@@ -7,14 +7,12 @@ buffs:
 
     - bard melody setup
 
-
 grouping:
-    - recall group setup from ini file like e3
-    - extend to auto form raid too
+    - LATER: extend to auto form raid too
 
 moving:
-    - mq2moveutils ?
     - clickit, rtz, followon, followoff
+    - LATER: check out MQ2Nav. XXX how to download "1.5 gigabyte" of community nav meshes? redguide offers them with membership...
 
 
 corpses:
@@ -25,4 +23,11 @@ corpses:
 assisting:
     - assiston /filter
     - backoff
+
+
+
+
+dannet:
+    - channels... can we have one called "debug" and a external listener program for that channel ???
+    - can we log channel text to disk?
 

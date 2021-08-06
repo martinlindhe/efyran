@@ -2,20 +2,18 @@
 
 mq = require('mq')
 
-aliases   = require('e4_Aliases')
-autogroup = require('e4_AutoGroup')
-buffs     = require('e4_Buffs')
-eqbc      = require('e4_EQBC')
-netbots   = require('e4_NetBots')
+buffs   = require('e4_Buffs')
+dannet  = require('e4_DanNet')
+follow  = require('e4_Follow')
+group   = require('e4_Group')
 
-aliases.Init()
-autogroup.Init()
-netbots.Init()
-eqbc.Init()
+dannet.Init()
+follow.Init()
+group.Init()
 
-local doRefreshBuffs = true
+local doRefreshBuffs = true -- XXX move property to "buffs" object (class?)
 
-mq.cmd.bc('E4 started')
+mq.cmd.dgtell('all E4 started')
 
 while true do
     if doRefreshBuffs then
