@@ -19,5 +19,12 @@ while true do
     if doRefreshBuffs then
         buffs.RefreshBuffs()
     end
+
+    -- close f2p nag screen (TODO: does it need to run in main loop?)
+    if mq.TLO.Window('AlertWnd').Open() then
+        mq.cmd.dgtell('DEBUG: closing f2p nag screen')
+        mq.cmd.notify('AlertWnd ALW_Dismiss_Button leftmouseup')
+    end
+
     mq.doevents()
 end

@@ -1,5 +1,3 @@
--- TODO: abstract to module to allow swapping netbots backend
-
 local DanNet = {}
 
 function DanNet.Init()
