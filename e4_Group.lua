@@ -10,23 +10,19 @@ local settingsRoot = 'D:/dev-mq/mqnext-e4-lua/settings'
 
 function Group.Init()
 
-    mq.bind('/recallgroup', function(name)
-        -- recalls group setup from INI
+    mq.bind('/recallgroup', function(name, groupNumber)
+        -- recalls group setup from INI, leader from group 1 will tell other leaders to form up
 
-        -- XXX make sure sender is netbot
-        print("recallgroup ", name)
+        print("recallgroup ", name, " ", groupNumber)
 
-        -- XXX get server shortname
-        local server = 'antonius'
-
-        local group = server .. '_' .. name .. '_1'
-        local topLeader = tostring(mq.TLO.Ini(settingsRoot .. '/Saved Groups.ini', group, 'Member1', 'NULL'))
-        if mq.TLO.Me.Name() == topLeader then
+        if groupNumber == nil then
             -- XXX separate command /dropgroup:
             mq.cmd.noparse('/dgaexecute /if (${Raid.Members} > 0) /raiddisband')
             mq.cmd.noparse('/dgaexecute /if (${Group.Members} > 0) /disband')
             mq.delay(2000)
         end
+
+        local server = mq.TLO.MacroQuest.Server()
 
         for g = 1,12,1
         do
@@ -49,17 +45,15 @@ function Group.Init()
                         end
                     end
                 end
-            elseif mq.TLO.Me.Name() == topLeader and leader ~= 'NULL' then
+            elseif groupNumber == nil and leader ~= 'NULL' then
                 print('TELLLING LEADER ', leader, ' TO FORM GROUP ', group)
-                mq.cmd.dexecute(leader, '/recallgroup ' .. name)
+                mq.cmd.dexecute(leader, '/recallgroup', name, g)
             end
         end
-
     end)
 
-
-    -- Automatically accepts group invites
     mq.event('joingroup', '#1# invites you to join a group.', function(text, sender)
+        -- Accepts group invites
 
         -- only allow invites from my bots
         if onlyAllowBots and mq.TLO.DanNet(sender) == nil then
@@ -97,8 +91,6 @@ function Group.Init()
         ]]--
 
     end)
-
-
 
     print('DONE: Group.Init')
 end
