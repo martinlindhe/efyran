@@ -1,7 +1,7 @@
 local DanNet = {}
 
 function DanNet.Init()
-    if tostring(mq.TLO.Plugin('MQ2DanNet')) == 'NULL' then
+    if mq.TLO.Plugin('MQ2DanNet')() == 'NULL' then
         mq.cmd.plugin('MQ2DanNet')
         print('WARNING: MQ2DanNet was not loaded')
     end

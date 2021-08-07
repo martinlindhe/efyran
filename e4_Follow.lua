@@ -3,14 +3,14 @@ local Follow = {}
 function Follow.Init()
     --[[
     -- XXX do we need moveutils ????
-    if tostring(mq.TLO.Plugin('MQ2MoveUtils')) == 'NULL' then
+    if mq.TLO.Plugin('MQ2MoveUtils')() == 'NULL' then
         mq.cmd.plugin('MQ2MoveUtils')
         print('WARNING: MQ2MoveUtils was not loaded')
     end
     ]]--
 
     -- MQ2AdvPath provides /afollow
-    if tostring(mq.TLO.Plugin('MQ2AdvPath')) == 'NULL' then
+    if mq.TLO.Plugin('MQ2AdvPath')() == 'NULL' then
         mq.cmd.plugin('MQ2AdvPath')
         print('WARNING: MQ2AdvPath was not loaded')
     end

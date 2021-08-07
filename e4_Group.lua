@@ -27,17 +27,16 @@ function Group.Init()
         for g = 1,12,1
         do
             group = server .. '_' .. name .. '_' .. g
-            local leader = tostring(mq.TLO.Ini(settingsRoot .. '/Saved Groups.ini', group, 'Member1', 'NULL'))
+            local leader = mq.TLO.Ini(settingsRoot .. '/Saved Groups.ini', group, 'Member1', 'NULL')()
 
             if mq.TLO.Me.Name() == leader then
                 for n = 2,6,1
                 do
                     local member = "Member" .. n
 
-                    -- FIXME tostring() needed because Ini() returns type 'userdata' //aug 2021
-                    local name = tostring(mq.TLO.Ini(settingsRoot .. '/Saved Groups.ini', group, member, 'NULL'))
+                    local name = mq.TLO.Ini(settingsRoot .. '/Saved Groups.ini', group, member, 'NULL')()
                     if name ~= 'NULL' then
-                        if mq.TLO.DanNet(name) ~= nil then
+                        if mq.TLO.DanNet(name)() ~= nil then
                             print("Inviting ", group, ' ', member, ' ', name)
                             mq.cmd.invite(name)
                         else
