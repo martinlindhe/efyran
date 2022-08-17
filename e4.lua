@@ -4,6 +4,7 @@ mq      = require('mq')
 
 utils   = require('e4_Utils')
 
+botSettings = require('e4_BotSettings')
 buffs   = require('e4_Buffs')
 dannet  = require('e4_DanNet')
 follow  = require('e4_Follow')
@@ -18,6 +19,7 @@ BRD     = require('e4_Class_Bard')
 
 WAR     = require('e4_Class_Warrior')
 
+botSettings.Init()
 dannet.Init()
 follow.Init()
 group.Init()
@@ -26,7 +28,7 @@ qol.Init()
 
 
 local doRefreshBuffs = true -- XXX move property to "buffs" object (class?)
-local refreshBuffsTimer = utils.Timer.new(6 * 1) -- 6s
+local refreshBuffsTimer = utils.Timer.new(10 * 1) -- 10s
 refreshBuffsTimer:expire()
 
 mq.cmd.dgtell('all E4 started')

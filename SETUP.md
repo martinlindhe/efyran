@@ -2,3 +2,6 @@
 
 xxxxx
 
+MQ2Cast   for /casting, /memorize
+
+

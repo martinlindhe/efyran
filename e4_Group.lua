@@ -9,7 +9,6 @@ local settingsRoot = 'D:/dev-mq/mqnext-e4-lua/settings'
 
 function Group.Init()
 
-
     if Group.settings == nil then
         local settingsFile = settingsRoot .. '/' .. mq.TLO.MacroQuest.Server() .. '__Saved Groups.lua'
 
@@ -20,8 +19,8 @@ function Group.Init()
         --tprint(Group.settings)
     end
 
+    -- Recalls group setup from settings. The orchestrator (caller) will tell the rest how to form up
     mq.bind('/recallgroup', function(name, groupNumber)
-        -- recalls group setup from INI, orchestrator (caller) will tell the rest how to form up
 
         local orchestrator = false
         local raidLeader = ""
