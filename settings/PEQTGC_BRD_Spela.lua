@@ -6,23 +6,23 @@ settings.buffs = {
 
 settings.songs = {
     ["general"] = {
-        -- TANK SONGS (Niv's Harmonic) SPELA, SOPHEE
+        -- TANK SONGS (Niv's Harmonic): Spela, Sophee
 
         -- PERCUSSION - Selo's Accelerating Chorus
         "Selo's Accelerating Chorus/Gem|8",
-      
-        -- SINGING - resists + ac + ds:
+
+        -- SINGING - resists + ac + ds
         "Psalm of Veeshan/Gem|2",
-      
+
         -- WIND - Verse of Vesagran (mitigate melee & spell by 5% for 450 dmg)
         "Verse of Vesagran/Gem|3",
-      
-        -- BRASS - atk, ds:
+
+        -- BRASS - atk, ds
         "War March of Muram/Gem|4",
-      
-        -- SINGING - spellshield, ac:
+
+        -- SINGING - spellshield, ac
         "Niv's Harmonic/Gem|6",
-      
+
         -- STRINGED - mana regen (AE 60 range)
         -- "Chorus of Life/Gem|1",
     },
@@ -39,10 +39,10 @@ settings.songs = {
 
     ["nods"] = {
         "Selo's Accelerating Chorus/Gem|8",
+        -- magic, poison, disease & ac buff instead of Psalm of Veeshan
+        "Purifying Chorus/Gem|2",
         "Niv's Harmonic/Gem|6",
         "Verse of Vesagran/Gem|3",
-        -- magic, poison, disease & ac buff instead of Psalm of Veeshan:
-        "Purifying Chorus/Gem|2",
         -- "Chorus of Life/Gem|1",
     },
 

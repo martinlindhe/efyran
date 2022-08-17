@@ -1,11 +1,9 @@
--- XXX TO DO  listen to "/playmelody" commands to switch spell sets
-
 local defaultMelody = "general"
 
 local Bard = { currentMelody = "" }
 
 function Bard.DoEvents()
-    --print('Bard.DoEvents')
+    -- print('Bard.DoEvents')
     if Bard.currentMelody == "" then
         Bard.ScribeSongSet(defaultMelody)
     end
@@ -14,7 +12,13 @@ end
 -- memorize and twist given songset
 function Bard.ScribeSongSet(name)
 
-    
+    if botSettings.settings.songs == nil then
+        mq.cmd.dgtell("ERROR no bard songs declared")
+        mq.cmd.beep(1)
+        mq.delay(50000)
+        return
+    end
+
     local songSet = botSettings.settings.songs[name]
     if songSet == nil then
         mq.cmd.dgtell("ERROR no such song set", name)
@@ -53,16 +57,15 @@ function Bard.ScribeSongSet(name)
     Bard.currentMelody = name
 end
 
-mq.bind("/playmelody", function(name)
-    print("PLAYMELODY ", name)
-
-    -- XXX tell each bard in same zone as me to do this:
-    if mq.TLO.Me.Class.ShortName() then
-        Bard.ScribeSongSet(name)
+mq.bind("/playmelody", function(name, called)
+    if not called then
+        --mq.cmd.dgzexecute("/playmelody", name, true) -- everyone in current zone
+        mq.cmd.dgexecute("brd", "/playmelody", name, true) -- all bards
     end
 
-
+    if mq.TLO.Me.Class.ShortName() == "BRD" then
+        Bard.ScribeSongSet(name)
+    end
 end)
-
 
 return Bard

@@ -1,16 +1,9 @@
 local Follow = {}
 
 function Follow.Init()
-    --[[
-    -- XXX do we need moveutils ????
-    if mq.TLO.Plugin('MQ2MoveUtils')() == 'NULL' then
-        mq.cmd.plugin('MQ2MoveUtils')
-        print('WARNING: MQ2MoveUtils was not loaded')
-    end
-    ]]--
 
     -- MQ2AdvPath provides /afollow
-    if mq.TLO.Plugin('MQ2AdvPath')() == 'NULL' then
+    if mq.TLO.Plugin('MQ2AdvPath')() == nil then
         mq.cmd.plugin('MQ2AdvPath')
         print('WARNING: MQ2AdvPath was not loaded')
     end
@@ -24,20 +17,23 @@ function Follow.Init()
         -- XXX click nearby door. like pok stones etc
     
         -- XXX spawn check if door within X radius
-        mq.cmd.dgaexecute('/doortarget')
+        mq.cmd.dgae('/doortarget')
         mq.delay(500)
-        mq.cmd.dgaexecute('/click left door')
+        mq.cmd.dgae('/click left door')
     end)
 
-    -- XXX only write on inital setup for first toon ?!?!? like below, it writes 1 alias line in ini for each bot, messing it up!
-    --[[
-    mq.cmd.alias('/followme /dge /afollow spawn ${Me.ID}')
-    mq.cmd.alias('/followstop /dge /afollow off')
-    mq.cmd.alias('/followon /dge /afollow spawn ${Me.ID}')
-    mq.cmd.alias('/followoff /dge /afollow off')
-    ]]--
-
-    print('DONE: Follow.Init')
+    mq.bind('/followon', function()
+        mq.cmd.dgze("/afollow spawn ${Me.ID}")
+    end)
+    mq.bind('/followme', function()
+        mq.cmd.dgze("/afollow spawn ${Me.ID}")
+    end)
+    mq.bind('/followoff', function()
+        mq.cmd.dgze("/afollow off")
+    end)
+    mq.bind('/followstop', function()
+        mq.cmd.dgze("/afollow off")
+    end)
 end
 
 return Follow

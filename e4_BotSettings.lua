@@ -8,21 +8,16 @@ local BotSettings = {}
 function BotSettings.Init()
     local id = mq.TLO.MacroQuest.Server() .. "_" .. mq.TLO.Me.Class.ShortName() .. "_" .. mq.TLO.Me.Name()
     local settingsFile = settingsRoot .. "/" .. id .. ".lua"
-
     local settings = loadfile(settingsFile)()
-
     if settings ~= nil then
         BotSettings.settings = settings
         print("Bot settings loaded for ", id)
-        tprint(settings)
     else
         -- give up. no settings file found
         mq.cmd.dgtell("File not found: ", settingsFile)
         mq.cmd.beep(1)
         return
     end
-
-    print("DONE: BotSettings.Init")
 end
 
 return BotSettings
