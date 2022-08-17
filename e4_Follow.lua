@@ -32,9 +32,9 @@ function Follow.Init()
     -- XXX only write on inital setup for first toon ?!?!? like below, it writes 1 alias line in ini for each bot, messing it up!
     --[[
     mq.cmd.alias('/followme /dge /afollow spawn ${Me.ID}')
-    mq.cmd.alias('/followstop=/dge /afollow off')
-    mq.cmd.alias('/followon=/dge /afollow spawn ${Me.ID}')
-    mq.cmd.alias('/followoff=/dge /afollow off')
+    mq.cmd.alias('/followstop /dge /afollow off')
+    mq.cmd.alias('/followon /dge /afollow spawn ${Me.ID}')
+    mq.cmd.alias('/followoff /dge /afollow off')
     ]]--
 
     print('DONE: Follow.Init')

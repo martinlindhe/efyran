@@ -5,8 +5,6 @@ buffs:
     - spells and clickies
     - use lua root for toon configs! create initial empty ini
 
-grouping:
-    - LATER: extend to auto form raid too
 
 moving:
     - clickit, rtz, followon, followoff
@@ -42,7 +40,6 @@ performance:
 
 
 xp tracking:
-    https://www.mmobugs.com/wiki/index.php?title=MQ2ETrack
     https://www.mmobugs.com/wiki/index.php?title=MQ2XPTracker
 
 stat food:
@@ -73,7 +70,7 @@ QoL:
 
 MQ2AdvPath - for auto following (replaces MQ2MoveUtils ??? ... still need /stick for combat.. or mq2melee ???)
 MQ2DanNet - bot communication (replaces MQ2EQBC and MQ2NetBots)
-
+MQ2Cast - for spell & clickies
 
 
 # DIFFERENCES TO E3

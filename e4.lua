@@ -1,6 +1,8 @@
--- restart all: /bcaa //multiline ; /lua stop e4 ; /timed 5 /lua run e4
+-- restart all: /dgaexecute /multiline ; /lua stop e4 ; /timed 5 /lua run e4
 
-mq = require('mq')
+mq      = require('mq')
+
+utils   = require('e4_Utils')
 
 buffs   = require('e4_Buffs')
 dannet  = require('e4_DanNet')
@@ -8,7 +10,13 @@ follow  = require('e4_Follow')
 group   = require('e4_Group')
 qol     = require('e4_QoL')
 
-utils   = require('e4_Utils')
+
+
+CLR     = require('e4_Class_Cleric')
+
+BRD     = require('e4_Class_Bard')
+
+WAR     = require('e4_Class_Warrior')
 
 dannet.Init()
 follow.Init()
@@ -17,10 +25,8 @@ qol.Init()
 
 
 
-
-
 local doRefreshBuffs = true -- XXX move property to "buffs" object (class?)
-local refreshBuffsTimer = utils.Timer.new(10 * 1) -- 10s
+local refreshBuffsTimer = utils.Timer.new(6 * 1) -- 6s
 refreshBuffsTimer:expire()
 
 mq.cmd.dgtell('all E4 started')
@@ -32,6 +38,28 @@ while true do
         refreshBuffsTimer:restart()
     end
 
+    local class = mq.TLO.Me.Class.ShortName()
+    if class == "CLR" then CLR.DoEvents()
+    --[[
+    elseif class == "SHM" then ShamanEvents()
+    elseif class == "DRU" then DruidEvents()
+    elseif class == "WIZ" then WizardEvents()
+    elseif class == "MAG" then MagicianEvents()
+    elseif class == "ENC" then EnchanterEvents()
+    elseif class == "NEC" then NecromancerEvents()
+    elseif class == "ROG" then RogueEvents()
+    elseif class == "MNK" then MonkEvents()
+    elseif class == "BER" then BerserkerEvents()
+    ]]--
+    elseif class == "BRD" then BRD.DoEvents()
+    --elseif class == "BST" then BeastlordEvents()
+    --elseif class == "RNG" then RangerEvents()
+    elseif class == "WAR" then WAR.DoEvents()
+    --elseif class == "SHD" then ShadowknightEvents()
+    --elseif class == "PAL" then PaladinEvents()
+    end
+
     mq.doevents()
+    mq.delay(1000) -- 1.0s
 end
 
