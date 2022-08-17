@@ -2,6 +2,7 @@
 
 xxxxx
 
-MQ2Cast   for /casting, /memorize
+MQ2Cast     for /casting, /memorize
+MQ2DanNet   instead of EQBC and MQ2NetBots
 
 

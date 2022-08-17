@@ -9,11 +9,6 @@ local settingsRoot = 'D:/dev-mq/mqnext-e4-lua/settings'
 
 function Group.Init()
 
-    if mq.TLO.Plugin('MQ2DanNet')() == nil then
-        mq.cmd.plugin('MQ2DanNet')
-        print('WARNING: MQ2DanNet was not loaded')
-    end
-
     if Group.settings == nil then
         local settingsFile = settingsRoot .. '/' .. mq.TLO.MacroQuest.Server() .. '__Saved Groups.lua'
 

@@ -4,6 +4,8 @@ mq      = require('mq')
 
 utils   = require('e4_Utils')
 
+aliases = require('settings/Spell Aliases')
+
 botSettings = require('e4_BotSettings')
 buffs   = require('e4_Buffs')
 follow  = require('e4_Follow')
@@ -12,11 +14,11 @@ qol     = require('e4_QoL')
 
 
 
-CLR     = require('e4_Class_Cleric')
+CLR     = require('Class_Cleric')
 
-BRD     = require('e4_Class_Bard')
+BRD     = require('Class_Bard')
 
-WAR     = require('e4_Class_Warrior')
+WAR     = require('Class_Warrior')
 
 botSettings.Init()
 follow.Init()
