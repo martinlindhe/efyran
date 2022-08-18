@@ -42,6 +42,11 @@ function QoL.Tick()
         end
     end
 
+    if mq.TLO.Me.Class.ShortName() == "WIZ" and mq.TLO.Me.Pet.ID() ~= 0 then
+        print("dropping wiz familiar ...", mq.TLO.Me.Pet.ID(), type(mq.TLO.Me.Pet.ID()))
+        mq.cmd.pet("get lost")
+    end
+
 end
 
 return QoL

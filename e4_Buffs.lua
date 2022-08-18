@@ -107,12 +107,33 @@ function refreshBuff(buffItem, botName)
     local spawn = mq.TLO.Spawn("pc =" .. botName)
     --print("PC MATCH", botName, " ", spawn, " ", type(spawn))
     if tostring(spawn) == "NULL" then
-        --print("SKIP BUFFING, NOT IN ZONE ", botName)
+        print("SKIP BUFFING, NOT IN ZONE ", botName)
         return false
     end
     local spawnID = spawn.ID()
 
     local spellConfig = parseSpellLine(buffItem) -- XXX parse this once on script startup. dont evaluate all the time !!!
+
+    local spell = getSpellFromBuff(spellConfig.SpellName) -- XXX parse this once on script startup too, dont evaluate all the time !
+    if spell == nil then
+        mq.cmd.dgtell("Buffs.refreshBuff: getSpellFromBuff ", buffItem, " FAILED")
+        mq.cmd.beep(1)
+        return false
+    end
+
+    -- AERange is used for group spells
+    if spell.TargetType() == "Group v2" then
+        if spawn.Distance() >= spell.AERange() then
+            mq.cmd.dgtell(spell.TargetType(), "cant rebuff (group buff), toon too far away: ", buffItem, " ", botName, " spell range = ", spell.Range(), ", spawn distance = ", spawn.Distance())
+            return false
+        end
+    else
+        if spell.TargetType() ~= "Self" and spawn.Distance() >= spell.Range() then
+            mq.cmd.dgtell(spell.TargetType(), "cant rebuff (",spell.TargetType(),"), toon too far away: ", buffItem, " ", botName, " spell range = ", spell.Range(), ", spawn distance = ", spawn.Distance())
+            return false
+        end
+    end
+
     if spellConfig.MinMana ~= nil then
         if mq.TLO.Me.PctMana() < tonumber(spellConfig.MinMana) then
             print("SKIP BUFFING, my mana ", mq.TLO.Me.PctMana, " vs required ", spellConfig.MinMana)
@@ -144,13 +165,6 @@ function refreshBuff(buffItem, botName)
         end
     end
 
-    local spell = getSpellFromBuff(spellConfig.SpellName) -- XXX parse this once on script startup too, dont evaluate all the time !
-    if spell == nil then
-        mq.cmd.dgtell("Buffs.refreshBuff: getSpellFromBuff ", buffItem, " FAILED")
-        mq.cmd.beep(1)
-        return false
-    end
-
     if mq.TLO.Me() == botName then
         if mq.TLO.Me.Buff(spell.Name)() ~= nil and mq.TLO.Me.Buff(spell.Name).Duration.Ticks() > 4 then
             return false
@@ -177,13 +191,8 @@ function Buffs.RefreshBotBuffs()
     if botSettings.settings.bot_buffs == nil then
         return
     end
-    -- XXX 
+
     print("Buffs.RefreshBotBuffs")
-
-
---    ["Aura of Devotion/MinMana|50"] = {
---        "Blastar", "Myggan", "Absint", "Trams", "Redito", "Samma", "Fandinu",
---    },
 
     for buff, names in pairs(botSettings.settings.bot_buffs) do
         --print("xxx ",buff)
@@ -216,7 +225,7 @@ function Buffs.RefreshAura()
     return true
 end
 
--- helper for casting spell, clicky, AA, combat ability. auto handles bard twist. XXX
+-- helper for casting spell, clicky, AA, combat ability
 function castSpell(name, spawnId)
     local spell = getSpellFromBuff(name)
 
@@ -258,19 +267,16 @@ function getSpellFromBuff(name)
     end
 end
 
-
 -- memorizes all spells listed in character settings.gems in their correct position
 function memorizeListedSpells()
     if botSettings.settings.gems == nil then
         print("no gems configured")
         return
     end
-
     for k, n in pairs(botSettings.settings.gems) do
         print("gem ",k, " n ",n)
     end
 end
-
 
 return Buffs
 
