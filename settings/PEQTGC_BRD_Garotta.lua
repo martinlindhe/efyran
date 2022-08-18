@@ -1,18 +1,16 @@
 local settings = { }
 
 settings.swap = { -- XXX impl
-    --[[
-    ; Chaotic Black Scimitar (1hs 26 dmg, 21 delay, 15 bonus)
-    ; Prismatic Dragon Blade (1hp 24 dmg, 22 delay, 15 bonus)
-    Main=Blade of Vesagran|Mainhand/Notched Blade of Bloodletting|Offhand
+    -- Chaotic Black Scimitar (1hs 26 dmg, 21 delay, 15 bonus)
+    -- Prismatic Dragon Blade (1hp 24 dmg, 22 delay, 15 bonus)
+    ["main"] = "Blade of Vesagran|Mainhand/Notched Blade of Bloodletting|Offhand",
 
-    Fishing=Fishing Pole|Mainhand
+    ["fishing"] = "Fishing Pole|Mainhand",
 
-    NoRiposte=Trithcink|Mainhand/Muramite Aggressor's Bulwark|Offhand
-    ]]--
+    ["noriposte"] = "Trithcink|Mainhand/Muramite Aggressor's Bulwark|Offhand",
 }
 
-settings.buffs = {
+settings.self_buffs = {
     "Fuzzy Foothairs",
 
     -- Harmonize (increase singing skill by 9)

@@ -9,6 +9,13 @@ function QoL.Init()
         print('WARNING: MQ2AutoAccept was not loaded')
     end
 
+    mq.event("missing_component", "You are missing #1#.", function(text, name)
+        if name ~= "some required components" then
+            mq.cmd.dgtell("Missing component", name)
+            mq.cmd.beep(1)
+        end
+    end)
+
     -- print('DONE: QoL.Init')
 end
 

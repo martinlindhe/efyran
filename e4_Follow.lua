@@ -18,6 +18,16 @@ function Follow.Init()
         print("WARNING: MQ2MoveUtils was not loaded")
     end
 
+    if mq.TLO.Plugin("MQ2Cast")() == nil then
+        mq.cmd.plugin("MQ2Cast")
+        print("WARNING: MQ2Cast was not loaded")
+    end
+
+    if mq.TLO.Plugin("MQ2Medley")() == nil then
+        mq.cmd.plugin("MQ2Medley")
+        print("WARNING: MQ2Medley was not loaded")
+    end
+
     mq.bind("/clickit", function(name)
         print("CLICKING NEARBY DOOR xxx name")
         -- XXX click nearby door. like pok stones etc

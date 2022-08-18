@@ -1,30 +1,26 @@
 local settings = { }
 
 settings.swap = { -- XXX impl
---[[
-    ; to use: /bcaa //swap main
-    Main=Kreljnok's Sword of Eternal Power|Mainhand/Shield of the Lightning Lord|Offhand/Plaguebreeze|Ranged
+    -- XXX to use: /bcaa //swap main
+    ["main"] = "Kreljnok's Sword of Eternal Power|Mainhand/Shield of the Lightning Lord|Offhand/Plaguebreeze|Ranged",
 
-    BFG=Breezeboot's Frigid Gnasher|Mainhand
+    ["bfg"] = "Breezeboot's Frigid Gnasher|Mainhand",
 
-    ; 215 range + 150 range Flight Arrow = 365
-    Ranged=Plaguebreeze|Ranged
+    -- 215 range + 150 range Flight Arrow = 365
+    ["ranged"] = "Plaguebreeze|Ranged",
 
-    ; For raids where tanks should not riposte, like tacvi Pixtt Riel Tavas
-    NoRiposte=Aged Left Eye of Xygoz|Mainhand/Shield of the Lightning Lord|Offhand
+    -- For raids where tanks should not riposte, like tacvi Pixtt Riel Tavas
+    ["noriposte"] = "Aged Left Eye of Xygoz|Mainhand/Shield of the Lightning Lord|Offhand",
 
-    Fishing=Fishing Pole|Mainhand
+    ["fishing"] = "Fishing Pole|Mainhand",
 
-    OMM=Mirrored Mask|Face
-
-    ; for mpg trial of weaponry (group):
-    SlashDMG=Greatsword of Mortification|Mainhand
-    PierceDMG=Warspear of Vexation|Mainhand
-    BluntDMG=Girplan Hammer of Carnage|Mainhand
-]]--
+    -- for mpg trial of weaponry (group):
+    ["slashdmg"] = "Greatsword of Mortification|Mainhand",
+    ["piercedmg"] = "Warspear of Vexation|Mainhand",
+    ["bluntdmg"] = "Girplan Hammer of Carnage|Mainhand",
 }
 
-settings.buffs = {
+settings.self_buffs = {
     "Amulet of Necropotence",
 
     -- Chaotic Ward (20 all resists, 67 ac) - stacks with all resist buffs. DON'T STACK WITH Form of Defense
@@ -53,7 +49,7 @@ settings.buffs = {
     --"Puresteel Mantle",
 }
 
-settings.combatBuffs = { -- XXX implement
+settings.combat_buffs = { -- XXX implement
     -- L68 Commanding Voice
     "Commanding Voice/Bandy/MinEnd|5",
 }

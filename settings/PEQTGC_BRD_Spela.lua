@@ -2,25 +2,20 @@ local settings = { }
 
 
 settings.swap = {   -- XXX implement
---[[
-    ; Chaotic Black Scimitar (1hs 26 dmg, 21 delay, 15 bonus)
-    ; Rapier of Somber Notes (1hp, 27 dmg, 19 delay, 15 bonus) - tacvi
-    ; Notched Blade of Bloodletting (1hs, 37 dmg, 24 delay, 15 bonus) - anguish amv
-    Main=Blade of Vesagran|Mainhand/Notched Blade of Bloodletting|Offhand
+    -- Notched Blade of Bloodletting (1hs, 37 dmg, 24 delay, 15 bonus) - anguish amv
+    ["main"] = "Blade of Vesagran|Mainhand/Notched Blade of Bloodletting|Offhand",
 
-    Fishing=Fishing Pole|Mainhand
+    ["fishing"] = "Fishing Pole|Mainhand",
 
-    NoRiposte=Lute of False Worship|Mainhand/Shield of the Planar Assassin|Offhand
+    ["noriposte"] = "Lute of False Worship|Mainhand/Shield of the Planar Assassin|Offhand",
 
-
-    ; for mpg group weaponry:
-    ;SlashDMG=Chaotic Black Scimitar|Mainhand/Edge of Eternity|Offhand
-    ;PierceDMG=Blade of Vesagran|Mainhand/Blade of Annihilation Anthems|Offhand
-    ;BluntDMG=Despair|Mainhand/Frostcaller|Offhand
-]]--
+    -- for mpg group weaponry:
+    ["slashdmg"] = "Chaotic Black Scimitar|Mainhand/Edge of Eternity|Offhand",
+    ["piercedmg"] = "Blade of Vesagran|Mainhand/Blade of Annihilation Anthems|Offhand",
+    ["bluntdmg"] = "Despair|Mainhand/Frostcaller|Offhand",
 }
 
-settings.buffs = {
+settings.self_buffs = {
     "Fuzzy Foothairs",
 
     -- Harmonize (increase singing skill by 9)

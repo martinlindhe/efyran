@@ -1,19 +1,24 @@
 local settings = { }
 
 settings.swap = { -- XXX impl
---[[
-    Main=Bazu Claw Hammer|Mainhand/Aegis of Superior Divinity|Offhand
-
-    Fishing=Fishing Pole|Mainhand
-
-    ; Weighted Hammer of Conviction (1hb)
-    Melee=Weighted Hammer of Conviction|Mainhand
-]]--
+    ["main"] = "Bazu Claw Hammer|Mainhand/Aegis of Superior Divinity|Offhand",
+    ["fishing"] = "Fishing Pole|Mainhand",
+    ["melee"] = "Weighted Hammer of Conviction|Mainhand", -- 1hb
 }
 
-settings.buffs = {
-    "Fuzzy Foothairs",
+settings.gems = { -- XXX implement. default spell gem mapping. makes "main" spellset obsolete and allows for auto scribe on script start
+    ["Pious Remedy"] = 1,
+    ["Pious Elixir"] = 2,
+    ["Aura of Devotion"] = 3,
+    ["Ancient: Hallowed Light"] = 4,
+    ["Word of Vivification"] = 6,
+    ["Balikor's Mark"] = 7,
+    ["Ward of Retribution"] = 8,
+    ["Divine Intervention"] = 9,
+}
 
+settings.self_buffs = {
+    "Fuzzy Foothairs",
 
     -- mana regen clicky:
     -- Reyfin's Random Musings (slot 8: 9 mana regen, slot 10: 6 hp regen)
@@ -39,153 +44,85 @@ settings.buffs = {
     -- NOTE: does not stack with DRU Skin
     --"Armor of the Zealot/MinMana|90/CheckFor|Kazad's Mark",
 
-
-
-
-
     -- xxx
 
-    "Aura of Devotion",
+    -- spell haste:
+    -- L15 Blessing of Piety (10% spell haste to L39, 40 min)
+    -- L35 Blessing of Faith (10% spell haste to L61, 40 min)
+    -- L62 Blessing of Reverence (10% spell haste to L65, 40 min)
+    -- L64 Aura of Reverence (10% spell haste to L65, 40 min, group)
+    -- L67 Blessing of Devotion (10% spell haste to L70, 40 min, 390 mana)
+    -- L69 Aura of Devotion (10% spell haste to L70, 45 min, group, 1125 mana)
+    "Aura of Devotion/MinMana|40",
 
-    "Balikor's Mark",
+    -- absorb melee:
+    -- L40 Guard of Vie (absorb 10% melee dmg to 700)
+    -- L54 Protection of Vie (absorb 10% melee dmg to 1200)
+    -- L62 Bulwark of Vie (absorb 10% melee dmg to 1600)
+    -- L67 Panoply of Vie (absorb 10% melee dmg to 2080, 36 min)
+    "Panoply of Vie/MinMana|70",
 
-    -- XXX IMPL THIS:
---[[
+    -- hp buff - symbol line:
+    -- L54 Symbol of Marzin (640-700 hp)
+    -- L58 Naltron's Mark (525 hp, group)
+    -- L60 Marzin's Mark (725 hp, group)
+    -- L61 Symbol of Kazad (910 hp, cost 600 mana)
+    -- L63 Kazad's Mark (910 hp, cost 1800 mana, group)
+    -- L66 Symbol of Balikor (1137 hp, cost 780 mana)
+    -- L70 Balikor's Mark (1137 hp, cost 2340 mana, group)
+    "Balikor's Mark/MinMana|75",
 
-; spell haste:
-; L15 Blessing of Piety (10% spell haste to L39, 40 min)
-; L35 Blessing of Faith (10% spell haste to L61, 40 min)
-; L62 Blessing of Reverence (10% spell haste to L65, 40 min)
-; L64 Aura of Reverence (10% spell haste to L65, 40 min, group)
-; L67 Blessing of Devotion (10% spell haste to L70, 40 min, 390 mana)
-; L69 Aura of Devotion (10% spell haste to L70, 45 min, group, 1125 mana)
-; NOTE: Stor does team18, Helge does the rest
+    -- ac - slot 4:
+    -- L61 Ward of Gallantry (54 ac)
+    -- L66 Ward of Valiance (72 ac)
+    -- NOTE: stacks with Symbol + DRU Skin + Focus
+    "Ward of Valiance/MinMana|50/CheckFor|Hand of Conviction",
+}
 
-; team18 - g1:
-Self Buff=Aura of Devotion/Gem|3/MinMana|40
+settings.group_buffs = {    -- XXX implement. can then be used for /buffit
+    "Balikor's Mark" -- XXX also implement min-level check for buff
+}
 
-; Crusade don't need spell haste
-Bot Buff=Aura of Devotion/Blastar/MinMana|50
+settings.bot_buffs = {  -- XXX IMPL THIS
+    -- NOTE: Stor does team18, Helge does the rest
+    ["Aura of Devotion/MinMana|50"] = {
+        "Blastar", "Myggan", "Absint", "Trams", "Redito", "Samma", "Fandinu",
+    },
 
-; team18 - g2:
-Bot Buff=Aura of Devotion/Myggan/MinMana|50
-Bot Buff=Aura of Devotion/Absint/MinMana|50
-Bot Buff=Aura of Devotion/Trams/MinMana|50
-; Kamaxia
-Bot Buff=Aura of Devotion/Redito/MinMana|50
+    -- NOTE: Stor does team18, Helge does the rest
+    ["Panoply of Vie/MinMana|80"] = {
+        "Blastar", "Myggan", "Absint", "Trams", "Redito", "Samma", "Fandinu",
+    },
 
-; team18 - g3:
-Bot Buff=Aura of Devotion/Samma/MinMana|50
-Bot Buff=Aura of Devotion/Fandinu/MinMana|50
+    ["Ward of Valiance/MinMana|70/CheckFor|Hand of Conviction"] = {
+        "Bandy", "Manu", "Nullius", "Crusade", "Juancarlos",
+    },
 
+    -- NOTE: Stor does team18, Kamaxia does the rest
+    ["Balikor's Mark/MinMana|50"] = {
+        -- team18
+        "Bandy", "Crusade", "Spela", "Azoth", "Blastar", "Myggan", "Absint", "Trams", "Gerwulf", "Redito", 
+        "Kniven", "Samma", "Besty", "Grimakin", "Chancer", "Fandinu", "Drutten",
 
-; absorb melee:
-; L40 Guard of Vie (absorb 10% melee dmg to 700)
-; L54 Protection of Vie (absorb 10% melee dmg to 1200)
-; L62 Bulwark of Vie (absorb 10% melee dmg to 1600)
-; L67 Panoply of Vie (absorb 10% melee dmg to 2080, 36 min)
-; NOTE: Stor does team18, Helge does the rest
+        -- pl 2021
+        "Endstand", "Nacken", "Halsen", "Ryggen", "Katten", "Tervet", 
+        "Gasoline", "Saga", "Brinner", "Katan", "Kasta", "Bulf", "Papp",
+        "Pantless", "Crust", "Plin", "Hypert",
+    },
 
-; team18 - g1:
-Self Buff=Panoply of Vie/MinMana|70
-Bot Buff=Panoply of Vie/Blastar/MinMana|40
-
-; team18 - g2:
-Bot Buff=Panoply of Vie/Myggan/MinMana|40
-Bot Buff=Panoply of Vie/Absint/MinMana|40
-Bot Buff=Panoply of Vie/Trams/MinMana|40
-; Kamaxia
-Bot Buff=Panoply of Vie/Redito/MinMana|40
-
-; team18 - g3:
-Bot Buff=Panoply of Vie/Samma/MinMana|40
-Bot Buff=Panoply of Vie/Fandinu/MinMana|40
-
-
-
-; hp buff - aegolism line (slot 2 - does not stack with DRU skin):
-; L01 Courage (20 hp, 4 ac, single)
-; L40 Temperance (800 hp, 48 ac, single) - LANDS ON L01
-; L45 Blessing of Temperance (800 hp, 48 ac, group) - LANDS ON L01
-; L60 Aegolism (1150 hp, 60 ac, single)
-; L60 Blessing of Aegolism (1150 hp, 60 ac, group)
-; L62 Virtue (1405 hp, 72 ac, single)
-; L65 Hand of Virtue (1405 hp, 72 ac, group) - LANDS ON L47
-; L67 Conviction (1787 hp, 94 ac)
-; L70 Hand of Conviction (1787 hp, 94 ac, group) - XXX LANDS ON L61 ???
-
-;Bot Buff=Temperance/Tand/MinMana|40
-
-
-; hp buff - symbol line:
-; L54 Symbol of Marzin (640-700 hp)
-; L58 Naltron's Mark (525 hp, group)
-; L60 Marzin's Mark (725 hp, group)
-; L61 Symbol of Kazad (910 hp, cost 600 mana)
-; L63 Kazad's Mark (910 hp, cost 1800 mana, group)
-; L66 Symbol of Balikor (1137 hp, cost 780 mana)
-; L70 Balikor's Mark (1137 hp, cost 2340 mana, group)
-; NOTE: Stor do symbol team18, Kamaxia does the rest
-Group Buff=Balikor's Mark
-Self Buff=Balikor's Mark/MinMana|75
-
-; team18 - g1:
-Bot Buff=Balikor's Mark/Bandy/MinMana|40
-Bot Buff=Balikor's Mark/Crusade/MinMana|40
-Bot Buff=Balikor's Mark/Spela/MinMana|70
-Bot Buff=Balikor's Mark/Azoth/MinMana|70
-Bot Buff=Balikor's Mark/Blastar/MinMana|70
-
-; team18 - g2:
-Bot Buff=Balikor's Mark/Myggan/MinMana|70
-Bot Buff=Balikor's Mark/Absint/MinMana|70
-Bot Buff=Balikor's Mark/Trams/MinMana|70
-; Kamaxia
-Bot Buff=Balikor's Mark/Gerwulf/MinMana|70
-Bot Buff=Balikor's Mark/Redito/MinMana|70
-
-; team18 - g3:
-Bot Buff=Balikor's Mark/Kniven/MinMana|70
-Bot Buff=Balikor's Mark/Samma/MinMana|70
-Bot Buff=Balikor's Mark/Besty/MinMana|70
-Bot Buff=Balikor's Mark/Grimakin/MinMana|70
-Bot Buff=Balikor's Mark/Chancer/MinMana|70
-Bot Buff=Balikor's Mark/Fandinu/MinMana|70
-Bot Buff=Balikor's Mark/Drutten/MinMana|70
-
-; PL 2021
-Bot Buff=Balikor's Mark/Endstand/MinMana|70
-Bot Buff=Balikor's Mark/Nacken/MinMana|70
-Bot Buff=Balikor's Mark/Ryggen/MinMana|70
-Bot Buff=Balikor's Mark/Tervet/MinMana|70
-Bot Buff=Balikor's Mark/Plin/MinMana|70
-Bot Buff=Balikor's Mark/Hypert/MinMana|70
-Bot Buff=Balikor's Mark/Gasoline/MinMana|70
-Bot Buff=Balikor's Mark/Katan/MinMana|70
-Bot Buff=Balikor's Mark/Fedt/MinMana|40
-Bot Buff=Balikor's Mark/Bulf/MinMana|40
-Bot Buff=Balikor's Mark/Papp/MinMana|40
-Bot Buff=Balikor's Mark/Pantless/MinMana|40
-Bot Buff=Balikor's Mark/Sogaard/MinMana|40
-Bot Buff=Balikor's Mark/Fisse/MinMana|40
-Bot Buff=Balikor's Mark/Kasta/MinMana|40
-Bot Buff=Balikor's Mark/Halsen/MinMana|40
-Bot Buff=Balikor's Mark/Crust/MinMana|40
-Bot Buff=Balikor's Mark/Saga/MinMana|70
-Bot Buff=Balikor's Mark/Brinner/MinMana|70
-Bot Buff=Balikor's Mark/Katten/MinMana|70
-
-; ac - slot 4:
-; L61 Ward of Gallantry (54 ac)
-; L66 Ward of Valiance (72 ac)
-; NOTE: stacks with Symbol + DRU Skin + Focus
-Self Buff=Ward of Valiance/MinMana|50/CheckFor|Hand of Conviction
-Bot Buff=Ward of Valiance/Bandy/MinMana|50/CheckFor|Hand of Conviction
-Bot Buff=Ward of Valiance/Manu/MinMana|50/CheckFor|Hand of Conviction
-Bot Buff=Ward of Valiance/Nullius/MinMana|50/CheckFor|Hand of Conviction
-Bot Buff=Ward of Valiance/Crusade/MinMana|50/CheckFor|Hand of Conviction
-Bot Buff=Ward of Valiance/Juancarlos/MinMana|50/CheckFor|Hand of Conviction
-]]--
+    -- hp buff - aegolism line (slot 2 - does not stack with DRU skin):
+    -- L01 Courage (20 hp, 4 ac, single)
+    -- L40 Temperance (800 hp, 48 ac, single) - LANDS ON L01
+    -- L45 Blessing of Temperance (800 hp, 48 ac, group) - LANDS ON L01
+    -- L60 Aegolism (1150 hp, 60 ac, single)
+    -- L60 Blessing of Aegolism (1150 hp, 60 ac, group)
+    -- L62 Virtue (1405 hp, 72 ac, single)
+    -- L65 Hand of Virtue (1405 hp, 72 ac, group) - LANDS ON L47
+    -- L67 Conviction (1787 hp, 94 ac)
+    -- L70 Hand of Conviction (1787 hp, 94 ac, group) - XXX LANDS ON L61 ???
+    ["Temperance"] = {
+        --"Tand",
+    },
 }
 
 settings.healing = { -- XXX implement
@@ -203,7 +140,7 @@ settings.healing = { -- XXX implement
     -- ### FROM OLD [Cleric] E3 SECTION END ### --
 
     ["life_support"] = { -- XXX implement
-        "Ward of Retribution/Gem|8/HealPct|50/Delay|3m/CheckFor|Resurrection Sickness",
+        "Ward of Retribution/HealPct|50/Delay|3m/CheckFor|Resurrection Sickness",
 
         "Distillate of Divine Healing XI/HealPct|18/CheckFor|Resurrection Sickness",
 
@@ -295,10 +232,10 @@ settings.healing = { -- XXX implement
     -- L70 Ancient: Hallowed Light (4150 hp, 3.8s cast, 775 mana)
 
     ["tank_heal"] = {-- XXX impl
-        "Ancient: Hallowed Light/HealPct|88/Gem|4/MinMana|5",
+        "Ancient: Hallowed Light/HealPct|88/MinMana|5",
 
         -- MPG Efficiency with stronger toons. the zone debuff fools mq that 100% HP is like 75%:
-        "Pious Remedy/HealPct|70/Gem|1/MinMana|5",
+        --"Pious Remedy/HealPct|70/MinMana|5",
 
         -- CH for mpg Efficency. the zone debuff fools mq that 100% HP is like 75%:   TODO verify how it is on mqnext
         -- "Complete Heal/HealPct|70/Gem|2",
@@ -308,7 +245,7 @@ settings.healing = { -- XXX implement
     },
 
     ["all_heal"] = {-- XXX impl
-        "Pious Remedy/HealPct|60/Gem|1/MinMana|30",
+        "Pious Remedy/HealPct|60/MinMana|30",
 
         -- tacvi clicky
         "Weighted Hammer of Conviction/HealPct|95",
@@ -349,7 +286,7 @@ settings.healing = { -- XXX implement
         -- L62 Supernal Elixir (600 hp/tick, 0.4 min, 480 mana)
         -- L65 Holy Elixir (900 hp/tick, 0.4 min, 720 mana)
         -- L67 Pious Elixir (slot 1: 1170 hp/tick, 0.4 min, 890 mana)
-        "Pious Elixir/HealPct|70/Gem|4/CheckFor|Spiritual Serenity",
+        "Pious Elixir/HealPct|70/CheckFor|Spiritual Serenity",
     }
 
     -- ["who_to_hot"] = "Tanks", -- XXX impl

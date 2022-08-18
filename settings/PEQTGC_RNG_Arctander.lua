@@ -1,20 +1,18 @@
 local settings = { }
 
 settings.swap = { -- XXX impl
-    --[[
-    Main=Aurora, the Heartwood Blade|Mainhand/Notched Blade of Bloodletting|Offhand/Symbol of the Overlord|Ranged
+    ["main"] = "Aurora, the Heartwood Blade|Mainhand/Notched Blade of Bloodletting|Offhand/Symbol of the Overlord|Ranged",
 
-    BFG=Breezeboot's Frigid Gnasher|Mainhand
+    ["bfg"] = "Breezeboot's Frigid Gnasher|Mainhand",
 
-    Ranged=Plaguebreeze|Ranged
+    ["ranged"] = "Plaguebreeze|Ranged",
 
-    NoRiposte=Fishing Pole|Mainhand/Muramite Aggressor's Bulwark|Offhand
+    ["noriposte"] = "Fishing Pole|Mainhand/Muramite Aggressor's Bulwark|Offhand",
 
-    Fishing=Fishing Pole|Mainhand
-    ]]--
+    ["fishing"] = "Fishing Pole|Mainhand",
 }
 
-settings.buffs = {
+settings.self_buffs = {
     "Fuzzy Foothairs",
 
     -- atk buff:
@@ -278,6 +276,5 @@ settings.assist = {
         --"Auspice of the Hunter",      -- XXX condition: only use if MGB AA is down and more than 15 min cooldown.
     },
 }
-
 
 return settings

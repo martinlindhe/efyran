@@ -1,29 +1,24 @@
 local settings = { }
 
 settings.swap = { -- XXX impl
-    --[[
-    ; Hardened Bone Spike (1hp 23 dmg, 19 delay, 15 bonus)
-    ; Discordant Dagger of Night (1hp 25 dmg, 21 delay, 15 bonus)
-    ; Soulskive (1hp 26 dmg, 21 delay, 15 bonus)
-    Main=Nightshade, Blade of Entropy|Mainhand/Aneuk Dagger of Eye Gouging|Offhand/Sorrowmourn Stone|Ranged
+    ["main"] = "Nightshade, Blade of Entropy|Mainhand/Aneuk Dagger of Eye Gouging|Offhand/Sorrowmourn Stone|Ranged",
 
-    BFG=Breezeboot's Frigid Gnasher|Mainhand
+    ["bfg"] = "Breezeboot's Frigid Gnasher|Mainhand",
 
-    Ranged=Plaguebreeze|Ranged
+    ["ranged"] = "Plaguebreeze|Ranged",
 
-    NoRiposte=Fishing Pole|Mainhand/Muramite Aggressor's Bulwark|Offhand
+    ["noriposte"] = "Fishing Pole|Mainhand/Muramite Aggressor's Bulwark|Offhand",
 
-    Fishing=Fishing Pole|Mainhand
+    ["fishing"] = "Fishing Pole|Mainhand",
 
-    ; for mpg group weaponry:
-    ; FIXME need better 1h slashing
-    SlashDMG=Jagged Blade of Ice|Mainhand/Great Blade of Storms|Offhand
-    BluntDMG=Mace of Tortured Nightmares|Mainhand/Hammer of Rancorous Thoughts|Offhand
-    PierceDMG=Nightshade, Blade of Entropy|Mainhand/Aneuk Dagger of Eye Gouging|Offhand
-    ]]--
+    -- for mpg group weaponry:
+    -- FIXME need better 1h slashing
+    ["slashdmg"] = "Jagged Blade of Ice|Mainhand/Great Blade of Storms|Offhand",
+    ["bluntdmg"] = "Mace of Tortured Nightmares|Mainhand/Hammer of Rancorous Thoughts|Offhand",
+    ["piercedmg"] = "Nightshade, Blade of Entropy|Mainhand/Aneuk Dagger of Eye Gouging|Offhand",
 }
 
-settings.buffs = {
+settings.self_buffs = {
 
     -- "Tiny Bone Bracelet",
  
@@ -46,10 +41,10 @@ settings.buffs = {
     -- XXX dont get it to work 22 feb:
     -- 30% haste clicky, 72 min
     -- "Stanos' Wicked Gauntlets",
+}
 
-
-    -- XXX combat buffs:
-    --"Combat Buff=Thief's Eyes/Kniven/MinEnd|10",
+settings.combat_buffs = { -- XXX combat buffs:
+    "Thief's Eyes/Kniven/MinEnd|10",        -- XXX MinEnd
 }
 
 settings.healing = { -- XXX implement
@@ -70,7 +65,6 @@ settings.healing = { -- XXX implement
         "Glyph of Stored Life/HealPct|5/CheckFor|Resurrection Sickness",
     }
 }
-
 
 settings.assist = {
     ["type"] = "Melee",

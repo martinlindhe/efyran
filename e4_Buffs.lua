@@ -25,14 +25,12 @@ function findBestAura()
     local aura = nil
     for k, n in pairs(combatAbilityAuras) do
         if mq.TLO.Me.CombatAbility(n)() then
-            print("found ca aura ",n)
             aura = n
         end
     end
     if aura == nil then
         for k, n in pairs(spellAuras) do
             if mq.TLO.Me.Book(n)() then
-                print("found spell aura ",n)
                 aura = n
             end
         end
@@ -42,23 +40,81 @@ end
 
 local Buffs = { aura = findBestAura() }
 
+-- returns a object
+function parseSpellLine(s)
+    -- Ward of Valiance/MinMana|50/CheckFor|Hand of Conviction
+
+    local o = {}
+
+	local name = ""
+    for token in string.gmatch(s, "[^/]+") do
+        -- separate token on | "key" + "val"
+        local key = ""
+        local i = 0
+        for v in string.gmatch(token, "[^|]+") do
+            if i == 0 then
+                key = v
+            end
+            if i == 1 then
+                -- print(key, " = ", v)
+                o[key] = v
+            end
+            i = i + 1
+        end
+        if i == 1 then
+            o.SpellName = token
+        end
+    end
+
+    return o
+end
+
 -- returns true if a buff was casted
 function Buffs.RefreshBuffs()
     --print('-- RefreshBuffs ', mq.TLO.Me.Class.ShortName, ' ', mq.TLO.Time)
 
-    for k, buffItem in pairs(botSettings.settings.buffs) do
-        local spell = getSpellFromBuff(buffItem)
+    for k, buffItem in pairs(botSettings.settings.self_buffs) do
+        local skip = false
+        local spellConfig = parseSpellLine(buffItem) -- XXX parse this once on script startup. dont evaluate all the time !!!
+        if spellConfig["MinMana"] ~= nil then
+            if mq.TLO.Me.PctMana() < tonumber(spellConfig["MinMana"]) then
+                print("SKIP BUFFING, my mana ", mq.TLO.Me.PctMana, " vs required ", spellConfig["MinMana"])
+                skip = true
+            end
+        end
+        if spellConfig["CheckFor"] ~= nil then
+            -- if we got this buff on, then skip.
+            if mq.TLO.Me.Buff(spellConfig["CheckFor"])() ~= nil then
+                print("SKIP BUFFING ", spellConfig.SpellName, ", I have buff ", spellConfig["CheckFor"], " on me")
+                skip = true
+            end
+        end
+        if spellConfig["Reagent"] ~= nil then
+            -- if we lack this item, then skip.
+            if mq.TLO.FindItemCount("=" .. spellConfig["Reagent"])() == 0 then
+                mq.cmd.dgtell("SKIP BUFFING ", spellConfig.SpellName, ", I'm out of reagent ", spellConfig["Reagent"])
+                skip = true
+            end
+        end
+
+        local spell = getSpellFromBuff(spellConfig.SpellName) -- XXX parse this once on script startup too, dont evaluate all the time !
+        if spell == nil then
+            mq.cmd.dgtell("Buffs.RefreshBuffs: getSpellFromBuff ",buffItem, " FAILED")
+            return
+        end
 
         -- print("considering buffing ", spell)
 
-        -- refresh missing buffs or ones fading within 4 ticks
-        if mq.TLO.Me.Buff(spell.Name()).ID() == nil or mq.TLO.Me.Buff(spell.Name()).Duration.Ticks() <= 4 then
-            print("Refreshing buff ", spell.Name())
+        if not skip then
+            -- refresh missing buffs or ones fading within 4 ticks
+            if mq.TLO.Me.Buff(spell.Name())() == nil or mq.TLO.Me.Buff(spell.Name()).Duration.Ticks() <= 4 then
+                print("Refreshing buff ", spell.Name())
 
-            castSpell(buffItem)
+                castSpell(spellConfig.SpellName)
 
-            -- end loop after first successful buff
-            return true
+                -- end loop after first successful buff
+                return true
+            end
         end
     end
     return false
@@ -75,33 +131,25 @@ end
 function castSpell(name)
     local spell = getSpellFromBuff(name)
 
-    local resumeTwist = false
-    if mq.TLO.Twist.Twisting() then
-        mq.cmd.twist("stop")
-        mq.cmd.casting("stop")
-        mq.delay(100)
-        resumeTwist = true
-    end
-
     -- XXX check_ready and abort if spell is on a longer cooldown (with text error). like DI
 
-    local castingArg = ""
-    if spell.TargetType() == "Self" then
-        castingArg = '"' .. name .. '"'
-    else
-        castingArg = '"' .. name .. '" -targetid|'.. mq.TLO.Me.ID()
-    end
     if mq.TLO.Me.CombatAbility(name)() ~= nil then
-        mq.cmd.dgtell("castSpell: /disc",name)
+        mq.cmd.dgtell("castSpell: /disc", name)
         mq.cmd.disc(name)
     else
-        mq.cmd.dgtell("castSpell: /casting",castingArg)
-        mq.cmd.casting(castingArg)
-    end
-
-    if resumeTwist then
-        mq.delay(3000)
-        mq.cmd.twist("start")
+        if mq.TLO.Me.Class.ShortName() == "BRD" then
+            mq.cmd.dgtell("castSpell: /medley queue", name)
+            mq.cmd.medley('queue "' .. name .. '"')
+        else
+            local castingArg = ""
+            if spell.TargetType() == "Self" then
+                castingArg = '"' .. name .. '"'
+            else
+                castingArg = '"' .. name .. '" -targetid|'.. mq.TLO.Me.ID()
+            end
+            mq.cmd.dgtell("castSpell: /casting", castingArg)
+            mq.cmd.casting(castingArg)
+        end
     end
 end
 
@@ -118,6 +166,19 @@ function getSpellFromBuff(name)
         mq.cmd.dgtell("getSpellFromBuff ERROR: can't find buff", name)
         mq.cmd.beep(1)
         return nil
+    end
+end
+
+
+-- memorizes all spells listed in character settings.gems in their correct position
+function memorizeListedSpells()
+    if botSettings.settings.gems == nil then
+        print("no gems configured")
+        return
+    end
+
+    for k, n in pairs(botSettings.settings.gems) do
+        print("gem ",k, " n ",n)
     end
 end
 

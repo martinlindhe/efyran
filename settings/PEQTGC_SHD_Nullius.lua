@@ -1,26 +1,22 @@
 local settings = { }
 
 settings.swap = { -- XXX impl
---[[
-Main=Morguecaller|Mainhand/Shield of the Lightning Lord|Offhand/Screaming Skull of Discontent|Ranged
+    ["main"] = "Morguecaller|Mainhand/Shield of the Lightning Lord|Offhand/Screaming Skull of Discontent|Ranged",
+    ["bfg"] = "Breezeboot's Frigid Gnasher|Mainhand",
 
-BFG=Breezeboot's Frigid Gnasher|Mainhand
+    ["ranged"] = "Plaguebreeze|Ranged",
 
-Ranged=Plaguebreeze|Ranged
+    ["noriposte"] = "Aged Left Eye of Xygoz|Mainhand/Shield of the Lightning Lord|Offhand",
 
-NoRiposte=Aged Left Eye of Xygoz|Mainhand/Shield of the Lightning Lord|Offhand
+    ["fishing"] = "Fishing Pole|Mainhand",
 
-Fishing=Fishing Pole|Mainhand
-
-
-; for mpg trial of weaponry (group):
-SlashDMG=Innoruuk's Dark Blessing|Mainhand
-PierceDMG=Warspear of Vexation|Mainhand
-BluntDMG=Girplan Hammer of Carnage|Mainhand
-]]--
+    -- for mpg trial of weaponry (group):
+    ["slashdmg"] = "Innoruuk's Dark Blessing|Mainhand",
+    ["piercedmg"] = "Warspear of Vexation|Mainhand",
+    ["bluntdmg"] = "Girplan Hammer of Carnage|Mainhand",
 }
 
-settings.buffs = {
+settings.self_buffs = {
     "Fuzzy Foothairs",
 
     -- Combat Innates:
@@ -195,6 +191,5 @@ settings.assist = {
         "Unholy Aura Discipline",
     },
 }
-
 
 return settings

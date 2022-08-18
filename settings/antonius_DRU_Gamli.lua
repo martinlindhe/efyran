@@ -1,6 +1,6 @@
 local settings = { }
 
-settings.buffs = {
+settings.self_buffs = {
 
     -- L80 Mask of the Shadowcat (SELF, slot 2: 9 mana/tick)
     -- XXX WORKS! (i don't have rk 2 !!!)

@@ -45,10 +45,6 @@ xp tracking:
 stat food:
     https://www.mmobugs.com/wiki/index.php?title=MQ2FeedMe
 
-bard:
-    https://www.mmobugs.com/wiki/index.php?title=MQ2Medley
-    - bard melody setup             mq2twist ???
-
 
 QoL:
     task getter? https://www.mmobugs.com/wiki/index.php?title=MQ2GetMission
@@ -78,3 +74,8 @@ MQ2Cast - for spell & clickies
 + /rtz is useless. bots will /followon across zone lines
 
 + and more
+
+
+# reported bugs:
+mq2medley: https://gitlab.com/redguides/plugins/MQ2Medley/-/issues/1
+

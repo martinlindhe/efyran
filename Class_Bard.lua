@@ -29,31 +29,37 @@ function Bard.ScribeSongSet(name)
     
     print("Scribing bard song set ", name)
 
-    local songGems = ""
+    -- TODO: I dunno how to better use mq2medley. we write song set to mq2medley_character.ini and then /medley reload /medley <name>, can we just tell it with commands?
+
+    local id = mq.TLO.MacroQuest.Server() .. "_" .. mq.TLO.Me.Name()
+    local iniFile = mq.TLO.MacroQuest.Path() .. "/config/" .. id .. ".ini"
+
     for v, songRow in pairs(songSet) do
         -- War March of Muram/Gem|4
-        for songName, gemNumber in string.gmatch(songRow, "([A-Za-z' ]+)/Gem|(%d+)") do
-            print("k:",songName, ", v:", gemNumber)
+        local o = parseSpellLine(songRow)
 
-            if mq.TLO.Me.Book(songName)() == nil then
-                mq.cmd.dgtell("ERROR don't know bard song", songName)
-                mq.cmd.beep(1)
-                return
-            end
+        if mq.TLO.Me.Book(o.SpellName)() == nil then
+            mq.cmd.dgtell("ERROR don't know bard song", o.SpellName)
+            mq.cmd.beep(1)
+            return
+        end
 
+        if o["Gem"] ~= nil then
             -- make sure that song is scribed, else scribe it
-            if mq.TLO.Me.Gem(gemNumber).Name() ~= songName then
-                mq.cmd.twist("off")
-                print("SCRIBE SONG IN GEM ", gemNumber, ": want:", songName, ", have:", mq.TLO.Me.Gem(gemNumber).Name())
-                mq.cmd.memorize('"'..songName..'"', gemNumber)
+            if mq.TLO.Me.Gem(o["Gem"]).Name() ~= o.SpellName then
+                print("SCRIBE SONG IN GEM ", o["Gem"], ": want:", o.SpellName, ", have:", mq.TLO.Me.Gem(o["Gem"]).Name())
+                mq.cmd.memorize('"'..o.SpellName..'"', o["Gem"])
                 mq.delay(3000)  -- XXX 3s
             end
+        end
 
-            songGems = songGems .. gemNumber .. " "
-         end
+        -- write out song to mq2medley section
+        mq.cmd.ini(iniFile, "MQ2Medley-"..name, "song"..v, '"'..o.SpellName..'"')
     end
 
-    mq.cmd.twist(songGems)
+    mq.cmd.medley("reload")
+    mq.cmd.medley(name)
+
     Bard.currentMelody = name
 end
 
