@@ -38,7 +38,9 @@ mq.cmd.dgtell('all E4 started')
 
 while true do
     if doRefreshBuffs and refreshBuffsTimer:expired() then
-        buffs.RefreshBuffs()
+        if not buffs.RefreshBuffs() then
+            buffs.RefreshAura()
+        end
         refreshBuffsTimer:restart()
     end
 
