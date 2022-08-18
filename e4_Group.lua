@@ -48,7 +48,7 @@ function Group.Init()
                 for n = 2,6,1
                 do
                     local name = group[n]
-                    if mq.TLO.DanNet(name)() ~= nil then
+                    if mq.TLO.DanNet(name) ~= nil then
                         print("Inviting ", name)
                         mq.cmd.invite(name)
                     else
@@ -68,7 +68,7 @@ function Group.Init()
             for idx, group in pairs(Group.settings[name])
             do
                 local groupLeader = group[1]
-                if mq.TLO.DanNet(groupLeader)() ~= nil then
+                if mq.TLO.DanNet(groupLeader) ~= nil then
                     if mq.TLO.Me.Name() == raidLeader then
                         mq.cmd.raidinvite(groupLeader)
                     elseif raidLeader ~= groupLeader then

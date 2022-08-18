@@ -70,65 +70,158 @@ function parseSpellLine(s)
 end
 
 -- returns true if a buff was casted
-function Buffs.RefreshBuffs()
-    --print('-- RefreshBuffs ', mq.TLO.Me.Class.ShortName, ' ', mq.TLO.Time)
-
+function Buffs.RefreshSelfBuffs()
     for k, buffItem in pairs(botSettings.settings.self_buffs) do
-        local skip = false
-        local spellConfig = parseSpellLine(buffItem) -- XXX parse this once on script startup. dont evaluate all the time !!!
-        if spellConfig["MinMana"] ~= nil then
-            if mq.TLO.Me.PctMana() < tonumber(spellConfig["MinMana"]) then
-                print("SKIP BUFFING, my mana ", mq.TLO.Me.PctMana, " vs required ", spellConfig["MinMana"])
-                skip = true
-            end
-        end
-        if spellConfig["CheckFor"] ~= nil then
-            -- if we got this buff on, then skip.
-            if mq.TLO.Me.Buff(spellConfig["CheckFor"])() ~= nil then
-                print("SKIP BUFFING ", spellConfig.SpellName, ", I have buff ", spellConfig["CheckFor"], " on me")
-                skip = true
-            end
-        end
-        if spellConfig["Reagent"] ~= nil then
-            -- if we lack this item, then skip.
-            if mq.TLO.FindItemCount("=" .. spellConfig["Reagent"])() == 0 then
-                mq.cmd.dgtell("SKIP BUFFING ", spellConfig.SpellName, ", I'm out of reagent ", spellConfig["Reagent"])
-                skip = true
-            end
-        end
 
-        local spell = getSpellFromBuff(spellConfig.SpellName) -- XXX parse this once on script startup too, dont evaluate all the time !
-        if spell == nil then
-            mq.cmd.dgtell("Buffs.RefreshBuffs: getSpellFromBuff ",buffItem, " FAILED")
-            return
-        end
-
-        -- print("considering buffing ", spell)
-
-        if not skip then
-            -- refresh missing buffs or ones fading within 4 ticks
-            if mq.TLO.Me.Buff(spell.Name())() == nil or mq.TLO.Me.Buff(spell.Name()).Duration.Ticks() <= 4 then
-                print("Refreshing buff ", spell.Name())
-
-                castSpell(spellConfig.SpellName)
-
-                -- end loop after first successful buff
-                return true
-            end
+        if refreshBuff(buffItem, mq.TLO.Me.Name()) then
+            -- end after first successful buff
+            return true
         end
     end
     return false
 end
 
-function Buffs.RefreshAura()
-    if Buffs.aura == nil or mq.TLO.Me.Aura(1)() ~= nil then
+function queryBot(peer, q)
+    local fullQuery = peer .. ' -q ' .. q
+    mq.cmd.dquery(fullQuery)
+    mq.delay(1000, function()
+        local state = mq.TLO.DanNet(peer).Query(q).Received()
+        --print("delay ", peer, " q", q, state)
+        if state == nil then
+            return false
+        end
+        return state > 0
+    end)
+
+    local res = mq.TLO.DanNet.Q()
+    --print("  bot query ",q, " == ", res)
+    return res
+end
+
+
+-- refreshes buff on self or another bot, returns true if buff was cast
+function refreshBuff(buffItem, botName)
+
+    --print("refreshBuff ", buffItem, ", botName:",botName)
+
+    local skip = false
+
+    local spawnID = mq.TLO.Spawn("pc =" .. botName).ID()
+    if spawnID == 0 or spawnID == nil then
+        --print("SKIP BUFFING, NOT IN ZONE ", botName)
+        skip = true
+    end
+
+    local spellConfig = parseSpellLine(buffItem) -- XXX parse this once on script startup. dont evaluate all the time !!!
+    if spellConfig.MinMana ~= nil then
+        if mq.TLO.Me.PctMana() < tonumber(spellConfig.MinMana) then
+            print("SKIP BUFFING, my mana ", mq.TLO.Me.PctMana, " vs required ", spellConfig.MinMana)
+            skip = true
+        end
+    end
+    if not skip and spellConfig.CheckFor ~= nil then
+        -- if we got this buff on, then skip.
+        if mq.TLO.Me() ~= botName then
+            -- XXX LATER: rework to use /dobserve
+            local res = queryBot(botName, 'Me.Buff["' .. spellConfig.CheckFor .. '"].ID')
+
+            if res ~= "NULL" then
+                print("SKIP BUFFING of ", spellConfig.SpellName, ", target bot ", botName, " has ", spellConfig.CheckFor)
+                skip = true
+            end
+        else
+            if mq.TLO.Me.Buff(spellConfig.CheckFor)() ~= nil then
+                print("SKIP BUFFING ", spellConfig.SpellName, ", I have buff ", spellConfig.CheckFor, " on me")
+                skip = true
+            end
+        end
+    end
+    if not skip and spellConfig.Reagent ~= nil then
+        -- if we lack this item, then skip.
+        if mq.TLO.FindItemCount("=" .. spellConfig.Reagent)() == 0 then
+            mq.cmd.dgtell("SKIP BUFFING ", spellConfig.SpellName, ", I'm out of reagent ", spellConfig.Reagent)
+            skip = true
+        end
+    end
+
+    local spell = getSpellFromBuff(spellConfig.SpellName) -- XXX parse this once on script startup too, dont evaluate all the time !
+    if spell == nil then
+        mq.cmd.dgtell("Buffs.RefreshSelfBuffs: getSpellFromBuff ", buffItem, " FAILED")
+        mq.cmd.beep(1)
+        return false
+    end
+
+    if mq.TLO.Me() == botName then
+        if mq.TLO.Me.Buff(spell.Name)() ~= nil and mq.TLO.Me.Buff(spell.Name).Duration.Ticks() > 4 then
+            skip = true
+        end
+    else
+        -- check buff time remaining on this bot
+
+        -- XXX LATER: rework to use /dobserve
+        local res = queryBot(botName, 'Me.Buff["' .. spell.Name() .. '"].Duration.Ticks')
+        if (res ~= nil and res ~= "NULL") and tonumber(res) > 4 then
+            --print("SKIPPING BUFF WITH DURATION ", botName, ": ", spellConfig.SpellName, " ", tonumber(res) )
+            skip = true
+        end
+    end
+
+    if not skip then
+        print("buffing bot ", botName, ": ", spellConfig.SpellName)
+        castSpell(spellConfig.SpellName, spawnID)
+        return true
+    end
+
+    return false
+end
+
+-- returns true if spell was cast
+function Buffs.RefreshBotBuffs()
+
+    if botSettings.settings.bot_buffs == nil then
         return
     end
+    -- XXX 
+    print("Buffs.RefreshBotBuffs")
+
+
+--    ["Aura of Devotion/MinMana|50"] = {
+--        "Blastar", "Myggan", "Absint", "Trams", "Redito", "Samma", "Fandinu",
+--    },
+
+    for buff, names in pairs(botSettings.settings.bot_buffs) do
+        --print("xxx ",buff)
+
+        local spellConfig = parseSpellLine(buff) -- XXX cache, dont do this all the time!
+
+        local spell = getSpellFromBuff(spellConfig.SpellName) -- XXX parse this once on script startup too, dont evaluate all the time !
+        if spell == nil then
+            mq.cmd.dgtell("Buffs.RefreshBotBuffs: getSpellFromBuff ", buff, " FAILED")
+            mq.cmd.beep(1)
+            return false
+        end
+
+        for k, bot in pairs(names) do
+            if refreshBuff(buff, bot) then
+                return true
+            end
+        end
+    end
+
+    return false
+end
+
+-- returns true if a buff was casted
+function Buffs.RefreshAura()
+    if Buffs.aura == nil or mq.TLO.Me.Aura(1)() ~= nil then
+        return false
+    end
     castSpell(Buffs.aura)
+    return true
 end
 
 -- helper for casting spell, clicky, AA, combat ability. auto handles bard twist. XXX
-function castSpell(name)
+function castSpell(name, spawnId)
     local spell = getSpellFromBuff(name)
 
     -- XXX check_ready and abort if spell is on a longer cooldown (with text error). like DI
@@ -145,7 +238,7 @@ function castSpell(name)
             if spell.TargetType() == "Self" then
                 castingArg = '"' .. name .. '"'
             else
-                castingArg = '"' .. name .. '" -targetid|'.. mq.TLO.Me.ID()
+                castingArg = '"' .. name .. '" -targetid|'.. spawnId
             end
             mq.cmd.dgtell("castSpell: /casting", castingArg)
             mq.cmd.casting(castingArg)

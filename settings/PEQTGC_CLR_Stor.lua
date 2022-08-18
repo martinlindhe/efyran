@@ -6,7 +6,7 @@ settings.swap = { -- XXX impl
     ["melee"] = "Weighted Hammer of Conviction|Mainhand", -- 1hb
 }
 
-settings.gems = { -- XXX implement. default spell gem mapping. makes "main" spellset obsolete and allows for auto scribe on script start
+settings.gems = { -- XXX implement. default spell gem mapping. makes "main" spellset obsolete and allows for auto scribe in the right slots
     ["Pious Remedy"] = 1,
     ["Pious Elixir"] = 2,
     ["Aura of Devotion"] = 3,
@@ -43,8 +43,6 @@ settings.self_buffs = {
     -- L70 Armor of the Pioous (563 hp, 46 ac, 9 mana/tick)
     -- NOTE: does not stack with DRU Skin
     --"Armor of the Zealot/MinMana|90/CheckFor|Kazad's Mark",
-
-    -- xxx
 
     -- spell haste:
     -- L15 Blessing of Piety (10% spell haste to L39, 40 min)

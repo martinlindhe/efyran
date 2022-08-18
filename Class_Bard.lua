@@ -29,6 +29,8 @@ function Bard.ScribeSongSet(name)
     
     print("Scribing bard song set ", name)
 
+    -- XXX only write spell set to ini once (keep track), and only parse it all once
+
     -- TODO: I dunno how to better use mq2medley. we write song set to mq2medley_character.ini and then /medley reload /medley <name>, can we just tell it with commands?
 
     local id = mq.TLO.MacroQuest.Server() .. "_" .. mq.TLO.Me.Name()
@@ -36,7 +38,7 @@ function Bard.ScribeSongSet(name)
 
     for v, songRow in pairs(songSet) do
         -- War March of Muram/Gem|4
-        local o = parseSpellLine(songRow)
+        local o = parseSpellLine(songRow) -- XXX parse this once on script startup. dont evaluate all the time !!!
 
         if mq.TLO.Me.Book(o.SpellName)() == nil then
             mq.cmd.dgtell("ERROR don't know bard song", o.SpellName)
