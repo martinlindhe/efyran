@@ -1,7 +1,84 @@
 local settings = { }
 
+
+settings.swap = {   -- XXX implement
+--[[
+    ; Chaotic Black Scimitar (1hs 26 dmg, 21 delay, 15 bonus)
+    ; Rapier of Somber Notes (1hp, 27 dmg, 19 delay, 15 bonus) - tacvi
+    ; Notched Blade of Bloodletting (1hs, 37 dmg, 24 delay, 15 bonus) - anguish amv
+    Main=Blade of Vesagran|Mainhand/Notched Blade of Bloodletting|Offhand
+
+    Fishing=Fishing Pole|Mainhand
+
+    NoRiposte=Lute of False Worship|Mainhand/Shield of the Planar Assassin|Offhand
+
+
+    ; for mpg group weaponry:
+    ;SlashDMG=Chaotic Black Scimitar|Mainhand/Edge of Eternity|Offhand
+    ;PierceDMG=Blade of Vesagran|Mainhand/Blade of Annihilation Anthems|Offhand
+    ;BluntDMG=Despair|Mainhand/Frostcaller|Offhand
+]]--
+}
+
 settings.buffs = {
     "Fuzzy Foothairs",
+
+    -- Harmonize (increase singing skill by 9)
+    "Shadowsong Cloak",
+
+    -- form of endurance:
+    -- Form of Endurance III (slot 6: immunity, slot 5: 270 hp) - Ring of the Beast (anguish)
+    "Ring of the Beast",
+
+    -- Form of Defense III (slot 6: immunity, slot 10: 81 ac)
+    --"Hanvar's Hoop",
+
+    -- Savage Guard (+25 atk, slot 5)
+    "Irestone Band of Rage",
+
+    -- mana pool clicky:
+    -- Eye of Dreams (slot 4: 400 mana pool, potime)
+    --"Eye of Dreams",
+}
+
+settings.lifeSupport = { -- XXX implement
+--[[
+    "Shield of Notes/HealPct|30/CheckFor|Resurrection Sickness",
+    "Deftdance Discipline/HealPct|20/CheckFor|Resurrection Sickness",
+    "Distillate of Divine Healing XI/HealPct|8/CheckFor|Resurrection Sickness",
+]]--
+}
+
+settings.assist = {
+    ["type"] = "Melee", -- XXX "Ranged",  "Off"
+    ["stick_point"] = "Back",
+    ["melee_distance"] = 12,
+    ["ranged_distance"] = 100,
+    ["engage_percent"] = 98,  -- XXX implement!
+
+    ["abilities"] = { -- XXX implememt !!!
+        "Boastful Bellow",
+    },
+
+    ["quickburns"] = {-- XXX implememt !!!
+        -- (epic 1.5: slot 9: spell crit  8%, slot 10: dot crit  8%, slot 12: accuracy 130%) Prismatic Dragon Blade
+        -- (epic 2.0: slot 9: spell crit 12%, slot 10: dot crit 12%, slot 12: accuracy 140%) Blade of Vesagran 
+        "Blade of Vesagran",
+
+        "Dance of Blades",
+        "Cacophony",
+
+        -- (oow T1: increase double attack by  30% for 12s, 5 min reuse) Traveler's Mail Chestguard 
+        -- (oow T2: increase double attack by 100% for 24s, 5 min reuse) Farseeker's Plate Chestguard of Harmony 
+        "Farseeker's Plate Chestguard of Harmony",
+
+        "Song of Stone",
+    },
+
+    ["longburns"] = {-- XXX implememt !!!
+        "Thousand Blades",
+        "Puretone Discipline",
+    },
 }
 
 settings.songs = {
