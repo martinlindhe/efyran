@@ -58,39 +58,40 @@ settings.combatBuffs = { -- XXX implement
     "Commanding Voice/Bandy/MinEnd|5",
 }
 
-settings.lifeSupport = { -- XXX implement
+settings.healing = { -- XXX implement
+    ["life_support"] = { -- XXX implement
+        -- epic 2.0 Kreljnok's Sword of Eternal Power (group 800 hp)
+        --"Kreljnok's Sword of Eternal Power/HealPct|50/CheckFor|Resurrection Sickness",
 
-    -- epic 2.0 Kreljnok's Sword of Eternal Power (group 800 hp)
-    --"Kreljnok's Sword of Eternal Power/HealPct|50/CheckFor|Resurrection Sickness",
+        -- timer 1:
+        -- L52 Evasive
+        -- L55 Defensive
+        -- L65 Stonewall
+        "Stonewall Discipline/HealPct|30/CheckFor|Resurrection Sickness",
 
-    -- timer 1:
-    -- L52 Evasive
-    -- L55 Defensive
-    -- L65 Stonewall
-    "Stonewall Discipline/HealPct|30/CheckFor|Resurrection Sickness",
+        -- timer 2:
+        -- L56 Furious (riposte every incoming attack, 12s, 40 min reuse)
+        -- L59 Fortitude (increase chance of evading attacks, 12s, 40 min reuse)
+        "Furious Discipline/HealPct|28/CheckFor|Resurrection Sickness",
 
-    -- timer 2:
-    -- L56 Furious (riposte every incoming attack, 12s, 40 min reuse)
-    -- L59 Fortitude (increase chance of evading attacks, 12s, 40 min reuse)
-    "Furious Discipline/HealPct|28/CheckFor|Resurrection Sickness",
+        -- oow T1 bp: Armsmaster's Breastplate - reduce damage taken for 12s
+        -- oow T2 bp: Gladiator's Plate Chestguard of War - reduce damage taken for 24s
+        "Gladiator's Plate Chestguard of War/HealPct|20/CheckFor|Resurrection Sickness",
 
-    -- oow T1 bp: Armsmaster's Breastplate - reduce damage taken for 12s
-    -- oow T2 bp: Gladiator's Plate Chestguard of War - reduce damage taken for 24s
-    "Gladiator's Plate Chestguard of War/HealPct|20/CheckFor|Resurrection Sickness",
+        "Distillate of Divine Healing XI/HealPct|8/CheckFor|Resurrection Sickness",
 
-    "Distillate of Divine Healing XI/HealPct|8/CheckFor|Resurrection Sickness",
+        -- Warlord's Tenacity (1h reuse, reduce with AA Hastened Defiance, 10% per rank)
+        -- L6x Warlord's Tenacity Rank 1 AA (id: 4926, inc max hp by 1000, heal by 1134, dot 134/tick, 1.1 min)
+        -- L65 Warlord's Tenacity Rank 2 AA (id: ???)
+        -- L65 Warlord's Tenacity Rank 3 AA (id: 4927, inc max hp by 1500, heal by 1700, dot 200/tick, 1.1 min)
+        -- L6x Warlord's Tenacity Rank 4 AA (id: 5936, inc max hp by 3000, heal by 3410, dot 410/tick, 1.1 min)
+        -- L68 Warlord's Tenacity Rank 5 AA (id: 5937, inc max hp by 4000, heal by 4545, dot 545/tick, 1.1 min)
+        -- L70 Warlord's Tenacity Rank 6 AA (id: 5938, inc max hp by 5000, heal by 5680, dot 680/tick, 1.1 min)
+        --"Warlord's Tenacity/HealPct|6/CheckFor|Resurrection Sickness",
 
-    -- Warlord's Tenacity (1h reuse, reduce with AA Hastened Defiance, 10% per rank)
-    -- L6x Warlord's Tenacity Rank 1 AA (id: 4926, inc max hp by 1000, heal by 1134, dot 134/tick, 1.1 min)
-    -- L65 Warlord's Tenacity Rank 2 AA (id: ???)
-    -- L65 Warlord's Tenacity Rank 3 AA (id: 4927, inc max hp by 1500, heal by 1700, dot 200/tick, 1.1 min)
-    -- L6x Warlord's Tenacity Rank 4 AA (id: 5936, inc max hp by 3000, heal by 3410, dot 410/tick, 1.1 min)
-    -- L68 Warlord's Tenacity Rank 5 AA (id: 5937, inc max hp by 4000, heal by 4545, dot 545/tick, 1.1 min)
-    -- L70 Warlord's Tenacity Rank 6 AA (id: 5938, inc max hp by 5000, heal by 5680, dot 680/tick, 1.1 min)
-    --"Warlord's Tenacity/HealPct|6/CheckFor|Resurrection Sickness",
-
-    -- Expendable AA
-    --"Glyph of Stored Life/HealPct|4/CheckFor|Resurrection Sickness",
+        -- Expendable AA
+        --"Glyph of Stored Life/HealPct|4/CheckFor|Resurrection Sickness",
+    }
 }
 
 settings.misc = {       -- XXX implement

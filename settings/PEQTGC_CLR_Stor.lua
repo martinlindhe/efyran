@@ -188,187 +188,191 @@ Bot Buff=Ward of Valiance/Juancarlos/MinMana|50/CheckFor|Hand of Conviction
 ]]--
 }
 
-settings.cures = {  -- XXX impl
---[[
-;;CureAll=Remove Greater Curse/CheckFor|Gravel Rain/Zone|potactics,poearthb
-; NOTE: makes tanks die if all clerics do this:
-;CureAll=Remove Greater Curse/CheckFor|Solar Storm/Zone|poair
-CureAll=Remove Greater Curse/CheckFor|Curse of the Fiend/Zone|solrotower
+settings.healing = { -- XXX implement
 
-CureAll=Remove Greater Curse/CheckFor|Feeblemind/Zone|thedeep
+    -- ### FROM OLD [Cleric] E3 SECTION ### --
+    ["divine_arbitration"] = 60,    -- XXX impl. was [Cleric] Divine Arbitrsation pct in e3
+    -- ["celestial_regeneration"] = 25, -- XXX impl. was [Cleric] Celestial Regeneration pct in e3
 
-CureAll=Cure Disease/CheckFor|Rabies/Zone|chardok
+    -- yaulp:
+    -- L56 Yaulp V (50 atk, 10 mana/tick, 75 dex, 25% haste)
+    -- L65 Yaulp VI (60 atk, 12 mana/tick, 90 dex, 30% haste)
+    -- L69 Yaulp VII (80 atk, 14 mana/tick, 100 dex, 30% haste)
+    --Auto-Yaulp (On/Off)=Off
+    ["yaulp"] = "Yaulp VII",    -- XXX impl. was [Cleric] Yaulp Spell in e3
+    -- ### FROM OLD [Cleric] E3 SECTION END ### --
 
-CureAll=Antidote/CheckFor|Fulmination/Zone|Txevu
+    ["life_support"] = { -- XXX implement
+        "Ward of Retribution/Gem|8/HealPct|50/Delay|3m/CheckFor|Resurrection Sickness",
 
-AutoRadiant (On/Off)=On
-; PoP:
-;;RadiantCure=Gravel Rain/MinSick|1/Zone|potactics,poearthb
+        "Distillate of Divine Healing XI/HealPct|18/CheckFor|Resurrection Sickness",
 
-; GoD:
-RadiantCure=Fulmination/MinSick|1/Zone|txevu
-RadiantCure=Kneeshatter/MinSick|1/Zone|qvic
-RadiantCure=Skullpierce/MinSick|1/Zone|qvic
-RadiantCure=Malo/MinSick|1
-RadiantCure=Malicious Decay/MinSick|1
-RadiantCure=Insidious Decay/MinSick|1
-RadiantCure=Chaos Claws/MinSick|1
+        -- L65 Divine Avatar Rank 1 AA (decrease melee attack by 5%, increase HoT by 100/tick)
+        -- L65 Divine Avatar Rank 2 AA (decrease melee attack by 10%, increase HoT by 150/tick)
+        -- L65 Divine Avatar Rank 3 AA (decrease melee attack by 10%, increase HoT by 200/tick)
+        -- L70 Divine Avatar Rank 4 AA (decrease melee attack by 15%, increase HoT by 250/tick)
+        -- L70 Divine Avatar Rank 5 AA (id:8157, decrease melee attack by 15%, increase HoT by 300/tick)
+        -- L70 Divine Avatar Rank 6 AA (id:8158, decrease melee attack by 338%, increase HoT by 350/tick, 3.0 min, 36 min reuse)
+        "Divine Avatar/HealPct|20/CheckFor|Resurrection Sickness",
 
-; vxed,tipt:
-RadiantCure=Stonemite Acid/MinSick|1
-RadiantCure=Tigir's Insects/MinSick|1
+        -- L70 Sanctuary AA (id:5912, removes you from combat)
+        "Sanctuary/HealPct|13/CheckFor|Resurrection Sickness",
 
-; OOW:
-RadiantCure=Whipping Dust/MinSick|1/Zone|causeway
-RadiantCure=Chaotica/MinSick|1/Zone|riftseekers,wallofslaughter
-RadiantCure=Infected Bite/MinSick|1/Zone|riftseekers
-RadiantCure=Kneeshatter/MinSick|1/Zone|provinggrounds
+        -- defensive - stun attackers:
+        -- L70 Divine Retribution I (id:5866, proc Divine Retribution Effect)
+        "Divine Retribution/HealPct|25/CheckFor|Resurrection Sickness",
+    },
 
-; rss downstairs mez - XXX dont work
-;RadiantCure=Freezing Touch/Zone|riftseekers
-
-;;RadiantCure=Pyronic Lash/Zone|riftseekers
-CureAll=Pure Blood/CheckFor|Chailak Venom/Zone|riftseekers
-
-; anguish:
-RadiantCure=Gaze of Anguish/MinSick|1/Zone|anguish
-RadiantCure=Chains of Anguish/MinSick|1/Zone|anguish
-RadiantCure=Feedback Dispersion/MinSick|1/Zone|anguish
-RadiantCure=Wanton Destruction/MinSick|1/Zone|anguish,txevu
-]]--
-}
-
-settings.lifeSupport = { -- XXX implement
-    "Ward of Retribution/Gem|8/HealPct|50/Delay|3m/CheckFor|Resurrection Sickness",
-
-    "Distillate of Divine Healing XI/HealPct|18/CheckFor|Resurrection Sickness",
-
-    -- L65 Divine Avatar Rank 1 AA (decrease melee attack by 5%, increase HoT by 100/tick)
-    -- L65 Divine Avatar Rank 2 AA (decrease melee attack by 10%, increase HoT by 150/tick)
-    -- L65 Divine Avatar Rank 3 AA (decrease melee attack by 10%, increase HoT by 200/tick)
-    -- L70 Divine Avatar Rank 4 AA (decrease melee attack by 15%, increase HoT by 250/tick)
-    -- L70 Divine Avatar Rank 5 AA (id:8157, decrease melee attack by 15%, increase HoT by 300/tick)
-    -- L70 Divine Avatar Rank 6 AA (id:8158, decrease melee attack by 338%, increase HoT by 350/tick, 3.0 min, 36 min reuse)
-    "Divine Avatar/HealPct|20/CheckFor|Resurrection Sickness",
-
-    -- L70 Sanctuary AA (id:5912, removes you from combat)
-    "Sanctuary/HealPct|13/CheckFor|Resurrection Sickness",
-
-    -- defensive - stun attackers:
-    -- L70 Divine Retribution I (id:5866, proc Divine Retribution Effect)
-    "Divine Retribution/HealPct|25/CheckFor|Resurrection Sickness",
-}
-
-settings.heals = { -- XXX implement
---[[
-    [Heals]
-    Tank=Bandy
-    Tank=Nullius
-    ;Tank=Manu
-    ;Tank=Crusade
-    ;Tank=Juancarlos
-
-    Tank Heal=Ancient: Hallowed Light/HealPct|88/Gem|4/MinMana|5
-
-    ; MPG Efficiency:
-    ;Tank Heal=Pious Remedy/HealPct|70/Gem|1/MinMana|5
-
-    All Heal=Pious Remedy/HealPct|60/Gem|1/MinMana|30
-
-    ; tacvi clicky:
-    All Heal=Weighted Hammer of Conviction/HealPct|95
-
-
-    ; curing heals:
-    ; L70 Desperate Renewal (4935 hp, -18 pr, -18 dr, -18 curse, cost 1375 mana)
-
-    ; quick heals:
-    ; L01 Minor Healing (12-20 hp, 1.5s cast, 10 mana)
-    ; L04 Light Healing (47-65 hp, 2s cast, 28 mana)
-    ; L10 Healing (135-175 hp, 2.5s cast, 65 mana)
-    ; L20 Greater Healing (280-350 hp, 3.0s cast, 115 mana)
-    ; L51 Remedy (463-483 hp, 1.8s cast, 167 mana)
-    ; L58 Ethereal Remedy (975 hp, 2.8s cast, 400 mana)
-    ; L61 Supernal Remedy (1450 hp, 1.8s cast, 400 mana)
-    ; L66 Pious Remedy (1990 hp, 1.8s cast, 495 mana)
-
-    ; fast heals:
-    ; L58 Ethereal Light (1980-2000 hp, 3.8s cast, 490 mana)
-    ; L63 Supernal Light (2730-2750 hp, 3.8s cast, 600 mana)
-    ; L65 Holy Light (3275 hp, 3.8s cast, 650 mana)
-    ; --- Weighted Hammer of Conviction (tacvi class click) - Supernal Remedy (1.5s cast, 3m30s reuse)
-    ; L68 Pious Light (3750-3770 hp, 3.8s cast, 740 mana)
-    ; L70 Ancient: Hallowed Light (4150 hp, 3.8s cast, 775 mana)
-
-
-    ; CH for mpg Ingenuity:
-    ;;Tank Heal=Complete Heal/HealPct|80/Gem|2
-
-    ; CH for mpg Efficency - due to zone debuff fools mq 100% hp is like 75%:
-    ;;Tank Heal=Complete Heal/HealPct|70/Gem|2
-
-
-    Who to Heal=Tanks/All
-
-
-    ; hot:
-    ; L44 Celestial Healing (180 hp/tick, 0.4 min, 225 mana)
-    ; L59 Celestial Elixir (300 hp/tick, 0.4 min, 300 mana)
-    ; L60 Ethereal Elixir (300 hp/tick, 0.4 min, 975 mana, group)
-    ; L62 Supernal Elixir (600 hp/tick, 0.4 min, 480 mana)
-    ; L65 Holy Elixir (900 hp/tick, 0.4 min, 720 mana)
-    ; L67 Pious Elixir (slot 1: 1170 hp/tick, 0.4 min, 890 mana)
-    ;Heal Over Time Spell=Pious Elixir/HealPct|70/Gem|4/CheckFor|Spiritual Serenity
-    ;Who to HoT=Tanks
-
-
-    ; group heals:
-    ; L30 Word of Health (380-485 hp, cost 302 mana)
-    ; L57 Word of Restoration (1788-1818 hp, cost 898 mana)
-    ; L60 Word of Redemption (7500 hp, cost 1100 mana)
-    ; L64 Word of Replenishment (2500 hp, -14 dr, -14 pr, -7 curse, cost 1100 mana)
-    ; L69 Word of Vivification (3417-3427 hp, -21 dr, -21 pr, -14 curse, cost 1357 mana)
-
-
-    ; group hot:
-    ; L70 Elixir of Divinity (900 hp/tick, group, cost 1550 mana)
-
-
-    Join Heal Chains (On/Off)=Off
-    Important Bot=
-    Pet Owner=
-    Important Heal=
-    Pet Heal=
-    Heal Over Time Spell=
-    Group Heal=
-    Who to HoT=
-]]--
-}
-
-
-settings.assist = {
-    ["nukes"] = { -- XXX implement
+    ["cures"] = { -- XXX impl. was [Cures] in e3
         --[[
-        [Nukes]
-        Main=
-        ; magic nukes:
-        ; L44 Retribution (372-390 hp, cost 144 mana)
-        ; L54 Reckoning (571 hp, cost 206 mana)
-        ; L56 Judgment (842 hp, cost 274 mana)
-        ; L62 Condemnation (1175 hp, cost 365 mana)
-        ; L65 Order (1219 hp, cost 379 mana)
-        ; L65 Ancient: Chaos Censure (1329 hp, cost 413 mana)
-        ; L67 Reproach (1424-1524 hp, cost 430 mana)
-        ; L69 Chromastrike (1200 hp, cost 375 mana, chromatic resist)
-        ; L70 Ancient: Pious Conscience (1646 hp, cost 457 mana)
-        ;Main=Reproach/NoAggro/Gem|7/MinMana|30
+        ;;CureAll=Remove Greater Curse/CheckFor|Gravel Rain/Zone|potactics,poearthb
+        ; NOTE: makes tanks die if all clerics do this:
+        ;CureAll=Remove Greater Curse/CheckFor|Solar Storm/Zone|poair
+        CureAll=Remove Greater Curse/CheckFor|Curse of the Fiend/Zone|solrotower
+
+        CureAll=Remove Greater Curse/CheckFor|Feeblemind/Zone|thedeep
+
+        CureAll=Cure Disease/CheckFor|Rabies/Zone|chardok
+
+        CureAll=Antidote/CheckFor|Fulmination/Zone|Txevu
+
+        AutoRadiant (On/Off)=On
+        ; PoP:
+        ;;RadiantCure=Gravel Rain/MinSick|1/Zone|potactics,poearthb
+
+        ; GoD:
+        RadiantCure=Fulmination/MinSick|1/Zone|txevu
+        RadiantCure=Kneeshatter/MinSick|1/Zone|qvic
+        RadiantCure=Skullpierce/MinSick|1/Zone|qvic
+        RadiantCure=Malo/MinSick|1
+        RadiantCure=Malicious Decay/MinSick|1
+        RadiantCure=Insidious Decay/MinSick|1
+        RadiantCure=Chaos Claws/MinSick|1
+
+        ; vxed,tipt:
+        RadiantCure=Stonemite Acid/MinSick|1
+        RadiantCure=Tigir's Insects/MinSick|1
+
+        ; OOW:
+        RadiantCure=Whipping Dust/MinSick|1/Zone|causeway
+        RadiantCure=Chaotica/MinSick|1/Zone|riftseekers,wallofslaughter
+        RadiantCure=Infected Bite/MinSick|1/Zone|riftseekers
+        RadiantCure=Kneeshatter/MinSick|1/Zone|provinggrounds
+
+        ; rss downstairs mez - XXX dont work
+        ;RadiantCure=Freezing Touch/Zone|riftseekers
+
+        ;;RadiantCure=Pyronic Lash/Zone|riftseekers
+        CureAll=Pure Blood/CheckFor|Chailak Venom/Zone|riftseekers
+
+        ; anguish:
+        RadiantCure=Gaze of Anguish/MinSick|1/Zone|anguish
+        RadiantCure=Chains of Anguish/MinSick|1/Zone|anguish
+        RadiantCure=Feedback Dispersion/MinSick|1/Zone|anguish
+        RadiantCure=Wanton Destruction/MinSick|1/Zone|anguish,txevu
         ]]--
     },
 
+    -- curing heals:
+    -- L70 Desperate Renewal (4935 hp, -18 pr, -18 dr, -18 curse, cost 1375 mana)
+
+    -- quick heals:
+    -- L01 Minor Healing (12-20 hp, 1.5s cast, 10 mana)
+    -- L04 Light Healing (47-65 hp, 2s cast, 28 mana)
+    -- L10 Healing (135-175 hp, 2.5s cast, 65 mana)
+    -- L20 Greater Healing (280-350 hp, 3.0s cast, 115 mana)
+    -- L51 Remedy (463-483 hp, 1.8s cast, 167 mana)
+    -- L58 Ethereal Remedy (975 hp, 2.8s cast, 400 mana)
+    -- L61 Supernal Remedy (1450 hp, 1.8s cast, 400 mana)
+    -- L66 Pious Remedy (1990 hp, 1.8s cast, 495 mana)
+
+    -- fast heals:
+    -- L58 Ethereal Light (1980-2000 hp, 3.8s cast, 490 mana)
+    -- L63 Supernal Light (2730-2750 hp, 3.8s cast, 600 mana)
+    -- L65 Holy Light (3275 hp, 3.8s cast, 650 mana)
+    -- L65 Weighted Hammer of Conviction (tacvi class click) - Supernal Remedy (1.5s cast, 3m30s reuse)
+    -- L68 Pious Light (3750-3770 hp, 3.8s cast, 740 mana)
+    -- L70 Ancient: Hallowed Light (4150 hp, 3.8s cast, 775 mana)
+
+    ["tank_heal"] = {-- XXX impl
+        "Ancient: Hallowed Light/HealPct|88/Gem|4/MinMana|5",
+
+        -- MPG Efficiency with stronger toons. the zone debuff fools mq that 100% HP is like 75%:
+        "Pious Remedy/HealPct|70/Gem|1/MinMana|5",
+
+        -- CH for mpg Efficency. the zone debuff fools mq that 100% HP is like 75%:   TODO verify how it is on mqnext
+        -- "Complete Heal/HealPct|70/Gem|2",
+
+        -- CH for mpg Ingenuity:
+        --"Complete Heal/HealPct|80/Gem|2",
+    },
+
+    ["all_heal"] = {-- XXX impl
+        "Pious Remedy/HealPct|60/Gem|1/MinMana|30",
+
+        -- tacvi clicky
+        "Weighted Hammer of Conviction/HealPct|95",
+    },
+
+    ["group_heal"] = { -- XXX impl
+        -- group heals:
+        -- L30 Word of Health (380-485 hp, cost 302 mana)
+        -- L57 Word of Restoration (1788-1818 hp, cost 898 mana)
+        -- L60 Word of Redemption (7500 hp, cost 1100 mana)
+        -- L64 Word of Replenishment (2500 hp, -14 dr, -14 pr, -7 curse, cost 1100 mana)
+        -- L69 Word of Vivification (3417-3427 hp, -21 dr, -21 pr, -14 curse, cost 1357 mana)
+
+        -- group hot:
+        -- L70 Elixir of Divinity (900 hp/tick, group, cost 1550 mana)
+        -- XXX add celestial regen aa here?!
+    },
+
+    ["pet_heal"] = {}, -- XXX impl
+
+    ["tanks"] = {-- XXX impl
+        "Bandy",
+        "Nullius",
+        --"Manu",
+        --"Crusade",
+        --"Juancarlos",
+    },
+
+    ["important"] = {}, -- XXX impl. prioritized list of toons to heal as "Important" group in who_to_heal
+    ["important_heal"] = {}, -- XXX impl. heal spell to heal these toons with
+
+    ["who_to_heal"] = "Tanks/All", -- XXX impl
+
+    ["hot"] = { -- XXX impl
+        -- L44 Celestial Healing (180 hp/tick, 0.4 min, 225 mana)
+        -- L59 Celestial Elixir (300 hp/tick, 0.4 min, 300 mana)
+        -- L60 Ethereal Elixir (300 hp/tick, 0.4 min, 975 mana, group)
+        -- L62 Supernal Elixir (600 hp/tick, 0.4 min, 480 mana)
+        -- L65 Holy Elixir (900 hp/tick, 0.4 min, 720 mana)
+        -- L67 Pious Elixir (slot 1: 1170 hp/tick, 0.4 min, 890 mana)
+        "Pious Elixir/HealPct|70/Gem|4/CheckFor|Spiritual Serenity",
+    }
+
+    -- ["who_to_hot"] = "Tanks", -- XXX impl
+}
+
+settings.assist = {
+    ["nukes"] = { -- XXX implement
+        -- magic nukes:
+        -- L44 Retribution (372-390 hp, cost 144 mana)
+        -- L54 Reckoning (571 hp, cost 206 mana)
+        -- L56 Judgment (842 hp, cost 274 mana)
+        -- L62 Condemnation (1175 hp, cost 365 mana)
+        -- L65 Order (1219 hp, cost 379 mana)
+        -- L65 Ancient: Chaos Censure (1329 hp, cost 413 mana)
+        -- L67 Reproach (1424-1524 hp, cost 430 mana)
+        -- L69 Chromastrike (1200 hp, cost 375 mana, chromatic resist)
+        -- L70 Ancient: Pious Conscience (1646 hp, cost 457 mana)
+        --"Reproach/NoAggro/Gem|7/MinMana|30",
+    },
+
     ["quickburns"] = { -- XXX implememt !!!
-        -- oow bp clicky:
-        -- OOW T1 bp: Sanctified Chestguard (increase healing spell potency by 1-50% for 0.5 min)
-        -- OOW T2 bp: Faithbringer's Breastplate of Conviction (increase healing spell potency by 1-50% for 0.7 min)
+        -- oow T1 bp: Sanctified Chestguard (increase healing spell potency by 1-50% for 0.5 min)
+        -- oow T2 bp: Faithbringer's Breastplate of Conviction (increase healing spell potency by 1-50% for 0.7 min)
         "Faithbringer's Breastplate of Conviction",
 
         -- L66 Celestial Hammer AA, 22 min reuse (XXX disabled because of casting time)
@@ -377,35 +381,20 @@ settings.assist = {
 }
 
 settings.pbae = {   -- XXX implement
---[[
-; pbae magic nukes:
-; L09 Word of Pain (24-29 hp, aerange 20, recast 9s, cost 47 mana)
-; L19 Word of Shadow (52-58 hp, aerange 20, recast 9s, cost 85 mana)
-; L26 Word of Spirit (91-104 hp, aerange 20, recast 9s, cost 133 mana)
-; L34 Tremor (106-122 hp, aerange 30, recast 10s, cost 200 mana)
-; L39 Word of Souls (138-155 hp, aerange 20, recast 9s, cost 171 mana)
-; L44 Earthquake (214-246 hp, aerange 30, recast 24s, cost 375 mana)
-; L49 Word Divine (339 hp, aerange 20, recast 9s, cost 304 mana)
-; L52 Upheaval (618-725 hp, aerange 35, recast 24s, cost 625 mana)
-; L59 The Unspoken Word (605 hp, aerange 20, recast 120s, cost 427 mana)
-; L64 Catastrophe (850 hp, aerange 35, recast 24s, cost 650 mana)
-; L69 Calamity (1105 hp, aerange 35, recast 24s, cost 812 mana - PUSHBACK 1.0)
-;PBAE=Calamity/Gem|6/MinMana|10
-;PBAE=Catastrophe/Gem|7/MinMana|10
-]]--
+    -- pbae magic nukes:
+    -- L09 Word of Pain (24-29 hp, aerange 20, recast 9s, cost 47 mana)
+    -- L19 Word of Shadow (52-58 hp, aerange 20, recast 9s, cost 85 mana)
+    -- L26 Word of Spirit (91-104 hp, aerange 20, recast 9s, cost 133 mana)
+    -- L34 Tremor (106-122 hp, aerange 30, recast 10s, cost 200 mana)
+    -- L39 Word of Souls (138-155 hp, aerange 20, recast 9s, cost 171 mana)
+    -- L44 Earthquake (214-246 hp, aerange 30, recast 24s, cost 375 mana)
+    -- L49 Word Divine (339 hp, aerange 20, recast 9s, cost 304 mana)
+    -- L52 Upheaval (618-725 hp, aerange 35, recast 24s, cost 625 mana)
+    -- L59 The Unspoken Word (605 hp, aerange 20, recast 120s, cost 427 mana)
+    -- L64 Catastrophe (850 hp, aerange 35, recast 24s, cost 650 mana)
+    -- L69 Calamity (1105 hp, aerange 35, recast 24s, cost 812 mana - PUSHBACK 1.0)
+    -- "Calamity/Gem|6/MinMana|10",
+    -- "Catastrophe/Gem|7/MinMana|10",
 }
-
-settings.cleric = {
-    ["divine_arbitration"] = 60,    -- XXX impl
-    -- ["celestial_regeneration"] = 25,
-
-    -- yaulp:
-    -- L56 Yaulp V (50 atk, 10 mana/tick, 75 dex, 25% haste)
-    -- L65 Yaulp VI (60 atk, 12 mana/tick, 90 dex, 30% haste)
-    -- L69 Yaulp VII (80 atk, 14 mana/tick, 100 dex, 30% haste)
-    --Auto-Yaulp (On/Off)=Off
-    ["yaulp"] = "Yaulp VII",    -- XXX impl
-}
-
 
 return settings

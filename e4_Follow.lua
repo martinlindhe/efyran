@@ -12,6 +12,12 @@ function Follow.Init()
         print("WARNING: MQ2AdvPath was not loaded")
     end
 
+    if mq.TLO.Plugin("MQ2MoveUtils")() == nil then
+        -- XXX currently used for /stick when assisting. would prefer to drop it fully
+        mq.cmd.plugin("MQ2MoveUtils")
+        print("WARNING: MQ2MoveUtils was not loaded")
+    end
+
     mq.bind("/clickit", function(name)
         print("CLICKING NEARBY DOOR xxx name")
         -- XXX click nearby door. like pok stones etc
@@ -66,41 +72,64 @@ function Follow.Init()
 
     end)
 
-    mq.bind("/assiston", function(called)
-        -- XXX if melee, stick and attack
+    mq.bind("/assiston", function(mobID)
 
-        local id = mq.TLO.Target.ID()
-        local class = mq.TLO.Me.Class.ShortName()
-        if class == "WAR" then meleeAssist(id)
+        local orchestrator = false
+        if mq.TLO.FrameLimiter.Status() == "Foreground" then
+            mobID = mq.TLO.Target.ID()
+            orchestrator = true
         end
 
+        if botSettings.settings.assist.type == "Melee" then
+            meleeAssist(mobID)
+        end
+
+        -- TODO ranged & caster assist ...
+
+        if orchestrator then
+            -- XXX tell everyone else to attack
+                mq.cmd.dgze("/assiston", mobID)
+        end
     end)
+
 
 end
 
+-- stick and perform melee attacks
 -- id = spawn id
 function meleeAssist(id)
-    print("meleeAssist")
+    print("meleeAssist ",id)
+    if id == nil then
+        mq.cmd.dgtell("ERROR ASSSIST ON ",id)
+        return
+    end
 
+    mq.cmd.target("id "..id)
     mq.cmd.attack("on")
     -- mq.cmd.afollow("spawn " .. id) -- # XXX afollow wont stick in front/back, etc. need more like /stick 
 
+    if botSettings.settings.assist.melee_distance == "MaxMelee" then
+        botSettings.settings.assist.melee_distance = 25 -- XXX should be a global config for MaxMelee value
+    end
 
-    tprint(botSettings.settings.assist) -- XXX respect settings
+    --tprint(botSettings.settings.assist) -- XXX respect settings
 
-    if botSettings.settings.assist.type == "Melee" then
+    local stickArg = ""
+    if id ~= nil then
+        stickArg = "id " .. id .. " "
+    end
 
-        if botSettings.settings.assist.stick_point == "Front" then
-            mq.cmd.dgtell("STICKING IN FRONT!")
-            mq.cmd.stick("hold front " .. botSettings.settings.assist.melee_distance .. " uw")
-        else
-            mq.cmd.dgtell("STICKING IN BACK!")
-            mq.cmd.stick("snaproll uw")
-            --/delay 20 ${Stick.Behind} && ${Stick.Stopped}
-            mq.cmd.delay(20, mq.TLO.Stick.Behind and mq.TLO.Stick.Stopped)
-            mq.cmd.stick("hold moveback behind " .. botSettings.settings.assist.melee_distance .. " uw")
-        end
-
+    if botSettings.settings.assist.stick_point == "Front" then
+        stickArg = stickArg .. "hold front " .. botSettings.settings.assist.melee_distance .. " uw"
+        mq.cmd.dgtell("STICKING IN FRONT TO ",id, " ", stickArg)
+        mq.cmd.stick(stickArg)
+    else
+        mq.cmd.stick("snaproll uw")
+        --/delay 20 ${Stick.Behind} && ${Stick.Stopped}
+        mq.cmd.delay(20, mq.TLO.Stick.Behind and mq.TLO.Stick.Stopped)
+        stickArg = stickArg .. "hold moveback behind " .. botSettings.settings.assist.melee_distance .. " uw"
+        mq.cmd.dgtell("STICKING IN BACK TO ",id, " ", stickArg)
+        mq.cmd.stick(stickArg)
     end
 
 

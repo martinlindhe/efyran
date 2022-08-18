@@ -18,7 +18,7 @@ function Buffs.RefreshBuffs()
             spell = mq.TLO.Me.AltAbility(buffItem).Spell
             --print('using aa ', buffItem, ', spell: ', spell)
         else
-            mq.cmd.dgtell("ERROR cant find buff ", buffItem)
+            mq.cmd.dgtell("ERROR can't find buff", buffItem)
             mq.cmd.beep(1)
             return
         end
