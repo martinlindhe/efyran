@@ -41,7 +41,7 @@ mq.cmd.dgtell('all E4 started')
 
 
 while true do
-    if botSettings.toggles.refresh_buffs and refreshBuffsTimer:expired() and not mq.TLO.Me.Moving()
+    if botSettings.toggles.refresh_buffs and refreshBuffsTimer:expired() and not mq.TLO.Me.Moving() and not mq.TLO.Me.Invis()
     and (mq.TLO.Me.Class.ShortName() == "BRD" or not mq.TLO.Me.Casting()) then
         if not buffs.RefreshSelfBuffs() then
             if not buffs.RefreshAura() then

@@ -31,13 +31,11 @@ function QoL.Init()
         end
     end)
 
-
     mq.event("zoned", "You have entered #1#.", function(text, zone)
         mq.cmd.dgtell("i zoned into ", zone)
         mq.delay(2000)
         pet.ConfigureTaunt()
     end)
-
 
     -- print('DONE: QoL.Init')
 end

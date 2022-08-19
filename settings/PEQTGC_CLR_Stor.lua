@@ -79,14 +79,41 @@ settings.group_buffs = {
     -- L63 Kazad's Mark (910 hp, cost 1800 mana, group)
     -- L66 Symbol of Balikor (1137 hp, cost 780 mana)
     -- L70 Balikor's Mark (1137 hp, cost 2340 mana, group)
+    -- NOTE: stacks with DRU Skin and AC
     ["symbol"] = {
-        "Symbol of Naltron/MinLevel|1",
-        "Symbol of Marzin/MinLevel|42",
+        "Symbol of Naltron/MinLevel|1", -- single
+        "Symbol of Marzin/MinLevel|42", -- single
         "Naltron's Mark/MinLevel|44",
-        "Symbol of Kazad/MinLevel|45",
         "Kazad's Mark/MinLevel|46",
         "Balikor's Mark/MinLevel|62",
     },
+
+    -- L61 Ward of Gallantry (slot 4: 54 ac)
+    -- L66 Ward of Valiance (slot 4: 72 ac)
+    -- NOTE: stacks with Symbol + DRU Skin + Focus
+    ["ac"] = {
+        "Ward of Gallantry/MinLevel|45/CheckFor|Hand of Virtue",
+        "Ward of Valiance/MinLevel|62/CheckFor|Hand of Conviction",
+    },
+
+    -- hp buff - aegolism line (slot 2 - does not stack with DRU skin):
+    -- L01 Courage (20 hp, 4 ac, single)
+    -- L40 Temperance (800 hp, 48 ac, single) - LANDS ON L01
+    -- L45 Blessing of Temperance (800 hp, 48 ac, group) - LANDS ON L01
+    -- L60 Aegolism (1150 hp, 60 ac, single)
+    -- L60 Blessing of Aegolism (1150 hp, 60 ac, group)
+    -- L62 Virtue (1405 hp, 72 ac, single)
+    -- L65 Hand of Virtue (1405 hp, 72 ac, group) - LANDS ON L47
+    -- L67 Conviction (1787 hp, 94 ac)
+    -- L70 Hand of Conviction (1787 hp, 94 ac, group) - LANDS ON L62
+    --[[
+    ["aegolism"] = {
+        "Blessing of Temperance/MinLevel|1",
+        "Blessing of Aegolism/MinLevel|45",
+        "Hand of Virtue/MinLevel|47",
+        "Hand of Conviction/MinLevel|62",
+    }
+    ]]--
 }
 
 settings.bot_buffs = {  -- XXX IMPL THIS
@@ -114,20 +141,6 @@ settings.bot_buffs = {  -- XXX IMPL THIS
         "Endstand", "Nacken", "Halsen", "Ryggen", "Katten", "Tervet", 
         "Gasoline", "Saga", "Brinner", "Katan", "Kasta", "Bulf", "Papp",
         "Pantless", "Crust", "Plin", "Hypert",
-    },
-
-    -- hp buff - aegolism line (slot 2 - does not stack with DRU skin):
-    -- L01 Courage (20 hp, 4 ac, single)
-    -- L40 Temperance (800 hp, 48 ac, single) - LANDS ON L01
-    -- L45 Blessing of Temperance (800 hp, 48 ac, group) - LANDS ON L01
-    -- L60 Aegolism (1150 hp, 60 ac, single)
-    -- L60 Blessing of Aegolism (1150 hp, 60 ac, group)
-    -- L62 Virtue (1405 hp, 72 ac, single)
-    -- L65 Hand of Virtue (1405 hp, 72 ac, group) - LANDS ON L47
-    -- L67 Conviction (1787 hp, 94 ac)
-    -- L70 Hand of Conviction (1787 hp, 94 ac, group) - XXX LANDS ON L61 ???
-    ["Temperance"] = {
-        --"Tand",
     },
 }
 

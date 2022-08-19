@@ -175,7 +175,6 @@ end
 -- returns true if a buff was casted
 function Buffs.RefreshSelfBuffs()
     for k, buffItem in pairs(botSettings.settings.self_buffs) do
-
         if refreshBuff(buffItem, mq.TLO.Me.Name()) then
             -- end after first successful buff
             return true
@@ -284,6 +283,11 @@ function spellConfigAllowsCasting(buffItem, botName)
             mq.cmd.dgtell("cant rebuff (",spell.TargetType(),"), toon too far away: ", buffItem, " ", botName, " spell range = ", spell.Range(), ", spawn distance = ", spawn.Distance())
             return false
         end
+    end
+
+    if spellConfig.Shrink ~= nil and mq.TLO.Me.Height() <= 2.03 then
+        --print("will not shrink myself with ", spellConfig.SpellName, " because my height is already ", mq.TLO.Me.Height())
+        return false
     end
 
     if spellConfig.MinMana ~= nil then

@@ -55,6 +55,8 @@ settings.self_buffs = {
     -- L54 Elemental Cloak (45 cr, 45 fr)
     -- L61 Elemental Barrier (60 cr, 60 fr)
     --"Elemental Barrier/MinMana|100",
+
+    "Shimmering Bauble of Trickery/Shrink|On",
 }
 
 settings.combat_buffs = {
