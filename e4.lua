@@ -12,6 +12,7 @@ assist  = require('e4_Assist')
 buffs   = require('e4_Buffs')
 follow  = require('e4_Follow')
 group   = require('e4_Group')
+pet     = require('e4_Pet')
 qol     = require('e4_QoL')
 
 
@@ -44,7 +45,9 @@ while true do
     and (mq.TLO.Me.Class.ShortName() == "BRD" or not mq.TLO.Me.Casting()) then
         if not buffs.RefreshSelfBuffs() then
             if not buffs.RefreshAura() then
-                buffs.RefreshBotBuffs()
+                if not pet.BuffMyPet() then
+                    buffs.RefreshBotBuffs()
+                end
             end
         end
         refreshBuffsTimer:restart()
@@ -72,6 +75,9 @@ while true do
     end
 
     mq.doevents()
+
+    pet.Summon()
+
     qol.Tick()
     mq.delay(1000) -- 1.0s
 end

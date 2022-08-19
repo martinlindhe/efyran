@@ -187,21 +187,19 @@ settings.healing = { -- XXX implement
     }
 }
 
-settings.pet = { -- XXX impl
+settings.pet = {
+    ["auto"] = false,
+
     -- Lxx Kintaz's Animation
     -- L55 Zumaik's Animation
     -- L62 Aeldorb's Animation
     -- L66 Salik's Animation
-    --[[
-    ;Pet Spell=Salik's Animation/MinMana|20/Reagent|Tiny Dagger
-    Pet Heal=
-    Pet Buff=Speed of Salik/MinMana|50/CheckFor|Hastening of Salik
-    Pet Taunt (On/Off)=Off
-    Pet Auto-Shrink (On/Off)=Off
-    Pet Summon Combat (On/Off)=Off
-    Pet Buff Combat (On/Off)=Off
-    Pet Spell=
-    ]]--
+    ["spell"] = "Salik's Animation/MinMana|20/Reagent|Tiny Dagger",
+
+    ["heals"] = {},
+    ["buffs"] = {
+        "Hastening of Salik/MinMana|50",
+    },
 }
 
 settings.assist = {

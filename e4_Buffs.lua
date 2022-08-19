@@ -59,6 +59,9 @@ function Buffs.Init()
 
     -- if filter == "all", drop all. else drop partially matched buffs
     mq.bind("/dropbuff", function(filter)
+        if filter == nil then
+            return
+        end
         local orchestrator = mq.TLO.FrameLimiter.Status() == "Foreground"
         if orchestrator then
             mq.cmd.dgzexecute("/dropbuff", filter)
@@ -112,7 +115,6 @@ function Buffs.Init()
             end
 
             for k, buff in pairs(buffs) do
-
                 local spellConfig = parseSpellLine(buff)  -- XXX do not parse here, cache and reuse
                 local n = tonumber(spellConfig.MinLevel)
                 if n == nil then
@@ -127,14 +129,16 @@ function Buffs.Init()
             end
 
             if minLevel > 0 then
-                castSpellRaw(spellName, spawnID, "-maxtries|3")
-                -- XXX wait until cast is finished !!!
-                mq.delay(10000) -- XXX 10s
+                if spellConfigAllowsCasting(spellName, spawn.Name()) then
+                    castSpellRaw(spellName, spawnID, "-maxtries|3")
+                    -- XXX wait until cast is finished !!!
+                    mq.delay(10000) -- XXX 10s
+                end
             else
                 print("Failed to find a matching group buff ", key, ", target ", spawn.Name(), " L", level)
             end
-
         end
+
     end)
 end
 
@@ -211,6 +215,55 @@ function refreshBuff(buffItem, botName)
     end
     local spawnID = spawn.ID()
 
+    if not spellConfigAllowsCasting(buffItem, botName) then
+        return false
+    end
+
+    local spellConfig = parseSpellLine(buffItem) -- XXX parse this once on script startup. dont evaluate all the time !!!
+
+    local spell = getSpellFromBuff(spellConfig.SpellName) -- XXX parse this once on script startup too, dont evaluate all the time !
+    if spell == nil then
+        mq.cmd.dgtell("Buffs.refreshBuff: getSpellFromBuff ", buffItem, " FAILED")
+        mq.cmd.beep(1)
+        return false
+    end
+
+    -- only refresh fading & missing buffs
+    if mq.TLO.Me() == botName then
+        if mq.TLO.Me.Buff(spell.Name)() ~= nil and mq.TLO.Me.Buff(spell.Name).Duration.Ticks() > 4 then
+            return false
+        end
+    else
+        -- check buff time remaining on this bot
+
+        -- XXX LATER: rework to use /dobserve
+        local res = queryBot(botName, 'Me.Buff["' .. spell.Name() .. '"].Duration.Ticks')
+        if (res ~= nil and res ~= "NULL") and tonumber(res) > 4 then
+            --print("SKIPPING BUFF WITH DURATION ", botName, ": ", spellConfig.SpellName, " ", tonumber(res) )
+            return false
+        end
+    end
+
+    print("buffing bot ", botName, " (id ",spawnID,"): ", spellConfig.SpellName)
+    castSpell(spellConfig.SpellName, spawnID)
+    return true
+end
+
+
+
+
+-- XXX refactor more. need to be usable with pet buffs too (should take a spawn id instead of bot name, and then derive if its a bot in zone or a pet)
+-- returns bool
+function spellConfigAllowsCasting(buffItem, botName)
+
+    local spawn = mq.TLO.Spawn("pc =" .. botName)
+    --print("PC MATCH", botName, " ", spawn, " ", type(spawn))
+    if tostring(spawn) == "NULL" then
+        --print("SKIP BUFFING, NOT IN ZONE ", botName)
+        return false
+    end
+    local spawnID = spawn.ID()
+
     local spellConfig = parseSpellLine(buffItem) -- XXX parse this once on script startup. dont evaluate all the time !!!
 
     local spell = getSpellFromBuff(spellConfig.SpellName) -- XXX parse this once on script startup too, dont evaluate all the time !
@@ -264,25 +317,20 @@ function refreshBuff(buffItem, botName)
         end
     end
 
-    if mq.TLO.Me() == botName then
-        if mq.TLO.Me.Buff(spell.Name)() ~= nil and mq.TLO.Me.Buff(spell.Name).Duration.Ticks() > 4 then
-            return false
-        end
-    else
-        -- check buff time remaining on this bot
-
-        -- XXX LATER: rework to use /dobserve
-        local res = queryBot(botName, 'Me.Buff["' .. spell.Name() .. '"].Duration.Ticks')
-        if (res ~= nil and res ~= "NULL") and tonumber(res) > 4 then
-            --print("SKIPPING BUFF WITH DURATION ", botName, ": ", spellConfig.SpellName, " ", tonumber(res) )
-            return false
-        end
-    end
-
-    print("buffing bot ", botName, ": ", spellConfig.SpellName)
-    castSpell(spellConfig.SpellName, spawnID)
     return true
 end
+
+
+
+
+
+
+
+
+
+
+
+
 
 -- returns true if spell was cast
 function Buffs.RefreshBotBuffs()

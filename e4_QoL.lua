@@ -20,8 +20,22 @@ function QoL.Init()
     end)
 
     mq.event("tell", "#1# tells you, #2#", function(text, name, msg)
-        mq.cmd.dgtell("all GOT A TELL FROM ", name, ": ", msg)
-        mq.cmd.beep(1)
+        local s = string.lower(msg)
+        if s == "buff me" or s == "buffme" then
+            -- XXX commandeer all to buff this one. how to specify orchestrator if buff is in background?
+            mq.cmd.dgtell("XXX FIXME handle 'buffme' tell from ", name)
+            mq.cmd.beep(1)
+        else
+            mq.cmd.dgtell("all GOT A TELL FROM ", name, ": ", msg)
+            mq.cmd.beep(1)
+        end
+    end)
+
+
+    mq.event("zoned", "You have entered #1#.", function(text, zone)
+        mq.cmd.dgtell("i zoned into ", zone)
+        mq.delay(2000)
+        pet.ConfigureTaunt()
     end)
 
 

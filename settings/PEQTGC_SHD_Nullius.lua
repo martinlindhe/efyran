@@ -84,24 +84,18 @@ settings.healing = { -- XXX implement
     },
 }
 
-settings.pet = { -- XXX impl
---[[
-; L68 Son of Decay (WAR/60)
-; AA Deathly Pact to not need Bone Chips
-;;Pet Spell=Son of Decay/MinMana|10/Reagent|Bag of the Tinkerers
+settings.pet = {
+    ["auto"] = false,
 
-Pet Heal=
-
-; pet haste
-; L69 Rune of Decay (65% haste, 85 str, 22 ac)
-Pet Buff=Rune of Decay
-
-Pet Taunt (On/Off)=Off
-Pet Auto-Shrink (On/Off)=Off
-Pet Summon Combat (On/Off)=Off
-Pet Buff Combat (On/Off)=Off
-Pet Spell=
-]]--
+    -- L68 Son of Decay (WAR/60)
+    -- AA Deathly Pact to not need Bone Chips
+    ["spell"] = "Son of Decay/MinMana|10/Reagent|Bag of the Tinkerers",
+    ["heals"] = {},
+    ["buffs"] = {
+        -- pet haste
+        -- L69 Rune of Decay (65% haste, 85 str, 22 ac)
+        "Rune of Decay/MinMana|50",
+    },
 }
 
 settings.assist = {

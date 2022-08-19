@@ -88,6 +88,12 @@ settings.group_buffs = {
         "Focus of the Seventh/MinLevel|47",
         "Talisman of Wunshi/MinLevel|62",
     },
+
+    -- L09 Spirit of Wolf (48-55% speed, 36 min)
+    -- L36 Spirit of Bih`Li (48-55% run speed, 15 atk, 36 min, group)
+    ["run"] = {
+        "SSpirit of Bih`Li/MinLevel|1/CheckFor|Flight of Eagles",  -- XXX CheckFor on group buffs... ?!
+    }
 }
 
 settings.bot_buffs = {
@@ -137,11 +143,6 @@ settings.bot_buffs = {
         "Kniven", "Besty", "Grimakin", "Chancer", "Fandinu",
     },
 
-    -- L36 Spirit of Bih`Li (48-55% run speed, 15 atk)
-    ["Spirit of Bih`Li/MinMana|30/CheckFor|Flight of Eagles"] = {
-        --"Spela",
-    },
-
     -- resist buffs:
     -- L50 Talisman of Jasinth (45 dr, group)
     -- L53 Talisman of Shadoo (45 pr, group)
@@ -182,33 +183,27 @@ Combat Buff=
 
 
 settings.pet = { -- XXX impl
---[[
-[Pets]
-; pet:
-; L32 Companion Spirit
-; L37 Vigilant Spirit
-; L41 Guardian Spirit
-; L45 Frenzied Spirit
-; L55 Spirit of the Howler
-; L61 True Spirit (pet WAR/58)
-; L67 Farrel's Companion (pet WAR/63)
-;Pet Spell=Farrel's Companion/MinMana|80/Reagent|Bag of the Tinkerers
+    ["auto"] = false, -- XXX if true, will auto-summon and auto-buff pet
+    -- L32 Companion Spirit
+    -- L37 Vigilant Spirit
+    -- L41 Guardian Spirit
+    -- L45 Frenzied Spirit
+    -- L55 Spirit of the Howler
+    -- L61 True Spirit (pet WAR/58)
+    -- L67 Farrel's Companion (pet WAR/63)
+    ["spell"] = "Farrel's Companion/MinMana|80/Reagent|Bag of the Tinkerers",
+ 
+    ["heals"] = {
+        "Ancient: Wilslik's Mending/HealPct|25/MinMana|70",
+    },
 
-;Pet Heal=Ancient: Wilslik's Mending/healPct|25/MinMana|70
-
-; pet haste:
-; L50 Spirit Quickening (30 str, 20% haste, 19-27 ac, 60 min)
-; L63 Swift Like the Wind (60% haste, 16m)
-;Pet Buff=Spirit Quickening/MinMana|50
-
-Pet Taunt (On/Off)=Off
-Pet Auto-Shrink (On/Off)=Off
-Pet Summon Combat (On/Off)=Off
-Pet Buff Combat (On/Off)=Off
-Pet Spell=
-Pet Heal=
-Pet Buff=
-]]--
+    ["buffs"] = {
+        -- pet haste:
+        -- L50 Spirit Quickening (30 str, 20% haste, 19-27 ac, 60 min)
+        -- L63 Swift Like the Wind (60% haste, 16 min)
+        -- L64 Talisman of Celerity (60% haste, 36 min, group)
+        "Talisman of Celerity/MinMana|50",
+    },
 }
 
 settings.healing = { -- XXX implement

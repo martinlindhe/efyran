@@ -103,68 +103,89 @@ settings.healing = { -- XXX implement
     }
 }
 
-settings.pet = {    -- XXX impl
---[[
-[Pets]
-; water pets (rogue):
-; L02 Elementalkin: Water
-; L10 Elemental: Water
-; L22 Summoning: Water
-; L26 Greater Summoning: Water
-; L31 Minor Conjuration: Water
-; L36 Lesser Conjuration: Water
-; Lxx Greater Conjuration: Water
-; L54 Vocarate: Water
-; L60 Greater Vocaration: Water
-; L62 Servant of Marr (pet ROG/60) - no reagent
-; L67 Child of Water (pet ROG/65) - Malachite
-; AA Elemental Pact to not use Malachite
-Pet Spell=Child of Water/MinMana|10/Reagent|Bag of the Tinkerers
+settings.pet = {
+    -- water pets (rogue):
+    -- L02 Elementalkin: Water
+    -- L10 Elemental: Water
+    -- L22 Summoning: Water
+    -- L26 Greater Summoning: Water
+    -- L31 Minor Conjuration: Water
+    -- L36 Lesser Conjuration: Water
+    -- Lxx Greater Conjuration: Water
+    -- L54 Vocarate: Water
+    -- L60 Greater Vocaration: Water
+    -- L62 Servant of Marr (pet ROG/60) - no reagent
+    -- L67 Child of Water (pet ROG/65) - Malachite
+    -- AA Elemental Pact to not use Malachite
+    ["spell"] = "Child of Water/MinMana|10/Reagent|Bag of the Tinkerers",
 
-; pet heals:
-; Lxx Primal Remedy
-; L59 Mend Companion AA (36 min reuse without Hastened Mending AA)
-; L60 Transon's Elemental Renewal (849-873 hp, -20 dr pr curse, cost 237 mana)
-; L64 Planar Renewal (1190-1200 hp, -24 dr pr curse, cost 290 mana)
-; L69 Renewal of Jerikor (1635-1645 hp, -28 dr pr curse, cost 358 mana)
-Pet Heal=Renewal of Jerikor/HealPct|40
+    -- pet heals:
+    -- Lxx Primal Remedy
+    -- L59 Mend Companion AA (36 min reuse without Hastened Mending AA)
+    -- L60 Transon's Elemental Renewal (849-873 hp, -20 dr pr curse, cost 237 mana)
+    -- L64 Planar Renewal (1190-1200 hp, -24 dr pr curse, cost 290 mana)
+    -- L69 Renewal of Jerikor (1635-1645 hp, -28 dr pr curse, cost 358 mana)
+    ["heals"] = {
+        "Renewal of Jerikor/HealPct|40",
 
-; pet haste:
-; L11 Burnout (15 str, 12-15% haste, 7 ac)
-; L29 Burnout II (39-45 str, 29-35% haste, 9 ac)
-; L47 Burnout III (50 str, 60% haste, 13 ac)
-; LXX Elemental Empathy (x)
-; L55 Burnout IV (60 str, 65% haste, 16 ac)
-; L60 Ancient: Burnout Blaze (80 str, 80% haste, 22 ac, 50 atk)
-; L62 Burnout V (80 str, 85% haste, 22 ac, 40 atk)
-; L69 Elemental Fury (85% haste, 29 ac, 52 atk, 5% skill dmg mod)
-Pet Buff=Elemental Fury/MinMana|25
+        -- L6x Replenish Companion AA (36 min reuse)
+        "Replenish Companion/HealPct|50", -- was [Magician].pet mend" in e3
+    },
 
-; pet run speed:
-; L27 Expedience (20% movement, 12 min)
-; L58 Velocity (59-80% movement, 36 min)
-Pet Buff=Velocity/MinMana|95
+    ["buffs"] = {
+        -- pet haste:
+        -- L11 Burnout (15 str, 12-15% haste, 7 ac)
+        -- L29 Burnout II (39-45 str, 29-35% haste, 9 ac)
+        -- L47 Burnout III (50 str, 60% haste, 13 ac)
+        -- LXX Elemental Empathy (x)
+        -- L55 Burnout IV (60 str, 65% haste, 16 ac)
+        -- L60 Ancient: Burnout Blaze (80 str, 80% haste, 22 ac, 50 atk)
+        -- L62 Burnout V (80 str, 85% haste, 22 ac, 40 atk)
+        -- L69 Elemental Fury (85% haste, 29 ac, 52 atk, 5% skill dmg mod)
+        "Elemental Fury/MinMana|25",
 
-; "aura":
-; L55 Earthen Strength (5% melee dmg to nearby pets)
-; L70 Rathe's Strength (xxx)
-Pet Buff=Rathe's Strength/MinMana|10/CheckFor|Rathe's Strength Effect
+        -- pet run speed:
+        -- L27 Expedience (20% movement, 12 min)
+        -- L58 Velocity (59-80% movement, 36 min)
+        "Velocity/MinMana|90",
 
-; L70 Iceflame Guard (15 ds, Iceflame Strike proc, rate mod 150)
-Pet Buff=Iceflame Guard/MinMana|15
+        -- "aura":
+        -- L55 Earthen Strength (5% melee dmg to nearby pets)
+        -- L70 Rathe's Strength (slot 1: Persistent Effect: Rather's Strength Effect)
+        "Rathe's Strength/MinMana|10/CheckFor|Rathe's Strength Effect",
 
-; epic 1.5: Staff of Elemental Essence (hp 800, mana 10/tick, hp 20/tick, proc Elemental Conjunction Strike, defensive proc Elemental Conjunction Parry)
-; epic 2.0: Focus of Primal Elements (hp 1000, mana 12/tick, hp 24/tick, proc Primal Fusion Strike, defensive proc Primal Fusion Parry, 20 min (34 min with ext duration))
-Pet Buff=Focus of Primal Elements
+        -- L70 Iceflame Guard (15 ds, Iceflame Strike proc, rate mod 150)
+        "Iceflame Guard/MinMana|15",
 
-; L6x Replenish Companion AA (36 min reuse)
-Pet Mend (Pct)=50
+        -- epic 1.5: hp  800, mana 10/tick, hp 20/tick, proc Elemental Conjunction Strike, defensive proc Elemental Conjunction Parry (Staff of Elemental Essence)
+        -- epic 2.0: hp 1000, mana 12/tick, hp 24/tick, proc Primal Fusion Strike, defensive proc Primal Fusion Parry, 20 min (34 min with ext duration) (Focus of Primal Elements)
+        "Focus of Primal Elements",
+    },
 
-Pet Taunt (On/Off)=Off
-Pet Auto-Shrink (On/Off)=Off
-Pet Summon Combat (On/Off)=Off
-Pet Buff Combat (On/Off)=Off
-]]--
+    ["auto_weapons"] = false, -- XXX was e3 [Magician].Auto-Pet Weapons (On/Off). XXX IMPL
+
+    ["summoned_pet_items"] = { -- for magicians. was e3 [Magician].Summoned Pet Item. XXX IMPL
+        -- pet toys:
+        -- L56 Muzzle of Mardu (FACE: 11% haste)
+        -- L61 Belt of Magi`Kot (WAIST: 250 hp, 10 str, 10 sta, 10 agi, 10 dex)
+        -- L61 Blade of Walnan (1HS: 50 hp, 10 dmg, 3 magic dmg, 20 delay + 220 magic proc)
+        -- L62 Fist of Ixiblat (H2H: 50 hp, 10 dmg, 3 fire dmg, 20 delay + 220 fire proc)
+        -- L63 Blade of The Kedge (1HS: 50 hp, 10 dmg, 3 cold dmg, 20 delay + 220 cold proc)
+        -- L64 Girdle of Magi`Kot (WAIST: 500 hp, 15 str, 15 sta, 15 agi, 15 dex)
+        -- L66 Summon Fireblade (1HS: 75 hp, 12 dmg, 5 fire, 20 delay + 220 fire proc)
+        -- L67 Summon Staff of the North Wind (1HB: 75 hp, 12 dmg, 5 magic, 20 delay + 220 magic proc)
+        -- L67 Summon Dagger of the Deep (1HP: 75 hp, 12 dmg, 5 cold, 12 backstab, 20 delay + 220 cold proc)
+        -- L67 Summon Crystal Belt (WAIST: 650 hp, 20 str, 20 sta, 20 agi, 20 dex)
+        -- Blazing Stone of Demise: Summoned: Burning Shank from ikky4 (1HP, 100 hp, 11 dmg, 4 fire, 11 backstab, 19 delay + 225 fire proc)
+        -- NOTE: MAG Agatha does Summon Crystal Belt
+        "Blazing Stone of Demise",
+        "Blazing Stone of Demise",
+    },
+
+    ["taunt"] = false, -- XXX impl
+    ["shrink"] = false, -- XXX impl . was e3 [Pets].Pet Auto-Shrink (On/Off)
+    ["buff_in_combat"] = false, -- XXX impl. was e3 [Pets].Pet Buff Combat (On/Off)=Off
+    --Pet Summon Combat (On/Off)=Off       -- XXX unimplemented e3 pet setting
 }
 
 settings.assist = {
@@ -264,28 +285,5 @@ settings.pbae = { -- XXX impl
     "Wind of the Desert/Gem|7/MinMana|10",
     "Scintillation/Gem|6/MinMana|10",
 }
-
-settings.magician = { -- XXX impl and rearrange settings
-    --[[
-    Auto-Pet Weapons (On/Off)=Off
-
-    ; pet toys:
-    ; L56 Muzzle of Mardu (FACE: 11% haste)
-    ; L61 Belt of Magi`Kot (WAIST: 250 hp, 10 str, 10 sta, 10 agi, 10 dex)
-    ; L61 Blade of Walnan (1HS: 50 hp, 10 dmg, 3 magic dmg, 20 delay + 220 magic proc)
-    ; L62 Fist of Ixiblat (H2H: 50 hp, 10 dmg, 3 fire dmg, 20 delay + 220 fire proc)
-    ; L63 Blade of The Kedge (1HS: 50 hp, 10 dmg, 3 cold dmg, 20 delay + 220 cold proc)
-    ; L64 Girdle of Magi`Kot (WAIST: 500 hp, 15 str, 15 sta, 15 agi, 15 dex)
-    ; L66 Summon Fireblade (1HS: 75 hp, 12 dmg, 5 fire, 20 delay + 220 fire proc)
-    ; L67 Summon Staff of the North Wind (1HB: 75 hp, 12 dmg, 5 magic, 20 delay + 220 magic proc)
-    ; L67 Summon Dagger of the Deep (1HP: 75 hp, 12 dmg, 5 cold, 12 backstab, 20 delay + 220 cold proc)
-    ; L67 Summon Crystal Belt (WAIST: 650 hp, 20 str, 20 sta, 20 agi, 20 dex)
-    ; Blazing Stone of Demise: Summoned: Burning Shank from ikky4 (1HP, 100 hp, 11 dmg, 4 fire, 11 backstab, 19 delay + 225 fire proc)
-    ; NOTE: MAG Agatha does Summon Crystal Belt
-    Summoned Pet Item=Blazing Stone of Demise
-    Summoned Pet Item=Blazing Stone of Demise
-    ]]--
-}
-
 
 return settings
