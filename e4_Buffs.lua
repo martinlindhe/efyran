@@ -57,6 +57,26 @@ function Buffs.Init()
         end
     end)
 
+    -- if filter == "all", drop all. else drop partially matched buffs
+    mq.bind("/dropbuff", function(filter)
+        local orchestrator = mq.TLO.FrameLimiter.Status() == "Foreground"
+        if orchestrator then
+            mq.cmd.dgzexecute("/dropbuff", filter)
+        end
+
+        if filter == "all" then
+            for i=1,mq.TLO.Me.MaxBuffSlots() do
+                if mq.TLO.Me.Buff(i).ID() ~= nil then
+                    print("removing buff ", i, "id:",mq.TLO.Me.Buff(i).ID(), ",name:", mq.TLO.Me.Buff(i).Name())
+                    mq.cmd.removebuff(mq.TLO.Me.Buff(i).Name())
+                    mq.delay(1)
+                end
+            end
+        else
+            mq.cmd.removebuff(filter)
+        end
+    end)
+
     -- /buffit: asks bots to cast group buffs on current target
     mq.bind("/buffit", function(spawnID)
         --mq.cmd.dgtell("all buffit ", spawnID)
