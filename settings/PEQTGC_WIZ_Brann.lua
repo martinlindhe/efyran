@@ -86,7 +86,7 @@ settings.assist = {
         ]]--
     },
 
-    ["targetae"] = {
+    ["targetae"] = { -- XXX impl
         -- L12 Firestorm (41 hp, FIRE, adj -10, aerange 25, recast 12s, cost 34 mana)
         -- L24 Column of Lightning (128-136 hp, FIRE, aerange 15, recast 6s, cost 130 mana)
         -- L26 Energy Storm (238 hp, MAGIC, adj -10, aerange 25, recast 12s, cost 148 mana)

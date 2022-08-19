@@ -60,18 +60,7 @@ settings.self_buffs = {
 settings.combat_buffs = {
 --[[
 ; ds:
-; L07 Shield of Fire (4-6 ds, 10 fr, 15 min, single)
-; L19 Shield of Flame (7-9 ds, 15 fr, 15 min, single)
-; L28 Inferno Shield (13-15 ds, 20 fr, 15 min, single)
-; L38 Barrier of Combustion (18-20 ds, 22 fr, 15 min, single)
-; L45 Shield of Lava (25 ds, 25 fr, 15 min, single) - L1-45
-; L53 Boon of Immolation (25 ds, 25 fr, 15 min, group)
-; L56 Cadeau of Flame (35 ds, 33 fr, 15 min, single)
-; L61 Flameshield of Ro (48 ds, 45 fr, 15 min, single)
-; L63 Maelstrom of Ro (48 ds, 45 fr, 15 min, group)
-; L66 Fireskin (62 ds - slot 1, 45 fr, 15 min)
 ; L68 Pyrilen Skin (420 ds - slot 12, 12 sec)
-; L70 Circle of Fireskin (62 ds, 45 fr, 15 min, group)
 ; L70 Ancient: Veil of Pyrilonus (500 ds - slot 12, 24 sec)
 ;;Combat Buff=Fireskin/Bandy/MinMana|10
 ;;Combat Buff=Fireskin/Manu/MinMana|10
@@ -85,6 +74,26 @@ settings.combat_buffs = {
 ;;Bot Buff=Fireskin/Nullius/MinMana|10
 ;Combat Buff=Pyrilen Skin/Nullius/Gem|2/MinMana|10
 ]]--
+}
+
+settings.group_buffs = {
+    -- L07 Shield of Fire (4-6 ds, 10 fr, 15 min, single)
+    -- L19 Shield of Flame (7-9 ds, 15 fr, 15 min, single)
+    -- L28 Inferno Shield (13-15 ds, 20 fr, 15 min, single)
+    -- L38 Barrier of Combustion (18-20 ds, 22 fr, 15 min, single)
+    -- L45 Shield of Lava (25 ds, 25 fr, 15 min, single) - L1-45
+    -- L53 Boon of Immolation (25 ds, 25 fr, 15 min, group)
+    -- L56 Cadeau of Flame (35 ds, 33 fr, 15 min, single)
+    -- L61 Flameshield of Ro (48 ds, 45 fr, 15 min, single)
+    -- L63 Maelstrom of Ro (48 ds, 45 fr, 15 min, group)
+    -- L66 Fireskin (62 ds - slot 1, 45 fr, 15 min)
+    -- L70 Circle of Fireskin (62 ds, 45 fr, 15 min, group)
+    ["ds"] = {
+        "Shield of Lava/MinLevel|1",
+        "Boon of Immolation/Boon of Immolation/MinLevel|41",
+        "Maelstrom of Ro/MinLevel|46",
+        "Circle of Fireskin/MinLevel|62",
+    }
 }
 
 settings.healing = { -- XXX implement

@@ -3,7 +3,13 @@ local file = require('e4_File')
 -- FIXME: relative path...
 local settingsRoot = "D:/dev-mq/mqnext-e4-lua/settings"
 
-local BotSettings = {}
+local BotSettings = {
+    ["toggles"] = {
+        ["refresh_buffs"] = true,   -- /buffon, /buffoff
+    },
+}
+
+
 
 function BotSettings.Init()
     local id = mq.TLO.MacroQuest.Server() .. "_" .. mq.TLO.Me.Class.ShortName() .. "_" .. mq.TLO.Me.Name()

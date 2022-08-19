@@ -60,14 +60,6 @@ settings.self_buffs = {
     -- L67 Panoply of Vie (absorb 10% melee dmg to 2080, 36 min)
     "Panoply of Vie/MinMana|70",
 
-    -- hp buff - symbol line:
-    -- L54 Symbol of Marzin (640-700 hp)
-    -- L58 Naltron's Mark (525 hp, group)
-    -- L60 Marzin's Mark (725 hp, group)
-    -- L61 Symbol of Kazad (910 hp, cost 600 mana)
-    -- L63 Kazad's Mark (910 hp, cost 1800 mana, group)
-    -- L66 Symbol of Balikor (1137 hp, cost 780 mana)
-    -- L70 Balikor's Mark (1137 hp, cost 2340 mana, group)
     "Balikor's Mark/MinMana|75",
 
     -- ac - slot 4:
@@ -77,8 +69,24 @@ settings.self_buffs = {
     "Ward of Valiance/MinMana|50/CheckFor|Hand of Conviction",
 }
 
-settings.group_buffs = {    -- XXX implement. can then be used for /buffit
-    "Balikor's Mark" -- XXX also implement min-level check for buff
+settings.group_buffs = {
+    -- hp buff - symbol line:
+    -- L41 Symbol of Naltron (406-525 hp)
+    -- L54 Symbol of Marzin (640-700 hp)
+    -- L58 Naltron's Mark (525 hp, group)
+    -- L60 Marzin's Mark (725 hp, group)
+    -- L61 Symbol of Kazad (910 hp, cost 600 mana)
+    -- L63 Kazad's Mark (910 hp, cost 1800 mana, group)
+    -- L66 Symbol of Balikor (1137 hp, cost 780 mana)
+    -- L70 Balikor's Mark (1137 hp, cost 2340 mana, group)
+    ["symbol"] = {
+        "Symbol of Naltron/MinLevel|1",
+        "Symbol of Marzin/MinLevel|42",
+        "Naltron's Mark/MinLevel|44",
+        "Symbol of Kazad/MinLevel|45",
+        "Kazad's Mark/MinLevel|46",
+        "Balikor's Mark/MinLevel|62",
+    },
 }
 
 settings.bot_buffs = {  -- XXX IMPL THIS

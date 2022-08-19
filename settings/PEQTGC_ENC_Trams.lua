@@ -63,40 +63,64 @@ settings.self_buffs = {
     -- epic 2.0: slot 5: absorb 1800 dmg. Staff of Eternal Eloquence (Aegis of Abstraction)
     "Staff of Eternal Eloquence",
 
-    -- mana regen:
-    -- L26 Clarity (7-9 mana/tick)
-    -- L42 Boon of the Clear Mind (6-9 mana/tick, group) - L01-45
-    -- L52 Clarity II (9-11 mana/tick, single)
-    -- L56 Gift of Pure Thought (10-11 mana/tick, group)
-    -- L60 Koadic's Endless Intellect (14 mana/tick, group) - lands on L46
-    -- L63 Tranquility (16 mana/tick, group)
-    -- L65 Voice of Quellious (18 mana/tick, group, cost 1200 mana) - lands on L47
-    -- L68 Clairvoyance (20 mana/tick, cost 400 mana) - lands on L61 ???
-    -- L70 Voice of Clairvoyance (20 mana/tick, cost 1300 mana, group)
     "Voice of Clairvoyance/MinMana|30",
 
-    -- magic resist:
-    -- L48 Group Resist Magic (53-55 mr, group)
-    -- L62 Guard of Druzzil (75 mr, group)
-    -- NOTE: Trams and Kasper both do GoD
     "Guard of Druzzil/MinMana|80",
 }
 
-settings.group_buffs = { -- XXX impl
-    -- NOTE: I do mana regen
-    "Voice of Clairvoyance",
+settings.group_buffs = {
+    -- L26 Clarity (7-9 mana/tick)
+    -- L42 Boon of the Clear Mind (6-9 mana/tick, group)
+    -- L52 Clarity II (9-11 mana/tick, single)
+    -- L56 Gift of Pure Thought (10-11 mana/tick, group)
+    -- L60 Koadic's Endless Intellect (14 mana/tick, group)
+    -- L63 Tranquility (16 mana/tick, group)
+    -- L65 Voice of Quellious (18 mana/tick, group, cost 1200 mana)
+    -- L68 Clairvoyance (20 mana/tick, cost 400 mana)
+    -- L70 Voice of Clairvoyance (20 mana/tick, cost 1300 mana, group)
+    ["manaregen"] = {
+        "Boon of the Clear Mind/MinLevel|1",
+        "Gift of Pure Thought/MinLevel|43",
+        "Koadic's Endless Intellect/MinLevel|45",
+        "Tranquility/MinLevel|46",
+        "Voice of Quellious/MinLevel|47",
+        "Voice of Clairvoyance/MinLevel|62",
+    },
 
-    "Hastening of Salik",
+    -- L47 Swift Like the Wind (60% haste, 16 min) - L01-45
+    -- L53 Aanya's Quickening (64% haste, 24 min, DOES NOT land on lv15. DOES LAND on L42)
+    -- L58 Wondrous Rapidity (70% haste, 18.4 min)
+    -- L62 Speed of Vallon (68% haste, 41 atk, 52 agi, 33 dex, 42 min)
+    -- L65 Vallon's Quickening (68% haste, 41 atk, 52 agi, 33 dex, 42 min, group)
+    -- L67 Speed of Salik (68% haste, 53 atk, 60 agi, 50 dex, 42 min + 20% melee crit chance, cost 437 mana)
+    -- L67 Hastening of Salik (68% haste, 53 atk, 60 agi, 50 dex, 42 min, group + 20% melee crit chance, cost 1260 mana)
+    ["haste"] = {
+        "Swift Like the Wind/MinLevel|1",
+        "Aanya's Quickening/MinLevel|41",
+        "Wondrous Rapidity/MinLevel|44",
+        "Speed of Vallon/MinLevel|46",
+        "Vallon's Quickening/MinLevel|47",
+        "Hastening of Salik/MinLevel|62",
+    },
 
-    "Guard of Druzzil",
+    -- L48 Group Resist Magic (53-55 mr, group)
+    -- L62 Guard of Druzzil (75 mr, group)
+    ["resist"] = {
+        "Group Resist Magic/MinLevel|1",
+        "Guard of Druzzil/MinLevel|46",
+    },
 }
 
-settings.bot_buffs = { -- XXX impl
-
-    ["Voice of Clairvoyance/MinMana|30"] = { -- XXX /MinMana|50
+settings.bot_buffs = {
+    -- NOTE: Trams do mana regen
+    ["Voice of Clairvoyance/MinMana|30"] = {
         "Stor", "Kamaxia", "Maynarrd", "Arriane", "Gerrald", "Helge", "Hankie", "Hybregee",
-        "Drutten", "Lofty", "Samma", "Erland", "Blastar", "Fandinu", "Redito", "Brann", "Umlilo",
-        "Myggan", "Agatha", "Besty", "Arctander", "Crusade", "Nullius", 
+        "Drutten", "Lofty", "Samma", "Erland", 
+    },
+
+    ["Voice of Clairvoyance/MinMana|50"] = {
+        "Blastar", "Fandinu", "Redito", "Brann", "Umlilo",
+        "Myggan", "Agatha", "Besty", "Arctander",
 
         -- roof
         "Gimaxx", "Kesok", "Shimaclop",
@@ -108,15 +132,7 @@ settings.bot_buffs = { -- XXX impl
         "Saga", "Brinner", 
     },
 
-    -- haste:
-    -- L47 Swift Like the Wind (60% haste, 16 min) - L01-45
-    -- L53 Aanya's Quickening (64% haste, 24 min, DOES NOT land on lv15. DOES LAND on L42)
-    -- L58 Wondrous Rapidity (70% haste, 18.4 min)
-    -- L62 Speed of Vallon (68% haste, 41 atk, 52 agi, 33 dex, 42 min)
-    -- L65 Vallon's Quickening (68% haste, 41 atk, 52 agi, 33 dex, 42 min, group)
-    -- L67 Speed of Salik (68% haste, 53 atk, 60 agi, 50 dex, 42 min + 20% melee crit chance, cost 437 mana)
-    -- L67 Hastening of Salik (68% haste, 53 atk, 60 agi, 50 dex, 42 min, group + 20% melee crit chance, cost 1260 mana)
-    -- NOTE: Trams do group + single haste
+    -- NOTE: Trams do group haste
     ["Hastening of Salik/MinMana|40"] = {
         "Bandy", "Manu", "Juancarlos", "Crusade", "Nullius",
         "Azoth", "Yelwen", "Laser", "Knuck",
@@ -128,12 +144,12 @@ settings.bot_buffs = { -- XXX impl
         "Hypert", "Crust", "Plin", "Pantless",
     },
 
+    -- NOTE: Trams and Kasper both do GoD
     ["Guard of Druzzil/MinMana|40"] = {
         "Bandy", "Manu", "Crusade", "Nullius",
         "Stor", "Drutten", "Samma", "Spela",
         "Kamaxia", "Lofty", "Erland",
     },
-
 }
 
 settings.combat_buffs = { -- XXX impl

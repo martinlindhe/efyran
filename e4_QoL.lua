@@ -19,6 +19,12 @@ function QoL.Init()
         end
     end)
 
+    mq.event("tell", "#1# tells you, #2#", function(text, name, msg)
+        mq.cmd.dgtell("all GOT A TELL FROM ", name, ": ", msg)
+        mq.cmd.beep(1)
+    end)
+
+
     -- print('DONE: QoL.Init')
 end
 
@@ -45,6 +51,16 @@ function QoL.Tick()
     if mq.TLO.Me.Class.ShortName() == "WIZ" and mq.TLO.Me.Pet.ID() ~= 0 then
         print("dropping wiz familiar ...", mq.TLO.Me.Pet.ID(), type(mq.TLO.Me.Pet.ID()))
         mq.cmd.pet("get lost")
+    end
+
+    if mq.TLO.Me.MaxMana() > 0 then
+        if mq.TLO.Me.PctMana() < 70 and mq.TLO.Me.Standing() then
+            mq.cmd.dgtell("all low mana, medding! ", mq.TLO.Me.PctMana())
+            mq.cmd.sit("on")
+        elseif mq.TLO.Me.PctMana() >= 100 and not mq.TLO.Me.Standing() and not mq.TLO.Window("SpellBookWnd").Open() then
+            mq.cmd.dgtell("mana is good, standing up! ", mq.TLO.Me.PctMana(), "standing=",mq.TLO.Me.Standing())
+            mq.cmd.sit("off")
+        end
     end
 
 end

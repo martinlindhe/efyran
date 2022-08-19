@@ -51,15 +51,15 @@ function Follow.Init()
         mq.cmd.dgze("/afollow off")
     end)
 
-    mq.bind("/portto", function(name, called)
+    mq.bind("/portto", function(name)
         name = string.lower(name)
-        -- XXX if i am active, tell the 1st porter of each group to do /portto name
-        -- TODO LATER: access ${FrameLimiter.Status} to see if we are in foreground, then assume we are active. now bug https://github.com/macroquest/macroquest/issues/607
-        
-        if not called then
-            -- porters in current zone
-            mq.cmd.dgexecute("wiz", "/portto", name, true)
-            mq.cmd.dgexecute("dru", "/portto", name, true) 
+        local orchestrator = mq.TLO.FrameLimiter.Status() == "Foreground"
+
+        if orchestrator then
+            -- tell porters in current zone
+            -- XXX instead, tell all in zone and in raid... ?
+            mq.cmd.dgexecute("wiz", "/portto", name)
+            mq.cmd.dgexecute("dru", "/portto", name) 
         end
     
         local spellName = ""
@@ -77,71 +77,8 @@ function Follow.Init()
             mq.cmd.dgtell("ERROR: no such port ", name)
         end
 
-        -- XXX cast it
-        mq.cmd.casting('"'..spellName..'" gem5')
-
+        castSpellRaw(spellName, mq.TLO.Me.ID(), "gem5 -maxtries|3")
     end)
-
-    mq.bind("/assiston", function(mobID)
-
-        local orchestrator = false
-        if mq.TLO.FrameLimiter.Status() == "Foreground" then
-            mobID = mq.TLO.Target.ID()
-            orchestrator = true
-        end
-
-        if botSettings.settings.assist.type == "Melee" then
-            meleeAssist(mobID)
-        end
-
-        -- TODO ranged & caster assist ...
-
-        if orchestrator then
-            -- XXX tell everyone else to attack
-                mq.cmd.dgze("/assiston", mobID)
-        end
-    end)
-
-
-end
-
--- stick and perform melee attacks
--- id = spawn id
-function meleeAssist(id)
-    print("meleeAssist ",id)
-    if id == nil then
-        mq.cmd.dgtell("ERROR ASSSIST ON ",id)
-        return
-    end
-
-    mq.cmd.target("id "..id)
-    mq.cmd.attack("on")
-    -- mq.cmd.afollow("spawn " .. id) -- # XXX afollow wont stick in front/back, etc. need more like /stick 
-
-    if botSettings.settings.assist.melee_distance == "MaxMelee" then
-        botSettings.settings.assist.melee_distance = 25 -- XXX should be a global config for MaxMelee value
-    end
-
-    --tprint(botSettings.settings.assist) -- XXX respect settings
-
-    local stickArg = ""
-    if id ~= nil then
-        stickArg = "id " .. id .. " "
-    end
-
-    if botSettings.settings.assist.stick_point == "Front" then
-        stickArg = stickArg .. "hold front " .. botSettings.settings.assist.melee_distance .. " uw"
-        mq.cmd.dgtell("STICKING IN FRONT TO ",id, " ", stickArg)
-        mq.cmd.stick(stickArg)
-    else
-        mq.cmd.stick("snaproll uw")
-        --/delay 20 ${Stick.Behind} && ${Stick.Stopped}
-        mq.cmd.delay(20, mq.TLO.Stick.Behind and mq.TLO.Stick.Stopped)
-        stickArg = stickArg .. "hold moveback behind " .. botSettings.settings.assist.melee_distance .. " uw"
-        mq.cmd.dgtell("STICKING IN BACK TO ",id, " ", stickArg)
-        mq.cmd.stick(stickArg)
-    end
-
 
 end
 

@@ -12,6 +12,11 @@ settings.swap = { -- XXX impl
     ["fishing"] = "Fishing Pole|Mainhand",
 }
 
+settings.gems = {
+    ["Strength of Tunare"] = 8,
+    ["Call of Lightning"] = 9,
+}
+
 settings.self_buffs = {
     "Fuzzy Foothairs",
 
@@ -32,8 +37,6 @@ settings.self_buffs = {
     -- L68 Briarcoat (49 ac, 8 ds)
     -- "Briarcoat/MinMana|70",
 
-    --[[
-
     -- SLOT 1 PROC BUFFS:
     -- L64 Nature's Rebuke (add proc Nature's Rebuke Strike)
     -- L65 Symbol of the Planemasters (Pestilence Shock buff, potime)
@@ -43,7 +46,7 @@ settings.self_buffs = {
     -- L69 Nature's Denial (add proc Nature's Denial Strike)
     -- L70 Call of Lightning (slot 1: Add Proc Call of Lightning Strike)
     --"Nature Veil/MinMana|50",
-    "Call of Lightning/Gem|9/MinMana|50",
+    "Call of Lightning/MinMana|50",
 
     -- L65 Mask of the Stalker (slot 3: 3 mana regen)
     -- NOTE: skipping Mask of the Stalker because out of buff slots, june 2022
@@ -52,114 +55,42 @@ settings.self_buffs = {
     -- L62 Strength of Tunare (slot 1: 92 atk, 125 hp, group, cost 250 mana)
     -- L67 Strength of the Hunter (75 atk, 155 hp, group, cost 325 mana)
     -- NOTE: Tunare has more ATK
-    "Strength of Tunare/Gem|8/MinMana|50",
+    "Strength of Tunare/MinMana|50",
 
+    -- L64 Spirit of the Predator (70 atk slot 2)
+    -- L69 Howl of the Predator (90 atk slot 2, double atk 3-20%)
+    "Howl of the Predator/MinMana|50",
+}
 
-    Group Buff=Strength of Tunare
-    Bot Buff=Strength of Tunare/Besty/MinMana|50/CheckFor|Spiritual Vitality
-    Bot Buff=Strength of Tunare/Blod/MinMana|50/CheckFor|Spiritual Vitality
-    Bot Buff=Strength of Tunare/Urinfact/MinMana|50/CheckFor|Spiritual Vitality
-    Bot Buff=Strength of Tunare/Sweetlard/MinMana|50/CheckFor|Spiritual Vitality
+settings.group_buffs = {
+    ["hp_atk"] = {
+        "Strength of Tunare/MinLevel|46",
+    }
+}
 
-    Bot Buff=Strength of Tunare/Azoth/MinMana|50/CheckFor|Spiritual Vitality
-    Bot Buff=Strength of Tunare/Yelwen/MinMana|50/CheckFor|Spiritual Vitality
-    Bot Buff=Strength of Tunare/Laser/MinMana|50/CheckFor|Spiritual Vitality
-    Bot Buff=Strength of Tunare/Knuck/MinMana|50/CheckFor|Spiritual Vitality
+settings.bot_buffs = {
+    ["Strength of Tunare/MinMana|50/CheckFor|Spiritual Vitality"] = {
+        "Besty", "Blod", "Urinfact", "Sweetlard", "Azoth", "Yelwen", "Laser", "Knuck",
+        "Kniven", "Strupen", "Fosco", "Lotho", "Grimakin",
+        "Spela", "Garotta", "Gerwulf", "Chancer", "Sophee", "Alethea", "Moola", "Saberku",
+        "Rupat", "Debre", "Kedel", "Lynnmary",
+        "Kasta", "Bulf", "Halsen", "Nacken", "Ryggen", "Papp", "Hypert", "Crust", "Pantless", "Plin",
+    },
 
-    Bot Buff=Strength of Tunare/Kniven/MinMana|50/CheckFor|Spiritual Vitality
-    Bot Buff=Strength of Tunare/Strupen/MinMana|50/CheckFor|Spiritual Vitality
-    Bot Buff=Strength of Tunare/Fosco/MinMana|50/CheckFor|Spiritual Vitality
-    Bot Buff=Strength of Tunare/Lotho/MinMana|50/CheckFor|Spiritual Vitality
-    Bot Buff=Strength of Tunare/Grimakin/MinMana|50/CheckFor|Spiritual Vitality
+    ["Howl of the Predator/MinMana|50"] = {
+        "Azoth", "Yelwen", "Laser", "Knuck", "Fosco", "Lotho", "Grimakin", "Kniven", "Strupen",
+        "Blod", "Urinfact", "Sweetlard", "Besty",
+        "Spela", "Garotta", "Gerwulf", "Chancer", "Sophee", "Alethea", "Moola", "Saberku",
+        "Rupat", "Debre", "Kedel", "Lynnmary",
+        "Kasta", "Bulf", "Halsen", "Nacken", "Ryggen", "Papp", "Hypert", "Crust", "Pantless", "Plin",
+    },
 
-    Bot Buff=Strength of Tunare/Spela/MinMana|50/CheckFor|Spiritual Vitality
-    Bot Buff=Strength of Tunare/Garotta/MinMana|50/CheckFor|Spiritual Vitality
-    Bot Buff=Strength of Tunare/Gerwulf/MinMana|50/CheckFor|Spiritual Vitality
-    Bot Buff=Strength of Tunare/Chancer/MinMana|50/CheckFor|Spiritual Vitality
-    Bot Buff=Strength of Tunare/Sophee/MinMana|50/CheckFor|Spiritual Vitality
-    Bot Buff=Strength of Tunare/Alethea/MinMana|50/CheckFor|Spiritual Vitality
-    Bot Buff=Strength of Tunare/Moola/MinMana|50/CheckFor|Spiritual Vitality
-    Bot Buff=Strength of Tunare/Saberku/MinMana|50/CheckFor|Spiritual Vitality
-
-    Bot Buff=Strength of Tunare/Rupat/MinMana|50/CheckFor|Spiritual Vitality
-    Bot Buff=Strength of Tunare/Debre/MinMana|50/CheckFor|Spiritual Vitality
-    Bot Buff=Strength of Tunare/Kedel/MinMana|50/CheckFor|Spiritual Vitality
-    Bot Buff=Strength of Tunare/Lynnmary/MinMana|50/CheckFor|Spiritual Vitality
-
-    Bot Buff=Strength of Tunare/Kasta/MinMana|50/CheckFor|Spiritual Vitality
-    Bot Buff=Strength of Tunare/Bulf/MinMana|50/CheckFor|Spiritual Vitality
-    Bot Buff=Strength of Tunare/Halsen/MinMana|50/CheckFor|Spiritual Vitality
-    Bot Buff=Strength of Tunare/Nacken/MinMana|50/CheckFor|Spiritual Vitality
-    Bot Buff=Strength of Tunare/Ryggen/MinMana|50/CheckFor|Spiritual Vitality
-    Bot Buff=Strength of Tunare/Papp/MinMana|50/CheckFor|Spiritual Vitality
-    Bot Buff=Strength of Tunare/Hypert/MinMana|50/CheckFor|Spiritual Vitality
-    Bot Buff=Strength of Tunare/Crust/MinMana|50/CheckFor|Spiritual Vitality
-    Bot Buff=Strength of Tunare/Pantless/MinMana|50/CheckFor|Spiritual Vitality
-    Bot Buff=Strength of Tunare/Plin/MinMana|50/CheckFor|Spiritual Vitality
-
-    ; L64 Spirit of the Predator (70 atk slot 2)
-    ; L69 Howl of the Predator (90 atk slot 2, double atk 3-20%)
-    Self Buff=Howl of the Predator/MinMana|50
-
-    Bot Buff=Howl of the Predator/Azoth/MinMana|50
-    Bot Buff=Howl of the Predator/Yelwen/MinMana|50
-    Bot Buff=Howl of the Predator/Laser/MinMana|50
-    Bot Buff=Howl of the Predator/Knuck/MinMana|50
-
-    Bot Buff=Howl of the Predator/Fosco/MinMana|50
-    Bot Buff=Howl of the Predator/Lotho/MinMana|50
-    Bot Buff=Howl of the Predator/Grimakin/MinMana|50
-    Bot Buff=Howl of the Predator/Kniven/MinMana|50
-    Bot Buff=Howl of the Predator/Strupen/MinMana|50
-
-    Bot Buff=Howl of the Predator/Blod/MinMana|50
-    Bot Buff=Howl of the Predator/Urinfact/MinMana|50
-    Bot Buff=Howl of the Predator/Sweetlard/MinMana|50
-
-    Bot Buff=Howl of the Predator/Besty/MinMana|50
-
-    Bot Buff=Howl of the Predator/Spela/MinMana|50
-    Bot Buff=Howl of the Predator/Garotta/MinMana|50
-    Bot Buff=Howl of the Predator/Gerwulf/MinMana|50
-    Bot Buff=Howl of the Predator/Sophee/MinMana|50
-    Bot Buff=Howl of the Predator/Chancer/MinMana|50
-    Bot Buff=Howl of the Predator/Alethea/MinMana|50
-    Bot Buff=Howl of the Predator/Moola/MinMana|50
-    Bot Buff=Howl of the Predator/Saberku/MinMana|50
-
-
-    Bot Buff=Howl of the Predator/Debre/MinMana|50
-    Bot Buff=Howl of the Predator/Kedel/MinMana|50
-    Bot Buff=Howl of the Predator/Rupat/MinMana|50
-    Bot Buff=Howl of the Predator/Lynnmary/MinMana|50
-
-    Bot Buff=Howl of the Predator/Kasta/MinMana|50
-    Bot Buff=Howl of the Predator/Bulf/MinMana|50
-    Bot Buff=Howl of the Predator/Plin/MinMana|50
-    Bot Buff=Howl of the Predator/Pantless/MinMana|50
-    Bot Buff=Howl of the Predator/Crust/MinMana|50
-    Bot Buff=Howl of the Predator/Hypert/MinMana|50
-    Bot Buff=Howl of the Predator/Halsen/MinMana|50
-    Bot Buff=Howl of the Predator/Nacken/MinMana|50
-    Bot Buff=Howl of the Predator/Ryggen/MinMana|50
-    Bot Buff=Howl of the Predator/Papp/MinMana|50
-
-
-    ;Bot Buff=Howl of the Predator/Bandy/MinMana|50
-    ;Bot Buff=Howl of the Predator/Manu/MinMana|50
-    ;Bot Buff=Howl of the Predator/Juancarlos/MinMana|50
-    ;Bot Buff=Howl of the Predator/Crusade/MinMana|50
-    ;Bot Buff=Howl of the Predator/Nullius/MinMana|50
-
-
-    ; ac + ds:
-    ; L62 Call of the Rathe (10 ds, 34 ac)
-    ; L67 Guard of the Earth (13 ds, 49 ac)
-    ;;Bot Buff=Guard of the Earth/Bandy/MinMana|50
-    ;;Bot Buff=Guard of the Earth/Manu/MinMana|50
-    ;;Bot Buff=Guard of the Earth/Crusade/MinMana|50
-    ;;Bot Buff=Guard of the Earth/Nullius/MinMana|50
-    ]]--
+    -- ac + ds:
+    -- L62 Call of the Rathe (10 ds, 34 ac)
+    -- L67 Guard of the Earth (13 ds, 49 ac)
+    ["Guard of the Earth/MinMana|50"] = {
+        --"Bandy", "Manu", "Crusade", "Nullius",
+    }
 }
 
 settings.healing = { -- XXX implement

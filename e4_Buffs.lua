@@ -40,6 +40,85 @@ end
 
 local Buffs = { aura = findBestAura() }
 
+function Buffs.Init()
+    mq.bind("/buffon", function()
+        botSettings.toggles.refresh_buffs = true
+        local orchestrator = mq.TLO.FrameLimiter.Status() == "Foreground"
+        if orchestrator then
+            mq.cmd.dgzexecute("/buffon")
+        end
+    end)
+
+    mq.bind("/buffoff", function()
+        botSettings.toggles.refresh_buffs = false
+        local orchestrator = mq.TLO.FrameLimiter.Status() == "Foreground"
+        if orchestrator then
+            mq.cmd.dgzexecute("/buffoff")
+        end
+    end)
+
+    -- /buffit: asks bots to cast group buffs on current target
+    mq.bind("/buffit", function(spawnID)
+        --mq.cmd.dgtell("all buffit ", spawnID)
+        local orchestrator = mq.TLO.FrameLimiter.Status() == "Foreground"
+        if orchestrator then
+            spawnID = mq.TLO.Target.ID()
+            if spawnID ~= 0 then
+                mq.cmd.dgzexecute("/buffit", spawnID)
+            end
+        end
+
+        if botSettings.settings.group_buffs == nil then
+            return
+        end
+
+        local spawn = mq.TLO.Spawn("id " .. spawnID)
+        if tostring(spawn) == "NULL" then
+            mq.cmd.dgtell("all BUFFIT FAIL, cannot find target id in zone ", spawnID)
+            return false
+        end
+
+        local level = spawn.Level()
+
+        for key, buffs in pairs(botSettings.settings.group_buffs) do
+            print("finding best group buff ", key)
+
+            -- XXX find the one with highest MinLevel
+            local minLevel = 0
+            local spellName = ""
+            if type(buffs) ~= "table" then
+                mq.cmd.dgtell("all FATAL ERROR, group buffdata ", buffs, " should be a table")
+                return
+            end
+
+            for k, buff in pairs(buffs) do
+
+                local spellConfig = parseSpellLine(buff)  -- XXX do not parse here, cache and reuse
+                local n = tonumber(spellConfig.MinLevel)
+                if n == nil then
+                    mq.cmd.dgtell("all FATAL ERROR, group buff ", buff, " does not have a MinLevel setting")
+                    return
+                end
+                if n > minLevel and level >= n then
+                    minLevel = n
+                    spellName = spellConfig.SpellName
+                    print("Best ", key, " buff so far is L",spellConfig.MinLevel, " ", spellConfig.SpellName, " target ", spawn.Name() ," L", level)
+                end
+            end
+
+            if minLevel > 0 then
+                castSpellRaw(spellName, spawnID, "-maxtries|3")
+                -- XXX wait until cast is finished !!!
+                mq.delay(10000) -- XXX 10s
+            else
+                print("Failed to find a matching group buff ", key, ", target ", spawn.Name(), " L", level)
+            end
+
+        end
+    end)
+end
+
+
 -- returns a object
 function parseSpellLine(s)
     -- Ward of Valiance/MinMana|50/CheckFor|Hand of Conviction
@@ -107,7 +186,7 @@ function refreshBuff(buffItem, botName)
     local spawn = mq.TLO.Spawn("pc =" .. botName)
     --print("PC MATCH", botName, " ", spawn, " ", type(spawn))
     if tostring(spawn) == "NULL" then
-        print("SKIP BUFFING, NOT IN ZONE ", botName)
+        --print("SKIP BUFFING, NOT IN ZONE ", botName)
         return false
     end
     local spawnID = spawn.ID()
@@ -124,12 +203,12 @@ function refreshBuff(buffItem, botName)
     -- AERange is used for group spells
     if spell.TargetType() == "Group v2" then
         if spawn.Distance() >= spell.AERange() then
-            mq.cmd.dgtell(spell.TargetType(), "cant rebuff (group buff), toon too far away: ", buffItem, " ", botName, " spell range = ", spell.Range(), ", spawn distance = ", spawn.Distance())
+            mq.cmd.dgtell("cant rebuff (",spell.TargetType(),"), toon too far away: ", buffItem, " ", botName, " spell range = ", spell.Range(), ", spawn distance = ", spawn.Distance())
             return false
         end
     else
         if spell.TargetType() ~= "Self" and spawn.Distance() >= spell.Range() then
-            mq.cmd.dgtell(spell.TargetType(), "cant rebuff (",spell.TargetType(),"), toon too far away: ", buffItem, " ", botName, " spell range = ", spell.Range(), ", spawn distance = ", spawn.Distance())
+            mq.cmd.dgtell("cant rebuff (",spell.TargetType(),"), toon too far away: ", buffItem, " ", botName, " spell range = ", spell.Range(), ", spawn distance = ", spawn.Distance())
             return false
         end
     end
@@ -192,7 +271,7 @@ function Buffs.RefreshBotBuffs()
         return
     end
 
-    print("Buffs.RefreshBotBuffs")
+    --print("Buffs.RefreshBotBuffs")
 
     for buff, names in pairs(botSettings.settings.bot_buffs) do
         --print("xxx ",buff)
@@ -221,16 +300,12 @@ function Buffs.RefreshAura()
     if Buffs.aura == nil or mq.TLO.Me.Aura(1)() ~= nil then
         return false
     end
-    castSpell(Buffs.aura)
+    castSpell(Buffs.aura, mq.TLO.Me.ID())
     return true
 end
 
 -- helper for casting spell, clicky, AA, combat ability
 function castSpell(name, spawnId)
-    local spell = getSpellFromBuff(name)
-
-    -- XXX check_ready and abort if spell is on a longer cooldown (with text error). like DI
-
     if mq.TLO.Me.CombatAbility(name)() ~= nil then
         mq.cmd.dgtell("castSpell: /disc", name)
         mq.cmd.disc(name)
@@ -239,16 +314,20 @@ function castSpell(name, spawnId)
             mq.cmd.dgtell("castSpell: /medley queue", name)
             mq.cmd.medley('queue "' .. name .. '"')
         else
-            local castingArg = ""
-            if spell.TargetType() == "Self" then
-                castingArg = '"' .. name .. '"'
-            else
-                castingArg = '"' .. name .. '" -targetid|'.. spawnId
-            end
-            mq.cmd.dgtell("castSpell: /casting", castingArg)
-            mq.cmd.casting(castingArg)
+            castSpellRaw(name, spawnId, "-maxtries|2")
         end
     end
+end
+
+function castSpellRaw(name, spawnId, extraArgs)
+    if spawnId == nil then
+        mq.cmd.dgtell("castSpellRaw: called with nil spawnId, name = ", name, " extraArgs=", extraArgs)
+        mq.cmd.beep(1)
+        return
+    end
+    local castingArg = '"' .. name .. '" -targetid|'.. spawnId .. ' ' .. extraArgs
+    mq.cmd.dgtell("castSpell: /casting", castingArg)
+    mq.cmd.casting(castingArg)
 end
 
 function getSpellFromBuff(name)

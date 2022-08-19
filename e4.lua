@@ -7,6 +7,8 @@ utils   = require('e4_Utils')
 aliases = require('settings/Spell Aliases')
 
 botSettings = require('e4_BotSettings')
+
+assist  = require('e4_Assist')
 buffs   = require('e4_Buffs')
 follow  = require('e4_Follow')
 group   = require('e4_Group')
@@ -21,23 +23,25 @@ BRD     = require('Class_Bard')
 WAR     = require('Class_Warrior')
 
 botSettings.Init()
+
+assist.Init()
+buffs.Init()
 follow.Init()
 group.Init()
 qol.Init()
 
 
 
-local doRefreshBuffs = true -- XXX move property to "buffs" object (class?)
-local refreshBuffsTimer = utils.Timer.new(10 * 1) -- 10s
+local refreshBuffsTimer = utils.Timer.new(4 * 1) -- 4s
 refreshBuffsTimer:expire()
-
 
 
 mq.cmd.dgtell('all E4 started')
 
 
 while true do
-    if doRefreshBuffs and refreshBuffsTimer:expired() then
+    if botSettings.toggles.refresh_buffs and refreshBuffsTimer:expired() and not mq.TLO.Me.Moving()
+    and (mq.TLO.Me.Class.ShortName() == "BRD" or not mq.TLO.Me.Casting()) then
         if not buffs.RefreshSelfBuffs() then
             if not buffs.RefreshAura() then
                 buffs.RefreshBotBuffs()
