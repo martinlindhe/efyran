@@ -48,7 +48,7 @@ function Group.Init()
                 for n = 2,6,1
                 do
                     local name = group[n]
-                    if mq.TLO.DanNet(name) ~= nil then
+                    if mq.TLO.DanNet(name)() ~= nil then
                         print("Inviting ", name)
                         mq.cmd.invite(name)
                     else
@@ -68,7 +68,7 @@ function Group.Init()
             for idx, group in pairs(Group.settings[name])
             do
                 local groupLeader = group[1]
-                if mq.TLO.DanNet(groupLeader) ~= nil then
+                if mq.TLO.DanNet(groupLeader)() ~= nil then
                     if mq.TLO.Me.Name() == raidLeader then
                         mq.cmd.raidinvite(groupLeader)
                     elseif raidLeader ~= groupLeader then
@@ -84,7 +84,7 @@ function Group.Init()
     end)
 
     mq.event('joingroup', '#1# invites you to join a group.', function(text, sender)
-        if mq.TLO.DanNet(sender) ~= nil then
+        if mq.TLO.DanNet(sender)() ~= nil then
             -- mq.cmd.dgtell('GROUP INVITE FROM ' .. sender)
             mq.cmd.squelch('/target clear')
             mq.delay(100)
@@ -93,7 +93,7 @@ function Group.Init()
     end)
 
     mq.event('joinraid', '#1# invites you to join a raid.#*#', function(text, sender)
-        if mq.TLO.DanNet(sender) ~= nil then
+        if mq.TLO.DanNet(sender)() ~= nil then
             -- mq.cmd.dgtell('RAID INVITE FROM ' .. sender)
             mq.cmd.notify('ConfirmationDialogBox Yes_Button leftmouseup')
             mq.cmd.squelch('/raidaccept')

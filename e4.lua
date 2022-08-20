@@ -12,6 +12,7 @@ assist  = require('e4_Assist')
 buffs   = require('e4_Buffs')
 follow  = require('e4_Follow')
 group   = require('e4_Group')
+heal    = require('e4_Heal')
 pet     = require('e4_Pet')
 qol     = require('e4_QoL')
 
@@ -29,24 +30,25 @@ assist.Init()
 buffs.Init()
 follow.Init()
 group.Init()
+heal.Init()
 qol.Init()
-
-
-
-local refreshBuffsTimer = utils.Timer.new(4 * 1) -- 4s
-refreshBuffsTimer:expire()
-
 
 mq.cmd.dgtell('all E4 started')
 
+local refreshBuffsTimer = utils.Timer.new_expired(3 * 1) -- 4s
 
 while true do
     if botSettings.toggles.refresh_buffs and refreshBuffsTimer:expired() and not mq.TLO.Me.Moving() and not mq.TLO.Me.Invis()
     and (mq.TLO.Me.Class.ShortName() == "BRD" or not mq.TLO.Me.Casting()) then
         if not buffs.RefreshSelfBuffs() then
             if not buffs.RefreshAura() then
-                if not pet.BuffMyPet() then
-                    buffs.RefreshBotBuffs()
+                if not pet.Summon() then
+                    if not pet.BuffMyPet() then
+
+                        -- XXX temp disabled bot buffs because its super slow due to dannet queries. rewrite to have bots request buffs in a channel instead.
+                        -- XXX orchestrator will decide what toon will cast the requested buff in the end (?)
+                        ------buffs.RefreshBotBuffs() -- XXX slow!
+                    end
                 end
             end
         end
@@ -76,9 +78,10 @@ while true do
 
     mq.doevents()
 
-    pet.Summon()
-
     qol.Tick()
-    mq.delay(1000) -- 1.0s
+
+    heal.Tick()
+    mq.delay(1000) -- 1.0s  XXX cant block here for more than few millisec
+
 end
 

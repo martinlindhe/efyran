@@ -116,7 +116,7 @@ settings.group_buffs = {
     ]]--
 }
 
-settings.bot_buffs = {  -- XXX IMPL THIS
+settings.bot_buffs = {
     -- NOTE: Stor does team18, Helge does the rest
     ["Aura of Devotion/MinMana|50"] = {
         "Blastar", "Myggan", "Absint", "Trams", "Redito", "Samma", "Fandinu",
@@ -146,18 +146,6 @@ settings.bot_buffs = {  -- XXX IMPL THIS
 
 settings.healing = { -- XXX implement
 
-    -- ### FROM OLD [Cleric] E3 SECTION ### --
-    ["divine_arbitration"] = 60,    -- XXX impl. was [Cleric] Divine Arbitrsation pct in e3
-    -- ["celestial_regeneration"] = 25, -- XXX impl. was [Cleric] Celestial Regeneration pct in e3
-
-    -- yaulp:
-    -- L56 Yaulp V (50 atk, 10 mana/tick, 75 dex, 25% haste)
-    -- L65 Yaulp VI (60 atk, 12 mana/tick, 90 dex, 30% haste)
-    -- L69 Yaulp VII (80 atk, 14 mana/tick, 100 dex, 30% haste)
-    --Auto-Yaulp (On/Off)=Off
-    ["yaulp"] = "Yaulp VII",    -- XXX impl. was [Cleric] Yaulp Spell in e3
-    -- ### FROM OLD [Cleric] E3 SECTION END ### --
-
     ["life_support"] = { -- XXX implement
         "Ward of Retribution/HealPct|50/Delay|3m/CheckFor|Resurrection Sickness",
 
@@ -180,77 +168,98 @@ settings.healing = { -- XXX implement
     },
 
     ["cures"] = { -- XXX impl. was [Cures] in e3
-        --[[
-        ;;CureAll=Remove Greater Curse/CheckFor|Gravel Rain/Zone|potactics,poearthb
-        ; NOTE: makes tanks die if all clerics do this:
-        ;CureAll=Remove Greater Curse/CheckFor|Solar Storm/Zone|poair
-        CureAll=Remove Greater Curse/CheckFor|Curse of the Fiend/Zone|solrotower
+        -- poison cures:
+        -- L01 Cure Poison (-1 to -4 poison)
+        -- L22 Counteract Poison (-8 posion)
+        -- L48 Abolish Poison (-36 posion)
+        -- L51 Pure Blood (-9 poison x4)
+        -- L58 Antidote (-16 poison x4)
+        -- L70 Puratus (cure all poisons from target + block next posion spell from affecting them)
 
-        CureAll=Remove Greater Curse/CheckFor|Feeblemind/Zone|thedeep
+        -- curse cures:
+        -- L08 Remove Minor Curse (-2 curse)
+        -- L23 Remove Lesser Curse (-4 curse)
+        -- L38 Remove Curse (-4 curse x2)
+        -- L54 Remove Greater Curse (-9 curse x5)
 
-        CureAll=Cure Disease/CheckFor|Rabies/Zone|chardok
+        -- disease cures:
+        -- L04 Cure Disease (-1 to -4 disease)
 
-        CureAll=Antidote/CheckFor|Fulmination/Zone|Txevu
+        -- curing heals:
+        -- L70 Desperate Renewal (4935 hp, -18 pr, -18 dr, -18 curse, cost 1375 mana)
 
-        AutoRadiant (On/Off)=On
-        ; PoP:
-        ;;RadiantCure=Gravel Rain/MinSick|1/Zone|potactics,poearthb
+        ["Remove Greater Curse"] = {
+            --"Gravel Rain/Zone|potactics,poearthb",
+            --"Solar Storm/Zone|poair", -- NOTE: makes tanks die if all clerics cure this
+            "Curse of the Fiend/Zone|solrotower",
+            "Feeblemind/Zone|thedeep",
+        },
 
-        ; GoD:
-        RadiantCure=Fulmination/MinSick|1/Zone|txevu
-        RadiantCure=Kneeshatter/MinSick|1/Zone|qvic
-        RadiantCure=Skullpierce/MinSick|1/Zone|qvic
-        RadiantCure=Malo/MinSick|1
-        RadiantCure=Malicious Decay/MinSick|1
-        RadiantCure=Insidious Decay/MinSick|1
-        RadiantCure=Chaos Claws/MinSick|1
+        ["Cure Disease"] = {
+            "Rabies/Zone|chardok",
+        },
 
-        ; vxed,tipt:
-        RadiantCure=Stonemite Acid/MinSick|1
-        RadiantCure=Tigir's Insects/MinSick|1
+        ["Antidote"] = {
+            "Fulmination/Zone|Txevu",
+        },
 
-        ; OOW:
-        RadiantCure=Whipping Dust/MinSick|1/Zone|causeway
-        RadiantCure=Chaotica/MinSick|1/Zone|riftseekers,wallofslaughter
-        RadiantCure=Infected Bite/MinSick|1/Zone|riftseekers
-        RadiantCure=Kneeshatter/MinSick|1/Zone|provinggrounds
+        ["Pure Blood"] = {
+            "Chailak Venom/Zone|riftseekers",
+        },
 
-        ; rss downstairs mez - XXX dont work
-        ;RadiantCure=Freezing Touch/Zone|riftseekers
-
-        ;;RadiantCure=Pyronic Lash/Zone|riftseekers
-        CureAll=Pure Blood/CheckFor|Chailak Venom/Zone|riftseekers
-
-        ; anguish:
-        RadiantCure=Gaze of Anguish/MinSick|1/Zone|anguish
-        RadiantCure=Chains of Anguish/MinSick|1/Zone|anguish
-        RadiantCure=Feedback Dispersion/MinSick|1/Zone|anguish
-        RadiantCure=Wanton Destruction/MinSick|1/Zone|anguish,txevu
-        ]]--
+        -- AutoRadiant (On/Off)=On   XXX impl? you always want it on imo
+        ["Radiant Cure"] = {
+            -- PoP:
+            --"Gravel Rain/MinSick|1/Zone|potactics,poearthb",
+    
+            -- GoD:
+            "Fulmination/MinSick|1/Zone|txevu",
+            "Kneeshatter/MinSick|1/Zone|qvic",
+            "Skullpierce/MinSick|1/Zone|qvic",
+            "Malo/MinSick|1",
+            "Malicious Decay/MinSick|1",
+            "Insidious Decay/MinSick|1",
+            "Chaos Claws/MinSick|1",
+    
+            -- vxed,tipt:
+            "Stonemite Acid/MinSick|1",
+            "Tigir's Insects/MinSick|1",
+    
+            -- OOW:
+            "Whipping Dust/MinSick|1/Zone|causeway",
+            "Chaotica/MinSick|1/Zone|riftseekers,wallofslaughter",
+            "Infected Bite/MinSick|1/Zone|riftseekers",
+            "Kneeshatter/MinSick|1/Zone|provinggrounds",
+    
+            -- rss downstairs mez - XXX dont work
+            --"Freezing Touch/Zone|riftseekers",
+    
+            --"Pyronic Lash/Zone|riftseekers",
+    
+            -- anguish:
+            "Gaze of Anguish/MinSick|1/Zone|anguish",
+            "Chains of Anguish/MinSick|1/Zone|anguish",
+            "Feedback Dispersion/MinSick|1/Zone|anguish",
+            "Wanton Destruction/MinSick|1/Zone|anguish,txevu",
+        }
     },
 
-    -- curing heals:
-    -- L70 Desperate Renewal (4935 hp, -18 pr, -18 dr, -18 curse, cost 1375 mana)
+    ["tanks"] = {
+        "Bandy",
+        "Nullius",
+        --"Manu",
+        --"Crusade",
+        --"Juancarlos",
+    },
 
-    -- quick heals:
-    -- L01 Minor Healing (12-20 hp, 1.5s cast, 10 mana)
-    -- L04 Light Healing (47-65 hp, 2s cast, 28 mana)
-    -- L10 Healing (135-175 hp, 2.5s cast, 65 mana)
-    -- L20 Greater Healing (280-350 hp, 3.0s cast, 115 mana)
-    -- L51 Remedy (463-483 hp, 1.8s cast, 167 mana)
-    -- L58 Ethereal Remedy (975 hp, 2.8s cast, 400 mana)
-    -- L61 Supernal Remedy (1450 hp, 1.8s cast, 400 mana)
-    -- L66 Pious Remedy (1990 hp, 1.8s cast, 495 mana)
-
-    -- fast heals:
-    -- L58 Ethereal Light (1980-2000 hp, 3.8s cast, 490 mana)
-    -- L63 Supernal Light (2730-2750 hp, 3.8s cast, 600 mana)
-    -- L65 Holy Light (3275 hp, 3.8s cast, 650 mana)
-    -- L65 Weighted Hammer of Conviction (tacvi class click) - Supernal Remedy (1.5s cast, 3m30s reuse)
-    -- L68 Pious Light (3750-3770 hp, 3.8s cast, 740 mana)
-    -- L70 Ancient: Hallowed Light (4150 hp, 3.8s cast, 775 mana)
-
-    ["tank_heal"] = {-- XXX impl
+    ["tank_heal"] = {
+        -- fast heals:
+        -- L58 Ethereal Light (1980-2000 hp, 3.8s cast, 490 mana)
+        -- L63 Supernal Light (2730-2750 hp, 3.8s cast, 600 mana)
+        -- L65 Holy Light (3275 hp, 3.8s cast, 650 mana)
+        -- L65 Weighted Hammer of Conviction (tacvi class click) - Supernal Remedy (1.5s cast, 3m30s reuse)
+        -- L68 Pious Light (3750-3770 hp, 3.8s cast, 740 mana)
+        -- L70 Ancient: Hallowed Light (4150 hp, 3.8s cast, 775 mana)
         "Ancient: Hallowed Light/HealPct|88/MinMana|5",
 
         -- MPG Efficiency with stronger toons. the zone debuff fools mq that 100% HP is like 75%:
@@ -263,7 +272,19 @@ settings.healing = { -- XXX implement
         --"Complete Heal/HealPct|80/Gem|2",
     },
 
+    --["important"] = {"Spela"}, -- XXX impl. prioritized list of toons to heal as "Important" group in who_to_heal
+    --["important_heal"] = { "Pious Remedy/HealPct|60/MinMana|30"}, -- XXX impl. heal spell to heal these toons with
+
     ["all_heal"] = {-- XXX impl
+        -- quick heals:
+        -- L01 Minor Healing (12-20 hp, 1.5s cast, 10 mana)
+        -- L04 Light Healing (47-65 hp, 2s cast, 28 mana)
+        -- L10 Healing (135-175 hp, 2.5s cast, 65 mana)
+        -- L20 Greater Healing (280-350 hp, 3.0s cast, 115 mana)
+        -- L51 Remedy (463-483 hp, 1.8s cast, 167 mana)
+        -- L58 Ethereal Remedy (975 hp, 2.8s cast, 400 mana)
+        -- L61 Supernal Remedy (1450 hp, 1.8s cast, 400 mana)
+        -- L66 Pious Remedy (1990 hp, 1.8s cast, 495 mana)
         "Pious Remedy/HealPct|60/MinMana|30",
 
         -- tacvi clicky
@@ -285,17 +306,6 @@ settings.healing = { -- XXX implement
 
     ["pet_heal"] = {}, -- XXX impl
 
-    ["tanks"] = {-- XXX impl
-        "Bandy",
-        "Nullius",
-        --"Manu",
-        --"Crusade",
-        --"Juancarlos",
-    },
-
-    ["important"] = {}, -- XXX impl. prioritized list of toons to heal as "Important" group in who_to_heal
-    ["important_heal"] = {}, -- XXX impl. heal spell to heal these toons with
-
     ["who_to_heal"] = "Tanks/All", -- XXX impl
 
     ["hot"] = { -- XXX impl
@@ -306,9 +316,21 @@ settings.healing = { -- XXX implement
         -- L65 Holy Elixir (900 hp/tick, 0.4 min, 720 mana)
         -- L67 Pious Elixir (slot 1: 1170 hp/tick, 0.4 min, 890 mana)
         "Pious Elixir/HealPct|70/CheckFor|Spiritual Serenity",
-    }
+    },
 
     -- ["who_to_hot"] = "Tanks", -- XXX impl
+
+
+
+    ["divine_arbitration"] = 60,    -- XXX impl. was [Cleric] Divine Arbitrsation pct in e3
+    ["celestial_regeneration"] = 25, -- XXX impl. was [Cleric] Celestial Regeneration pct in e3
+
+    -- yaulp:
+    -- L56 Yaulp V (50 atk, 10 mana/tick, 75 dex, 25% haste)
+    -- L65 Yaulp VI (60 atk, 12 mana/tick, 90 dex, 30% haste)
+    -- L69 Yaulp VII (80 atk, 14 mana/tick, 100 dex, 30% haste)
+    ["yaulp"] = "Yaulp VII",    -- was e3 [Cleric].Yaulp Spell    XXX impl. 
+    ["auto_yaulp"] = false, -- was e3 [Cleric].Auto-Yaulp (On/Off)  XXX impl. 
 }
 
 settings.assist = {

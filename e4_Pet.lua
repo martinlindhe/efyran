@@ -1,20 +1,20 @@
 local Pet = {}
 
--- summon my pet
+-- summon my pet, returns true if spell was cast
 function Pet.Summon()
     if botSettings.settings.pet == nil or botSettings.settings.pet.spell == nil then
         --print("cant summon pet. no spell in settings")
-        return
+        return false
     end
 
     if mq.TLO.Me.Pet.ID() ~= 0 then
         --mq.cmd.dgtell("all cant summon pet. i already have one!", mq.TLO.Me.Pet.Name())
-        return
+        return false
     end
 
     if botSettings.settings.pet.auto ~= nil and not botSettings.settings.pet.auto then
         --print("wont summon pet. pet.auto is false")
-        return
+        return false
     end
 
     print("Summoning pet with spell ", botSettings.settings.pet.spell)
@@ -43,6 +43,7 @@ function Pet.Summon()
     end)
 
     Pet.ConfigureTaunt()
+    return true
 end
 
 -- returns true if spell was cast
@@ -87,6 +88,11 @@ function Pet.BuffMyPet()
                 mq.cmd.dgtell("SKIP PET BUFFING ", spellConfig.SpellName, ", I'm out of reagent ", spellConfig.Reagent)
                 skip = true
             end
+        end
+
+        if spellConfig.Shrink ~= nil and mq.TLO.Me.Pet.Height() <= 1.0 then
+            --print("will not shrink pet with ", spellConfig.SpellName, " because pet height is already ", mq.TLO.Me.Pet.Height())
+            return false
         end
 
         if not skip then

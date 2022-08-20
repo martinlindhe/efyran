@@ -4,6 +4,7 @@ local file = require('e4_File')
 local settingsRoot = "D:/dev-mq/mqnext-e4-lua/settings"
 
 local BotSettings = {
+    ["healme_channel"] = "", -- healme channel for current zone
     ["toggles"] = {
         ["refresh_buffs"] = true,   -- /buffon, /buffoff
     },

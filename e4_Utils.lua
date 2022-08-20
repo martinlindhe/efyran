@@ -8,7 +8,13 @@ Timer.__index = Timer
 function Timer.new(duration)
     local t = setmetatable({}, Utils.Timer)
     t.duration = duration
-    Timer.restart(t)
+    t:restart()
+    return t
+end
+
+function Timer.new_expired(duration)
+    local t = Timer.new(duration)
+    t:expire()
     return t
 end
 
@@ -46,5 +52,15 @@ function tprint (tbl, indent)
     end
 end
 
+-- Requires: tbl is a table containing strings; str is a string.
+-- Effects : returns true if tbl contains str, false otherwise.
+function find_string_in(tbl, str)
+    for _, element in ipairs(tbl) do
+        if (element == str) then
+            return true
+        end
+    end
+    return false
+end
 
 return Utils

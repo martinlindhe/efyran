@@ -41,6 +41,8 @@ settings.self_buffs = {
     -- XXX dont get it to work 22 feb:
     -- 30% haste clicky, 72 min
     -- "Stanos' Wicked Gauntlets",
+
+    "Bracelet of the Shadow Hive/Shrink|On",
 }
 
 settings.combat_buffs = { -- XXX combat buffs:

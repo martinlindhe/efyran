@@ -162,6 +162,8 @@ settings.pet = {
         -- epic 1.5: hp  800, mana 10/tick, hp 20/tick, proc Elemental Conjunction Strike, defensive proc Elemental Conjunction Parry (Staff of Elemental Essence)
         -- epic 2.0: hp 1000, mana 12/tick, hp 24/tick, proc Primal Fusion Strike, defensive proc Primal Fusion Parry, 20 min (34 min with ext duration) (Focus of Primal Elements)
         "Focus of Primal Elements",
+
+        "Algae Covered Stiletto/Shrink|On",
     },
 
     ["auto_weapons"] = false, -- XXX was e3 [Magician].Auto-Pet Weapons (On/Off). XXX IMPL
