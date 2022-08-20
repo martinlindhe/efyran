@@ -94,7 +94,7 @@ settings.group_buffs = {
     -- L65 Vallon's Quickening (68% haste, 41 atk, 52 agi, 33 dex, 42 min, group)
     -- L67 Speed of Salik (68% haste, 53 atk, 60 agi, 50 dex, 42 min + 20% melee crit chance, cost 437 mana)
     -- L67 Hastening of Salik (68% haste, 53 atk, 60 agi, 50 dex, 42 min, group + 20% melee crit chance, cost 1260 mana)
-    ["haste"] = {
+    ["enc_haste"] = {
         "Swift Like the Wind/MinLevel|1",
         "Aanya's Quickening/MinLevel|41",
         "Wondrous Rapidity/MinLevel|44",
@@ -105,7 +105,7 @@ settings.group_buffs = {
 
     -- L48 Group Resist Magic (53-55 mr, group)
     -- L62 Guard of Druzzil (75 mr, group)
-    ["resist"] = {
+    ["magic_resist"] = {
         "Group Resist Magic/MinLevel|1",
         "Guard of Druzzil/MinLevel|46",
     },

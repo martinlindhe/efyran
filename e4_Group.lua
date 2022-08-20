@@ -1,8 +1,16 @@
--- TODO later: register "/savegroup" command
-
 local file = require('e4_File')
 
 local Group = { settings = nil }
+
+-- TODO: add /savegroup command to fill this data automatically. then we dont need to error if file not found
+local savedGroupsTemplate = [[
+local groups = { }
+groups.team12 = {
+    {"One", "Two", "Three", "Four", "Five", "Six"},
+    {"Second", "Group", "Toons", "Here", "They", "Are"},
+}
+return groups
+]]
 
 -- FIXME: relative path...
 local settingsRoot = 'D:/dev-mq/mqnext-e4-lua/settings'
@@ -12,8 +20,19 @@ function Group.Init()
     if Group.settings == nil then
         local settingsFile = settingsRoot .. '/' .. mq.TLO.MacroQuest.Server() .. '__Saved Groups.lua'
 
-        local settings = loadfile(settingsFile)()
-        Group.settings = settings
+        local settings = loadfile(settingsFile)
+        if settings ~= nil then
+            Group.settings = settings
+        else
+            -- XXX create skeleton file ?
+            print("no Saved Groups layouts for the server found, creating ", settingsFile, " with phony data, PLEASE EDIT THIS FILE !!!")
+            mq.cmd.beep(1)
+
+            local f = assert(io.open(settingsFile, "w"))
+            local t = f:write(savedGroupsTemplate)
+            f:close()
+
+        end
     end
 
     -- Recalls group setup from settings. The orchestrator (caller) will tell the rest how to form up

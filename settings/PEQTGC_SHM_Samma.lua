@@ -92,8 +92,18 @@ settings.group_buffs = {
     -- L09 Spirit of Wolf (48-55% speed, 36 min)
     -- L36 Spirit of Bih`Li (48-55% run speed, 15 atk, 36 min, group)
     ["run"] = {
-        "SSpirit of Bih`Li/MinLevel|1/CheckFor|Flight of Eagles",  -- XXX CheckFor on group buffs... ?!
-    }
+        "Spirit of Bih`Li/MinLevel|1/CheckFor|Flight of Eagles",  -- XXX CheckFor on group buffs... ?!
+    },
+
+    ["shm_haste"] = {
+        -- L26 Quiuckness (27--30% haste, 11 min)
+        -- L42 Alacrity (32-40% haste, 11 min)
+        -- L63 Swift Like the Wind (60% haste, 16 min)
+        -- L64 Talisman of Celerity (60% haste, 36 min, group)
+        "Alacrity/MinLevel|1",
+        "Swift Like the Wind/MinLevel|46",
+        "Talisman of Celerity/MinLevel|47/CheckFor|Hastening of Salik",
+    },
 }
 
 settings.bot_buffs = {
@@ -202,7 +212,7 @@ settings.pet = { -- XXX impl
         -- L50 Spirit Quickening (30 str, 20% haste, 19-27 ac, 60 min)
         -- L63 Swift Like the Wind (60% haste, 16 min)
         -- L64 Talisman of Celerity (60% haste, 36 min, group)
-        "Talisman of Celerity/MinMana|50",
+        "Talisman of Celerity/MinMana|50/CheckFor|Hastening of Salik",
     },
 }
 

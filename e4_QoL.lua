@@ -7,6 +7,10 @@ function QoL.Init()
     -- rof2 client has no persistent setting for /tgb on, afaik
     mq.cmd.tgb("on")
 
+    if mq.TLO.Me.Combat() then
+        mq.cmd.attack("off")
+    end
+
     joinCurrentHealChannel()
 
     mq.event("missing_component", "You are missing #1#.", function(text, name)

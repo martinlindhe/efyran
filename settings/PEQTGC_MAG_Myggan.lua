@@ -88,14 +88,20 @@ settings.group_buffs = {
     -- L56 Cadeau of Flame (35 ds, 33 fr, 15 min, single)
     -- L61 Flameshield of Ro (48 ds, 45 fr, 15 min, single)
     -- L63 Maelstrom of Ro (48 ds, 45 fr, 15 min, group)
-    -- L66 Fireskin (62 ds - slot 1, 45 fr, 15 min)
+    -- L66 Fireskin (62 ds - slot 1, 45 fr, 15 min, single)
     -- L70 Circle of Fireskin (62 ds, 45 fr, 15 min, group)
     ["ds"] = {
+        -- single ds buff
         "Shield of Lava/MinLevel|1",
-        "Boon of Immolation/Boon of Immolation/MinLevel|41",
+        "Cadeau of Flame/MinLevel|43",
+        "Flameshield of Ro/MinLevel|45",
+        "Fireskin/MinLevel|62",
+    },
+    ["groupds"] = {  
+        "Boon of Immolation/MinLevel|41",
         "Maelstrom of Ro/MinLevel|46",
         "Circle of Fireskin/MinLevel|62",
-    }
+    },
 }
 
 settings.healing = { -- XXX implement

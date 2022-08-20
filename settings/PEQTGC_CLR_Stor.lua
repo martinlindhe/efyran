@@ -44,13 +44,6 @@ settings.self_buffs = {
     -- NOTE: does not stack with DRU Skin
     --"Armor of the Zealot/MinMana|90/CheckFor|Kazad's Mark",
 
-    -- spell haste:
-    -- L15 Blessing of Piety (10% spell haste to L39, 40 min)
-    -- L35 Blessing of Faith (10% spell haste to L61, 40 min)
-    -- L62 Blessing of Reverence (10% spell haste to L65, 40 min)
-    -- L64 Aura of Reverence (10% spell haste to L65, 40 min, group)
-    -- L67 Blessing of Devotion (10% spell haste to L70, 40 min, 390 mana)
-    -- L69 Aura of Devotion (10% spell haste to L70, 45 min, group, 1125 mana)
     "Aura of Devotion/MinMana|40",
 
     -- absorb melee:
@@ -106,14 +99,24 @@ settings.group_buffs = {
     -- L65 Hand of Virtue (1405 hp, 72 ac, group) - LANDS ON L47
     -- L67 Conviction (1787 hp, 94 ac)
     -- L70 Hand of Conviction (1787 hp, 94 ac, group) - LANDS ON L62
-    --[[
     ["aegolism"] = {
         "Blessing of Temperance/MinLevel|1",
         "Blessing of Aegolism/MinLevel|45",
         "Hand of Virtue/MinLevel|47",
         "Hand of Conviction/MinLevel|62",
-    }
-    ]]--
+    },
+
+    -- spell haste:
+    -- L15 Blessing of Piety (10% spell haste to L39, 40 min)
+    -- L35 Blessing of Faith (10% spell haste to L61, 40 min)
+    -- L62 Blessing of Reverence (10% spell haste to L65, 40 min)
+    -- L64 Aura of Reverence (10% spell haste to L65, 40 min, group)
+    -- L67 Blessing of Devotion (10% spell haste to L70, 40 min, 390 mana)
+    -- L69 Aura of Devotion (10% spell haste to L70, 45 min, group, 1125 mana)
+    ["spellhaste"] = {
+        "Blessing of Faith/MinLevel|1", -- 10% spell haste to L61
+        "Aura of Devotion/MinLevel|62", -- 10% spell haste to L70
+    },
 }
 
 settings.bot_buffs = {

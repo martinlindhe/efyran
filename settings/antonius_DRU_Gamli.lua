@@ -1,5 +1,11 @@
 local settings = { }
 
+settings.gems = {
+    -- XXX
+    ["Flight of Eagles"] = 11,
+    ["Second Life"] = 12,
+}
+
 settings.self_buffs = {
 
     -- L80 Mask of the Shadowcat (SELF, slot 2: 9 mana/tick)

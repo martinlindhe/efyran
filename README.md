@@ -21,15 +21,32 @@ x if queue is less than 10 requests, always add it
 When picking from the queue:
 - tanks, then important bots is always picked ahead of the rest in queue
 
----
 
-TODO TODO TODO--
+
+
+
 
 # How auto buffing works
+
+TODO TODO TODO--
 
 also rework buffing like this:
 	- bots request the buffs from nearby bots.
 	this way a bot will be able to: ask for conviction if no DRU nearby. DROP conviction etc if DRU shows up.
-	- this way healers wont have to dannet probe buff status on each toon (SUPER SLOW!!!!!)
 
 
+
+
+## buff spell level and PC target levels
+
+Buff Spell Level   Minimum Target Level
+1-50:				Level 1
+51: 				Level 40
+52-53: 				Level 41
+54-55: 				Level 42
+56-57: 				Level 43
+58-59: 				Level 44
+60-61: 				Level 45
+62-63: 				Level 46
+64-65: 				Level 47
+66+: 				Level 62

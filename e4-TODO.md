@@ -1,5 +1,15 @@
 # TODO
 
+- BRD: invis/travel songs break after each casted tick??
+
+
+
+
+
+
+OLD TODO ....:::
+
+
 buffs:
     - read toon INI for buffs, like e3 syntax (init when macro loads)
     - spells and clickies

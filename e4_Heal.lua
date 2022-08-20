@@ -1,3 +1,5 @@
+require('e4_Spells')
+
 queue = require('Queue')
 
 local Heal = {

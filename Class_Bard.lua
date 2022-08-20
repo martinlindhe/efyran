@@ -60,6 +60,7 @@ function Bard.ScribeSongSet(name)
     end
 
     mq.cmd.medley("reload")
+    mq.delay(10)
     mq.cmd.medley(name)
 
     Bard.currentMelody = name

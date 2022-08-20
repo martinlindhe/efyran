@@ -26,15 +26,11 @@ settings.self_buffs = {
     -- Chaotic Ward (20 all resists, 67 ac) - stacks with all resist buffs. DON'T STACK WITH Form of Defense
     "Necklace of the Steadfast Spirit",
 
-    -- form of endurance:
     -- Form of Endurance III (slot 5: 270 hp) - Ring of the Beast (anguish)
     "Ring of the Beast",
 
-    -- form of defense:
-    -- Form of Defense I (slot 10: 27 ac) - Shroud of the Fallen Defender
-    -- Form of Defense II (slot 10: 54 ac) - Executioner's Cincture, Band of Primordial Energy (potime)
-    -- Form of Defense III (slot 10: 81 ac) - Hanvar's Hoop (OOW), Skull of Vishimtar (DoN)
-    --"Executioner's Cincture",
+    -- Form of Defense III (slot 10: 81 ac) - Hanvar's Hoop (anguish)
+    --"Hanvar's Hoop",
 
     -- god haste click:
     --"Kizrak's Gauntlets of Battle",
@@ -49,6 +45,25 @@ settings.self_buffs = {
     --"Puresteel Mantle",
 
     --"Shimmering Bauble of Trickery/Shrink|On",
+}
+
+settings.request_buffs = {
+    -- XXX i list all buffs that I want
+    --"Balikor's Mark/IfClass|DRU",
+    --"Conviction/IfNoClass|DRU", -- xxx consider syntax
+    "symbol", -- clr
+    "ac", -- clr
+    "focus", -- shm
+    "skin", -- XXX DRU need ini
+    "brells", -- XXX PAL need ini
+
+    "seasons", -- XXX DRU
+
+    "enc_haste", -- enc
+    "magic_resist", -- enc
+    -- XXX more
+
+    --"Blessing of Steeloak"
 }
 
 settings.combat_buffs = { -- XXX implement
