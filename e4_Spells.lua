@@ -250,6 +250,13 @@ function castSpellRaw(name, spawnId, extraArgs)
     mq.cmd.casting(castingArg)
 end
 
+function getItem(name)
+    if mq.TLO.FindItem(name).ID() ~= nil then
+        return mq.TLO.FindItem(name).Clicky
+    end
+    return nil
+end
+
 -- returns datatype spell or nil if not found
 function getSpellFromBuff(name)
     if mq.TLO.FindItem(name).ID() ~= nil then

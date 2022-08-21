@@ -68,7 +68,7 @@ function Group.Init()
             print(' -- processing group ',idx, ', leader:', groupLeader)
 
             if mq.TLO.Me.Name() == groupLeader then
-                for n = 2,6,1
+                for n = 2,6
                 do
                     local name = group[n]
                     if mq.TLO.DanNet(name)() ~= nil then

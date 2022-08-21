@@ -142,6 +142,41 @@ function Buffs.Init()
                 print("Failed to find a matching group buff ", key, ", target ", spawn.Name(), " L", level)
             end
         end
+    end)
+
+    mq.bind("/shrinkgroup", function()
+        -- find the shrink clicky/spell if we got one
+        local shrinkClicky = nil
+        local spellConfig
+        for key, buff in pairs(botSettings.settings.self_buffs) do
+            spellConfig = parseSpellLine(buff)
+            if spellConfig.Shrink ~= nil then
+                shrinkClicky = buff
+            end
+        end
+
+        if shrinkClicky == nil or mq.TLO.Group() == nil then
+            print("I DONT HAVE A SHRINK CLICKY/SPELL, GIVING UP")
+            return
+        end
+
+        local item = getItem(spellConfig.SpellName)
+
+        -- make sure shrink is targetable check buff type
+        local spell = getSpellFromBuff(spellConfig.SpellName)
+        if spell.TargetType() == "Single" or spell.TargetType() == "Group v1" then
+            -- loop over group, shrink one by one
+            for n = 1,5 do
+                for i = 1, 3 do
+                    if mq.TLO.Group.Member(n)() ~= nil and not mq.TLO.Group.Member(n).OtherZone() and mq.TLO.Group.Member(n).Height() > 2.04 then
+                        print("shrink member ", mq.TLO.Group.Member(n)(), " from height ", mq.TLO.Group.Member(n).Height())
+                        castSpell(spellConfig.SpellName, mq.TLO.Group.Member(n).ID())
+                        -- sleep for the Duration
+                        mq.delay(item.CastTime() + spell.RecastTime())
+                    end
+                end
+            end
+        end
 
     end)
 end
