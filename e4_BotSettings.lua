@@ -11,6 +11,15 @@ local BotSettings = {
 }
 
 
+-- XXX improve peer template generation
+local peerTemplate = [[
+local settings = { }
+
+settings.self_buffs = {
+}
+
+return settings
+]]
 
 function BotSettings.Init()
     local id = mq.TLO.MacroQuest.Server() .. "_" .. mq.TLO.Me.Class.ShortName() .. "_" .. mq.TLO.Me.Name()
@@ -24,10 +33,17 @@ function BotSettings.Init()
         print("Bot settings loaded for ", id)
     else
         -- no settings file found
-        mq.cmd.dgtell("FATAL ERROR: File not found: ", settingsFile)
+
+        mq.cmd.dgtell("PEER INI NOT FOUND, CREATING EMPTY ONE. PLEASE EDIT ", settingsFile)
         mq.cmd.beep(1)
-        -- GIVE UP, WE ARE IN A BROKEN STATE !
+
+        local f = assert(io.open(settingsFile, "w"))
+        local t = f:write(peerTemplate)
+        f:close()
+
+        -- WE ARE IN A BROKEN STATE
         os.exit()
+
     end
 end
 

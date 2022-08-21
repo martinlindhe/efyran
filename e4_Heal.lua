@@ -15,7 +15,7 @@ function Heal.Init()
     mq.event("dannet_chat", "[ #1# (#2#) ] #3#", function(text, peer, channel, msg)
         print("-- dannet_chat: chan ", channel, " msg: ", msg)
 
-        if me_healer() and channel == Heal.CurrentHealChannel() then
+        if me_healer() and channel == Heal.CurrentHealChannel() and botSettings.settings.healing ~= nil then
             handleHealmeRequest(msg)
         end
     end)

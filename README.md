@@ -37,6 +37,8 @@ also rework buffing like this:
 
 
 
+
+
 ## buff spell level and PC target levels
 
 Buff Spell Level   Minimum Target Level
@@ -50,3 +52,9 @@ Buff Spell Level   Minimum Target Level
 62-63: 				Level 46
 64-65: 				Level 47
 66+: 				Level 62
+
+
+## eqbc -> dannet migration
+
+
+/bca  => xxx

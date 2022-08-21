@@ -109,7 +109,7 @@ function refreshBuff(buffItem, botName)
     end
 
     -- only refresh fading & missing buffs
-    print("refreshBuff looking at ", buffItem, ", rank name: ", spell.RankName)
+    --print("refreshBuff looking at ", buffItem, ", rank name: ", spell.RankName)
     if mq.TLO.Me() == botName then
         -- IMPORTANT: on live, f2p restricts all spells to rank 1, so we need to look for both forms
         if mq.TLO.Me.Buff(spell.RankName)() ~= nil and mq.TLO.Me.Buff(spell.RankName).Duration.Ticks() > 4 then
@@ -131,7 +131,7 @@ function refreshBuff(buffItem, botName)
 
     local castSpellName = spell.RankName()
     if is_item then
-        castSpellName = buffItem
+        castSpellName =spellConfig.SpellName
     end
 
     print("buffing bot ", botName, " (id ",spawnID,"): ", castSpellName)
@@ -175,7 +175,7 @@ function spellConfigAllowsCasting(buffItem, botName)
         end
     end
 
-    if spellConfig.Shrink ~= nil and mq.TLO.Me.Height() <= 2.03 then
+    if spellConfig.Shrink ~= nil and mq.TLO.Me.Height() <= 2.04 then
         --print("will not shrink myself with ", spellConfig.SpellName, " because my height is already ", mq.TLO.Me.Height())
         return false
     end
@@ -198,7 +198,7 @@ function spellConfigAllowsCasting(buffItem, botName)
             end
         else
             if mq.TLO.Me.Buff(spellConfig.CheckFor)() ~= nil then
-                print("SKIP BUFFING ", spellConfig.SpellName, ", I have buff ", spellConfig.CheckFor, " on me")
+                --print("SKIP BUFFING ", spellConfig.SpellName, ", I have buff ", spellConfig.CheckFor, " on me")
                 return false
             end
         end
@@ -221,11 +221,18 @@ function castSpell(name, spawnId)
         mq.cmd.disc(name)
     else
         if mq.TLO.Me.Class.ShortName() == "BRD" then
-            mq.cmd.dgtell("castSpell: /medley queue", name)
-            mq.cmd.medley('queue "' .. name .. '"')
-        else
-            castSpellRaw(name, spawnId, "-maxtries|2")
+            if mq.TLO.Me.Casting.ID() then
+                mq.cmd.stopsong()
+            end
         end
+
+        castSpellRaw(name, spawnId, "-maxtries|2")
+
+        if mq.TLO.Me.Class.ShortName() == "BRD" then
+            mq.delay(3000) -- XXX
+            -- XXX resume songs
+        end
+
     end
 end
 
@@ -236,7 +243,7 @@ function castSpellRaw(name, spawnId, extraArgs)
         return
     end
 
-    print("xxxxx",name)
+    print("-- castSpellRaw " , name, " spawnId ", spawnId, ", extraArgs ", extraArgs)
 
     local castingArg = '"' .. name .. '" -targetid|'.. spawnId .. ' ' .. extraArgs
     mq.cmd.dgtell("castSpell: /casting", castingArg)

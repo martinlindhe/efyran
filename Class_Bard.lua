@@ -5,12 +5,17 @@ local Bard = { currentMelody = "" }
 function Bard.DoEvents()
     -- print('Bard.DoEvents')
     if Bard.currentMelody == "" then
-        Bard.ScribeSongSet(defaultMelody)
+        Bard.PlayMelody(defaultMelody)
+    elseif Bard.currentMelody ~= "" and mq.TLO.Me.Casting.ID() == nil then
+        Bard.PlayMelody(Bard.currentMelody)
     end
 end
 
--- memorize and twist given songset
-function Bard.ScribeSongSet(name)
+-- scribes and sings a melody (set of songs defined in peer settings)
+function Bard.PlayMelody(name)
+    if name == Bard.currentMelody then
+        return
+    end
 
     if botSettings.settings.songs == nil then
         mq.cmd.dgtell("ERROR no bard songs declared")
@@ -29,18 +34,16 @@ function Bard.ScribeSongSet(name)
     
     print("Scribing bard song set ", name)
 
-    -- XXX only write spell set to ini once (keep track), and only parse it all once
 
-    -- TODO: I dunno how to better use mq2medley. we write song set to mq2medley_character.ini and then /medley reload /medley <name>, can we just tell it with commands?
-
-    local id = mq.TLO.MacroQuest.Server() .. "_" .. mq.TLO.Me.Name()
-    local iniFile = mq.TLO.MacroQuest.Path() .. "/config/" .. id .. ".ini"
-
+    local gemSet = ""
     for v, songRow in pairs(songSet) do
         -- War March of Muram/Gem|4
         local o = parseSpellLine(songRow) -- XXX parse this once on script startup. dont evaluate all the time !!!
 
-        if mq.TLO.Me.Book(o.SpellName)() == nil then
+        local nameWithRank = mq.TLO.Spell(o.SpellName).RankName()
+        print("brd check... ", o.SpellName, " ... ", nameWithRank)
+
+        if mq.TLO.Me.Book(nameWithRank)() == nil then
             mq.cmd.dgtell("ERROR don't know bard song", o.SpellName)
             mq.cmd.beep(1)
             return
@@ -48,33 +51,34 @@ function Bard.ScribeSongSet(name)
 
         if o["Gem"] ~= nil then
             -- make sure that song is scribed, else scribe it
-            if mq.TLO.Me.Gem(o["Gem"]).Name() ~= o.SpellName then
-                print("SCRIBE SONG IN GEM ", o["Gem"], ": want:", o.SpellName, ", have:", mq.TLO.Me.Gem(o["Gem"]).Name())
-                mq.cmd.memorize('"'..o.SpellName..'"', o["Gem"])
+            if mq.TLO.Me.Gem(o["Gem"]).Name() ~= nameWithRank then
+                -- XXX proper rank name
+                print("SCRIBE SONG IN GEM ", o["Gem"], ": want:", nameWithRank, ", have:", mq.TLO.Me.Gem(o["Gem"]).Name())
+                mq.cmd.memorize('"'..nameWithRank..'"', o["Gem"])
                 mq.delay(3000)  -- XXX 3s
             end
+        else
+            mq.cmd.dgtell("all ERROR bard song lacks Gem|x argument: ", songRow)
+            mq.cmd.beep(1)
         end
 
-        -- write out song to mq2medley section
-        mq.cmd.ini(iniFile, "MQ2Medley-"..name, "song"..v, '"'..o.SpellName..'"')
+        gemSet = gemSet .. o["Gem"] .. " "
+
     end
 
-    mq.cmd.medley("reload")
-    mq.delay(10)
-    mq.cmd.medley(name)
+    mq.cmd.melody(gemSet)
+    print("Playing bard song set ", name, ": ", gemSet)
 
     Bard.currentMelody = name
 end
 
-mq.bind("/playmelody", function(name, called)
-    if not called then
-        --mq.cmd.dgzexecute("/playmelody", name, true) -- everyone in current zone
-        mq.cmd.dgexecute("brd", "/playmelody", name, true) -- all bards
+mq.bind("/playmelody", function(name)
+    local orchestrator = mq.TLO.FrameLimiter.Status() == "Foreground"
+    if orchestrator then
+        mq.cmd.dgexecute("brd", "/playmelody", name) -- all bards
     end
-
-    if mq.TLO.Me.Class.ShortName() == "BRD" then
-        Bard.ScribeSongSet(name)
-    end
+    Bard.PlayMelody(name)
 end)
+
 
 return Bard

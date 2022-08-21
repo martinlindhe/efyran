@@ -2,7 +2,7 @@ local file = require('e4_File')
 
 local Group = { settings = nil }
 
--- TODO: add /savegroup command to fill this data automatically. then we dont need to error if file not found
+-- FIXME: add /savegroup command to fill this data automatically. then we dont need to error if file not found
 local savedGroupsTemplate = [[
 local groups = { }
 groups.team12 = {
@@ -22,7 +22,7 @@ function Group.Init()
 
         local settings = loadfile(settingsFile)
         if settings ~= nil then
-            Group.settings = settings
+            Group.settings = settings()
         else
             -- XXX create skeleton file ?
             print("no Saved Groups layouts for the server found, creating ", settingsFile, " with phony data, PLEASE EDIT THIS FILE !!!")
@@ -50,9 +50,13 @@ function Group.Init()
             print('Recalling group ', name, ' ', groupNumber)
         end
 
-        local server = mq.TLO.MacroQuest.Server()
+        if Group.settings[name] == nil then
+            print("error: no such group ", name)
+            mq.cmd.beep(1)
+            return
+        end
 
-        print('group data for ',name, ' is ', Group.settings[name])
+        print('group data for ', name, ' is ', Group.settings[name])
 
         for idx, group in pairs(Group.settings[name])
         do

@@ -1,8 +1,12 @@
 # TODO
 
 - BRD: invis/travel songs break after each casted tick??
+    issue with mq2medley... ??? or how i invoke it
 
+- LIVE: /followon mq.bind does not register for some reason?!?! some binds works, others dont..
 
+- LIVE: XXX MOST mq.bind seem to be broken, a few works for some reason?????. /followme WORKS. rest does not!?
+-       /recallgroup does not work.
 
 
 

@@ -4,8 +4,10 @@ local QoL = {}
 
 function QoL.Init()
 
-    -- rof2 client has no persistent setting for /tgb on, afaik
-    mq.cmd.tgb("on")
+    if is_rof2() then
+        -- rof2 client has no persistent setting for /tgb on. it has been permanently auto enabled on live
+        mq.cmd.tgb("on")
+    end
 
     if mq.TLO.Me.Combat() then
         mq.cmd.attack("off")
@@ -113,7 +115,6 @@ end
 function QoL.Tick()
     -- close f2p nag screen
     if mq.TLO.Window("AlertWnd").Open() then
-        mq.cmd.dgtell("closing f2p nag screen")
         mq.cmd.notify("AlertWnd ALW_Dismiss_Button leftmouseup")
     end
 

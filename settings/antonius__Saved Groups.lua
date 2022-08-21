@@ -1,5 +1,5 @@
 local groups = { }
-groups.team12 = {
+groups.team6 = {
     {"Gamli", "Kirurgen", "Draparn", "Electronica", "Enkligen", "Ixtrem"},
 }
 return groups

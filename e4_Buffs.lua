@@ -19,6 +19,48 @@ function Buffs.Init()
         end
     end)
 
+    mq.bind("/mounton", function()
+        local orchestrator = mq.TLO.FrameLimiter.Status() == "Foreground"
+        if orchestrator then
+            mq.cmd.dgzexecute("/mounton")
+        end
+
+        if botSettings.settings.mount ~= nil then
+
+            if not mq.TLO.Me.CanMount() then
+                mq.cmd.dgtell("all MOUNT ERROR, cannot mount in ", mq.TLO.Zone.Name())
+                return
+            end
+
+            -- XXX see if mount clicky buff is on us already
+
+
+            local spell = getSpellFromBuff(botSettings.settings.mount) 
+            if spell == nil then
+                mq.cmd.dgtell("Buffs.refreshBuff: getSpellFromBuff ", buffItem, " FAILED")
+                mq.cmd.beep(1)
+                return false
+            end
+
+            if mq.TLO.Me.Buff(spell.RankName)() ~= nil then
+                print("I am already mounted.")
+                return false
+            end
+
+            -- XXX dont summon if we are already mounted.
+            print("Summoning mount ", botSettings.settings.mount)
+            castSpell(botSettings.settings.mount, mq.TLO.Me.ID())
+        end
+    end)
+
+    mq.bind("/mountoff", function()
+        local orchestrator = mq.TLO.FrameLimiter.Status() == "Foreground"
+        if orchestrator then
+            mq.cmd.dgzexecute("/mountoff")
+        end
+        mq.cmd.dismount() 
+    end)
+
     -- if filter == "all", drop all. else drop partially matched buffs
     mq.bind("/dropbuff", function(filter)
         if filter == nil then

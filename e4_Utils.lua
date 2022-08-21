@@ -63,4 +63,17 @@ function find_string_in(tbl, str)
     return false
 end
 
+
+function is_rof2()
+    -- XXX hack, will be able to check if on emu with MacroQuest.Build value soon
+    --  ? value == 1 is live (?), value 2 is test, 3 is beta, 4 is rof2-emu
+    -- XXX BEST YET: MAcroQuest.BuildName is a text string (Live, Test, Beta, Emu) ?
+    if mq.TLO.EverQuest.Server() == "antonius" then
+        return false
+    end
+
+    return true
+end
+
+
 return Utils

@@ -63,7 +63,7 @@ settings.self_buffs = {
 }
 
 settings.group_buffs = {
-    -- hp buff - symbol line:
+    -- slot 3 hp buff - symbol line:
     -- L41 Symbol of Naltron (406-525 hp)
     -- L54 Symbol of Marzin (640-700 hp)
     -- L58 Naltron's Mark (525 hp, group)

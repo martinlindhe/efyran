@@ -214,14 +214,17 @@ settings.pbae = { -- XXX impl
     --"Fire Rune/Gem|8",
 }
 
+settings.evac = { -- XXX impl
+    -- L18 Lesser Evacuate (10.5s cast, cost 150 mana)
+    -- L57 Evacuate (9s cast, cost 100 mana)
+    -- Lxx Exodus AA (instant cast, recast time 72 min)
+    "Exodus",
+
+    "Evacuate",
+}
+
 settings.wizard = { -- XXX impl / rearrange
 --[[
-[Wizard]
-; L18 Lesser Evacuate (10.5s cast, cost 150 mana)
-; L57 Evacuate (9s cast, cost 100 mana)
-; Lxx Exodus AA (instant cast, recast time 72 min)
-Evac Spell=Exodus
-
 Auto-Harvest (On/Off)=On
 ;Harvest=Harvest/Gem|8/MaxMana|22
 Harvest=Harvest of Druzzil/MaxMana|20

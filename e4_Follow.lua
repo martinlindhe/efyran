@@ -23,31 +23,24 @@ function Follow.Init()
         print("WARNING: MQ2Cast was not loaded")
     end
 
-    if mq.TLO.Plugin("MQ2Medley")() == nil then
-        mq.cmd.plugin("MQ2Medley")
-        print("WARNING: MQ2Medley was not loaded")
-    end
-
     mq.bind("/clickit", function(name)
         print("CLICKING NEARBY DOOR xxx name")
         -- XXX click nearby door. like pok stones etc
     
         -- XXX spawn check if door within X radius
-        mq.cmd.dgae("/doortarget")
+        mq.cmd.dgze("/doortarget")
         mq.delay(500)
-        mq.cmd.dgae("/click left door")
+        mq.cmd.dgze("/click left door")
     end)
 
-    mq.bind("/followon", function()
+    print("FOLLOW ONIT !!!!!")
+
+    -- NOTE: can't seem to register /followon and /followoff
+    mq.bind("/followme", function(s)
         mq.cmd.dgze("/afollow spawn ${Me.ID}")
     end)
-    mq.bind("/followme", function()
-        mq.cmd.dgze("/afollow spawn ${Me.ID}")
-    end)
-    mq.bind("/followoff", function()
-        mq.cmd.dgze("/afollow off")
-    end)
-    mq.bind("/followstop", function()
+    
+    mq.bind("/stopfollow", function(s)
         mq.cmd.dgze("/afollow off")
     end)
 
@@ -56,10 +49,7 @@ function Follow.Init()
         local orchestrator = mq.TLO.FrameLimiter.Status() == "Foreground"
 
         if orchestrator then
-            -- tell porters in current zone
-            -- XXX instead, tell all in zone and in raid... ?
-            mq.cmd.dgexecute("wiz", "/portto", name)
-            mq.cmd.dgexecute("dru", "/portto", name) 
+            mq.cmd.dgzexecute("/portto", name)
         end
     
         local spellName = ""
@@ -80,6 +70,33 @@ function Follow.Init()
         castSpellRaw(spellName, mq.TLO.Me.ID(), "gem5 -maxtries|3")
     end)
 
+    mq.bind("/evac", function(name)
+
+        local orchestrator = mq.TLO.FrameLimiter.Status() == "Foreground"
+
+        if orchestrator then
+            mq.cmd.dgzexecute("/evac")
+        end
+
+        if botSettings.settings.evac == nil then
+            return
+        end
+
+        -- chose first one we have and use it (skip Exodus if AA is down)
+        for key, evac in pairs(botSettings.settings.evac) do
+            print("finding available evac spell ", key, ": ", evac)
+            if mq.TLO.Me.AltAbility(evac)() ~= nil then
+                if mq.TLO.Me.AltAbilityReady(evac)() then
+                    castSpellRaw(evac, mq.TLO.Me.ID(), "-maxtries|3")
+                    return
+                end
+            else
+                castSpellRaw(evac, mq.TLO.Me.ID(), "gem5 -maxtries|3")
+            end
+
+        end
+
+    end)
 end
 
 return Follow
