@@ -221,22 +221,34 @@ function castSpell(name, spawnId)
         mq.cmd.disc(name)
     else
         if mq.TLO.Me.Class.ShortName() == "BRD" then
+            print("ME BARD castSpell ", name, " -- SO I STOP TWIST!")
             if mq.TLO.Me.Casting.ID() then
-                mq.cmd.stopsong()
+                mq.cmd.twist("stop")
+                mq.delay(20)
             end
         end
 
         castSpellRaw(name, spawnId, "-maxtries|2")
 
         if mq.TLO.Me.Class.ShortName() == "BRD" then
-            mq.delay(3000) -- XXX
-            -- XXX resume songs
+            
+            local item = getItem(name)
+            if item ~= nil then 
+                -- sleep for the Duration
+                --print("XXX item click sleep, ", item.Clicky.CastTime(), " + ", item.Clicky.Spell.RecastTime() )
+                mq.delay(item.Clicky.CastTime() + item.Clicky.Spell.RecastTime() + 1500) -- XXX recast time is 0
+            end
+            print("ME BARD castSpell ", name, " -- SO I RESUME TWIST!")
+            mq.cmd.twist("start")
         end
 
     end
 end
 
 function castSpellRaw(name, spawnId, extraArgs)
+    if extraArgs == nil then
+        extraArgs = ""
+    end
     if spawnId == nil then
         mq.cmd.dgtell("castSpellRaw: called with nil spawnId, name = ", name, " extraArgs=", extraArgs)
         mq.cmd.beep(1)
@@ -250,9 +262,10 @@ function castSpellRaw(name, spawnId, extraArgs)
     mq.cmd.casting(castingArg)
 end
 
+-- return item or nil
 function getItem(name)
     if mq.TLO.FindItem(name).ID() ~= nil then
-        return mq.TLO.FindItem(name).Clicky
+        return mq.TLO.FindItem(name)
     end
     return nil
 end

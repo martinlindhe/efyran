@@ -21,8 +21,7 @@ buffs:
 
 
 moving:
-    - clickit, rtz, followon, followoff
-    - NOTE: /rtz useless, /afollow works across zones
+    - clickit, rtz
     - LATER: check out MQ2Nav. XXX how to download "1.5 gigabyte" of community nav meshes? redguide offers them with membership...
 
 

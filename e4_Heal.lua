@@ -13,7 +13,7 @@ end
 
 function Heal.Init()
     mq.event("dannet_chat", "[ #1# (#2#) ] #3#", function(text, peer, channel, msg)
-        print("-- dannet_chat: chan ", channel, " msg: ", msg)
+        --print("-- dannet_chat: chan ", channel, " msg: ", msg)
 
         if me_healer() and channel == Heal.CurrentHealChannel() and botSettings.settings.healing ~= nil then
             handleHealmeRequest(msg)
@@ -48,7 +48,6 @@ function handleHealmeRequest(msg)
     local spawn = mq.TLO.Spawn("pc =" .. peer)
     if tostring(spawn) == "NULL" then
         mq.cmd.dgtell("all peer not in zone, ignoring heal request ", peer)
-        mq.cmd.beep(1)
         return
     end
 
@@ -76,7 +75,7 @@ local askForHealTimer = utils.Timer.new_expired(5 * 1) -- 5s
 
 function Heal.Tick()
 
-    if mq.TLO.Me.PctHPs() < 100 and askForHealTimer:expired() then
+    if mq.TLO.Me.PctHPs() <= 98 and askForHealTimer:expired() then
         -- ask for heals if i take damage
         local s = mq.TLO.Me.Name().." "..mq.TLO.Me.PctHPs() -- "Avicii 82"
         print("HELP HEAL ME, ", s)

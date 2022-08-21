@@ -135,8 +135,10 @@ function Buffs.Init()
             if minLevel > 0 then
                 if spellConfigAllowsCasting(spellName, spawn.Name()) then
                     castSpellRaw(spellName, spawnID, "-maxtries|3")
-                    -- XXX wait until cast is finished !!!
-                    mq.delay(10000) -- XXX 10s
+
+                    -- sleep for the Duration
+                    local spell = getSpellFromBuff(spellName)
+                    mq.delay(4000 + spell.MyCastTime() + spell.RecastTime()) -- XXX 4s for "memorize spell"
                 end
             else
                 print("Failed to find a matching group buff ", key, ", target ", spawn.Name(), " L", level)
@@ -172,13 +174,34 @@ function Buffs.Init()
                         print("shrink member ", mq.TLO.Group.Member(n)(), " from height ", mq.TLO.Group.Member(n).Height())
                         castSpell(spellConfig.SpellName, mq.TLO.Group.Member(n).ID())
                         -- sleep for the Duration
-                        mq.delay(item.CastTime() + spell.RecastTime())
+                        mq.delay(item.Clicky.CastTime() + spell.RecastTime())
                     end
                 end
             end
         end
 
     end)
+end
+
+local refreshBuffsTimer = utils.Timer.new_expired(3 * 1) -- 4s
+
+function Buffs.Tick()
+    if botSettings.toggles.refresh_buffs and refreshBuffsTimer:expired() and not mq.TLO.Me.Moving() and not mq.TLO.Me.Invis()
+    and (mq.TLO.Me.Class.ShortName() == "BRD" or not mq.TLO.Me.Casting()) then
+        if not buffs.RefreshSelfBuffs() then
+            if not buffs.RefreshAura() then
+                if not pet.Summon() then
+                    if not pet.BuffMyPet() then
+    
+                        -- XXX temp disabled bot buffs because its super slow due to dannet queries. rewrite to have bots request buffs in a channel instead.
+                        -- XXX orchestrator will decide what toon will cast the requested buff in the end (?)
+                        ------buffs.RefreshBotBuffs() -- XXX slow due to dannet queries!
+                    end
+                end
+            end
+        end
+        refreshBuffsTimer:restart()
+    end
 end
 
 -- returns true if a buff was casted

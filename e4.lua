@@ -7,10 +7,10 @@ utils   = require('e4_Utils')
 aliases = require('settings/Spell Aliases')
 
 botSettings = require('e4_BotSettings')
+follow  = require('e4_Follow')
 
 assist  = require('e4_Assist')
 buffs   = require('e4_Buffs')
-follow  = require('e4_Follow')
 group   = require('e4_Group')
 heal    = require('e4_Heal')
 pet     = require('e4_Pet')
@@ -35,25 +35,8 @@ qol.Init()
 
 mq.cmd.dgtell('all E4 started')
 
-local refreshBuffsTimer = utils.Timer.new_expired(3 * 1) -- 4s
-
 while true do
-    if botSettings.toggles.refresh_buffs and refreshBuffsTimer:expired() and not mq.TLO.Me.Moving() and not mq.TLO.Me.Invis()
-    and (mq.TLO.Me.Class.ShortName() == "BRD" or not mq.TLO.Me.Casting()) then
-        if not buffs.RefreshSelfBuffs() then
-            if not buffs.RefreshAura() then
-                if not pet.Summon() then
-                    if not pet.BuffMyPet() then
-
-                        -- XXX temp disabled bot buffs because its super slow due to dannet queries. rewrite to have bots request buffs in a channel instead.
-                        -- XXX orchestrator will decide what toon will cast the requested buff in the end (?)
-                        ------buffs.RefreshBotBuffs() -- XXX slow!
-                    end
-                end
-            end
-        end
-        refreshBuffsTimer:restart()
-    end
+    buffs.Tick()
 
     local class = mq.TLO.Me.Class.ShortName()
     if class == "CLR" then CLR.DoEvents()

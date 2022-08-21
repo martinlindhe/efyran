@@ -76,14 +76,16 @@ settings.group_buffs = {
     -- L60 Koadic's Endless Intellect (14 mana/tick, group)
     -- L63 Tranquility (16 mana/tick, group)
     -- L65 Voice of Quellious (18 mana/tick, group, cost 1200 mana)
+    -- L65 Dusty Cap of the Will Breaker (LDoN raid). casts "Voice of Quellious" on L01 toons
     -- L68 Clairvoyance (20 mana/tick, cost 400 mana)
     -- L70 Voice of Clairvoyance (20 mana/tick, cost 1300 mana, group)
     ["manaregen"] = {
-        "Boon of the Clear Mind/MinLevel|1",
-        "Gift of Pure Thought/MinLevel|43",
-        "Koadic's Endless Intellect/MinLevel|45",
-        "Tranquility/MinLevel|46",
-        "Voice of Quellious/MinLevel|47",
+        --"Boon of the Clear Mind/MinLevel|1",
+        --"Gift of Pure Thought/MinLevel|43",
+        --"Koadic's Endless Intellect/MinLevel|45",
+        --"Tranquility/MinLevel|46",
+        --"Voice of Quellious/MinLevel|47",
+        "Dusty Cap of the Will Breaker/MinLevel|1",
         "Voice of Clairvoyance/MinLevel|62",
     },
 

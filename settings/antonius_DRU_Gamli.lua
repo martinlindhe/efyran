@@ -13,7 +13,7 @@ settings.gems = {
 settings.mount = "Glowing Black Drum"
 
 settings.self_buffs = {
-    --"Guise of the Deceiver", -- 6s cast. XXX is there permanent illusion aa for all classes on live?
+    --"Guise of the Deceiver", -- 6s cast. XXX get general AA 'Persistent Illusions (L75, 30 aa cost)
     --"Thick Ice Studded Collar", -- 3s cast,
     --"Ball of Golem Clay",
     "Amulet of Necropotence",
@@ -99,9 +99,72 @@ settings.group_buffs = {
     ["corruption"] = { -- XXX unused
         "Resist Corruption/MinLevel|71",    -- XXX unsure of minlevel
         "Forbear Corruption/MinLevel|76",   -- XXX unsure of minlevel
+    },
+
+    ["regen"] = {
+        -- L34 Regeneration (5-9 hp/tick)
+        -- L39 Pack Regeneration (9 hp/tick)
+        -- L42 Chloroplast (10-19 hp/tick)
+        -- L45 Pack Chloroplast (13-19 hp/tick)
+        -- L54 Regrowth (20-38 hp/tick, 18.4 min, cost 300 mana)
+        -- L58 Regrowth of the Grove (32-38 hp/tick, 18.4 min, cost 600 mana, group)
+        -- L61 Replenishment (40-58 hp/tick, 19.6 min, cost 275 mana)
+        -- L63 Blessing of Replenishment (44-58 hp/tick, 19.6 min, cost 650 mana, group)
+        -- L66 Oaken Vigor (60-70 hp/tick, 21 min, cost 343 mana)
+        -- L69 Blessing of Oak (66-70 hp/tick, 21 min, cost 845 mana, group)
+        -- L76 Spirit of the Stalwart Rk. II (105-144 hp/tick, 21 min, cost 523 mana)
+        -- L79 Talisman of the Stalwart Rk. II (111-144 hp/tick, 21 min, cost 1238 mana)
+        "Chloroplast/MinLevel|1",
+        "Regrowth/MinLevel|42",
+        "Replenishment/MinLevel|45",
+        "Oaken Vigor/MinLevel|62",
+        "Spirit of the Stalwart/MinLevel|76", -- XXX unsure of minlevel
+    },
+
+    ["ds"] = {
+        -- L07 Shield of Thistles (4-6 ds, 15 min)
+        -- L17 Shield of Barbs (7-9 ds, 15 min)
+        -- L27 Shield of Brambles (10-12 ds, 15 min)
+        -- L37 Shield of Spikes (14 ds, 15 min)
+        -- L47 Shield of Thorns (24 ds, 15 min) - lands on LV1
+        -- L49 Legacy of Spike (24 ds, 15 min, group) - lands on LV1
+        -- L58 Shield of Blades (32 ds, 15 min)
+        -- L59 Legacy of Thorn (32 ds, 15 min, group)
+        -- L63 Shield of Bracken (40 ds, 15 min)
+        -- L65 Legacy of Bracken (40 ds, 15 min, group)
+        -- L67 Nettle Shield (55 ds, 15 min)
+        -- L70 Legacy of Nettles (55 ds, 15 min, group)
+        -- L72 Viridfloral Shield Rk. II (69 ds, 15 min)
+        -- L75 Legacy of Viridiflora Rk. II (69 ds, 15 min, group)
+        -- L77 Viridfloral Bulwark Rk. II (86 ds, 15 min)
+        -- L80 Legacy of Viridithorns Rk. II (86 ds, 15 min, group)
+        -- NOTE: MAGE DS IS STRONGER
+        "Shield of Thorns/MinLevel|1",
+        "Shield of Blades/MinLevel|44",
+        "Shield of Bracken/MinLevel|46",
+        "Nettle Shield/MinLevel|62", -- XXX unsure of minlevel
+        "Viridfloral Shield/MinLevel|71",  -- XXX unsure of minlevel
+        "Viridfloral Bulwark/MinLevel|76", -- XXX unsure of minlevel
     }
 
 }
+
+--[[
+Buff Spell Level   Minimum Target Level
+1-50:				Level 1
+51: 				Level 40
+52-53: 				Level 41
+54-55: 				Level 42
+56-57: 				Level 43
+58-59: 				Level 44
+60-61: 				Level 45
+62-63: 				Level 46
+64-65: 				Level 47
+66+: 				Level 62
+]]--
+
+
+
 
 settings.healing = { -- XXX implement
 

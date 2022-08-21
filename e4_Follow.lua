@@ -1,4 +1,6 @@
-local Follow = {}
+local Follow = {
+    spawn = nil, -- the current spawn I am following
+}
 
 function Follow.Init()
 
@@ -33,15 +35,29 @@ function Follow.Init()
         mq.cmd.dgze("/click left door")
     end)
 
-    print("FOLLOW ONIT !!!!!")
-
     -- NOTE: can't seem to register /followon and /followoff
-    mq.bind("/followme", function(s)
-        mq.cmd.dgze("/afollow spawn ${Me.ID}")
+    mq.bind("/followme", function()
+        mq.cmd.dgzexecute("/followid", mq.TLO.Me.ID())
+    end)
+
+    -- follows another peer in LoS
+    mq.bind("/followid", function(spawnID)
+        print("followid called")
+        if is_peer(spawnID) then
+            if is_spawn_los(spawnID) then
+                Follow.spawn = getSpawn(spawnID)
+                Follow.Resume()
+            else
+                mq.cmd.dgtell("all spawn ", spawnID, " not LoS")
+            end
+        else
+            mq.cmd.dgtell("all ERROR: /followid called on invalid spawnID", spawnID)
+        end
     end)
     
     mq.bind("/stopfollow", function(s)
-        mq.cmd.dgze("/afollow off")
+        Follow.Pause()
+        Follow.spawn = nil
     end)
 
     mq.bind("/portto", function(name)
@@ -73,7 +89,6 @@ function Follow.Init()
     mq.bind("/evac", function(name)
 
         local orchestrator = mq.TLO.FrameLimiter.Status() == "Foreground"
-
         if orchestrator then
             mq.cmd.dgzexecute("/evac")
         end
@@ -95,8 +110,40 @@ function Follow.Init()
             end
 
         end
-
     end)
+
+    mq.bind("/throne", function()
+        local orchestrator = mq.TLO.FrameLimiter.Status() == "Foreground"
+        if orchestrator then
+            mq.cmd.dgzexecute("/throne")
+        end
+        castVeteranAA("Throne of Heroes")
+    end)
+end
+
+function Follow.Pause()
+    mq.cmd.afollow("off")
+end
+
+function Follow.Resume()
+    if Follow.spawn ~= nil then
+        print("resuming follow")
+        mq.cmd("/afollow spawn", Follow.spawn.ID())
+    else
+        print("Follow.Resume: failed. spawnID is nil")
+    end
+end
+
+function castVeteranAA(name)
+    if mq.TLO.Me.AltAbility(name)() ~= nil then
+        if mq.TLO.Me.AltAbilityReady(name)() then
+            castSpell(name, mq.TLO.Me.ID())
+        else
+            mq.cmd.dgtell("ERROR:", name, "is not ready, ready in", mq.TLO.Me.AltAbilityTimer(name).TimeHMS() )
+        end
+    else
+        mq.cmd.dgtell("ERROR: i do not have AA", name)
+    end
 end
 
 return Follow

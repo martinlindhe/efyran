@@ -53,7 +53,7 @@ settings.self_buffs = {
     -- L67 Panoply of Vie (absorb 10% melee dmg to 2080, 36 min)
     "Panoply of Vie/MinMana|70",
 
-    "Balikor's Mark/MinMana|75",
+    "Balikor's Mark/MinMana|75/CheckFor|Hand of Conviction",
 
     -- ac - slot 4:
     -- L61 Ward of Gallantry (54 ac)
@@ -100,10 +100,10 @@ settings.group_buffs = {
     -- L67 Conviction (1787 hp, 94 ac)
     -- L70 Hand of Conviction (1787 hp, 94 ac, group) - LANDS ON L62
     ["aegolism"] = {
-        "Blessing of Temperance/MinLevel|1",
-        "Blessing of Aegolism/MinLevel|45",
-        "Hand of Virtue/MinLevel|47",
-        "Hand of Conviction/MinLevel|62",
+        --"Blessing of Temperance/MinLevel|1",
+        --"Blessing of Aegolism/MinLevel|45",
+        --"Hand of Virtue/MinLevel|47",
+        --"Hand of Conviction/MinLevel|62",
     },
 
     -- spell haste:

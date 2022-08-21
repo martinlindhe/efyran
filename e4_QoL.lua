@@ -35,12 +35,29 @@ function QoL.Init()
     end)
 
     mq.event("zoned", "You have entered #1#.", function(text, zone)
-        mq.cmd.dgtell("i zoned into ", zone)
-        mq.delay(2000)
-        pet.ConfigureTaunt()
+        if zone ~= "an area where levitation effects do not function" then
+            mq.cmd.dgtell("i zoned into ", zone)
+            mq.delay(2000)
+            pet.ConfigureTaunt()
 
-        joinCurrentHealChannel()
+            joinCurrentHealChannel()
+        end
     end)
+
+    -- clear all chat windows on current peer
+    mq.bind("/clr", function(name)
+        mq.cmd.clear()
+    end)
+
+    -- clear all chat windows on all peers
+    mq.bind("/cls", function(name)
+        mq.cmd.dgaexecute("/clear")
+    end)
+
+    mq.bind("/self", function(name)
+        mq.cmd("/target myself")
+    end)
+
 end
 
 -- joins/changes to the heal channel for current zone
@@ -50,8 +67,6 @@ function joinCurrentHealChannel()
 
     if orchestrator or me_healer() then
         if heal.CurrentHealChannel() == botSettings.healme_channel then
-            mq.cmd.dgtell("all unexpected: asked to join heal channel a second time", botSettings.healme_channel)
-            mq.cmd.beep(1)
             return
         end
 
@@ -135,7 +150,7 @@ function QoL.Tick()
         mq.cmd.pet("get lost")
     end
 
-    if mq.TLO.Me.MaxMana() > 0 then
+    if mq.TLO.Me.MaxMana() > 0 and not mq.TLO.Me.Moving() then
         if mq.TLO.Me.PctMana() < 70 and mq.TLO.Me.Standing() then
             mq.cmd.dgtell("all low mana, medding! ", mq.TLO.Me.PctMana())
             mq.cmd.sit("on")

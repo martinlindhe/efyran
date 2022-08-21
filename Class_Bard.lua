@@ -41,7 +41,7 @@ function Bard.PlayMelody(name)
         local o = parseSpellLine(songRow) -- XXX parse this once on script startup. dont evaluate all the time !!!
 
         local nameWithRank = mq.TLO.Spell(o.SpellName).RankName()
-        print("brd check... ", o.SpellName, " ... ", nameWithRank)
+        --print("considering bard song ... ", o.SpellName, " ... ", nameWithRank)
 
         if mq.TLO.Me.Book(nameWithRank)() == nil then
             mq.cmd.dgtell("ERROR don't know bard song", o.SpellName)
@@ -52,7 +52,6 @@ function Bard.PlayMelody(name)
         if o["Gem"] ~= nil then
             -- make sure that song is scribed, else scribe it
             if mq.TLO.Me.Gem(o["Gem"]).Name() ~= nameWithRank then
-                -- XXX proper rank name
                 print("SCRIBE SONG IN GEM ", o["Gem"], ": want:", nameWithRank, ", have:", mq.TLO.Me.Gem(o["Gem"]).Name())
                 mq.cmd.memorize('"'..nameWithRank..'"', o["Gem"])
                 mq.delay(3000)  -- XXX 3s
@@ -66,7 +65,7 @@ function Bard.PlayMelody(name)
 
     end
 
-    mq.cmd.melody(gemSet)
+    mq.cmd.twist(gemSet)
     print("Playing bard song set ", name, ": ", gemSet)
 
     Bard.currentMelody = name
@@ -77,7 +76,9 @@ mq.bind("/playmelody", function(name)
     if orchestrator then
         mq.cmd.dgexecute("brd", "/playmelody", name) -- all bards
     end
-    Bard.PlayMelody(name)
+    if mq.TLO.Me.Class.ShortName() == "BRD" then
+        Bard.PlayMelody(name)
+    end
 end)
 
 

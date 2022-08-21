@@ -67,13 +67,26 @@ end
 function is_rof2()
     -- XXX hack, will be able to check if on emu with MacroQuest.Build value soon
     --  ? value == 1 is live (?), value 2 is test, 3 is beta, 4 is rof2-emu
-    -- XXX BEST YET: MAcroQuest.BuildName is a text string (Live, Test, Beta, Emu) ?
+    -- XXX BEST YET: MacroQuest.BuildName is a text string (Live, Test, Beta, Emu) ? 21 aug '22, not yet in master branch
     if mq.TLO.EverQuest.Server() == "antonius" then
         return false
     end
-
     return true
 end
 
+-- returns true if spawnID is another peer
+function is_peer(spawnID)
+    local spawn = getSpawn(spawnID)
+    if spawn == nil or spawn.Type() ~= "PC" then
+        return false
+    end
+    return mq.TLO.DanNet(spawn.Name())() ~= nil
+end
+
+-- returns true if spawnID is in LoS
+function is_spawn_los(spawnID)
+    local spawn = getSpawn(spawnID)
+    return spawn ~= nil and spawn.LineOfSight()
+end
 
 return Utils
