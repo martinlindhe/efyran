@@ -72,4 +72,13 @@ Buff Spell Level   Minimum Target Level
 /clickit					- click a "door" object to zone
 
 
+/buffon                     - auto buffs
+/buffoff
+/buffit						- buff target
+
+
+/finditem, /fdi             - find item by partial name
+
+
+
 xxx document rest

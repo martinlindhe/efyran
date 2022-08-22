@@ -24,16 +24,13 @@ return settings
 function BotSettings.Init()
     local id = mq.TLO.MacroQuest.Server() .. "_" .. mq.TLO.Me.Class.ShortName() .. "_" .. mq.TLO.Me.Name()
     local settingsFile = settingsRoot .. "/" .. id .. ".lua"
-    print("reading peer ", mq.TLO.Me.Name(), " settings from ", settingsFile)
-    -- XXX dont crash if file not found !
-    print(type(loadfile))
+    print("Reading peer settings ", settingsFile)
+
     local settings = loadfile(settingsFile)
     if settings ~= nil then
         BotSettings.settings = settings()
-        print("Bot settings loaded for ", id)
     else
         -- no settings file found
-
         mq.cmd.dgtell("PEER INI NOT FOUND, CREATING EMPTY ONE. PLEASE EDIT ", settingsFile)
         mq.cmd.beep(1)
 
@@ -43,7 +40,6 @@ function BotSettings.Init()
 
         -- WE ARE IN A BROKEN STATE
         os.exit()
-
     end
 end
 

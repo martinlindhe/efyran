@@ -93,13 +93,13 @@ function Assist.handleAssistCall(spawn)
         mq.cmd.dgtell("all WARNING: I have no assist settings")
         return
     end
-
-    Assist.killSpawn(spawn)
-
+    
     if mq.TLO.Me.Pet.ID() ~= 0 then
         mq.cmd.dgtell("all ATTACKING WITH MY PET", mq.TLO.Me.Pet.CleanName())
         mq.cmd.pet("attack", spawn.ID())
     end
+
+    Assist.killSpawn(spawn)
 end
 
 -- return true if spell/ability was cast
@@ -124,6 +124,11 @@ function Assist.castSpellAbility(spawn, row)
             --print("SKIP NoAggro ", spell.Name, " i have aggro")
             return false
         end
+    end
+
+    if spell.MinMana ~= nil and mq.TLO.Me.PctMana() < tonumber(spell.MinMana) then
+        mq.cmd.dgtell("all SKIP MinMana ", spell.Name, ", ", mq.TLO.Me.PctMana(), " vs required " , spell.MinMana)
+        return false
     end
 
     --print("Assist.castSpellAbility preparing to cast ", spell.Name)

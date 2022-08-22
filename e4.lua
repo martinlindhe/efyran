@@ -3,6 +3,7 @@
 mq      = require('mq')
 
 utils   = require('e4_Utils')
+items   = require('e4_Items')
 
 aliases = require('settings/Spell Aliases')
 
@@ -32,6 +33,7 @@ follow.Init()
 group.Init()
 heal.Init()
 qol.Init()
+items.Init()
 
 mq.cmd.dgtell('all E4 started')
 

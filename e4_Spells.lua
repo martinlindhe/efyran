@@ -124,7 +124,7 @@ function refreshBuff(buffItem, botName) -- XXX take spawn argument instead.
     end
 
     if not is_spell_ability_ready(spellConfig.Name) then
-        print("not ready", spellConfig.Name)
+        --print("not ready ", spellConfig.Name)
         return false
     end
 
