@@ -235,8 +235,14 @@ function castSpell(name, spawnId)
             local item = getItem(name)
             if item ~= nil then 
                 -- sleep for the Duration
-                --print("XXX item click sleep, ", item.Clicky.CastTime(), " + ", item.Clicky.Spell.RecastTime() )
+                print("XXX item click sleep, ", item.Clicky.CastTime(), " + ", item.Clicky.Spell.RecastTime() )
                 mq.delay(item.Clicky.CastTime() + item.Clicky.Spell.RecastTime() + 1500) -- XXX recast time is 0
+            else
+                local spell = getSpell(name)
+                if spell ~= nil then
+                    print("XXX spell sleep ", spell.MyCastTime(), spell.RecastTime())
+                    mq.delay(spell.MyCastTime() + spell.RecastTime()) 
+                end
             end
             print("ME BARD castSpell ", name, " -- SO I RESUME TWIST!")
             mq.cmd.twist("start")
@@ -266,6 +272,14 @@ end
 function getItem(name)
     if mq.TLO.FindItem(name).ID() ~= nil then
         return mq.TLO.FindItem(name)
+    end
+    return nil
+end
+
+-- return spell or nil
+function getSpell(name)
+    if mq.TLO.Spell(name).ID() ~= nil then
+        return mq.TLO.Spell(name)
     end
     return nil
 end

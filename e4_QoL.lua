@@ -58,6 +58,21 @@ function QoL.Init()
         mq.cmd("/target myself")
     end)
 
+    -- hide existing corpses
+    mq.bind("/hce", function(name)
+        mq.cmd("/hidec all")
+    end)
+
+    -- hide looted corpses
+    mq.bind("/hcl", function(name)
+        mq.cmd("/hidec looted")
+    end)
+
+    -- hide no corpses
+    mq.bind("/hcn", function(name)
+        mq.cmd("/hidec none")
+    end)
+
 end
 
 -- joins/changes to the heal channel for current zone
