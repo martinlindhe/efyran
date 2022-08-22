@@ -56,6 +56,10 @@ function Follow.Init()
     end)
     
     mq.bind("/stopfollow", function(s)
+        local orchestrator = mq.TLO.FrameLimiter.Status() == "Foreground"
+        if orchestrator then
+            mq.cmd.dgzexecute("/stopfollow")
+        end
         Follow.Pause()
         Follow.spawn = nil
     end)

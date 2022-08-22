@@ -146,15 +146,15 @@ settings.assist = {
         -- L70 Scorched Earth (1150 hp, 0.5s cast, cost 365 mana, 30s recast)
 
         ["main"] = {
-            "Scorched Earth/noAggro/MinMana|60",
+            "Scorched Earth/NoAggro/MinMana|60",
         },
 
         ["fastfire"] = {
-            "Scorched Earth/noAggro/MinMana|60",
+            "Scorched Earth/NoAggro/MinMana|60",
         },
 
         ["bigfire"] = {
-            "Scorched Earth/noAggro/MinMana|60"
+            "Scorched Earth/NoAggro/MinMana|60"
         },
 
         -- cold nukes - timer 2:
@@ -163,11 +163,11 @@ settings.assist = {
         -- L63 Frozen Wind (695 hp, 0.5s cast, cost 295 mana)
         -- L70 Ancient: North Wind (1032 hp, 0.5s cast, 30s recast, cost 392 mana)
         ["fastcold"] = {
-            "Ancient: North Wind/noAggro/MinMana|60",
+            "Ancient: North Wind/NoAggro/MinMana|60",
         },
 
         ["bigcold"] = {
-            "Ancient: North Wind/noAggro/MinMana|60",
+            "Ancient: North Wind/NoAggro/MinMana|60",
         },
     },
 

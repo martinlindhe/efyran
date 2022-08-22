@@ -6,7 +6,7 @@ function Bard.DoEvents()
     -- print('Bard.DoEvents')
     if Bard.currentMelody == "" then
         Bard.PlayMelody(defaultMelody)
-    elseif Bard.currentMelody ~= "" and mq.TLO.Me.Casting.ID() == nil then
+    elseif Bard.currentMelody ~= "" and mq.TLO.Me.Casting() == nil then
         Bard.PlayMelody(Bard.currentMelody)
     end
 end

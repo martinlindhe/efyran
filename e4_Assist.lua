@@ -4,6 +4,8 @@ local Assist = {}
 
 local assistTarget = nil -- the current assist target
 
+local spellSet = "main" -- the current spell set. XXX impl switching it
+
 -- return spawn or nil
 function getSpawn(spawnID)
     local spawn = mq.TLO.Spawn("id " .. spawnID)
@@ -43,6 +45,10 @@ function Assist.Init()
         end
 
         if spawn.Type() ~= "PC" then
+            if assistTarget ~= nil then
+                print("backing off existing target before assisting new")
+                Assist.backoff()
+            end
             print("calling assist on spawn type ", spawn.Type)
 
             if orchestrator then
@@ -63,19 +69,23 @@ function Assist.Init()
             mq.cmd.dgzexecute("/backoff")
         end
 
-        if assistTarget ~= nil then
-            mq.cmd.dgtell("backing off target ", assistTarget.Name())
-            assistTarget = nil
-        else
-            mq.cmd.dgtell("all XXX ignoring backoff, no spawn known!")
-        end
-
-        if mq.TLO.Me.Pet.ID() ~= 0 then
-            mq.cmd.dgtell("all PET BACKING OFF")
-            mq.cmd.pet("back off")
-        end
+        Assist.backoff()
     end)
 
+end
+
+function Assist.backoff()
+    if assistTarget ~= nil then
+        mq.cmd.dgtell("backing off target ", assistTarget.Name())
+        assistTarget = nil
+    else
+        mq.cmd.dgtell("all XXX ignoring backoff, no spawn known!")
+    end
+
+    if mq.TLO.Me.Pet.ID() ~= 0 then
+        mq.cmd.dgtell("all PET BACKING OFF")
+        mq.cmd.pet("back off")
+    end
 end
 
 function Assist.handleAssistCall(spawn)
@@ -90,6 +100,40 @@ function Assist.handleAssistCall(spawn)
         mq.cmd.dgtell("all ATTACKING WITH MY PET", mq.TLO.Me.Pet.CleanName())
         mq.cmd.pet("attack", spawn.ID())
     end
+end
+
+-- return true if spell/ability was cast
+function Assist.castSpellAbility(spawn, row)
+
+    local spell = parseSpellLine(row)
+
+   --print("Assist.castSpellAbility", row, ": ", spell.Name)
+
+    if spell.PctAggro ~= nil then
+        -- PctAggro skips cast if your aggro % is above threshold
+        --print("evaluating pctaggro castSpellability", spell.Name)
+        if mq.TLO.Me.PctAggro() < tonumber(spell.PctAggro) then
+            print("SKIP PctAggro ", spell.Name, " aggro ", mq.TLO.Me.PctAggro(), " vs required ", spell.PctAggro)
+            return false
+        end
+    end
+    if spell.NoAggro ~= nil and spell.NoAggro then
+        -- NoAggro skips cast if you are on top of aggro
+        --print("evaluating noaggro castSpellability", spell.Name)
+        if mq.TLO.Me.TargetOfTarget.ID() == mq.TLO.Me.ID() then
+            --print("SKIP NoAggro ", spell.Name, " i have aggro")
+            return false
+        end
+    end
+
+    --print("Assist.castSpellAbility preparing to cast ", spell.Name)
+
+    if is_spell_ability_ready(spell.Name) then
+        castSpell(spell.Name, spawn.ID())
+        mq.delay(200)
+        return true
+    end
+    return false
 end
 
 -- stick and perform melee attacks
@@ -153,7 +197,7 @@ function Assist.killSpawn(spawn)
             break
         end
 
-        print(spawn.Type, " assist spawn ", assistTarget)
+        --print(spawn.Type, " assist spawn ", assistTarget)
 
         if mq.TLO.Target() == nil or mq.TLO.Target.ID() ~= spawn.ID() then
             -- XXX will happen for healer+nuker setups (DRU,RNG,SHM)
@@ -167,33 +211,44 @@ function Assist.killSpawn(spawn)
                 mq.doevents()
                 if assistTarget == nil then
                     -- break inner loop if /backoff was called
-                    print("meleeLoop: i got called off, breaking inner loop")
+                    print("melee: i got called off, breaking inner loop")
                     break
                 end
 
-                local ability = parseSpellLine(abilityRow)
-                --print("ability", abilityRow, ": ", ability.Name)
-
-                local skip = false
-                if ability.PctAggro ~= nil then
-                    print("evaluating pctaggro ability", ability.Name)
-                    if mq.TLO.Me.PctAggro() < tonumber(ability.PctAggro) then
-                        --print("SKIP PctAggro ABILITY", ability.Name, "aggro", mq.TLO.Me.PctAggro(), "vs required", ability.PctAggro)
-                        skip = true
-                    end
-                end
-
-                if not skip and is_spell_ability_ready(ability.Name) then
-                    castSpell(ability.Name, spawn.ID())
-                    mq.delay(200)
+                if Assist.castSpellAbility(spawn, abilityRow) then
                     break
                 end
             end
         end
 
-        -- XXX caster/hybrid assist.nukes section
+        -- caster/hybrid assist.nukes
+        if botSettings.settings.assist.nukes ~= nil and mq.TLO.Me.Casting() == nil then
+            local nukes = botSettings.settings.assist.nukes[spellSet]
+            --print("evaluating nukes ...", nukes)
+            if nukes ~= nil then
+                for v, nukeRow in pairs(nukes) do
+                    mq.doevents()
+                    if assistTarget == nil then
+                        -- break inner loop if /backoff was called
+                        print("nukes: i got called off, breaking inner loop")
+                        break
+                    end
+
+                    if Assist.castSpellAbility(spawn, nukeRow) then
+                        break
+                    end
+                end
+            else
+                mq.cmd.dgtell("all ERROR cannot nuke, have no spell set", spellSet)
+            end
+        end
 
         mq.delay(1)
+    end
+
+    if mq.TLO.Me.Class.ShortName() ~= "BRD" and mq.TLO.Me.Casting() ~= nil then
+        mq.cmd.dgtell("all DEBUG abort cast mob dead ", mq.TLO.Me.Casting.Name)
+        mq.cmd.stopcast()
     end
 
     assistTarget = nil
@@ -201,13 +256,12 @@ function Assist.killSpawn(spawn)
     mq.cmd.attack("off")
     mq.cmd.stick("off")
     follow.Resume()
-
 end
 
 -- returns true if name is ready to use (spell, aa, ability or combat ability)
 function is_spell_ability_ready(name)
 
-    if mq.TLO.Me.Class.ShortName() ~= "BRD" and mq.TLO.Me.Casting() then
+    if mq.TLO.Me.Class.ShortName() ~= "BRD" and mq.TLO.Me.Casting() ~= nil then
         return false
     end
 
@@ -234,7 +288,12 @@ function is_spell_ability_ready(name)
         return true
     end
 
-    --print("is_spell_ability_ready FALSE", name)
+    -- item clicky
+    if mq.TLO.FindItem(name).Clicky() ~= nil and mq.TLO.FindItem(name).Timer.Ticks() == 0 then
+        --print("is_spell_ability_ready item TRUE", name)
+        return true
+    end
+
     return false
 end
 

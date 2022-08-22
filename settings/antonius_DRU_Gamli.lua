@@ -53,7 +53,7 @@ settings.self_buffs = {
     -- slot 3: block if spell is slot 3 and "All Resists" < 1050, slot 10: 50 fire resist
     "Fractured Werewolf Jawbone",
 
-    "Bracelet of the Shadow Hive/Shrink|On",
+    "Bracelet of the Shadow Hive/Shrink",
 }
 
 settings.group_buffs = {

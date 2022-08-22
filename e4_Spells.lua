@@ -6,23 +6,37 @@ function parseSpellLine(s)
     local o = {}
 
 	local name = ""
+    local idx = 0
+
+    -- split on / separator
     for token in string.gmatch(s, "[^/]+") do
+        idx = idx + 1
+        --print("token", idx, token)
+
         -- separate token on | "key" + "val"
-        local key = ""
-        local i = 0
-        for v in string.gmatch(token, "[^|]+") do
-            if i == 0 then
-                key = v
+        local found, _ = string.find(token, "|")
+        if found then
+            local key = ""
+            local subIndex = 0
+            for v in string.gmatch(token, "[^|]+") do
+                if subIndex == 0 then
+                    key = v
+                end
+                if subIndex == 1 then
+                    -- print(key, " = ", v)
+                    o[key] = v
+                end
+                subIndex = subIndex + 1
             end
-            if i == 1 then
-                -- print(key, " = ", v)
-                o[key] = v
+        else
+            if idx == 1 then
+                o.Name = token
+            else
+                -- expanding boolean property
+                o[token] = true
             end
-            i = i + 1
         end
-        if i == 1 then
-            o.Name = token
-        end
+
     end
 
     return o
@@ -78,7 +92,7 @@ end
 
 
 -- refreshes buff on self or another bot, returns true if buff was cast
-function refreshBuff(buffItem, botName)
+function refreshBuff(buffItem, botName) -- XXX take spawn argument instead.
 
     --print("refreshBuff ", buffItem, ", botName:",botName)
 
@@ -91,6 +105,7 @@ function refreshBuff(buffItem, botName)
     local spawnID = spawn.ID()
 
     if not spellConfigAllowsCasting(buffItem, botName) then
+        --print("wont allow casting", buffItem)
         return false
     end
 
@@ -105,6 +120,11 @@ function refreshBuff(buffItem, botName)
     if spell == nil then
         mq.cmd.dgtell("Buffs.refreshBuff: getSpellFromBuff ", buffItem, " FAILED")
         mq.cmd.beep(1)
+        return false
+    end
+
+    if not is_spell_ability_ready(spellConfig.Name) then
+        print("not ready", spellConfig.Name)
         return false
     end
 
@@ -175,7 +195,7 @@ function spellConfigAllowsCasting(buffItem, botName)
         end
     end
 
-    if spellConfig.Shrink ~= nil and mq.TLO.Me.Height() <= 2.04 then
+    if spellConfig.Shrink ~= nil and spellConfig.Shrink and mq.TLO.Me.Height() <= 2.04 then
         --print("will not shrink myself with ", spellConfig.Name, " because my height is already ", mq.TLO.Me.Height())
         return false
     end
@@ -225,6 +245,8 @@ function castSpell(name, spawnId)
         mq.cmd('/doability "'..name..'"')   -- NOTE: /doability argument must use quotes
     else
         -- spell / aa
+
+        -- XXX if AA and not ready, abort.
 
         if mq.TLO.Me.Class.ShortName() == "BRD" then
             print("ME BARD castSpell ", name, " -- SO I STOP TWIST!")

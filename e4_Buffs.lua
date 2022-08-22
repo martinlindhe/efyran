@@ -186,8 +186,12 @@ end
 local refreshBuffsTimer = utils.Timer.new_expired(3 * 1) -- 4s
 
 function Buffs.Tick()
-    if botSettings.toggles.refresh_buffs and refreshBuffsTimer:expired() and not mq.TLO.Me.Moving() and not mq.TLO.Me.Invis()
-    and (mq.TLO.Me.Class.ShortName() == "BRD" or not mq.TLO.Me.Casting()) then
+    if mq.TLO.Me.Class.ShortName() ~= "BRD" and mq.TLO.Me.Casting() ~= nil then
+        return
+    end
+
+    --print("buff tick ", botSettings.toggles.refresh_buffs, refreshBuffsTimer:expired(), not mq.TLO.Me.Moving(), not mq.TLO.Me.Invis()  )
+    if botSettings.toggles.refresh_buffs and refreshBuffsTimer:expired() and not mq.TLO.Me.Moving() and not mq.TLO.Me.Invis() then
         if not buffs.RefreshSelfBuffs() then
             if not buffs.RefreshAura() then
                 if not pet.Summon() then

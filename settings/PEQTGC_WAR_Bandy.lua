@@ -44,7 +44,7 @@ settings.self_buffs = {
     -- Shield of Pain (10 ds slot 4)
     --"Puresteel Mantle",
 
-    --"Shimmering Bauble of Trickery/Shrink|On",
+    --"Shimmering Bauble of Trickery/Shrink",
 }
 
 settings.request_buffs = {

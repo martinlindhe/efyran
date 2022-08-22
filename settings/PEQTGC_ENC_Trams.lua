@@ -213,20 +213,22 @@ settings.assist = {
         -- chromatic nukes:
         -- L69 Colored Chaos (CHROMATIC, 1600 hp, cost 425 mana)
 
-        -- magic nukes:
-        -- L07 Chaotic Feedback (28-32 hp, 1s stun, 16 mana)
-        -- L16 Sanity Warp (81-87 hp, 1s stun, 38 mana)
-        -- L21 Chaos Flux (152-175 hp, 1s stun, 67 mana)
-        -- L32 Anarchy (264-275 hp, 1s stun, 99 mana)
-        -- L43 Discordant Mind (387 hp, 1s stun, 126 mana)
-        -- L54 Dementia (571 hp, 1s stun, 169 mana)
-        -- L58 Dementing Visions (836 hp, 239 mana)
-        -- L64 Insanity (1100 hp, cost 300 mana)
-        -- L65 Madness of Ikkibi (1210 hp, cost 330 mana)
-        -- L65 Ancient: Chaos Madness (1320 hp, cost 360 mana)
-        -- L68 Psychosis (1513 hp, cost 375 mana)
-        -- L70 Ancient: Neurosis (1634 hp, cost 398 mana)
-        "Ancient: Neurosis/NoAggro/MinMana|30"
+        ["main"] = {
+            -- magic nukes:
+            -- L07 Chaotic Feedback (28-32 hp, 1s stun, 16 mana)
+            -- L16 Sanity Warp (81-87 hp, 1s stun, 38 mana)
+            -- L21 Chaos Flux (152-175 hp, 1s stun, 67 mana)
+            -- L32 Anarchy (264-275 hp, 1s stun, 99 mana)
+            -- L43 Discordant Mind (387 hp, 1s stun, 126 mana)
+            -- L54 Dementia (571 hp, 1s stun, 169 mana)
+            -- L58 Dementing Visions (836 hp, 239 mana)
+            -- L64 Insanity (1100 hp, cost 300 mana)
+            -- L65 Madness of Ikkibi (1210 hp, cost 330 mana)
+            -- L65 Ancient: Chaos Madness (1320 hp, cost 360 mana)
+            -- L68 Psychosis (1513 hp, cost 375 mana)
+            -- L70 Ancient: Neurosis (1634 hp, cost 398 mana)
+            "Ancient: Neurosis/NoAggro/MinMana|30",
+        },
     },
 
     ["debuffs"] = { -- XXX impl

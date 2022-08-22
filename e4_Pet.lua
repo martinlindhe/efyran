@@ -90,7 +90,7 @@ function Pet.BuffMyPet()
             end
         end
 
-        if spellConfig.Shrink ~= nil and mq.TLO.Me.Pet.Height() <= 1.0 then
+        if spellConfig.Shrink ~= nil and spellConfig.Shrink and mq.TLO.Me.Pet.Height() <= 1.0 then
             --print("will not shrink pet with ", spellConfig.Name, " because pet height is already ", mq.TLO.Me.Pet.Height())
             return false
         end

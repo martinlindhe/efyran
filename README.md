@@ -69,6 +69,7 @@ Buff Spell Level   Minimum Target Level
 
 /followme					- movement
 /stopfollow					- movement
+/clickit					- click a "door" object to zone
 
 
 xxx document rest
