@@ -107,7 +107,7 @@ function Assist.meleeLoop(spawn)
     local meleeDistance = botSettings.settings.assist.melee_distance
     if meleeDistance == "auto" then
         meleeDistance = spawn.MaxRangeTo() * 0.75
-        mq.cmd.dgtell("all calculated auto melee distance", meleeDistance)
+        print("calculated auto melee distance", meleeDistance)
     end
 
     --tprint(botSettings.settings.assist) -- XXX respect settings
@@ -124,14 +124,15 @@ function Assist.meleeLoop(spawn)
             return mq.TLO.Stick.Behind and mq.TLO.Stick.Stopped
         end)
         stickArg = "hold moveback behind " .. meleeDistance .. " uw"
-        mq.cmd.dgtell("STICKING IN BACK TO ",spawn.Name, " ", stickArg)
+        print("STICKING IN BACK TO ",spawn.Name, " ", stickArg)
         mq.cmd.stick(stickArg)
     end
 
     while true do
+        mq.doevents()
         if assistTarget == nil then
-            -- break loop if /backoff was called
-            print("meleeLoop: i got called off, breaking")
+            -- break outer loop if /backoff was called
+            print("meleeLoop: i got called off, breaking outer loop")
             break
         end
         if spawn.Type() == "Corpse" or spawn.Type() == "NULL" then
@@ -150,6 +151,13 @@ function Assist.meleeLoop(spawn)
             -- use melee abilities
             print("evaluating assist.abilities")
             for v, abilityRow in pairs(botSettings.settings.assist.abilities) do
+                mq.doevents()
+                if assistTarget == nil then
+                    -- break inner loop if /backoff was called
+                    print("meleeLoop: i got called off, breaking inner loop")
+                    break
+                end
+
                 local ability = parseSpellLine(abilityRow)
                 --print("ability", abilityRow, ": ", ability.SpellName)
 
@@ -170,7 +178,6 @@ function Assist.meleeLoop(spawn)
             end
         end
 
-        mq.doevents()
         mq.delay(1)
     end
 

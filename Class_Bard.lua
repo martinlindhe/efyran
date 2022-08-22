@@ -13,9 +13,6 @@ end
 
 -- scribes and sings a melody (set of songs defined in peer settings)
 function Bard.PlayMelody(name)
-    if name == Bard.currentMelody then
-        return
-    end
 
     if botSettings.settings.songs == nil then
         mq.cmd.dgtell("ERROR no bard songs declared")

@@ -9,9 +9,20 @@
 -       /recallgroup does not work.
 
 
+- CPU%   CHECK OUT https://gitlab.com/redguides/plugins/mq2cpuload
+    - automatic load balancing. no more powershell script !!!
+
+- CPU % check out https://gitlab.com/redguides/plugins/MQ2Profiler
+    ???
+
+
 
 
 OLD TODO ....:::
+
+
+item swap:
+    https://gitlab.com/redguides/plugins/MQ2Exchange
 
 
 buffs:
@@ -19,20 +30,34 @@ buffs:
     - spells and clickies
     - use lua root for toon configs! create initial empty ini
 
+curing:
+    https://gitlab.com/redguides/plugins/MQ2Debuffs
+
 
 moving:
     - clickit, rtz
     - LATER: check out MQ2Nav. XXX how to download "1.5 gigabyte" of community nav meshes? redguide offers them with membership...
+    - check out https://gitlab.com/redguides/plugins/mq2portalsetter
 
+
+tribute:
+    https://gitlab.com/redguides/plugins/MQ2TributeManager
 
 corpses:
     - aerez
     - autoloot, see https://www.mmobugs.com/wiki/index.php?title=MQ2Rez
     - wait for rez
+    - check out https://gitlab.com/redguides/plugins/mq2rez
 
 assisting:
     - assiston /filter
     - backoff
+
+
+dps meter:
+    check out
+    https://gitlab.com/redguides/plugins/mq2dpsadv
+    https://gitlab.com/redguides/plugins/mq2damagemeter
 
 
 DanNet:
@@ -43,6 +68,8 @@ DanNet:
 loot:
     check out 
     https://www.mmobugs.com/wiki/index.php?title=MQ2AutoLoot
+    https://gitlab.com/redguides/plugins/mq2autoloot
+    https://gitlab.com/redguides/plugins/MQ2AutoLootSort
     https://www.mmobugs.com/wiki/index.php?title=MQ2MasterLooter
 
 
@@ -56,7 +83,9 @@ xp tracking:
     https://www.mmobugs.com/wiki/index.php?title=MQ2XPTracker
 
 stat food:
+    auto forage + mq2feedme maybe perfect (auto save pod of water, roots etc  and auto eat those-all classes have Forage AA)
     https://www.mmobugs.com/wiki/index.php?title=MQ2FeedMe
+    https://gitlab.com/redguides/plugins/MQ2Autoforage
 
 
 QoL:

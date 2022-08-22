@@ -221,7 +221,7 @@ function castSpell(name, spawnId)
         mq.cmd.dgtell("castSpell: /disc", name)
         mq.cmd('/disc', name)               -- NOTE: /disc argument must NOT use quotes
     elseif mq.TLO.Me.Ability(name)() then
-        mq.cmd.dgtell("castSpell: /doability", name)
+        print("castSpell: /doability", name)
         mq.cmd('/doability "'..name..'"')   -- NOTE: /doability argument must use quotes
     else
         -- spell / aa
@@ -234,7 +234,7 @@ function castSpell(name, spawnId)
             end
         end
 
-        castSpellRaw(name, spawnId, "-maxtries|2")
+        castSpellRaw(name, spawnId, "-maxtries|3")
 
         if mq.TLO.Me.Class.ShortName() == "BRD" then
             

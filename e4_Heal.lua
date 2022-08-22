@@ -72,10 +72,11 @@ function handleHealmeRequest(msg)
 end
 
 local askForHealTimer = utils.Timer.new_expired(5 * 1) -- 5s
+local askForHealPct = 97 -- at what % HP to start begging for heals
 
 function Heal.Tick()
 
-    if mq.TLO.Me.PctHPs() <= 98 and askForHealTimer:expired() then
+    if mq.TLO.Me.PctHPs() <= askForHealPct and askForHealTimer:expired() then
         -- ask for heals if i take damage
         local s = mq.TLO.Me.Name().." "..mq.TLO.Me.PctHPs() -- "Avicii 82"
         print("HELP HEAL ME, ", s)
