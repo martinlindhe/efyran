@@ -16,6 +16,16 @@ end
 
 function Assist.Init()
 
+    if botSettings.settings.assist ~= nil then
+        if botSettings.settings.assist.melee_distance == nil then
+            botSettings.settings.assist.melee_distance = "auto"
+        end
+        botSettings.settings.assist.melee_distance = string.lower(botSettings.settings.assist.melee_distance)
+        if botSettings.settings.assist.melee_distance == "maxmelee" then
+            botSettings.settings.assist.melee_distance = "auto"
+        end
+    end
+
     -- assist on mob until dead
     mq.bind("/assiston", function(mobID)
 
@@ -72,6 +82,7 @@ function Assist.handleAssistCall(spawn)
     end
 
     if mq.TLO.Me.Pet.ID() ~= 0 then
+        mq.cmd.dgtell("all ATTACKING WITH MY PET", mq.TLO.Me.Pet.CleanName())
         mq.cmd.pet("attack", spawn.ID())
     end
 end
@@ -93,8 +104,10 @@ function Assist.meleeLoop(spawn)
 
     follow.Pause()
 
-    if botSettings.settings.assist.melee_distance == "MaxMelee" then
-        botSettings.settings.assist.melee_distance = 25 -- XXX should be a global config for MaxMelee value
+    local meleeDistance = botSettings.settings.assist.melee_distance
+    if meleeDistance == "auto" then
+        meleeDistance = spawn.MaxRangeTo() * 0.75
+        mq.cmd.dgtell("all calculated auto melee distance", meleeDistance)
     end
 
     --tprint(botSettings.settings.assist) -- XXX respect settings
@@ -102,7 +115,7 @@ function Assist.meleeLoop(spawn)
     local stickArg
 
     if botSettings.settings.assist.stick_point == "Front" then
-        stickArg = "hold front " .. botSettings.settings.assist.melee_distance .. " uw"
+        stickArg = "hold front " .. meleeDistance .. " uw"
         mq.cmd.dgtell("STICKING IN FRONT TO ",spawn.Name, " ", stickArg)
         mq.cmd.stick(stickArg)
     else
@@ -110,16 +123,14 @@ function Assist.meleeLoop(spawn)
         mq.delay(20, function()
             return mq.TLO.Stick.Behind and mq.TLO.Stick.Stopped
         end)
-        stickArg = "hold moveback behind " .. botSettings.settings.assist.melee_distance .. " uw"
+        stickArg = "hold moveback behind " .. meleeDistance .. " uw"
         mq.cmd.dgtell("STICKING IN BACK TO ",spawn.Name, " ", stickArg)
         mq.cmd.stick(stickArg)
     end
 
-    -- XXX loop here until spawn is dead
-
     while true do
-        -- break loop with /backoff
         if assistTarget == nil then
+            -- break loop if /backoff was called
             print("meleeLoop: i got called off, breaking")
             break
         end
@@ -127,7 +138,9 @@ function Assist.meleeLoop(spawn)
             break
         end
 
-        print(spawn.Type, "  assist spawn ", assistTarget)
+        -- print(spawn.Type, "  assist spawn ", assistTarget)
+
+        -- XXX use melee abilities
 
         mq.doevents()
         mq.delay(1)

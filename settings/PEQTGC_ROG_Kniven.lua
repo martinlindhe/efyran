@@ -71,7 +71,7 @@ settings.healing = { -- XXX implement
 settings.assist = {
     ["type"] = "Melee",
     ["stick_point"] = "Behind",
-    ["melee_distance"] = 10,
+    --["melee_distance"] = 10,
     ["ranged_distance"] = 80,
     ["engage_percent"] = 98,  -- XXX implement!
 
