@@ -218,42 +218,45 @@ settings.assist = {
         -- L70 Ancient: Nova Strike (2377 hp, 6.3s cast, cost 525 mana)
 
         -- L70 Raging Servant (1650 mana, swarm pet)
-        "Raging Servant/GoM", -- XXX GoM
+        ["main"] = {
+            "Raging Servant/GoM", -- XXX GoM
 
-        -- L69 Summon: Molten Orb (10 charge 700 hp fire nuke, -10 fire adj, instant cast, 12s recast)
-        "Molten Orb/NoAggro", -- XXX NoAggro
+            -- L69 Summon: Molten Orb (10 charge 700 hp fire nuke, -10 fire adj, instant cast, 12s recast)
+            "Molten Orb/NoAggro", -- XXX NoAggro
 
-        "Burning Earth/NoAggro/MinMana|10",
-        "Spear of Ro/GoM/NoAggro",
+            "Burning Earth/NoAggro/MinMana|10",
+            "Spear of Ro/GoM/NoAggro",
 
-        -- tacvi clicky:
-        "Dagger of Evil Summons/NoAggro",
-        --[[
-        NoKS=Sun Vortex/NoAggro/Gem|1
+            -- tacvi clicky:
+            "Dagger of Evil Summons/NoAggro",
+        },
 
-        FastFire=Raging Servant/GoM
-        FastFire=Burning Earth/NoAggro
-        FastFire=Dagger of Evil Summons/NoAggro
-        FastFire=Molten Orb/NoAggro
+        ["noks"] = {
+            "Sun Vortex/NoAggro/Gem|1",
+        },
 
-        BigFire=Raging Servant/GoM
-        BigFire=Spear of Ro/NoAggro
-        BigFire=Dagger of Evil Summons/NoAggro
-        BigFire=Molten Orb/NoAggro
+        ["fastfire"] = {
+            "Raging Servant/GoM",
+            "Burning Earth/NoAggro",
+            "Dagger of Evil Summons/NoAggro",
+            "Molten Orb/NoAggro",
 
-        LureFire=
+        },
+        ["bigfire"] = {
+            "Raging Servant/GoM",
+            "Spear of Ro/NoAggro",
+            "Dagger of Evil Summons/NoAggro",
+            "Molten Orb/NoAggro",
+        },
 
-        FastCold=Raging Servant/GoM
+        ["fastcold"] = {
+            "Raging Servant/GoM",
 
-        ; magic nukes:
-        ; L65 Rock of Taelosia (1623 hp, 6.3s cast, cost 379 mana)
-        ; L68 Blade Strike (2029 hp, 6.3s cast, cost 431 mana)
-        FastCold=Blade Strike/NoAggro/Gem|1
-
-        BigMagic=
-        FastMagic=
-        LureMagic=
-        ]]--
+            -- magic nukes:
+            -- L65 Rock of Taelosia (1623 hp, 6.3s cast, cost 379 mana)
+            -- L68 Blade Strike (2029 hp, 6.3s cast, cost 431 mana)
+            "Blade Strike/NoAggro/Gem|1",
+        },
     },
 
     ["debuffs"] = { -- XXX impl

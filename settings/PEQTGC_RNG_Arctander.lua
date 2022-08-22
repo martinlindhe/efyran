@@ -13,6 +13,12 @@ settings.swap = { -- XXX impl
 }
 
 settings.gems = {
+    ["Sylvan Water"] = 1,
+    ["Scorched Earth"] = 2,
+    ["Ancient: North Wind"] = 3,
+    ["Hearth Embers"] = 4,
+    ["Howl of the Predator"] = 6,
+    ["Frost Wind"] = 7,
     ["Strength of Tunare"] = 8,
     ["Call of Lightning"] = 9,
 }
@@ -93,13 +99,13 @@ settings.bot_buffs = {
     }
 }
 
-settings.healing = { -- XXX implement
+settings.healing = {
     ["life_support"] = { -- XXX implement
         "Weapon Shield Discipline/HealPct|30/CheckFor|Resurrection Sickness",
         "Distillate of Divine Healing XI/HealPct|10/CheckFor|Resurrection Sickness",
     },
 
-    ["important"] = { -- XXX impl. prioritized list of toons to heal as "Important" group in who_to_heal
+    ["important"] = {
         "Stor",
         "Kamaxia",
         "Maynarrd",
@@ -110,10 +116,10 @@ settings.healing = { -- XXX implement
         "Hybregee",
     },
 
-    ["important_heal"] = { -- XXX impl. heal spell to heal these toons with
+    ["important_heal"] = {
         -- L65 Sylvan Light (850 hp, 3s cast time, cost 370 mana)
         -- L67 Sylvan Water (1135-1165 hp, 3s cast time, cost 456 mana)
-        "Sylvan Water/HealPct|45/Gem|1/MinMana|5",
+        "Sylvan Water/HealPct|45/MinMana|5",
     },
 
     ["who_to_heal"] = "Important", -- XXX impl. was "ImportantBots" in e3. accept both values
@@ -139,18 +145,30 @@ settings.assist = {
         -- L65 Ancient: Burning Chaos (734 hp, 0.5s cast, cost 264 mana)
         -- L70 Scorched Earth (1150 hp, 0.5s cast, cost 365 mana, 30s recast)
 
-        --Main=Scorched Earth/noAggro/Gem|2/MinMana|60
-        --FastFire=Scorched Earth/noAggro/Gem|2/MinMana|60
-        --BigFire=Scorched Earth/noAggro/Gem|2/MinMana|60
+        ["main"] = {
+            "Scorched Earth/noAggro/MinMana|60",
+        },
+
+        ["fastfire"] = {
+            "Scorched Earth/noAggro/MinMana|60",
+        },
+
+        ["bigfire"] = {
+            "Scorched Earth/noAggro/MinMana|60"
+        },
 
         -- cold nukes - timer 2:
         -- L68 Frost Wind (956 hp, 0.5s cast, cost 369 mana, 30s recast)
         -- cold nukes - timer 3:
         -- L63 Frozen Wind (695 hp, 0.5s cast, cost 295 mana)
         -- L70 Ancient: North Wind (1032 hp, 0.5s cast, 30s recast, cost 392 mana)
+        ["fastcold"] = {
+            "Ancient: North Wind/noAggro/MinMana|60",
+        },
 
-        --FastCold=Ancient: North Wind/noAggro/Gem|3/MinMana|60
-        --BigCold=Ancient: North Wind/noAggro/Gem|3/MinMana|60
+        ["bigcold"] = {
+            "Ancient: North Wind/noAggro/MinMana|60",
+        },
     },
 
     ["dots"] = { -- XXX implement. was called "DoTs on assist" in e3
@@ -197,9 +215,9 @@ settings.assist = {
         "Sunrider's Vest",
 
         -- quick burn some extra nukes, timer 1, 2 and 3
-        "Ancient: North Wind/Gem|3",
-        "Hearth Embers/Gem|4",
-        "Frost Wind/Gem|7",
+        "Ancient: North Wind",
+        "Hearth Embers",
+        "Frost Wind",
     },
 
     ["longburns"] = {-- XXX implememt !!!

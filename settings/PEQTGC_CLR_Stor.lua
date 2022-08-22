@@ -338,17 +338,19 @@ settings.healing = { -- XXX implement
 
 settings.assist = {
     ["nukes"] = { -- XXX implement
-        -- magic nukes:
-        -- L44 Retribution (372-390 hp, cost 144 mana)
-        -- L54 Reckoning (571 hp, cost 206 mana)
-        -- L56 Judgment (842 hp, cost 274 mana)
-        -- L62 Condemnation (1175 hp, cost 365 mana)
-        -- L65 Order (1219 hp, cost 379 mana)
-        -- L65 Ancient: Chaos Censure (1329 hp, cost 413 mana)
-        -- L67 Reproach (1424-1524 hp, cost 430 mana)
-        -- L69 Chromastrike (1200 hp, cost 375 mana, chromatic resist)
-        -- L70 Ancient: Pious Conscience (1646 hp, cost 457 mana)
-        --"Reproach/NoAggro/Gem|7/MinMana|30",
+        ["main"] = {
+            -- magic nukes:
+            -- L44 Retribution (372-390 hp, cost 144 mana)
+            -- L54 Reckoning (571 hp, cost 206 mana)
+            -- L56 Judgment (842 hp, cost 274 mana)
+            -- L62 Condemnation (1175 hp, cost 365 mana)
+            -- L65 Order (1219 hp, cost 379 mana)
+            -- L65 Ancient: Chaos Censure (1329 hp, cost 413 mana)
+            -- L67 Reproach (1424-1524 hp, cost 430 mana)
+            -- L69 Chromastrike (1200 hp, cost 375 mana, chromatic resist)
+            -- L70 Ancient: Pious Conscience (1646 hp, cost 457 mana)
+            -- "Reproach/NoAggro/Gem|7/MinMana|30",
+        }
     },
 
     ["quickburns"] = { -- XXX implememt !!!

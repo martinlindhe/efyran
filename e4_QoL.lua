@@ -29,8 +29,12 @@ function QoL.Init()
             mq.cmd.dgtell("XXX FIXME handle 'buffme' tell from ", name)
             mq.cmd.beep(1)
         else
-            mq.cmd.dgtell("all GOT A TELL FROM ", name, ": ", msg)
-            mq.cmd.beep(1)
+            if name == mq.TLO.Me.Pet.CleanName() then
+                print("GNORING TELL FROM MY PET '".. name.. "'': ", msg)
+            else
+                mq.cmd.dgtell("all GOT A TELL FROM", name, ": ", msg, " my pet:",mq.TLO.Me.Pet.Name())
+                mq.cmd.beep(1)
+            end
         end
     end)
 

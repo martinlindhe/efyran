@@ -67,95 +67,97 @@ settings.healing = { -- XXX implement
 
 settings.assist = {
     ["nukes"] = { -- XXX implement
-        --[[
-        ; defensive - lower aggro:
-        ; L37 Concussion (-400 hate, 2s cast)
-        ; --- Maelin's Leggings of Lore (Concussion 2s cast) - pop ep legs
-        ; L60 Ancient: Greater Concussion (-600 hate, 2s cast)
-        ; Lxx Mind Crash AA Rank 1 (id:5943, -2500 hate)
-        ; Lxx Mind Crash AA Rank 2 (id:5944, -5000 hate)
-        ; Lxx Mind Crash AA Rank 3 (id:5945, -7500 hate)
-        Main=Ancient: Greater Concussion/Gem|9/PctAggro|98
-        Main=Mind Crash/PctAggro|99
+        ["main"] = {
+            -- defensive - lower aggro:
+            -- L37 Concussion (-400 hate, 2s cast)
+            --- Maelin's Leggings of Lore (Concussion 2s cast) - pop ep legs
+            -- L60 Ancient: Greater Concussion (-600 hate, 2s cast)
+            -- Lxx Mind Crash AA Rank 1 (id:5943, -2500 hate)
+            -- Lxx Mind Crash AA Rank 2 (id:5944, -5000 hate)
+            -- Lxx Mind Crash AA Rank 3 (id:5945, -7500 hate)
+            "Ancient: Greater Concussion/Gem|9/PctAggro|98",
+            "Mind Crash/PctAggro|99",
 
-        ; fire nukes:
-        ; L04 Shock of Fire (14-20 hp, cost 10 mana)
-        ; L15 Flame Shock (145-175 hp, cost 65 mana)
-        ; L26 Inferno Shock (430-600 hp, cost 185 mana)
-        ; L51 Draught of Fire (622 hp, cost 176 mana)
-        ; L60 Sunstrike (1800 hp, resist adj -10, cost 450 mana)
-        ; L62 Draught of Ro (980 hp, resist adj -50, cost 255 mana)
-        ; L62 Lure of Ro (1090 hp, resist adj -300, cost 387 mana)
-        ; L65 Strike of Solusek (2740 hp, resist adj -10, cost 640 mana)
-        ; L65 White Fire (3015 hp, resist adj -10, cost 704 mana)
-        ; L65 Ancient: Strike of Chaos (3288 hp, resist adj -10, cost 768 mana)
+            -- fire nukes:
+            -- L04 Shock of Fire (14-20 hp, cost 10 mana)
+            -- L15 Flame Shock (145-175 hp, cost 65 mana)
+            -- L26 Inferno Shock (430-600 hp, cost 185 mana)
+            -- L51 Draught of Fire (622 hp, cost 176 mana)
+            -- L60 Sunstrike (1800 hp, resist adj -10, cost 450 mana)
+            -- L62 Draught of Ro (980 hp, resist adj -50, cost 255 mana)
+            -- L62 Lure of Ro (1090 hp, resist adj -300, cost 387 mana)
+            -- L65 Strike of Solusek (2740 hp, resist adj -10, cost 640 mana)
+            -- L65 White Fire (3015 hp, resist adj -10, cost 704 mana)
+            -- L65 Ancient: Strike of Chaos (3288 hp, resist adj -10, cost 768 mana)
 
+            -- tacvi class clicky:
+            "Scepter of Incantations/NoAggro",
 
-        ; tacvi class clicky:
-        Main=Scepter of Incantations/NoAggro
+            -- L66 Spark of Fire (1348 hp, resist adj -50, cost 319 mana, 3s cast)
+            -- L68 Firebane (1500 hp, resist adj -300, cost 456 mana, 4.5s cast)
+            -- L70 Chaos Flame (random 1000 to 2000, resist adj -50, cost 275 mana, 3.0s cast)
+            -- L70 Ether Flame (5848 hp, resist adj -50, cost 1550 mana, 8s cast)
+            -- L70 Corona Flare (3770 hp, resist adj -10, cost 800 mana, 8s cast)
+            -- L70 Ancient: Core Fire (4070 hp, resist adj -10, cost 850 mana, 8s cast)
+            "Chaos Flame/NoAggro/Gem|1/MinMana|5",
+            "Ancient: Core Fire/GoM/NoAggro/Gem|3",
+        },
 
-        ; L66 Spark of Fire (1348 hp, resist adj -50, cost 319 mana, 3s cast)
-        ; L68 Firebane (1500 hp, resist adj -300, cost 456 mana, 4.5s cast)
-        ; L70 Chaos Flame (random 1000 to 2000, resist adj -50, cost 275 mana, 3.0s cast)
-        ; L70 Ether Flame (5848 hp, resist adj -50, cost 1550 mana, 8s cast)
-        ; L70 Corona Flare (3770 hp, resist adj -10, cost 800 mana, 8s cast)
-        ; L70 Ancient: Core Fire (4070 hp, resist adj -10, cost 850 mana, 8s cast)
-        Main=Chaos Flame/NoAggro/Gem|1/MinMana|5
-        Main=Ancient: Core Fire/GoM/NoAggro/Gem|3
+        ["noks"] = {
+            "Draught of Ro/NoAggro/Gem|1",
+        },
 
-        NoKS=Draught of Ro/NoAggro/Gem|1
+        ["fastfire"] = {
+            "Chaos Flame/NoAggro/Gem|1/MinMana|5",
+            "Ancient: Core Fire/GoM/NoAggro/Gem|3",
+            "Scepter of Incantations/NoAggro",
+        },
 
-        FastFire=Chaos Flame/NoAggro/Gem|1/MinMana|5
-        FastFire=Ancient: Core Fire/GoM/NoAggro/Gem|3
-        FastFire=Scepter of Incantations/NoAggro
+        ["bigfire"] = {
+            "Ancient: Core Fire/NoAggro/Gem|3/MinMana|5",
+            "Scepter of Incantations",
+        },
 
-        BigFire=Ancient: Core Fire/NoAggro/Gem|3/MinMana|5
-        BigFire=Scepter of Incantations
+        -- cold nukes:
+        -- L01 Frost Bolt (9-14 hp, cost 6 mana)
+        -- L01 Blast of Cold (11-18 hp, cost 8 mana)
+        -- L08 Shock of Ice (46-58 hp, cost 23 mana)
+        -- L49 Ice Comet (808 hp, resist adj -10, cost 203 mana)
+        -- L57 Draught of Ice (793 hp, resist adj -10, cost 216 mana)
+        -- L60 Ice Spear of Solist (1076 hp, resist adj -10, cost 221 mana)
+        -- L61 Claw of Frost (1000 hp, resist adj -50, cost 167 mana)
+        -- L64 Ice Meteor (2460 hp, resist adj -10, cost 520 mana)
+        -- L64 Draught of E'ci (980 hp, resist adj -50, cost 255 mana)
+        -- L65 Black Ice (1078 hp, resist adj -10, cost 280 mana)
+        -- L66 Icebane (1500 hp, resist adj -300, cost 456 mana)
+        -- L68 Clinging Frost (1830 hp, resist adj -10, cost 350 mana + Clinging Frost Trigger DD)
+        -- L69 Gelidin Comet (3385 hp, resist adj -10, cost 650 mana)
+        -- L69 Spark of Ice (1348 hp, resist adj -50, cost 319 mana, 3s cast)
+        -- L69 Claw of Vox (1375 hp, resist adj -50, cost 208 mana, 5s cast)
+        -- L70 Ancient: Spear of Gelaqua (1976 hp, resist adj -10, cost 345 mana, 3.5s cast)
+        ["fastcold"] = {
+            "Spark of Ice/NoAggro/Gem|2/MinMana|5",
+            "Gelidin Comet/GoM/NoAggro/Gem|4/MinMana|5",
+        },
+        ["bigcold"] = {
+            "Gelidin Comet/NoAggro/Gem|4/MinMana|5",
+        },
 
-        LureFire=
-
-        ; cold nukes:
-        ; L01 Frost Bolt (9-14 hp, cost 6 mana)
-        ; L01 Blast of Cold (11-18 hp, cost 8 mana)
-        ; L08 Shock of Ice (46-58 hp, cost 23 mana)
-        ; L49 Ice Comet (808 hp, resist adj -10, cost 203 mana)
-        ; L57 Draught of Ice (793 hp, resist adj -10, cost 216 mana)
-        ; L60 Ice Spear of Solist (1076 hp, resist adj -10, cost 221 mana)
-        ; L61 Claw of Frost (1000 hp, resist adj -50, cost 167 mana)
-        ; L64 Ice Meteor (2460 hp, resist adj -10, cost 520 mana)
-        ; L64 Draught of E'ci (980 hp, resist adj -50, cost 255 mana)
-        ; L65 Black Ice (1078 hp, resist adj -10, cost 280 mana)
-        ; L66 Icebane (1500 hp, resist adj -300, cost 456 mana)
-        ; L68 Clinging Frost (1830 hp, resist adj -10, cost 350 mana + Clinging Frost Trigger DD)
-        ; L69 Gelidin Comet (3385 hp, resist adj -10, cost 650 mana)
-        ; L69 Spark of Ice (1348 hp, resist adj -50, cost 319 mana, 3s cast)
-        ; L69 Claw of Vox (1375 hp, resist adj -50, cost 208 mana, 5s cast)
-        ; L70 Ancient: Spear of Gelaqua (1976 hp, resist adj -10, cost 345 mana, 3.5s cast)
-        FastCold=Spark of Ice/NoAggro/Gem|2/MinMana|5
-        FastCold=Gelidin Comet/GoM/NoAggro/Gem|4/MinMana|5
-        BigCold=Gelidin Comet/NoAggro/Gem|4/MinMana|5
-        LureCold=
-
-        ; magic nukes:
-        ; L10 Shock of Lightning (74-83 hp, cost 50 mana)
-        ; L60 Elnerick's Electrical Rending (1796 hp, cost 421 mana)
-        ; L61 Lure of Thunder (1090 hp, resist adj -300, cost 365 mana)
-        ; L63 Draught of Thunder (980 hp, stun 1s/65, resist adj -50, cost 255 mana)
-        ; L63 Draught of Lightning (980 hp, resist adj -50, cost 255 mana)
-        ; L63 Agnarr's Thunder (2350 hp, cost 525 mana)
-        ; L65 Shock of Magic (random dmg up to 2400 hp, resist adj -20, cost 550 mana)
-        ; L67 Lightningbane (1500 hp, resist adj -300, cost 456 mana)
-        ; L68 Spark of Lightning (1348 hp, resist adj -50, cost 319 mana)
-        ; L68 Spark of Thunder (1348 hp, resist adj -50, cost 319 mana + 1s stun L70)
-        ; L68 Thundaka (3233 hp, cost 656 mana)
-
-        BigMagic=
-        FastMagic=
-        LureMagic=
-        ]]--
+        -- magic nukes:
+        -- L10 Shock of Lightning (74-83 hp, cost 50 mana)
+        -- L60 Elnerick's Electrical Rending (1796 hp, cost 421 mana)
+        -- L61 Lure of Thunder (1090 hp, resist adj -300, cost 365 mana)
+        -- L63 Draught of Thunder (980 hp, stun 1s/65, resist adj -50, cost 255 mana)
+        -- L63 Draught of Lightning (980 hp, resist adj -50, cost 255 mana)
+        -- L63 Agnarr's Thunder (2350 hp, cost 525 mana)
+        -- L65 Shock of Magic (random dmg up to 2400 hp, resist adj -20, cost 550 mana)
+        -- L67 Lightningbane (1500 hp, resist adj -300, cost 456 mana)
+        -- L68 Spark of Lightning (1348 hp, resist adj -50, cost 319 mana)
+        -- L68 Spark of Thunder (1348 hp, resist adj -50, cost 319 mana + 1s stun L70)
+        -- L68 Thundaka (3233 hp, cost 656 mana)
     },
 
-    ["targetae"] = {
+    ["targetae"] = { -- XXX impl?
         -- L12 Firestorm (41 hp, FIRE, adj -10, aerange 25, recast 12s, cost 34 mana)
         -- L24 Column of Lightning (128-136 hp, FIRE, aerange 15, recast 6s, cost 130 mana)
         -- L26 Energy Storm (238 hp, MAGIC, adj -10, aerange 25, recast 12s, cost 148 mana)
@@ -168,7 +170,7 @@ settings.assist = {
         -- L69 Meteor Storm (886 hp, FIRE, adj -300, aerange 25, recast 12s, cost 523 mana)
     },
 
-    ["quickburns"] = {
+    ["quickburns"] = { -- XXX impl
         -- epic 1.5: Staff of Prismatic Power (-30% spell resist rate for group, -4% spell hate)
         -- epic 2.0: Staff of Phenomenal Power (-50% spell resist rate for group, -6% spell hate)
         "Staff of Phenomenal Power",
@@ -214,7 +216,7 @@ settings.pbae = { -- XXX impl
     --"Fire Rune/Gem|8",
 }
 
-settings.evac = { -- XXX impl
+settings.evac = {
     -- L18 Lesser Evacuate (10.5s cast, cost 150 mana)
     -- L57 Evacuate (9s cast, cost 100 mana)
     -- Lxx Exodus AA (instant cast, recast time 72 min)

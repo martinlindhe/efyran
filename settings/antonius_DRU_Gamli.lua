@@ -204,7 +204,7 @@ settings.healing = { -- XXX implement
     },
 }
 
-settings.evac = { -- XXX impl
+settings.evac = {
     -- L18 Lesser Succor (10.5s cast, cost 150 mana)
     -- L57 Succor (9s cast, cost 100 mana)
     -- Lxx Exodus AA (instant cast, recast time 72 min)

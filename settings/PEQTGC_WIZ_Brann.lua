@@ -37,53 +37,48 @@ settings.healing = { -- XXX implement
 
 settings.assist = {
     ["nukes"] = { -- XXX implement
-        --[[
-        Main=Ancient: Greater Concussion/Gem|9/PctAggro|98
-        Main=Mind Crash/PctAggro|99
+        ["main"] = {
+            "Ancient: Greater Concussion/Gem|9/PctAggro|98",
+            "Mind Crash/PctAggro|99",
 
-        ; fire nukes:
-        ; L66 Spark of Fire (1348 hp, resist adj -50, cost 319 mana)
-        ; L68 Firebane (1500 hp, resist adj -300, cost 456 mana)
-        ; L70 Chaos Flame (random -1000 to 1000, resist adj -50, cost 275 mana)
-        ; L70 Ether Flame (5848 hp, resist adj -50, cost 1550 mana)
-        ; L70 Corona Flare (3770 hp, resist adj -10, cost 800 mana)
-        Main=Scepter of Incantations/NoAggro
-        Main=Chaos Flame/NoAggro/Gem|1/MinMana|5
-        Main=Ether Flame/GoM/NoAggro/Gem|3
+            -- fire nukes:
+            -- L66 Spark of Fire (1348 hp, resist adj -50, cost 319 mana)
+            -- L68 Firebane (1500 hp, resist adj -300, cost 456 mana)
+            -- L70 Chaos Flame (random -1000 to 1000, resist adj -50, cost 275 mana)
+            -- L70 Ether Flame (5848 hp, resist adj -50, cost 1550 mana)
+            -- L70 Corona Flare (3770 hp, resist adj -10, cost 800 mana)
+            "Scepter of Incantations/NoAggro",
+            "Chaos Flame/NoAggro/Gem|1/MinMana|5",
+            "Ether Flame/GoM/NoAggro/Gem|3",
+        },
+        ["noks"] = {
+            "Draught of Ro/NoAggro/Gem|1",
+        },
 
-        NoKS=Draught of Ro/NoAggro/Gem|1
+        ["fastfire"] = {
+            "Scepter of Incantations/NoAggro",
+            "Chaos Flame/NoAggro/Gem|1/MinMana|5",
+            "Ether Flame/GoM/NoAggro/Gem|3",
+        },
 
-        FastFire=Scepter of Incantations/NoAggro
-        FastFire=Chaos Flame/NoAggro/Gem|1/MinMana|5
-        FastFire=Ether Flame/GoM/NoAggro/Gem|3
+        ["bigfire"] = {
+            "Scepter of Incantations/NoAggro",
+            "Ether Flame/NoAggro/Gem|3/MinMana|5",
+        },
 
-        BigFire=Scepter of Incantations/NoAggro
-        BigFire=Ether Flame/NoAggro/Gem|3/MinMana|5
-        LureFire=
-
-        ; cold nukes:
-        ; L66 Icebane (1500 hp, resist adj -300, cost 456 mana)
-        ; L68 Clinging Frost (1830 hp, resist adj -10, cost 350 mana + Clinging Frost Trigger DD)
-        ; L69 Gelidin Comet (3385 hp, resist adj -10, cost 650 mana)
-        ; L69 Spark of Ice (1348 hp, resist adj -50, cost 319 mana, 3s cast)
-        ; L69 Claw of Vox (1375 hp, resist adj -50, cost 208 mana, 5s cast)
-        FastCold=Spark of Ice/NoAggro/Gem|2/MinMana|5
-        FastCold=Gelidin Comet/GoM/NoAggro/Gem|4/MinMana|5
-        BigCold=Gelidin Comet/NoAggro/Gem|4/MinMana|5
-        LureCold=
-
-        ; magic nukes:
-        ; L10 Shock of Lightning (74-83 hp, cost 50 mana)
-        ; L60 Elnerick's Electrical Rending (1796 hp, cost 421 mana)
-        ; L61 Lure of Thunder (1090 hp, resist adj -300, cost 365 mana)
-        ; L63 Draught of Thunder (980 hp, stun 1s/65, resist adj -50, cost 255 mana)
-        ; L63 Draught of Lightning (980 hp, resist adj -50, cost 255 mana)
-        ; L63 Agnarr's Thunder (2350 hp, cost 525 mana)
-        ; L65 Shock of Magic (random dmg up to 2400 hp, cost 550 mana, resist adj -20)
-        BigMagic=
-        FastMagic=
-        LureMagic=
-        ]]--
+        -- cold nukes:
+        -- L66 Icebane (1500 hp, resist adj -300, cost 456 mana)
+        -- L68 Clinging Frost (1830 hp, resist adj -10, cost 350 mana + Clinging Frost Trigger DD)
+        -- L69 Gelidin Comet (3385 hp, resist adj -10, cost 650 mana)
+        -- L69 Spark of Ice (1348 hp, resist adj -50, cost 319 mana, 3s cast)
+        -- L69 Claw of Vox (1375 hp, resist adj -50, cost 208 mana, 5s cast)
+        ["fastcold"] = {
+            "Spark of Ice/NoAggro/Gem|2/MinMana|5",
+            "Gelidin Comet/GoM/NoAggro/Gem|4/MinMana|5",
+        },
+        ["bigcold"] = {
+            "Gelidin Comet/NoAggro/Gem|4/MinMana|5",
+        },
     },
 
     ["targetae"] = { -- XXX impl
@@ -128,10 +123,14 @@ settings.pbae = { -- XXX impl
     --"Fire Rune/Gem|8",
 }
 
+settings.evac = {
+    "Exodus",
+    "Evacuate",
+}
+
 settings.wizard = { -- XXX impl / rearrange
 --[[
 [Wizard]
-Evac Spell=Exodus
 Auto-Harvest (On/Off)=On
 ;Harvest=Harvest/Gem|8/MaxMana|22
 Harvest=Harvest of Druzzil/MaxMana|20

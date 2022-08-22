@@ -112,21 +112,19 @@ settings.assist = {
     },
 
     ["nukes"] = { -- XXX implement
-        --[[
-        ; L67 Terror of Discord (1800 hate, 60 mana, instant cast, 6s recast)
-        Main=Terror of Discord/Gem|8
+        ["main"] = {
+            -- L67 Terror of Discord (1800 hate, 60 mana, instant cast, 6s recast)
+            "Terror of Discord/Gem|8",
 
-        ; L70 Theft of Agony (1200 hate, 100 mana, 1.5s cast, 60s recast)
-        Main=Theft of Agony/Gem|1
+            -- L70 Theft of Agony (1200 hate, 100 mana, 1.5s cast, 60s recast)
+            "Theft of Agony/Gem|1",
 
+            -- L67 Inruku's Bite (250 dd, -500 disease check, 1.5s cast, 60s recast)
+            "Inruku's Bite/Gem|9",
 
-        ; L67 Inruku's Bite (250 dd, -500 disease check, 1.5s cast, 60s recast)
-        Main=Inruku's Bite/Gem|9
-
-
-        ; L70 Theft of Hate (-130 hp, increase atk)
-        Main=Theft of Hate/Gem|2
-        ]]
+            -- L70 Theft of Hate (-130 hp, increase atk)
+            "Theft of Hate/Gem|2",
+        },
     },
 
     ["dots"] = { -- XXX implement. was called "DoTs on assist" in e3

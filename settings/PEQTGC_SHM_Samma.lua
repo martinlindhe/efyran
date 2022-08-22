@@ -355,26 +355,26 @@ settings.healing = { -- XXX implement
 
 settings.assist = {
     ["nukes"] = { -- XXX implement
-        -- ice nukes:
-        -- L14 Spirit Strike (72-78 hp, cost 44 mana)
-        -- L23 Frost Strike (142-156 hp, cost 78 mana)
-        -- L33 Winter's Roar (236-246 hp, cost 116 mana)
-        -- L44 Blizzard Blast (332-346 hp, cost 147 mana)
-        -- L54 Ice Strike (511 hp, cost 198 mana)
-        -- L64 Velium Strike (925 hp, cost 330 mana)
-        -- L69 Ice Age (1273 hp, cost  413 mana)
+        ["main"] = {
+            -- ice nukes:
+            -- L14 Spirit Strike (72-78 hp, cost 44 mana)
+            -- L23 Frost Strike (142-156 hp, cost 78 mana)
+            -- L33 Winter's Roar (236-246 hp, cost 116 mana)
+            -- L44 Blizzard Blast (332-346 hp, cost 147 mana)
+            -- L54 Ice Strike (511 hp, cost 198 mana)
+            -- L64 Velium Strike (925 hp, cost 330 mana)
+            -- L69 Ice Age (1273 hp, cost  413 mana)
 
-        -- poison nukes:
-        -- L54 Blast of Venom (704 hp, cost 289 mana)
-        -- L61 Spear of Torment (870 hp, cost 340 mana)
-        -- L66 Yoppa's Spear of Venom (1197 hp, cost 425 mana)
+            -- poison nukes:
+            -- L54 Blast of Venom (704 hp, cost 289 mana)
+            -- L61 Spear of Torment (870 hp, cost 340 mana)
+            -- L66 Yoppa's Spear of Venom (1197 hp, cost 425 mana)
+            "Ice Age/NoAggro/Gem|3/MinMana|40",
+        },
 
-        --"Ice Age/NoAggro/Gem|3/MinMana|40",
-
-        --;;FastFire=Yoppa's Spear of Venom/NoAggro/Gem|3/MinMana|40
-        --;;FastCold=Ice Age/NoAggro/Gem|3/MinMana|40
-        --BigCold=
-        --LureCold=
+        ["fastcold"] = {
+            "Ice Age/NoAggro/Gem|3/MinMana|40",
+        },
     },
 
     ["dots"] = {
