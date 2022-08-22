@@ -106,7 +106,7 @@ settings.assist = {
     ["ranged_distance"] = 60,
     ["engage_percent"] = 100,  -- XXX implement!
 
-    ["abilities"] = {   -- XXX implememt !!!
+    ["abilities"] = {
         "Bash",
         "Disarm",
     },

@@ -43,7 +43,7 @@ settings.assist = {
     ["ranged_distance"] = 100,
     ["engage_percent"] = 98,  -- XXX implement!
 
-    ["abilities"] = { -- XXX implememt !!!
+    ["abilities"] = {
         "Boastful Bellow",
     },
 

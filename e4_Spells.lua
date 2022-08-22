@@ -216,10 +216,16 @@ end
 
 -- helper for casting spell, clicky, AA, combat ability
 function castSpell(name, spawnId)
+
     if mq.TLO.Me.CombatAbility(name)() ~= nil then
         mq.cmd.dgtell("castSpell: /disc", name)
-        mq.cmd.disc(name)
+        mq.cmd('/disc', name)               -- NOTE: /disc argument must NOT use quotes
+    elseif mq.TLO.Me.Ability(name)() then
+        mq.cmd.dgtell("castSpell: /doability", name)
+        mq.cmd('/doability "'..name..'"')   -- NOTE: /doability argument must use quotes
     else
+        -- spell / aa
+
         if mq.TLO.Me.Class.ShortName() == "BRD" then
             print("ME BARD castSpell ", name, " -- SO I STOP TWIST!")
             if mq.TLO.Me.Casting.ID() then
@@ -234,13 +240,14 @@ function castSpell(name, spawnId)
             
             local item = getItem(name)
             if item ~= nil then 
-                -- sleep for the Duration
-                print("XXX item click sleep, ", item.Clicky.CastTime(), " + ", item.Clicky.Spell.RecastTime() )
+                -- item click
+                print("item click sleep, ", item.Clicky.CastTime(), " + ", item.Clicky.Spell.RecastTime() )
                 mq.delay(item.Clicky.CastTime() + item.Clicky.Spell.RecastTime() + 1500) -- XXX recast time is 0
             else
+                -- spell / AA
                 local spell = getSpell(name)
                 if spell ~= nil then
-                    print("XXX spell sleep ", spell.MyCastTime(), spell.RecastTime())
+                    print("spell sleep ", spell.MyCastTime(), spell.RecastTime())
                     mq.delay(spell.MyCastTime() + spell.RecastTime()) 
                 end
             end
