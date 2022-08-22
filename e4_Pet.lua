@@ -31,12 +31,12 @@ function Pet.Summon()
     if spellConfig.Reagent ~= nil then
         -- if we lack this item, then skip.
         if mq.TLO.FindItemCount("=" .. spellConfig.Reagent)() == 0 then
-            mq.cmd.dgtell("SKIP PET SUMMON ", spellConfig.SpellName, ", I'm out of reagent ", spellConfig.Reagent)
+            mq.cmd.dgtell("SKIP PET SUMMON ", spellConfig.Name, ", I'm out of reagent ", spellConfig.Reagent)
             return false
         end
     end
 
-    castSpellRaw(spellConfig.SpellName, mq.TLO.Me.ID(), "-maxtries|3")
+    castSpellRaw(spellConfig.Name, mq.TLO.Me.ID(), "-maxtries|3")
 
     mq.delay(20000, function()
         return mq.TLO.Me.Pet.ID() ~= 0
@@ -55,7 +55,7 @@ function Pet.BuffMyPet()
     for key, buff in pairs(botSettings.settings.pet.buffs) do
 
         local spellConfig = parseSpellLine(buff)  -- XXX do not parse here, cache and reuse
-        local spell = getSpellFromBuff(spellConfig.SpellName) -- XXX parse this once on script startup too, dont evaluate all the time !
+        local spell = getSpellFromBuff(spellConfig.Name) -- XXX parse this once on script startup too, dont evaluate all the time !
         if spell == nil then
             mq.cmd.dgtell("Pet.BuffMyPet: getSpellFromBuff ", buff, " FAILED")
             mq.cmd.beep(1)
@@ -78,26 +78,26 @@ function Pet.BuffMyPet()
         if spellConfig.CheckFor ~= nil then
             -- if we got this buff on, then skip.
             if mq.TLO.Me.Pet.Buff(spellConfig.CheckFor)() ~= nil then
-                --print("SKIP PET BUFFING ", spellConfig.SpellName, ", Pet have buff ", spellConfig.CheckFor, " on them")
+                --print("SKIP PET BUFFING ", spellConfig.Name, ", Pet have buff ", spellConfig.CheckFor, " on them")
                 skip = true
             end
         end
         if spellConfig.Reagent ~= nil then
             -- if we lack this item, then skip.
             if mq.TLO.FindItemCount("=" .. spellConfig.Reagent)() == 0 then
-                mq.cmd.dgtell("SKIP PET BUFFING ", spellConfig.SpellName, ", I'm out of reagent ", spellConfig.Reagent)
+                mq.cmd.dgtell("SKIP PET BUFFING ", spellConfig.Name, ", I'm out of reagent ", spellConfig.Reagent)
                 skip = true
             end
         end
 
         if spellConfig.Shrink ~= nil and mq.TLO.Me.Pet.Height() <= 1.0 then
-            --print("will not shrink pet with ", spellConfig.SpellName, " because pet height is already ", mq.TLO.Me.Pet.Height())
+            --print("will not shrink pet with ", spellConfig.Name, " because pet height is already ", mq.TLO.Me.Pet.Height())
             return false
         end
 
         if not skip then
-            print("Buffing my pet with ", spellConfig.SpellName)
-            castSpellRaw(spellConfig.SpellName, mq.TLO.Me.Pet.ID(), "-maxtries|3")
+            print("Buffing my pet with ", spellConfig.Name)
+            castSpellRaw(spellConfig.Name, mq.TLO.Me.Pet.ID(), "-maxtries|3")
             return true
         end
     end

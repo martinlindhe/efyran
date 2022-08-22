@@ -156,8 +156,8 @@ function healPeer(spell_list, peer, pct)
             Heal.queue:remove(peer)
             return false
         else
-            print("heal ", peer, " with spell ", spellConfig.SpellName)
-            castSpell(spellConfig.SpellName, spawnID)
+            print("heal ", peer, " with spell ", spellConfig.Name)
+            castSpell(spellConfig.Name, spawnID)
             Heal.queue:remove(peer)
             return true
         end

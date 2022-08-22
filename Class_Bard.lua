@@ -37,11 +37,11 @@ function Bard.PlayMelody(name)
         -- War March of Muram/Gem|4
         local o = parseSpellLine(songRow) -- XXX parse this once on script startup. dont evaluate all the time !!!
 
-        local nameWithRank = mq.TLO.Spell(o.SpellName).RankName()
-        --print("considering bard song ... ", o.SpellName, " ... ", nameWithRank)
+        local nameWithRank = mq.TLO.Spell(o.Name).RankName()
+        --print("considering bard song ... ", o.Name, " ... ", nameWithRank)
 
         if mq.TLO.Me.Book(nameWithRank)() == nil then
-            mq.cmd.dgtell("ERROR don't know bard song", o.SpellName)
+            mq.cmd.dgtell("ERROR don't know bard song", o.Name)
             mq.cmd.beep(1)
             return
         end

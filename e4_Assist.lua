@@ -24,6 +24,10 @@ function Assist.Init()
         if botSettings.settings.assist.melee_distance == "maxmelee" then
             botSettings.settings.assist.melee_distance = "auto"
         end
+
+        if botSettings.settings.assist.type ~= nil then
+            botSettings.settings.assist.type = string.lower(botSettings.settings.assist.type)
+        end
     end
 
     -- assist on mob until dead
@@ -75,11 +79,12 @@ function Assist.Init()
 end
 
 function Assist.handleAssistCall(spawn)
-    if botSettings.settings.assist.type == "Melee" then
-        Assist.meleeLoop(spawn)
-    else
-        -- TODO ranged & caster assist ...
+    if botSettings.settings == nil or botSettings.settings.assist == nil then
+        mq.cmd.dgtell("all WARNING: I have no assist settings")
+        return
     end
+
+    Assist.killSpawn(spawn)
 
     if mq.TLO.Me.Pet.ID() ~= 0 then
         mq.cmd.dgtell("all ATTACKING WITH MY PET", mq.TLO.Me.Pet.CleanName())
@@ -89,44 +94,53 @@ end
 
 -- stick and perform melee attacks
 -- spawn is "userdata" type spawn
-function Assist.meleeLoop(spawn)
+function Assist.killSpawn(spawn)
 
     assistTarget = spawn
 
-    print("meleeAssist ", spawn.Name)
+    print("Assist.killSpawn ", spawn.Name)
     if spawn == nil then
         mq.cmd.dgtell("ERROR ASSSIST ON ",spawn.Name)
         return
     end
 
     mq.cmd.target("id", spawn.ID())
-    mq.cmd.attack("on")
-
     follow.Pause()
 
-    local meleeDistance = botSettings.settings.assist.melee_distance
-    if meleeDistance == "auto" then
-        meleeDistance = spawn.MaxRangeTo() * 0.75
-        print("calculated auto melee distance", meleeDistance)
+    local melee = botSettings.settings.assist ~= nil and botSettings.settings.assist.type ~= nil and botSettings.settings.assist.type == "melee"
+
+    if botSettings.settings.assist ~= nil and botSettings.settings.assist.type ~= nil and botSettings.settings.assist.type == "ranged" then
+        mq.cmd.dgtell("all XXX TODO ADD RANGED ASSIST MODE")
+        mq.cmd.beep(1)
+        return
     end
 
-    --tprint(botSettings.settings.assist) -- XXX respect settings
+    if melee then
+        mq.cmd.attack("on")
 
-    local stickArg
+        local meleeDistance = botSettings.settings.assist.melee_distance
+        if meleeDistance == "auto" then
+            meleeDistance = spawn.MaxRangeTo() * 0.75
+            print("calculated auto melee distance", meleeDistance)
+        end
 
-    if botSettings.settings.assist.stick_point == "Front" then
-        stickArg = "hold front " .. meleeDistance .. " uw"
-        mq.cmd.dgtell("STICKING IN FRONT TO ",spawn.Name, " ", stickArg)
-        mq.cmd.stick(stickArg)
-    else
-        mq.cmd.stick("snaproll uw")
-        mq.delay(20, function()
-            return mq.TLO.Stick.Behind and mq.TLO.Stick.Stopped
-        end)
-        stickArg = "hold moveback behind " .. meleeDistance .. " uw"
-        print("STICKING IN BACK TO ",spawn.Name, " ", stickArg)
-        mq.cmd.stick(stickArg)
+        local stickArg
+
+        if botSettings.settings.assist.stick_point == "Front" then
+            stickArg = "hold front " .. meleeDistance .. " uw"
+            mq.cmd.dgtell("STICKING IN FRONT TO ",spawn.Name, " ", stickArg)
+            mq.cmd.stick(stickArg)
+        else
+            mq.cmd.stick("snaproll uw")
+            mq.delay(20, function()
+                return mq.TLO.Stick.Behind and mq.TLO.Stick.Stopped
+            end)
+            stickArg = "hold moveback behind " .. meleeDistance .. " uw"
+            print("STICKING IN BACK TO ",spawn.Name, " ", stickArg)
+            mq.cmd.stick(stickArg)
+        end
     end
+
 
     while true do
         mq.doevents()
@@ -141,15 +155,14 @@ function Assist.meleeLoop(spawn)
 
         print(spawn.Type, " assist spawn ", assistTarget)
 
-
         if mq.TLO.Target() == nil or mq.TLO.Target.ID() ~= spawn.ID() then
+            -- XXX will happen for healer+nuker setups (DRU,RNG,SHM)
             mq.cmd.dgtell("all WARN: i lost target, breaking")
             break
         end
 
-        if botSettings.settings.assist ~= nil and spawn.Distance() < spawn.MaxRangeTo() and spawn.LineOfSight() then
+        if melee and spawn.Distance() < spawn.MaxRangeTo() and spawn.LineOfSight() then
             -- use melee abilities
-            print("evaluating assist.abilities")
             for v, abilityRow in pairs(botSettings.settings.assist.abilities) do
                 mq.doevents()
                 if assistTarget == nil then
@@ -159,24 +172,26 @@ function Assist.meleeLoop(spawn)
                 end
 
                 local ability = parseSpellLine(abilityRow)
-                --print("ability", abilityRow, ": ", ability.SpellName)
+                --print("ability", abilityRow, ": ", ability.Name)
 
                 local skip = false
                 if ability.PctAggro ~= nil then
-                    print("evaluating pctaggro ability", ability.SpellName)
+                    print("evaluating pctaggro ability", ability.Name)
                     if mq.TLO.Me.PctAggro() < tonumber(ability.PctAggro) then
-                        --print("SKIP PctAggro ABILITY", ability.SpellName, "aggro", mq.TLO.Me.PctAggro(), "vs required", ability.PctAggro)
+                        --print("SKIP PctAggro ABILITY", ability.Name, "aggro", mq.TLO.Me.PctAggro(), "vs required", ability.PctAggro)
                         skip = true
                     end
                 end
 
-                if not skip and is_spell_ability_ready(ability.SpellName) then
-                    castSpell(ability.SpellName, spawn.ID())
+                if not skip and is_spell_ability_ready(ability.Name) then
+                    castSpell(ability.Name, spawn.ID())
                     mq.delay(200)
                     break
                 end
             end
         end
+
+        -- XXX caster/hybrid assist.nukes section
 
         mq.delay(1)
     end
@@ -219,7 +234,7 @@ function is_spell_ability_ready(name)
         return true
     end
 
-    print("is_spell_ability_ready FALSE", name)
+    --print("is_spell_ability_ready FALSE", name)
     return false
 end
 

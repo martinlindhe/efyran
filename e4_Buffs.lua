@@ -127,8 +127,8 @@ function Buffs.Init()
                 end
                 if n > minLevel and level >= n then
                     minLevel = n
-                    spellName = spellConfig.SpellName
-                    print("Best ", key, " buff so far is L",spellConfig.MinLevel, " ", spellConfig.SpellName, " target ", spawn.Name() ," L", level)
+                    spellName = spellConfig.Name
+                    print("Best ", key, " buff so far is L",spellConfig.MinLevel, " ", spellConfig.Name, " target ", spawn.Name() ," L", level)
                 end
             end
 
@@ -162,17 +162,17 @@ function Buffs.Init()
             return
         end
 
-        local item = getItem(spellConfig.SpellName)
+        local item = getItem(spellConfig.Name)
 
         -- make sure shrink is targetable check buff type
-        local spell = getSpellFromBuff(spellConfig.SpellName)
+        local spell = getSpellFromBuff(spellConfig.Name)
         if spell.TargetType() == "Single" or spell.TargetType() == "Group v1" then
             -- loop over group, shrink one by one
             for n = 1,5 do
                 for i = 1, 3 do
                     if mq.TLO.Group.Member(n)() ~= nil and not mq.TLO.Group.Member(n).OtherZone() and mq.TLO.Group.Member(n).Height() > 2.04 then
                         print("shrink member ", mq.TLO.Group.Member(n)(), " from height ", mq.TLO.Group.Member(n).Height())
-                        castSpell(spellConfig.SpellName, mq.TLO.Group.Member(n).ID())
+                        castSpell(spellConfig.Name, mq.TLO.Group.Member(n).ID())
                         -- sleep for the Duration
                         mq.delay(item.Clicky.CastTime() + spell.RecastTime())
                     end
@@ -232,7 +232,7 @@ function Buffs.RefreshBotBuffs()
 
         local spellConfig = parseSpellLine(buff) -- XXX cache, dont do this all the time!
 
-        local spell = getSpellFromBuff(spellConfig.SpellName) -- XXX parse this once on script startup too, dont evaluate all the time !
+        local spell = getSpellFromBuff(spellConfig.Name) -- XXX parse this once on script startup too, dont evaluate all the time !
         if spell == nil then
             mq.cmd.dgtell("Buffs.RefreshBotBuffs: getSpellFromBuff ", buff, " FAILED")
             mq.cmd.beep(1)

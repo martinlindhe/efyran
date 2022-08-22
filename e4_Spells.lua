@@ -1,5 +1,5 @@
 
--- returns a object
+-- parses a spell/ability etc line with properties, returns a object
 function parseSpellLine(s)
     -- Ward of Valiance/MinMana|50/CheckFor|Hand of Conviction
 
@@ -21,7 +21,7 @@ function parseSpellLine(s)
             i = i + 1
         end
         if i == 1 then
-            o.SpellName = token
+            o.Name = token
         end
     end
 
@@ -97,11 +97,11 @@ function refreshBuff(buffItem, botName)
     local spellConfig = parseSpellLine(buffItem) -- XXX parse this once on script startup. dont evaluate all the time !!!
 
     local is_item = true
-    if mq.TLO.Me.Book(mq.TLO.Spell(spellConfig.SpellName).RankName)() ~= nil then
+    if mq.TLO.Me.Book(mq.TLO.Spell(spellConfig.Name).RankName)() ~= nil then
         is_item = false
     end
 
-    local spell = getSpellFromBuff(spellConfig.SpellName) -- XXX parse this once on script startup too, dont evaluate all the time !
+    local spell = getSpellFromBuff(spellConfig.Name) -- XXX parse this once on script startup too, dont evaluate all the time !
     if spell == nil then
         mq.cmd.dgtell("Buffs.refreshBuff: getSpellFromBuff ", buffItem, " FAILED")
         mq.cmd.beep(1)
@@ -124,18 +124,18 @@ function refreshBuff(buffItem, botName)
         -- XXX LATER: rework to use /dobserve
         local res = queryBot(botName, 'Me.Buff["' .. buffName .. '"].Duration.Ticks')
         if (res ~= nil and res ~= "NULL") and tonumber(res) > 4 then
-            --print("SKIPPING BUFF WITH DURATION ", botName, ": ", spellConfig.SpellName, " ", tonumber(res) )
+            --print("SKIPPING BUFF WITH DURATION ", botName, ": ", spellConfig.Name, " ", tonumber(res) )
             return false
         end
     end
 
-    local castSpellName = spell.RankName()
+    local spellName = spell.RankName()
     if is_item then
-        castSpellName =spellConfig.SpellName
+        spellName = spellConfig.Name
     end
 
-    print("buffing bot ", botName, " (id ",spawnID,"): ", castSpellName)
-    castSpell(castSpellName, spawnID)
+    print("buffing bot ", botName, " (id ",spawnID,"): ", spellName)
+    castSpell(spellName, spawnID)
     return true
 end
 
@@ -153,7 +153,7 @@ function spellConfigAllowsCasting(buffItem, botName)
 
     local spellConfig = parseSpellLine(buffItem) -- XXX parse this once on script startup. dont evaluate all the time !!!
 
-    local spell = getSpellFromBuff(spellConfig.SpellName) -- XXX parse this once on script startup too, dont evaluate all the time !
+    local spell = getSpellFromBuff(spellConfig.Name) -- XXX parse this once on script startup too, dont evaluate all the time !
     if spell == nil then
         mq.cmd.dgtell("Buffs.refreshBuff: getSpellFromBuff ", buffItem, " FAILED")
         mq.cmd.beep(1)
@@ -176,7 +176,7 @@ function spellConfigAllowsCasting(buffItem, botName)
     end
 
     if spellConfig.Shrink ~= nil and mq.TLO.Me.Height() <= 2.04 then
-        --print("will not shrink myself with ", spellConfig.SpellName, " because my height is already ", mq.TLO.Me.Height())
+        --print("will not shrink myself with ", spellConfig.Name, " because my height is already ", mq.TLO.Me.Height())
         return false
     end
 
@@ -193,12 +193,12 @@ function spellConfigAllowsCasting(buffItem, botName)
             local res = queryBot(botName, 'Me.Buff["' .. spellConfig.CheckFor .. '"].ID')
 
             if res ~= "NULL" then
-                print("SKIP BUFFING of ", spellConfig.SpellName, ", target bot ", botName, " has ", spellConfig.CheckFor)
+                print("SKIP BUFFING of ", spellConfig.Name, ", target bot ", botName, " has ", spellConfig.CheckFor)
                 return false
             end
         else
             if mq.TLO.Me.Buff(spellConfig.CheckFor)() ~= nil then
-                --print("SKIP BUFFING ", spellConfig.SpellName, ", I have buff ", spellConfig.CheckFor, " on me")
+                --print("SKIP BUFFING ", spellConfig.Name, ", I have buff ", spellConfig.CheckFor, " on me")
                 return false
             end
         end
@@ -206,7 +206,7 @@ function spellConfigAllowsCasting(buffItem, botName)
     if spellConfig.Reagent ~= nil then
         -- if we lack this item, then skip.
         if mq.TLO.FindItemCount("=" .. spellConfig.Reagent)() == 0 then
-            mq.cmd.dgtell("SKIP BUFFING ", spellConfig.SpellName, ", I'm out of reagent ", spellConfig.Reagent)
+            mq.cmd.dgtell("SKIP BUFFING ", spellConfig.Name, ", I'm out of reagent ", spellConfig.Reagent)
             return false
         end
     end

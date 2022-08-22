@@ -58,3 +58,17 @@ Buff Spell Level   Minimum Target Level
 
 
 /bca  => xxx
+
+
+
+## command reference
+
+/assiston ${Target.ID}    	- run from main driver, tells bots to kill ID
+/backoff                  	- call of assist
+
+
+/followme					- movement
+/stopfollow					- movement
+
+
+xxx document rest
