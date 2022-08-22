@@ -147,9 +147,11 @@ settings.bot_buffs = {
     },
 }
 
-settings.healing = { -- XXX implement
+settings.healing = {
+    ["life_support"] = {
+        -- L70 Sanctuary AA (id:5912, removes you from combat), 1h12 min reuse
+        "Sanctuary/HealPct|13/CheckFor|Resurrection Sickness",
 
-    ["life_support"] = { -- XXX implement
         "Ward of Retribution/HealPct|50/Delay|3m/CheckFor|Resurrection Sickness",
 
         "Distillate of Divine Healing XI/HealPct|18/CheckFor|Resurrection Sickness",
@@ -162,12 +164,24 @@ settings.healing = { -- XXX implement
         -- L70 Divine Avatar Rank 6 AA (id:8158, decrease melee attack by 338%, increase HoT by 350/tick, 3.0 min, 36 min reuse)
         "Divine Avatar/HealPct|20/CheckFor|Resurrection Sickness",
 
-        -- L70 Sanctuary AA (id:5912, removes you from combat)
-        "Sanctuary/HealPct|13/CheckFor|Resurrection Sickness",
-
         -- defensive - stun attackers:
         -- L70 Divine Retribution I (id:5866, proc Divine Retribution Effect)
         "Divine Retribution/HealPct|25/CheckFor|Resurrection Sickness",
+    },
+
+    ["rez"] = { -- XXX impl? or just auto code the rez spells
+        -- L12 Reanimation (0% exp, 6s cast, 20s recast)
+        -- L18 Reconstitution (10% exp, 6s cast, 20s recast)
+        -- L22 Reparation (20% exp, 6s cast, 20s recast)
+        -- L27 Revive (35% exp, 6s cast, 20s recast)
+        -- L32 Renewal (50% exp, 6s cast, 20s recast)
+        -- L37 Resuscitate (60% exp, 6s cast, 20s recast)
+        -- L42 Restoration (75% exp, 6s cast, 20s recast)
+        -- L47 Resurrection (90% exp, 6s cast, 700 mana)
+        -- L56 Reviviscence (96% exp, 7s cast, 600 mana)
+        -- L60 ? Water Sprinkler of Nem Ankh (epic 1.0, Reviviscence clicky. 10s cast)
+        -- Lxx Blessing of Resurrection AA (96% exp, 3s cast, 12s recast)
+        "Blessing of Resurrection",
     },
 
     ["cures"] = { -- XXX impl. was [Cures] in e3

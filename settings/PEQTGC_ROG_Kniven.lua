@@ -49,8 +49,8 @@ settings.combat_buffs = { -- XXX combat buffs:
     "Thief's Eyes/Kniven/MinEnd|10",        -- XXX MinEnd
 }
 
-settings.healing = { -- XXX implement
-    ["life_support"] = { -- XXX implement
+settings.healing = {
+    ["life_support"] = {
         -- Lxx Counterattack Discipline (ripostes every blow, 40 min reuse) - XXX does not work
         -- L55 Nimble Discipline (avoid most attacks, 21 min reuse)
         "Nimble Discipline/HealPct|45/CheckFor|Resurrection Sickness",

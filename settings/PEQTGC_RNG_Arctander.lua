@@ -100,7 +100,7 @@ settings.bot_buffs = {
 }
 
 settings.healing = {
-    ["life_support"] = { -- XXX implement
+    ["life_support"] = {
         "Weapon Shield Discipline/HealPct|30/CheckFor|Resurrection Sickness",
         "Distillate of Divine Healing XI/HealPct|10/CheckFor|Resurrection Sickness",
     },

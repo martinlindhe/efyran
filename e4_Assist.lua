@@ -252,7 +252,7 @@ function Assist.killSpawn(spawn)
     end
 
     if mq.TLO.Me.Class.ShortName() ~= "BRD" and mq.TLO.Me.Casting() ~= nil then
-        mq.cmd.dgtell("all DEBUG abort cast mob dead ", mq.TLO.Me.Casting.Name)
+        --mq.cmd.dgtell("all DEBUG abort cast mob dead ", mq.TLO.Me.Casting.Name)
         mq.cmd.stopcast()
     end
 
@@ -261,45 +261,6 @@ function Assist.killSpawn(spawn)
     mq.cmd.attack("off")
     mq.cmd.stick("off")
     follow.Resume()
-end
-
--- returns true if name is ready to use (spell, aa, ability or combat ability)
-function is_spell_ability_ready(name)
-
-    if mq.TLO.Me.Class.ShortName() ~= "BRD" and mq.TLO.Me.Casting() ~= nil then
-        return false
-    end
-
-    if mq.TLO.Me.AltAbilityReady(name)()  then
-        --print("is_spell_ability_ready aa TRUE", name)
-        return true
-    end
-
-    -- spell: is spell scribed, is cooldown 0, and not currently casting?
-    if mq.TLO.Me.Gem(name)() ~= nil and mq.TLO.Me.SpellReady(name)() then
-        --print("is_spell_ability_ready spell TRUE", name)
-        return true
-    end
-
-    -- combat ability
-    if mq.TLO.Me.CombatAbilityReady(name)() then
-        --print("is_spell_ability_ready combat ability TRUE", name)
-        return true
-    end
-
-    -- ability (Kick)
-    if mq.TLO.Me.AbilityReady(name)() then
-        --print("is_spell_ability_ready ability TRUE", name)
-        return true
-    end
-
-    -- item clicky
-    if mq.TLO.FindItem(name).Clicky() ~= nil and mq.TLO.FindItem(name).Timer.Ticks() == 0 then
-        --print("is_spell_ability_ready item TRUE", name)
-        return true
-    end
-
-    return false
 end
 
 return Assist

@@ -168,7 +168,7 @@ Buff Spell Level   Minimum Target Level
 
 settings.healing = { -- XXX implement
 
-    ["life_support"] = { -- XXX implement
+    ["life_support"] = {
         -- L80 Distillate of Divine Healing XIII
         "Distillate of Divine Healing XIII/HealPct|18/CheckFor|Resurrection Sickness",
     },

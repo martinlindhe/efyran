@@ -19,6 +19,38 @@ function Heal.Init()
             handleHealmeRequest(msg)
         end
     end)
+
+    mq.event("zoned", "You have entered #1#.", function(text, zone)
+        if zone ~= "an area where levitation effects do not function" then
+            mq.cmd.dgtell("i zoned into ", zone)
+            mq.delay(2000)
+            pet.ConfigureTaunt()
+
+            joinCurrentHealChannel()
+            memorizeListedSpells()
+        end
+    end)
+
+    joinCurrentHealChannel()
+end
+
+-- joins/changes to the heal channel for current zone
+function joinCurrentHealChannel()
+    -- orchestrator only joins to watch the numbers
+    local orchestrator = mq.TLO.FrameLimiter.Status() == "Foreground"
+
+    if orchestrator or me_healer() then
+        if heal.CurrentHealChannel() == botSettings.healme_channel then
+            return
+        end
+
+        if botSettings.healme_channel ~= "" then
+            mq.cmd.dleave(botSettings.healme_channel)
+        end
+
+        botSettings.healme_channel = heal.CurrentHealChannel()
+        mq.cmd.djoin(botSettings.healme_channel) -- new zone
+    end
 end
 
 local healQueueMaxLength = 10
@@ -76,12 +108,15 @@ local askForHealPct = 97 -- at what % HP to start begging for heals
 
 function Heal.Tick()
 
-    if mq.TLO.Me.PctHPs() <= askForHealPct and askForHealTimer:expired() then
+    if mq.TLO.Me.PctHPs() <= askForHealPct then
         -- ask for heals if i take damage
         local s = mq.TLO.Me.Name().." "..mq.TLO.Me.PctHPs() -- "Avicii 82"
         print("HELP HEAL ME, ", s)
         mq.cmd.dgtell(Heal.CurrentHealChannel(), s)
         askForHealTimer:restart()
+
+        -- life support check is also controlled by the askForHealTimer, every 5s
+        Heal.performLifeSupport()
     end
 
     -- check if heals need to be casted
@@ -126,11 +161,45 @@ function Heal.Tick()
                 end
             end
         end
-
     end
-
 end
 
+-- tries to defend myself using settings.healing.life_support
+function Heal.performLifeSupport()
+    --print("Heal.performLifeSupport")
+
+    -- XXX checkfor Resurrection Sickness should be automatic here !!!
+
+    if botSettings.settings.healing.life_support == nil then
+        mq.cmd.dgtell("all I dont have healing.life_support configured")
+        return
+    end
+
+    for k, row in pairs(botSettings.settings.healing.life_support) do
+        --print("k ", k, " v ", row)
+        local spellConfig = parseSpellLine(row)
+
+        local skip = false
+        if spellConfig.HealPct ~= nil and tonumber(spellConfig.HealPct) < mq.TLO.Me.PctHPs() then
+            -- remove, dont meet heal criteria
+            --print("performLifeSupport skip use of ", spellConfig.Name, ", my hp ", mq.TLO.Me.PctHPs, " vs required ", spellConfig.HealPct)
+            skip = true
+        end
+
+        if spellConfig.CheckFor ~= nil then
+            -- if we got this buff on, then skip.
+            if mq.TLO.Me.Buff(spellConfig.CheckFor)() ~= nil then
+                mq.cmd.dgtell("all performLifeSupport skip ", spellConfig.Name, ", I have buff ", spellConfig.CheckFor, " on me")
+                skip = true
+            end
+        end
+
+        if not skip then
+            castSpell(spellConfig.Name, mq.TLO.Me.ID())
+        end
+
+    end
+end
 
 -- uses healing.tank_heal, returns true if spell was cast
 function healPeer(spell_list, peer, pct)

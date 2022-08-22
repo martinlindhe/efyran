@@ -1,5 +1,7 @@
 # TODO
 
+- /rezit /only|Samma    force SHM/DRU to use their 90% rezzes
+
 - BRD: invis/travel songs break after each casted tick??
     issue with mq2medley... ??? or how i invoke it
 

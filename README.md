@@ -78,7 +78,7 @@ Buff Spell Level   Minimum Target Level
 
 
 /finditem, /fdi             - find item by partial name
-
+/fmi                        - find missing item. report peers who lack an item
 
 
 xxx document rest

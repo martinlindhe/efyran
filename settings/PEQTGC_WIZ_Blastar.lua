@@ -56,8 +56,8 @@ settings.self_buffs = {
 }
 
 
-settings.healing = { -- XXX implement
-    ["life_support"] = { -- XXX implement
+settings.healing = {
+    ["life_support"] = {
         "Distillate of Divine Healing XI/HealPct|10/CheckFor|Resurrection Sickness",
 
         -- Expendable AA

@@ -216,8 +216,8 @@ settings.pet = { -- XXX impl
     },
 }
 
-settings.healing = { -- XXX implement
-    ["life_support"] = { -- XXX implement
+settings.healing = {
+    ["life_support"] = {
         -- Ancestral Guard - 15 min reuse
         -- Lxx Ancestral Guard Rank 1 AA (id:8218,  mitigate 25% melee dmg until 5000 absorbed)
         -- Lxx Ancestral Guard Rank 2 AA (id:8219,  mitigate 50% melee dmg until 5000 absorbed)
@@ -226,6 +226,11 @@ settings.healing = { -- XXX implement
         "Ancestral Guard/HealPct|50/CheckFor|Resurrection Sickness",
 
         "Distillate of Divine Healing XI/HealPct|10/CheckFor|Resurrection Sickness",
+    },
+
+    ["rez"] = { -- XXX impl
+        -- L59 Incarnate Anew (90% exp, 20s cast, 700 mana)
+        "Incarnate Anew",
     },
 
     ["cures"] = {

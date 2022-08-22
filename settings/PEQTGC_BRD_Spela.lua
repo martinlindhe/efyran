@@ -36,8 +36,8 @@ settings.self_buffs = {
     --"Eye of Dreams",
 }
 
-settings.healing = { -- XXX implement
-    ["life_support"] = { -- XXX implement
+settings.healing = {
+    ["life_support"] = {
         "Shield of Notes/HealPct|30/CheckFor|Resurrection Sickness",
         "Deftdance Discipline/HealPct|20/CheckFor|Resurrection Sickness",
         "Distillate of Divine Healing XI/HealPct|8/CheckFor|Resurrection Sickness",

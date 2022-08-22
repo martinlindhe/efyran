@@ -56,7 +56,7 @@ settings.self_buffs = {
     --"Pauldron of Dark Auspices",
 }
 
-settings.healing = { -- XXX implement
+settings.healing = {
     ["life_support"] = {
         "Distillate of Divine Healing XI/HealPct|7/CheckFor|Resurrection Sickness",
 

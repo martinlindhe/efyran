@@ -13,7 +13,7 @@ function QoL.Init()
         mq.cmd.attack("off")
     end
 
-    joinCurrentHealChannel()
+    QoL.verifySpellLines()
 
     mq.event("missing_component", "You are missing #1#.", function(text, name)
         if name ~= "some required components" then
@@ -35,16 +35,6 @@ function QoL.Init()
                 mq.cmd.dgtell("all GOT A TELL FROM", name, ": ", msg, " my pet:",mq.TLO.Me.Pet.Name())
                 mq.cmd.beep(1)
             end
-        end
-    end)
-
-    mq.event("zoned", "You have entered #1#.", function(text, zone)
-        if zone ~= "an area where levitation effects do not function" then
-            mq.cmd.dgtell("i zoned into ", zone)
-            mq.delay(2000)
-            pet.ConfigureTaunt()
-
-            joinCurrentHealChannel()
         end
     end)
 
@@ -77,24 +67,49 @@ function QoL.Init()
         mq.cmd("/hidec none")
     end)
 
+    -- open loot window on closest corpse
+    mq.bind("/lcorpse", function()
+        if mq.TLO.Target() ~= nil then
+            mq.cmd.target("clear")
+        end
+        mq.cmd.target("corpse radius 100")
+        mq.delay(500, function()
+            return mq.TLO.Target() ~= nil
+        end)
+        mq.cmd.loot()
+    end)
 end
 
--- joins/changes to the heal channel for current zone
-function joinCurrentHealChannel()
-    -- orchestrator only joins to watch the numbers
-    local orchestrator = mq.TLO.FrameLimiter.Status() == "Foreground"
+function QoL.verifySpellLines()
+    -- make sure I know all listed abilities
 
-    if orchestrator or me_healer() then
-        if heal.CurrentHealChannel() == botSettings.healme_channel then
-            return
+    verifySpellLines(botSettings.settings.self_buffs)
+    if botSettings.settings.healing ~= nil then
+        verifySpellLines(botSettings.settings.healing.life_support)
+        verifySpellLines(botSettings.settings.healing.tank_heal)
+        verifySpellLines(botSettings.settings.healing.important_heal)
+    end
+    if botSettings.settings.assist ~= nil then
+        verifySpellLines(botSettings.settings.assist.abilities)
+    end
+    if botSettings.settings.nukes ~= nil then
+        verifySpellLines(botSettings.settings.nukes.main)  -- XXX loop all groups
+    end
+
+    -- XXX TODO validate more fields
+end
+
+-- makes sure you have the item etc. ..
+function verifySpellLines(lines)
+    if lines == nil then
+        return
+    end
+    for k, row in pairs(lines) do
+        local spellConfig = parseSpellLine(row)
+        if not known_spell_ability(spellConfig.Name) then
+            mq.cmd.dgtell("all Missing ", spellConfig.Name)
+            mq.cmd.beep(1)
         end
-
-        if botSettings.healme_channel ~= "" then
-            mq.cmd.dleave(botSettings.healme_channel)
-        end
-
-        botSettings.healme_channel = heal.CurrentHealChannel()
-        mq.cmd.djoin(botSettings.healme_channel) -- new zone
     end
 end
 
@@ -155,11 +170,11 @@ function QoL.Tick()
     -- auto accept trades
     if mq.TLO.Window("tradewnd").Open() then
         if mq.TLO.Target() ~= nil and mq.TLO.DanNet(mq.TLO.Target())() ~= nil then
-            mq.cmd.dgtell("Accepting trade in 5s with", mq.TLO.Target())
+            mq.cmd.dgtell("all Accepting trade in 5s with", mq.TLO.Target())
             mq.delay(5000) -- 5.0s
             mq.cmd.notify("tradewnd TRDW_Trade_Button leftmouseup")
         else
-            mq.cmd.dgtell("Ignoring trade from unknown toon ", mq.TLO.Target())
+            mq.cmd.dgtell("all Ignoring trade from unknown toon ", mq.TLO.Target())
             mq.cmd.beep(1)
         end
     end
@@ -174,7 +189,7 @@ function QoL.Tick()
             mq.cmd.dgtell("all low mana, medding! ", mq.TLO.Me.PctMana())
             mq.cmd.sit("on")
         elseif mq.TLO.Me.PctMana() >= 100 and not mq.TLO.Me.Standing() and not mq.TLO.Window("SpellBookWnd").Open() then
-            mq.cmd.dgtell("mana is good, standing up! ", mq.TLO.Me.PctMana(), "standing=",mq.TLO.Me.Standing())
+            mq.cmd.dgtell("all Ending medbreak, full mana.")
             mq.cmd.sit("off")
         end
     end

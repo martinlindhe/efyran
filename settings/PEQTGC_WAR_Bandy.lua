@@ -71,8 +71,8 @@ settings.combat_buffs = { -- XXX implement
     "Commanding Voice/Bandy/MinEnd|5",
 }
 
-settings.healing = { -- XXX implement
-    ["life_support"] = { -- XXX implement
+settings.healing = {
+    ["life_support"] = {
         -- epic 2.0 Kreljnok's Sword of Eternal Power (group 800 hp)
         --"Kreljnok's Sword of Eternal Power/HealPct|50/CheckFor|Resurrection Sickness",
 

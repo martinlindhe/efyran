@@ -290,19 +290,28 @@ function castSpellRaw(name, spawnId, extraArgs)
         return
     end
 
-    print("-- castSpellRaw " , name, " spawnId ", spawnId, ", extraArgs ", extraArgs)
+    --print("-- castSpellRaw " , name, " spawnId ", spawnId, ", extraArgs ", extraArgs)
 
     local castingArg = '"' .. name .. '" -targetid|'.. spawnId .. ' ' .. extraArgs
-    mq.cmd.dgtell("castSpell: /casting", castingArg)
+    --mq.cmd.dgtell("castSpell: /casting", castingArg)
+    print("castSpell: /casting", castingArg)
     mq.cmd.casting(castingArg)
 end
 
--- return item or nil
+-- partial search by name, return item or nil
 function getItem(name)
     if mq.TLO.FindItem(name).ID() ~= nil then
         return mq.TLO.FindItem(name)
     end
     return nil
+end
+
+-- exact search by name, return item count or nil
+function getItemCountExact(name)
+    if mq.TLO.FindItem(name).ID() ~= nil then
+        return mq.TLO.FindItemCount("="..name)()
+    end
+    return ""
 end
 
 -- return spell or nil
@@ -338,7 +347,73 @@ function memorizeListedSpells()
         print("no gems configured")
         return
     end
-    for k, n in pairs(botSettings.settings.gems) do
-        print("gem ",k, " n ",n)
+    for name, gem in pairs(botSettings.settings.gems) do
+        print("Memorizing ", name, " in gem ", gem)
+        mq.cmd.memorize('"'..name..'"', gem)
     end
+end
+
+-- returns true if name is ready to use (spell, aa, ability or combat ability)
+function is_spell_ability_ready(name)
+
+    if mq.TLO.Me.Class.ShortName() ~= "BRD" and mq.TLO.Me.Casting() ~= nil then
+        return false
+    end
+
+    if mq.TLO.Me.AltAbilityReady(name)()  then
+        --print("is_spell_ability_ready aa TRUE", name)
+        return true
+    end
+
+    if mq.TLO.Me.Gem(name)() ~= nil and mq.TLO.Me.SpellReady(name)() then
+        --print("is_spell_ability_ready spell TRUE", name)
+        return true
+    end
+
+    if mq.TLO.Me.CombatAbilityReady(name)() then
+        --print("is_spell_ability_ready combat ability TRUE", name)
+        return true
+    end
+
+    if mq.TLO.Me.AbilityReady(name)() then
+        --print("is_spell_ability_ready ability TRUE", name)
+        return true
+    end
+
+    if mq.TLO.FindItem(name).Clicky() ~= nil and mq.TLO.FindItem(name).Timer.Ticks() == 0 then
+        --print("is_spell_ability_ready item TRUE", name)
+        return true
+    end
+
+    return false
+end
+
+function known_spell_ability(name)
+    
+    if mq.TLO.Me.AltAbility(name)()  then
+        --print("known_spell_ability aa TRUE", name)
+        return true
+    end
+
+    if mq.TLO.Me.Spell(name)() then
+        --print("known_spell_ability spell TRUE", name)
+        return true
+    end
+
+    if mq.TLO.Me.CombatAbility(name)() then
+        --print("known_spell_ability combat ability TRUE", name)
+        return true
+    end
+
+    if mq.TLO.Me.Ability(name)() then
+        --print("known_spell_ability ability TRUE", name)
+        return true
+    end
+
+    if mq.TLO.FindItem(name)() ~= nil then
+        --print("known_spell_ability item TRUE", name)
+        return true
+    end
+
+    return false
 end

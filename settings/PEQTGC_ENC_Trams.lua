@@ -12,7 +12,7 @@ settings.gems = {
     ["Euphoria"] = 1,
     ["Wake of Felicity"] = 2, -- XXX unused
     ["Guard of Druzzil"] = 3,
-    ["True Name"] = 4,
+    ["Ancient: Voice of Muram"] = 4,
     ["Ancient: Neurosis"] = 6,
     ["Mana Flare"] = 7,
     ["Rune of Rikkukin"] = 8,
@@ -167,8 +167,8 @@ Combat Buff=Mana Flare/Myggan
 ]]--
 }
 
-settings.healing = { -- XXX implement
-    ["life_support"] = { -- XXX implement
+settings.healing = {
+    ["life_support"] = {
         "Self Stasis/HealPct|55/CheckFor|Resurrection Sickness",
 
         -- L70 Color Shock AA
@@ -301,7 +301,14 @@ settings.enchanter = { -- XXX impl / rearrange settings
         -- L65 Bliss of the Nihil (0.6 min/L68, aerange 25, cost 850 mana)
         
         -- Hammer of Delusions (tacvi class click with Euphoria)
-        "Hammer of Delusions",
+        "Hammer of Delusions/MaxLevel|73", -- XXX impl MaxLevel filter
+
+        -- ae mez:
+        -- L16 Mesmerization (0.4 min/L55, 41% memblur, 30 aerange)
+        -- L52 Fascination (0.6 min/L55, resist adj -10, 41% memblur, 35 aerange)
+        -- L65 Bliss of the Nihil (0.6 min/L68, 25 aerange, 6 sec recast)
+        -- L69 Wake of Felicity (0.9 min/L70, 25 aerange, 6 sec recast)
+        "Wake of Felicity/MaxLevel|70/MinMobs|6", -- XXX impl MinMobs filter. will only cast if at least 5 mobs in "unsafe radius"
 
         -- single mez:
         -- L02 Mesmerize         (0.4 min/L55, 41% memblur, 20 mana)
@@ -315,12 +322,12 @@ settings.enchanter = { -- XXX impl / rearrange settings
         -- L64 Bliss             (0.9 min/L68, resist adj -10, 80% memblur, 300 mana)
         -- L67 Felicity          (0.9 min/L70, resist adj -10, 70% memblur, 340 mana)
         -- L69 Euphoria          (0.9 min/L73, resist adj -10, 70% memblur, 375 mana)
-        "Euphoria/MinMana|10",
+        "Euphoria/MinMana|10/MaxLevel|73",
 
         -- L68 Stasis   I AA (1.0 min/L73, resist adj -1000, 80% memblur, 36 min reuse)
         -- L69 Stasis  II AA (2.0 min/L73, resist adj -1000, 80% memblur, 36 min reuse)
         -- L70 Stasis III AA (3.0 min/L73, resist adj -1000, 80% memblur, 36 min reuse)
-        "Stasis",
+        "Stasis/MaxLevel|73",
     },
 
     ["charm"] = { -- XXX impl
@@ -331,7 +338,7 @@ settings.enchanter = { -- XXX impl / rearrange settings
         --- Edict of Command Rank 1 AA (id:8196, magic -1000, charm/70, 2 min set duration)
         --- Edict of Command Rank 2 AA (id:8197, magic -1000, charm/70, 4 min set duration)
         --- Edict of Command Rank 3 AA (id:8198, magic -1000, charm/70, 6 min set duration)
-        "Edict of Command",
+        "Edict of Command/MaxLevel|70",
 
         -- charms:
         -- L11 Charm (magic, charm/L25, 20.5 min)
@@ -343,8 +350,9 @@ settings.enchanter = { -- XXX impl / rearrange settings
         -- L64 Command of Druzzil (magic, charm/L64, 7.5 min). 5s cast time, 1.5s recast
         -- L68 Compel (magic, charm/L67, 7.5 min). 5s cast time, 1.5s recast
         -- L70 True Name (magic, charm/L69, 7.5 min). 5s cast time, 1.5s recast
-        -- L70 Ancient: Voice of Muram (magic -1000, charm/70, 0.8 min set duration). 5s cast time, 300s recast
-        "True Name",
+        -- L70 Ancient: Voice of Muram (magic -1000, charm/70, 0.8 min set duration). 5s cast time, 5 min recast
+        "Ancient: Voice of Muram/MaxLevel|70",
+        --"True Name/MaxLevel|69",
     },
 }
 
