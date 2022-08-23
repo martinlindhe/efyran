@@ -219,10 +219,10 @@ settings.assist = {
 
         -- L70 Raging Servant (1650 mana, swarm pet)
         ["main"] = {
-            "Raging Servant/GoM", -- XXX GoM
+            "Raging Servant/GoM",
 
             -- L69 Summon: Molten Orb (10 charge 700 hp fire nuke, -10 fire adj, instant cast, 12s recast)
-            "Molten Orb/NoAggro", -- XXX NoAggro
+            "Molten Orb/NoAggro/Summon|Summon: Molten Orb",
 
             "Burning Earth/NoAggro/MinMana|10",
             "Spear of Ro/GoM/NoAggro",
@@ -230,25 +230,21 @@ settings.assist = {
             -- tacvi clicky:
             "Dagger of Evil Summons/NoAggro",
         },
-
         ["noks"] = {
             "Sun Vortex/NoAggro/Gem|1",
         },
-
         ["fastfire"] = {
             "Raging Servant/GoM",
             "Burning Earth/NoAggro",
             "Dagger of Evil Summons/NoAggro",
-            "Molten Orb/NoAggro",
-
+            "Molten Orb/NoAggro/Summon|Summon: Molten Orb",
         },
         ["bigfire"] = {
             "Raging Servant/GoM",
             "Spear of Ro/NoAggro",
             "Dagger of Evil Summons/NoAggro",
-            "Molten Orb/NoAggro",
+            "Molten Orb/NoAggro/Summon|Summon: Molten Orb",
         },
-
         ["fastcold"] = {
             "Raging Servant/GoM",
 

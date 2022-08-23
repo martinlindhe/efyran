@@ -102,12 +102,21 @@ settings.assist = {
     ["type"] = "Melee", -- XXX "Ranged",  "Off"
     ["stick_point"] = "Front",
     --["melee_distance"] = 15,   -- XXX in order to automatically be closer to boss than the rest, allow changing formula "spawn.MaxRangeTo() * 0.75"
-    --SmartTaunt(On/Off)=On -- XXX impl
+    ["taunts"] = { -- XXX impl. used if set
+        -- L67 Terror of Discord (1800 hate, instant, unresistable, 60 mana, 6s recast)
+        "Terror of Discord",
+
+        -- Lxx Taunt
+        -- Lxx Bash
+        "Taunt",
+        "Bash", -- XXX requires shield equipped.
+
+        -- XXX add taunt spells
+    },
     ["ranged_distance"] = 60,
     ["engage_percent"] = 100,  -- XXX implement!
 
     ["abilities"] = {
-        "Bash",
         "Disarm",
     },
 

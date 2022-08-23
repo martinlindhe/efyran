@@ -118,6 +118,11 @@ settings.assist = {
     ["ranged_distance"] = 100,
     ["engage_percent"] = 98,  -- XXX implement!
 
+    ["taunts"] = { -- XXX impl. used if set
+        "Taunt",
+        -- XXX add more + ae taunts
+    },
+
     ["abilities"] = {
         "Knee Strike",
         "Bash",

@@ -55,9 +55,9 @@ settings.assist = {
         "Dance of Blades",
         "Cacophony",
 
-        -- (oow T1: increase double attack by  30% for 12s, 5 min reuse) Traveler's Mail Chestguard 
-        -- (oow T2: increase double attack by 100% for 24s, 5 min reuse) Farseeker's Plate Chestguard of Harmony 
-        "Farseeker's Plate Chestguard of Harmony",
+        -- (oow T1: increase double attack by  30% for 12s, 5 min reuse) Traveler's Mail Chestguard
+        -- (oow T2: increase double attack by 100% for 24s, 5 min reuse) Farseeker's Plate Chestguard of Harmony
+        --"Farseeker's Plate Chestguard of Harmony",
 
         "Song of Stone",
     },
@@ -134,7 +134,7 @@ settings.songs = {
         "Zuriki's Song of Shenanigans/Gem|8",
         "Selo's Accelerating Chorus/Gem|4",
         "Chorus of Life/Gem|1",
-    }
+    },
 }
 
 return settings

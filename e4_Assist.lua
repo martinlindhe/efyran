@@ -32,6 +32,8 @@ function Assist.Init()
         end
     end
 
+    Assist.prepareForNextFight()
+
     -- assist on mob until dead
     mq.bind("/assiston", function(mobID)
 
@@ -100,6 +102,76 @@ function Assist.handleAssistCall(spawn)
     end
 
     Assist.killSpawn(spawn)
+
+    Assist.prepareForNextFight()
+end
+
+
+-- called at end of each /assist call
+function Assist.prepareForNextFight()
+
+    print("Assist.prepareForNextFight")
+
+    Assist.summonNukeComponents()
+end
+
+-- summons missing component for nukes
+-- eg: "Molten Orb/NoAggro/Summon|Summon: Molten Orb" (MAG)
+function Assist.summonNukeComponents()
+    if botSettings.settings.assist.nukes == nil then
+        return
+    end
+    
+    for idx, lines in pairs(botSettings.settings.assist.nukes) do
+        for k, row in pairs(lines) do
+
+            local spell = parseSpellLine(row)
+            if spell.Summon ~= nil then
+                --print(row, "  xxx  ", spell.Name)
+                if not known_spell_ability(spell.Name) then
+                    mq.cmd.dgtell("all Missing "..spell.Name)
+                    mq.cmd.beep(1)
+                end
+
+                --print("summon prop", spell.Summon)
+
+                if getItemCountExact(spell.Name) == 0 and mq.TLO.Me.Casting() == nil then
+                    mq.cmd.dgtell("all Summoning", spell.Name)
+                    castSpell(spell.Summon, mq.TLO.Me.ID())
+
+                    -- wait and inventory
+                    local spell = getSpell(spell.Summon)
+                    mq.delay(2000 + spell.MyCastTime())
+                    clear_cursor()
+                    return true
+                end
+            end
+
+        end
+    end
+end
+
+function dbg(s)
+    print(mq.TLO.Time().."| "..s)
+end
+
+-- autoinventories all items on cursor
+function clear_cursor()
+    while true do
+        if mq.TLO.Me.FreeInventory() <= 1 then
+            mq.cmd.dgtell("all Cannot clear cursor, no free inventory slots")
+            mq.beep(1)
+            break
+        end
+        if mq.TLO.Cursor.ID() == nil then
+            break
+        end
+
+        mq.cmd.dgtell("all autoinv ", mq.TLO.Cursor())
+        mq.cmd("/autoinventory")
+        mq.delay(100)
+    end
+    print("clear_cursor gave up")
 end
 
 -- return true if spell/ability was cast
@@ -126,8 +198,20 @@ function Assist.castSpellAbility(spawn, row)
         end
     end
 
+    if spell.GoM ~= nil and spell.GoM then
+        if mq.TLO.Me.Song("Gift of Mana")() == nil then
+            --mq.cmd.dgtell("all SKIP GoM ", spell.Name, " i don't have GoM up")
+            return false
+        end
+    end
+
     if spell.MinMana ~= nil and mq.TLO.Me.PctMana() < tonumber(spell.MinMana) then
         mq.cmd.dgtell("all SKIP MinMana ", spell.Name, ", ", mq.TLO.Me.PctMana(), " vs required " , spell.MinMana)
+        return false
+    end
+
+    if spell.Summon ~= nil and getItemCountExact(spell.Name) == 0 then
+        mq.cmd.dgtell("all SKIP Summon ", spell.Name, ", missing summoned item mid fight")
         return false
     end
 
@@ -254,6 +338,11 @@ function Assist.killSpawn(spawn)
     if mq.TLO.Me.Class.ShortName() ~= "BRD" and mq.TLO.Me.Casting() ~= nil then
         --mq.cmd.dgtell("all DEBUG abort cast mob dead ", mq.TLO.Me.Casting.Name)
         mq.cmd.stopcast()
+    end
+
+    if assistTarget ~= nil then
+        -- did not get called off during fight
+        Assist.prepareForNextFight()
     end
 
     assistTarget = nil

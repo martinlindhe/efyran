@@ -1,5 +1,11 @@
 # TODO
 
+
+nukes assist:
+    -- TODO read spell.Gem and use that spell gem when scribing it, if not already scribed
+    -- TODO read MaxTries|3 prop and default to 1 cast ...
+
+
 - /rezit /only|Samma    force SHM/DRU to use their 90% rezzes
 
 - BRD: invis/travel songs break after each casted tick??

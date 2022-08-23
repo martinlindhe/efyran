@@ -13,6 +13,8 @@ function QoL.Init()
         mq.cmd.attack("off")
     end
 
+    clear_cursor()
+
     QoL.verifySpellLines()
 
     mq.event("missing_component", "You are missing #1#.", function(text, name)
@@ -83,31 +85,50 @@ end
 function QoL.verifySpellLines()
     -- make sure I know all listed abilities
 
-    verifySpellLines(botSettings.settings.self_buffs)
-    if botSettings.settings.healing ~= nil then
-        verifySpellLines(botSettings.settings.healing.life_support)
-        verifySpellLines(botSettings.settings.healing.tank_heal)
-        verifySpellLines(botSettings.settings.healing.important_heal)
-    end
+    verifySpellLines("evac", botSettings.settings.evac)
+    verifySpellLines("self_buffs", botSettings.settings.self_buffs)
+
     if botSettings.settings.assist ~= nil then
-        verifySpellLines(botSettings.settings.assist.abilities)
+        verifySpellLines("taunts", botSettings.settings.assist.taunts)
+        verifySpellLines("abilities", botSettings.settings.assist.abilities)
+        verifySpellLines("quickburns", botSettings.settings.assist.quickburns)
+        verifySpellLines("longburns", botSettings.settings.assist.longburns)
+        verifySpellLines("fullburns", botSettings.settings.assist.fullburns)
+
+        if botSettings.settings.assist.nukes ~= nil then
+            for k, v in pairs(botSettings.settings.assist.nukes) do
+                verifySpellLines(k, v)
+            end
+        end    
     end
-    if botSettings.settings.nukes ~= nil then
-        verifySpellLines(botSettings.settings.nukes.main)  -- XXX loop all groups
+
+    if botSettings.settings.healing ~= nil then
+        verifySpellLines("life_support", botSettings.settings.healing.life_support)
+        verifySpellLines("tank_heal", botSettings.settings.healing.tank_heal)
+        verifySpellLines("important_heal", botSettings.settings.healing.important_heal)
     end
+
+    if botSettings.settings.songs ~= nil then
+        print("ow")
+        for k, v in pairs(botSettings.settings.songs) do
+            print(k)
+            verifySpellLines(k, v)
+        end
+    end
+
 
     -- XXX TODO validate more fields
 end
 
--- makes sure you have the item etc. ..
-function verifySpellLines(lines)
+-- warns if you lack any item etc listed in `lines`.
+function verifySpellLines(label, lines)
     if lines == nil then
         return
     end
     for k, row in pairs(lines) do
         local spellConfig = parseSpellLine(row)
         if not known_spell_ability(spellConfig.Name) then
-            mq.cmd.dgtell("all Missing ", spellConfig.Name)
+            mq.cmd.dgtell("all Missing "..label..": "..spellConfig.Name)
             mq.cmd.beep(1)
         end
     end

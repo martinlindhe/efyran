@@ -306,12 +306,17 @@ function getItem(name)
     return nil
 end
 
--- exact search by name, return item count or nil
+-- returns true if spell is memorized in a gem
+function is_memorized(name)
+    return mq.TLO.Me.Gem(name)() ~= nil
+end
+
+-- exact search by name, return number
 function getItemCountExact(name)
     if mq.TLO.FindItem(name).ID() ~= nil then
         return mq.TLO.FindItemCount("="..name)()
     end
-    return ""
+    return 0
 end
 
 -- return spell or nil

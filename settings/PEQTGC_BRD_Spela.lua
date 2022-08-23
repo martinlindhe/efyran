@@ -56,15 +56,15 @@ settings.assist = {
     },
 
     ["quickburns"] = {-- XXX implememt !!!
-        -- (epic 1.5: slot 9: spell crit  8%, slot 10: dot crit  8%, slot 12: accuracy 130%) Prismatic Dragon Blade
-        -- (epic 2.0: slot 9: spell crit 12%, slot 10: dot crit 12%, slot 12: accuracy 140%) Blade of Vesagran 
+        -- epic 1.5: slot 9: spell crit  8%, slot 10: dot crit  8%, slot 12: accuracy 130% (Prismatic Dragon Blade)
+        -- epic 2.0: slot 9: spell crit 12%, slot 10: dot crit 12%, slot 12: accuracy 140% (Blade of Vesagran )
         "Blade of Vesagran",
 
         "Dance of Blades",
         "Cacophony",
 
-        -- (oow T1: increase double attack by  30% for 12s, 5 min reuse) Traveler's Mail Chestguard 
-        -- (oow T2: increase double attack by 100% for 24s, 5 min reuse) Farseeker's Plate Chestguard of Harmony 
+        -- oow T1 bp: increase double attack by  30% for 12s, 5 min reuse (Traveler's Mail Chestguard)
+        -- oow T2 bp: increase double attack by 100% for 24s, 5 min reuse (Farseeker's Plate Chestguard of Harmony)
         "Farseeker's Plate Chestguard of Harmony",
 
         "Song of Stone",
@@ -164,7 +164,7 @@ settings.songs = {
         "Zuriki's Song of Shenanigans/Gem|8",
         "Selo's Accelerating Chorus/Gem|4",
         "Chorus of Life/Gem|1",
-    }
+    },
 
 }
 
