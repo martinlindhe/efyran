@@ -283,16 +283,16 @@ settings.assist = {
         -- XXX: if using this burn, can i also Self Buff Elemental Form ??? (both is illusions, how will they overwrite?)
         "Heart of Flames",
     },
-}
 
-settings.pbae = { -- XXX impl
-    -- L01 Fire Flux (8-12 hp, aerange 20, recast 6s , cost 23 mana) - for PL
-    -- L22 Flame Flux (89-96 hp, aerange 20, recast 6s, cost 123 mana)
-    -- L39 Flame Arc (171-181 hp, aerange 20, recast 7s , cost 199 mana)
-    -- L51 Scintillation (597-608 hp, aerange 25, recast 6.5s, cost 361 mana)
-    -- L60 Wind of the Desert (1050 hp, aerange 25, recast 12s, cost 780 mana)
-    "Wind of the Desert/Gem|7/MinMana|10",
-    "Scintillation/Gem|6/MinMana|10",
+    ["pbae"] = { -- XXX impl
+        -- L01 Fire Flux (8-12 hp, aerange 20, recast 6s , cost 23 mana) - for PL
+        -- L22 Flame Flux (89-96 hp, aerange 20, recast 6s, cost 123 mana)
+        -- L39 Flame Arc (171-181 hp, aerange 20, recast 7s , cost 199 mana)
+        -- L51 Scintillation (597-608 hp, aerange 25, recast 6.5s, cost 361 mana)
+        -- L60 Wind of the Desert (1050 hp, aerange 25, recast 12s, cost 780 mana)
+        "Wind of the Desert/Gem|7/MinMana|10",
+        "Scintillation/Gem|6/MinMana|10",
+    },
 }
 
 return settings

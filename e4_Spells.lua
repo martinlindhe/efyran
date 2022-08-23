@@ -92,19 +92,19 @@ end
 
 
 -- refreshes buff on self or another bot, returns true if buff was cast
-function refreshBuff(buffItem, botName) -- XXX take spawn argument instead.
+function refreshBuff(buffItem, spawn)
 
-    --print("refreshBuff ", buffItem, ", botName:",botName)
+    --print("refreshBuff ", buffItem, ", botName:", spawn.CleanName())
 
-    local spawn = mq.TLO.Spawn("pc =" .. botName)
-    --print("PC MATCH", botName, " ", spawn, " ", type(spawn))
-    if tostring(spawn) == "NULL" then
-        --print("SKIP BUFFING, NOT IN ZONE ", botName)
+    if spawn.Type() ~= "PC" and spawn.Type() ~= "Pet" then
+        mq.cmd.dgtell("all WILL NOT BUFF ", spawn.Type, ": ", spawn.CleanName())
+        mq.beep(1)
         return false
     end
+
     local spawnID = spawn.ID()
 
-    if not spellConfigAllowsCasting(buffItem, botName) then
+    if not spellConfigAllowsCasting(buffItem, spawn) then
         --print("wont allow casting", buffItem)
         return false
     end
@@ -123,19 +123,31 @@ function refreshBuff(buffItem, botName) -- XXX take spawn argument instead.
         return false
     end
 
-    if not is_spell_ability_ready(spellConfig.Name) then
-        --print("not ready ", spellConfig.Name)
-        return false
+    local spellName = spell.RankName()
+    if is_item then
+        spellName = spellConfig.Name
     end
 
     -- only refresh fading & missing buffs
     --print("refreshBuff looking at ", buffItem, ", rank name: ", spell.RankName)
-    if mq.TLO.Me() == botName then
+    if mq.TLO.Me.ID() == spawn.ID() then
         -- IMPORTANT: on live, f2p restricts all spells to rank 1, so we need to look for both forms
         if mq.TLO.Me.Buff(spell.RankName)() ~= nil and mq.TLO.Me.Buff(spell.RankName).Duration.Ticks() > 4 then
             return false
         end
         if mq.TLO.Me.Buff(spell.Name)() ~= nil and mq.TLO.Me.Buff(spell.Name).Duration.Ticks() > 4 then
+            return false
+        end
+    elseif spawn.Type() == "Pet" and spawn.ID() == mq.TLO.Me.Pet.ID() then
+        -- IMPORTANT: on live, f2p restricts all spells to rank 1, so we need to look for both forms
+    
+        if mq.TLO.Me.Pet.Buff(spell.RankName)() ~= nil and mq.TLO.Me.Pet.Buff(mq.TLO.Me.Pet.Buff(spell.RankName)).Duration.Ticks() > 4 then
+            print("refreshBuff: SKIP PET BUFFING ", spell.RankName, ", duration is ", mq.TLO.Me.Pet.Buff(mq.TLO.Me.Pet.Buff(spell.RankName)).Duration.Ticks(), " ticks")
+            return false
+        end
+
+        if mq.TLO.Me.Pet.Buff(spell.Name)() ~= nil and mq.TLO.Me.Pet.Buff(mq.TLO.Me.Pet.Buff(spell.Name)).Duration.Ticks() > 4 then
+            print("refreshBuff: SKIP PET BUFFING ", spell.Name, ", duration is ", mq.TLO.Me.Pet.Buff(mq.TLO.Me.Pet.Buff(spell.Name)).Duration.Ticks(), " ticks")
             return false
         end
     else
@@ -149,26 +161,28 @@ function refreshBuff(buffItem, botName) -- XXX take spawn argument instead.
         end
     end
 
-    local spellName = spell.RankName()
-    if is_item then
-        spellName = spellConfig.Name
+    if not is_spell_ability_ready(spellName) then
+        -- if normal spell, memorize it
+        if is_spell_in_book(spellName) and not is_memorized(spellName) then
+            local gem = 5
+            if spellConfig.Gem ~= nil then
+                gem = spellConfig.Gem
+            end
+            --print("attempting to memorize ", spellName .. " ... GEM ", gem)
+           mq.cmd.memorize('"'..spellName..'"', gem)
+           mq.delay(3000) -- XXX 3s
+        end
     end
 
-    print("buffing bot ", botName, " (id ",spawnID,"): ", spellName)
+    print("buffing bot ", spawn.CleanName(), " (id ",spawnID,"): ", spellName)
     castSpell(spellName, spawnID)
     return true
 end
 
 -- XXX refactor more. need to be usable with pet buffs too (should take a spawn id instead of bot name, and then derive if its a bot in zone or a pet)
 -- returns bool
-function spellConfigAllowsCasting(buffItem, botName)
+function spellConfigAllowsCasting(buffItem, spawn)
 
-    local spawn = mq.TLO.Spawn("pc =" .. botName)
-    --print("PC MATCH", botName, " ", spawn, " ", type(spawn))
-    if tostring(spawn) == "NULL" then
-        --print("SKIP BUFFING, NOT IN ZONE ", botName)
-        return false
-    end
     local spawnID = spawn.ID()
 
     local spellConfig = parseSpellLine(buffItem) -- XXX parse this once on script startup. dont evaluate all the time !!!
@@ -180,17 +194,17 @@ function spellConfigAllowsCasting(buffItem, botName)
         return false
     end
 
-    --print("spellConfigAllowsCasting ", buffItem, " ", botName)
+    --print("spellConfigAllowsCasting ", buffItem, " ", spawn)
 
     -- AERange is used for group spells
     if spell.TargetType() == "Group v2" then
         if spawn.Distance() >= spell.AERange() then
-            mq.cmd.dgtell("cant rebuff (",spell.TargetType(),"), toon too far away: ", buffItem, " ", botName, " spell range = ", spell.Range(), ", spawn distance = ", spawn.Distance())
+            mq.cmd.dgtell("cant rebuff (",spell.TargetType(),"), toon too far away: ", buffItem, " ", spawn.CleanName(), " spell range = ", spell.Range(), ", spawn distance = ", spawn.Distance())
             return false
         end
     else
         if spell.TargetType() ~= "Self" and spawn.Distance() >= spell.Range() then
-            mq.cmd.dgtell("cant rebuff (",spell.TargetType(),"), toon too far away: ", buffItem, " ", botName, " spell range = ", spell.Range(), ", spawn distance = ", spawn.Distance())
+            mq.cmd.dgtell("cant rebuff (",spell.TargetType(),"), toon too far away: ", buffItem, " ", spawn.CleanName(), " spell range = ", spell.Range(), ", spawn distance = ", spawn.Distance())
             return false
         end
     end
@@ -208,12 +222,12 @@ function spellConfigAllowsCasting(buffItem, botName)
     end
     if spellConfig.CheckFor ~= nil then
         -- if we got this buff on, then skip.
-        if mq.TLO.Me() ~= botName then
+        if mq.TLO.Me() ~= spawn.CleanName() then
             -- XXX LATER: rework to use /dobserve
-            local res = queryBot(botName, 'Me.Buff["' .. spellConfig.CheckFor .. '"].ID')
+            local res = queryBot(spawn.CleanName(), 'Me.Buff["' .. spellConfig.CheckFor .. '"].ID')
 
             if res ~= "NULL" then
-                print("SKIP BUFFING of ", spellConfig.Name, ", target bot ", botName, " has ", spellConfig.CheckFor)
+                print("SKIP BUFFING of ", spellConfig.Name, ", target bot ", spawn.CleanName(), " has ", spellConfig.CheckFor)
                 return false
             end
         else
@@ -306,9 +320,14 @@ function getItem(name)
     return nil
 end
 
--- returns true if spell is memorized in a gem
+-- reutrns true if `name` is a spell currently memorized in a gem
 function is_memorized(name)
     return mq.TLO.Me.Gem(name)() ~= nil
+end
+
+-- returns true if `name` is a spell in my spellbook
+function is_spell_in_book(name)
+    return mq.TLO.Me.Book(name)() ~= nil
 end
 
 -- exact search by name, return number
@@ -353,8 +372,24 @@ function memorizeListedSpells()
         return
     end
     for name, gem in pairs(botSettings.settings.gems) do
-        print("Memorizing ", name, " in gem ", gem)
-        mq.cmd.memorize('"'..name..'"', gem)
+        local spell = getSpell(name)
+        if spell == nil then
+            mq.cmd.dgtell("all FATAL ERROR cant memorize spell", name)
+            mq.beep(1)
+            return
+        end
+        local nameWithRank = spell.RankName()
+
+        if mq.TLO.Me.Gem(gem).Name() ~= nameWithRank then
+            mq.cmd.dgtell("all Memorizing ", nameWithRank, " in gem ", gem)
+            mq.cmd.memorize('"'..nameWithRank..'"', gem)
+            -- sleep until spell is memorized
+            mq.delay(200)
+            mq.delay(5000, function()
+                return mq.TLO.Window("SpellBookWnd").Open() == false
+            end)
+            mq.delay(200)
+        end
     end
 end
 
@@ -415,7 +450,7 @@ function known_spell_ability(name)
         return true
     end
 
-    if mq.TLO.FindItem(name)() ~= nil then
+    if mq.TLO.FindItem("="..name)() ~= nil then
         --print("known_spell_ability item TRUE", name)
         return true
     end

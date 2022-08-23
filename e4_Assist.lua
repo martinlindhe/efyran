@@ -118,7 +118,7 @@ end
 -- summons missing component for nukes
 -- eg: "Molten Orb/NoAggro/Summon|Summon: Molten Orb" (MAG)
 function Assist.summonNukeComponents()
-    if botSettings.settings.assist.nukes == nil then
+    if botSettings.settings.assist == nil or botSettings.settings.assist.nukes == nil then
         return
     end
     
@@ -171,7 +171,7 @@ function clear_cursor()
         mq.cmd("/autoinventory")
         mq.delay(100)
     end
-    print("clear_cursor gave up")
+    --print("clear_cursor gave up")
 end
 
 -- return true if spell/ability was cast

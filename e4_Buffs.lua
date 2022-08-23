@@ -133,7 +133,7 @@ function Buffs.Init()
             end
 
             if minLevel > 0 then
-                if spellConfigAllowsCasting(spellName, spawn.Name()) then
+                if spellConfigAllowsCasting(spellName, spawn) then
                     castSpellRaw(spellName, spawnID, "-maxtries|3")
 
                     -- sleep for the Duration
@@ -214,7 +214,7 @@ function Buffs.RefreshSelfBuffs()
         return false
     end
     for k, buffItem in pairs(botSettings.settings.self_buffs) do
-        if refreshBuff(buffItem, mq.TLO.Me.Name()) then
+        if refreshBuff(buffItem, mq.TLO.Me) then
             -- end after first successful buff
             return true
         end
@@ -223,6 +223,7 @@ function Buffs.RefreshSelfBuffs()
 end
 
 -- returns true if spell was cast
+--[[
 function Buffs.RefreshBotBuffs()
 
     if botSettings.settings.bot_buffs == nil then
@@ -252,6 +253,7 @@ function Buffs.RefreshBotBuffs()
 
     return false
 end
+]]--
 
 -- returns true if a buff was casted
 function Buffs.RefreshAura()

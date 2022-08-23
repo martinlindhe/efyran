@@ -32,6 +32,7 @@ function Heal.Init()
     end)
 
     joinCurrentHealChannel()
+    memorizeListedSpells()
 end
 
 -- joins/changes to the heal channel for current zone

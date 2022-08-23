@@ -33,7 +33,7 @@ settings.self_buffs = {
     -- Maelin's Meditation (slot 4: 400 mana pool)
     --"Muramite Signet Orb",
 
-    -- shield - does not stack with Focus / Virtue:
+    -- shield - does not stack with Focus / Virtue: - XXX could buff and auto-drop this with a /Ungrouped property ?
     -- L40 Arch Shielding (140-150 hp, 24-27 ac, 20 mr)
     -- L54 Shield of the Magi (232-250 hp, 29-31 ac, 22-24 mr)
     -- L61 Shield of the Arcane (298-300 hp, 34-36 ac, 30 mr)
@@ -57,7 +57,7 @@ settings.self_buffs = {
     -- L61 Rune of Zebuxoruk (absorb 850 dmg)
     -- L67 Rune of Salik (slot 1: absorb 1105 dmg)
     -- L69 Rune of Rikkukin (slot 1: absorb 1500 dmg, group)
-    "Rune of Rikkukin/Reagent|Peridot", -- XXX Reagent
+    "Rune of Rikkukin/Reagent|Peridot",
 
     -- epic 1.5: slot 5: absorb 1500 dmg. Oculus of Persuasion (Protection of the Eye)
     -- epic 2.0: slot 5: absorb 1800 dmg. Staff of Eternal Eloquence (Aegis of Abstraction)
@@ -264,22 +264,22 @@ settings.assist = {
         -- oow T2 bp: 42 sec, -1% spell resist rate, 5 min reuse. Mindreaver's Vest of Coercion (Bedazzling Aura)
         "Mindreaver's Vest of Coercion",
     },
-}
 
-settings.pbae = { -- XXX impl
-    -- ae stun:
-    -- L03 Color Flux (4s stun/L55?, aerange 20, recast 12s)
-    -- L20 Color Shift (6s stun/L55?, aerange 25, recast 12s)
-    -- L43 Color Skew (8s stun/L55?, aerange 30, recast 12s)
-    -- L52 Color Slant (8s stun/L55?, -100 mana, aerange 35, recast 12s)
-    -- L63 Color Cloud (timer 3, 8s stun/L65, aerange 30, recast 12s)   XXX best for pop stuns then!?
-    -- L69 Color Snap (timer 3, 6s stun/L70, aerange 30, recast 12s)
+    ["pbae"] = { -- XXX impl
+        -- ae stun:
+        -- L03 Color Flux (4s stun/L55?, aerange 20, recast 12s)
+        -- L20 Color Shift (6s stun/L55?, aerange 25, recast 12s)
+        -- L43 Color Skew (8s stun/L55?, aerange 30, recast 12s)
+        -- L52 Color Slant (8s stun/L55?, -100 mana, aerange 35, recast 12s)
+        -- L63 Color Cloud (timer 3, 8s stun/L65, aerange 30, recast 12s)   XXX best for pop stuns then!?
+        -- L69 Color Snap (timer 3, 6s stun/L70, aerange 30, recast 12s)
 
-    -- Stun/L65
-    --"Color Cloud/Gem|2/MinMana|5",
+        -- Stun/L65
+        --"Color Cloud/Gem|2/MinMana|5",
 
-    -- Stun/L70
-    "Color Snap/Gem|1/MinMana|5",
+        -- Stun/L70
+        "Color Snap/Gem|1/MinMana|5",
+    },
 }
 
 settings.enchanter = { -- XXX impl / rearrange settings

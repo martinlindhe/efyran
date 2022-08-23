@@ -6,7 +6,7 @@ settings.swap = { -- XXX impl
     ["melee"] = "Weighted Hammer of Conviction|Mainhand", -- 1hb
 }
 
-settings.gems = { -- XXX implement. default spell gem mapping. makes "main" spellset obsolete and allows for auto scribe in the right slots
+settings.gems = {
     ["Pious Remedy"] = 1,
     ["Pious Elixir"] = 2,
     ["Aura of Devotion"] = 3,
@@ -41,6 +41,7 @@ settings.self_buffs = {
     -- L58 Blessed Armor of the Risen (294-300 hp, 30 ac, 6 mana/tick)
     -- L65 Armor of the Zealot (450 hp, 36 ac, 8 mana/tick)
     -- L70 Armor of the Pioous (563 hp, 46 ac, 9 mana/tick)
+    -- L71 Blessing of Purpose
     -- NOTE: does not stack with DRU Skin
     --"Armor of the Zealot/MinMana|90/CheckFor|Kazad's Mark",
 
@@ -60,6 +61,14 @@ settings.self_buffs = {
     -- L66 Ward of Valiance (72 ac)
     -- NOTE: stacks with Symbol + DRU Skin + Focus
     "Ward of Valiance/MinMana|50/CheckFor|Hand of Conviction",
+
+    -- self mana regen:
+    -- L49 Armor of the Faithful (252-275 hp, 22 ac)
+    -- L58 Blessed Armor of the Risen (294-300 hp, 30 ac, 6 mana/tick)
+    -- L65 Armor of the Zealot (450 hp, 36 ac, 8 mana/tick)
+    -- L70 Armor of the Pious (563 hp, 46 ac, 9 mana/tick)
+    -- NOTE: does not stack with DRU Skin
+    --"Armor of the Pious/MinMana|90/CheckFor|Balikor's Mark",
 }
 
 settings.group_buffs = {
@@ -152,6 +161,7 @@ settings.healing = {
         -- L70 Sanctuary AA (id:5912, removes you from combat), 1h12 min reuse
         "Sanctuary/HealPct|13/CheckFor|Resurrection Sickness",
 
+        -- L69 Ward of Retribution (add defenstive proc: Ward of Retribution Parry)
         "Ward of Retribution/HealPct|50/Delay|3m/CheckFor|Resurrection Sickness",
 
         "Distillate of Divine Healing XI/HealPct|18/CheckFor|Resurrection Sickness",
@@ -165,11 +175,11 @@ settings.healing = {
         "Divine Avatar/HealPct|20/CheckFor|Resurrection Sickness",
 
         -- defensive - stun attackers:
-        -- L70 Divine Retribution I (id:5866, proc Divine Retribution Effect)
+        -- L70 Divine Retribution I AA (id:5866, proc Divine Retribution Effect)
         "Divine Retribution/HealPct|25/CheckFor|Resurrection Sickness",
     },
 
-    ["rez"] = { -- XXX impl? or just auto code the rez spells
+    ["rez"] = { -- XXX impl? or just auto code the rez spells. theres still no new ones on LIVE, except for AE rez aa (?)
         -- L12 Reanimation (0% exp, 6s cast, 20s recast)
         -- L18 Reconstitution (10% exp, 6s cast, 20s recast)
         -- L22 Reparation (20% exp, 6s cast, 20s recast)
@@ -278,21 +288,12 @@ settings.healing = {
         -- L68 Pious Light (3750-3770 hp, 3.8s cast, 740 mana)
         -- L70 Ancient: Hallowed Light (4150 hp, 3.8s cast, 775 mana)
         "Ancient: Hallowed Light/HealPct|88/MinMana|5",
-
-        -- MPG Efficiency with stronger toons. the zone debuff fools mq that 100% HP is like 75%:
-        --"Pious Remedy/HealPct|70/MinMana|5",
-
-        -- CH for mpg Efficency. the zone debuff fools mq that 100% HP is like 75%:   TODO verify how it is on mqnext
-        -- "Complete Heal/HealPct|70/Gem|2",
-
-        -- CH for mpg Ingenuity:
-        --"Complete Heal/HealPct|80/Gem|2",
     },
 
-    --["important"] = {"Spela"}, -- XXX impl. prioritized list of toons to heal as "Important" group in who_to_heal
-    --["important_heal"] = { "Pious Remedy/HealPct|60/MinMana|30"}, -- XXX impl. heal spell to heal these toons with
+    ["important"] = {"Spela"},
+    ["important_heal"] = {"Pious Remedy/HealPct|65/MinMana|30"},
 
-    ["all_heal"] = {-- XXX impl
+    ["all_heal"] = {
         -- quick heals:
         -- L01 Minor Healing (12-20 hp, 1.5s cast, 10 mana)
         -- L04 Light Healing (47-65 hp, 2s cast, 28 mana)
@@ -303,9 +304,6 @@ settings.healing = {
         -- L61 Supernal Remedy (1450 hp, 1.8s cast, 400 mana)
         -- L66 Pious Remedy (1990 hp, 1.8s cast, 495 mana)
         "Pious Remedy/HealPct|60/MinMana|30",
-
-        -- tacvi clicky
-        "Weighted Hammer of Conviction/HealPct|95",
     },
 
     ["group_heal"] = { -- XXX impl
@@ -337,8 +335,6 @@ settings.healing = {
 
     -- ["who_to_hot"] = "Tanks", -- XXX impl
 
-
-
     ["divine_arbitration"] = 60,    -- XXX impl. was [Cleric] Divine Arbitrsation pct in e3
     ["celestial_regeneration"] = 25, -- XXX impl. was [Cleric] Celestial Regeneration pct in e3
 
@@ -346,12 +342,12 @@ settings.healing = {
     -- L56 Yaulp V (50 atk, 10 mana/tick, 75 dex, 25% haste)
     -- L65 Yaulp VI (60 atk, 12 mana/tick, 90 dex, 30% haste)
     -- L69 Yaulp VII (80 atk, 14 mana/tick, 100 dex, 30% haste)
-    ["yaulp"] = "Yaulp VII",    -- was e3 [Cleric].Yaulp Spell    XXX impl. 
+    ["yaulp"] = "Yaulp VII",    -- was e3 [Cleric].Yaulp Spell   XXX impl?  or hard code yaulp spell names?
     ["auto_yaulp"] = false, -- was e3 [Cleric].Auto-Yaulp (On/Off)  XXX impl. 
 }
 
 settings.assist = {
-    ["nukes"] = { -- XXX implement
+    ["nukes"] = {
         ["main"] = {
             -- magic nukes:
             -- L44 Retribution (372-390 hp, cost 144 mana)
@@ -375,23 +371,23 @@ settings.assist = {
         -- L66 Celestial Hammer AA, 22 min reuse (XXX disabled because of casting time)
         --"Celestial Hammer",
     },
-}
 
-settings.pbae = {   -- XXX implement
-    -- pbae magic nukes:
-    -- L09 Word of Pain (24-29 hp, aerange 20, recast 9s, cost 47 mana)
-    -- L19 Word of Shadow (52-58 hp, aerange 20, recast 9s, cost 85 mana)
-    -- L26 Word of Spirit (91-104 hp, aerange 20, recast 9s, cost 133 mana)
-    -- L34 Tremor (106-122 hp, aerange 30, recast 10s, cost 200 mana)
-    -- L39 Word of Souls (138-155 hp, aerange 20, recast 9s, cost 171 mana)
-    -- L44 Earthquake (214-246 hp, aerange 30, recast 24s, cost 375 mana)
-    -- L49 Word Divine (339 hp, aerange 20, recast 9s, cost 304 mana)
-    -- L52 Upheaval (618-725 hp, aerange 35, recast 24s, cost 625 mana)
-    -- L59 The Unspoken Word (605 hp, aerange 20, recast 120s, cost 427 mana)
-    -- L64 Catastrophe (850 hp, aerange 35, recast 24s, cost 650 mana)
-    -- L69 Calamity (1105 hp, aerange 35, recast 24s, cost 812 mana - PUSHBACK 1.0)
-    -- "Calamity/Gem|6/MinMana|10",
-    -- "Catastrophe/Gem|7/MinMana|10",
+    ["pbae"] = {   -- XXX implement
+        -- pbae magic nukes:
+        -- L09 Word of Pain (24-29 hp, aerange 20, recast 9s, cost 47 mana)
+        -- L19 Word of Shadow (52-58 hp, aerange 20, recast 9s, cost 85 mana)
+        -- L26 Word of Spirit (91-104 hp, aerange 20, recast 9s, cost 133 mana)
+        -- L34 Tremor (106-122 hp, aerange 30, recast 10s, cost 200 mana)
+        -- L39 Word of Souls (138-155 hp, aerange 20, recast 9s, cost 171 mana)
+        -- L44 Earthquake (214-246 hp, aerange 30, recast 24s, cost 375 mana)
+        -- L49 Word Divine (339 hp, aerange 20, recast 9s, cost 304 mana)
+        -- L52 Upheaval (618-725 hp, aerange 35, recast 24s, cost 625 mana)
+        -- L59 The Unspoken Word (605 hp, aerange 20, recast 120s, cost 427 mana)
+        -- L64 Catastrophe (850 hp, aerange 35, recast 24s, cost 650 mana)
+        -- L69 Calamity (1105 hp, aerange 35, recast 24s, cost 812 mana - PUSHBACK 1.0)
+        -- "Calamity/Gem|6/MinMana|10",
+        -- "Catastrophe/Gem|7/MinMana|10",
+    },
 }
 
 return settings

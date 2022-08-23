@@ -470,24 +470,26 @@ settings.assist = {
 
         -- L65 Call of the Ancients AA (heal ward, 30 min reuse)
         "Call of the Ancients",
-    }
+    },
+
+    ["pbae"] = { -- XXX impl
+        -- ae slow:
+        -- L58 Tigir's Insects (50% slow, decrease hate 200, aerange 20, 3 min)
+        -- L70 Vindictive Spirit (50% slow, -100 magic adj, aerange 50, 0.3 min)
+        --"Breath of Antraygus/Gem|6/MinMana|10"
+
+        -- directional ae:
+        -- L69 Breath of Antraygus (directional AoE, 1200 dmg, 12s recast, cost 700 mana)
+        --"Vindictive Spirit/Gem|3/MinMana|10",
+        
+        -- "aura" idol:
+        -- L55 Idol of Malo
+        -- L70 Idol of Malos
+        "Idol of Malos/Gem|3",
+    },
+
 }
 
-settings.pbae = { -- XXX impl
---[[
-; ae slow:
-; L58 Tigir's Insects (50% slow, decrease hate 200, aerange 20, 3 min)
-; L69 Breath of Antraygus (directional AoE, 1200 dmg, 12s recast, cost 700 mana)
-; L70 Vindictive Spirit (50% slow, -100 magic adj, aerange 50, 0.3 min)
-;;PBAE=Breath of Antraygus/Rotate/Gem|6/MinMana|10
-;;PBAE=Vindictive Spirit/Rotate/Gem|3/MinMana|10
-
-; "aura" idol:
-; L55 Idol of Malo
-; L70 Idol of Malos
-;PBAE=Idol of Malos/Gem|3
-]]--
-}
 
 settings.shaman = { -- XXX impl / rearrange
 --[[

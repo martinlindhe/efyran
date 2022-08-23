@@ -15,6 +15,10 @@ settings.swap = {   -- XXX implement
     ["bluntdmg"] = "Despair|Mainhand/Frostcaller|Offhand",
 }
 
+settings.gems = {
+    -- XXX fill
+}
+
 settings.self_buffs = {
     "Fuzzy Foothairs",
 
@@ -60,18 +64,25 @@ settings.assist = {
         -- epic 2.0: slot 9: spell crit 12%, slot 10: dot crit 12%, slot 12: accuracy 140% (Blade of Vesagran )
         "Blade of Vesagran",
 
-        "Dance of Blades",
-        "Cacophony",
-
         -- oow T1 bp: increase double attack by  30% for 12s, 5 min reuse (Traveler's Mail Chestguard)
         -- oow T2 bp: increase double attack by 100% for 24s, 5 min reuse (Farseeker's Plate Chestguard of Harmony)
         "Farseeker's Plate Chestguard of Harmony",
 
+        -- Lxx Dance of Blades AA
+        "Dance of Blades",
+
+        -- Lxx Cacophony AA
+        "Cacophony",
+
+        -- Lxx Song of Stone AA
         "Song of Stone",
     },
 
     ["longburns"] = {-- XXX implememt !!!
+        -- L70 Dance of a Thousand Blades (dodh quest)
         "Thousand Blades",
+
+        -- L60 Puretone Discipline (timer 3, 1h7min reuse)
         "Puretone Discipline",
     },
 }

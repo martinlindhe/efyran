@@ -1,12 +1,56 @@
 local settings = { }
 
+settings.swap = {
+    -- XXX implement
+}
+
 settings.gems = {
+    -- XXX fill
     ["Cantata of Restoration"] = 12,
+}
+
+settings.self_buffs = {
 }
 
 settings.mount = "Glowing Black Drum"
 
 settings.self_buffs = {
+    -- XXX do i have any clickies? farm oow wos t1 ac click shroud of the fallen defender?
+    -- XXX farm ATK clicky?
+}
+
+settings.healing = {
+    ["life_support"] = {
+        "Shield of Notes/HealPct|30/CheckFor|Resurrection Sickness",
+        "Deftdance Discipline/HealPct|20/CheckFor|Resurrection Sickness",
+        "Distillate of Divine Healing XIII/HealPct|8/CheckFor|Resurrection Sickness",
+    }
+}
+
+settings.assist = {
+    ["type"] = "Melee",
+    ["stick_point"] = "Behind",
+    --["melee_distance"] = 12,
+    ["engage_percent"] = 98,  -- XXX implement!
+
+    ["abilities"] = {
+    },
+
+    ["quickburns"] = {-- XXX implememt !!!
+        -- Lxx Dance of Blades AA
+        "Dance of Blades",
+
+        -- Lxx Cacophony AA
+        "Cacophony",
+
+        -- Lxx Song of Stone AA
+        "Song of Stone",
+    },
+
+    ["longburns"] = {-- XXX implememt !!!
+        -- L70 Dance of a Thousand Blades (dodh quest)
+        --"Thousand Blades", -- XXX todo get
+    },
 }
 
 settings.songs = {
@@ -29,7 +73,7 @@ settings.songs = {
         "Niv's Harmonic/Gem|6",
 
         -- STRINGED - mana regen (AE 60 range)
-        "Cantata of Restoration/Gem|1",
+        "Cantata of Restoration/Gem|12",
     },
 
     ["levitate"] = {
@@ -71,7 +115,7 @@ settings.songs = {
         -- L56 Song of Midnight (ae range 35, fear to L52, sow mobs)
         -- L62 Angstlich's Echo of Terror (ae range 25, fear to L60)
         -- L67 Angstlich's Wail of Panic (ae range 25, fear to L65)
-        "Angstlich's Wail of Panic/Gem|7",
+        --"Angstlich's Wail of Panic/Gem|7",  -- XXX miss spell! minor muramite rune
     },
 
     ["travel"] = {

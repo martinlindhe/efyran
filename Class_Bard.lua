@@ -21,6 +21,10 @@ function Bard.PlayMelody(name)
         return
     end
 
+    if mq.TLO.Window("MerchantWnd").Open() then
+        return
+    end
+
     local songSet = botSettings.settings.songs[name]
     if songSet == nil then
         mq.cmd.dgtell("ERROR no such song set", name)

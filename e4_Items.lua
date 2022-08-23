@@ -7,8 +7,8 @@ function strip_link(s)
 end
 
 function Items.Init()
-    -- finds item by name in inventory/bags
-    mq.bind("/finditem", function(...)
+    -- finds item by name in inventory/bags. NOTE: "/finditem" is reserved in eq live for "dragon hoard" feature
+    mq.bind("/fdi", function(...)
         --- collect arg into query, needed for /fdi water flask to work without quotes
         local name = ""
         for i = 1, select("#",...) do
@@ -34,11 +34,6 @@ function Items.Init()
         local cnt = getItemCountExact(item.Name())
         local s = item.ItemLink("CLICKABLE")() .. " in " .. inventory_slot_name(item.ItemSlot()) .. " (count:".. tostring(cnt) .. ")"
         mq.cmd.dgtell("all", s)
-    end)
-
-    -- /finditem alias
-    mq.bind("/fdi", function(...)
-        mq.cmd.finditem(...)
     end)
 
     -- find missing item

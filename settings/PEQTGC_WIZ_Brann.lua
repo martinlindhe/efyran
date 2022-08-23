@@ -113,14 +113,14 @@ settings.assist = {
     ["fullburns"] = {
         -- Expendable AA (increase dmg)
         "Glyph of Courage",
-    }
-}
+    },
 
-settings.pbae = { -- XXX impl
-    "Circle of Thunder/Gem|3",
-    "Winds of Gelid/Gem|4",
-    "Circle of Fire/Gem|5",
-    --"Fire Rune/Gem|8",
+    ["pbae"] = { -- XXX impl
+        "Circle of Thunder/Gem|3",
+        "Winds of Gelid/Gem|4",
+        "Circle of Fire/Gem|5",
+        --"Fire Rune/Gem|8",
+    },
 }
 
 settings.evac = {

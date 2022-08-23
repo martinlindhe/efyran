@@ -77,8 +77,12 @@ Buff Spell Level   Minimum Target Level
 /buffit						- buff target
 
 
-/finditem, /fdi             - find item by partial name
+/fdi             			- find item by partial name
 /fmi                        - find missing item. report peers who lack an item
+
+/recallgroup <name>         - recalls a group/raid formation
+
+/shrinkgroup                - shrink group members shrink spells/clickies
 
 
 xxx document rest

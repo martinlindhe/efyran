@@ -97,7 +97,8 @@ function Pet.BuffMyPet()
 
         if not skip then
             print("Buffing my pet with ", spellConfig.Name)
-            castSpellRaw(spellConfig.Name, mq.TLO.Me.Pet.ID(), "-maxtries|3")
+            --castSpellRaw(spellConfig.Name, mq.TLO.Me.Pet.ID(), "-maxtries|3")
+            refreshBuff(spellConfig.Name, mq.TLO.Me.Pet)
             return true
         end
     end

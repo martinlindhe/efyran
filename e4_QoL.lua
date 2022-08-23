@@ -40,6 +40,10 @@ function QoL.Init()
         end
     end)
 
+    mq.event("skillup", "You have become better at #1#! (#2#)", function(text, name, num)
+        mq.cmd.dgtell("all Skillup ".. name .. " (".. num..")")
+    end)
+
     -- clear all chat windows on current peer
     mq.bind("/clr", function(name)
         mq.cmd.clear()
@@ -90,6 +94,7 @@ function QoL.verifySpellLines()
 
     if botSettings.settings.assist ~= nil then
         verifySpellLines("taunts", botSettings.settings.assist.taunts)
+        verifySpellLines("pbae", botSettings.settings.assist.pbae)
         verifySpellLines("abilities", botSettings.settings.assist.abilities)
         verifySpellLines("quickburns", botSettings.settings.assist.quickburns)
         verifySpellLines("longburns", botSettings.settings.assist.longburns)
@@ -106,16 +111,25 @@ function QoL.verifySpellLines()
         verifySpellLines("life_support", botSettings.settings.healing.life_support)
         verifySpellLines("tank_heal", botSettings.settings.healing.tank_heal)
         verifySpellLines("important_heal", botSettings.settings.healing.important_heal)
+
+        if botSettings.settings.healing.cures ~= nil then
+            for k, v in pairs(botSettings.settings.healing.cures) do
+                verifySpellLines("cures", {k})
+            end
+        end
     end
 
     if botSettings.settings.songs ~= nil then
-        print("ow")
         for k, v in pairs(botSettings.settings.songs) do
-            print(k)
             verifySpellLines(k, v)
         end
     end
 
+    if botSettings.settings.group_buffs ~= nil then
+        for k, v in pairs(botSettings.settings.group_buffs) do
+            verifySpellLines(k, v)
+        end
+    end
 
     -- XXX TODO validate more fields
 end
