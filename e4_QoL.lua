@@ -73,6 +73,11 @@ function QoL.Init()
         mq.cmd("/hidec none")
     end)
 
+    -- quickly exits all eqgame.exe instances using task manager (prevents url open on f2p game exit)
+    mq.bind("/exitall", function(name)
+        mq.cmd.exec('TASKKILL "/F /IM eqgame.exe"')
+    end)
+
     -- open loot window on closest corpse
     mq.bind("/lcorpse", function()
         if mq.TLO.Target() ~= nil then
