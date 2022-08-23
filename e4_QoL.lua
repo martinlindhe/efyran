@@ -78,6 +78,11 @@ function QoL.Init()
         mq.cmd.exec('TASKKILL "/F /IM eqgame.exe"')
     end)
 
+    -- reports all toons that are not running e4
+    mq.bind("/note4", function()
+        mq.cmd("/dgaexecute /lua run note4")
+    end)
+
     -- open loot window on closest corpse
     mq.bind("/lcorpse", function()
         if mq.TLO.Target() ~= nil then
