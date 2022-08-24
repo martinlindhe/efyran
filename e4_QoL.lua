@@ -13,6 +13,10 @@ function QoL.Init()
         mq.cmd.attack("off")
     end
 
+    if is_orchestrator() then
+        mq.cmd.djoin("skillup")
+    end
+
     clear_cursor()
 
     QoL.verifySpellLines()
@@ -41,7 +45,12 @@ function QoL.Init()
     end)
 
     mq.event("skillup", "You have become better at #1#! (#2#)", function(text, name, num)
-        mq.cmd.dgtell("all Skillup ".. name .. " (".. num..")")
+        mq.cmd.dgtell("skillup Skillup ".. name .. " (".. num..")")
+        print("Skillup ".. name .. " (".. num..")")
+    end)
+    
+    mq.event("xp", "You gain experience!", function()
+        mq.cmd.dgtell("xp gain")
     end)
 
     -- clear all chat windows on current peer
@@ -78,11 +87,6 @@ function QoL.Init()
         mq.cmd.exec('TASKKILL "/F /IM eqgame.exe"')
     end)
 
-    -- reports all toons that are not running e4
-    mq.bind("/note4", function()
-        mq.cmd("/dgaexecute /lua run note4")
-    end)
-
     -- open loot window on closest corpse
     mq.bind("/lcorpse", function()
         if has_target() ~= nil then
@@ -93,6 +97,17 @@ function QoL.Init()
             return has_target()
         end)
         mq.cmd.loot()
+    end)
+
+    
+    -- reports all toons that are not running e4
+    mq.bind("/note4", function()
+        mq.cmd("/dgaexecute /lua run note4")
+    end)
+
+    mq.bind("/running", function()
+        -- XXX reports all running scripts on all toons
+        print("FIXME impl /running: report all running scripts on all toons")
     end)
 end
 

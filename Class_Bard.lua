@@ -31,10 +31,8 @@ function Bard.PlayMelody(name)
         mq.cmd.beep(1)
         return
     end
-    -- tprint(songSet)
-    
-    print("Scribing bard song set ", name)
 
+    print("Scribing bard song set ", name)
 
     local gemSet = ""
     for v, songRow in pairs(songSet) do
@@ -63,18 +61,21 @@ function Bard.PlayMelody(name)
         end
 
         gemSet = gemSet .. o["Gem"] .. " "
-
     end
 
     mq.cmd.twist(gemSet)
-    print("Playing bard song set ", name, ": ", gemSet)
+    mq.cmd.dgtell("all Playing melody", name)
 
     Bard.currentMelody = name
 end
 
+-- returns true if i am the foreground instance
+function is_orchestrator()
+    return mq.TLO.FrameLimiter.Status() == "Foreground"
+end
+
 mq.bind("/playmelody", function(name)
-    local orchestrator = mq.TLO.FrameLimiter.Status() == "Foreground"
-    if orchestrator then
+    if is_orchestrator() then
         mq.cmd.dgexecute("brd", "/playmelody", name) -- all bards
     end
     if is_brd() then

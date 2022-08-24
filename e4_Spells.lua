@@ -121,7 +121,7 @@ function refreshBuff(buffItem, spawn)
 
     local spell = getSpellFromBuff(spellConfig.Name) -- XXX parse this once on script startup too, dont evaluate all the time !
     if spell == nil then
-        mq.cmd.dgtell("Buffs.refreshBuff: getSpellFromBuff ", buffItem, " FAILED")
+        mq.cmd.dgtell("refreshBuff: getSpellFromBuff ", buffItem, " FAILED")
         mq.cmd.beep(1)
         return false
     end
@@ -186,13 +186,19 @@ end
 -- returns bool
 function spellConfigAllowsCasting(buffItem, spawn)
 
+    if spawn == nil then
+        mq.cmd.dgtell("all ERROR: spellConfigAllowsCasting called with nil spawn for ", buffItem)
+        mq.cmd.beep(1)
+        return
+    end
+
     local spawnID = spawn.ID()
 
     local spellConfig = parseSpellLine(buffItem) -- XXX parse this once on script startup. dont evaluate all the time !!!
 
     local spell = getSpellFromBuff(spellConfig.Name) -- XXX parse this once on script startup too, dont evaluate all the time !
-    if spell == nil then
-        mq.cmd.dgtell("Buffs.refreshBuff: getSpellFromBuff ", buffItem, " FAILED")
+    if spell() == nil then
+        mq.cmd.dgtell("spellConfigAllowsCasting: getSpellFromBuff ", buffItem, " FAILED (query '"..spellConfig.Name.."'")
         mq.cmd.beep(1)
         return false
     end
@@ -350,11 +356,14 @@ end
 
 -- returns datatype spell or nil if not found
 function getSpellFromBuff(name)
+
     if mq.TLO.FindItem(name).ID() ~= nil then
         return mq.TLO.FindItem(name).Clicky.Spell
     elseif mq.TLO.Me.Book(mq.TLO.Spell(name).RankName) ~= nil then
-        --print("getspell frombuff book ",  mq.TLO.Me.Book(mq.TLO.Spell(name).RankName), ", name = ", name)
-        --return mq.TLO.Me.Book(mq.TLO.Me.Book(mq.TLO.Spell(name).RankName))
+        if name == "Regrowth" then
+            -- XXX Regrowth wont cast from druid, NO IDEA WHY?!
+            print("getspell frombuff book ",  mq.TLO.Me.Book(mq.TLO.Spell(name).RankName), ", name = ", mq.TLO.Spell(name).Name)
+        end
         return mq.TLO.Spell(name)
     elseif mq.TLO.Me.AltAbility(name)() ~= nil then
         return mq.TLO.Me.AltAbility(name).Spell
@@ -377,7 +386,7 @@ function memorizeListedSpells()
         local spell = getSpell(name)
         if spell == nil then
             mq.cmd.dgtell("all FATAL ERROR cant memorize spell", name)
-            mq.beep(1)
+            mq.cmd.beep(1)
             return
         end
         local nameWithRank = spell.RankName()

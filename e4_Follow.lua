@@ -56,8 +56,7 @@ function Follow.Init()
     end)
     
     mq.bind("/stopfollow", function(s)
-        local orchestrator = mq.TLO.FrameLimiter.Status() == "Foreground"
-        if orchestrator then
+        if is_orchestrator() then
             mq.cmd.dgzexecute("/stopfollow")
         end
         Follow.Pause()
@@ -66,9 +65,7 @@ function Follow.Init()
 
     mq.bind("/portto", function(name)
         name = string.lower(name)
-        local orchestrator = mq.TLO.FrameLimiter.Status() == "Foreground"
-
-        if orchestrator then
+        if is_orchestrator() then
             mq.cmd.dgzexecute("/portto", name)
         end
     
@@ -92,8 +89,7 @@ function Follow.Init()
 
     mq.bind("/evac", function(name)
 
-        local orchestrator = mq.TLO.FrameLimiter.Status() == "Foreground"
-        if orchestrator then
+        if is_orchestrator() then
             mq.cmd.dgzexecute("/evac")
         end
 
@@ -117,8 +113,7 @@ function Follow.Init()
     end)
 
     mq.bind("/throne", function()
-        local orchestrator = mq.TLO.FrameLimiter.Status() == "Foreground"
-        if orchestrator then
+        if is_orchestrator() then
             mq.cmd.dgzexecute("/throne")
         end
         castVeteranAA("Throne of Heroes")

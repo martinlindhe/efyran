@@ -27,10 +27,8 @@ function Assist.Init()
     -- assist on mob until dead
     mq.bind("/assiston", function(mobID)
 
-        local orchestrator = mq.TLO.FrameLimiter.Status() == "Foreground"
-
         local spawn
-        if orchestrator then
+        if is_orchestrator() then
             spawn = mq.TLO.Target
         else
             spawn = spawn_from_id(mobID)
@@ -43,7 +41,7 @@ function Assist.Init()
             end
             print("calling assist on spawn type ", spawn.Type)
 
-            if orchestrator then
+            if is_orchestrator() then
                 -- tell everyone else to attack
                 mq.cmd.dgze("/assiston", spawn.ID())
             else
@@ -56,11 +54,9 @@ function Assist.Init()
 
     -- ends assist call
     mq.bind("/backoff", function()
-        local orchestrator = mq.TLO.FrameLimiter.Status() == "Foreground"
-        if orchestrator then
+        if is_orchestrator() then
             mq.cmd.dgzexecute("/backoff")
         end
-
         Assist.backoff()
     end)
 
@@ -160,7 +156,7 @@ function clear_cursor()
     while true do
         if mq.TLO.Me.FreeInventory() <= 1 then
             mq.cmd.dgtell("all Cannot clear cursor, no free inventory slots")
-            mq.beep(1)
+            mq.cmd.beep(1)
             break
         end
         if mq.TLO.Cursor.ID() == nil then

@@ -37,8 +37,7 @@ function Heal.Init()
     mq.bind("/rezit", function(spawnID)
         print("rezit", spawnID)
 
-        local orchestrator = mq.TLO.FrameLimiter.Status() == "Foreground"
-        if orchestrator then
+        if is_orchestrator() then
             if not has_target() then
                 print("/rezit ERROR: No corpse targeted.")
                 return
@@ -59,13 +58,19 @@ function Heal.Init()
         end
 
         -- perform rez
-        print("XXX perform rez on ", spawnID, " ", type(spawnID), " ", orchestrator)
         local spawn = spawn_from_id(spawnID)
+        if spawn == nil then
+            -- unlikely
+            mq.cmd.dgtell("all ERROR: tried to rez spawnid ", spawnID, " which is not found in zone")
+            mq.cmd.beep(1)
+            return
+        end
+        print("Performing rez on ", spawnID, " ", type(spawnID), " ", spawn.Name)
 
         -- find first rez that is ready to use
         for k, rez in pairs(botSettings.settings.healing.rez) do
             -- TODO: chose the best spell for the moment. auto code spells. now we just pick the 1st.
-            mq.cmd.dgtell("all Rezzing", spawn.Name)
+            mq.cmd.dgtell("all Rezzing", spawn.Name, "with", rez)
             castSpell(rez, spawn.ID())
             break
         end
@@ -152,11 +157,11 @@ function handleHealmeRequest(msg)
         end
 
         Heal.queue:add(peer, pct)
-        print("added ", peer, " to heal queue")
+        --print("added ", peer, " to heal queue")
     end
 
-    print("current heal queue:")
-    tprint(Heal.queue)
+    --print("current heal queue:")
+    --tprint(Heal.queue)
 end
 
 local askForHealTimer = utils.Timer.new_expired(5 * 1) -- 5s
@@ -167,7 +172,7 @@ function Heal.Tick()
     if mq.TLO.Me.PctHPs() <= askForHealPct and askForHealTimer:expired() then
         -- ask for heals if i take damage
         local s = mq.TLO.Me.Name().." "..mq.TLO.Me.PctHPs() -- "Avicii 82"
-        print(mq.TLO.Time, "HELP HEAL ME, ", s)
+        --print(mq.TLO.Time, "HELP HEAL ME, ", s)
         mq.cmd.dgtell(Heal.CurrentHealChannel(), s)
         askForHealTimer:restart()
 
@@ -243,7 +248,7 @@ function Heal.acceptRez()
             --print("got a rez from", peer, " ( ", spawn.Name() , ")")
             if not is_peer(spawn) then
                 mq.cmd.dgtell("all WARNING: got a rez from (NOT A PEER)", spawn.Name(), ": ", s)
-                mq.beep(1)
+                mq.cmd.beep(1)
                 mq.delay(1000) -- XXX
                 -- XXX should we decline the rez?
                 return
@@ -344,7 +349,7 @@ function healPeer(spell_list, peer, pct)
             Heal.queue:remove(peer)
             return false
         else
-            print("heal ", peer, " with spell ", spellConfig.Name)
+            mq.cmd.dgtell("all Healing ", peer, " at ", pct, " % HP with spell ", spellConfig.Name)
             castSpell(spellConfig.Name, spawn.ID())
             Heal.queue:remove(peer)
             return true

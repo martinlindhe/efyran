@@ -9,11 +9,11 @@ settings.gems = {
     ["Solstice Strike"] = 3,
     ["Ancient: Glacier Frost"] = 4,
 
-    ["Viridifloral Bulwark"] = 7,
+    ["Legacy of Viridithorns"] = 7,
     ["Viridithorn Coat"] = 8,
     ["Direwood Guard"] = 9,
     ["Succor"] = 10,
-    ["Flight of Eagles"] = 11,
+    ["Tectonic Upheaval"] = 11,
     ["Second Life"] = 12,
 }
 
@@ -25,22 +25,8 @@ settings.self_buffs = {
     --"Ball of Golem Clay",
     "Amulet of Necropotence",
 
-    -- L80 Mask of the Shadowcat (SELF, slot 2: 9 mana/tick)
-    "Mask of the Shadowcat",
-
-    -- L75 Second Life (SELF, increase divine save by 25%)
-    -- L75 Second Life Rk. II (SELF, increase divine save by 29%)
-    "Second Life",
-
-    -- L80 Blessing of the Ironwood Rk. II (66 ac, 1255 hp, 14 mana/tick, cost 3371 mana, group)
-    "Blessing of the Ironwood",
-
-    "Protection of Seasons",
-
-    --"Forbear Corruption", -- not needed atm
-
     -- Geomantra III
-    "Crimson Mask of Triumph",
+    --"Crimson Mask of Triumph",
 
     -- Form of Endurance V
     "Frost-Scarred Giant Hide Bracer/CheckFor|Shadow of Endurance",
@@ -65,13 +51,21 @@ settings.self_buffs = {
     "Coldain Hero's Insignia Ring",
 
     -- slot 1: 86 ds
-    "Viridifloral Bulwark",
+    "Legacy of Viridithorns",
 
-    "Blessing of the Ironwood",  -- XXX no normal buffs gets casted !!!
+    -- L80 Blessing of the Ironwood Rk. II (66 ac, 1255 hp, 14 mana/tick, cost 3371 mana, group)
+    "Blessing of the Ironwood",
+
+    -- L80 Mask of the Shadowcat (SELF, slot 2: 9 mana/tick)
+    "Mask of the Shadowcat",
+
+    -- L75 Second Life (SELF, increase divine save by 25%)
+    -- L75 Second Life Rk. II (SELF, increase divine save by 29%)
+    "Second Life",
 
     "Protection of Seasons",
 
-    "Forbear Corruption",
+    --"Forbear Corruption", -- not needed atm
 }
 
 settings.group_buffs = {

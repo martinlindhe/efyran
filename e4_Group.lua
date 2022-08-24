@@ -71,6 +71,9 @@ function Group.Init()
                 for n = 2,6
                 do
                     local name = group[n]
+                    if name == nil then
+                        break
+                    end
                     if mq.TLO.DanNet(name)() ~= nil then
                         print("Inviting ", name)
                         mq.cmd.invite(name)

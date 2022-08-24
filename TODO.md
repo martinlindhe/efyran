@@ -1,6 +1,13 @@
 # TODO
 
 
+heal:
+    make the healme requester a separate macro, thus removing the issue of not asking for heals when e4 has crashed!
+        (e4 will auto start this one if it is not already running)
+
+
+
+
 nukes assist:
     -- TODO read spell.Gem and use that spell gem when scribing it, if not already scribed
     -- TODO read MaxTries|3 prop and default to 1 cast ...

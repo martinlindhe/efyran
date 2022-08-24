@@ -5,23 +5,20 @@ local Buffs = { aura = findBestAura() }
 function Buffs.Init()
     mq.bind("/buffon", function()
         botSettings.toggles.refresh_buffs = true
-        local orchestrator = mq.TLO.FrameLimiter.Status() == "Foreground"
-        if orchestrator then
+        if is_orchestrator() then
             mq.cmd.dgzexecute("/buffon")
         end
     end)
 
     mq.bind("/buffoff", function()
         botSettings.toggles.refresh_buffs = false
-        local orchestrator = mq.TLO.FrameLimiter.Status() == "Foreground"
-        if orchestrator then
+        if is_orchestrator() then
             mq.cmd.dgzexecute("/buffoff")
         end
     end)
 
     mq.bind("/mounton", function()
-        local orchestrator = mq.TLO.FrameLimiter.Status() == "Foreground"
-        if orchestrator then
+        if is_orchestrator() then
             mq.cmd.dgzexecute("/mounton")
         end
 
@@ -54,8 +51,7 @@ function Buffs.Init()
     end)
 
     mq.bind("/mountoff", function()
-        local orchestrator = mq.TLO.FrameLimiter.Status() == "Foreground"
-        if orchestrator then
+        if is_orchestrator() then
             mq.cmd.dgzexecute("/mountoff")
         end
         mq.cmd.dismount() 
@@ -66,8 +62,7 @@ function Buffs.Init()
         if filter == nil then
             return
         end
-        local orchestrator = mq.TLO.FrameLimiter.Status() == "Foreground"
-        if orchestrator then
+        if is_orchestrator() then
             mq.cmd.dgzexecute("/dropbuff", filter)
         end
 
@@ -91,8 +86,7 @@ function Buffs.Init()
     -- /buffit: asks bots to cast level appropriate buffs on current target
     mq.bind("/buffit", function(spawnID)
         --mq.cmd.dgtell("all buffit ", spawnID)
-        local orchestrator = mq.TLO.FrameLimiter.Status() == "Foreground"
-        if orchestrator then
+        if is_orchestrator() then
             spawnID = mq.TLO.Target.ID()
             if spawnID ~= 0 then
                 mq.cmd.dgzexecute("/buffit", spawnID)
@@ -104,6 +98,7 @@ function Buffs.Init()
         end
 
         local spawn = mq.TLO.Spawn("id " .. spawnID)
+        
         if tostring(spawn) == "NULL" then
             mq.cmd.dgtell("all BUFFIT FAIL, cannot find target id in zone ", spawnID)
             return false
@@ -112,7 +107,7 @@ function Buffs.Init()
         local level = spawn.Level()
 
         for key, buffs in pairs(botSettings.settings.group_buffs) do
-            print("finding best group buff ", key)
+            print("/buffit on ",spawn, "  ", type(spawn), ", finding best group buff ", key)
 
             -- XXX find the one with highest MinLevel
             local minLevel = 0

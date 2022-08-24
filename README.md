@@ -97,3 +97,11 @@ mag: in e3 you could list Molten Orb as a nuke and it will auto summon,
 in e4 it was changed to work with any spells, so you need to be explicit with the Summon filter.
 Example: "Molten Orb/NoAggro/Summon|Summon: Molten Orb"
 
+
+
+
+## special channels:
+
+"skillup" - ability skillups are posted here
+
+"server_zoneshort_healme" - heal request channel for current zone
