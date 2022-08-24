@@ -12,7 +12,7 @@ settings.gems = {
     ["Legacy of Viridithorns"] = 7,
     ["Viridithorn Coat"] = 8,
     ["Direwood Guard"] = 9,
-    ["Succor"] = 10,
+    --["Succor"] = 10,
     ["Tectonic Upheaval"] = 11,
     ["Second Life"] = 12,
 }

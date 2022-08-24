@@ -46,7 +46,6 @@ function QoL.Init()
 
     mq.event("skillup", "You have become better at #1#! (#2#)", function(text, name, num)
         mq.cmd.dgtell("skillup Skillup ".. name .. " (".. num..")")
-        print("Skillup ".. name .. " (".. num..")")
     end)
     
     mq.event("xp", "You gain experience!", function()

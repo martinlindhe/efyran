@@ -22,6 +22,11 @@ return settings
 ]]
 
 function BotSettings.Init()
+    if is_hovering() then
+        mq.cmd.dgtell("all FATAL ERROR: cannot start e4 successfully while in HOVERING mode")
+        mq.cmd.beep(1)
+        return
+    end
     local id = mq.TLO.MacroQuest.Server() .. "_" .. mq.TLO.Me.Class.ShortName() .. "_" .. mq.TLO.Me.Name()
     local settingsFile = settingsRoot .. "/" .. id .. ".lua"
     print("Reading peer settings ", settingsFile)

@@ -117,22 +117,3 @@ QoL:
 
     disable free to play nagging url open at exit (kill processes???): MQ2NoGold (mmobugs) or MQ2NoNagWindows (redguides)
 
-
-
-# REQUIREMENTS
-
-MQ2AdvPath - for auto following (replaces MQ2MoveUtils ??? ... still need /stick for combat.. or mq2melee ???)
-MQ2DanNet - bot communication (replaces MQ2EQBC and MQ2NetBots)
-MQ2Cast - for spell & clickies
-
-
-# DIFFERENCES TO E3
-
-+ /rtz is useless. bots will /followon across zone lines
-
-+ and more
-
-
-# reported bugs:
-mq2medley: https://gitlab.com/redguides/plugins/MQ2Medley/-/issues/1
-

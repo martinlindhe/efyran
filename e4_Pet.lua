@@ -90,7 +90,8 @@ function Pet.BuffMyPet()
             end
         end
 
-        if spellConfig.Shrink ~= nil and spellConfig.Shrink and mq.TLO.Me.Pet.Height() <= 1.0 then
+        -- XXX on eqemu pet max shrunk is 1.0xxxxxx, on live it is (nec pet) 1.3541...
+        if spellConfig.Shrink ~= nil and spellConfig.Shrink and mq.TLO.Me.Pet.Height() <= 1.36 then
             --print("will not shrink pet with ", spellConfig.Name, " because pet height is already ", mq.TLO.Me.Pet.Height())
             return false
         end

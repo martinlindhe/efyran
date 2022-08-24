@@ -151,8 +151,9 @@ function Buffs.Init()
         local spellConfig
         for key, buff in pairs(botSettings.settings.self_buffs) do
             spellConfig = parseSpellLine(buff)
-            if spellConfig.Shrink ~= nil then
+            if spellConfig.Shrink ~= nil and spellConfig.Shrink then
                 shrinkClicky = buff
+                break
             end
         end
 
@@ -162,6 +163,7 @@ function Buffs.Init()
         end
 
         local item = getItem(spellConfig.Name)
+        print("Shrinking group members with ", spellConfig.Name, " item ", item)
 
         -- make sure shrink is targetable check buff type
         local spell = getSpellFromBuff(spellConfig.Name)

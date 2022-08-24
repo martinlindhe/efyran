@@ -266,13 +266,13 @@ function Heal.medCheck()
         return
     end
 
-    if is_brd() or mq.TLO.Window("SpellBookWnd").Open() then
+    if is_brd() or is_hovering() or mq.TLO.Window("SpellBookWnd").Open() then
         return
     end
 
     if mq.TLO.Me.MaxMana() > 0 and not mq.TLO.Me.Moving() then
         if mq.TLO.Me.PctMana() < 70 and mq.TLO.Me.Standing() then
-            mq.cmd.dgtell("all low mana, medding! ", mq.TLO.Me.PctMana())
+            mq.cmd.dgtell("all Low mana, medding at ", mq.TLO.Me.PctMana().."%")
             mq.cmd.sit("on")
         elseif mq.TLO.Me.PctMana() >= 100 and not mq.TLO.Me.Standing() then
             mq.cmd.dgtell("all Ending medbreak, full mana.")
@@ -281,6 +281,10 @@ function Heal.medCheck()
     end
 end
 
+-- returns true if we are in hovering state (just died, waiting for rez in the same zone)
+function is_hovering()
+    return mq.TLO.Me.State() == "HOVER"
+end
 
 -- returns true if a window `name` is open
 function window_open(name)

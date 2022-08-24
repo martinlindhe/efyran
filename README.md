@@ -70,6 +70,7 @@ Buff Spell Level   Minimum Target Level
 /followme					- movement
 /stopfollow					- movement
 /clickit					- click a "door" object to zone
+/rtz                        - face zoneline and run it to instruct bots to cross the zoneline
 
 
 /buffon                     - auto buffs

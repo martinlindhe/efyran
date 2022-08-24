@@ -288,6 +288,10 @@ settings.pet = {
         -- L72 Sigil of the Unnatural (6% skills dmg mod, 96 str, 70% haste, 28 ac)
         -- L77 Sigil of the Aberrant Rk. II (10% skills dmg mod, 122 str, 70% haste, 36 ac)
         "Sigil of the Aberrant/MinMana|30",
+
+        "Tiny Companion/Shrink",
+
+        --"Algae Covered Stiletto/Shrink", -- XXX farm this clicky in powater
     },
 }
 

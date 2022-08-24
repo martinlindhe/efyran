@@ -118,6 +118,84 @@ function Follow.Init()
         end
         castVeteranAA("Throne of Heroes")
     end)
+
+    -- run through zone based on the position of startingPeer
+    -- stand near a zoneline and face in the direction of the zoneline, run command for bots to move forward to the other zone
+    mq.bind("/rtz", function(startingPeer)
+
+        if is_orchestrator() then
+            mq.cmd.dgzexecute("/rtz", mq.TLO.Me.Name())
+        else
+            -- run across (need pos + heading from orchestrator)
+            local spawn = spawn_from_peer_name(startingPeer)
+            if spawn == nil then
+                mq.cmd.dgtell("all ERROR: /rtz requested from peer not found: ", startingPeer)
+                return
+            end
+
+            local oldZone = mq.TLO.Zone.ShortName()
+            print("MOVING THRU ZONE FROM ", oldZone)
+
+            mq.cmd.stick("off")
+
+            -- move to initial position
+            move_to(spawn)
+
+            if not is_within_distance(spawn, 15) then
+                -- unlikely
+                mq.cmd.dgtell("all /rtz ERROR: failed to move near ", spawn.Name(), ", my distance is ", spawn.Distance())
+                return
+            end
+
+            -- face the direction of the orchestration
+            local heading = spawn.Heading.Degrees()
+            local headingArg = "fast heading "..tostring(spawn.Heading.Degrees() * -1)
+            mq.cmd.face(headingArg)
+            mq.delay(5)
+
+            -- move forward
+            mq.cmd.keypress("forward hold")
+            mq.delay(6000, function()
+                local zoned = mq.TLO.Zone.ShortName() ~= oldZone
+                if zoned then
+                    print("I ZONED INTO ", mq.TLO.Zone.ShortName())
+                end
+                return zoned
+            end)
+
+            if mq.TLO.Zone.ShortName() == oldZone then
+                mq.cmd.dgtell("all ERROR failed to run across zone line in", oldZone)
+                mq.cmd.beep(1)
+            end
+
+        end
+
+    end)
+end
+
+-- moves to the location of `spawn` using MQ2MoveUtils
+function move_to(spawn)
+    print("move_to ", spawn.Name())
+
+    if not line_of_sight_to(spawn) then
+        mq.cmd.dgtell("all move_to ERROR: cannot see", spawn.Name())
+        mq.cmd.beep(1)
+        return
+    end
+
+    mq.cmd.moveto("loc "..spawn.Y().." "..spawn.X())
+    mq.delay(10000, function() return is_within_distance(spawn, 15) end)
+end
+
+-- returns true if `spawn` is within maxDistance
+function is_within_distance(spawn, maxDistance)
+    return spawn.Distance() <= maxDistance
+end
+
+-- returns true if there is line of sight between you and `spawn`
+function line_of_sight_to(spawn)
+    local q = mq.TLO.Me.Y()..","..mq.TLO.Me.X()..","..mq.TLO.Me.Z()..":"..spawn.Y()..","..spawn.X()..","..spawn.Z()
+    return mq.TLO.LineOfSight(q)()
 end
 
 function Follow.Pause()
