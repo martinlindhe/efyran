@@ -37,7 +37,7 @@ settings.self_buffs = {
 
     "Protection of Seasons",
 
-    "Forbear Corruption",
+    --"Forbear Corruption", -- not needed atm
 
     -- Geomantra III
     "Crimson Mask of Triumph",
@@ -167,6 +167,7 @@ settings.group_buffs = {
 }
 
 settings.healing = {
+    ["automed"] = false, -- XXX do not auto sit/stand/mount
     ["life_support"] = {
         -- L80 Distillate of Divine Healing XIII
         "Distillate of Divine Healing XIII/HealPct|18/CheckFor|Resurrection Sickness",
@@ -181,7 +182,7 @@ settings.healing = {
 
     ["rez"] = { -- XXX impl
         -- L59 Incarnate Anew (90% exp, 20s cast, 700 mana)
-        "Incarnate Anew",
+        --"Incarnate Anew",
     },
 
     ["cures"] = { -- XXX impl. 

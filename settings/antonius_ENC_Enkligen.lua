@@ -4,10 +4,13 @@ settings.swap = { -- XXX impl
 }
 
 settings.gems = {
-    -- XXX fill
-
     ["Multichromatic Assault"] = 1,
+    ["Desolate Deeds"] = 2,
+    ["Mystifying Flash"] = 3, -- mez
+    ["Din of Tashan"] = 4,
 
+    ["Shattered Consciousness"] = 6,
+    ["Erradien's Animation"] = 7,
     ["Opalescent Rune"] = 8,
     ["Multichromatic Rune"] = 9,
     ["Guard of Druzzil"] = 10,
@@ -209,7 +212,7 @@ settings.assist = {
         -- L57 Forlorn Deeds (67-70% slow, 2.9 min, 225 mana)
         -- L65 Dreary Deeds (MAGIC: 70% slow, resist adj -10, 1.5 min, cost 270 mana)
         -- L69 Desolate Deeds (MAGIC: 70% slow, resist adj -30, 1.5 min, cost 300 mana)
-        "Desolate Deeds/MaxTries|2/Gem|2",
+        "Desolate Deeds/MaxTries|2",
     },
 
     ["debuffs_on_command"] = { -- XXX impl

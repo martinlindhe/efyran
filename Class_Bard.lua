@@ -77,10 +77,13 @@ mq.bind("/playmelody", function(name)
     if orchestrator then
         mq.cmd.dgexecute("brd", "/playmelody", name) -- all bards
     end
-    if mq.TLO.Me.Class.ShortName() == "BRD" then
+    if is_brd() then
         Bard.PlayMelody(name)
     end
 end)
 
+function is_brd()
+    return mq.TLO.Me.Class.ShortName() == "BRD"
+end
 
 return Bard

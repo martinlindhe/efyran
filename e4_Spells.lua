@@ -97,8 +97,11 @@ function refreshBuff(buffItem, spawn)
     --print("refreshBuff ", buffItem, ", botName:", spawn.CleanName())
 
     if spawn.Type() ~= "PC" and spawn.Type() ~= "Pet" then
-        mq.cmd.dgtell("all WILL NOT BUFF ", spawn.Type, ": ", spawn.CleanName())
-        mq.beep(1)
+        print("will not buff ", spawn.Type(), " ", spawn.Name(), ": ", spawn.CleanName())
+        if spawn.Type() ~= "Corpse" then
+            mq.cmd.dgtell("all WILL NOT BUFF ", spawn.Type(), ": ", spawn.CleanName())
+            mq.cmd.beep(1)
+        end
         return false
     end
 
@@ -262,7 +265,7 @@ function castSpell(name, spawnId)
 
         -- XXX if AA and not ready, abort.
 
-        if mq.TLO.Me.Class.ShortName() == "BRD" then
+        if is_brd() then
             print("ME BARD castSpell ", name, " -- SO I STOP TWIST!")
             if mq.TLO.Me.Casting.ID() then
                 mq.cmd.twist("stop")
@@ -272,8 +275,7 @@ function castSpell(name, spawnId)
 
         castSpellRaw(name, spawnId, "-maxtries|3")
 
-        if mq.TLO.Me.Class.ShortName() == "BRD" then
-            
+        if is_brd() then
             local item = getItem(name)
             if item ~= nil then 
                 -- item click
@@ -299,7 +301,7 @@ function castSpellRaw(name, spawnId, extraArgs)
         extraArgs = ""
     end
     if spawnId == nil then
-        mq.cmd.dgtell("castSpellRaw: called with nil spawnId, name = ", name, " extraArgs=", extraArgs)
+        mq.cmd.dgtell("castSpellRaw FATAL ERROR: called with nil spawnId, name = ", name, " extraArgs=", extraArgs)
         mq.cmd.beep(1)
         return
     end
@@ -381,7 +383,8 @@ function memorizeListedSpells()
         local nameWithRank = spell.RankName()
 
         if mq.TLO.Me.Gem(gem).Name() ~= nameWithRank then
-            mq.cmd.dgtell("all Memorizing ", nameWithRank, " in gem ", gem)
+            -- This is unusual, if gems is correctly set up
+            mq.cmd.dgtell("all Memorizing", nameWithRank, "in gem", gem)
             mq.cmd.memorize('"'..nameWithRank..'"', gem)
             -- sleep until spell is memorized
             mq.delay(200)
@@ -396,7 +399,7 @@ end
 -- returns true if name is ready to use (spell, aa, ability or combat ability)
 function is_spell_ability_ready(name)
 
-    if mq.TLO.Me.Class.ShortName() ~= "BRD" and mq.TLO.Me.Casting() ~= nil then
+    if not is_brd() and mq.TLO.Me.Casting() ~= nil then
         return false
     end
 

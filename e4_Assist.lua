@@ -6,16 +6,6 @@ local assistTarget = nil -- the current assist target
 
 local spellSet = "main" -- the current spell set. XXX impl switching it
 
--- return spawn or nil
-function getSpawn(spawnID)
-    local spawn = mq.TLO.Spawn("id " .. spawnID)
-    if tostring(spawn) == "NULL" then
-        return nil
-    end
-    return spawn
-end
-
-
 function Assist.Init()
 
     if botSettings.settings.assist ~= nil then
@@ -43,7 +33,7 @@ function Assist.Init()
         if orchestrator then
             spawn = mq.TLO.Target
         else
-            spawn = getSpawn(mobID)
+            spawn = spawn_from_id(mobID)
         end
 
         if spawn.Type() ~= "PC" then
@@ -84,7 +74,7 @@ function Assist.backoff()
         mq.cmd.dgtell("all XXX ignoring backoff, no spawn known!")
     end
 
-    if mq.TLO.Me.Pet.ID() ~= 0 then
+    if have_pet() then
         mq.cmd.dgtell("all PET BACKING OFF")
         mq.cmd.pet("back off")
     end
@@ -96,7 +86,7 @@ function Assist.handleAssistCall(spawn)
         return
     end
     
-    if mq.TLO.Me.Pet.ID() ~= 0 then
+    if have_pet() then
         mq.cmd.dgtell("all ATTACKING WITH MY PET", mq.TLO.Me.Pet.CleanName())
         mq.cmd.pet("attack", spawn.ID())
     end
@@ -106,6 +96,10 @@ function Assist.handleAssistCall(spawn)
     Assist.prepareForNextFight()
 end
 
+-- returns true if i have a pet
+function have_pet()
+    return mq.TLO.Me.Pet.ID() ~= 0
+end
 
 -- called at end of each /assist call
 function Assist.prepareForNextFight()
@@ -123,6 +117,12 @@ function Assist.summonNukeComponents()
     end
     
     for idx, lines in pairs(botSettings.settings.assist.nukes) do
+        if type(lines) == "string" then
+            mq.cmd.dgtell("all FATAL ERROR: settings.assist.nukes must be a map")
+            mq.cmd.beep(1)
+            mq.delay(10000)
+            return
+        end
         for k, row in pairs(lines) do
 
             local spell = parseSpellLine(row)
@@ -179,7 +179,7 @@ function Assist.castSpellAbility(spawn, row)
 
     local spell = parseSpellLine(row)
 
-   --print("Assist.castSpellAbility", row, ": ", spell.Name)
+   print("Assist.castSpellAbility", row, ": ", spell.Name)
 
     if spell.PctAggro ~= nil then
         -- PctAggro skips cast if your aggro % is above threshold
@@ -215,7 +215,12 @@ function Assist.castSpellAbility(spawn, row)
         return false
     end
 
-    --print("Assist.castSpellAbility preparing to cast ", spell.Name)
+    if spell.NoPet ~= nil and spell.NoPet and have_pet() then
+        mq.cmd.dgtell("all SKIP NoPet, i have a pet up")
+        return false
+    end
+
+    print("Assist.castSpellAbility preparing to cast ", spell.Name)
 
     if is_spell_ability_ready(spell.Name) then
         castSpell(spell.Name, spawn.ID())
@@ -288,7 +293,7 @@ function Assist.killSpawn(spawn)
 
         --print(spawn.Type, " assist spawn ", assistTarget)
 
-        if mq.TLO.Target() == nil or mq.TLO.Target.ID() ~= spawn.ID() then
+        if not has_target() or mq.TLO.Target.ID() ~= spawn.ID() then
             -- XXX will happen for healer+nuker setups (DRU,RNG,SHM)
             mq.cmd.dgtell("all WARN: i lost target, breaking")
             break
@@ -313,10 +318,10 @@ function Assist.killSpawn(spawn)
         -- caster/hybrid assist.nukes
         if botSettings.settings.assist.nukes ~= nil and mq.TLO.Me.Casting() == nil then
             local nukes = botSettings.settings.assist.nukes[spellSet]
-            --print("evaluating nukes ...", nukes)
             if nukes ~= nil then
                 for v, nukeRow in pairs(nukes) do
                     mq.doevents()
+                    --print("evaluating nuke ", nukeRow)
                     if assistTarget == nil then
                         -- break inner loop if /backoff was called
                         print("nukes: i got called off, breaking inner loop")
@@ -335,7 +340,7 @@ function Assist.killSpawn(spawn)
         mq.delay(1)
     end
 
-    if mq.TLO.Me.Class.ShortName() ~= "BRD" and mq.TLO.Me.Casting() ~= nil then
+    if not is_brd() and mq.TLO.Me.Casting() ~= nil then
         --mq.cmd.dgtell("all DEBUG abort cast mob dead ", mq.TLO.Me.Casting.Name)
         mq.cmd.stopcast()
     end

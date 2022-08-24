@@ -43,9 +43,9 @@ function Follow.Init()
     -- follows another peer in LoS
     mq.bind("/followid", function(spawnID)
         print("followid called")
-        if is_peer(spawnID) then
+        if is_peer_id(spawnID) then
             if is_spawn_los(spawnID) then
-                Follow.spawn = getSpawn(spawnID)
+                Follow.spawn = spawn_from_id(spawnID)
                 Follow.Resume()
             else
                 mq.cmd.dgtell("all spawn ", spawnID, " not LoS")

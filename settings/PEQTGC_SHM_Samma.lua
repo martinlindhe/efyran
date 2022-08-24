@@ -192,7 +192,7 @@ Combat Buff=
 
 
 
-settings.pet = { -- XXX impl
+settings.pet = {
     ["auto"] = false, -- XXX if true, will auto-summon and auto-buff pet
     -- L32 Companion Spirit
     -- L37 Vigilant Spirit

@@ -85,12 +85,12 @@ function QoL.Init()
 
     -- open loot window on closest corpse
     mq.bind("/lcorpse", function()
-        if mq.TLO.Target() ~= nil then
+        if has_target() ~= nil then
             mq.cmd.target("clear")
         end
         mq.cmd.target("corpse radius 100")
         mq.delay(500, function()
-            return mq.TLO.Target() ~= nil
+            return has_target()
         end)
         mq.cmd.loot()
     end)
@@ -214,7 +214,7 @@ function QoL.Tick()
 
     -- auto accept trades
     if mq.TLO.Window("tradewnd").Open() then
-        if mq.TLO.Target() ~= nil and mq.TLO.DanNet(mq.TLO.Target())() ~= nil then
+        if has_target() and mq.TLO.DanNet(mq.TLO.Target())() ~= nil then
             mq.cmd.dgtell("all Accepting trade in 5s with", mq.TLO.Target())
             mq.delay(5000) -- 5.0s
             mq.cmd.notify("tradewnd TRDW_Trade_Button leftmouseup")
@@ -224,19 +224,9 @@ function QoL.Tick()
         end
     end
 
-    if mq.TLO.Me.Class.ShortName() == "WIZ" and mq.TLO.Me.Pet.ID() ~= 0 then
+    if mq.TLO.Me.Class.ShortName() == "WIZ" and have_pet() then
         print("dropping wiz familiar ...", mq.TLO.Me.Pet.ID(), type(mq.TLO.Me.Pet.ID()))
         mq.cmd.pet("get lost")
-    end
-
-    if mq.TLO.Me.MaxMana() > 0 and not mq.TLO.Me.Moving() then
-        if mq.TLO.Me.PctMana() < 70 and mq.TLO.Me.Standing() then
-            mq.cmd.dgtell("all low mana, medding! ", mq.TLO.Me.PctMana())
-            mq.cmd.sit("on")
-        elseif mq.TLO.Me.PctMana() >= 100 and not mq.TLO.Me.Standing() and not mq.TLO.Window("SpellBookWnd").Open() then
-            mq.cmd.dgtell("all Ending medbreak, full mana.")
-            mq.cmd.sit("off")
-        end
     end
 
 end

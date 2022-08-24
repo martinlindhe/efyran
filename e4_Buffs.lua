@@ -84,6 +84,10 @@ function Buffs.Init()
         end
     end)
 
+    mq.bind("/buffme", function()
+        mq.cmd.dgaexecute("/buffit", mq.TLO.Me.ID())
+    end)
+
     -- /buffit: asks bots to cast level appropriate buffs on current target
     mq.bind("/buffit", function(spawnID)
         --mq.cmd.dgtell("all buffit ", spawnID)
@@ -186,7 +190,7 @@ end
 local refreshBuffsTimer = utils.Timer.new_expired(3 * 1) -- 4s
 
 function Buffs.Tick()
-    if mq.TLO.Me.Class.ShortName() ~= "BRD" and mq.TLO.Me.Casting() ~= nil then
+    if not is_brd() and mq.TLO.Me.Casting() ~= nil then
         return
     end
 

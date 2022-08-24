@@ -205,7 +205,7 @@ settings.pet = {
 }
 
 settings.assist = {
-    ["nukes"] = { -- XXX implement
+    ["nukes"] = {
         -- lower aggro:
         -- L61 Boggle (decrease hate by 500)
         --"Boggle/PctAggro|99/Gem|2", -- XXX PctAggro

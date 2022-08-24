@@ -6,11 +6,21 @@ settings.gems = {
     -- XXX fill list
 
     ["Pious Remedy"] = 1,
+    ["Pious Light"] = 2,
+    ["Eleventh-Hour"] = 3,
+    ["Word of Vivacity"] = 4,
 
-
-    ["Pious Light"] = 4,
 
     ["Reproval"] = 7,
+    ["Catastrophe"] = 8, -- pbae
+
+
+
+    ["Rallied Shield of Vie"] = 10,
+    ["Aura of Resolve"] = 11,
+    ["Kaerra's Mark"] = 12,
+
+
 }
 
 
@@ -245,6 +255,12 @@ settings.healing = {
 settings.assist = {
     ["nukes"] = {
         ["main"] = {
+            -- hammer pet
+            -- L54 Unswerving Hammer of Faith (0.5 sec cast, 175 mana)
+            -- L68 Unswerving Hammer of Retribution (0.5 sec cast, 175 mana)
+            -- L79 Indomitable Hammer of Zeal (0.5 sec cast, 175 mana)
+            "Indomitable Hammer of Zeal/NoPet", -- XXX NoPet filter. only cast if i have no pet
+
             -- magic nukes:
             -- L44 Retribution (372-390 hp, cost 144 mana)
             -- L54 Reckoning (571 hp, cost 206 mana)
@@ -257,8 +273,8 @@ settings.assist = {
             -- L70 Ancient: Pious Conscience (1646 hp, cost 457 mana)
             -- L72 Reproval Rk. II (1967 hp, cost 562 mana)
             -- L77 Divine Censure Rk. II (~2500 dmg, cost 654 mana) - more dmg to undead/summoned
-            "Reproval/NoAggro/Gem|7/MinMana|30",
-        }
+            "Reproval/NoAggro/MinMana|30",
+        },
     },
 
     ["quickburns"] = { -- XXX implememt !!!

@@ -37,7 +37,7 @@ Utils.Timer = Timer
 
 -- Print contents of `tbl`, with indentation.
 -- `indent` sets the initial level of indentation.
-function tprint (tbl, indent)
+function tprint(tbl, indent)
     if not indent then indent = 0 end
     for k, v in pairs(tbl) do
         formatting = string.rep("  ", indent) .. k .. ": "
@@ -74,19 +74,41 @@ function is_rof2()
     return true
 end
 
--- returns true if spawnID is another peer
-function is_peer(spawnID)
-    local spawn = getSpawn(spawnID)
+-- returns true if spawn is another peer
+function is_peer(spawn)
     if spawn == nil or spawn.Type() ~= "PC" then
         return false
     end
     return mq.TLO.DanNet(spawn.Name())() ~= nil
 end
 
+-- returns true if spawnID is another peer
+function is_peer_id(spawnID)
+    return is_peer(spawn_from_id(spawnID))
+end
+
 -- returns true if spawnID is in LoS
 function is_spawn_los(spawnID)
-    local spawn = getSpawn(spawnID)
+    local spawn = spawn_from_id(spawnID)
     return spawn ~= nil and spawn.LineOfSight()
+end
+
+-- return spawn or nil
+function spawn_from_id(spawnID)
+    local spawn = mq.TLO.Spawn("id " .. spawnID)
+    if tostring(spawn) == "NULL" then
+        return nil
+    end
+    return spawn
+end
+
+-- returns a spawn, nil if not found
+function spawn_from_peer_name(name)
+    local v = mq.TLO.Spawn("pc =" .. name)
+    if v() == "NULL" then
+        return nil
+    end
+    return v
 end
 
 return Utils

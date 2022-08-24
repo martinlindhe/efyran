@@ -10,6 +10,7 @@ settings.gems = {
 }
 
 settings.self_buffs = {
+    -- XXX clickies?
 }
 
 settings.mount = "Glowing Black Drum"

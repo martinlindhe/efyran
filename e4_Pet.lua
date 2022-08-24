@@ -7,7 +7,7 @@ function Pet.Summon()
         return false
     end
 
-    if mq.TLO.Me.Pet.ID() ~= 0 then
+    if have_pet() then
         --mq.cmd.dgtell("all cant summon pet. i already have one!", mq.TLO.Me.Pet.Name())
         return false
     end
@@ -20,6 +20,8 @@ function Pet.Summon()
     print("Summoning pet with spell ", botSettings.settings.pet.spell)
 
     local spellConfig = parseSpellLine(botSettings.settings.pet.spell) -- XXX parse this once on script startup. dont evaluate all the time !!!
+
+    local spell = getSpellFromBuff(spellConfig.Name)
 
     if spellConfig.MinMana ~= nil then
         if mq.TLO.Me.PctMana() < tonumber(spellConfig.MinMana) then
@@ -36,11 +38,9 @@ function Pet.Summon()
         end
     end
 
-    castSpellRaw(spellConfig.Name, mq.TLO.Me.ID(), "-maxtries|3")
+    castSpellRaw(spell.RankName(), mq.TLO.Me.ID(), "-maxtries|3")
 
-    mq.delay(20000, function()
-        return mq.TLO.Me.Pet.ID() ~= 0
-    end)
+    mq.delay(20000, function() return have_pet() end)
 
     Pet.ConfigureTaunt()
     return true
@@ -48,7 +48,7 @@ end
 
 -- returns true if spell was cast
 function Pet.BuffMyPet()
-    if botSettings.settings.pet == nil or botSettings.settings.pet.buffs == nil or mq.TLO.Me.Pet.ID() == 0 then
+    if botSettings.settings.pet == nil or botSettings.settings.pet.buffs == nil or not have_pet() then
         return false
     end
 
@@ -107,7 +107,7 @@ end
 
 -- XXX also call each time we zone...
 function Pet.ConfigureTaunt()
-    if mq.TLO.Me.Pet.ID() == 0 then
+    if not have_pet() then
         return
     end
     print("configuring pet")
