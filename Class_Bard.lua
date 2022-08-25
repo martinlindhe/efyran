@@ -6,7 +6,7 @@ function Bard.DoEvents()
     -- print('Bard.DoEvents')
     if Bard.currentMelody == "" then
         Bard.PlayMelody(defaultMelody)
-    elseif Bard.currentMelody ~= "" and mq.TLO.Me.Casting() == nil then
+    elseif Bard.currentMelody ~= "" and not is_casting() then
         Bard.PlayMelody(Bard.currentMelody)
     end
 end
@@ -82,9 +82,5 @@ mq.bind("/playmelody", function(name)
         Bard.PlayMelody(name)
     end
 end)
-
-function is_brd()
-    return mq.TLO.Me.Class.ShortName() == "BRD"
-end
 
 return Bard

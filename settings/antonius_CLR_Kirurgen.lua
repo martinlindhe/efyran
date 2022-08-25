@@ -147,19 +147,29 @@ settings.bot_buffs = {} -- XXX
 
 settings.healing = {
     ["life_support"] = {
+        -- Celestial Regeneration AA - HoT, 15 min reuse
+        "Celestial Regeneration/HealPct|90/MinMobs|10",
+
+        -- Divine Arbitration AA - balance group HP %, 3 min reuse
+        "Divine Arbitration/HealPct|50/MinMobs|10",
+
         -- L70 Sanctuary AA (id:5912, removes you from combat), 1h12 min reuse
-        "Sanctuary/HealPct|13/CheckFor|Resurrection Sickness",
+        "Sanctuary/HealPct|13",
 
-        --"Ward of Retribution/HealPct|50/Delay|3m/CheckFor|Resurrection Sickness", -- XXX buy spell
+        --"Ward of Retribution/HealPct|50/Delay|3m", -- XXX buy spell
 
-        "Distillate of Divine Healing XIII/HealPct|18/CheckFor|Resurrection Sickness",
+        "Distillate of Divine Healing XIII/HealPct|18",
 
         -- L65 Divine Avatar Rank 1 AA (decrease melee attack by 5%, increase HoT by 100/tick)
-        "Divine Avatar/HealPct|20/CheckFor|Resurrection Sickness",
+        "Divine Avatar/HealPct|20",
 
         -- defensive - stun attackers:
         -- L70 Divine Retribution I AA (id:5866, proc Divine Retribution Effect)
-        --"Divine Retribution/HealPct|25/CheckFor|Resurrection Sickness", -- XXX fixme get aa
+        --"Divine Retribution/HealPct|25", -- XXX fixme get aa
+
+        "Eleventh-Hour/HealPct|35/MinMana|60", -- XXX is MinMana check done on life_support ?
+
+        "Pious Remedy/HealPct|40/MinMana|5",
     },
 
     ["rez"] = { -- XXX impl? or just auto code the rez spells

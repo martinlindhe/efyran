@@ -58,10 +58,10 @@ settings.self_buffs = {
 
 settings.healing = {
     ["life_support"] = {
-        "Distillate of Divine Healing XI/HealPct|10/CheckFor|Resurrection Sickness",
+        "Distillate of Divine Healing XI/HealPct|10",
 
         -- Expendable AA
-        --"Glyph of Stored Life/HealPct|4/CheckFor|Resurrection Sickness",
+        --"Glyph of Stored Life/HealPct|4",
     },
 }
 

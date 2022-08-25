@@ -69,14 +69,14 @@ settings.healing = {
         -- L60 Death Peace (98% success, 4s recast)
         -- L6x Death Peace AA Rank 1 (???)    - XXX disappered on live
         -- L76 Death Peace AA Rank 2 (???)
-        "Death Peace/HealPct|35/CheckFor|Resurrection Sickness",
+        "Death Peace/HealPct|35",
 
         -- invulnerability:
         -- Lxx Harmshield
         -- L58 Quivering Veil of Xarn (invulnerability 0.3 min, +150 hp)
         --"Quivering Veil of Xarn/Gem|7/HealPct|33",
 
-        "Distillate of Divine Healing XIII/HealPct|12/CheckFor|Resurrection Sickness",
+        "Distillate of Divine Healing XIII/HealPct|12",
     },
 
     ["rez"] = {

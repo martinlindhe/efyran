@@ -1,29 +1,29 @@
 -- restart all: /dgaexecute /multiline ; /lua stop e4 ; /timed 5 /lua run e4
 
-mq      = require('mq')
+require("ezmq")
 
-utils   = require('e4_Utils')
-items   = require('e4_Items')
-
-aliases = require('settings/Spell Aliases')
-
-botSettings = require('e4_BotSettings')
-follow  = require('e4_Follow')
-
-assist  = require('e4_Assist')
-buffs   = require('e4_Buffs')
-group   = require('e4_Group')
-heal    = require('e4_Heal')
-pet     = require('e4_Pet')
-qol     = require('e4_QoL')
+items   = require("e4_Items")
 
 
+aliases = require("settings/Spell Aliases")
 
-CLR     = require('Class_Cleric')
+botSettings = require("e4_BotSettings")
+follow  = require("e4_Follow")
 
-BRD     = require('Class_Bard')
+assist  = require("e4_Assist")
+buffs   = require("e4_Buffs")
+group   = require("e4_Group")
+heal    = require("e4_Heal")
+pet     = require("e4_Pet")
+qol     = require("e4_QoL")
 
-WAR     = require('Class_Warrior')
+
+
+CLR     = require("Class_Cleric")
+
+BRD     = require("Class_Bard")
+
+WAR     = require("Class_Warrior")
 
 botSettings.Init()
 
@@ -35,7 +35,7 @@ heal.Init()
 qol.Init()
 items.Init()
 
-mq.cmd.dgtell('all E4 started')
+mq.cmd.dgtell("all E4 started")
 
 while true do
     buffs.Tick()

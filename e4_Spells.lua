@@ -72,7 +72,6 @@ function findBestAura()
     return aura
 end
 
-
 function queryBot(peer, q)
     local fullQuery = peer .. ' -q ' .. q
     mq.cmd.dquery(fullQuery)
@@ -89,7 +88,6 @@ function queryBot(peer, q)
     --print("  bot query ",q, " == ", res)
     return res
 end
-
 
 -- refreshes buff on self or another bot, returns true if buff was cast
 function refreshBuff(buffItem, spawn)
@@ -114,11 +112,6 @@ function refreshBuff(buffItem, spawn)
 
     local spellConfig = parseSpellLine(buffItem) -- XXX parse this once on script startup. dont evaluate all the time !!!
 
-    local is_item = true
-    if mq.TLO.Me.Book(mq.TLO.Spell(spellConfig.Name).RankName)() ~= nil then
-        is_item = false
-    end
-
     local spell = getSpellFromBuff(spellConfig.Name) -- XXX parse this once on script startup too, dont evaluate all the time !
     if spell == nil then
         mq.cmd.dgtell("refreshBuff: getSpellFromBuff ", buffItem, " FAILED")
@@ -127,29 +120,28 @@ function refreshBuff(buffItem, spawn)
     end
 
     local spellName = spell.RankName()
-    if is_item then
+    if have_item(spellConfig.Name) then
         spellName = spellConfig.Name
     end
 
     -- only refresh fading & missing buffs
-    --print("refreshBuff looking at ", buffItem, ", rank name: ", spell.RankName)
     if mq.TLO.Me.ID() == spawn.ID() then
         -- IMPORTANT: on live, f2p restricts all spells to rank 1, so we need to look for both forms
-        if mq.TLO.Me.Buff(spell.RankName)() ~= nil and mq.TLO.Me.Buff(spell.RankName).Duration.Ticks() > 4 then
+        if have_buff(spell.RankName) and mq.TLO.Me.Buff(spell.RankName).Duration.Ticks() >= 6 then
             return false
         end
-        if mq.TLO.Me.Buff(spell.Name)() ~= nil and mq.TLO.Me.Buff(spell.Name).Duration.Ticks() > 4 then
+        if have_buff(spell.Name) and mq.TLO.Me.Buff(spell.Name).Duration.Ticks() >= 6 then
             return false
         end
     elseif spawn.Type() == "Pet" and spawn.ID() == mq.TLO.Me.Pet.ID() then
         -- IMPORTANT: on live, f2p restricts all spells to rank 1, so we need to look for both forms
     
-        if mq.TLO.Me.Pet.Buff(spell.RankName)() ~= nil and mq.TLO.Me.Pet.Buff(mq.TLO.Me.Pet.Buff(spell.RankName)).Duration.Ticks() > 4 then
+        if mq.TLO.Me.Pet.Buff(spell.RankName)() ~= nil and mq.TLO.Me.Pet.Buff(mq.TLO.Me.Pet.Buff(spell.RankName)).Duration.Ticks() >= 6 then
             print("refreshBuff: SKIP PET BUFFING ", spell.RankName, ", duration is ", mq.TLO.Me.Pet.Buff(mq.TLO.Me.Pet.Buff(spell.RankName)).Duration.Ticks(), " ticks")
             return false
         end
 
-        if mq.TLO.Me.Pet.Buff(spell.Name)() ~= nil and mq.TLO.Me.Pet.Buff(mq.TLO.Me.Pet.Buff(spell.Name)).Duration.Ticks() > 4 then
+        if mq.TLO.Me.Pet.Buff(spell.Name)() ~= nil and mq.TLO.Me.Pet.Buff(mq.TLO.Me.Pet.Buff(spell.Name)).Duration.Ticks() >= 6 then
             print("refreshBuff: SKIP PET BUFFING ", spell.Name, ", duration is ", mq.TLO.Me.Pet.Buff(mq.TLO.Me.Pet.Buff(spell.Name)).Duration.Ticks(), " ticks")
             return false
         end
@@ -164,17 +156,24 @@ function refreshBuff(buffItem, spawn)
         end
     end
 
-    if not is_spell_ability_ready(spellName) then
-        -- if normal spell, memorize it
-        if is_spell_in_book(spellName) and not is_memorized(spellName) then
-            local gem = 5
-            if spellConfig.Gem ~= nil then
-                gem = spellConfig.Gem
-            end
-            --print("attempting to memorize ", spellName .. " ... GEM ", gem)
-           mq.cmd.memorize('"'..spellName..'"', gem)
-           mq.delay(3000) -- XXX 3s
+    if not is_spell_ability_ready(spellName) and is_spell_in_book(spellName) and not is_memorized(spellName) then
+        local gem = 5
+        if spellConfig.Gem ~= nil then
+            gem = spellConfig.Gem
         end
+        --print("attempting to memorize ", spellName .. " ... GEM ", gem)
+        mq.cmd.memorize('"'..spellName..'"', gem)
+        mq.delay(3000) -- XXX 3s
+    end
+
+    if not have_item(spellConfig.Name) and mq.TLO.Me.CurrentMana() < spell.Mana() then
+        print("SKIPPING BUFF, not enough mana. Have ", mq.TLO.Me.CurrentMana(), ", need ", spell.Mana() )
+        return false
+    end
+
+    if is_alt_ability(spellName) and not is_alt_ability_ready(spellName) then
+        --print("SKIPPING BUFF, AA ", spellName, " is not ready")
+        return false
     end
 
     print("buffing bot ", spawn.CleanName(), " (id ",spawnID,"): ", spellName)
@@ -240,7 +239,7 @@ function spellConfigAllowsCasting(buffItem, spawn)
                 return false
             end
         else
-            if mq.TLO.Me.Buff(spellConfig.CheckFor)() ~= nil then
+            if have_buff(spellConfig.CheckFor) or have_song(spellConfig.CheckFor) then
                 --print("SKIP BUFFING ", spellConfig.Name, ", I have buff ", spellConfig.CheckFor, " on me")
                 return false
             end
@@ -257,6 +256,7 @@ function spellConfigAllowsCasting(buffItem, spawn)
     return true
 end
 
+
 -- helper for casting spell, clicky, AA, combat ability
 function castSpell(name, spawnId)
 
@@ -269,14 +269,9 @@ function castSpell(name, spawnId)
     else
         -- spell / aa
 
-        -- XXX if AA and not ready, abort.
-
-        if is_brd() then
-            print("ME BARD castSpell ", name, " -- SO I STOP TWIST!")
-            if mq.TLO.Me.Casting.ID() then
-                mq.cmd.twist("stop")
-                mq.delay(20)
-            end
+        if is_brd() and is_casting() then
+            mq.cmd.twist("stop")
+            mq.delay(20)
         end
 
         castSpellRaw(name, spawnId, "-maxtries|3")
@@ -318,40 +313,6 @@ function castSpellRaw(name, spawnId, extraArgs)
     --mq.cmd.dgtell("castSpell: /casting", castingArg)
     print("castSpell: /casting", castingArg)
     mq.cmd.casting(castingArg)
-end
-
--- partial search by name, return item or nil
-function getItem(name)
-    if mq.TLO.FindItem(name).ID() ~= nil then
-        return mq.TLO.FindItem(name)
-    end
-    return nil
-end
-
--- reutrns true if `name` is a spell currently memorized in a gem
-function is_memorized(name)
-    return mq.TLO.Me.Gem(name)() ~= nil
-end
-
--- returns true if `name` is a spell in my spellbook
-function is_spell_in_book(name)
-    return mq.TLO.Me.Book(name)() ~= nil
-end
-
--- exact search by name, return number
-function getItemCountExact(name)
-    if mq.TLO.FindItem(name).ID() ~= nil then
-        return mq.TLO.FindItemCount("="..name)()
-    end
-    return 0
-end
-
--- return spell or nil
-function getSpell(name)
-    if mq.TLO.Spell(name).ID() ~= nil then
-        return mq.TLO.Spell(name)
-    end
-    return nil
 end
 
 -- returns datatype spell or nil if not found
@@ -408,7 +369,7 @@ end
 -- returns true if name is ready to use (spell, aa, ability or combat ability)
 function is_spell_ability_ready(name)
 
-    if not is_brd() and mq.TLO.Me.Casting() ~= nil then
+    if not is_brd() and is_casting() then
         return false
     end
 

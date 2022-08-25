@@ -1,4 +1,6 @@
-require('e4_Spells')
+require("e4_Spells")
+
+local timer = require("Timer")
 
 local Buffs = { aura = findBestAura() }
 
@@ -184,10 +186,15 @@ function Buffs.Init()
     end)
 end
 
-local refreshBuffsTimer = utils.Timer.new_expired(3 * 1) -- 4s
+local refreshBuffsTimer = timer.new_expired(3 * 1) -- 4s
 
 function Buffs.Tick()
-    if not is_brd() and mq.TLO.Me.Casting() ~= nil then
+    if not is_brd() and is_casting() then
+        return
+    end
+
+    if spawn_count("npc radius 50 zradius 40") > 0 then
+        -- skip buffing if npc is nearby
         return
     end
 

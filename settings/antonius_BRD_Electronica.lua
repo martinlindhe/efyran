@@ -22,9 +22,9 @@ settings.self_buffs = {
 
 settings.healing = {
     ["life_support"] = {
-        "Shield of Notes/HealPct|30/CheckFor|Resurrection Sickness",
-        "Deftdance Discipline/HealPct|20/CheckFor|Resurrection Sickness",
-        "Distillate of Divine Healing XIII/HealPct|8/CheckFor|Resurrection Sickness",
+        "Shield of Notes/HealPct|30",
+        "Deftdance Discipline/HealPct|20",
+        "Distillate of Divine Healing XIII/HealPct|8",
     }
 }
 

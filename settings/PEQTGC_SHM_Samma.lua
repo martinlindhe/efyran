@@ -91,7 +91,7 @@ settings.group_buffs = {
 
     -- L09 Spirit of Wolf (48-55% speed, 36 min)
     -- L36 Spirit of Bih`Li (48-55% run speed, 15 atk, 36 min, group)
-    ["run"] = {
+    ["runspeed"] = {
         "Spirit of Bih`Li/MinLevel|1/CheckFor|Flight of Eagles",  -- XXX CheckFor on group buffs... ?!
     },
 
@@ -223,9 +223,9 @@ settings.healing = {
         -- Lxx Ancestral Guard Rank 2 AA (id:8219,  mitigate 50% melee dmg until 5000 absorbed)
         -- L70 Ancestral Guard Rank 3 AA (id:x)
         -- L70 Ancestral Guard Rank 6 AA (id:13518, mitigate 75% melee dmg until 11000 absorbed)
-        "Ancestral Guard/HealPct|50/CheckFor|Resurrection Sickness",
+        "Ancestral Guard/HealPct|50",
 
-        "Distillate of Divine Healing XI/HealPct|10/CheckFor|Resurrection Sickness",
+        "Distillate of Divine Healing XI/HealPct|10",
     },
 
     ["rez"] = { -- XXX impl

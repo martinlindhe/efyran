@@ -138,15 +138,15 @@ Combat Buff=Mana Flare/Myggan
 
 settings.healing = {
     ["life_support"] = {
-        "Self Stasis/HealPct|55/CheckFor|Resurrection Sickness",
+        "Self Stasis/HealPct|55",
 
         -- L70 Color Shock AA
-        -- "Color Shock/HealPct|50/CheckFor|Resurrection Sickness",  -- XXX get the AA
+        -- "Color Shock/HealPct|50",  -- XXX get the AA
 
         -- L65 Doppelganger AA
-        --"Doppelganger/HealPct|30/CheckFor|Resurrection Sickness", -- XXX get the AA
+        --"Doppelganger/HealPct|30", -- XXX get the AA
         
-        "Distillate of Divine Healing XIII/HealPct|12/CheckFor|Resurrection Sickness",
+        "Distillate of Divine Healing XIII/HealPct|12",
         
         -- L6x Mind Over Matter AA Rank 1 (id:5906 - slot1: mana shield absorb damage up to 50%, 10 hits)
         -- L68 Mind Over Matter AA Rank 2 (id:5907 - slot1: mana shield absorb damage up to 50%, 20 hits)
@@ -154,7 +154,7 @@ settings.healing = {
         -- Rank 4 - 40 hits
         -- Rank 5 - 50 hits
         -- Rank 6 - 60 hits
-        --"Mind Over Matter/HealPct|30/CheckFor|Resurrection Sickness",       -- XXX get the AA
+        --"Mind Over Matter/HealPct|30",       -- XXX get the AA
     }
 }
 

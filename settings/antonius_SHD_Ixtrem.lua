@@ -17,7 +17,7 @@ settings.self_buffs = {
 
 settings.healing = {
     ["life_support"] = {
-        --"Distillate of Divine Healing XIII/HealPct|12/CheckFor|Resurrection Sickness",    -- XXX FIXME get heal pots
+        --"Distillate of Divine Healing XIII/HealPct|12",    -- XXX FIXME get heal pots
     }
 }
 

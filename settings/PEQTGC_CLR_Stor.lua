@@ -159,12 +159,12 @@ settings.bot_buffs = {
 settings.healing = {
     ["life_support"] = {
         -- L70 Sanctuary AA (id:5912, removes you from combat), 1h12 min reuse
-        "Sanctuary/HealPct|13/CheckFor|Resurrection Sickness",
+        "Sanctuary/HealPct|13",
 
         -- L69 Ward of Retribution (add defenstive proc: Ward of Retribution Parry)
-        "Ward of Retribution/HealPct|50/Delay|3m/CheckFor|Resurrection Sickness",
+        "Ward of Retribution/HealPct|50/Delay|3m",
 
-        "Distillate of Divine Healing XI/HealPct|18/CheckFor|Resurrection Sickness",
+        "Distillate of Divine Healing XI/HealPct|18",
 
         -- L65 Divine Avatar Rank 1 AA (decrease melee attack by 5%, increase HoT by 100/tick)
         -- L65 Divine Avatar Rank 2 AA (decrease melee attack by 10%, increase HoT by 150/tick)
@@ -172,11 +172,11 @@ settings.healing = {
         -- L70 Divine Avatar Rank 4 AA (decrease melee attack by 15%, increase HoT by 250/tick)
         -- L70 Divine Avatar Rank 5 AA (id:8157, decrease melee attack by 15%, increase HoT by 300/tick)
         -- L70 Divine Avatar Rank 6 AA (id:8158, decrease melee attack by 338%, increase HoT by 350/tick, 3.0 min, 36 min reuse)
-        "Divine Avatar/HealPct|20/CheckFor|Resurrection Sickness",
+        "Divine Avatar/HealPct|20",
 
         -- defensive - stun attackers:
         -- L70 Divine Retribution I AA (id:5866, proc Divine Retribution Effect)
-        "Divine Retribution/HealPct|25/CheckFor|Resurrection Sickness",
+        "Divine Retribution/HealPct|25",
     },
 
     ["rez"] = { -- XXX impl? or just auto code the rez spells. theres still no new ones on LIVE, except for AE rez aa (?)

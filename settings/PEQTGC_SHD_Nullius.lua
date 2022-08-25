@@ -58,25 +58,25 @@ settings.self_buffs = {
 
 settings.healing = {
     ["life_support"] = {
-        "Distillate of Divine Healing XI/HealPct|7/CheckFor|Resurrection Sickness",
+        "Distillate of Divine Healing XI/HealPct|7",
 
         -- oow t1 bp: Heartstiller's Mail Chestguard - Lifetap from Weapon Damage (15) for 2 ticks
         -- oow t2: Duskbringer's Plate Chestguard of the Hateful - Lifetap from Weapon Damage (15) for 4 ticks. 5 min reuse
-        "Duskbringer's Plate Chestguard of the Hateful/HealPct|35/CheckFor|Resurrection Sickness",
+        "Duskbringer's Plate Chestguard of the Hateful/HealPct|35",
         
         -- timer 3:
         -- L59 Deflection Discipline (12s use, 40m reuse) - block most attacks with shield
-        "Deflection Discipline/HealPct|10/CheckFor|Resurrection Sickness",
+        "Deflection Discipline/HealPct|10",
         
         -- timer 2:
         -- L60 Leechcurse Discipline (42 end upkeep, 24s use, 1h7m reuse) - heal for 100% of all melee dmg
-        "Leechcurse Discipline/HealPct|8/CheckFor|Resurrection Sickness",
+        "Leechcurse Discipline/HealPct|8",
         
         -- timer 4:
         -- L56 Ichor Guard (absorb 25% melee dmg up to 2500)
         -- L61 Soul Guard (absorb 25% melee dmg up to 6000)
         -- L69 Soul Shield (absorb 25% melee dmg up to 10000, 30s use, 15m reuse)
-        "Soul Shield/HealPct|15/CheckFor|Resurrection Sickness",
+        "Soul Shield/HealPct|15",
     },
     ["lifetap"] = { -- XXX implement. was [Shadow Knight].LifeTap in e3
         -- L70 Touch of the Devourer (-740 hp, -200 magic resist, 448 mana, 10s recast)

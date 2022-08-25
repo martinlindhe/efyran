@@ -1,6 +1,7 @@
 require('e4_Spells')
 
-queue = require('Queue')
+local queue = require('Queue')
+local timer = require("Timer")
 
 local Heal = {
     queue = queue.new(), -- holds toons that requested a heal
@@ -81,20 +82,6 @@ function Heal.Init()
     memorizeListedSpells()
 end
 
-
--- return true if peer has a target
-function has_target()
-    return mq.TLO.Target() ~= nil
-end
-
--- return the current target spawn, or nil
-function target()
-    if not has_target() then
-        return nil
-    end
-    return mq.TLO.Target
-end
-
 -- joins/changes to the heal channel for current zone
 function joinCurrentHealChannel()
     -- orchestrator only joins to watch the numbers
@@ -135,7 +122,7 @@ end
 function handleHealmeRequest(msg)
 
     local peer, pct = parseHealmeRequest(msg)
-    print("heal peer ", peer," pct ", pct)
+    --print("heal peer ", peer," pct ", pct)
 
     -- ignore if not in zone
     local spawn = spawn_from_peer_name(peer)
@@ -164,10 +151,14 @@ function handleHealmeRequest(msg)
     --tprint(Heal.queue)
 end
 
-local askForHealTimer = utils.Timer.new_expired(5 * 1) -- 5s
+local askForHealTimer = timer.new_expired(5 * 1) -- 5s
 local askForHealPct = 94 -- at what % HP to start begging for heals
 
 function Heal.Tick()
+
+    if is_hovering() then
+        return
+    end
 
     if mq.TLO.Me.PctHPs() <= askForHealPct and askForHealTimer:expired() then
         -- ask for heals if i take damage
@@ -216,7 +207,7 @@ function Heal.Tick()
             local peer = Heal.queue:peek_first()
             if peer ~= nil then
                 local pct = Heal.queue:prop(peer)
-                print("healing ", peer.name, " at pct ", pct)
+                --print("healing ", peer, " at pct ", pct)
                 if healPeer(botSettings.settings.healing.all_heal, peer, pct) then
                     return
                 end
@@ -232,7 +223,11 @@ end
 function Heal.acceptRez()
     if window_open("ConfirmationDialogBox") then
         local s = mq.TLO.Window("ConfirmationDialogBox").Child("CD_TextOutput").Text()
-        if string.find(s, "wants to cast") ~= nil then
+        -- XXX full text
+
+        -- Call of the Wild, druid recall to corpse, can still be rezzed.
+        -- "NAME is attempting to return you to your corpse. If you accept this, you will still be able to get a resurrection later. Do you wish this?"
+        if string.find(s, "wants to cast") ~= nil or string.find(s, "attempting to return you") ~= nil then
             -- grab first word from sentence
             local i = 1
             local peer = ""
@@ -255,6 +250,12 @@ function Heal.acceptRez()
             end
             mq.cmd.dgtell("all Accepting rez from", spawn.Name())
             mq.cmd("/notify ConfirmationDialogBox Yes_Button leftmouseup")
+
+            -- XXX click in the RespawnWnd if open (live)
+            if window_open("RespawnWnd") then
+                mq.cmd.dgtell("all BEEP RespawnWnd is open ...")
+                mq.cmd.beep(1)
+            end
         end
     end
 end
@@ -266,7 +267,7 @@ function Heal.medCheck()
         return
     end
 
-    if is_brd() or is_hovering() or mq.TLO.Window("SpellBookWnd").Open() then
+    if is_brd() or is_hovering() or is_casting() or mq.TLO.Window("SpellBookWnd").Open() then
         return
     end
 
@@ -291,11 +292,17 @@ function window_open(name)
     return mq.TLO.Window(name).Open() == true
 end
 
+local nearbyNPCFilter = "npc radius 75 zradius 75"
+
 -- tries to defend myself using settings.healing.life_support
 function Heal.performLifeSupport()
     --print("Heal.performLifeSupport")
 
     -- XXX checkfor Resurrection Sickness should be automatic here !!!
+    if have_buff("Resurrection Sickness") then
+        mq.cmd.dgtell("all performLifeSupport GIVING UP. REZ SICKNESS")
+        return
+    end
 
     if botSettings.settings.healing == nil or botSettings.settings.healing.life_support == nil then
         mq.cmd.dgtell("all performLifeSupport ERROR I dont have healing.life_support configured. Current HP is "..mq.TLO.Me.PctHPs().."%")
@@ -314,16 +321,34 @@ function Heal.performLifeSupport()
         end
 
         if spellConfig.CheckFor ~= nil then
-            -- if we got this buff on, then skip.
-            if mq.TLO.Me.Buff(spellConfig.CheckFor)() ~= nil then
-                mq.cmd.dgtell("all performLifeSupport skip ", spellConfig.Name, ", I have buff ", spellConfig.CheckFor, " on me")
+            -- if we got this buff/song on, then skip.
+            if have_buff(spellConfig.CheckFor) or have_song(spellConfig.CheckFor) then
+                --mq.cmd.dgtell("all performLifeSupport skip ", spellConfig.Name, ", I have buff ", spellConfig.CheckFor, " on me")
                 skip = true
             end
         end
 
+        if spellConfig.MinMobs ~= nil then
+            -- only cast if enough NPC:s is nearby
+            if spawn_count(nearbyNPCFilter) < tonumber(spellConfig.MinMobs) then
+                --mq.cmd.dgtell("all performLifeSupport skip ", spellConfig.Name, ", Not enought nearby mobs. Have ", spawn_count(nearbyNPCFilter), ", need ", spellConfig.MinMobs)
+                skip = true
+            end
+        end
+
+        --print(" skip = ", skip, " spellConfig = ", spellConfig.Name)
+
         if not skip then
-            mq.cmd.dgtell("all USING LIFE SUPPORT ", spellConfig.Name, " AT ", mq.TLO.Me.PctHPs(), " % HP")
-            castSpell(spellConfig.Name, mq.TLO.Me.ID())
+            local spell = getSpellFromBuff(spellConfig.Name)
+
+            local spellName = spell.RankName()
+            if have_item(spellConfig.Name) or is_alt_ability(spellConfig.Name) then
+                spellName = spellConfig.Name
+            end
+
+            mq.cmd.dgtell("all USING LIFE SUPPORT ", spellName, " AT ", mq.TLO.Me.PctHPs(), " % HP")
+            castSpell(spellName, mq.TLO.Me.ID())
+            break
         end
 
     end
@@ -332,7 +357,7 @@ end
 -- uses healing.tank_heal, returns true if spell was cast
 function healPeer(spell_list, peer, pct)
     
-    print("Heal: ", peer, " is in my queue, at ", pct, " want heal!!!")
+    --print("Heal: ", peer, " is in my queue, at ", pct, " want heal!!!")
 
     for k, heal in pairs(spell_list) do
 
@@ -349,7 +374,7 @@ function healPeer(spell_list, peer, pct)
             print("SKIP HEALING, my mana ", mq.TLO.Me.PctMana, " vs required ", spellConfig.MinMana)
         elseif spellConfig.HealPct ~= nil and tonumber(spellConfig.HealPct) < pct then
             -- remove, dont meet heal criteria
-            print("removing from heal queue, dont need heal: ", peer)
+            --print("removing from heal queue, dont need heal: ", peer)
             Heal.queue:remove(peer)
             return false
         else

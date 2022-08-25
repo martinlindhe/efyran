@@ -53,18 +53,18 @@ settings.healing = {
     ["life_support"] = {
         -- Lxx Counterattack Discipline (ripostes every blow, 40 min reuse) - XXX does not work
         -- L55 Nimble Discipline (avoid most attacks, 21 min reuse)
-        "Nimble Discipline/HealPct|45/CheckFor|Resurrection Sickness",
+        "Nimble Discipline/HealPct|45",
         
-        "Distillate of Divine Healing XI/HealPct|10/CheckFor|Resurrection Sickness",
+        "Distillate of Divine Healing XI/HealPct|10",
         
         -- L70 Stealthy Getaway AA
-        "Stealthy Getaway/HealPct|12/CheckFor|Resurrection Sickness",
+        "Stealthy Getaway/HealPct|12",
         
         -- Mind Shock (potion, 15 min, add proc: Mind Shock)
-        --"Mind Shock/HealPct|20/CheckFor|Resurrection Sickness",
+        --"Mind Shock/HealPct|20",
         
         -- Expendable AA
-        "Glyph of Stored Life/HealPct|5/CheckFor|Resurrection Sickness",
+        "Glyph of Stored Life/HealPct|5",
     }
 }
 

@@ -173,30 +173,6 @@ function Follow.Init()
     end)
 end
 
--- moves to the location of `spawn` using MQ2MoveUtils
-function move_to(spawn)
-    print("move_to ", spawn.Name())
-
-    if not line_of_sight_to(spawn) then
-        mq.cmd.dgtell("all move_to ERROR: cannot see", spawn.Name())
-        mq.cmd.beep(1)
-        return
-    end
-
-    mq.cmd.moveto("loc "..spawn.Y().." "..spawn.X())
-    mq.delay(10000, function() return is_within_distance(spawn, 15) end)
-end
-
--- returns true if `spawn` is within maxDistance
-function is_within_distance(spawn, maxDistance)
-    return spawn.Distance() <= maxDistance
-end
-
--- returns true if there is line of sight between you and `spawn`
-function line_of_sight_to(spawn)
-    local q = mq.TLO.Me.Y()..","..mq.TLO.Me.X()..","..mq.TLO.Me.Z()..":"..spawn.Y()..","..spawn.X()..","..spawn.Z()
-    return mq.TLO.LineOfSight(q)()
-end
 
 function Follow.Pause()
     mq.cmd.afollow("off")

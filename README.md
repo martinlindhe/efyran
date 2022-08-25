@@ -106,3 +106,51 @@ Example: "Molten Orb/NoAggro/Summon|Summon: Molten Orb"
 "skillup" - ability skillups are posted here
 
 "server_zoneshort_healme" - heal request channel for current zone
+
+
+
+## Tricks
+
+Put all toons in the same guild:
+- easy auto consent of all toons
+- travel using guild portal and guild banner
+- guild bank, guild tribute
+
+
+
+## Spell filter lines
+
+Many are borrowed from e3, some are new.
+
+
+for heals.life_support (Heal.performLifeSupport)
+- HealPct = when to start using this ability (number)
+- CheckFor = only cast if I don't have this in buffs/songs
+- MinMobs = only cast if this many mobs nearby (number)
+
+
+for pet.buffs (Pet.BuffMyPet)
+- MinMana
+- CheckFor
+- Reagent
+- Shrink   = lists a pet shrink ability
+
+
+for buffs (spellConfigAllowsCasting)
+- MinMana
+- CheckFor
+- Reagent
+- Shrink
+
+for assist.abilities and assist.nukes (Assist.castSpellAbility)
+- MinMana
+- PctAggro
+- NoAggro
+- GoM
+- Summon
+- NoPet
+
+for heals (healPeer)
+- MinMana
+- HealPct
+

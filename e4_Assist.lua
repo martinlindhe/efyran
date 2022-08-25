@@ -131,7 +131,7 @@ function Assist.summonNukeComponents()
 
                 --print("summon prop", spell.Summon)
 
-                if getItemCountExact(spell.Name) == 0 and mq.TLO.Me.Casting() == nil then
+                if getItemCountExact(spell.Name) == 0 and not is_casting() then
                     mq.cmd.dgtell("all Summoning", spell.Name)
                     castSpell(spell.Summon, mq.TLO.Me.ID())
 
@@ -154,15 +154,14 @@ end
 -- autoinventories all items on cursor
 function clear_cursor()
     while true do
-        if mq.TLO.Me.FreeInventory() <= 1 then
+        if mq.TLO.Cursor.ID() == nil then
+            break
+        end
+        if mq.TLO.Me.FreeInventory() == 0 then
             mq.cmd.dgtell("all Cannot clear cursor, no free inventory slots")
             mq.cmd.beep(1)
             break
         end
-        if mq.TLO.Cursor.ID() == nil then
-            break
-        end
-
         mq.cmd.dgtell("all autoinv ", mq.TLO.Cursor())
         mq.cmd("/autoinventory")
         mq.delay(100)
@@ -195,7 +194,7 @@ function Assist.castSpellAbility(spawn, row)
     end
 
     if spell.GoM ~= nil and spell.GoM then
-        if mq.TLO.Me.Song("Gift of Mana")() == nil then
+        if have_song("Gift of Mana") then
             --mq.cmd.dgtell("all SKIP GoM ", spell.Name, " i don't have GoM up")
             return false
         end
@@ -291,8 +290,8 @@ function Assist.killSpawn(spawn)
 
         if not has_target() or mq.TLO.Target.ID() ~= spawn.ID() then
             -- XXX will happen for healer+nuker setups (DRU,RNG,SHM)
-            mq.cmd.dgtell("all WARN: i lost target, breaking")
-            break
+            mq.cmd.dgtell("all WARN: i lost target, restoring to ", spawn.ID(), " ", spawn.Name())
+            mq.cmd.target("id", spawn.ID())
         end
 
         if melee and spawn.Distance() < spawn.MaxRangeTo() and spawn.LineOfSight() then
@@ -312,7 +311,7 @@ function Assist.killSpawn(spawn)
         end
 
         -- caster/hybrid assist.nukes
-        if botSettings.settings.assist.nukes ~= nil and mq.TLO.Me.Casting() == nil then
+        if botSettings.settings.assist.nukes ~= nil and not is_casting() then
             local nukes = botSettings.settings.assist.nukes[spellSet]
             if nukes ~= nil then
                 for v, nukeRow in pairs(nukes) do
@@ -336,7 +335,7 @@ function Assist.killSpawn(spawn)
         mq.delay(1)
     end
 
-    if not is_brd() and mq.TLO.Me.Casting() ~= nil then
+    if not is_brd() and is_casting() then
         --mq.cmd.dgtell("all DEBUG abort cast mob dead ", mq.TLO.Me.Casting.Name)
         mq.cmd.stopcast()
     end

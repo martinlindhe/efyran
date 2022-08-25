@@ -2,6 +2,11 @@
 
 local QoL = {}
 
+-- returns true if I am in a guild
+function in_guild()
+    return mq.TLO.Me.Guild() ~= nil
+end
+
 function QoL.Init()
 
     if is_rof2() then
@@ -15,6 +20,11 @@ function QoL.Init()
 
     if is_orchestrator() then
         mq.cmd.djoin("skillup")
+    end
+
+    if in_guild() then
+        -- enable auto consent for guild
+        mq.cmd("/consent guild")
     end
 
     clear_cursor()
@@ -45,7 +55,7 @@ function QoL.Init()
     end)
 
     mq.event("skillup", "You have become better at #1#! (#2#)", function(text, name, num)
-        mq.cmd.dgtell("skillup Skillup ".. name .. " (".. num..")")
+        mq.cmd.dgtell("skillup ".. name .. " (".. num.."/".. tostring(mq.TLO.Skill(name).SkillCap()) ..")")
     end)
     
     mq.event("xp", "You gain experience!", function()

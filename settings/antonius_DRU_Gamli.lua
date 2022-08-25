@@ -9,10 +9,11 @@ settings.gems = {
     ["Solstice Strike"] = 3,
     ["Ancient: Glacier Frost"] = 4,
 
+    ["Scales of the Reptile"] = 6,
     ["Legacy of Viridithorns"] = 7,
     ["Viridithorn Coat"] = 8,
     ["Direwood Guard"] = 9,
-    --["Succor"] = 10,
+    ["Blessing of the Ironwood"] = 10,
     ["Tectonic Upheaval"] = 11,
     ["Second Life"] = 12,
 }
@@ -53,6 +54,9 @@ settings.self_buffs = {
     -- slot 1: 86 ds
     "Legacy of Viridithorns",
 
+    -- slot XXX: big single hit ds
+    "Wrath of the Wild",
+
     -- L80 Blessing of the Ironwood Rk. II (66 ac, 1255 hp, 14 mana/tick, cost 3371 mana, group)
     "Blessing of the Ironwood",
 
@@ -64,6 +68,10 @@ settings.self_buffs = {
     "Second Life",
 
     "Protection of Seasons",
+
+    -- L68 Skin of the Reptile (melee proc heals when hit)
+    -- L79 Scales of the Reptile Rk. II (melee proc that heals when hit)
+    "Scales of the Reptile/MinMana|25",
 
     --"Forbear Corruption", -- not needed atm
 }
@@ -158,25 +166,70 @@ settings.group_buffs = {
         "Viridifloral Shield/MinLevel|71",  -- XXX unsure of minlevel
         "Viridifloral Bulwark/MinLevel|76", -- XXX unsure of minlevel
     },
+
+    ["str"] = {
+        -- L07 Strength of Earth (8-15 str)
+        -- L34 Strength of Stone (22-25 str)
+        -- L44 Storm Strength (32-35 str)
+        -- L55 Girdle of Karana (42 str)
+        -- L62 Nature's Might (55 str)
+        "Storm Strength/MinLevel|1",
+        "Girdle of Karana/MinLevel|42",
+        "Nature's Might/MinLevel|46",
+    },
+
+    -- L67 Lion's Strength (increase skills dmg mod by 5%, cost 165 mana)
+    -- L71 Mammoth's Strength Rk. III (increase skills dmg mod by 8%, cost 215 mana)
+    -- NOTE: SHM has group version of these spells
+    ["skill_dmg_mod"] = {
+        "Lion's Strength/MinLevel|62",
+        "Mammoth's Strength/MinLevel|71", -- XXX minlevel
+    },
+
+    -- L09 Spirit of Wolf (48-55% speed, 36 min)
+    -- L35 Pack Spirit (47-55% speed, 36 min, group)
+    -- L54 Spirit of Eagle (57-70% speed, 1 hour)
+    -- L62 Flight of Eagles (70% speed, 1 hour, group)
+    ["runspeed"] = {
+        "Pack Spirit/MinLevel|1",
+        "Spirit of Eagle/MinLevel|42",
+        "Flight of Eagles/MinLevel|46", 
+    },
 }
 
 settings.healing = {
-    ["automed"] = false, -- XXX do not auto sit/stand/mount
+    ["automed"] = false, -- do not auto sit/stand/mount
     ["life_support"] = {
+        -- L70 Convergence of Spirits I AA (1000 hp instant, 500 hp/tick, 60 ds, 54 ac)
+        -- L70 Convergence of Spirits II AA (1500 hp instant, 750 hp/tick, 65 ds, 60 ac)
+        -- L70 Convergence of Spirits III AA (2000 hp instant, 1000 hp/tick, 70 ds, 66 ac)
+        "Convergence of Spirits/CheckFor|Spirit of the Wood/HealPct|90/MinMobs|10",
+
+        -- L63 Spirit of the Wood 1 AA (xxx ds)
+        "Spirit of the Wood/CheckFor|Convergence of Spirits/HealPct|90/MinMobs|10",
+
         -- L80 Distillate of Divine Healing XIII
-        "Distillate of Divine Healing XIII/HealPct|18/CheckFor|Resurrection Sickness",
+        "Distillate of Divine Healing XIII/HealPct|18",
 
         -- XXX
 
         -- melee guard:
-        -- L69 Oaken Guard (mitigate 75% melee dmg for 5000 + Oaken Guard Parry proc, 1s cast, timer 5, 900s recast)
-        -- L74 Direwood Guard Rk. II (mitigate 75% melee dmg for 6250 + Direwood Guard Parry proc, 1s cast, timer 5, 900s recast)
+        -- L69 Oaken Guard (mitigate 75% melee dmg for 5000 + Oaken Guard Parry proc, 1s cast, timer 5, 15 min recast)
+        -- L74 Direwood Guard Rk. II (mitigate 75% melee dmg for 6250 + Direwood Guard Parry proc, 1s cast, timer 5, 15 min recast)
         "Direwood Guard/HealPct|30",
+
+        "Mask of the Ancients/HealPct|40", -- 1s cast Chlorotrope
+
+        "Adrenaline Surge/HealPct|30/MinMana|50", -- 1.8s cast
+
+        "Puravida/HealPct|70/MinMana|30", -- 3.75s cast
     },
 
     ["rez"] = { -- XXX impl
         -- L59 Incarnate Anew (90% exp, 20s cast, 700 mana)
+        -- Lxx Call of the Wild (0% rez, corpse can be properly rezzed later)
         --"Incarnate Anew",
+        "Call of the Wild",
     },
 
     ["cures"] = { -- XXX impl. 
@@ -190,7 +243,9 @@ settings.healing = {
     },
 
     ["tank_heal"] = {
-        "Puravida/HealPct|60/MinMana|5",
+        "Mask of the Ancients/HealPct|85",
+
+        "Puravida/HealPct|80/MinMana|5",
     },
 
     ["all_heal"] = {
@@ -221,10 +276,10 @@ settings.healing = {
 
     ["important_heal"] = {
         -- quick heal:
-         -- L75 Adrenaline Surge Rk. III (3681 hp, cost 1050 mana, cast time 1.8s, timer 2. 15s recast)
-         "Mask of the Ancients/HealPct|60",
+        -- L75 Adrenaline Surge Rk. III (3681 hp, cost 1050 mana, cast time 1.8s, timer 2. 15s recast)
+        "Mask of the Ancients/HealPct|60",
 
-         "Adrenaline Surge/HealPct|30/MinMana|50",
+        "Adrenaline Surge/HealPct|30/MinMana|50",
 
         "Puravida/HealPct|70/MinMana|30",
     },
@@ -243,13 +298,6 @@ settings.healing = {
         -- hot v2 - stacks with CLR/SHM/PAL HoT:
         -- L60 Nature's Recovery (slot 2: 30 hp/tick, 3.0 min, recast 90s, cost 250 mana)
         --"Nature's Recovery/HealPct|70/MinMana|20",
-
-        -- L70 Convergence of Spirits I AA (1000 hp instant, 500 hp/tick, 60 ds, 54 ac)
-        -- L70 Convergence of Spirits II AA (1500 hp instant, 750 hp/tick, 65 ds, 60 ac)
-        -- L70 Convergence of Spirits III AA (2000 hp instant, 1000 hp/tick, 70 ds, 66 ac)
-        "Convergence of Spirits/HealPct|14",
-
-        -- L63 Spirit of the Wood 1 AA (xxx ds)
     },
 
     --["who_to_hot"] = "Tanks", -- XXX impl

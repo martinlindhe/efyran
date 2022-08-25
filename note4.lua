@@ -1,7 +1,6 @@
 --- reports if we are not running e4
 
-
-mq = require("mq")
+require("ezmq")
 
 local found = false
 

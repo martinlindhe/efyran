@@ -106,8 +106,8 @@ settings.group_buffs = {
 
 settings.healing = {
     ["life_support"] = {
-        "Shared Health/HealPct|60/CheckFor|Resurrection Sickness",
-        "Distillate of Divine Healing XI/HealPct|10/CheckFor|Resurrection Sickness",
+        "Shared Health/HealPct|60",
+        "Distillate of Divine Healing XI/HealPct|10",
     }
 }
 
