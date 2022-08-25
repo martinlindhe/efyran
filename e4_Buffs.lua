@@ -164,7 +164,7 @@ function Buffs.Init()
             return
         end
 
-        local item = getItem(spellConfig.Name)
+        local item = get_item(spellConfig.Name)
         print("Shrinking group members with ", spellConfig.Name, " item ", item)
 
         -- make sure shrink is targetable check buff type
@@ -192,6 +192,8 @@ function Buffs.Tick()
     if not is_brd() and is_casting() then
         return
     end
+
+    bard.resumeMelody()
 
     if spawn_count("npc radius 50 zradius 40") > 0 then
         -- skip buffing if npc is nearby
@@ -222,6 +224,7 @@ function Buffs.RefreshSelfBuffs()
         return false
     end
     for k, buffItem in pairs(botSettings.settings.self_buffs) do
+        mq.doevents()
         if refreshBuff(buffItem, mq.TLO.Me) then
             -- end after first successful buff
             return true

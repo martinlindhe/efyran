@@ -2,11 +2,6 @@
 
 local QoL = {}
 
--- returns true if I am in a guild
-function in_guild()
-    return mq.TLO.Me.Guild() ~= nil
-end
-
 function QoL.Init()
 
     if is_rof2() then
@@ -214,7 +209,7 @@ end
 
 function is_tank(class)
     if class == nil then
-        mq.cmd.dgtell("all is_tank called without class. did you mean me_tank() ?")
+        mq.cmd.dgtell("all ERROR: is_tank called without class. did you mean me_tank() ?")
         mq.cmd.beep(1)
     end
     return class == "WAR" or class == "PAL" or class == "SHD"
@@ -249,7 +244,7 @@ function QoL.Tick()
     end
 
     if mq.TLO.Me.Class.ShortName() == "WIZ" and have_pet() then
-        print("dropping wiz familiar ...", mq.TLO.Me.Pet.ID(), type(mq.TLO.Me.Pet.ID()))
+        --print("Dropping wiz familiar ...", mq.TLO.Me.Pet.ID(), type(mq.TLO.Me.Pet.ID()))
         mq.cmd.pet("get lost")
     end
 

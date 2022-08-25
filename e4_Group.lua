@@ -38,6 +38,12 @@ function Group.Init()
     -- Recalls group setup from settings. The orchestrator (caller) will tell the rest how to form up
     mq.bind('/recallgroup', function(name, groupNumber)
 
+        if Group.settings[name] == nil then
+            print("/recallgroup Error: no such group ", name)
+            mq.cmd.beep(1)
+            return
+        end
+
         local orchestrator = false
         local raidLeader = ""
         if groupNumber == nil then
@@ -50,13 +56,7 @@ function Group.Init()
             print('Recalling group ', name, ' ', groupNumber)
         end
 
-        if Group.settings[name] == nil then
-            print("error: no such group ", name)
-            mq.cmd.beep(1)
-            return
-        end
-
-        print('group data for ', name, ' is ', Group.settings[name])
+        -- print('group data for ', name, ' is ', Group.settings[name])
 
         for idx, group in pairs(Group.settings[name])
         do

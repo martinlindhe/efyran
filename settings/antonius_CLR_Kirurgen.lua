@@ -153,6 +153,9 @@ settings.healing = {
         -- Divine Arbitration AA - balance group HP %, 3 min reuse
         "Divine Arbitration/HealPct|50/MinMobs|10",
 
+        -- epic 1.5 - balance group HP %, 6 min reuse
+        "Harmony of the Soul/HealPct|50/MinMobs|10",
+
         -- L70 Sanctuary AA (id:5912, removes you from combat), 1h12 min reuse
         "Sanctuary/HealPct|13",
 

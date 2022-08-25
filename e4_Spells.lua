@@ -277,7 +277,7 @@ function castSpell(name, spawnId)
         castSpellRaw(name, spawnId, "-maxtries|3")
 
         if is_brd() then
-            local item = getItem(name)
+            local item = get_item(name)
             if item ~= nil then 
                 -- item click
                 print("item click sleep, ", item.Clicky.CastTime(), " + ", item.Clicky.Spell.RecastTime() )

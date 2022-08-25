@@ -25,7 +25,7 @@ function Items.Init()
             mq.cmd.dgzexecute("/fdi", name)
         end
 
-        local item = getItem(name)
+        local item = get_item(name)
         if item == nil then
             --mq.cmd.dgtell("all", name, "not found")
             return nil
@@ -52,7 +52,7 @@ function Items.Init()
             mq.cmd.dgzexecute("/fmi", name)
         end
 
-        local item = getItem(name)
+        local item = get_item(name)
         if item == nil then
             mq.cmd.dgtell("all I miss", name)
             return nil

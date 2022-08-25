@@ -43,7 +43,7 @@ function Heal.Init()
                 print("/rezit ERROR: No corpse targeted.")
                 return
             end
-            local spawn = target()
+            local spawn = get_target()
             spawnID = tostring(spawn.ID())
             if spawn.Type() ~= "Corpse" then
                 print("/rezit ERROR: Target is not a corpse (type ", spawn.Type(), ")")
@@ -280,16 +280,6 @@ function Heal.medCheck()
             mq.cmd.sit("off")
         end
     end
-end
-
--- returns true if we are in hovering state (just died, waiting for rez in the same zone)
-function is_hovering()
-    return mq.TLO.Me.State() == "HOVER"
-end
-
--- returns true if a window `name` is open
-function window_open(name)
-    return mq.TLO.Window(name).Open() == true
 end
 
 local nearbyNPCFilter = "npc radius 75 zradius 75"

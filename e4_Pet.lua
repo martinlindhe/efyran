@@ -54,6 +54,8 @@ function Pet.BuffMyPet()
 
     for key, buff in pairs(botSettings.settings.pet.buffs) do
 
+        mq.doevents()
+
         local spellConfig = parseSpellLine(buff)  -- XXX do not parse here, cache and reuse
         local spell = getSpellFromBuff(spellConfig.Name) -- XXX parse this once on script startup too, dont evaluate all the time !
         if spell == nil then

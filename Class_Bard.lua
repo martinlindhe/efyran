@@ -2,12 +2,23 @@ local defaultMelody = "general"
 
 local Bard = { currentMelody = "" }
 
-function Bard.DoEvents()
-    -- print('Bard.DoEvents')
-    if Bard.currentMelody == "" then
-        Bard.PlayMelody(defaultMelody)
-    elseif Bard.currentMelody ~= "" and not is_casting() then
-        Bard.PlayMelody(Bard.currentMelody)
+-- tells all bards to play given melody name
+mq.bind("/playmelody", function(name)
+    if is_orchestrator() then
+        mq.cmd.dgexecute("brd", "/playmelody", name)
+    end
+    if is_brd() then
+        Bard.PlayMelody(name)
+    end
+end)
+
+function Bard.resumeMelody()
+    if is_brd() then
+        if Bard.currentMelody == "" then
+            Bard.PlayMelody(defaultMelody)
+        elseif Bard.currentMelody ~= "" and not is_casting() then
+            Bard.PlayMelody(Bard.currentMelody)
+        end
     end
 end
 
@@ -68,19 +79,5 @@ function Bard.PlayMelody(name)
 
     Bard.currentMelody = name
 end
-
--- returns true if i am the foreground instance
-function is_orchestrator()
-    return mq.TLO.FrameLimiter.Status() == "Foreground"
-end
-
-mq.bind("/playmelody", function(name)
-    if is_orchestrator() then
-        mq.cmd.dgexecute("brd", "/playmelody", name) -- all bards
-    end
-    if is_brd() then
-        Bard.PlayMelody(name)
-    end
-end)
 
 return Bard

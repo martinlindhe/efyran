@@ -1,9 +1,9 @@
 -- collection of functions to simplify working with macroquest through Lua
 mq = require("mq")
 
--- return number. the number of spawns matching `query`
-function spawn_count(query)
-    return mq.TLO.SpawnCount(query)()
+-- returns true if i am the foreground instance
+function is_orchestrator()
+    return mq.TLO.FrameLimiter.Status() == "Foreground"
 end
 
 -- returns true if `spawn` is within maxDistance
@@ -31,28 +31,11 @@ function move_to(spawn)
     mq.delay(10000, function() return is_within_distance(spawn, 15) end)
 end
 
--- Print contents of `tbl`, with indentation.
--- `indent` sets the initial level of indentation.
-function tprint(tbl, indent)
-    if not indent then indent = 0 end
-    for k, v in pairs(tbl) do
-        formatting = string.rep("  ", indent) .. k .. ": "
-        if type(v) == "table" then
-            print(formatting)
-            tprint(v, indent+1)
-        elseif type(v) == 'boolean' then
-            print(formatting .. tostring(v))      
-        else
-            print(formatting .. v)
-        end
-    end
-end
-
--- Requires: tbl is a table containing strings; str is a string.
--- Effects : returns true if tbl contains str, false otherwise.
-function find_string_in(tbl, str)
+-- Requires: tbl is a table containing strings; v is a string.
+-- Effects : returns true if tbl contains v, false otherwise.
+function find_in(tbl, v)
     for _, element in ipairs(tbl) do
-        if (element == str) then
+        if (element == v) then
             return true
         end
     end
@@ -90,20 +73,25 @@ end
 
 -- return spawn or nil
 function spawn_from_id(spawnID)
-    local spawn = mq.TLO.Spawn("id " .. spawnID)
-    if tostring(spawn) == "NULL" then
+    return spawn_from_query("id ".. spawnID)
+end
+
+-- return number. the number of spawns matching `query`
+function spawn_count(query)
+    return mq.TLO.SpawnCount(query)()
+end
+
+function spawn_from_query(query)
+    local o = mq.TLO.Spawn(query)
+    if o() == nil then
         return nil
     end
-    return spawn
+    return o
 end
 
 -- returns a spawn, nil if not found
 function spawn_from_peer_name(name)
-    local v = mq.TLO.Spawn("pc =" .. name)
-    if v() == "NULL" then
-        return nil
-    end
-    return v
+    return spawn_from_query("pc =".. name)
 end
 
 -- return spell or nil
@@ -125,7 +113,7 @@ function has_target()
 end
 
 -- return the current target spawn, or nil
-function target()
+function get_target()
     if not has_target() then
         return nil
     end
@@ -133,7 +121,7 @@ function target()
 end
 
 -- partial search by name, return item or nil
-function getItem(name)
+function get_item(name)
     if mq.TLO.FindItem(name).ID() ~= nil then
         return mq.TLO.FindItem(name)
     end
@@ -202,4 +190,70 @@ end
 
 function is_brd()
     return mq.TLO.Me.Class.ShortName() == "BRD"
+end
+
+-- returns true if I am in a guild
+function in_guild()
+    return mq.TLO.Me.Guild() ~= nil
+end
+
+-- returns true if we are in hovering state (just died, waiting for rez in the same zone)
+function is_hovering()
+    return mq.TLO.Me.State() == "HOVER"
+end
+
+-- returns true if a window `name` is open
+function window_open(name)
+    return mq.TLO.Window(name).Open() == true
+end
+
+-- returns true if successful
+function open_merchant_window(spawn)
+
+    if spawn.Distance() > 20 then
+        print("Too far away from merchant. Giving up")
+        return
+    end
+
+    -- Right click merchant, and wait for window to open.
+
+    local attempt = 1
+    while true do
+
+        if attempt >= 3 then
+            mq.cmd.dgtell("all Giving up opening merchant window after", attempt, "attempts")
+            break
+        end
+
+        if not window_open("MerchantWnd") then
+            mq.cmd("/click right target")
+            mq.delay(5000, function() return window_open("MerchantWnd") end)
+        end
+
+        if window_open("MerchantWnd") then
+            break
+        end
+
+        mq.delay(500)
+        attempt = attempt +1
+    end
+
+    -- Wait for merchant's item list to populate.
+
+    local merchantTotal = -1
+    attempt = 1
+    while true do
+        if attempt >= 10 then
+            mq.cmd.dgtell("all Giving up listing merchant window items")
+            break
+        end
+
+        if merchantTotal ~= mq.TLO.Window("MerchantWnd").Child("ItemList").Items() then
+            merchantTotal = mq.TLO.Window("MerchantWnd").Child("ItemList").Items()
+            print("merchant total: ", merchantTotal)
+        end
+        mq.delay(100)
+        attempt = attempt +1
+    end
+
 end

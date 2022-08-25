@@ -2,6 +2,9 @@
 
 require("ezmq")
 
+require("debug")
+
+
 items   = require("e4_Items")
 
 
@@ -21,7 +24,7 @@ qol     = require("e4_QoL")
 
 CLR     = require("Class_Cleric")
 
-BRD     = require("Class_Bard")
+bard    = require("Class_Bard")
 
 WAR     = require("Class_Warrior")
 
@@ -39,27 +42,6 @@ mq.cmd.dgtell("all E4 started")
 
 while true do
     buffs.Tick()
-
-    local class = mq.TLO.Me.Class.ShortName()
-    if class == "CLR" then CLR.DoEvents()
-    --[[
-    elseif class == "SHM" then ShamanEvents()
-    elseif class == "DRU" then DruidEvents()
-    elseif class == "WIZ" then WizardEvents()
-    elseif class == "MAG" then MagicianEvents()
-    elseif class == "ENC" then EnchanterEvents()
-    elseif class == "NEC" then NecromancerEvents()
-    elseif class == "ROG" then RogueEvents()
-    elseif class == "MNK" then MonkEvents()
-    elseif class == "BER" then BerserkerEvents()
-    ]]--
-    elseif class == "BRD" then BRD.DoEvents()
-    --elseif class == "BST" then BeastlordEvents()
-    --elseif class == "RNG" then RangerEvents()
-    elseif class == "WAR" then WAR.DoEvents()
-    --elseif class == "SHD" then ShadowknightEvents()
-    --elseif class == "PAL" then PaladinEvents()
-    end
 
     mq.doevents()
 
