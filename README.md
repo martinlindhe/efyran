@@ -103,7 +103,8 @@ Example: "Molten Orb/NoAggro/Summon|Summon: Molten Orb"
 
 ## special channels:
 
-"skillup" - ability skillups are posted here
+"skillup" - ability skillups is posted here
+"xp" - xp gains is posted here
 
 "server_zoneshort_healme" - heal request channel for current zone
 

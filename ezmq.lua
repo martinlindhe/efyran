@@ -94,14 +94,6 @@ function spawn_from_peer_name(name)
     return spawn_from_query("pc =".. name)
 end
 
--- return spell or nil
-function getSpell(name)
-    if mq.TLO.Spell(name).ID() ~= nil then
-        return mq.TLO.Spell(name)
-    end
-    return nil
-end
-
 -- returns true if `name` is an item i have
 function have_item(name)
     return mq.TLO.FindItemCount("=" .. name)() > 0
@@ -128,14 +120,41 @@ function get_item(name)
     return nil
 end
 
+-- return true if `item` clicky effect is ready to use
+function is_item_clicky_ready(name)
+    local item = get_item(name)
+    if item == nil then
+        mq.cmd.dgtell("all ERROR: is_item_clicky_ready() called with item I do not have:", name)
+        return false
+    end
+    return item.Clicky() ~= nil and item.Timer.Ticks() == 0
+end
+
 -- reutrns true if `name` is a spell currently memorized in a gem
 function is_memorized(name)
-    return mq.TLO.Me.Gem(name)() ~= nil
+    return mq.TLO.Me.Gem(mq.TLO.Spell(name).RankName)() ~= nil
 end
 
 -- returns true if `name` is a spell in my spellbook
 function is_spell_in_book(name)
-    return mq.TLO.Me.Book(name)() ~= nil
+    return mq.TLO.Me.Book(mq.TLO.Spell(name).RankName)() ~= nil
+end
+
+-- return spell or nil
+function get_spell(name)
+    if mq.TLO.Spell(name).ID() ~= nil then
+        return mq.TLO.Spell(mq.TLO.Spell(name).RankName)
+    end
+    return nil
+end
+
+-- returns true if `name` is ready to cast
+function is_spell_ready(name)
+    local spell = get_spell(name)
+    if spell == nil then
+        return false
+    end
+    return mq.TLO.Me.SpellReady(spell.RankName)()
 end
 
 -- exact search by name, return number
@@ -188,6 +207,11 @@ function is_casting()
     return mq.TLO.Me.Casting() ~= nil
 end
 
+-- returns true if I am moving
+function is_moving()
+    return mq.TLO.Me.Moving()
+end
+
 function is_brd()
     return mq.TLO.Me.Class.ShortName() == "BRD"
 end
@@ -199,7 +223,12 @@ end
 
 -- returns true if we are in hovering state (just died, waiting for rez in the same zone)
 function is_hovering()
-    return mq.TLO.Me.State() == "HOVER"
+    if window_open("RespawnWnd") then
+        mq.cmd.dgtell("all XXX verify: i am hovering?  RespawnWnd is open !")
+        return true
+    end
+    -- while hovering, returned "HOVER" or "STUN" on live, aug 2022. XXX why "STUN" ??? better detect with window open
+    return mq.TLO.Me.State() == "HOVER" or mq.TLO.Me.State() == "STUN"
 end
 
 -- returns true if a window `name` is open
@@ -210,12 +239,18 @@ end
 -- returns true if successful
 function open_merchant_window(spawn)
 
+    if window_open("MerchantWnd") then
+        mq.cmd.dgtell("all WARNING: A merchant window was already open. Closing it")
+        close_merchant_window()
+        mq.delay(1000)
+    end
+
     if spawn.Distance() > 20 then
         print("Too far away from merchant. Giving up")
         return
     end
 
-    -- Right click merchant, and wait for window to open.
+    mq.cmd.target("id", spawn.ID())
 
     local attempt = 1
     while true do
@@ -225,35 +260,104 @@ function open_merchant_window(spawn)
             break
         end
 
-        if not window_open("MerchantWnd") then
-            mq.cmd("/click right target")
-            mq.delay(5000, function() return window_open("MerchantWnd") end)
-        end
-
         if window_open("MerchantWnd") then
             break
         end
+
+        -- Right click merchant, and wait for window to open.
+        mq.cmd("/click right target")
+        mq.delay(5000, function() return window_open("MerchantWnd") end)
 
         mq.delay(500)
         attempt = attempt +1
     end
 
-    -- Wait for merchant's item list to populate.
+    if not window_open("MerchantWnd") then
+        print("Giving up.. Could not open merchant window.")
+    end
 
+    -- Wait for merchant's item list to populate.
     local merchantTotal = -1
     attempt = 1
     while true do
         if attempt >= 10 then
-            mq.cmd.dgtell("all Giving up listing merchant window items")
+            print("Giving up listing merchant window items")
             break
         end
 
         if merchantTotal ~= mq.TLO.Window("MerchantWnd").Child("ItemList").Items() then
             merchantTotal = mq.TLO.Window("MerchantWnd").Child("ItemList").Items()
-            print("merchant total: ", merchantTotal)
+            print("Merchant total: ", merchantTotal)
         end
-        mq.delay(100)
+        mq.delay(200)
         attempt = attempt +1
     end
+end
 
+function close_merchant_window()
+    if not window_open("MerchantWnd") then
+        return
+    end
+    mq.cmd("/notify MerchantWnd MW_Done_Button leftmouseup")
+end
+
+
+local neutralZones = { "guildlobby", "guildhall", "bazaar", "poknowledge", "potranquility", "nexus" }
+
+-- returns true if we are in a neutral zone
+function in_neutral_zone()
+    for k, v in pairs(neutralZones) do
+        if mq.TLO.Zone.ShortName():lower() == v:lower() then
+            return true
+        end
+    end
+    return false
+end
+
+-- opens all inventory bags
+function open_bags()
+    for n = 1, 10 do
+        local pack = "Pack"..tostring(n)
+        local slot = get_inventory_slot(pack)
+        if is_container(slot) and not mq.TLO.Window(pack).Open() then
+            mq.cmd("/itemnotify "..pack.." rightmouseup")
+            mq.delay(1) -- this delay is needed to ensure /itemnotify is not called too fast
+            mq.delay(1000, function() return mq.TLO.Window(pack).Open() end)
+        end
+    end
+    mq.delay(1)
+end
+
+-- closes all inventory bags
+function close_bags()
+    for n = 1, 10 do
+        local pack = "Pack"..tostring(n)
+        local slot = get_inventory_slot(pack)
+        if is_container(slot) and mq.TLO.Window(pack).Open() then
+            mq.cmd("/itemnotify "..pack.." rightmouseup")
+            mq.delay(1) -- this delay is needed to ensure /itemnotify is not called too fast
+            mq.delay(1000, function() return not mq.TLO.Window(pack).Open() end)
+        end
+    end
+    mq.delay(1)
+end
+
+function num_inventory_slots()
+    -- TODO is number in a mq.TLO value?
+    -- TODO return 8 on servers who only support it
+    return 10
+end
+
+-- returns item or nil
+function get_inventory_slot(name)
+    local v = mq.TLO.Me.Inventory(name)
+    if v() == nil then
+        return nil
+    end
+    return v
+end
+
+-- returns true if `item` is a container
+function is_container(item)
+    return item ~= nil and item.Container() ~= 0
 end

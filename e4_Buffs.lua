@@ -193,6 +193,10 @@ function Buffs.Tick()
         return
     end
 
+    if is_hovering() then
+        return
+    end
+
     bard.resumeMelody()
 
     if spawn_count("npc radius 50 zradius 40") > 0 then
@@ -201,7 +205,7 @@ function Buffs.Tick()
     end
 
     --print("buff tick ", botSettings.toggles.refresh_buffs, refreshBuffsTimer:expired(), not mq.TLO.Me.Moving(), not mq.TLO.Me.Invis()  )
-    if botSettings.toggles.refresh_buffs and refreshBuffsTimer:expired() and not mq.TLO.Me.Moving() and not mq.TLO.Me.Invis() then
+    if botSettings.toggles.refresh_buffs and refreshBuffsTimer:expired() and not is_moving() and not mq.TLO.Me.Invis() then
         if not buffs.RefreshSelfBuffs() then
             if not buffs.RefreshAura() then
                 if not pet.Summon() then

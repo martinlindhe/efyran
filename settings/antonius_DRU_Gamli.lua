@@ -207,22 +207,22 @@ settings.healing = {
 
         -- L63 Spirit of the Wood 1 AA (xxx ds)
         "Spirit of the Wood/CheckFor|Convergence of Spirits/HealPct|90/MinMobs|10",
-
-        -- L80 Distillate of Divine Healing XIII
-        "Distillate of Divine Healing XIII/HealPct|18",
-
-        -- XXX
-
+        
         -- melee guard:
         -- L69 Oaken Guard (mitigate 75% melee dmg for 5000 + Oaken Guard Parry proc, 1s cast, timer 5, 15 min recast)
         -- L74 Direwood Guard Rk. II (mitigate 75% melee dmg for 6250 + Direwood Guard Parry proc, 1s cast, timer 5, 15 min recast)
-        "Direwood Guard/HealPct|30",
+        "Direwood Guard/HealPct|50/MinMobs|5",
 
-        "Mask of the Ancients/HealPct|40", -- 1s cast Chlorotrope
+        -- XXX
 
-        "Adrenaline Surge/HealPct|30/MinMana|50", -- 1.8s cast
+        "Mask of the Ancients/HealPct|40", -- 1s cast Chlorotrope, 3 min 30 sec recast
+
+        "Adrenaline Surge/HealPct|60/MinMana|50", -- 1.8s cast
 
         "Puravida/HealPct|70/MinMana|30", -- 3.75s cast
+        
+        -- L80 Distillate of Divine Healing XIII, 2 min recast
+        "Distillate of Divine Healing XIII/HealPct|18",
     },
 
     ["rez"] = { -- XXX impl

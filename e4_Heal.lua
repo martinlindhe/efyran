@@ -267,11 +267,11 @@ function Heal.medCheck()
         return
     end
 
-    if is_brd() or is_hovering() or is_casting() or mq.TLO.Window("SpellBookWnd").Open() then
+    if is_brd() or is_hovering() or is_casting() or is_moving() or mq.TLO.Window("SpellBookWnd").Open() then
         return
     end
 
-    if mq.TLO.Me.MaxMana() > 0 and not mq.TLO.Me.Moving() then
+    if mq.TLO.Me.MaxMana() > 0 then
         if mq.TLO.Me.PctMana() < 70 and mq.TLO.Me.Standing() then
             mq.cmd.dgtell("all Low mana, medding at ", mq.TLO.Me.PctMana().."%")
             mq.cmd.sit("on")
@@ -297,6 +297,12 @@ function Heal.performLifeSupport()
     if botSettings.settings.healing == nil or botSettings.settings.healing.life_support == nil then
         mq.cmd.dgtell("all performLifeSupport ERROR I dont have healing.life_support configured. Current HP is "..mq.TLO.Me.PctHPs().."%")
         return
+    end
+
+    if mq.TLO.Me.Ducking() then
+        mq.cmd.dgtell("all performLifeSupport WARNING: Standing up. Was ducking")
+        mq.cmd.stand()
+        mq.delay(20)
     end
 
     for k, row in pairs(botSettings.settings.healing.life_support) do
@@ -326,6 +332,26 @@ function Heal.performLifeSupport()
             end
         end
 
+        if is_alt_ability(spellConfig.Name) and not is_alt_ability_ready(spellConfig.Name) then
+            --mq.cmd.dgtell("all performLifeSupport skip ", spellConfig.Name, ", AA is not ready")
+            skip = true
+        end
+
+        if have_item(spellConfig.Name) and not is_item_clicky_ready(spellConfig.Name) then
+            --mq.cmd.dgtell("all performLifeSupport skip ", spellConfig.Name, ", item clicky is not ready")
+            skip = true
+        end
+
+        if is_spell_in_book(spellConfig.Name) then
+            if not is_memorized(spellConfig.Name) then
+                mq.cmd.dgtell("all performLifeSupport skip ", spellConfig.Name, ", spell is not memorized")
+                skip = true
+            elseif not is_spell_ready(spellConfig.Name) then
+                mq.cmd.dgtell("all performLifeSupport skip ", spellConfig.Name, ", spell is not ready")
+                skip = true
+            end
+        end
+
         --print(" skip = ", skip, " spellConfig = ", spellConfig.Name)
 
         if not skip then
@@ -336,7 +362,7 @@ function Heal.performLifeSupport()
                 spellName = spellConfig.Name
             end
 
-            mq.cmd.dgtell("all USING LIFE SUPPORT ", spellName, " AT ", mq.TLO.Me.PctHPs(), " % HP")
+            mq.cmd.dgtell("all USING LIFE SUPPORT", spellName, "at", mq.TLO.Me.PctHPs(), "%")
             castSpell(spellName, mq.TLO.Me.ID())
             break
         end

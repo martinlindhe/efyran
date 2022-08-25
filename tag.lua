@@ -81,4 +81,9 @@ while true do
     mq.doevents()
     mq.delay(100)
 
+    if in_neutral_zone() then
+        mq.cmd.dgtell("all ERROR: Ending tag.lua in neutral zone")
+        os.exit()
+    end
+
 end

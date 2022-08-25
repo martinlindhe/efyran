@@ -17,6 +17,7 @@ assist  = require("e4_Assist")
 buffs   = require("e4_Buffs")
 group   = require("e4_Group")
 heal    = require("e4_Heal")
+loot    = require("e4_Loot")
 pet     = require("e4_Pet")
 qol     = require("e4_QoL")
 

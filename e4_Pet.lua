@@ -42,6 +42,12 @@ function Pet.Summon()
 
     mq.delay(20000, function() return have_pet() end)
 
+    if not have_pet() then
+        mq.cmd.dgtell("all ERROR: Failed to summon pet.")
+        mq.cmd.beep(1)
+        return false
+    end
+
     Pet.ConfigureTaunt()
     return true
 end

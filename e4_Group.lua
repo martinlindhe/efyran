@@ -96,7 +96,9 @@ function Group.Init()
                 local groupLeader = group[1]
                 if mq.TLO.DanNet(groupLeader)() ~= nil then
                     if mq.TLO.Me.Name() == raidLeader then
-                        mq.cmd.raidinvite(groupLeader)
+                        if mq.TLO.Me.Name() ~= groupLeader then
+                            mq.cmd.raidinvite(groupLeader)
+                        end
                     elseif raidLeader ~= groupLeader then
                         --print('Telling raid leader ', raidLeader,' to invite', groupLeader)
                         mq.cmd.dexecute(raidLeader, '/raidinvite', groupLeader)

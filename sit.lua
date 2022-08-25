@@ -25,4 +25,9 @@ while true do
     mq.delay(1)
     mq.doevents()
 
+    if in_neutral_zone() then
+        mq.cmd.dgtell("all ERROR: Ending sit.lua in neutral zone")
+        os.exit()
+    end
+
 end

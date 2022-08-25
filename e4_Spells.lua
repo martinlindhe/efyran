@@ -284,7 +284,7 @@ function castSpell(name, spawnId)
                 mq.delay(item.Clicky.CastTime() + item.Clicky.Spell.RecastTime() + 1500) -- XXX recast time is 0
             else
                 -- spell / AA
-                local spell = getSpell(name)
+                local spell = get_spell(name)
                 if spell ~= nil then
                     print("spell sleep ", spell.MyCastTime(), spell.RecastTime())
                     mq.delay(spell.MyCastTime() + spell.RecastTime()) 
@@ -321,10 +321,6 @@ function getSpellFromBuff(name)
     if mq.TLO.FindItem(name).ID() ~= nil then
         return mq.TLO.FindItem(name).Clicky.Spell
     elseif mq.TLO.Me.Book(mq.TLO.Spell(name).RankName) ~= nil then
-        if name == "Regrowth" then
-            -- XXX Regrowth wont cast from druid, NO IDEA WHY?!
-            print("getspell frombuff book ",  mq.TLO.Me.Book(mq.TLO.Spell(name).RankName), ", name = ", mq.TLO.Spell(name).Name)
-        end
         return mq.TLO.Spell(name)
     elseif mq.TLO.Me.AltAbility(name)() ~= nil then
         return mq.TLO.Me.AltAbility(name).Spell
@@ -344,7 +340,7 @@ function memorizeListedSpells()
         return
     end
     for name, gem in pairs(botSettings.settings.gems) do
-        local spell = getSpell(name)
+        local spell = get_spell(name)
         if spell == nil then
             mq.cmd.dgtell("all FATAL ERROR cant memorize spell", name)
             mq.cmd.beep(1)

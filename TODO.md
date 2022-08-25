@@ -1,6 +1,11 @@
 # TODO
 
 
+MQ2Lua gotchas:
+    /itemnotify seem to require mq.delay(1) or it wont always register
+
+
+
 heal:
     make the healme requester a separate macro, thus removing the issue of not asking for heals when e4 has crashed!
         (e4 will auto start this one if it is not already running)

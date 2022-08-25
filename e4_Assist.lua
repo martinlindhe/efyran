@@ -136,7 +136,7 @@ function Assist.summonNukeComponents()
                     castSpell(spell.Summon, mq.TLO.Me.ID())
 
                     -- wait and inventory
-                    local spell = getSpell(spell.Summon)
+                    local spell = get_spell(spell.Summon)
                     mq.delay(2000 + spell.MyCastTime())
                     clear_cursor()
                     return true

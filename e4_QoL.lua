@@ -17,6 +17,8 @@ function QoL.Init()
         mq.cmd.djoin("skillup")
     end
 
+    mq.cmd.djoin("xp")
+
     if in_guild() then
         -- enable auto consent for guild
         mq.cmd("/consent guild")
@@ -54,7 +56,7 @@ function QoL.Init()
     end)
     
     mq.event("xp", "You gain experience!", function()
-        mq.cmd.dgtell("xp gain")
+        mq.cmd.dgtell("xp", "gained xp")
     end)
 
     -- clear all chat windows on current peer
@@ -86,7 +88,7 @@ function QoL.Init()
         mq.cmd("/hidec none")
     end)
 
-    -- quickly exits all eqgame.exe instances using task manager (prevents url open on f2p game exit)
+    -- quickly exits all eqgame.exe instances using task manager
     mq.bind("/exitall", function(name)
         mq.cmd.exec('TASKKILL "/F /IM eqgame.exe"')
     end)

@@ -147,14 +147,14 @@ settings.bot_buffs = {} -- XXX
 
 settings.healing = {
     ["life_support"] = {
-        -- Celestial Regeneration AA - HoT, 15 min reuse
-        "Celestial Regeneration/HealPct|90/MinMobs|10",
-
         -- Divine Arbitration AA - balance group HP %, 3 min reuse
         "Divine Arbitration/HealPct|50/MinMobs|10",
 
         -- epic 1.5 - balance group HP %, 6 min reuse
         "Harmony of the Soul/HealPct|50/MinMobs|10",
+
+        -- Celestial Regeneration AA - HoT, 15 min reuse
+        "Celestial Regeneration/HealPct|50/MinMobs|10",
 
         -- L70 Sanctuary AA (id:5912, removes you from combat), 1h12 min reuse
         "Sanctuary/HealPct|13",
@@ -172,7 +172,7 @@ settings.healing = {
 
         "Eleventh-Hour/HealPct|35/MinMana|60", -- XXX is MinMana check done on life_support ?
 
-        "Pious Remedy/HealPct|40/MinMana|5",
+        "Pious Remedy/HealPct|70/MinMana|5",
     },
 
     ["rez"] = { -- XXX impl? or just auto code the rez spells
