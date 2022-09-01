@@ -55,9 +55,8 @@ settings.assist = {
         "Dance of Blades",
         "Cacophony",
 
-        -- (oow T1: increase double attack by  30% for 12s, 5 min reuse) Traveler's Mail Chestguard
-        -- (oow T2: increase double attack by 100% for 24s, 5 min reuse) Farseeker's Plate Chestguard of Harmony
-        --"Farseeker's Plate Chestguard of Harmony",
+        -- oow T2 bp: increase double attack by 100% for 24s, 5 min reuse (Farseeker's Plate Chestguard of Harmony)
+        "Farseeker's Plate Chestguard of Harmony",
 
         "Song of Stone",
     },

@@ -35,32 +35,31 @@ function Follow.Init()
         mq.cmd.dgze("/click left door")
     end)
 
-    -- NOTE: can't seem to register /followon and /followoff
-    mq.bind("/followme", function()
+    mq.bind("/followon", function()
         mq.cmd.dgzexecute("/followid", mq.TLO.Me.ID())
+    end)
+
+    mq.bind("/followoff", function(s)
+        if is_orchestrator() then
+            mq.cmd.dgzexecute("/followoff")
+        end
+        Follow.Pause()
+        Follow.spawn = nil
     end)
 
     -- follows another peer in LoS
     mq.bind("/followid", function(spawnID)
-        print("followid called")
-        if is_peer_id(spawnID) then
-            if is_spawn_los(spawnID) then
-                Follow.spawn = spawn_from_id(spawnID)
-                Follow.Resume()
-            else
-                mq.cmd.dgtell("all spawn ", spawnID, " not LoS")
-            end
-        else
+        if not is_peer_id(spawnID) then
             mq.cmd.dgtell("all ERROR: /followid called on invalid spawnID", spawnID)
+            return
         end
-    end)
-    
-    mq.bind("/stopfollow", function(s)
-        if is_orchestrator() then
-            mq.cmd.dgzexecute("/stopfollow")
+
+        if is_spawn_los(spawnID) then
+            Follow.spawn = spawn_from_id(spawnID)
+            Follow.Resume()
+        else
+            mq.cmd.dgtell("all Spawn ", spawnID, " is not in LoS")
         end
-        Follow.Pause()
-        Follow.spawn = nil
     end)
 
     mq.bind("/portto", function(name)
@@ -112,11 +111,34 @@ function Follow.Init()
         end
     end)
 
+    -- tell peers in zone to use Throne of Heroes
     mq.bind("/throne", function()
+        mq.cmd.dgzexecute("/throne")
+        cast_veteran_aa("Throne of Heroes")
+    end)
+
+
+    mq.bind("/movetome", function()
+        mq.cmd.dgzexecute("/movetoid", mq.TLO.Me.ID())
+    end)
+
+    -- move to me
+    mq.bind("/mtm", function()
+        mq.cmd.dgzexecute("/movetoid", mq.TLO.Me.ID())
+    end)
+
+    -- move to spawn ID
+    mq.bind("/movetoid", function(spawnID)
         if is_orchestrator() then
-            mq.cmd.dgzexecute("/throne")
+            mq.cmd.dgzexecute("/movetoid", spawnID)
         end
-        castVeteranAA("Throne of Heroes")
+
+        local spawn = spawn_from_id(spawnID)
+        if spawn == nil then
+            mq.cmd.dgtell("all No such spawn: ", spawnID)
+            return
+        end
+        move_to(spawn)
     end)
 
     -- run through zone based on the position of startingPeer
@@ -124,55 +146,55 @@ function Follow.Init()
     mq.bind("/rtz", function(startingPeer)
 
         if is_orchestrator() then
+            -- tell the others to cross zone line
             mq.cmd.dgzexecute("/rtz", mq.TLO.Me.Name())
-        else
-            -- run across (need pos + heading from orchestrator)
-            local spawn = spawn_from_peer_name(startingPeer)
-            if spawn == nil then
-                mq.cmd.dgtell("all ERROR: /rtz requested from peer not found: ", startingPeer)
-                return
+            return
+        end
+
+        -- run across (need pos + heading from orchestrator)
+        local spawn = spawn_from_peer_name(startingPeer)
+        if spawn == nil then
+            mq.cmd.dgtell("all ERROR: /rtz requested from peer not found: ", startingPeer)
+            return
+        end
+
+        local oldZone = mq.TLO.Zone.ShortName()
+        print("MOVING THRU ZONE FROM ", oldZone)
+
+        mq.cmd.stick("off")
+
+        -- move to initial position
+        move_to(spawn)
+
+        if not is_within_distance(spawn, 15) then
+            -- unlikely
+            mq.cmd.dgtell("all /rtz ERROR: failed to move near ", spawn.Name(), ", my distance is ", spawn.Distance())
+            return
+        end
+
+        -- face the direction of the orchestration
+        local heading = spawn.Heading.Degrees()
+        local headingArg = "fast heading "..tostring(spawn.Heading.Degrees() * -1)
+        mq.cmd.face(headingArg)
+        mq.delay(5)
+
+        -- move forward
+        mq.cmd.keypress("forward hold")
+        mq.delay(6000, function()
+            local zoned = mq.TLO.Zone.ShortName() ~= oldZone
+            if zoned then
+                print("I ZONED INTO ", mq.TLO.Zone.ShortName())
             end
+            return zoned
+        end)
 
-            local oldZone = mq.TLO.Zone.ShortName()
-            print("MOVING THRU ZONE FROM ", oldZone)
-
-            mq.cmd.stick("off")
-
-            -- move to initial position
-            move_to(spawn)
-
-            if not is_within_distance(spawn, 15) then
-                -- unlikely
-                mq.cmd.dgtell("all /rtz ERROR: failed to move near ", spawn.Name(), ", my distance is ", spawn.Distance())
-                return
-            end
-
-            -- face the direction of the orchestration
-            local heading = spawn.Heading.Degrees()
-            local headingArg = "fast heading "..tostring(spawn.Heading.Degrees() * -1)
-            mq.cmd.face(headingArg)
-            mq.delay(5)
-
-            -- move forward
-            mq.cmd.keypress("forward hold")
-            mq.delay(6000, function()
-                local zoned = mq.TLO.Zone.ShortName() ~= oldZone
-                if zoned then
-                    print("I ZONED INTO ", mq.TLO.Zone.ShortName())
-                end
-                return zoned
-            end)
-
-            if mq.TLO.Zone.ShortName() == oldZone then
-                mq.cmd.dgtell("all ERROR failed to run across zone line in", oldZone)
-                mq.cmd.beep(1)
-            end
-
+        if mq.TLO.Zone.ShortName() == oldZone then
+            mq.cmd.dgtell("all ERROR failed to run across zone line in", oldZone)
+            mq.cmd.beep(1)
         end
 
     end)
 end
-
 
 function Follow.Pause()
     mq.cmd.afollow("off")
@@ -184,18 +206,6 @@ function Follow.Resume()
         mq.cmd("/afollow spawn", Follow.spawn.ID())
     else
         print("Follow.Resume: failed. spawnID is nil")
-    end
-end
-
-function castVeteranAA(name)
-    if mq.TLO.Me.AltAbility(name)() ~= nil then
-        if mq.TLO.Me.AltAbilityReady(name)() then
-            castSpell(name, mq.TLO.Me.ID())
-        else
-            mq.cmd.dgtell("ERROR:", name, "is not ready, ready in", mq.TLO.Me.AltAbilityTimer(name).TimeHMS() )
-        end
-    else
-        mq.cmd.dgtell("ERROR: i do not have AA", name)
     end
 end
 

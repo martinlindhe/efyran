@@ -29,6 +29,7 @@ function move_to(spawn)
 
     mq.cmd.moveto("loc "..spawn.Y().." "..spawn.X())
     mq.delay(10000, function() return is_within_distance(spawn, 15) end)
+    mq.cmd.moveto("off")
 end
 
 -- returns true if t contains v, false otherwise.
@@ -303,8 +304,12 @@ end
 
 local neutralZones = { "guildlobby", "guildhall", "bazaar", "poknowledge", "potranquility", "nexus" }
 
--- returns true if we are in a neutral zone
+-- returns true if we are in a neutral zone (be less obvious on live)
 function in_neutral_zone()
+    if is_rof2() then
+        -- ignore neutral zone check on emu.
+        return false
+    end
     for k, v in pairs(neutralZones) do
         if mq.TLO.Zone.ShortName():lower() == v:lower() then
             return true
@@ -393,7 +398,7 @@ end
 function clear_cursor()
     while true do
         if mq.TLO.Cursor.ID() == nil then
-            print("cursor clear. ending")
+            --print("cursor clear. ending")
             return true
         end
         if mq.TLO.Me.FreeInventory() == 0 then
@@ -406,5 +411,17 @@ function clear_cursor()
         mq.delay(10000, function() return mq.TLO.Cursor.ID() == nil end)
         mq.delay(100)
         mq.doevents()
+    end
+end
+
+function cast_veteran_aa(name)
+    if mq.TLO.Me.AltAbility(name)() ~= nil then
+        if mq.TLO.Me.AltAbilityReady(name)() then
+            castSpell(name, mq.TLO.Me.ID())
+        else
+            mq.cmd.dgtell("all", "ERROR:", name, "is not ready, ready in", mq.TLO.Me.AltAbilityTimer(name).TimeHMS() )
+        end
+    else
+        mq.cmd.dgtell("all", "ERROR: i do not have AA", name)
     end
 end

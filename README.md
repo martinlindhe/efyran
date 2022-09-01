@@ -67,8 +67,8 @@ Buff Spell Level   Minimum Target Level
 /backoff                  	- call of assist
 
 
-/followme					- movement
-/stopfollow					- movement
+/followon					- movement
+/followoff					- movement
 /clickit					- click a "door" object to zone
 /rtz                        - face zoneline and run it to instruct bots to cross the zoneline
 

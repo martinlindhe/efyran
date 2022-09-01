@@ -75,7 +75,7 @@ function Bard.PlayMelody(name)
     end
 
     mq.cmd.twist(gemSet)
-    mq.cmd.dgtell("all Playing melody", name)
+    mq.cmd.dgtell("all Playing melody \ay"..name.."\ax.")
 
     Bard.currentMelody = name
 end

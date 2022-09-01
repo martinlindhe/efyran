@@ -268,7 +268,7 @@ end
 function castSpell(name, spawnId)
 
     if mq.TLO.Me.CombatAbility(name)() ~= nil then
-        mq.cmd.dgtell("castSpell: /disc", name)
+        --mq.cmd.dgtell("castSpell: /disc", name)
         mq.cmd('/disc', name)               -- NOTE: /disc argument must NOT use quotes
     elseif mq.TLO.Me.Ability(name)() then
         print("castSpell: /doability", name)
