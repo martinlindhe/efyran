@@ -1,14 +1,16 @@
+local PetSpells = require("e4_PetSpells")
+
 local Pet = {}
 
 -- summon my pet, returns true if spell was cast
 function Pet.Summon()
-    if botSettings.settings.pet == nil or botSettings.settings.pet.spell == nil then
-        --print("cant summon pet. no spell in settings")
+    if botSettings.settings.pet == nil then
+        --print("wont summon pet. no spell in settings")
         return false
     end
 
     if have_pet() then
-        --mq.cmd.dgtell("all cant summon pet. i already have one!", mq.TLO.Me.Pet.Name())
+        --mq.cmd.dgtell("all wont summon pet. i already have one!", mq.TLO.Me.Pet.Name())
         return false
     end
 
@@ -17,17 +19,25 @@ function Pet.Summon()
         return false
     end
 
-    print("Summoning pet with spell ", botSettings.settings.pet.spell)
+    local spellName = find_pet_spell()
+    if spellName == nil then
+        mq.cmd.dgtell("all ERROR: Can't summon pet. No spell found.")
+        return false
+    end
 
-    local spellConfig = parseSpellLine(botSettings.settings.pet.spell) -- XXX parse this once on script startup. dont evaluate all the time !!!
+    local spellConfig = parseSpellLine(spellName)
 
-    local spell = getSpellFromBuff(spellConfig.Name)
+    local spell = get_spell(spellConfig.Name)
+    if spell == nil then
+        mq.cmd.dgtell("all ERROR: Failed to lookup spell ", spellConfig.Name)
+        return false
+    end
 
-    if spellConfig.MinMana ~= nil then
-        if mq.TLO.Me.PctMana() < tonumber(spellConfig.MinMana) then
-            print("SKIP PET SUMMON, my mana ", mq.TLO.Me.PctMana, " vs required ", spellConfig.MinMana)
-            return false
-        end
+    print("Summoning L", spell.Level(), " pet with \ay"..spellName.."\ax.")
+
+    if mq.TLO.Me.CurrentMana() < spell.Mana() then
+        print("SKIP PET SUMMON, my mana ", mq.TLO.Me.PctMana(), " vs required ", spell.Mana())
+        return false
     end
 
     if spellConfig.Reagent ~= nil then
@@ -50,6 +60,46 @@ function Pet.Summon()
 
     Pet.ConfigureTaunt()
     return true
+end
+
+-- return spell line (string) with best available pet
+function find_pet_spell()
+    local pets = PetSpells[mq.TLO.Me.Class.ShortName()]
+    if pets == nil then
+        mq.cmd.dgtell("all ERROR: No pets defined for class", mq.TLO.Me.Class.Name())
+        return nil
+    end
+
+    local level = 1
+    local name = ""
+    for i,v in ipairs(pets) do
+        if is_spell_in_book(v) then
+            local spell = get_spell(v)
+            -- print("Considering L",spell.Level(), " ", spell.RankName())
+            if spell.Level() > level then
+                level = spell.Level()
+                name = spell.RankName()
+            end
+        else
+            print("Pet spell not in book: ", v)
+        end
+    end
+
+    reagent = ""
+    if mq.TLO.Me.Class.ShortName() == "ENC" then
+        reagent = "/Reagent|Tiny Dagger"
+    elseif mq.TLO.Me.Class.ShortName() == "NEC" and not is_alt_ability("Deathly Pact") then
+        -- NOTE: skip reagent with Deathly Pact AA
+        reagent = "/Reagent|Bone Chips"
+    elseif mq.TLO.Me.Class.ShortName() == "SHD" and not is_alt_ability("Deathly Pact") then
+        -- NOTE: skip reagent with Deathly Pact AA
+        reagent = "/Reagent|Bone Chips"
+    elseif mq.TLO.Me.Class.ShortName() == "MAG" and not is_alt_ability("Elemental Pact") then
+         -- NOTE: skip reagent with Elemental Pact AA
+        reagent = "/Reagent|Malachite"
+    end
+
+    return name..reagent
 end
 
 -- returns true if spell was cast
@@ -112,12 +162,11 @@ function Pet.BuffMyPet()
     return false
 end
 
--- XXX also call each time we zone...
 function Pet.ConfigureTaunt()
     if not have_pet() then
         return
     end
-    print("configuring pet")
+    --print("Configuring pet")
     if botSettings.settings.pet.taunt ~= nil and botSettings.settings.pet.taunt then
         mq.cmd.pet("taunt on")
     else
