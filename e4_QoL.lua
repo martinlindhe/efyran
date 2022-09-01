@@ -126,6 +126,22 @@ function QoL.Init()
         mq.cmd("/noparse /dgaexecute all /if (!${Zone.ShortName.Equal["..zone.."]}) /dgtell all I'm in ${Zone.ShortName}")
     end)
 
+    mq.bind("/notingroup", function()
+        mq.cmd("/noparse /dgaexecute all /if (!${Me.Grouped}) /dgtell all NOT IN GROUP")
+    end)
+
+    mq.bind("/ingroup", function()
+        mq.cmd("/noparse /dgaexecute all /if (${Me.Grouped}) /dgtell all IN GROUP")
+    end)
+
+    mq.bind("/notinraid", function()
+        mq.cmd("/noparse /dgaexecute all /if (!${Raid.Members}) /dgtell all NOT IN RAID")
+    end)
+
+    mq.bind("/inraid", function()
+        mq.cmd("/noparse /dgaexecute all /if (${Raid.Members}) /dgtell all IN RAID")
+    end)
+
     -- open loot window on closest corpse
     mq.bind("/lcorpse", function()
         if has_target() ~= nil then
