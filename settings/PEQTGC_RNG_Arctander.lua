@@ -68,12 +68,6 @@ settings.self_buffs = {
     "Howl of the Predator/MinMana|50",
 }
 
-settings.group_buffs = {
-    ["hp_atk"] = {
-        "Strength of Tunare/MinLevel|46",
-    }
-}
-
 settings.bot_buffs = {
     ["Strength of Tunare/MinMana|50/CheckFor|Spiritual Vitality"] = {
         "Besty", "Blod", "Urinfact", "Sweetlard", "Azoth", "Yelwen", "Laser", "Knuck",

@@ -46,83 +46,6 @@ settings.self_buffs = {
     "Guard of Druzzil/MinMana|80",
 }
 
-
-settings.group_buffs = {
-    -- L26 Clarity (7-9 mana/tick)
-    -- L42 Boon of the Clear Mind (6-9 mana/tick, group)
-    -- L52 Clarity II (9-11 mana/tick, single)
-    -- L56 Gift of Pure Thought (10-11 mana/tick, group)
-    -- L60 Koadic's Endless Intellect (14 mana/tick, group)
-    -- L63 Tranquility (16 mana/tick, group)
-    -- L65 Voice of Quellious (18 mana/tick, group, cost 1200 mana)
-    -- L65 Dusty Cap of the Will Breaker (LDoN raid). casts "Voice of Quellious" on L01 toons
-    -- L68 Clairvoyance (20 mana/tick, cost 400 mana)
-    -- L70 Voice of Clairvoyance (20 mana/tick, cost 1300 mana, group)
-    -- L73 Seer's Intuition (24 mana/tick, cost 480 mana)
-    -- L75 Voice of Intuition Rk. II (25 mana/tick, cost 1625 mana, group)
-    -- L78 Seer's Cognizance Rk. II (35 mana/tick, cost 610 mana)
-    -- L80 Voice of Cognizance Rk. II (35 mana/tick, cost 1983 mana, group)
-    ["manaregen"] = {
-        "Boon of the Clear Mind/MinLevel|1",
-        "Gift of Pure Thought/MinLevel|43",
-        --"Koadic's Endless Intellect/MinLevel|45",     -- XXX get spell
-        "Tranquility/MinLevel|46",
-        --"Voice of Quellious/MinLevel|47",             -- XXX get spell
-        "Voice of Clairvoyance/MinLevel|62",
-        "Voice of Intuition/MinLevel|71", -- XXX minlevel
-        "Voice of Cognizance/MinLevel|76", -- XXX minlevel
-    },
-
-    -- L47 Swift Like the Wind (60% haste, 16 min) - L01-45
-    -- L53 Aanya's Quickening  (64% haste, 24 min, DOES NOT land on lv15. DOES LAND on L42)
-    -- L58 Wondrous Rapidity   (70% haste, 18.4 min)
-    -- L62 Speed of Vallon     (68% haste, 41 atk, 52 agi, 33 dex, 42 min)
-    -- L65 Vallon's Quickening (68% haste, 41 atk, 52 agi, 33 dex, 42 min, group)
-    -- L67 Speed of Salik      (68% haste, 53 atk, 60 agi, 50 dex, 42 min 20% melee crit chance, cost 437 mana)
-    -- L67 Hastening of Salik  (68% haste, 53 atk, 60 agi, 50 dex, 42 min, 20% melee crit chance, cost 1260 mana, group)
-    -- L72 Speed of Ellowind   (68% haste, 64 atk, 72 agi, 60 dex, 42 min, 24% melee crit chance, %1 crit melee damage, cost 524 mana)
-    -- L75 Hastening of Ellowind Rk. II (68% haste, 66 atk, 75 agi, 63 dex, 42 min, 25% melee crit chance, 2% crit melee damage, cost 1575 mana, group)
-    ["enc_haste"] = {
-        "Swift Like the Wind/MinLevel|1",
-        "Aanya's Quickening/MinLevel|41",
-        "Wondrous Rapidity/MinLevel|44",
-        --"Speed of Vallon/MinLevel|46",            -- XXX get spell
-        --"Vallon's Quickening/MinLevel|47",        -- XXX get spell
-        "Hastening of Salik/MinLevel|62",
-        "Hastening of Ellowind/MinLevel|71", -- XXX unsure of minlevel
-    },
-
-    -- L48 Group Resist Magic (53-55 mr, group)
-    -- L62 Guard of Druzzil (75 mr, group)
-    ["magic_resist"] = {
-        "Group Resist Magic/MinLevel|1",
-        "Guard of Druzzil/MinLevel|46",
-    },
-
-    ["group_rune"] = {
-        -- L69 Rune of Rikkukin (absorb 1500 dmg, group)  - XXX get spell
-        -- L79 Rune of the Deep Rk. II (slot 1: absorb 4118 dmg, slot 2: defensive proc Blurred Shadows Rk. II)
-        "Rune of the Deep/MinLevel|76", -- XXX unsure of minlevel
-    },
-
-    ["rune"] = {
-        -- targeted rune - slot 1:
-        -- L33 Rune III (absorb 168-230 dmg)
-        -- L40 Rune IV (absorb 305-394 dmg)
-        -- L52 Rune V (absorb 620-700 dmg)
-        -- L61 Rune of Zebuxoruk (absorb 850 dmg)
-        -- L67 Rune of Salik (absorb 1105 dmg)
-        -- L71 Rune of Ellowind (absorb 2160 dmg)
-        -- L76 Rune of Erradien Rk. II (absorb 5631 dmg)
-        "Rune IV/Reagent|Peridot/MinLevel|1",
-        "Rune V/Reagent|Peridot/MinLevel|41",
-        "Rune of Zebuxoruk/Reagent|Peridot/MinLevel|45",
-        --"Rune of Salik/Reagent|Peridot/MinLevel|62",        -- XXX get spell
-        "Rune of Ellowind/Reagent|Peridot/MinLevel|71", -- XXX minlevel
-        "Rune of Erradien/Reagent|Peridot/MinLevel|76", -- XXX minlevel
-    },
-}
-
 settings.combat_buffs = { -- XXX impl
 --[[
 ; L63 Night's Dark Terror (scarecrow, Lifetap Strike proc, 45 atk, 120 dex) - DOES not stack with Avatar
@@ -160,14 +83,6 @@ settings.healing = {
 
 settings.pet = {
     --["auto"] = false,
-
-    -- Lxx Kintaz's Animation
-    -- L55 Zumaik's Animation
-    -- L62 Aeldorb's Animation
-    -- L66 Salik's Animation
-    -- L71 Ellowind's Animation
-    -- L76 Erradien's Animation
-    ["spell"] = "Erradien's Animation/MinMana|20/Reagent|Tiny Dagger",
 
     ["heals"] = {},
     ["buffs"] = {

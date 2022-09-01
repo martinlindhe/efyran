@@ -47,10 +47,7 @@ settings.self_buffs = {
     -- L64 Shield of Maelin (350 hp, 38-39 ac, 40 mr)
     --"Shield of Maelin/MinMana|70",
 
-
-    -- L41 Dead Man Floating (61-70 pr, water breathing, see invis, levitate)
-    -- L45 Dead Men Floating (65-70 pr, water breathing, see invis, levitate, group)
-    "Dead Men Floating",
+    "Dead Men Floating", -- group levitate
 
     -- self rune, slot 1:
     -- L63 Force Shield (absorb 750 dmg, 2 mana/tick)
@@ -236,34 +233,9 @@ Mana Dump=Covetous Subversion/MinMana|5/Gem|3
 Lich Spell=
 LifeTap=
 
-
 ]]--
 
-
 settings.pet = {
-    -- L01 Cavoting Bones
-    -- L04 Leering Corpse
-    -- L08 Bone Walk
-    -- L12 Convoke Shadow
-    -- L16 Restless Bones
-    -- L20 Animate Dead
-    -- L24 Haunting Corpse
-    -- L29 Summon Dead
-    -- L33 Invoke Shadow
-    -- L39 Malignant Dead (pet is L33)
-    -- L56 Servant of Bones (pet is L44)
-    -- L59 Emissary of Thule (pet is L47)
-    -- L61 Legacy of Zek (pet WAR/XX)
-    -- L63 Saryrn's Companion (pet ROG/60)
-    -- L67 Lost Soul (pet WAR/65)
-    -- L70 Dark Assassin (pet ROG/65)
-    -- L72 Riza`farr's Shadow (xxx)
-    -- L75 Putrescent Servant (xxx)
-    -- L77 Relamar's Shade (xxx)
-    -- L80 Noxious Servant (xxx)
-    -- NOTE: skip reagent with Deadly Pact AA
-    ["spell"] = "Noxious Servant/MinMana|10/Reagent|Bag of the Tinkerers",
-
     ["heals"] = {
         -- pet heals:
         -- L07 Mend Bones (22-32 hp)

@@ -55,57 +55,6 @@ settings.self_buffs = {
     --"Rage/MinMana|40",
 }
 
-settings.group_buffs = {
-    -- STA - affects HP:
-    -- L06 Spirit of Bear (11-15 sta)
-    -- L21 Spirit of Ox (19-23 sta)
-    -- L30 Health (27-31 sta)
-    -- L43 Stamina (36-40 sta)
-    -- L54 Riotous Health (50 sta)
-    -- L57 Talisman of the Brute (50 sta, group)
-    -- L62 Endurance of the Boar (60 sta)
-    -- L63 Talisman of the Boar (60-68 sta, group)
-    -- L68 Spirit of Fortitude (75 sta, 40 sta cap)
-    -- L69 Talisman of Fortitude (78 sta, 40 sta cap, group)
-    ["sta"] = {
-        "Stamina/MinLevel|1",
-        "Talisman of the Brute/MinLevel|43",
-        "Talisman of the Boar/MinLevel|46",
-        "Talisman of Fortitude/MinLevel|62",
-    },
-
-    -- focus - HP Slot 1: Increase Max HP:
-    -- L46 Harnessing of Spirit (243-251 hp, 67 str, 50 dex, cost 425 mana)
-    -- L60 Focus of Spirit (405-525 hp, 67 str, 60 dex, cost 500 mana)
-    -- L60 Khura's Focusing (430-550 hp, 67 str, 60 dex, cost 1250 mana, group)
-    -- L62 Focus of Soul (544 hp, 75 str, 70 dex, cost XXX mana)
-    -- L65 Focus of the Seventh (544 hp, 75 str, 70 dex, cost 1800 mana, group)
-    -- L68 Wunshi's Focusing (680 hp, 85 str, 85 dex, str cap 85, dex cap 85, cost 780 mana)
-    -- L70 Talisman of Wunshi (680 hp, 85 str, 85 dex, str cap 85, dex cap 85, cost 2340 mana)
-    ["focus"] = {
-        "Harnessing of Spirit/MinLevel|1",
-        "Khura's Focusing/MinLevel|45",
-        "Focus of the Seventh/MinLevel|47",
-        "Talisman of Wunshi/MinLevel|62",
-    },
-
-    -- L09 Spirit of Wolf (48-55% speed, 36 min)
-    -- L36 Spirit of Bih`Li (48-55% run speed, 15 atk, 36 min, group)
-    ["runspeed"] = {
-        "Spirit of Bih`Li/MinLevel|1/CheckFor|Flight of Eagles",  -- XXX CheckFor on group buffs... ?!
-    },
-
-    ["shm_haste"] = {
-        -- L26 Quiuckness (27--30% haste, 11 min)
-        -- L42 Alacrity (32-40% haste, 11 min)
-        -- L63 Swift Like the Wind (60% haste, 16 min)
-        -- L64 Talisman of Celerity (60% haste, 36 min, group)
-        "Alacrity/MinLevel|1",
-        "Swift Like the Wind/MinLevel|46",
-        "Talisman of Celerity/MinLevel|47/CheckFor|Hastening of Salik",
-    },
-}
-
 settings.bot_buffs = {
     -- STR - affects ATK & carry limit
     -- L01 Strengthen (5-10 str)
@@ -193,16 +142,8 @@ Combat Buff=
 
 
 settings.pet = {
-    ["auto"] = false, -- XXX if true, will auto-summon and auto-buff pet
-    -- L32 Companion Spirit
-    -- L37 Vigilant Spirit
-    -- L41 Guardian Spirit
-    -- L45 Frenzied Spirit
-    -- L55 Spirit of the Howler
-    -- L61 True Spirit (pet WAR/58)
-    -- L67 Farrel's Companion (pet WAR/63)
-    ["spell"] = "Farrel's Companion/MinMana|80/Reagent|Bag of the Tinkerers",
- 
+    ["auto"] = false,
+
     ["heals"] = {
         "Ancient: Wilslik's Mending/HealPct|25/MinMana|70",
     },

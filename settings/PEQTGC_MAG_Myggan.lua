@@ -78,32 +78,6 @@ settings.combat_buffs = {
 ]]--
 }
 
-settings.group_buffs = {
-    -- L07 Shield of Fire (4-6 ds, 10 fr, 15 min, single)
-    -- L19 Shield of Flame (7-9 ds, 15 fr, 15 min, single)
-    -- L28 Inferno Shield (13-15 ds, 20 fr, 15 min, single)
-    -- L38 Barrier of Combustion (18-20 ds, 22 fr, 15 min, single)
-    -- L45 Shield of Lava (25 ds, 25 fr, 15 min, single) - L1-45
-    -- L53 Boon of Immolation (25 ds, 25 fr, 15 min, group)
-    -- L56 Cadeau of Flame (35 ds, 33 fr, 15 min, single)
-    -- L61 Flameshield of Ro (48 ds, 45 fr, 15 min, single)
-    -- L63 Maelstrom of Ro (48 ds, 45 fr, 15 min, group)
-    -- L66 Fireskin (62 ds - slot 1, 45 fr, 15 min, single)
-    -- L70 Circle of Fireskin (62 ds, 45 fr, 15 min, group)
-    ["ds"] = {
-        -- single ds buff
-        "Shield of Lava/MinLevel|1",
-        "Cadeau of Flame/MinLevel|43",
-        "Flameshield of Ro/MinLevel|45",
-        "Fireskin/MinLevel|62",
-    },
-    ["groupds"] = {  
-        "Boon of Immolation/MinLevel|41",
-        "Maelstrom of Ro/MinLevel|46",
-        "Circle of Fireskin/MinLevel|62",
-    },
-}
-
 settings.healing = {
     ["life_support"] = {
         "Shared Health/HealPct|60",
@@ -112,21 +86,6 @@ settings.healing = {
 }
 
 settings.pet = {
-    -- water pets (rogue):
-    -- L02 Elementalkin: Water
-    -- L10 Elemental: Water
-    -- L22 Summoning: Water
-    -- L26 Greater Summoning: Water
-    -- L31 Minor Conjuration: Water
-    -- L36 Lesser Conjuration: Water
-    -- Lxx Greater Conjuration: Water
-    -- L54 Vocarate: Water
-    -- L60 Greater Vocaration: Water
-    -- L62 Servant of Marr (pet ROG/60) - no reagent
-    -- L67 Child of Water (pet ROG/65) - Malachite
-    -- AA Elemental Pact to not use Malachite
-    ["spell"] = "Child of Water/MinMana|10/Reagent|Bag of the Tinkerers",
-
     -- pet heals:
     -- Lxx Primal Remedy
     -- L59 Mend Companion AA (36 min reuse without Hastened Mending AA)

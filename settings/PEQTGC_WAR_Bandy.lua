@@ -49,21 +49,29 @@ settings.self_buffs = {
 
 settings.request_buffs = {
     -- XXX i list all buffs that I want
-    --"Balikor's Mark/IfClass|DRU",
-    --"Conviction/IfNoClass|DRU", -- xxx consider syntax
-    "symbol", -- clr
-    "ac", -- clr
-    "focus", -- shm
-    "skin", -- XXX DRU need ini
-    "brells", -- XXX PAL need ini
 
-    "seasons", -- XXX DRU
+    -- should we ask for symbol / aegolism?
+    "symbol/IfAvailable|DRU", -- CLR
+    "ac/IfAvailable|DRU", -- CLR
+    "skin/IfAvailable|DRU", -- DRU. XXX DRU need ini
+
+    "aegolism/IfNotAvailable|DRU", -- CLR
+
+
+
+    "focus/IfAvailable|SHM", -- shm
+
+    -- XXX alternates, BST SV or RNG buff
+    "brells/IfAvailable|PAL", -- XXX PAL need ini
+
+
 
     "enc_haste", -- enc
-    "magic_resist", -- enc
-    -- XXX more
 
-    --"Blessing of Steeloak"
+
+    -- resists
+    "seasons/IfAvailable|DRU", -- DRU
+    "magic_resist", -- enc
 }
 
 settings.combat_buffs = { -- XXX implement

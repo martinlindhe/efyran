@@ -107,7 +107,6 @@ function Follow.Init()
             else
                 castSpellRaw(evac, mq.TLO.Me.ID(), "gem5 -maxtries|3")
             end
-
         end
     end)
 
@@ -116,7 +115,6 @@ function Follow.Init()
         mq.cmd.dgzexecute("/throne")
         cast_veteran_aa("Throne of Heroes")
     end)
-
 
     mq.bind("/movetome", function()
         mq.cmd.dgzexecute("/movetoid", mq.TLO.Me.ID())

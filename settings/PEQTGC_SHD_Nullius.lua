@@ -86,10 +86,6 @@ settings.healing = {
 
 settings.pet = {
     ["auto"] = false,
-
-    -- L68 Son of Decay (WAR/60)
-    -- AA Deathly Pact to not need Bone Chips
-    ["spell"] = "Son of Decay/MinMana|10/Reagent|Bag of the Tinkerers",
     ["heals"] = {},
     ["buffs"] = {
         -- pet haste

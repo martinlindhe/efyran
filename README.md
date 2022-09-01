@@ -54,11 +54,9 @@ Buff Spell Level   Minimum Target Level
 66+: 				Level 62
 
 
-## eqbc -> dannet migration
-
-
-/bca  => xxx
-
+## Terminology used
+- Orchestrator = the main driver toon you are playing from
+- Peer = A connected character that you control
 
 
 ## command reference
@@ -67,11 +65,11 @@ Buff Spell Level   Minimum Target Level
 /backoff                  	- call of assist
 
 
-/followon					- movement
-/followoff					- movement
+/followon					- tell peers to follow you
+/followoff					- tell peers to stop
+/movetome                   - tell peers to move to your location
 /clickit					- click a "door" object to zone
 /rtz                        - face zoneline and run it to instruct bots to cross the zoneline
-
 
 /buffon                     - auto buffs
 /buffoff

@@ -24,17 +24,6 @@ function Heal.Init()
         end
     end)
 
-    mq.event("zoned", "You have entered #1#.", function(text, zone)
-        if zone ~= "an area where levitation effects do not function" then
-            print("I zoned into ", zone)
-            mq.delay(2000)
-            pet.ConfigureTaunt()
-
-            joinCurrentHealChannel()
-            memorizeListedSpells()
-        end
-    end)
-
     mq.bind("/rezit", function(spawnID)
         print("rezit", spawnID)
 
@@ -269,7 +258,7 @@ function Heal.medCheck()
         if mq.TLO.Me.PctMana() < 70 and mq.TLO.Me.Standing() then
             mq.cmd.dgtell("all Low mana, medding at", mq.TLO.Me.PctMana().."%")
             mq.cmd.sit("on")
-        elseif mq.TLO.Me.PctMana() >= 100 and not mq.TLO.Me.Standing() then
+        elseif mq.TLO.Me.PctMana() >= 100 and not mq.TLO.Me.Standing() and not mq.TLO.Me.Ducking() then
             mq.cmd.dgtell("all Ending medbreak, full mana.")
             mq.cmd.sit("off")
         end

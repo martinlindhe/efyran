@@ -32,6 +32,17 @@ function QoL.Init()
 
     QoL.verifySpellLines()
 
+    mq.event("zoned", "You have entered #1#.", function(text, zone)
+        if zone ~= "an area where levitation effects do not function" then
+            print("I zoned into ", zone)
+            mq.delay(2000)
+            pet.ConfigureTaunt()
+
+            joinCurrentHealChannel()
+            memorizeListedSpells()
+        end
+    end)
+
     mq.event("missing_component", "You are missing #1#.", function(text, name)
         if name ~= "some required components" then
             mq.cmd.dgtell("Missing component", name)
@@ -235,44 +246,6 @@ function verifySpellLines(label, lines)
             mq.cmd.beep(1)
         end
     end
-end
-
-function me_healer()
-    return is_healer(mq.TLO.Me.Class.ShortName())
-end
-
-function me_priest()
-    return is_priest(mq.TLO.Me.Class.ShortName())
-end
-
-function me_tank()
-    return is_tank(mq.TLO.Me.Class.ShortName())
-end
-
--- true if CLR,DRU,SHM,PAL,RNG,BST
-function is_healer(class)
-    if class == nil then
-        mq.cmd.dgtell("all is_healer called without class. did you mean me_healer() ?")
-        mq.cmd.beep(1)
-    end
-    return class == "CLR" or class == "DRU" or class == "SHM" or class == "PAL" or class == "RNG" or class == "BST"
-end
-
--- true if CLR,DRU,SHM
-function is_priest(class)
-    if class == nil then
-        mq.cmd.dgtell("all is_priest called without class. did you mean me_priest() ?")
-        mq.cmd.beep(1)
-    end
-    return class == "CLR" or class == "DRU" or class == "SHM"
-end
-
-function is_tank(class)
-    if class == nil then
-        mq.cmd.dgtell("all ERROR: is_tank called without class. did you mean me_tank() ?")
-        mq.cmd.beep(1)
-    end
-    return class == "WAR" or class == "PAL" or class == "SHD"
 end
 
 -- XXX add more:

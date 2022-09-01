@@ -68,51 +68,6 @@ settings.self_buffs = {
     "Guard of Druzzil/MinMana|80",
 }
 
-settings.group_buffs = {
-    -- L26 Clarity (7-9 mana/tick)
-    -- L42 Boon of the Clear Mind (6-9 mana/tick, group)
-    -- L52 Clarity II (9-11 mana/tick, single)
-    -- L56 Gift of Pure Thought (10-11 mana/tick, group)
-    -- L60 Koadic's Endless Intellect (14 mana/tick, group)
-    -- L63 Tranquility (16 mana/tick, group)
-    -- L65 Voice of Quellious (18 mana/tick, group, cost 1200 mana)
-    -- L65 Dusty Cap of the Will Breaker (LDoN raid). casts "Voice of Quellious" on L01 toons
-    -- L68 Clairvoyance (20 mana/tick, cost 400 mana)
-    -- L70 Voice of Clairvoyance (20 mana/tick, cost 1300 mana, group)
-    ["manaregen"] = {
-        --"Boon of the Clear Mind/MinLevel|1",
-        --"Gift of Pure Thought/MinLevel|43",
-        --"Koadic's Endless Intellect/MinLevel|45",
-        --"Tranquility/MinLevel|46",
-        --"Voice of Quellious/MinLevel|47",
-        "Dusty Cap of the Will Breaker/MinLevel|1",
-        "Voice of Clairvoyance/MinLevel|62",
-    },
-
-    -- L47 Swift Like the Wind (60% haste, 16 min) - L01-45
-    -- L53 Aanya's Quickening (64% haste, 24 min, DOES NOT land on lv15. DOES LAND on L42)
-    -- L58 Wondrous Rapidity (70% haste, 18.4 min)
-    -- L62 Speed of Vallon (68% haste, 41 atk, 52 agi, 33 dex, 42 min)
-    -- L65 Vallon's Quickening (68% haste, 41 atk, 52 agi, 33 dex, 42 min, group)
-    -- L67 Speed of Salik (68% haste, 53 atk, 60 agi, 50 dex, 42 min + 20% melee crit chance, cost 437 mana)
-    -- L67 Hastening of Salik (68% haste, 53 atk, 60 agi, 50 dex, 42 min, group + 20% melee crit chance, cost 1260 mana)
-    ["enc_haste"] = {
-        "Swift Like the Wind/MinLevel|1",
-        "Aanya's Quickening/MinLevel|41",
-        "Wondrous Rapidity/MinLevel|44",
-        "Speed of Vallon/MinLevel|46",
-        "Vallon's Quickening/MinLevel|47",
-        "Hastening of Salik/MinLevel|62",
-    },
-
-    -- L48 Group Resist Magic (53-55 mr, group)
-    -- L62 Guard of Druzzil (75 mr, group)
-    ["magic_resist"] = {
-        "Group Resist Magic/MinLevel|1",
-        "Guard of Druzzil/MinLevel|46",
-    },
-}
-
 settings.bot_buffs = {
     -- NOTE: Trams do mana regen
     ["Voice of Clairvoyance/MinMana|30"] = {
