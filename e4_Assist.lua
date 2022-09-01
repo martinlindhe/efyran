@@ -146,24 +146,6 @@ function dbg(s)
     print(mq.TLO.Time().."| "..s)
 end
 
--- autoinventories all items on cursor
-function clear_cursor()
-    while true do
-        if mq.TLO.Cursor.ID() == nil then
-            break
-        end
-        if mq.TLO.Me.FreeInventory() == 0 then
-            mq.cmd.dgtell("all Cannot clear cursor, no free inventory slots")
-            mq.cmd.beep(1)
-            break
-        end
-        mq.cmd.dgtell("all autoinv ", mq.TLO.Cursor())
-        mq.cmd("/autoinventory")
-        mq.delay(100)
-    end
-    --print("clear_cursor gave up")
-end
-
 -- return true if spell/ability was cast
 function Assist.castSpellAbility(spawn, row)
 

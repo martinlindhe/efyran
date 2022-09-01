@@ -31,13 +31,10 @@ function move_to(spawn)
     mq.delay(10000, function() return is_within_distance(spawn, 15) end)
 end
 
--- Requires: tbl is a table containing strings; v is a string.
--- Effects : returns true if tbl contains v, false otherwise.
-function find_in(tbl, v)
-    for _, element in ipairs(tbl) do
-        if (element == v) then
-            return true
-        end
+-- returns true if t contains v, false otherwise.
+function in_array(t, v)
+    for i=1,#t do
+        if v == t[i] then return true end
     end
     return false
 end
@@ -390,4 +387,24 @@ function get_running_scripts_except(name)
         end
     end
     return others
+end
+
+-- autoinventories all items on cursor. returns false on failure
+function clear_cursor()
+    while true do
+        if mq.TLO.Cursor.ID() == nil then
+            print("cursor clear. ending")
+            return true
+        end
+        if mq.TLO.Me.FreeInventory() == 0 then
+            mq.cmd.dgtell("all Cannot clear cursor, no free inventory slots")
+            mq.cmd.beep(1)
+            return false
+        end
+        print("Putting cursor item ", mq.TLO.Cursor(), " in inventory.")
+        mq.cmd("/autoinventory")
+        mq.delay(10000, function() return mq.TLO.Cursor.ID() == nil end)
+        mq.delay(100)
+        mq.doevents()
+    end
 end
