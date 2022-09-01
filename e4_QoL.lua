@@ -107,6 +107,19 @@ function QoL.Init()
         mq.cmd.exec('TASKKILL "/F /IM eqgame.exe"')
     end)
 
+    mq.bind("/exitnotinzone", function()
+        local me = mq.TLO.Me.Name()
+        mq.cmd("/noparse /dgaexecute all /if (!${SpawnCount[pc ="..me.."]}) /exit")
+    end)
+
+    mq.bind("/exitnotingroup", function()
+        mq.cmd("/noparse /dgaexecute all /if (!${Group.Members}) /exit")
+    end)
+
+    mq.bind("/exitnotinraid", function()
+        mq.cmd("/noparse /dgaexecute all /if (!${Raid.Members}) /exit")
+    end)
+
     -- open loot window on closest corpse
     mq.bind("/lcorpse", function()
         if has_target() ~= nil then
