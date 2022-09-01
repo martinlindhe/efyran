@@ -120,6 +120,12 @@ function QoL.Init()
         mq.cmd("/noparse /dgaexecute all /if (!${Raid.Members}) /exit")
     end)
 
+    -- report all peers who are not in current zone
+    mq.bind("/notinzone", function()
+        local zone = mq.TLO.Zone.ShortName()
+        mq.cmd("/noparse /dgaexecute all /if (!${Zone.ShortName.Equal["..zone.."]}) /dgtell all I'm in ${Zone.ShortName}")
+    end)
+
     -- open loot window on closest corpse
     mq.bind("/lcorpse", function()
         if has_target() ~= nil then
@@ -142,6 +148,14 @@ function QoL.Init()
     mq.bind("/running", function()
         -- XXX reports all running scripts on all toons
         print("FIXME impl /running: report all running scripts on all toons")
+    end)
+
+    -- runs combine.lua tradeskill script. NOTE: /combine is reserved for MacroQuest.
+    mq.bind("/combineit", function()
+        if is_script_running("combine") then
+            mq.cmd("/lua stop combine")
+        end
+        mq.cmd("/lua run combine")
     end)
 end
 

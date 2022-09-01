@@ -33,7 +33,7 @@ function combine_clear_cursor()
 end
 
 mq.event("missing_components", "Sorry, but you don't have everything you need for this recipe in your general inventory.", function(text, name)
-    mq.cmd.dgtell("all", "combine ending: out of stuff")
+    mq.cmd.dgtell("all", "Combine ending: out of stuff")
     os.exit()
 end)
 
