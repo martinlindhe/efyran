@@ -11,7 +11,7 @@ settings.gems = {
 
     ["Dead Men Floating"] = 7,
     ["Death Peace"] = 8, -- XXX where's the AA?
-    ["Shadowskin"] = 9, -- self rune
+    --["Shadowskin"] = 9, -- self rune
     ["Sigil of the Aberrant"] = 10, -- pet buff
     ["Dark Salve"] = 11, -- pet heal
     ["Noxious Servant"] = 12, -- pet
@@ -52,12 +52,13 @@ settings.self_buffs = {
     -- L45 Dead Men Floating (65-70 pr, water breathing, see invis, levitate, group)
     "Dead Men Floating",
 
-    -- self rune:
+    -- self rune, slot 1:
     -- L63 Force Shield (absorb 750 dmg, 2 mana/tick)
     -- L69 Dull Pain (absorb 975 dmg, 3 mana/tick)
     -- L73 Wraithskin Rk. II (slot 1: absorb 1219 dmg, 4 mana/tick)
     -- L78 Shadowskin Rk. II (slot 1: absorb 1585 dmg, 4 mana/tick)
-    "Shadowskin/MinMana|20",
+    -- NOTE: does not stack with ENC rune
+    "Shadowskin/MinMana|100/CheckFor|Rune of the Deep",
 }
 
 

@@ -200,6 +200,10 @@ settings.assist = {
         -- L69 Warder's Wrath (33m45s reuse, increase accuracy and crit rate for 1m)
         "Warder's Wrath",
 
+        -- oow T1 bp: Sunrider's Vest (slot 3: Add Proc: Minor Lightning Call Effect for 0.3 min)
+        -- oow T2 bp: Bladewhisper Chain Vest of Journeys (slot 3: Add Proc: Major Lightning Call Effect for 0.5 min)
+        "Bladewhisper Chain Vest of Journeys",
+
         -- epic 1.5: Heartwood Blade (critical melee chance 110%, accuracy 110%)
         -- epic 2.0: Aurora, the Heartwood Blade (critical melee chance 170%, accuracy 170%, 1 min duration, 5 min recast)
         "Aurora, the Heartwood Blade",
@@ -209,10 +213,6 @@ settings.assist = {
 
         -- L6x Guardian of the Forest Rank 1 (song id: 30741, 15m reuse, -30% with 3/? rank aa: 10m30s)
         "Guardian of the Forest",
-
-        -- oow T1 bp: Sunrider's Vest (add self proc Minor Lightning Call Effect for 18s)
-        -- oow T2 bp: xxx
-        "Sunrider's Vest",
 
         -- quick burn some extra nukes, timer 1, 2 and 3
         "Ancient: North Wind",

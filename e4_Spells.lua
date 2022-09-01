@@ -119,9 +119,9 @@ function refreshBuff(buffItem, spawn)
         return false
     end
 
-    local spellName = spell.RankName()
-    if have_item(spellConfig.Name) then
-        spellName = spellConfig.Name
+    local spellName = spellConfig.Name
+    if is_spell_in_book(spellConfig.Name) then
+        spellName = spell.RankName()
     end
 
     -- only refresh fading & missing buffs
@@ -131,6 +131,11 @@ function refreshBuff(buffItem, spawn)
             return false
         end
         if have_buff(spell.Name) and mq.TLO.Me.Buff(spell.Name).Duration.Ticks() >= 6 then
+            return false
+        end
+
+        if is_spell_in_book(spellName) and not spell.Stacks() then
+            --mq.cmd.dgtell("all ERROR cannot selfbuff with ", spellName, " (dont stack with current buffs)")
             return false
         end
     elseif spawn.Type() == "Pet" and spawn.ID() == mq.TLO.Me.Pet.ID() then
@@ -145,15 +150,13 @@ function refreshBuff(buffItem, spawn)
             print("refreshBuff: SKIP PET BUFFING ", spell.Name, ", duration is ", mq.TLO.Me.Pet.Buff(mq.TLO.Me.Pet.Buff(spell.Name)).Duration.Ticks(), " ticks")
             return false
         end
-    else
-        -- check buff time remaining on this bot
-
-        -- XXX LATER: rework to use /dobserve
-        local res = queryBot(botName, 'Me.Buff["' .. buffName .. '"].Duration.Ticks')
-        if (res ~= nil and res ~= "NULL") and tonumber(res) > 4 then
-            --print("SKIPPING BUFF WITH DURATION ", botName, ": ", spellConfig.Name, " ", tonumber(res) )
+        if is_spell_in_book(spellName) and spell.StacksPet() then
+            --mq.cmd.dgtell("all ERROR cannot buff pet with ", spellName, " (dont stack with current buffs)")
             return false
         end
+    else
+        mq.cmd.dtell("all FATAL ERROR refreshBuff called with invalid spawn ", spawn.Name())
+        return
     end
 
     if not is_spell_ability_ready(spellName) and is_spell_in_book(spellName) and not is_memorized(spellName) then
@@ -176,7 +179,11 @@ function refreshBuff(buffItem, spawn)
         return false
     end
 
-    print("buffing bot ", spawn.CleanName(), " (id ",spawnID,"): ", spellName)
+    if spawn.Type() == "Pet" then
+        print("Buffing \agmy pet ", spawn.CleanName(), "\ax with \ay", spellName)
+    else
+        print("Buffing \agmyself\ax with \ay", spellName)
+    end
     castSpell(spellName, spawnID)
     return true
 end
@@ -207,12 +214,12 @@ function spellConfigAllowsCasting(buffItem, spawn)
     -- AERange is used for group spells
     if spell.TargetType() == "Group v2" then
         if spawn.Distance() >= spell.AERange() then
-            mq.cmd.dgtell("cant rebuff (",spell.TargetType(),"), toon too far away: ", buffItem, " ", spawn.CleanName(), " spell range = ", spell.Range(), ", spawn distance = ", spawn.Distance())
+            print("cant rebuff (",spell.TargetType(),"), toon too far away: ", buffItem, " ", spawn.CleanName(), " spell range = ", spell.Range(), ", spawn distance = ", spawn.Distance())
             return false
         end
     else
         if spell.TargetType() ~= "Self" and spawn.Distance() >= spell.Range() then
-            mq.cmd.dgtell("cant rebuff (",spell.TargetType(),"), toon too far away: ", buffItem, " ", spawn.CleanName(), " spell range = ", spell.Range(), ", spawn distance = ", spawn.Distance())
+            print("cant rebuff (",spell.TargetType(),"), toon too far away: ", buffItem, " ", spawn.CleanName(), " spell range = ", spell.Range(), ", spawn distance = ", spawn.Distance())
             return false
         end
     end
@@ -310,8 +317,7 @@ function castSpellRaw(name, spawnId, extraArgs)
     --print("-- castSpellRaw " , name, " spawnId ", spawnId, ", extraArgs ", extraArgs)
 
     local castingArg = '"' .. name .. '" -targetid|'.. spawnId .. ' ' .. extraArgs
-    --mq.cmd.dgtell("castSpell: /casting", castingArg)
-    print("castSpell: /casting", castingArg)
+    --print("castSpellRaw: /casting", castingArg)
     mq.cmd.casting(castingArg)
 end
 

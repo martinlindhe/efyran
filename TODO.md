@@ -3,7 +3,9 @@
 
 MQ2Lua gotchas:
     /itemnotify seem to require mq.delay(1) or it wont always register
-
+    - spell links: missing from macroquest atm. 
+    - detect if on emu. cant do atm
+    - detect eqgame.exe build date. cant do atm. would want so i can detect rof2 or underfood
 
 
 heal:

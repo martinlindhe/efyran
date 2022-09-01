@@ -10,9 +10,9 @@ settings.gems = {
 }
 
 settings.self_buffs = {
-    "Vampiric Embrace",
+    "Vampiric Embrace/MinMana|70",
 
-    "Grim Aura",
+    "Grim Aura/MinMana|70",
 }
 
 settings.healing = {

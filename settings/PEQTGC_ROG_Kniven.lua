@@ -83,6 +83,10 @@ settings.assist = {
     },
 
     ["quickburns"] = {-- XXX implememt !!!
+        -- oow T1 bp: (increase 1hb dmg   taken by 20% for 12s, 5 min reuse) Darkraider's Vest
+        -- oow T2 bp: (increase all melee taken by 20% for 24s, 5 min reuse) Whispering Tunic of Shadows
+        "Whispering Tunic of Shadows",
+
         -- EPIC 1.5: Fatestealer (35% triple backstab, Assassin's Taint Strike proc)
         -- EPIC 2.0: Nightshade, Blade of Entropy (45% triple backstab, Deceiver's Blight Strike proc)
         "Nightshade, Blade of Entropy",
@@ -102,10 +106,6 @@ settings.assist = {
         -- L63 Deadly Precision Discipline
         -- L65 Twisted Chance Discipline (22 min reuse)
         "Twisted Chance Discipline",
-
-        -- oow T1 bp: (increase 1hb dmg   taken by 20% for 12s, 5 min reuse) Darkraider's Vest 
-        -- oow T2 bp: (increase all melee taken by 20% for 24s, 5 min reuse) Whispering Tunic of Shadows 
-        "Darkraider's Vest",
     },
 
     ["longburns"] = {-- XXX implememt !!!

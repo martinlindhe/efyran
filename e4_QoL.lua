@@ -24,6 +24,10 @@ function QoL.Init()
         mq.cmd("/consent guild")
     end
 
+    if not is_script_running("agents/healme") then
+        mq.cmd("/lua run agents/healme")
+    end
+
     clear_cursor()
 
     QoL.verifySpellLines()
@@ -44,10 +48,16 @@ function QoL.Init()
         else
             if name == mq.TLO.Me.Pet.CleanName() then
                 print("GNORING TELL FROM MY PET '".. name.. "'': ", msg)
-            else
-                mq.cmd.dgtell("all GOT A TELL FROM", name, ": ", msg, " my pet:",mq.TLO.Me.Pet.Name())
-                mq.cmd.beep(1)
+                return
             end
+            -- excludes tells from "Player`s pet" (permutation peddler)
+            local spawn = spawn_from_query('="'..name..'"')
+            if spawn ~= nil and spawn.Type() == "NPC" then
+                --print("GNORING TELL FROM NPC '".. name.. "'': ", msg)
+                return
+            end
+            mq.cmd.dgtell("all GOT A TELL FROM", name, ": ", msg, " my pet:",mq.TLO.Me.Pet.Name())
+            mq.cmd.beep(1)
         end
     end)
 
@@ -60,36 +70,40 @@ function QoL.Init()
     end)
 
     -- clear all chat windows on current peer
-    mq.bind("/clr", function(name)
+    mq.bind("/clr", function()
         mq.cmd.clear()
     end)
 
     -- clear all chat windows on all peers
-    mq.bind("/cls", function(name)
+    mq.bind("/cls", function()
         mq.cmd.dgaexecute("/clear")
     end)
 
-    mq.bind("/self", function(name)
+    mq.bind("/self", function()
         mq.cmd("/target myself")
     end)
 
     -- hide existing corpses
-    mq.bind("/hce", function(name)
+    mq.bind("/hce", function()
         mq.cmd("/hidec all")
     end)
 
     -- hide looted corpses
-    mq.bind("/hcl", function(name)
+    mq.bind("/hcl", function()
         mq.cmd("/hidec looted")
     end)
 
     -- hide no corpses
-    mq.bind("/hcn", function(name)
+    mq.bind("/hcn", function()
         mq.cmd("/hidec none")
     end)
 
+    mq.bind("/ri", function(name)
+        mq.cmd("/raidinvite", name)
+    end)
+
     -- quickly exits all eqgame.exe instances using task manager
-    mq.bind("/exitall", function(name)
+    mq.bind("/exitall", function()
         mq.cmd.exec('TASKKILL "/F /IM eqgame.exe"')
     end)
 
@@ -104,6 +118,7 @@ function QoL.Init()
         end)
         mq.cmd.loot()
     end)
+
 
     
     -- reports all toons that are not running e4
@@ -246,7 +261,6 @@ function QoL.Tick()
     end
 
     if mq.TLO.Me.Class.ShortName() == "WIZ" and have_pet() then
-        --print("Dropping wiz familiar ...", mq.TLO.Me.Pet.ID(), type(mq.TLO.Me.Pet.ID()))
         mq.cmd.pet("get lost")
     end
 

@@ -36,7 +36,7 @@ function Buffs.Init()
 
             local spell = getSpellFromBuff(botSettings.settings.mount) 
             if spell == nil then
-                mq.cmd.dgtell("Buffs.refreshBuff: getSpellFromBuff ", buffItem, " FAILED")
+                mq.cmd.dgtell("/mounton: getSpellFromBuff ", buffItem, " FAILED")
                 mq.cmd.beep(1)
                 return false
             end
@@ -100,7 +100,12 @@ function Buffs.Init()
         end
 
         local spawn = mq.TLO.Spawn("id " .. spawnID)
-        
+        mq.cmd("/target id "..spawnID)
+        mq.delay(1000, function()
+            print("... targetig id ...")
+            return mq.TLO.Target.ID() == tonumber(spawnID)
+        end)
+
         if tostring(spawn) == "NULL" then
             mq.cmd.dgtell("all BUFFIT FAIL, cannot find target id in zone ", spawnID)
             return false
@@ -129,12 +134,26 @@ function Buffs.Init()
                 if n > minLevel and level >= n then
                     minLevel = n
                     spellName = spellConfig.Name
-                    print("Best ", key, " buff so far is L",spellConfig.MinLevel, " ", spellConfig.Name, " target ", spawn.Name() ," L", level)
+                    local spell = mq.TLO.Spell(spellName)
+                    if spell() == nil then
+                        mq.cmd.dgtell("all FATAL ERROR cant lookup ", spellName)
+                        return
+                    end
+                    if is_spell_in_book(spellName) then
+                        spellName = spell.RankName()
+                        if not spell.StacksTarget() then
+                            mq.cmd.dgtell("all ERROR cannot buff ", spawn.Name(), " with ", spellName, " (dont stack with current buffs)")
+                            return
+                        end
+                    end
+
+                    --print("Best ", key, " buff so far is L",spellConfig.MinLevel, " ", spellConfig.Name, " target ", spawn.Name() ," L", level)
                 end
             end
 
             if minLevel > 0 then
                 if spellConfigAllowsCasting(spellName, spawn) then
+                    mq.cmd.dgtell("all Buffing \ag", spawn.Name(), "\ax with ", spellName, " (", key, ")")
                     castSpellRaw(spellName, spawnID, "-maxtries|3")
 
                     -- sleep for the Duration
@@ -193,7 +212,7 @@ function Buffs.Tick()
         return
     end
 
-    if is_hovering() then
+    if is_hovering() or in_neutral_zone() or window_open("MerchantWnd") or spawn_count("pc radius 100") == 1 then
         return
     end
 

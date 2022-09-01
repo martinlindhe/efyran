@@ -82,6 +82,7 @@ function spawn_count(query)
 end
 
 function spawn_from_query(query)
+    --print("spawn_from_query: ", query)
     local o = mq.TLO.Spawn(query)
     if o() == nil then
         return nil
@@ -130,13 +131,19 @@ function is_item_clicky_ready(name)
     return item.Clicky() ~= nil and item.Timer.Ticks() == 0
 end
 
--- reutrns true if `name` is a spell currently memorized in a gem
+-- returns true if `name` is a spell currently memorized in a gem
 function is_memorized(name)
     return mq.TLO.Me.Gem(mq.TLO.Spell(name).RankName)() ~= nil
 end
 
 -- returns true if `name` is a spell in my spellbook
 function is_spell_in_book(name)
+    if is_alt_ability(name) then
+        -- NOTE: some AA's overlap with spell names. use is_alt_ability() to distinguish. Examples:
+        -- CLR/06 Sanctuary / CLR Sanctuary AA
+        -- SHM/62 Ancestral Guard / SHM Ancestral Guard AA
+        return false
+    end
     return mq.TLO.Me.Book(mq.TLO.Spell(name).RankName)() ~= nil
 end
 
@@ -223,12 +230,7 @@ end
 
 -- returns true if we are in hovering state (just died, waiting for rez in the same zone)
 function is_hovering()
-    if window_open("RespawnWnd") then
-        mq.cmd.dgtell("all XXX verify: i am hovering?  RespawnWnd is open !")
-        return true
-    end
-    -- while hovering, returned "HOVER" or "STUN" on live, aug 2022. XXX why "STUN" ??? better detect with window open
-    return mq.TLO.Me.State() == "HOVER" or mq.TLO.Me.State() == "STUN"
+    return window_open("RespawnWnd")
 end
 
 -- returns true if a window `name` is open
@@ -360,4 +362,32 @@ end
 -- returns true if `item` is a container
 function is_container(item)
     return item ~= nil and item.Container() ~= 0
+end
+
+-- returns true if i have a pet
+function have_pet()
+    return mq.TLO.Me.Pet.ID() ~= 0
+end
+
+-- returns true if `name` is a running Lua script
+function is_script_running(name)
+    for pid in string.gmatch(mq.TLO.Lua.PIDs(), '([^,]+)') do
+        local luainfo = mq.TLO.Lua.Script(pid)
+        if luainfo.Name() == name then
+            return true
+        end
+    end
+    return false
+end
+
+-- returns a comma-separated list of all running scripts, except for `name`.
+function get_running_scripts_except(name)
+    local others = ""
+    for pid in string.gmatch(mq.TLO.Lua.PIDs(), '([^,]+)') do
+        local luainfo = mq.TLO.Lua.Script(pid)
+        if luainfo.Name() ~= name then
+            others = others .. ", " .. luainfo.Name()
+        end
+    end
+    return others
 end

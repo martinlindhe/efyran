@@ -151,7 +151,7 @@ function handleHealmeRequest(msg)
     --tprint(Heal.queue)
 end
 
-local askForHealTimer = timer.new_expired(5 * 1) -- 5s
+local lifeSupportTimer = timer.new_expired(5 * 1) -- 5s
 local askForHealPct = 94 -- at what % HP to start begging for heals
 
 function Heal.Tick()
@@ -160,20 +160,14 @@ function Heal.Tick()
         return
     end
 
-    if mq.TLO.Me.PctHPs() <= askForHealPct and askForHealTimer:expired() then
-        -- ask for heals if i take damage
-        local s = mq.TLO.Me.Name().." "..mq.TLO.Me.PctHPs() -- "Avicii 82"
-        --print(mq.TLO.Time, "HELP HEAL ME, ", s)
-        mq.cmd.dgtell(Heal.CurrentHealChannel(), s)
-        askForHealTimer:restart()
-
-        -- life support check is also controlled by the askForHealTimer, every 5s
+    if lifeSupportTimer:expired() then
+        lifeSupportTimer:restart()
         Heal.performLifeSupport()
     end
 
     -- check if heals need to be casted
     if Heal.queue:size() > 0 and botSettings.settings.healing ~= nil then
-        print("heal tick. queue is ", Heal.queue:size(), ": ", Heal.queue:describe())
+        --print("heal tick. queue is ", Heal.queue:size(), ": ", Heal.queue:describe())
 
         -- first find any TANKS
         if botSettings.settings.healing.tanks ~= nil and botSettings.settings.healing.tank_heal ~= nil then
@@ -273,7 +267,7 @@ function Heal.medCheck()
 
     if mq.TLO.Me.MaxMana() > 0 then
         if mq.TLO.Me.PctMana() < 70 and mq.TLO.Me.Standing() then
-            mq.cmd.dgtell("all Low mana, medding at ", mq.TLO.Me.PctMana().."%")
+            mq.cmd.dgtell("all Low mana, medding at", mq.TLO.Me.PctMana().."%")
             mq.cmd.sit("on")
         elseif mq.TLO.Me.PctMana() >= 100 and not mq.TLO.Me.Standing() then
             mq.cmd.dgtell("all Ending medbreak, full mana.")
@@ -295,7 +289,9 @@ function Heal.performLifeSupport()
     end
 
     if botSettings.settings.healing == nil or botSettings.settings.healing.life_support == nil then
-        mq.cmd.dgtell("all performLifeSupport ERROR I dont have healing.life_support configured. Current HP is "..mq.TLO.Me.PctHPs().."%")
+        if mq.TLO.Me.PctHPs() < 70 then
+            mq.cmd.dgtell("all performLifeSupport ERROR I dont have healing.life_support configured. Current HP is "..mq.TLO.Me.PctHPs().."%")
+        end
         return
     end
 
@@ -347,7 +343,7 @@ function Heal.performLifeSupport()
                 mq.cmd.dgtell("all performLifeSupport skip ", spellConfig.Name, ", spell is not memorized")
                 skip = true
             elseif not is_spell_ready(spellConfig.Name) then
-                mq.cmd.dgtell("all performLifeSupport skip ", spellConfig.Name, ", spell is not ready")
+                --mq.cmd.dgtell("all performLifeSupport skip ", spellConfig.Name, ", spell is not ready")
                 skip = true
             end
         end

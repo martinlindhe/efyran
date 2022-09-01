@@ -407,6 +407,10 @@ settings.assist = {
     },
 
     ["debuffs"] = {
+        -- oow t1 bp: Spiritkin Tunic (reduce resist rate by 40% for xxx sec)
+        -- oow t2 bp: Ritualchanter's Tunic of the Ancestors (reduce resists rate by xxx for 42s)
+        "Quick Burn=Ritualchanter's Tunic of the Ancestors",
+
         -- slow:
         -- L05 Drowsy (11-25% slow, 2.6 min, 20 mana)
         -- L13 Walking Sleep (23-35% slow, 2.6 min, 60 mana)
@@ -449,9 +453,6 @@ settings.assist = {
         -- epic 1.5: Crafted Talisman of Fates
         -- epic 2.0: Blessed Spiritstaff of the Heyokah
         "Blessed Spiritstaff of the Heyokah",
-
-        -- oow t1: Spiritkin Tunic (reduce resist rate by 40%)
-        "Quick Burn=Spiritkin Tunic",
 
         -- L61 Spirit Call Rank 1 AA (swarm pets, 15 min reuse / 10 min with Hastened Spirit Call)
         -- Lxx Spirit Call Rank 5 AA

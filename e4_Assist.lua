@@ -92,11 +92,6 @@ function Assist.handleAssistCall(spawn)
     Assist.prepareForNextFight()
 end
 
--- returns true if i have a pet
-function have_pet()
-    return mq.TLO.Me.Pet.ID() ~= 0
-end
-
 -- called at end of each /assist call
 function Assist.prepareForNextFight()
 

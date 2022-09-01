@@ -11,7 +11,7 @@ settings.swap = { -- XXX impl
 
 settings.gems = {
     ["Burning Earth"] = 1,
-    ["Spear of Ro"] = 2,
+    ["Ancient: Nova Strike"] = 2,
     ["Renewal of Jerikor"] = 3,
     ["Iceflame Guard"] = 4,
     ["Malosinia"] = 6,
@@ -199,7 +199,7 @@ settings.pet = {
 }
 
 settings.assist = {
-    ["nukes"] = { -- XXX implement
+    ["nukes"] = {
         -- fire nukes:
         -- L33 Cinder Bolt (499-510 hp, cost 165 mana)
         -- Lxx
@@ -225,7 +225,7 @@ settings.assist = {
             "Molten Orb/NoAggro/Summon|Summon: Molten Orb",
 
             "Burning Earth/NoAggro/MinMana|10",
-            "Spear of Ro/GoM/NoAggro",
+            "Ancient: Nova Strike/GoM/NoAggro",
 
             -- tacvi clicky:
             "Dagger of Evil Summons/NoAggro",
@@ -241,7 +241,7 @@ settings.assist = {
         },
         ["bigfire"] = {
             "Raging Servant/GoM",
-            "Spear of Ro/NoAggro",
+            "Ancient: Nova Strike/NoAggro",
             "Dagger of Evil Summons/NoAggro",
             "Molten Orb/NoAggro/Summon|Summon: Molten Orb",
         },
@@ -282,6 +282,10 @@ settings.assist = {
         -- L70 Heart of Flames (id:5915, increase fire dd dmg by 1-50% for 1.5 min, 22 min reuse)
         -- XXX: if using this burn, can i also Self Buff Elemental Form ??? (both is illusions, how will they overwrite?)
         "Heart of Flames",
+
+        -- oow t1 bp: Runemaster's Robe (pet buff: +50% skill dmg mod, -15% skill dmg taken for 0.3 min)
+        -- oow t2 bp: Glyphwielder's Tunic of the Summoner (pet buff: +50% skill dmg mod, -15% skill dmg taken for 0.5 min)
+        "Glyphwielder's Tunic of the Summoner",
     },
 
     ["pbae"] = { -- XXX impl
