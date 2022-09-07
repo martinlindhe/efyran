@@ -92,7 +92,7 @@ end
 -- refreshes buff on self or another bot, returns true if buff was cast
 function refreshBuff(buffItem, spawn)
 
-    --print("refreshBuff ", buffItem, ", botName:", spawn.CleanName())
+    --print("refreshBuff ", buffItem, ", target Name:", spawn.CleanName())
 
     if spawn.Type() ~= "PC" and spawn.Type() ~= "Pet" then
         print("will not buff ", spawn.Type(), " ", spawn.Name(), ": ", spawn.CleanName())
@@ -106,7 +106,7 @@ function refreshBuff(buffItem, spawn)
     local spawnID = spawn.ID()
 
     if not spellConfigAllowsCasting(buffItem, spawn) then
-        --print("wont allow casting", buffItem)
+        --print("wont allow casting ", buffItem)
         return false
     end
 
@@ -128,14 +128,16 @@ function refreshBuff(buffItem, spawn)
     if mq.TLO.Me.ID() == spawn.ID() then
         -- IMPORTANT: on live, f2p restricts all spells to rank 1, so we need to look for both forms
         if have_buff(spell.RankName) and mq.TLO.Me.Buff(spell.RankName).Duration.Ticks() >= 6 then
+            --print("target have ranked buff with remaining ticks:", mq.TLO.Me.Buff(spell.RankName).Duration.Ticks())
             return false
         end
         if have_buff(spell.Name) and mq.TLO.Me.Buff(spell.Name).Duration.Ticks() >= 6 then
+            --print("target have buff with remaining ticks:", mq.TLO.Me.Buff(spell.Name).Duration.Ticks())
             return false
         end
 
         if is_spell_in_book(spellName) and not spell.Stacks() then
-            --mq.cmd.dgtell("all ERROR cannot selfbuff with ", spellName, " (dont stack with current buffs)")
+            mq.cmd.dgtell("all ERROR cannot selfbuff with ", spellName, " (dont stack with current buffs)")
             return false
         end
     elseif spawn.Type() == "Pet" and spawn.ID() == mq.TLO.Me.Pet.ID() then

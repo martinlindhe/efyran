@@ -223,13 +223,12 @@ function Buffs.Tick()
         return
     end
 
-    --print("buff tick ", botSettings.toggles.refresh_buffs, refreshBuffsTimer:expired(), not mq.TLO.Me.Moving(), not mq.TLO.Me.Invis()  )
+    --print("buff tick. refresh_buffs:", botSettings.toggles.refresh_buffs, ", expired:", refreshBuffsTimer:expired(), ", still:", not mq.TLO.Me.Moving(), ", visible:", not mq.TLO.Me.Invis()  )
     if botSettings.toggles.refresh_buffs and refreshBuffsTimer:expired() and not is_moving() and not mq.TLO.Me.Invis() then
         if not buffs.RefreshSelfBuffs() then
             if not buffs.RefreshAura() then
                 if not pet.Summon() then
                     if not pet.BuffMyPet() then
-    
                         -- XXX temp disabled bot buffs because its super slow due to dannet queries. rewrite to have bots request buffs in a channel instead.
                         -- XXX orchestrator will decide what toon will cast the requested buff in the end (?)
                         ------buffs.RefreshBotBuffs() -- XXX slow due to dannet queries!

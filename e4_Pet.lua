@@ -105,6 +105,7 @@ end
 -- returns true if spell was cast
 function Pet.BuffMyPet()
     if botSettings.settings.pet == nil or botSettings.settings.pet.buffs == nil or not have_pet() then
+        --print("SKIP PET BUFFING: no pet buffs or I don't have pet.")
         return false
     end
 
@@ -143,7 +144,7 @@ function Pet.BuffMyPet()
         if spellConfig.Reagent ~= nil then
             -- if we lack this item, then skip.
             if mq.TLO.FindItemCount("=" .. spellConfig.Reagent)() == 0 then
-                mq.cmd.dgtell("SKIP PET BUFFING ", spellConfig.Name, ", I'm out of reagent ", spellConfig.Reagent)
+                --mq.cmd.dgtell("SKIP PET BUFFING ", spellConfig.Name, ", I'm out of reagent ", spellConfig.Reagent)
                 skip = true
             end
         end
@@ -155,7 +156,8 @@ function Pet.BuffMyPet()
         end
 
         if not skip then
-            refreshBuff(spellConfig.Name, mq.TLO.Me.Pet)
+            --print("refreshing pet buff ", spellConfig.Name)
+            castSpell(spellConfig.Name, mq.TLO.Me.Pet.ID())
             return true
         end
     end
