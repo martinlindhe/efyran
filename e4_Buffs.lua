@@ -218,8 +218,8 @@ function Buffs.Tick()
 
     bard.resumeMelody()
 
-    if spawn_count("npc radius 50 zradius 40") > 0 then
-        -- skip buffing if npc is nearby
+    if mq.TLO.Me.CombatState() == "COMBAT" then
+        -- print("skip buffing, i am in combat!")
         return
     end
 

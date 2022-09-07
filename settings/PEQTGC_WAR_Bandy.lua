@@ -32,7 +32,7 @@ settings.self_buffs = {
     -- Form of Defense III (slot 10: 81 ac) - Hanvar's Hoop (anguish)
     --"Hanvar's Hoop",
 
-    -- god haste click:
+    -- haste click:
     --"Kizrak's Gauntlets of Battle",
 
     -- Pestilence Shock proc buff (potime)
@@ -54,8 +54,7 @@ settings.request_buffs = {
     "symbol/IfAvailable|DRU", -- CLR
     "ac/IfAvailable|DRU", -- CLR
     "skin/IfAvailable|DRU", -- DRU. XXX DRU need ini
-
-    "aegolism/IfNotAvailable|DRU", -- CLR
+    "aegolism/IfAvailable|CLR/IfNotAvailable|DRU", -- CLR
 
 
 
@@ -64,14 +63,13 @@ settings.request_buffs = {
     -- XXX alternates, BST SV or RNG buff
     "brells/IfAvailable|PAL", -- XXX PAL need ini
 
-
-
-    "enc_haste", -- enc
-
+    -- haste
+    "enc_haste/IfAvailable|ENC",
+    "shm_haste/IfAvailable|SHM/IfNotAvailable|ENC",
 
     -- resists
-    "seasons/IfAvailable|DRU", -- DRU
-    "magic_resist", -- enc
+    "dru_resist/IfAvailable|DRU", -- DRU
+    "enc_resist/IfAvailable|ENC", -- enc
 }
 
 settings.combat_buffs = { -- XXX implement

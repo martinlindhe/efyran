@@ -12,7 +12,7 @@ GroupBuffs.SHM = {
     -- L63 Talisman of the Boar (60-68 sta, group)
     -- L68 Spirit of Fortitude (75 sta, 40 sta cap)
     -- L69 Talisman of Fortitude (78 sta, 40 sta cap, group)
-    ["sta"] = {
+    ["stamina"] = {
         "Stamina/MinLevel|1",
         "Talisman of the Brute/MinLevel|43",
         "Talisman of the Boar/MinLevel|46",
@@ -179,7 +179,7 @@ GroupBuffs.DRU = {
     -- L52 Circle of Summer (slot 4: 45 cr) - stack with Protection of Seasons
     -- L58 Circle of Seasons (slot 1: 55 fr, slot 4: 55 cr)
     -- L64 Protection of Seasons (slot 1: 72 fr, slot 2: 72 cr)
-    ["dru_resists"] = {-- XXX unused
+    ["dru_resist"] = {-- XXX unused
         "Resist Fire/MinLevel|1",
         "Resist Cold/MinLevel|1",
         "Circle of Seasons/MinLevel|44",
@@ -194,7 +194,7 @@ GroupBuffs.DRU = {
         "Forbear Corruption/MinLevel|76",   -- XXX unsure of minlevel
     },
 
-    ["regen"] = {
+    ["dru_regen"] = {
         -- L34 Regeneration (5-9 hp/tick)
         -- L39 Pack Regeneration (9 hp/tick)
         -- L42 Chloroplast (10-19 hp/tick)
@@ -214,7 +214,7 @@ GroupBuffs.DRU = {
         "Spirit of the Stalwart/MinLevel|76", -- XXX unsure of minlevel
     },
 
-    ["ds"] = {
+    ["dru_ds"] = {
         -- L07 Shield of Thistles (4-6 ds, 15 min)
         -- L17 Shield of Barbs (7-9 ds, 15 min)
         -- L27 Shield of Brambles (10-12 ds, 15 min)
@@ -240,12 +240,13 @@ GroupBuffs.DRU = {
         "Viridifloral Bulwark/MinLevel|76", -- XXX unsure of minlevel
     },
 
-    ["str"] = {
+    ["dru_strength"] = {
         -- L07 Strength of Earth (8-15 str)
         -- L34 Strength of Stone (22-25 str)
         -- L44 Storm Strength (32-35 str)
         -- L55 Girdle of Karana (42 str)
         -- L62 Nature's Might (55 str)
+        -- NOTE: Shaman has STR buffs too
         "Storm Strength/MinLevel|1",
         "Girdle of Karana/MinLevel|42",
         "Nature's Might/MinLevel|46",
@@ -263,7 +264,7 @@ GroupBuffs.DRU = {
     -- L35 Pack Spirit (47-55% speed, 36 min, group)
     -- L54 Spirit of Eagle (57-70% speed, 1 hour)
     -- L62 Flight of Eagles (70% speed, 1 hour, group)
-    ["runspeed"] = {
+    ["dru_runspeed"] = {
         "Pack Spirit/MinLevel|1",
         "Spirit of Eagle/MinLevel|42",
         "Flight of Eagles/MinLevel|46", 
@@ -318,7 +319,7 @@ GroupBuffs.ENC = {
 
     -- L48 Group Resist Magic (53-55 mr, group)
     -- L62 Guard of Druzzil (75 mr, group)
-    ["magic_resist"] = {
+    ["enc_resist"] = {
         "Group Resist Magic/MinLevel|1",
         "Guard of Druzzil/MinLevel|46",
     },
