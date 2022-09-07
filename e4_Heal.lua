@@ -378,7 +378,7 @@ function healPeer(spell_list, peer, pct)
             Heal.queue:remove(peer)
             return false
         else
-            mq.cmd.dgtell("all Healing ", peer, " at ", pct, " % HP with spell ", spellConfig.Name)
+            mq.cmd.dgtell("all Healing", peer, "at", pct, "% HP with spell", spellConfig.Name)
             castSpell(spellConfig.Name, spawn.ID())
             Heal.queue:remove(peer)
             return true

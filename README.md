@@ -84,6 +84,8 @@ Buff Spell Level   Minimum Target Level
 /shrinkgroup                - shrink group members shrink spells/clickies
 
 
+/wornaugs                   - reports all worn augs and total hp/mana/endurance/ac
+
 xxx document rest
 
 

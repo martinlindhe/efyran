@@ -183,8 +183,6 @@ function QoL.Init()
         mq.cmd.loot()
     end)
 
-
-
     -- reports all toons that are not running e4
     mq.bind("/note4", function()
         mq.cmd("/dgaexecute /lua run note4")
@@ -201,6 +199,31 @@ function QoL.Init()
             mq.cmd("/lua stop combine")
         end
         mq.cmd("/lua run combine")
+    end)
+
+    -- reports all currently worn auguments
+    mq.bind("/wornaugs", function()
+        print("Currently worn auguments:")
+        local hp = 0
+        local mana = 0
+        local endurance = 0
+        local ac = 0
+        for i=0,22 do
+            if mq.TLO.Me.Inventory(i).ID() then
+                for a=0,mq.TLO.Me.Inventory(i).Augs() do
+                    if mq.TLO.Me.Inventory(i).AugSlot(a)() ~= nil then
+                        local item = mq.TLO.Me.Inventory(i).AugSlot(a).Item
+                        hp = hp + item.HP()
+                        mana = mana + item.Mana()
+                        endurance = endurance + item.Endurance()
+                        ac = ac + item.AC()
+                        local name = inventory_slot_name(i)
+                        print(name, " #", a, ": ", item.ItemLink("CLICKABLE"), " ", item.HP(), " HP")
+                    end
+                end
+            end
+        end
+        print("Augument total: ", hp, " HP, ", mana, " mana, ", endurance, " endurance, ", ac, " AC")
     end)
 end
 
