@@ -1,5 +1,3 @@
-local file = require('e4_File')
-
 local Group = { settings = nil }
 
 -- FIXME: add /savegroup command to fill this data automatically. then we dont need to error if file not found
@@ -29,7 +27,7 @@ function Group.Init()
             mq.cmd.beep(1)
 
             local f = assert(io.open(settingsFile, "w"))
-            local t = f:write(savedGroupsTemplate)
+            f:write(savedGroupsTemplate)
             f:close()
 
         end
@@ -68,17 +66,18 @@ function Group.Init()
             print(' -- processing group ',idx, ', leader:', groupLeader)
 
             if mq.TLO.Me.Name() == groupLeader then
+                -- leader invites the other group members
                 for n = 2,6
                 do
-                    local name = group[n]
-                    if name == nil then
+                    local groupMember = group[n]
+                    if groupMember == nil then
                         break
                     end
-                    if mq.TLO.DanNet(name)() ~= nil then
-                        print("Inviting ", name)
-                        mq.cmd.invite(name)
+                    if mq.TLO.DanNet(groupMember)() ~= nil then
+                        print("Inviting ", groupMember)
+                        mq.cmd.invite(groupMember)
                     else
-                        mq.cmd.dgtell("WARNING:", name, "not connected. will not invite to group")
+                        mq.cmd.dgtell("WARNING:", groupMember, "not connected. will not invite to group")
                     end
                 end
             elseif orchestrator and groupLeader ~= 'NULL' then

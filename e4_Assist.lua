@@ -81,7 +81,7 @@ function Assist.handleAssistCall(spawn)
         mq.cmd.dgtell("all WARNING: I have no assist settings")
         return
     end
-    
+
     if have_pet() then
         mq.cmd.dgtell("all ATTACKING WITH MY PET", mq.TLO.Me.Pet.CleanName())
         mq.cmd.pet("attack", spawn.ID())
@@ -106,7 +106,7 @@ function Assist.summonNukeComponents()
     if botSettings.settings.assist == nil or botSettings.settings.assist.nukes == nil then
         return
     end
-    
+
     for idx, lines in pairs(botSettings.settings.assist.nukes) do
         if type(lines) == "string" then
             mq.cmd.dgtell("all FATAL ERROR: settings.assist.nukes must be a map")
@@ -140,10 +140,6 @@ function Assist.summonNukeComponents()
 
         end
     end
-end
-
-function dbg(s)
-    print(mq.TLO.Time().."| "..s)
 end
 
 -- return true if spell/ability was cast

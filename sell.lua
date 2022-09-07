@@ -6,30 +6,16 @@ require("e4_Loot")
 
 local loot = ReadLootSettings()
 
--- Opens trade with the nearest merchant.
-function open_nearby_merchant()
-    if window_open("MerchantWnd") then
-        return
-    end
-    local merchant = spawn_from_query("Merchant radius 100")
-    if merchant == nil then
-        print("ERROR no merchant nearby")
-        return
-    end
-
-    print("... OPENING TRADE WITH MERCHANT ", merchant, " ", type(merchant))
-
-    move_to(merchant)
-    open_merchant_window(merchant)
-end
-
 open_nearby_merchant()
 
 if not window_open("MerchantWnd") then
     return
 end
 
---open_bags()
+if is_rof2() then
+    -- XXX is open bags needed on rof2 with the new macroquest features? worked on live without them.
+    open_bags()
+end
 
 for n = 1, num_inventory_slots() do
     local pack = "Pack"..tostring(n)
@@ -74,6 +60,7 @@ for n = 1, num_inventory_slots() do
                         mq.cmd(itemNotifyQuery)
                         mq.delay(10)
 
+                        -- retry sell twice
                         for j = 1, 2 do
                             mq.cmd("/shift /notify MerchantWnd MW_Sell_Button leftmouseup")
                             mq.delay(1000, function()
@@ -93,7 +80,7 @@ for n = 1, num_inventory_slots() do
                     mq.cmd.dgtell("all New loot. Marking as Keep. ", item.ItemLink("CLICKABLE"))
                     SetLootItemSetting(loot, item, "Keep")
                 end
-                
+
             end
 
         end
@@ -105,5 +92,6 @@ WriteLootSettings(loot)
 
 close_merchant_window()
 
--- close_bags()
-
+if is_rof2() then
+    close_bags()
+end

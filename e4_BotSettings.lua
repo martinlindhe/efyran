@@ -1,5 +1,3 @@
-local file = require('e4_File')
-
 -- FIXME: relative path...
 local settingsRoot = "D:/dev-mq/mqnext-e4-lua/settings"
 
@@ -40,7 +38,7 @@ function BotSettings.Init()
         mq.cmd.beep(1)
 
         local f = assert(io.open(settingsFile, "w"))
-        local t = f:write(peerTemplate)
+        f:write(peerTemplate)
         f:close()
 
         -- WE ARE IN A BROKEN STATE

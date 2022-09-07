@@ -30,7 +30,7 @@ function Items.Init()
             --mq.cmd.dgtell("all", name, "not found")
             return nil
         end
-    
+
         local cnt = getItemCountExact(item.Name())
         local s = item.ItemLink("CLICKABLE")() .. " in " .. inventory_slot_name(item.ItemSlot()) .. " (count:".. tostring(cnt) .. ")"
         mq.cmd.dgtell("all", s)
@@ -67,7 +67,7 @@ end
 
 
 
- 
+
 
 local baseSlots = { -- XXX this should be accessible from mq TLO ?
     [0] = "charm",

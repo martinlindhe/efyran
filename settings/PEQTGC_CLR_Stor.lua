@@ -89,11 +89,11 @@ settings.bot_buffs = {
     -- NOTE: Stor does team18, Kamaxia does the rest
     ["Balikor's Mark/MinMana|50"] = {
         -- team18
-        "Bandy", "Crusade", "Spela", "Azoth", "Blastar", "Myggan", "Absint", "Trams", "Gerwulf", "Redito", 
+        "Bandy", "Crusade", "Spela", "Azoth", "Blastar", "Myggan", "Absint", "Trams", "Gerwulf", "Redito",
         "Kniven", "Samma", "Besty", "Grimakin", "Chancer", "Fandinu", "Drutten",
 
         -- pl 2021
-        "Endstand", "Nacken", "Halsen", "Ryggen", "Katten", "Tervet", 
+        "Endstand", "Nacken", "Halsen", "Ryggen", "Katten", "Tervet",
         "Gasoline", "Saga", "Brinner", "Katan", "Kasta", "Bulf", "Papp",
         "Pantless", "Crust", "Plin", "Hypert",
     },
@@ -181,7 +181,7 @@ settings.healing = {
         ["Radiant Cure"] = {
             -- PoP:
             --"Gravel Rain/MinSick|1/Zone|potactics,poearthb",
-    
+
             -- GoD:
             "Fulmination/MinSick|1/Zone|txevu",
             "Kneeshatter/MinSick|1/Zone|qvic",
@@ -190,22 +190,22 @@ settings.healing = {
             "Malicious Decay/MinSick|1",
             "Insidious Decay/MinSick|1",
             "Chaos Claws/MinSick|1",
-    
+
             -- vxed,tipt:
             "Stonemite Acid/MinSick|1",
             "Tigir's Insects/MinSick|1",
-    
+
             -- OOW:
             "Whipping Dust/MinSick|1/Zone|causeway",
             "Chaotica/MinSick|1/Zone|riftseekers,wallofslaughter",
             "Infected Bite/MinSick|1/Zone|riftseekers",
             "Kneeshatter/MinSick|1/Zone|provinggrounds",
-    
+
             -- rss downstairs mez - XXX dont work
             --"Freezing Touch/Zone|riftseekers",
-    
+
             --"Pyronic Lash/Zone|riftseekers",
-    
+
             -- anguish:
             "Gaze of Anguish/MinSick|1/Zone|anguish",
             "Chains of Anguish/MinSick|1/Zone|anguish",
@@ -286,7 +286,7 @@ settings.healing = {
     -- L65 Yaulp VI (60 atk, 12 mana/tick, 90 dex, 30% haste)
     -- L69 Yaulp VII (80 atk, 14 mana/tick, 100 dex, 30% haste)
     ["yaulp"] = "Yaulp VII",    -- was e3 [Cleric].Yaulp Spell   XXX impl?  or hard code yaulp spell names?
-    ["auto_yaulp"] = false, -- was e3 [Cleric].Auto-Yaulp (On/Off)  XXX impl. 
+    ["auto_yaulp"] = false, -- was e3 [Cleric].Auto-Yaulp (On/Off)  XXX impl.
 }
 
 settings.assist = {

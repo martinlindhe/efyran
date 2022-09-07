@@ -34,9 +34,9 @@ function Buffs.Init()
             -- XXX see if mount clicky buff is on us already
 
 
-            local spell = getSpellFromBuff(botSettings.settings.mount) 
+            local spell = getSpellFromBuff(botSettings.settings.mount)
             if spell == nil then
-                mq.cmd.dgtell("/mounton: getSpellFromBuff ", buffItem, " FAILED")
+                mq.cmd.dgtell("/mounton: getSpellFromBuff ", botSettings.settings.mount, " FAILED")
                 mq.cmd.beep(1)
                 return false
             end
@@ -56,7 +56,7 @@ function Buffs.Init()
         if is_orchestrator() then
             mq.cmd.dgzexecute("/mountoff")
         end
-        mq.cmd.dismount() 
+        mq.cmd.dismount()
     end)
 
     -- if filter == "all", drop all. else drop partially matched buffs
@@ -228,11 +228,11 @@ function Buffs.Tick()
         if not buffs.RefreshSelfBuffs() then
             if not buffs.RefreshAura() then
                 if not pet.Summon() then
-                    if not pet.BuffMyPet() then
-                        -- XXX temp disabled bot buffs because its super slow due to dannet queries. rewrite to have bots request buffs in a channel instead.
-                        -- XXX orchestrator will decide what toon will cast the requested buff in the end (?)
-                        ------buffs.RefreshBotBuffs() -- XXX slow due to dannet queries!
-                    end
+                    pet.BuffMyPet()
+
+                    -- XXX temp disabled bot buffs because its super slow due to dannet queries. rewrite to have bots request buffs in a channel instead.
+                    -- XXX orchestrator will decide what toon will cast the requested buff in the end (?)
+                    ------buffs.RefreshBotBuffs() -- XXX slow due to dannet queries!
                 end
             end
         end

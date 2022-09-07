@@ -49,7 +49,7 @@ settings.assist = {
 
     ["quickburns"] = {-- XXX implememt !!!
         -- (epic 1.5: slot 9: spell crit  8%, slot 10: dot crit  8%, slot 12: accuracy 130%) Prismatic Dragon Blade
-        -- (epic 2.0: slot 9: spell crit 12%, slot 10: dot crit 12%, slot 12: accuracy 140%) Blade of Vesagran 
+        -- (epic 2.0: slot 9: spell crit 12%, slot 10: dot crit 12%, slot 12: accuracy 140%) Blade of Vesagran
         "Blade of Vesagran",
 
         "Dance of Blades",

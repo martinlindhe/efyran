@@ -85,7 +85,7 @@ function find_pet_spell()
         end
     end
 
-    reagent = ""
+    local reagent = ""
     if mq.TLO.Me.Class.ShortName() == "ENC" then
         reagent = "/Reagent|Tiny Dagger"
     elseif mq.TLO.Me.Class.ShortName() == "NEC" and not is_alt_ability("Deathly Pact") then

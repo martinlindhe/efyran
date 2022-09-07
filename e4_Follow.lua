@@ -28,7 +28,7 @@ function Follow.Init()
     mq.bind("/clickit", function(name)
         print("CLICKING NEARBY DOOR xxx name")
         -- XXX click nearby door. like pok stones etc
-    
+
         -- XXX spawn check if door within X radius
         mq.cmd.dgze("/doortarget")
         mq.delay(500)
@@ -67,8 +67,8 @@ function Follow.Init()
         if is_orchestrator() then
             mq.cmd.dgzexecute("/portto", name)
         end
-    
-        local spellName = ""
+
+        local spellName
         if mq.TLO.Me.Class.ShortName() == "WIZ" then
             spellName = aliases.Wizard["port " .. name]
         elseif mq.TLO.Me.Class.ShortName() == "DRU" then
@@ -173,7 +173,6 @@ function Follow.Init()
         end
 
         -- face the direction of the orchestration
-        local heading = spawn.Heading.Degrees()
         local headingArg = "fast heading "..tostring(spawn.Heading.Degrees() * -1)
         mq.cmd.face(headingArg)
         mq.delay(5)

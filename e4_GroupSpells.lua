@@ -267,7 +267,7 @@ GroupBuffs.DRU = {
     ["dru_runspeed"] = {
         "Pack Spirit/MinLevel|1",
         "Spirit of Eagle/MinLevel|42",
-        "Flight of Eagles/MinLevel|46", 
+        "Flight of Eagles/MinLevel|46",
     },
 }
 
@@ -369,7 +369,7 @@ GroupBuffs.MAG = {
         "Flameshield of Ro/MinLevel|45",
         "Fireskin/MinLevel|62",
     },
-    ["groupds"] = {  
+    ["groupds"] = {
         "Boon of Immolation/MinLevel|41",
         "Maelstrom of Ro/MinLevel|46",
         "Circle of Fireskin/MinLevel|62",

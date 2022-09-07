@@ -98,7 +98,7 @@ settings.assist = {
             -- L75 Demand for Blood (2241 hp, cost 673 mana, adds a chance of temporary adjusting dot dmg)
             -- L80 Supplication of Blood (2532 hp, cost 742 mana, adds a chance of temporary adjusting dot dmg)
             "Venin/NoAggro/MaxHP|30/MinMana|90", -- XXX impl MaxHP  OR  MaxTargetHp to cast when HP of target is less than this
-            
+
             -- mana drain
             -- L70 Mind Flay          (decrease mana by 360 and give to group, -200 dr check, cost 700 mana)
             -- L79 Mental Vivisection (decrease mana by 482 and give to group, -200 dr check, cost 936 mana)
@@ -118,13 +118,13 @@ settings.assist = {
         -- L68 Fang of Death (370 hp/tick, MAGIC, resist adj -200, cost 750 mana)
         -- L69 Corath Venom (611 hp/tick, POISON,  resist adj -50, cost 655 mana)
         -- L70 Chaos Venom (473 hp/tick, POISON, resist adj -50, cost 566 mana)
-        
+
         -- magic dots:
         -- L62 Saryrn's Kiss (191-200 hp/tick, resist adj -200, magic, cost 550 mana)
         -- L63 Horror (432-450 hp/tick, resist adj -30, magic, cost 450 mana)
         -- L67 Dark Nightmare (591 hp/tick, resist adj -30, magic, cost 585 mana)
         -- L70 Ancient: Curse of Mori (639 hp/tick, resist adj -30, magic, cost 625 mana)
-        
+
         -- fire dots:
         -- L10 Heat Blood (28-43 hp/tick)
         -- L28 Boil Blood (67 hp/tick)
@@ -135,7 +135,7 @@ settings.assist = {
         -- L74 Ashengate Pyre Rk. II (1506 hp/tick, resist adj -100, cost 1694 mana)
         -- L79 Reaver's Pyre (2372 hp/tick, resist adj -100, cost 2651 mana)
         "Ashengate Pyre/MaxTries|2/MinMana|40", -- XXX impl MaxTries
-        
+
         -- snare dots:
         -- L04 Clinging Darkness (8 hp/tick, 24-30% snare, 0.8 min, cost 20 mana)
         -- L11 Engulfing Darkness (11 hp/tick, 40% snare, 1.0 min, cost 60 mana)

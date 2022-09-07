@@ -163,7 +163,7 @@ settings.healing = {
     -- L69 Yaulp VII (80 atk, 14 mana/tick, 100 dex, 30% haste)
     -- L76 Yaulp IX Rk. II (116 atk, 22 mana/tick, 60% proc chance, 30% haste)
     ["yaulp"] = "Yaulp IX",    -- was e3 [Cleric].Yaulp Spell    XXX impl?  or hard code yaulp spell names?
-    ["auto_yaulp"] = false, -- was e3 [Cleric].Auto-Yaulp (On/Off)  XXX impl. 
+    ["auto_yaulp"] = false, -- was e3 [Cleric].Auto-Yaulp (On/Off)  XXX impl.
 }
 
 

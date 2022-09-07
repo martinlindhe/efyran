@@ -140,7 +140,6 @@ Combat Buff=
 }
 
 
-
 settings.pet = {
     ["auto"] = false,
 
@@ -423,7 +422,7 @@ settings.assist = {
         -- directional ae:
         -- L69 Breath of Antraygus (directional AoE, 1200 dmg, 12s recast, cost 700 mana)
         --"Vindictive Spirit/Gem|3/MinMana|10",
-        
+
         -- "aura" idol:
         -- L55 Idol of Malo
         -- L70 Idol of Malos

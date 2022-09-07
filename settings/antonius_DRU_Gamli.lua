@@ -86,7 +86,7 @@ settings.healing = {
 
         -- L63 Spirit of the Wood 1 AA (xxx ds)
         "Spirit of the Wood/CheckFor|Convergence of Spirits/HealPct|90/MinMobs|10",
-        
+
         -- melee guard:
         -- L69 Oaken Guard (mitigate 75% melee dmg for 5000 + Oaken Guard Parry proc, 1s cast, timer 5, 15 min recast)
         -- L74 Direwood Guard Rk. II (mitigate 75% melee dmg for 6250 + Direwood Guard Parry proc, 1s cast, timer 5, 15 min recast)
@@ -99,7 +99,7 @@ settings.healing = {
         "Adrenaline Surge/HealPct|60/MinMana|50", -- 1.8s cast
 
         "Puravida/HealPct|70/MinMana|30", -- 3.75s cast
-        
+
         -- L80 Distillate of Divine Healing XIII, 2 min recast
         "Distillate of Divine Healing XIII/HealPct|18",
     },
@@ -111,7 +111,7 @@ settings.healing = {
         "Call of the Wild",
     },
 
-    ["cures"] = { -- XXX impl. 
+    ["cures"] = { -- XXX impl.
         ["Cure Disease"] = {
             "Rabies/Zone|chardok",
         },
@@ -259,22 +259,22 @@ settings.assist = {
         -- L64 Entrap AA (magic -0, snare 41-56%, 14 min, 5 sec recast)
         -- L69 Serpent Vines (chromatic -50, snare 55-60%, 3.0 min, cast time 3s, cost 125 mana)
         -- L70 Hungry Vines (magic -100, snare 50%, 0.3 min, cast time 3s, cost 500 mana) + absorb 1600 melee dmg on group
-        
+
         -- fire debuffs:
         -- L56 Ro's Smoldering Disjunction (-150 hp, -58-80 atk, -26-33 ac, -64-71 fr)
         -- L61 Hand of Ro (slot 7: -72 fr, slot 10: -100 atk, slot 12: -15 ac, resist adj -200)
         -- L62 Ro's Illumination (-80 atk, -15 ac)
         -- L67 Sun's Corona (slot 5: -90 atk, slot 6: -19 ac)
-        
+
         -- cold debuffs:
         -- L63 Eci's Frosty Breath (-55 cr, -24-30 ac, resist adj -200)
         -- L67 Glacier Breath (-55 cr, -30-36 ac, resist adj -200)
-        
+
         -- fire dot + debuff:
         -- L62 Immolation of Ro (-145 hp/tick, -35 fr, -27 ac, resist adj -50)
         -- L65 Sylvan Emnbers (-132-142 hp/tick, slot 3: -40 fr, slot 10: -30 ac, resist adj -50, 1 min)
         -- L67 Immolation of the Sun (-174-178 hp/tick, slot 3: -40 fr, slot 10: -36 ac, resist adj -50)
-        
+
         -- 1: -200 fire resist adj (slot 7: -72 fr, slot 10: -100 atk, slot 12: -15 ac)
         "Hand of Ro/Gem|7/MaxTries|2",
 

@@ -6,7 +6,7 @@ local radius = 40
 local spawnQuery = "npc zradius 50 radius "..radius
 
 
-local hit = false
+local hit
 mq.event("xp", "You #1# #2# for #3# points of damage.", function(line, kind, target, dmg)
     --print("hit ", kind)
     hit = true
@@ -76,10 +76,10 @@ while true do
 
     --print("ALL TAGGED, RESETTING TAGGED MOBS")
     tagged = {}
-    -- XXX move to old loc.
-
     mq.doevents()
     mq.delay(100)
+
+    move_to_loc(oldY, oldX)
 
     if in_neutral_zone() then
         mq.cmd.dgtell("all ERROR: Ending tag.lua in neutral zone")

@@ -19,6 +19,7 @@
         "ingame",
         "invis",
         "leftmouseup",
+        "luacheck",
         "mmobugs",
         "moveutils",
         "mq",

@@ -9,7 +9,7 @@ local lootFile = settingsRoot .. "/" .. mq.TLO.MacroQuest.Server() .. "__Loot Se
 function ReadLootSettings()
     local o = persistence.load(lootFile)
     if o == nil then
-        print("No loot settings found (", lootFile, "), creating new table") 
+        print("No loot settings found (", lootFile, "), creating new table")
 
         -- populate initial obj with keys A-Z, 0-9
         o = {}

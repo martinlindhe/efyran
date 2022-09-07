@@ -42,7 +42,7 @@ settings.self_buffs = {
     -- L59 Elemental Form: Fire Rank 2 AA (20 ds, 15 int, casting level +3)
     -- L59 Elemental Form: Fire Rank 3 AA (30 ds, 20 int, casting level +5)
     "Elemental Form: Fire",
-    
+
     -- shield - does not stack with Virtue or Focus:
     -- LXX Arch Shielding
     -- L54 Shield of the Magi (232-250 hp, 29-31 ac, 22-24 mr)

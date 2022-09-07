@@ -63,15 +63,15 @@ settings.healing = {
         -- oow t1 bp: Heartstiller's Mail Chestguard - Lifetap from Weapon Damage (15) for 2 ticks
         -- oow t2: Duskbringer's Plate Chestguard of the Hateful - Lifetap from Weapon Damage (15) for 4 ticks. 5 min reuse
         "Duskbringer's Plate Chestguard of the Hateful/HealPct|35",
-        
+
         -- timer 3:
         -- L59 Deflection Discipline (12s use, 40m reuse) - block most attacks with shield
         "Deflection Discipline/HealPct|10",
-        
+
         -- timer 2:
         -- L60 Leechcurse Discipline (42 end upkeep, 24s use, 1h7m reuse) - heal for 100% of all melee dmg
         "Leechcurse Discipline/HealPct|8",
-        
+
         -- timer 4:
         -- L56 Ichor Guard (absorb 25% melee dmg up to 2500)
         -- L61 Soul Guard (absorb 25% melee dmg up to 6000)
@@ -177,7 +177,7 @@ settings.assist = {
         -- oow T2 bp: Duskbringer's Plate Chestguard of the Hateful (Leeching Embrace, melee lifetap 15% heal)
         "Duskbringer's Plate Chestguard of the Hateful",
 
-        -- epic 1.5 (30% accuracy for group, 35% melee lifetap. 10 min reuse) Innoruuk's Voice 
+        -- epic 1.5 (30% accuracy for group, 35% melee lifetap. 10 min reuse) Innoruuk's Voice
         -- epic 2.0 (40% accuracy for group, 50% melee lifetap. 5 min reuse) Innoruuk's Dark Blessing - XXX targets self which makes tanking crap
         "Innoruuk's Dark Blessing"
     },

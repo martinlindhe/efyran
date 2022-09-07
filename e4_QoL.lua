@@ -75,7 +75,7 @@ function QoL.Init()
     mq.event("skillup", "You have become better at #1#! (#2#)", function(text, name, num)
         mq.cmd.dgtell("skillup ".. name .. " (".. num.."/".. tostring(mq.TLO.Skill(name).SkillCap()) ..")")
     end)
-    
+
     mq.event("xp", "You gain experience!", function()
         mq.cmd.dgtell("xp", "gained xp")
     end)
@@ -153,6 +153,7 @@ function QoL.Init()
         mq.cmd("/noparse /dgaexecute all /if (${Raid.Members}) /dgtell all IN RAID")
     end)
 
+    -- report all peers who are not levitating
     mq.bind("/notlevi", function()
         mq.cmd("/noparse /dgaexecute all /if (!${Me.Levitating}) /dgtell all NOT LEVI")
     end)
@@ -161,6 +162,7 @@ function QoL.Init()
         mq.cmd("/noparse /dgaexecute all (!${Me.Buff[Sunskin].ID}) /dgtell all NOT ITU")
     end)
 
+    -- report all peers who are not invisible
     mq.bind("/notinvis", function()
         mq.cmd("/noparse /dgaexecute all /if (!${Me.Invis}) /dgtell all NOT INVIS")
     end)
@@ -182,7 +184,7 @@ function QoL.Init()
     end)
 
 
-    
+
     -- reports all toons that are not running e4
     mq.bind("/note4", function()
         mq.cmd("/dgaexecute /lua run note4")
@@ -220,7 +222,7 @@ function QoL.verifySpellLines()
             for k, v in pairs(botSettings.settings.assist.nukes) do
                 verifySpellLines(k, v)
             end
-        end    
+        end
     end
 
     if botSettings.settings.healing ~= nil then

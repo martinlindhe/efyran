@@ -23,7 +23,7 @@ while true do
 
     --print("1 ", is_ability_ready("Tracking"), "  ",  mq.TLO.Corpse.Open(), not (mq.TLO.Target.Type() == "Corpse"))
 
-    if is_ability_ready("Tracking") and not mq.TLO.Corpse.Open() and not (mq.TLO.Target.Type() == "Corpse") then
+    if is_ability_ready("Tracking") and not mq.TLO.Corpse.Open() and mq.TLO.Target.Type() ~= "Corpse" then
 
         if not is_casting() or is_brd() then
             trackCount = trackCount + 1

@@ -68,9 +68,9 @@ settings.healing = {
 
         -- L65 Doppelganger AA
         --"Doppelganger/HealPct|30", -- XXX get the AA
-        
+
         "Distillate of Divine Healing XIII/HealPct|12",
-        
+
         -- L6x Mind Over Matter AA Rank 1 (id:5906 - slot1: mana shield absorb damage up to 50%, 10 hits)
         -- L68 Mind Over Matter AA Rank 2 (id:5907 - slot1: mana shield absorb damage up to 50%, 20 hits)
         -- L69 Mind Over Matter AA Rank 3 (id:xxx , 30 hits)
@@ -192,7 +192,7 @@ settings.enchanter = { -- XXX impl / rearrange settings
         -- L52 Fascination (36 sec/L55, cost 200 mana)
         -- L62 Word of Morell (0.3 min/L65, aerange 30, cost 300 mana)
         -- L65 Bliss of the Nihil (0.6 min/L68, aerange 25, cost 850 mana)
-        
+
         -- Hammer of Delusions (tacvi class click with Euphoria)
         "Hammer of Delusions/MaxLevel|73", -- XXX impl MaxLevel filter
 

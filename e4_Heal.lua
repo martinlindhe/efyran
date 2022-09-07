@@ -141,7 +141,6 @@ function handleHealmeRequest(msg)
 end
 
 local lifeSupportTimer = timer.new_expired(5 * 1) -- 5s
-local askForHealPct = 94 -- at what % HP to start begging for heals
 
 function Heal.Tick()
 
@@ -216,7 +215,7 @@ function Heal.acceptRez()
             local peer = ""
             for w in s:gmatch("%S+") do
                 if i == 1 then
-                    name = w
+                    peer = w
                     break
                 end
                 i = i + 1
@@ -357,7 +356,7 @@ end
 
 -- uses healing.tank_heal, returns true if spell was cast
 function healPeer(spell_list, peer, pct)
-    
+
     --print("Heal: ", peer, " is in my queue, at ", pct, " want heal!!!")
 
     for k, heal in pairs(spell_list) do
@@ -388,18 +387,5 @@ function healPeer(spell_list, peer, pct)
 
     return false
 end
-
-
-
-
-function table.contains(table, element)
-    for _, value in pairs(table) do
-      if value == element then
-        return true
-      end
-    end
-    return false
-  end
-  
 
 return Heal

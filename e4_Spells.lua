@@ -4,8 +4,6 @@ function parseSpellLine(s)
     -- Ward of Valiance/MinMana|50/CheckFor|Hand of Conviction
 
     local o = {}
-
-	local name = ""
     local idx = 0
 
     -- split on / separator
@@ -36,7 +34,6 @@ function parseSpellLine(s)
                 o[token] = true
             end
         end
-
     end
 
     return o
@@ -142,7 +139,7 @@ function refreshBuff(buffItem, spawn)
         end
     elseif spawn.Type() == "Pet" and spawn.ID() == mq.TLO.Me.Pet.ID() then
         -- IMPORTANT: on live, f2p restricts all spells to rank 1, so we need to look for both forms
-    
+
         if mq.TLO.Me.Pet.Buff(spell.RankName)() ~= nil and mq.TLO.Me.Pet.Buff(mq.TLO.Me.Pet.Buff(spell.RankName)).Duration.Ticks() >= 6 then
             print("refreshBuff: SKIP PET BUFFING ", spell.RankName, ", duration is ", mq.TLO.Me.Pet.Buff(mq.TLO.Me.Pet.Buff(spell.RankName)).Duration.Ticks(), " ticks")
             return false
@@ -199,8 +196,6 @@ function spellConfigAllowsCasting(buffItem, spawn)
         mq.cmd.beep(1)
         return
     end
-
-    local spawnID = spawn.ID()
 
     local spellConfig = parseSpellLine(buffItem) -- XXX parse this once on script startup. dont evaluate all the time !!!
 
@@ -287,7 +282,7 @@ function castSpell(name, spawnId)
 
         if is_brd() then
             local item = get_item(name)
-            if item ~= nil then 
+            if item ~= nil then
                 -- item click
                 print("item click sleep, ", item.Clicky.CastTime(), " + ", item.Clicky.Spell.RecastTime() )
                 mq.delay(item.Clicky.CastTime() + item.Clicky.Spell.RecastTime() + 1500) -- XXX recast time is 0
@@ -296,7 +291,7 @@ function castSpell(name, spawnId)
                 local spell = get_spell(name)
                 if spell ~= nil then
                     print("spell sleep ", spell.MyCastTime(), spell.RecastTime())
-                    mq.delay(spell.MyCastTime() + spell.RecastTime()) 
+                    mq.delay(spell.MyCastTime() + spell.RecastTime())
                 end
             end
             print("ME BARD castSpell ", name, " -- SO I RESUME TWIST!")
@@ -406,7 +401,7 @@ function is_spell_ability_ready(name)
 end
 
 function known_spell_ability(name)
-    
+
     if mq.TLO.Me.AltAbility(name)()  then
         --print("known_spell_ability aa TRUE", name)
         return true

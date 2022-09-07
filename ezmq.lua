@@ -11,6 +11,11 @@ function is_within_distance(spawn, maxDistance)
     return spawn.Distance() <= maxDistance
 end
 
+-- returns true if location is within maxDistance
+function is_within_distance_to_loc(y, x, maxDistance)
+    return mq.TLO.Math.Distance(y, x) <= maxDistance
+end
+
 -- returns true if there is line of sight between you and `spawn`
 function line_of_sight_to(spawn)
     local q = mq.TLO.Me.Y()..","..mq.TLO.Me.X()..","..mq.TLO.Me.Z()..":"..spawn.Y()..","..spawn.X()..","..spawn.Z()
@@ -29,6 +34,12 @@ function move_to(spawn)
 
     mq.cmd.moveto("loc "..spawn.Y().." "..spawn.X())
     mq.delay(10000, function() return is_within_distance(spawn, 15) end)
+    mq.cmd.moveto("off")
+end
+
+function move_to_loc(y, x)
+    mq.cmd.moveto("loc "..y.." "..x)
+    mq.delay(10000, function() return is_within_distance_to_loc(y, x, 15) end)
     mq.cmd.moveto("off")
 end
 
@@ -301,8 +312,22 @@ function close_merchant_window()
     mq.cmd("/notify MerchantWnd MW_Done_Button leftmouseup")
 end
 
+-- Opens trade with the nearest merchant.
+function open_nearby_merchant()
+    if window_open("MerchantWnd") then
+        return
+    end
+    local merchant = spawn_from_query("Merchant radius 100")
+    if merchant == nil then
+        print("ERROR no merchant nearby")
+        return
+    end
 
-local neutralZones = { "guildlobby", "guildhall", "bazaar", "poknowledge", "potranquility", "nexus" }
+    print("OPENING TRADE WITH MERCHANT ", merchant, " ", type(merchant))
+
+    move_to(merchant)
+    open_merchant_window(merchant)
+end
 
 -- returns true if we are in a neutral zone (be less obvious on live)
 function in_neutral_zone()
@@ -310,6 +335,7 @@ function in_neutral_zone()
         -- ignore neutral zone check on emu.
         return false
     end
+    local neutralZones = { "guildlobby", "guildhall", "bazaar", "poknowledge", "potranquility", "nexus" }
     for k, v in pairs(neutralZones) do
         if mq.TLO.Zone.ShortName():lower() == v:lower() then
             return true
@@ -320,8 +346,8 @@ end
 
 -- opens all inventory bags
 function open_bags()
-    for n = 1, 10 do
-        local pack = "Pack"..tostring(n)
+    for i = 1, 10 do
+        local pack = "Pack"..tostring(i)
         local slot = get_inventory_slot(pack)
         if is_container(slot) and not mq.TLO.Window(pack).Open() then
             mq.cmd("/itemnotify "..pack.." rightmouseup")
@@ -334,8 +360,8 @@ end
 
 -- closes all inventory bags
 function close_bags()
-    for n = 1, 10 do
-        local pack = "Pack"..tostring(n)
+    for i = 1, 10 do
+        local pack = "Pack"..tostring(i)
         local slot = get_inventory_slot(pack)
         if is_container(slot) and mq.TLO.Window(pack).Open() then
             mq.cmd("/itemnotify "..pack.." rightmouseup")

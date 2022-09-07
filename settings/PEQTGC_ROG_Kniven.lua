@@ -21,7 +21,7 @@ settings.swap = { -- XXX impl
 settings.self_buffs = {
 
     -- "Tiny Bone Bracelet",
- 
+
     -- atk buff:
     -- Furious Might (slot 5: 40 atk)
     "Veil of Intense Evolution",
@@ -54,15 +54,15 @@ settings.healing = {
         -- Lxx Counterattack Discipline (ripostes every blow, 40 min reuse) - XXX does not work
         -- L55 Nimble Discipline (avoid most attacks, 21 min reuse)
         "Nimble Discipline/HealPct|45",
-        
+
         "Distillate of Divine Healing XI/HealPct|10",
-        
+
         -- L70 Stealthy Getaway AA
         "Stealthy Getaway/HealPct|12",
-        
+
         -- Mind Shock (potion, 15 min, add proc: Mind Shock)
         --"Mind Shock/HealPct|20",
-        
+
         -- Expendable AA
         "Glyph of Stored Life/HealPct|5",
     }
@@ -94,7 +94,7 @@ settings.assist = {
         -- timer 5:
         -- L70 Frenzied Stabbing Discipline (15 min reuse)
         "Frenzied Stabbing Discipline",
-        
+
         -- timer 2:
         -- L57 Kinesthetics Discipline (5 min reuse)
         -- L59 Duelist Discipline (22 min reuse, 14 min reuse with epic 2.0)
