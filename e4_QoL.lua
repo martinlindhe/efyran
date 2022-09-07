@@ -153,6 +153,22 @@ function QoL.Init()
         mq.cmd("/noparse /dgaexecute all /if (${Raid.Members}) /dgtell all IN RAID")
     end)
 
+    mq.bind("/notlevi", function()
+        mq.cmd("/noparse /dgaexecute all /if (!${Me.Levitating}) /dgtell all NOT LEVI")
+    end)
+
+    mq.bind("/notitu", function()
+        mq.cmd("/noparse /dgaexecute all (!${Me.Buff[Sunskin].ID}) /dgtell all NOT ITU")
+    end)
+
+    mq.bind("/notinvis", function()
+        mq.cmd("/noparse /dgaexecute all /if (!${Me.Invis}) /dgtell all NOT INVIS")
+    end)
+
+    mq.bind("/invis", function()
+        mq.cmd("/noparse /dgaexecute all /if (${Me.Invis}) /dgtell all INVIS")
+    end)
+
     -- open loot window on closest corpse
     mq.bind("/lcorpse", function()
         if has_target() ~= nil then
