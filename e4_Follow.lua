@@ -112,7 +112,9 @@ function Follow.Init()
 
     -- tell peers in zone to use Throne of Heroes
     mq.bind("/throne", function()
-        mq.cmd.dgzexecute("/throne")
+        if is_orchestrator() then
+            mq.cmd.dgzexecute("/throne")
+        end
         cast_veteran_aa("Throne of Heroes")
     end)
 

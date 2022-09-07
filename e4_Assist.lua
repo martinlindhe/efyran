@@ -39,7 +39,7 @@ function Assist.Init()
                 print("backing off existing target before assisting new")
                 Assist.backoff()
             end
-            print("calling assist on spawn type ", spawn.Type)
+            --print("calling assist on spawn type ", spawn.Type)
 
             if is_orchestrator() then
                 -- tell everyone else to attack
@@ -116,22 +116,22 @@ function Assist.summonNukeComponents()
         end
         for k, row in pairs(lines) do
 
-            local spell = parseSpellLine(row)
-            if spell.Summon ~= nil then
+            local spellConfig = parseSpellLine(row)
+            if spellConfig.Summon ~= nil then
                 --print(row, "  xxx  ", spell.Name)
-                if not known_spell_ability(spell.Name) then
-                    mq.cmd.dgtell("all Missing "..spell.Name)
+                if not known_spell_ability(spellConfig.Name) then
+                    mq.cmd.dgtell("all", "Missing "..spellConfig.Name)
                     mq.cmd.beep(1)
                 end
 
                 --print("summon prop", spell.Summon)
 
-                if getItemCountExact(spell.Name) == 0 and not is_casting() then
-                    mq.cmd.dgtell("all Summoning", spell.Name)
-                    castSpell(spell.Summon, mq.TLO.Me.ID())
+                if getItemCountExact(spellConfig.Name) == 0 and not is_casting() then
+                    mq.cmd.dgtell("all", "Summoning", spellConfig.Name)
+                    castSpell(spellConfig.Summon, mq.TLO.Me.ID())
 
                     -- wait and inventory
-                    local spell = get_spell(spell.Summon)
+                    local spell = get_spell(spellConfig.Summon)
                     mq.delay(2000 + spell.MyCastTime())
                     clear_cursor()
                     return true
