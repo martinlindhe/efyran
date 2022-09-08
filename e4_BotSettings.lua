@@ -13,6 +13,10 @@ local BotSettings = {
 local peerTemplate = [[
 local settings = { }
 
+settings.swap = {
+    ["main"] = "",
+}
+
 settings.self_buffs = {
 }
 

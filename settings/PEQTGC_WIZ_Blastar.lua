@@ -6,6 +6,18 @@ settings.swap = { -- XXX impl
     ["melee"] = "Staff of Phenomenal Power|Mainhand", -- 1hb
 }
 
+settings.gems = {
+    ["Chaos Flame"] = 1, -- fire nuke
+    ["Ancient: Core Fire"] = 2, -- fire nuke
+    ["Spark of Ice"] = 3, -- cold nuke
+    ["Gelidin Comet"] = 4, -- cold nuke
+
+    ["Ether Skin"] = 6,
+    ["Iceflame of E`ci"] = 7,
+    ["Circle of Thunder"] = 8, -- pbae
+    ["Ancient: Greater Concussion"] = 9,
+}
+
 settings.self_buffs = {
     "Fuzzy Foothairs",
 
@@ -32,7 +44,7 @@ settings.self_buffs = {
     -- L63 Force Shield (slot 1: absorb 750 dmg, 2 mana/tick)
     -- L68 Ether Skin (slot 1: absorb 975 dmg, 3 mana/tick)
     -- L70 Shield of Dreams (slot 1: absorb 451 dmg, slot 8: +10 resists, slot 9: 3 mana/tick)
-    "Ether Skin/Gem|6/MinMana|20/CheckFor|Rune of Rikkukin",
+    "Ether Skin/MinMana|20/CheckFor|Rune of Rikkukin",
 
     -- increase spell dmg:
     -- L63 Iceflame of E`ci (1-30% cold spell dmg for L60 nukes)
@@ -66,7 +78,7 @@ settings.healing = {
 }
 
 settings.assist = {
-    ["nukes"] = { -- XXX implement
+    ["nukes"] = {
         ["main"] = {
             -- defensive - lower aggro:
             -- L37 Concussion (-400 hate, 2s cast)
@@ -75,7 +87,7 @@ settings.assist = {
             -- Lxx Mind Crash AA Rank 1 (id:5943, -2500 hate)
             -- Lxx Mind Crash AA Rank 2 (id:5944, -5000 hate)
             -- Lxx Mind Crash AA Rank 3 (id:5945, -7500 hate)
-            "Ancient: Greater Concussion/Gem|9/PctAggro|98",
+            "Ancient: Greater Concussion/PctAggro|98",
             "Mind Crash/PctAggro|99",
 
             -- fire nukes:
@@ -99,8 +111,8 @@ settings.assist = {
             -- L70 Ether Flame (5848 hp, resist adj -50, cost 1550 mana, 8s cast)
             -- L70 Corona Flare (3770 hp, resist adj -10, cost 800 mana, 8s cast)
             -- L70 Ancient: Core Fire (4070 hp, resist adj -10, cost 850 mana, 8s cast)
-            "Chaos Flame/NoAggro/Gem|1/MinMana|5",
-            "Ancient: Core Fire/GoM/NoAggro/Gem|3",
+            "Chaos Flame/NoAggro/MinMana|5",
+            "Ancient: Core Fire/GoM/NoAggro",
         },
 
         ["noks"] = {
@@ -108,13 +120,13 @@ settings.assist = {
         },
 
         ["fastfire"] = {
-            "Chaos Flame/NoAggro/Gem|1/MinMana|5",
-            "Ancient: Core Fire/GoM/NoAggro/Gem|3",
+            "Chaos Flame/NoAggro/MinMana|5",
+            "Ancient: Core Fire/GoM/NoAggro",
             "Scepter of Incantations/NoAggro",
         },
 
         ["bigfire"] = {
-            "Ancient: Core Fire/NoAggro/Gem|3/MinMana|5",
+            "Ancient: Core Fire/NoAggro/MinMana|5",
             "Scepter of Incantations",
         },
 
@@ -136,7 +148,7 @@ settings.assist = {
         -- L69 Claw of Vox (1375 hp, resist adj -50, cost 208 mana, 5s cast)
         -- L70 Ancient: Spear of Gelaqua (1976 hp, resist adj -10, cost 345 mana, 3.5s cast)
         ["fastcold"] = {
-            "Spark of Ice/NoAggro/Gem|2/MinMana|5",
+            "Spark of Ice/NoAggro/MinMana|5",
             "Gelidin Comet/GoM/NoAggro/Gem|4/MinMana|5",
         },
         ["bigcold"] = {
@@ -158,16 +170,17 @@ settings.assist = {
     },
 
     ["quickburns"] = { -- XXX impl
-        -- epic 1.5: Staff of Prismatic Power (-30% spell resist rate for group, -4% spell hate)
-        -- epic 2.0: Staff of Phenomenal Power (-50% spell resist rate for group, -6% spell hate)
-        "Staff of Phenomenal Power",
-
-        "Silent Casting",
         "Ward of Destruction",
         "Call of Xuzl",
 
-        -- oow T2 bp: Academic's Robe of the Arcanists (Academic's Intellect, -25% cast time for x, 5 min reuse)
+        "Silent Casting",
+
+        -- oow T2 bp: Academic's Robe of the Arcanists (Academic's Intellect, -25% cast time for 0.7 min, 5 min reuse)
         "Academic's Robe of the Arcanists",
+
+        -- epic 1.5: Staff of Prismatic Power (-30% spell resist rate for group, -4% spell hate)
+        -- epic 2.0: Staff of Phenomenal Power (-50% spell resist rate for group, -6% spell hate)
+        "Staff of Phenomenal Power",
     },
 
     ["longburns"] = {
@@ -197,7 +210,7 @@ settings.assist = {
         -- L60 Winds of Gelid (1260 hp, ICE, adj -10, aerange 35, recast 12s, cost 875 mana)
         -- L67 Circle of Fire (845 hp, FIRE, adj -10, aerange 35, recast 6s, cost 430 mana)
         -- L70 Circle of Thunder (1450 hp, MAGIC; adj -10, aerange 35, recast 12s, cost 990 mana)
-        "Circle of Thunder/Gem|3",
+        "Circle of Thunder",
         "Winds of Gelid/Gem|4",
         "Circle of Fire/Gem|5",
         --"Fire Rune/Gem|8",
