@@ -86,4 +86,21 @@ PetSpells.SHD = {
     "Son of Decay",   -- L68 (pet WAR/60)
 }
 
+PetSpells.BST = {
+    "Spirit of Sharik",    -- L08
+    "Spirit of Khaliz",    -- L15
+    "Spirit of Keshuval",  -- L21
+    "Spirit of Herikol",   -- L30
+    "Spirit of Yekan",     -- L39
+    "Spirit of Kashek",    -- L46
+    "Spirit of Omakin",    -- L54
+    "Spirit of Zehkes",    -- L56
+    "Spirit of Khurenz",   -- L58
+    "Spirit of Khati Sha", -- L60 (pet XXX/XXX)
+    "Spirit of Arag",      -- L62 (pet WAR/60)
+    "Spirit of Sorsha",    -- L64 (pet WAR/60)
+    "Spirit of Alladnu",   -- L68 (pet WAR/63)
+    "Spirit of Rashara",   -- L70 (pet WAR/65)
+}
+
 return PetSpells
