@@ -128,6 +128,7 @@ for heals.life_support (Heal.performLifeSupport)
 - HealPct = when to start using this ability (number)
 - CheckFor = only cast if I don't have this in buffs/songs
 - MinMobs = only cast if this many mobs nearby (number)
+- Zone|anguish      = only use this ability in the listed zone. TODO support multiple comma-separated zones: "Zone|anguish,tacvi"
 
 
 for pet.buffs (Pet.BuffMyPet)
@@ -151,7 +152,6 @@ for assist.abilities and assist.nukes (Assist.castSpellAbility)
 - Summon
 - NoPet
 
-for heals (healPeer)
-- MinMana
-- HealPct
-
+for heals and life support (healPeer)
+- MinMana|50
+- HealPct|80

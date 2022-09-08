@@ -54,6 +54,8 @@ settings.self_buffs = {
 
     -- DS slot 4:
     --"Pauldron of Dark Auspices",
+
+    "Shimmering Bauble of Trickery/Shrink",
 }
 
 settings.healing = {
@@ -77,6 +79,8 @@ settings.healing = {
         -- L61 Soul Guard (absorb 25% melee dmg up to 6000)
         -- L69 Soul Shield (absorb 25% melee dmg up to 10000, 30s use, 15m reuse)
         "Soul Shield/HealPct|15",
+
+        "Glyph of Stored Life/HealPct|5|Zone|anguish", -- Expendable AA
     },
     ["lifetap"] = { -- XXX implement. was [Shadow Knight].LifeTap in e3
         -- L70 Touch of the Devourer (-740 hp, -200 magic resist, 448 mana, 10s recast)

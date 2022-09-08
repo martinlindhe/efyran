@@ -64,15 +64,15 @@ end
 
 function Assist.backoff()
     if assistTarget ~= nil then
-        mq.cmd.dgtell("backing off target ", assistTarget.Name())
+        --mq.cmd.dgtell("backing off target ", assistTarget.Name())
         assistTarget = nil
+
+        if have_pet() then
+            print("Asking pet to back off")
+            mq.cmd.pet("back off")
+        end
     else
         mq.cmd.dgtell("all XXX ignoring backoff, no spawn known!")
-    end
-
-    if have_pet() then
-        mq.cmd.dgtell("all PET BACKING OFF")
-        mq.cmd.pet("back off")
     end
 end
 
@@ -115,12 +115,11 @@ function Assist.summonNukeComponents()
             return
         end
         for k, row in pairs(lines) do
-
             local spellConfig = parseSpellLine(row)
             if spellConfig.Summon ~= nil then
-                --print(row, "  xxx  ", spell.Name)
-                if not known_spell_ability(spellConfig.Name) then
-                    mq.cmd.dgtell("all", "Missing "..spellConfig.Name)
+                --print("Checking summon comonents for ", spellConfig.Summon) -- XXX name is "Molten Orb".
+                if not known_spell_ability(spellConfig.Summon) then
+                    mq.cmd.dgtell("all", "I dont know spell/ability "..spellConfig.Summon)
                     mq.cmd.beep(1)
                 end
 
@@ -132,8 +131,10 @@ function Assist.summonNukeComponents()
 
                     -- wait and inventory
                     local spell = get_spell(spellConfig.Summon)
-                    mq.delay(2000 + spell.MyCastTime())
-                    clear_cursor()
+                    if spell ~= nil then
+                        mq.delay(2000 + spell.MyCastTime())
+                        clear_cursor()
+                    end
                     return true
                 end
             end
@@ -234,7 +235,7 @@ function Assist.killSpawn(spawn)
 
         if botSettings.settings.assist.stick_point == "Front" then
             stickArg = "hold front " .. meleeDistance .. " uw"
-            mq.cmd.dgtell("STICKING IN FRONT TO ",spawn.Name, " ", stickArg)
+            print("STICKING IN FRONT TO ",spawn.Name, " ", stickArg)
             mq.cmd.stick(stickArg)
         else
             mq.cmd.stick("snaproll uw")

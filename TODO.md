@@ -3,7 +3,7 @@
 
 MQ2Lua gotchas:
     /itemnotify seem to require mq.delay(1) or it wont always register
-    - spell links: missing from macroquest atm. 
+    - spell links: missing from macroquest atm.
     - detect if on emu. cant do atm
     - detect eqgame.exe build date. cant do atm. would want so i can detect rof2 or underfood
 
@@ -51,6 +51,7 @@ buffs:
     - read toon INI for buffs, like e3 syntax (init when macro loads)
     - spells and clickies
     - use lua root for toon configs! create initial empty ini
+    - /dson mode = clickie ds buffs + auto ask for MAG & RNG ds (for power leveling)
 
 curing:
     https://gitlab.com/redguides/plugins/MQ2Debuffs
@@ -88,7 +89,7 @@ DanNet:
 
 
 loot:
-    check out 
+    check out
     https://www.mmobugs.com/wiki/index.php?title=MQ2AutoLoot
     https://gitlab.com/redguides/plugins/mq2autoloot
     https://gitlab.com/redguides/plugins/MQ2AutoLootSort

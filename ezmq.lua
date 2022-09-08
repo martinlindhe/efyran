@@ -12,8 +12,8 @@ function is_within_distance(spawn, maxDistance)
 end
 
 -- returns true if location is within maxDistance
-function is_within_distance_to_loc(y, x, maxDistance)
-    return mq.TLO.Math.Distance(y, x) <= maxDistance
+function is_within_distance_to_loc(y, x, z, maxDistance)
+    return mq.TLO.Math.Distance(y, x, z) <= maxDistance
 end
 
 -- returns true if there is line of sight between you and `spawn`
@@ -37,9 +37,9 @@ function move_to(spawn)
     mq.cmd.moveto("off")
 end
 
-function move_to_loc(y, x)
+function move_to_loc(y, x, z)
     mq.cmd.moveto("loc "..y.." "..x)
-    mq.delay(10000, function() return is_within_distance_to_loc(y, x, 15) end)
+    mq.delay(10000, function() return is_within_distance_to_loc(y, x, z, 15) end)
     mq.cmd.moveto("off")
 end
 
@@ -61,17 +61,14 @@ function is_rof2()
     return true
 end
 
--- returns true if spawn is another peer
-function is_peer(spawn)
-    if spawn == nil or spawn.Type() ~= "PC" then
-        return false
-    end
-    return mq.TLO.DanNet(spawn.Name())() ~= nil
+-- returns true if peerName is another peer
+function is_peer(peerName)
+    return mq.TLO.DanNet(peerName)() ~= nil
 end
 
 -- returns true if spawnID is another peer
 function is_peer_id(spawnID)
-    return is_peer(spawn_from_id(spawnID))
+    return is_peer(spawn_from_id(spawnID).Name())
 end
 
 -- returns true if spawnID is in LoS
@@ -432,7 +429,7 @@ function clear_cursor()
             mq.cmd.beep(1)
             return false
         end
-        print("Putting cursor item ", mq.TLO.Cursor(), " in inventory.")
+        mq.cmd.dgtell("all XXX:Putting cursor item ", mq.TLO.Cursor(), " in inventory.")
         mq.cmd("/autoinventory")
         mq.delay(10000, function() return mq.TLO.Cursor.ID() == nil end)
         mq.delay(100)
@@ -444,6 +441,7 @@ function cast_veteran_aa(name)
     if mq.TLO.Me.AltAbility(name)() ~= nil then
         if mq.TLO.Me.AltAbilityReady(name)() then
             castSpell(name, mq.TLO.Me.ID())
+            -- XXX delay full amount of time before returning, or mess up bards. ..
         else
             mq.cmd.dgtell("all", "ERROR:", name, "is not ready, ready in", mq.TLO.Me.AltAbilityTimer(name).TimeHMS() )
         end

@@ -5,9 +5,9 @@ settings.swap = {   -- XXX implement
     -- Notched Blade of Bloodletting (1hs, 37 dmg, 24 delay, 15 bonus) - anguish amv
     ["main"] = "Blade of Vesagran|Mainhand/Notched Blade of Bloodletting|Offhand",
 
-    ["fishing"] = "Fishing Pole|Mainhand",
-
     ["noriposte"] = "Lute of False Worship|Mainhand/Shield of the Planar Assassin|Offhand",
+
+    ["fishing"] = "Fishing Pole|Mainhand",
 
     -- for mpg group weaponry:
     ["slashdmg"] = "Chaotic Black Scimitar|Mainhand/Edge of Eternity|Offhand",
@@ -15,29 +15,13 @@ settings.swap = {   -- XXX implement
     ["bluntdmg"] = "Despair|Mainhand/Frostcaller|Offhand",
 }
 
-settings.gems = {
-    -- XXX fill
-}
-
 settings.self_buffs = {
     "Fuzzy Foothairs",
-
-    -- Harmonize (increase singing skill by 9)
-    "Shadowsong Cloak",
-
-    -- form of endurance:
-    -- Form of Endurance III (slot 6: immunity, slot 5: 270 hp) - Ring of the Beast (anguish)
-    "Ring of the Beast",
-
-    -- Form of Defense III (slot 6: immunity, slot 10: 81 ac)
-    --"Hanvar's Hoop",
-
-    -- Savage Guard (+25 atk, slot 5)
-    "Irestone Band of Rage",
-
-    -- mana pool clicky:
-    -- Eye of Dreams (slot 4: 400 mana pool, potime)
-    --"Eye of Dreams",
+    "Shadowsong Cloak", -- Harmonize (increase singing skill by 9)
+    "Ring of the Beast", -- Form of Endurance III (slot 6: immunity, slot 5: 270 hp)
+    --"Hanvar's Hoop", -- Form of Defense III (slot 6: immunity, slot 10: 81 ac)
+    "Irestone Band of Rage", -- Savage Guard (+25 atk, slot 5)
+    --"Eye of Dreams", -- slot 4: 400 mana pool, potime
 }
 
 settings.healing = {
@@ -50,8 +34,6 @@ settings.healing = {
 
 settings.assist = {
     ["type"] = "Melee", -- XXX "Ranged",  "Off"
-    ["stick_point"] = "Behind",
-    --["melee_distance"] = 12,
     ["ranged_distance"] = 100,
     ["engage_percent"] = 98,  -- XXX implement!
 
@@ -76,15 +58,27 @@ settings.assist = {
 
         -- Lxx Song of Stone AA
         "Song of Stone",
+
+        -- L70 Dance of a Thousand Blades (dodh quest, 33 min reuse)
+        "Thousand Blades",
     },
 
     ["longburns"] = {-- XXX implememt !!!
-        -- L70 Dance of a Thousand Blades (dodh quest)
-        "Thousand Blades",
-
         -- L60 Puretone Discipline (timer 3, 1h7min reuse)
         "Puretone Discipline",
     },
+}
+
+settings.gems = {
+    ["Chorus of Life"] = 1,
+    ["Psalm of Veeshan"] = 2,
+    ["Verse of Vesagran"] = 3,
+    ["War March of Muram"] = 4,
+
+    ["Niv's Harmonic"] = 6,
+    ["Agilmente's Aria of Eagles"] = 7,
+    ["Selo's Accelerating Chorus"] = 8,
+    ["Selo's Song of Travel"] = 9,
 }
 
 settings.songs = {
@@ -92,51 +86,49 @@ settings.songs = {
         -- TANK SONGS (Niv's Harmonic): Spela, Sophee
 
         -- PERCUSSION - Selo's Accelerating Chorus
-        "Selo's Accelerating Chorus/Gem|8",
+        "Selo's Accelerating Chorus",
 
         -- SINGING - resists + ac + ds
-        "Psalm of Veeshan/Gem|2",
+        "Psalm of Veeshan",
 
         -- WIND - Verse of Vesagran (mitigate melee & spell by 5% for 450 dmg)
-        "Verse of Vesagran/Gem|3",
+        "Verse of Vesagran",
 
         -- BRASS - atk, ds
-        "War March of Muram/Gem|4",
+        "War March of Muram",
 
         -- SINGING - spellshield, ac
-        "Niv's Harmonic/Gem|6",
+        "Niv's Harmonic",
 
         -- STRINGED - mana regen (AE 60 range)
-        -- "Chorus of Life/Gem|1",
+        -- "Chorus of Life",
     },
 
     ["levitate"] = {
         -- tank levitate
-        "Agilmente's Aria of Eagles/Gem|7",
-        "Psalm of Veeshan/Gem|2",
-        "Verse of Vesagran/Gem|3",
-        "War March of Muram/Gem|4",
-        "Niv's Harmonic/Gem|6",
-        --"Chorus of Life/Gem|1",
+        "Agilmente's Aria of Eagles",
+        "Psalm of Veeshan",
+        "Verse of Vesagran",
+        "War March of Muram",
+        "Niv's Harmonic",
+        --"Chorus of Life",
     },
 
     ["nods"] = {
-        "Selo's Accelerating Chorus/Gem|8",
-        -- magic, poison, disease & ac buff instead of Psalm of Veeshan
-        "Purifying Chorus/Gem|2",
-        "Niv's Harmonic/Gem|6",
-        "Verse of Vesagran/Gem|3",
-        -- "Chorus of Life/Gem|1",
+        "Selo's Accelerating Chorus",
+        "Purifying Chorus/Gem|2", -- magic, poison, disease & ac buff instead of Psalm of Veeshan
+        "Niv's Harmonic",
+        "Verse of Vesagran",
+        -- "Chorus of Life",
     },
 
     ["eb"] = {
-        -- for powater, grey, ssra ...
         "Tarew's Aquatic Ayre/Gem|7",
-        "Selo's Accelerating Chorus/Gem|8",
-        "Psalm of Veeshan/Gem|2",
-        "Verse of Vesagran/Gem|3",
-        "Niv's Harmonic/Gem|6",
-        -- "Chorus of Life/Gem|1",
+        "Selo's Accelerating Chorus",
+        "Psalm of Veeshan",
+        "Verse of Vesagran",
+        "Niv's Harmonic",
+        -- "Chorus of Life",
     },
 
     ["da"] = {
@@ -156,7 +148,7 @@ settings.songs = {
         -- L05 Selo's Accelerando (20-65% speed, 0.3 min, slower than SoW at level 14)
         -- L49 Selo's Accelerating Chorus (64-65% speed, 2.5 min)
         -- L51 Selo's Song of Travel (65% speed, invis, levi, 0.3 min)
-        "Selo's Song of Travel/Gem|9",
+        "Selo's Song of Travel",
     },
 
     ["invis"] = {
@@ -173,8 +165,8 @@ settings.songs = {
         -- L67 Zuriki's Song of Shenanigans (stringed, dd+haste debuff 45%)
         "Melody of Mischief/Gem|7",
         "Zuriki's Song of Shenanigans/Gem|8",
-        "Selo's Accelerating Chorus/Gem|4",
-        "Chorus of Life/Gem|1",
+        "Selo's Accelerating Chorus",
+        "Chorus of Life",
     },
 
 }

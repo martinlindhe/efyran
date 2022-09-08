@@ -216,8 +216,6 @@ function Buffs.Tick()
         return
     end
 
-    bard.resumeMelody()
-
     if mq.TLO.Me.CombatState() == "COMBAT" then
         -- print("skip buffing, i am in combat!")
         return

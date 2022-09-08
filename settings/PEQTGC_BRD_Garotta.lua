@@ -67,49 +67,51 @@ settings.assist = {
     },
 }
 
+settings.gems = {
+    ["Chorus of Life"] = 1,
+    ["Psalm of Veeshan"] = 2,
+    ["Verse of Vesagran"] = 3,
+    ["War March of Muram"] = 4,
+
+    ["Arcane Aria"] = 6,
+    ["Agilmente's Aria of Eagles"] = 7,
+    ["Selo's Accelerating Chorus"] = 8,
+    ["Selo's Song of Travel"] = 9,
+}
+
 settings.songs = {
     ["general"] = {
         -- CASTER SONGS (Arcane Aria): Garotta, Alethea, Moola
-
-        -- PERCUSSION - Selo's Accelerating Chorus
-        "Selo's Accelerating Chorus/Gem|8",
-
-        -- SINGING - resists + ac + ds:
-        "Psalm of Veeshan/Gem|2",
-
-        -- WIND - Verse of Vesagran (mitigate melee & spell by 5% for 450 dmg)
-        "Verse of Vesagran/Gem|3",
-
-        -- WIND - spell nuke proc
-        "Arcane Aria/Gem|6",
-
-        -- NOTE: Garotta+Alethea does ae mana regen song!
-        "Chorus of Life/Gem|1",
+        "Selo's Accelerating Chorus", -- PERCUSSION - run speed
+        "Psalm of Veeshan", -- SINGING - resists + ac + ds
+        "Verse of Vesagran", -- WIND - Verse of Vesagran (mitigate melee & spell by 5% for 450 dmg)
+        "Arcane Aria", -- WIND - spell nuke proc
+        "Chorus of Life", -- NOTE: Garotta+Alethea does ae mana regen song!
     },
 
     ["levitate"] = {
         -- caster levitate
-        "Agilmente's Aria of Eagles/Gem|7",
-        "Psalm of Veeshan/Gem|2",
-        "Verse of Vesagran/Gem|3",
-        "Arcane Aria/Gem|6",
-        "Chorus of Life/Gem|1",
+        "Agilmente's Aria of Eagles",
+        "Psalm of Veeshan",
+        "Verse of Vesagran",
+        "Arcane Aria",
+        "Chorus of Life",
     },
 
     ["nods"] = {
-        "Selo's Accelerating Chorus/Gem|8",
+        "Selo's Accelerating Chorus",
         "Purifying Chorus/Gem|2",
-        "Verse of Vesagran/Gem|3",
-        "Arcane Aria/Gem|6",
-        "Chorus of Life/Gem|1",
+        "Verse of Vesagran",
+        "Arcane Aria",
+        "Chorus of Life",
     },
 
     ["eb"] = {
         "Tarew's Aquatic Ayre/Gem|7",
-        "Selo's Accelerating Chorus/Gem|8",
-        "Psalm of Veeshan/Gem|2",
-        "Arcane Aria/Gem|6",
-        "Chorus of Life/Gem|1",
+        "Selo's Accelerating Chorus",
+        "Psalm of Veeshan",
+        "Arcane Aria",
+        "Chorus of Life",
     },
 
     ["da"] = {
@@ -121,7 +123,7 @@ settings.songs = {
     },
 
     ["travel"] = {
-        "Selo's Song of Travel/Gem|9",
+        "Selo's Song of Travel",
     },
 
     ["invis"] = {
@@ -131,8 +133,8 @@ settings.songs = {
     ["pbae"] = {
         "Melody of Mischief/Gem|7",
         "Zuriki's Song of Shenanigans/Gem|8",
-        "Selo's Accelerating Chorus/Gem|4",
-        "Chorus of Life/Gem|1",
+        "Selo's Accelerating Chorus",
+        "Chorus of Life",
     },
 }
 

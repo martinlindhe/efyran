@@ -108,8 +108,7 @@ settings.healing = {
         -- L70 Warlord's Tenacity Rank 6 AA (id: 5938, inc max hp by 5000, heal by 5680, dot 680/tick, 1.1 min)
         --"Warlord's Tenacity/HealPct|6",
 
-        -- Expendable AA
-        --"Glyph of Stored Life/HealPct|4",
+        "Glyph of Stored Life/HealPct|5|Zone|anguish", -- Expendable AA
     }
 }
 

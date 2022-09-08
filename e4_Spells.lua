@@ -6,6 +6,8 @@ function parseSpellLine(s)
     local o = {}
     local idx = 0
 
+    --print("parseSpellLine ", s)
+
     -- split on / separator
     for token in string.gmatch(s, "[^/]+") do
         idx = idx + 1
@@ -21,7 +23,7 @@ function parseSpellLine(s)
                     key = v
                 end
                 if subIndex == 1 then
-                    -- print(key, " = ", v)
+                    --print(key, " = ", v)
                     o[key] = v
                 end
                 subIndex = subIndex + 1
@@ -201,7 +203,7 @@ function spellConfigAllowsCasting(buffItem, spawn)
 
     local spell = getSpellFromBuff(spellConfig.Name) -- XXX parse this once on script startup too, dont evaluate all the time !
     if spell() == nil then
-        mq.cmd.dgtell("spellConfigAllowsCasting: getSpellFromBuff ", buffItem, " FAILED (query '"..spellConfig.Name.."'")
+        mq.cmd.dgtell("spellConfigAllowsCasting: getSpellFromBuff ", buffItem, " FAILED. Query = '"..spellConfig.Name.."'")
         mq.cmd.beep(1)
         return false
     end
@@ -290,8 +292,9 @@ function castSpell(name, spawnId)
                 -- spell / AA
                 local spell = get_spell(name)
                 if spell ~= nil then
-                    print("spell sleep ", spell.MyCastTime(), spell.RecastTime())
-                    mq.delay(spell.MyCastTime() + spell.RecastTime())
+                    local sleepTime = spell.MyCastTime() + spell.RecastTime()
+                    --print("spell sleep for '", spell.Name(), "', my cast time:", spell.MyCastTime(), ", recast time", spell.RecastTime(), " = ", sleepTime)
+                    mq.delay(sleepTime)
                 end
             end
             print("ME BARD castSpell ", name, " -- SO I RESUME TWIST!")

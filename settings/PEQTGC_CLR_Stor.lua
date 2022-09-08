@@ -36,15 +36,6 @@ settings.self_buffs = {
     -- Mantle of Corruption (Geomantra, mitigate 20% spell dmg of 500, decrease 2 mana/tick)
     --"Mantle of Corruption",
 
-    -- self mana regen:
-    -- L49 Armor of the Faithful (252-275 hp, 22 ac)
-    -- L58 Blessed Armor of the Risen (294-300 hp, 30 ac, 6 mana/tick)
-    -- L65 Armor of the Zealot (450 hp, 36 ac, 8 mana/tick)
-    -- L70 Armor of the Pioous (563 hp, 46 ac, 9 mana/tick)
-    -- L71 Blessing of Purpose
-    -- NOTE: does not stack with DRU Skin
-    --"Armor of the Zealot/MinMana|90/CheckFor|Kazad's Mark",
-
     "Aura of Devotion/MinMana|40",
 
     -- absorb melee:
@@ -107,7 +98,7 @@ settings.healing = {
         -- L69 Ward of Retribution (add defenstive proc: Ward of Retribution Parry)
         "Ward of Retribution/HealPct|50/Delay|3m",
 
-        "Distillate of Divine Healing XI/HealPct|18",
+        "Distillate of Divine Healing XI/HealPct|12",
 
         -- L65 Divine Avatar Rank 1 AA (decrease melee attack by 5%, increase HoT by 100/tick)
         -- L65 Divine Avatar Rank 2 AA (decrease melee attack by 10%, increase HoT by 150/tick)
@@ -246,6 +237,8 @@ settings.healing = {
         -- L58 Ethereal Remedy (975 hp, 2.8s cast, 400 mana)
         -- L61 Supernal Remedy (1450 hp, 1.8s cast, 400 mana)
         -- L66 Pious Remedy (1990 hp, 1.8s cast, 495 mana)
+
+        "Weighted Hammer of Conviction/HealPct|62", -- tacvi clicky
         "Pious Remedy/HealPct|60/MinMana|30",
     },
 

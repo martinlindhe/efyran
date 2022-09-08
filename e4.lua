@@ -40,13 +40,15 @@ mq.cmd.dgtell("all E4 started")
 
 while true do
     buffs.Tick()
-
     mq.doevents()
+    mq.delay(1)
 
     qol.Tick()
+    mq.doevents()
+    mq.delay(1)
 
     heal.Tick()
-    mq.delay(1000) -- 1.0s  XXX cant block here for more than few millisec
-
+    mq.doevents()
+    mq.delay(1)
 end
 

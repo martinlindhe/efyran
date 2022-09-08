@@ -34,6 +34,8 @@ settings.self_buffs = {
 
     "Talisman of Wunshi/MinMana|15",
 
+    "Talisman of the Tribunal/MinMana|50",
+
     -- bear illusion:
     -- L25 Form of the Bear (1 hp/tick, 5 wis)
     -- L55 Form of the Great Bear (2 hp/tick, 10 wis)
@@ -170,7 +172,8 @@ settings.healing = {
 
     ["rez"] = { -- XXX impl
         -- L59 Incarnate Anew (90% exp, 20s cast, 700 mana)
-        "Incarnate Anew",
+        -- Lxx Call of the Wild (0% rez, corpse can be properly rezzed later)
+        "Call of the Wild",
     },
 
     ["cures"] = {
@@ -314,11 +317,11 @@ settings.assist = {
             -- L54 Blast of Venom (704 hp, cost 289 mana)
             -- L61 Spear of Torment (870 hp, cost 340 mana)
             -- L66 Yoppa's Spear of Venom (1197 hp, cost 425 mana)
-            "Ice Age/NoAggro/Gem|3/MinMana|40",
+            --"Ice Age/NoAggro/Gem|3/MinMana|40",
         },
 
         ["fastcold"] = {
-            "Ice Age/NoAggro/Gem|3/MinMana|40",
+            --"Ice Age/NoAggro/Gem|3/MinMana|40",
         },
     },
 
@@ -349,7 +352,7 @@ settings.assist = {
     ["debuffs"] = {
         -- oow t1 bp: Spiritkin Tunic (reduce resist rate by 40% for xxx sec)
         -- oow t2 bp: Ritualchanter's Tunic of the Ancestors (reduce resists rate by xxx for 42s)
-        "Quick Burn=Ritualchanter's Tunic of the Ancestors",
+        "Ritualchanter's Tunic of the Ancestors",
 
         -- slow:
         -- L05 Drowsy (11-25% slow, 2.6 min, 20 mana)

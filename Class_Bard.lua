@@ -27,7 +27,6 @@ function Bard.PlayMelody(name)
 
     if botSettings.settings.songs == nil then
         mq.cmd.dgtell("ERROR no bard songs declared")
-        mq.cmd.beep(1)
         mq.delay(50000)
         return
     end
@@ -36,7 +35,7 @@ function Bard.PlayMelody(name)
         return
     end
 
-    local songSet = botSettings.settings.songs[name]
+    local songSet = botSettings.settings.songs[name:lower()]
     if songSet == nil then
         mq.cmd.dgtell("ERROR no such song set", name)
         mq.cmd.beep(1)
@@ -59,19 +58,26 @@ function Bard.PlayMelody(name)
             return
         end
 
+        local gem = nil
         if o["Gem"] ~= nil then
-            -- make sure that song is scribed, else scribe it
-            if mq.TLO.Me.Gem(o["Gem"]).Name() ~= nameWithRank then
-                print("SCRIBE SONG IN GEM ", o["Gem"], ": want:", nameWithRank, ", have:", mq.TLO.Me.Gem(o["Gem"]).Name())
-                mq.cmd.memorize('"'..nameWithRank..'"', o["Gem"])
-                mq.delay(3000)  -- XXX 3s
-            end
+            gem = o["Gem"]
+        elseif botSettings.settings.gems[o.Name] ~= nil then
+            gem = tostring(botSettings.settings.gems[o.Name])
         else
-            mq.cmd.dgtell("all ERROR bard song lacks Gem|x argument: ", songRow)
+            mq.cmd.dgtell("all ERROR bard song lacks gems default slot or Gem|x argument: ", songRow)
             mq.cmd.beep(1)
         end
 
-        gemSet = gemSet .. o["Gem"] .. " "
+        if gem ~= nil then
+            -- make sure that song is scribed in the required gem, else scribe it
+            if mq.TLO.Me.Gem(gem).Name() ~= nameWithRank then
+                print("SCRIBE SONG IN GEM ", gem, ": want:", nameWithRank, ", have:", mq.TLO.Me.Gem(gem).Name())
+                mq.cmd.memorize('"'..nameWithRank..'"', gem)
+                mq.delay(3000)  -- XXX 3s
+            end
+            gemSet = gemSet .. gem .. " "
+        end
+
     end
 
     mq.cmd.twist(gemSet)

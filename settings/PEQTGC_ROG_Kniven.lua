@@ -12,31 +12,25 @@ settings.swap = { -- XXX impl
     ["fishing"] = "Fishing Pole|Mainhand",
 
     -- for mpg group weaponry:
-    -- FIXME need better 1h slashing
-    ["slashdmg"] = "Jagged Blade of Ice|Mainhand/Great Blade of Storms|Offhand",
+    ["slashdmg"] = "Jagged Blade of Ice|Mainhand/Great Blade of Storms|Offhand", -- FIXME need better 1h slashing
     ["bluntdmg"] = "Mace of Tortured Nightmares|Mainhand/Hammer of Rancorous Thoughts|Offhand",
     ["piercedmg"] = "Nightshade, Blade of Entropy|Mainhand/Aneuk Dagger of Eye Gouging|Offhand",
 }
 
 settings.self_buffs = {
+    -- "Tiny Bone Bracelet", -- skeleton illusion
 
-    -- "Tiny Bone Bracelet",
-
-    -- atk buff:
-    -- Furious Might (slot 5: 40 atk)
-    "Veil of Intense Evolution",
+    "Veil of Intense Evolution", -- Furious Might (slot 5: 40 atk)
 
     -- poisons:
     -- L65 Bite of the Shissar XI (vendor bought in PoK)
     -- L70 Bite of the Shissar XII (vendor bought in PoK)
-    -- XXX handle Component syntax ...
-    -- "Bite of the Shissar XII/Component|Bite of the Shissar XII",
+    "Bite of the Shissar XII/Reagent|Bite of the Shissar XII",
 
     -- Chaotic Ward (20 all resists, 67 ac) - stacks with all resist buffs. DON'T STACK WITH Form of Defense
     "Necklace of the Steadfast Spirit",
 
-    -- Form of Defense III (slot 6: immunity, slot 10: 81 ac)
-    --"Hanvar's Hoop",
+    --"Hanvar's Hoop", -- Form of Defense III (slot 6: immunity, slot 10: 81 ac)
 
     -- XXX dont get it to work 22 feb:
     -- 30% haste clicky, 72 min
@@ -60,29 +54,21 @@ settings.healing = {
         -- L70 Stealthy Getaway AA
         "Stealthy Getaway/HealPct|12",
 
-        -- Mind Shock (potion, 15 min, add proc: Mind Shock)
-        --"Mind Shock/HealPct|20",
+        --"Mind Shock/HealPct|20", -- potion, 15 min, add proc: Mind Shock
 
-        -- Expendable AA
-        "Glyph of Stored Life/HealPct|5",
+        "Glyph of Stored Life/HealPct|5|Zone|anguish", -- Expendable AA
     }
 }
 
 settings.assist = {
     ["type"] = "Melee",
-    ["stick_point"] = "Behind",
-    --["melee_distance"] = 10,
     ["ranged_distance"] = 80,
-    ["engage_percent"] = 98,  -- XXX implement!
-
+    ["engage_percent"] = 98,
     ["abilities"] = {
-        -- L59 Escape AA
-        "Escape/PctAggro|99",
-
+        "Escape/PctAggro|99", -- L59 Escape AA
         "Backstab",
     },
-
-    ["quickburns"] = {-- XXX implememt !!!
+    ["quickburns"] = {
         -- oow T1 bp: (increase 1hb dmg   taken by 20% for 12s, 5 min reuse) Darkraider's Vest
         -- oow T2 bp: (increase all melee taken by 20% for 24s, 5 min reuse) Whispering Tunic of Shadows
         "Whispering Tunic of Shadows",
@@ -107,13 +93,9 @@ settings.assist = {
         -- L65 Twisted Chance Discipline (22 min reuse)
         "Twisted Chance Discipline",
     },
-
-    ["longburns"] = {-- XXX implememt !!!
-    },
-
-    ["fullburns"] = {-- XXX implememt !!!
-        -- Expendable AA (increase dmg)
-        "Glyph of Courage",
+    ["longburns"] = {},
+    ["fullburns"] = {
+        "Glyph of Courage", -- Expendable AA (increase dmg)
     },
 }
 

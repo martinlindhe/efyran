@@ -22,6 +22,7 @@ while true do
 
     local oldY = mq.TLO.Me.Y()
     local oldX = mq.TLO.Me.X()
+    local oldZ = mq.TLO.Me.Z()
 
     if  mq.TLO.SpawnCount("pc radius 80 zradius 50")() > 1 then
         for i=1,mq.TLO.SpawnCount(spawnQuery)() do
@@ -79,7 +80,7 @@ while true do
     mq.doevents()
     mq.delay(100)
 
-    move_to_loc(oldY, oldX)
+    move_to_loc(oldY, oldX, oldZ)
 
     if in_neutral_zone() then
         mq.cmd.dgtell("all ERROR: Ending tag.lua in neutral zone")

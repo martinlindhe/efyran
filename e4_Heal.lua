@@ -221,16 +221,15 @@ function Heal.acceptRez()
                 i = i + 1
             end
 
-            local spawn = spawn_from_peer_name(peer)
             --print("got a rez from", peer, " ( ", spawn.Name() , ")")
-            if not is_peer(spawn) then
-                mq.cmd.dgtell("all WARNING: got a rez from (NOT A PEER)", spawn.Name(), ": ", s)
+            if not is_peer(peer) then
+                mq.cmd.dgtell("all WARNING: got a rez from (NOT A PEER)", peer, ": ", s)
                 mq.cmd.beep(1)
                 mq.delay(1000) -- XXX
                 -- XXX should we decline the rez?
                 return
             end
-            mq.cmd.dgtell("all Accepting rez from", spawn.Name())
+            mq.cmd.dgtell("all Accepting rez from "..peer)
             mq.cmd("/notify ConfirmationDialogBox Yes_Button leftmouseup")
 
             -- XXX click in the RespawnWnd if open (live)
@@ -249,7 +248,7 @@ function Heal.medCheck()
         return
     end
 
-    if is_brd() or is_hovering() or is_casting() or is_moving() or mq.TLO.Window("SpellBookWnd").Open() then
+    if is_brd() or is_hovering() or is_casting() or is_moving() or window_open("SpellBookWnd") or window_open("LootWnd") then
         return
     end
 
@@ -270,9 +269,8 @@ local nearbyNPCFilter = "npc radius 75 zradius 75"
 function Heal.performLifeSupport()
     --print("Heal.performLifeSupport")
 
-    -- XXX checkfor Resurrection Sickness should be automatic here !!!
     if have_buff("Resurrection Sickness") then
-        mq.cmd.dgtell("all performLifeSupport GIVING UP. REZ SICKNESS")
+        --mq.cmd.dgtell("all performLifeSupport GIVING UP. REZ SICKNESS")
         return
     end
 
@@ -300,20 +298,22 @@ function Heal.performLifeSupport()
             skip = true
         end
 
-        if spellConfig.CheckFor ~= nil then
-            -- if we got this buff/song on, then skip.
-            if have_buff(spellConfig.CheckFor) or have_song(spellConfig.CheckFor) then
-                --mq.cmd.dgtell("all performLifeSupport skip ", spellConfig.Name, ", I have buff ", spellConfig.CheckFor, " on me")
-                skip = true
-            end
+        -- if we got this buff/song on, then skip.
+        if spellConfig.CheckFor ~= nil and (have_buff(spellConfig.CheckFor) or have_song(spellConfig.CheckFor)) then
+            --mq.cmd.dgtell("all performLifeSupport skip ", spellConfig.Name, ", I have buff ", spellConfig.CheckFor, " on me")
+            skip = true
         end
 
-        if spellConfig.MinMobs ~= nil then
-            -- only cast if enough NPC:s is nearby
-            if spawn_count(nearbyNPCFilter) < tonumber(spellConfig.MinMobs) then
-                --mq.cmd.dgtell("all performLifeSupport skip ", spellConfig.Name, ", Not enought nearby mobs. Have ", spawn_count(nearbyNPCFilter), ", need ", spellConfig.MinMobs)
-                skip = true
-            end
+        -- only cast if enough NPC:s is nearby
+        if spellConfig.MinMobs ~= nil and spawn_count(nearbyNPCFilter) < tonumber(spellConfig.MinMobs) then
+            --mq.cmd.dgtell("all performLifeSupport skip ", spellConfig.Name, ", Not enought nearby mobs. Have ", spawn_count(nearbyNPCFilter), ", need ", spellConfig.MinMobs)
+            skip = true
+        end
+
+        if spellConfig.Zone ~= nil and mq.TLO.Zone.ShortName() ~= spellConfig.Zone then
+            -- TODO: allow multiple zones listed as comma separated shortnames
+            --mq.cmd.dgtell("all performLifeSupport skip ", spellConfig.Name, ", we are in zone ", mq.TLO.Zone.ShortName(), " vs required ", spellConfig.Zone)
+            skip = true
         end
 
         if is_alt_ability(spellConfig.Name) and not is_alt_ability_ready(spellConfig.Name) then
