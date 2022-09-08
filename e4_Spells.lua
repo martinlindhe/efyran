@@ -180,10 +180,18 @@ function refreshBuff(buffItem, spawn)
         return false
     end
 
+    local pretty = spellName
+    if have_item(spellConfig.Name) then
+        local item = get_item(spellConfig.Name)
+        if item ~= nil then
+            pretty = item.ItemLink("CLICKABLE")()
+        end
+    end
+
     if spawn.Type() == "Pet" then
-        print("Buffing \agmy pet ", spawn.CleanName(), "\ax with \ay", spellName)
+        print("Buffing \agmy pet ", spawn.CleanName(), "\ax with \ay", pretty, "\ax.")
     else
-        print("Buffing \agmyself\ax with \ay", spellName)
+        print("Buffing \agmyself\ax with \ay", pretty, "\ax.")
     end
     castSpell(spellName, spawnID)
     return true

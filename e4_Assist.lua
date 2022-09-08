@@ -83,7 +83,7 @@ function Assist.handleAssistCall(spawn)
     end
 
     if have_pet() then
-        mq.cmd.dgtell("all ATTACKING WITH MY PET", mq.TLO.Me.Pet.CleanName())
+        print("Attacking with my pet ", mq.TLO.Me.Pet.CleanName())
         mq.cmd.pet("attack", spawn.ID())
     end
 
