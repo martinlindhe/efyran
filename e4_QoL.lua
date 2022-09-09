@@ -4,6 +4,8 @@ local QoL = {}
 
 function QoL.Init()
 
+    QoL.loadRequiredPlugins()
+
     if is_rof2() then
         -- rof2 client has no persistent setting for /tgb on. it has been permanently auto enabled on live
         mq.cmd.tgb("on")
@@ -57,18 +59,14 @@ function QoL.Init()
             mq.cmd.dgtell("XXX FIXME handle 'buffme' tell from ", name)
             mq.cmd.beep(1)
         else
-            if name == mq.TLO.Me.Pet.CleanName() then
-                print("IGNORING TELL FROM MY PET '".. name.. "'': ", msg)
-                return
-            end
-            -- excludes tells from "Player`s pet" (Permutation Peddler), "Player`s familiar" (Summoned Banker)
+            -- excludes tells from "Player`s pet" (Permutation Peddler, NPC), "Player`s familiar" (Summoned Banker, Pet)
             local spawn = spawn_from_query('="'..name..'"')
             if spawn ~= nil and (spawn.Type() == "NPC" or spawn.Type() == "Pet") then
-                --print("IGNORING TELL FROM NPC '".. name.. "'': ", msg)
+                print("IGNORING TELL FROM "..spawn.Type().." '".. name.. "': ", msg)
                 return
             end
             if spawn ~= nil then
-                mq.cmd.dgtell("all GOT A TELL FROM", name, ": ", msg, " type ", spawn.Type())
+                mq.cmd.dgtell("all GOT A IN-ZONE TELL FROM", name, ": ", msg, " type ", spawn.Type())
             else
                 mq.cmd.dgtell("all GOT A TELL FROM", name, ": ", msg)
             end
@@ -120,7 +118,13 @@ function QoL.Init()
 
     -- quickly exits all eqgame.exe instances using task manager
     mq.bind("/exitall", function()
-        mq.cmd.exec('TASKKILL "/F /IM eqgame.exe"')
+        mq.cmd.exec('TASKKILL "/F /IM eqgame.exe" bg')
+    end)
+
+    -- quickly exits my eqgame.exe instance using task manager
+    mq.bind("/exitme", function()
+        mq.cmd.dgtell("all Exiting")
+        mq.cmd.exec('TASKKILL "/F /PID '..tostring(mq.TLO.EverQuest.PID())..'" bg')
     end)
 
     mq.bind("/exitnotinzone", function()
@@ -264,9 +268,44 @@ function QoL.Init()
                         end
                     end
                 else
-                    print("XXX check bank top level slot")
+                    if inv.Clicky() ~= nil then
+                        print(key, " ", inv.ItemLink("CLICKABLE")(), " effect: ", inv.Clicky.Spell.Name())
+                    end
                 end
             end
+        end
+    end)
+
+    -- cast Summon Clockwork Banker veteran AA yourself, or the first available nearby peer
+    mq.bind("/banker", function()
+        local aaName = "Summon Clockwork Banker"
+        if is_alt_ability_ready(aaName) then
+            cast_alt_ability(aaName)
+            return
+        end
+
+        print(aaName.." is not ready. Ready in "..mq.TLO.Me.AltAbilityTimer(aaName).TimeHMS())
+
+        if not is_orchestrator() then
+            return
+        end
+
+        -- if my banker is not ready, check all nearby peers if one is ready to use and use it.
+        local spawnQuery = "pc notid " .. mq.TLO.Me.ID() .. " radius 50"
+
+        for i = 1, spawn_count(spawnQuery) do
+            local spawn = mq.TLO.NearestSpawn(i, spawnQuery)
+            local peer = spawn.Name()
+            if is_peer(peer) then
+                local value = query_peer(peer, 'Me.AltAbilityReady['..aaName..']', 0)
+                if value == "TRUE" then
+                    print("Asking ", peer, " to activate banker ...")
+                    mq.cmd.dex(peer, "/banker")
+                    return
+                end
+            end
+            mq.delay(1)
+            mq.doevents()
         end
 
     end)
@@ -274,6 +313,21 @@ function QoL.Init()
     mq.bind("/cohgroup", function()
         mq.cmd("/lua run cohgroup")
     end)
+end
+
+function QoL.loadRequiredPlugins()
+    local requiredPlugins = {
+        "MQ2DanNet",
+        --"MQ2AdvPath", -- not currently used
+        "MQ2MoveUtils",
+        "MQ2Cast",
+    }
+    for k, v in pairs(requiredPlugins) do
+        if mq.TLO.Plugin(v)() == nil then
+            mq.cmd("/plugin "..v)
+            print("WARNING: "..v.." was not loaded")
+        end
+    end
 end
 
 function QoL.verifySpellLines()

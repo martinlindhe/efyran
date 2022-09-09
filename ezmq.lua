@@ -193,6 +193,17 @@ function is_ability_ready(name)
     return mq.TLO.Me.AbilityReady(name)()
 end
 
+function cast_alt_ability(name, spawnID)
+    local cmd = '/casting "'..name..'|alt'
+    if spawnID ~= nil then
+        cmd = cmd .. ' -targetid|'.. tostring(spawnID)
+    end
+
+    mq.cmd(cmd)
+    mq.delay(1000)
+    mq.delay(20000, function() return not is_casting() end)
+end
+
 -- returns true if I have the buff `name` on me
 function have_buff(name)
     local spell = mq.TLO.Spell(name)
@@ -571,4 +582,13 @@ function drop_invis()
         mq.cmd.beep()
         mq.cmd.dgtell("all FATAL ERROR unhandled invis buff on me!")
     end
+end
+
+-- query a peer using MQ2DanNet
+function query_peer(peer, query, timeout)
+    mq.cmdf('/dquery %s -q "%s"', peer, query)
+    mq.delay(timeout or 0)
+    local value = mq.TLO.DanNet(peer).Q(query)()
+    --print(string.format('\ayQuerying - mq.TLO.DanNet(%s).Q(%s) = %s', peer, query, value))
+    return value
 end

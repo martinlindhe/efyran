@@ -81,6 +81,14 @@ function Buffs.Init()
         end
     end)
 
+    mq.bind("/dropinvis", function()
+        if is_orchestrator() then
+            mq.cmd.dgzexecute("/dropinvis")
+        end
+
+        drop_invis()
+    end)
+
     mq.bind("/buffme", function()
         mq.cmd.dgaexecute("/buffit", mq.TLO.Me.ID())
     end)

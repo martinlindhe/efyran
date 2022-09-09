@@ -4,27 +4,6 @@ local Follow = {
 
 function Follow.Init()
 
-    if mq.TLO.Plugin('MQ2DanNet')() == nil then
-        mq.cmd.plugin('MQ2DanNet')
-        print('WARNING: MQ2DanNet was not loaded')
-    end
-
-    if mq.TLO.Plugin("MQ2AdvPath")() == nil then
-        mq.cmd.plugin("MQ2AdvPath")
-        print("WARNING: MQ2AdvPath was not loaded")
-    end
-
-    if mq.TLO.Plugin("MQ2MoveUtils")() == nil then
-        -- XXX currently used for /stick when assisting. would prefer to drop it fully
-        mq.cmd.plugin("MQ2MoveUtils")
-        print("WARNING: MQ2MoveUtils was not loaded")
-    end
-
-    if mq.TLO.Plugin("MQ2Cast")() == nil then
-        mq.cmd.plugin("MQ2Cast")
-        print("WARNING: MQ2Cast was not loaded")
-    end
-
     mq.bind("/clickit", function(name)
         print("CLICKING NEARBY DOOR xxx name")
         -- XXX click nearby door. like pok stones etc

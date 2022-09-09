@@ -78,11 +78,13 @@ Buff Spell Level   Minimum Target Level
 /buffon                     - auto buffs
 /buffoff
 /buffit						- buff target
-
+/dropbuff <name>            - drop buff from all peers in zone, partial buff name match. "all" to drop all buffs
+/dropinvis                  - drop invisibility on all peers in zone
 
 /fdi             			- find item by partial name
 /fmi                        - find missing item. report peers who lack an item
 /clickies                   - lists all clickies on current toon
+/banker                     - summons a banker
 
 /recallgroup <name>         - recalls a group/raid formation
 

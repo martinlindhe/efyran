@@ -63,7 +63,7 @@ function Group.Init()
                 raidLeader = groupLeader
             end
 
-            print(' -- processing group ',idx, ', leader:', groupLeader)
+            --print(' -- processing group ',idx, ', leader:', groupLeader)
 
             if mq.TLO.Me.Name() == groupLeader then
                 -- leader invites the other group members
@@ -81,7 +81,7 @@ function Group.Init()
                     end
                 end
             elseif orchestrator and groupLeader ~= 'NULL' then
-                print('Telling group leader ', groupLeader, ' to form group ', group)
+                print('Telling group leader ', groupLeader, ' to form group ', idx)
                 mq.cmd.dexecute(groupLeader, '/recallgroup', name, idx)
             end
         end

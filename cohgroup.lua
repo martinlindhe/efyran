@@ -15,7 +15,7 @@ if mq.TLO.Me.Gem("Call of the Hero")() == nil then
 end
 
 if mq.TLO.Group.Members() == 0 then
-    mq.dgtell("all CoTH ERROR: I am not grouped")
+    mq.cmd.dgtell("all CoTH ERROR: I am not grouped")
     return
 end
 
