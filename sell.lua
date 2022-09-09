@@ -77,7 +77,7 @@ for n = 1, num_inventory_slots() do
 
                     end
                 else
-                    mq.cmd.dgtell("all New loot. Marking as Keep. ", item.ItemLink("CLICKABLE"))
+                    mq.cmd.dgtell("all New loot. Marking as Keep. ", item.ItemLink("CLICKABLE")())
                     SetLootItemSetting(loot, item, "Keep")
                 end
 

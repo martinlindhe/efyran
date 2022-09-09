@@ -81,11 +81,11 @@ Buff Spell Level   Minimum Target Level
 
 /fdi             			- find item by partial name
 /fmi                        - find missing item. report peers who lack an item
+/clickies                   - lists all clickies on current toon
 
 /recallgroup <name>         - recalls a group/raid formation
 
 /shrinkgroup                - shrink group members shrink spells/clickies
-
 
 /wornaugs                   - reports all worn augs and total hp/mana/endurance/ac
 

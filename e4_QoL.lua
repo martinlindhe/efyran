@@ -222,13 +222,53 @@ function QoL.Init()
                         mana = mana + item.Mana()
                         endurance = endurance + item.Endurance()
                         ac = ac + item.AC()
-                        local name = inventory_slot_name(i)
-                        print(name, " #", a, ": ", item.ItemLink("CLICKABLE"), " ", item.HP(), " HP")
+                        print(inventory_slot_name(i), " #", a, ": ", item.ItemLink("CLICKABLE")(), " ", item.HP(), " HP")
                     end
                 end
             end
         end
         print("Augument total: ", hp, " HP, ", mana, " mana, ", endurance, " endurance, ", ac, " AC")
+    end)
+
+    -- reports all owned clickies (worn, inventory, bank) worn auguments
+    mq.bind("/clickies", function()
+        print("My clickies:")
+
+        for i=0,32 do -- equipment: 0-22 is worn gear, 23-32 is inventory top level
+            if mq.TLO.Me.Inventory(i).ID() then
+                local inv = mq.TLO.Me.Inventory(i)
+                if inv.Container() > 0 then
+                    for c = 1, inv.Container() do
+                        local item = inv.Item(c)
+                        if item.Clicky() ~= nil then
+                            print(inventory_slot_name(i), " # "..c.." ", item.ItemLink("CLICKABLE")(), " effect: ", item.Clicky.Spell.Name())
+                        end
+                    end
+                else
+                    if inv.Clicky() ~= nil then
+                        print(inventory_slot_name(i), " ", inv.ItemLink("CLICKABLE")(), " effect: ", inv.Clicky.Spell.Name())
+                    end
+                end
+            end
+        end
+
+        for i = 1, 26 do -- bank top level slots: 1-24 is bank bags, 25-26 is shared bank
+            if mq.TLO.Me.Bank(i)() ~= nil then
+                local key = "bank"..tostring(i)
+                local inv = mq.TLO.Me.Bank(i)
+                if inv.Container() > 0 then
+                    for c = 1, inv.Container() do
+                        local item = inv.Item(c)
+                        if item.Clicky() ~= nil then
+                            print(key, " # "..c.." ", item.ItemLink("CLICKABLE")(), " effect: ", item.Clicky.Spell.Name())
+                        end
+                    end
+                else
+                    print("XXX check bank top level slot")
+                end
+            end
+        end
+
     end)
 end
 
