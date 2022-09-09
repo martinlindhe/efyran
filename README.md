@@ -61,8 +61,9 @@ Buff Spell Level   Minimum Target Level
 
 ## command reference
 
-/assiston ${Target.ID}    	- run from main driver, tells bots to kill ID
-/backoff                  	- call of assist
+/assiston ${Target.ID}      - run from main driver, tells bots to kill ID
+/backoff                    - call of assist
+/pbaeon                     - start PBAE
 
 
 /followon					- tell peers to follow you
@@ -70,6 +71,8 @@ Buff Spell Level   Minimum Target Level
 /movetome                   - tell peers to move to your location
 /clickit					- click a "door" object to zone
 /rtz                        - face zoneline and run it to instruct bots to cross the zoneline
+/hailit                     - hail/talk to nearby NPC
+/hailall                    - have all peers hail/talk to nearby NPC
 
 /buffon                     - auto buffs
 /buffoff

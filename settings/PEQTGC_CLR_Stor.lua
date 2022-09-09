@@ -308,7 +308,7 @@ settings.assist = {
         --"Celestial Hammer",
     },
 
-    ["pbae"] = {   -- XXX implement
+    ["pbae"] = {
         -- pbae magic nukes:
         -- L09 Word of Pain (24-29 hp, aerange 20, recast 9s, cost 47 mana)
         -- L19 Word of Shadow (52-58 hp, aerange 20, recast 9s, cost 85 mana)

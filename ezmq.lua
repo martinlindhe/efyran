@@ -225,6 +225,11 @@ function is_moving()
     return mq.TLO.Me.Moving()
 end
 
+-- returns true if I am sitting
+function is_sitting()
+    return mq.TLO.Me.Sitting()
+end
+
 function is_brd()
     return mq.TLO.Me.Class.ShortName() == "BRD"
 end
@@ -462,6 +467,15 @@ function me_tank()
     return is_tank(mq.TLO.Me.Class.ShortName())
 end
 
+-- XXX add more:
+-- Silk (ENC,MAG,NEC,WIZ)
+-- Chain (ROG,BER,SHM,RNG)
+-- Leather (DRU,BST,MNK)
+-- Plate (WAR,BRD,CLR,PAL,SHD)
+-- Knight (PAL,SHD)
+-- Melee (BRD,BER,BST,MNK,PAL,RNG,ROG,SHD,WAR)
+-- Hybrid (PAL,SHD,RNG,BST)
+
 -- true if CLR,DRU,SHM,PAL,RNG,BST
 function is_healer(class)
     if class == nil then
@@ -533,4 +547,28 @@ function inventory_slot_name(n)
         return baseSlots[n]
     end
     mq.cmd.dgtell("all ERROR: lookup inventory slot", n, "failed")
+end
+
+-- Makes character visible and drops sneak/hide.
+function drop_invis()
+    if mq.TLO.Me.Class.ShortName() == "ROG" then
+        if mq.TLO.Me.Sneaking() then
+            print("ROG - Dropping Sneak")
+            mq.cmd("/doability Sneak")
+            mq.delay(2000)
+        end
+        if mq.TLO.Me.Invis() then
+            print("ROG - dropping Hide")
+            mq.cmd("/doability Hide")
+            mq.delay(2000)
+        end
+    end
+    mq.cmd("/makemevisible")
+
+    mq.delay(1000, function() return not mq.TLO.Me.Invis() end)
+
+    if mq.TLO.Me.Invis() then
+        mq.cmd.beep()
+        mq.cmd.dgtell("all FATAL ERROR unhandled invis buff on me!")
+    end
 end

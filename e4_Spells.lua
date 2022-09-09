@@ -350,23 +350,55 @@ end
 -- memorizes all spells listed in character settings.gems in their correct position
 function memorizeListedSpells()
     if botSettings.settings.gems == nil then
-        print("no gems configured")
+        print("no settings.gems configured")
         return
     end
-    for name, gem in pairs(botSettings.settings.gems) do
-        local spell = get_spell(name)
-        if spell == nil then
-            mq.cmd.dgtell("all FATAL ERROR cant memorize spell", name)
-            mq.cmd.beep(1)
-            return
-        end
-        local nameWithRank = spell.RankName()
+    for spellRow, gem in pairs(botSettings.settings.gems) do
+        memorizeSpell(spellRow, tostring(gem))
+    end
+end
 
+-- memorizes all spells listed in character settings.assist.pbae in their correct position
+function memorizePBAESpells()
+    if botSettings.settings.assist.pbae == nil then
+        print("no settings.assist.pbae configured")
+        return
+    end
+    for k, spellRow in pairs(botSettings.settings.assist.pbae) do
+        memorizeSpell(spellRow)
+    end
+end
+
+-- spellRow is "War March of Muram/Gem|4" etc
+-- defaultGem is a string or nil for no default
+-- returns gem number as string or nil on error
+function memorizeSpell(spellRow, defaultGem)
+    local o = parseSpellLine(spellRow) -- XXX parse this once on script startup. dont evaluate all the time !!!
+
+    local nameWithRank = mq.TLO.Spell(o.Name).RankName()
+    --print("considering bard song ... ", o.Name, " ... ", nameWithRank)
+
+    if not is_spell_in_book(nameWithRank) then
+        mq.cmd.dgtell("ERROR don't know spell/song", o.Name)
+        mq.cmd.beep(1)
+        return
+    end
+
+    local gem = defaultGem
+    if o["Gem"] ~= nil then
+        gem = o["Gem"]
+    elseif botSettings.settings.gems[o.Name] ~= nil then
+        gem = tostring(botSettings.settings.gems[o.Name])
+    else
+        mq.cmd.dgtell("all ERROR spell/song lacks gems default slot or Gem|x argument: ", songRow)
+        mq.cmd.beep(1)
+    end
+
+    if gem ~= nil then
+        -- make sure that song is scribed in the required gem, else scribe it
         if mq.TLO.Me.Gem(gem).Name() ~= nameWithRank then
-            -- This is unusual, if gems is correctly set up
-            mq.cmd.dgtell("all Memorizing", nameWithRank, "in gem", gem)
+            mq.cmd.dgtell("all Scribing spell/song in gem ", gem, ": want:", nameWithRank, ", have:", mq.TLO.Me.Gem(gem).Name())
             mq.cmd.memorize('"'..nameWithRank..'"', gem)
-            -- sleep until spell is memorized
             mq.delay(200)
             mq.delay(5000, function()
                 return mq.TLO.Window("SpellBookWnd").Open() == false
@@ -374,7 +406,9 @@ function memorizeListedSpells()
             mq.delay(200)
         end
     end
+    return gem
 end
+
 
 -- returns true if name is ready to use (spell, aa, ability or combat ability)
 function is_spell_ability_ready(name)

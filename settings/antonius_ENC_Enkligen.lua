@@ -156,7 +156,7 @@ settings.assist = {
         --"Mindreaver's Vest of Coercion",
     },
 
-    ["pbae"] = { -- XXX impl
+    ["pbae"] = {
         -- ae stun:
         -- L03 Color Flux (4s stun/L55?, aerange 20, recast 12s)
         -- L20 Color Shift (6s stun/L55?, aerange 25, recast 12s)

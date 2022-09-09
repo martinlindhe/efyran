@@ -91,19 +91,15 @@ settings.assist = {
 
     ["longburns"] = {
         "Frenzied Devastation",
-
-        -- L59 Mana Burn AA (3000 mana into nuke???)
-        -- L65 Mana Blast AA (6000 mana into nuke???)
-        -- L70 Mana Blaze AA (9000 mana into nuke???)
-        "Mana Blaze",
+        --"Mana Blaze",
     },
 
     ["fullburns"] = {
         "Glyph of Courage", -- Expendable AA (increase dmg)
     },
 
-    ["pbae"] = { -- XXX impl
-        "Circle of Thunder/Gem|3",
+    ["pbae"] = {
+        "Circle of Thunder",
         "Winds of Gelid/Gem|4",
         "Circle of Fire/Gem|5",
         --"Fire Rune/Gem|8",

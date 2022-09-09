@@ -6,6 +6,18 @@ settings.swap = { -- XXX impl
     ["melee"] = "Staff of Phenomenal Power|Mainhand", -- 1hb
 }
 
+settings.gems = {
+    ["Chaos Flame"] = 1, -- fire nuke
+    ["Ancient: Core Fire"] = 2, -- fire nuke
+    ["Spark of Ice"] = 3, -- cold nuke
+    ["Gelidin Comet"] = 4, -- cold nuke
+
+    ["Ether Skin"] = 6,
+    ["Iceflame of E`ci"] = 7,
+    ["Circle of Thunder"] = 8, -- pbae
+    ["Ancient: Greater Concussion"] = 9,
+}
+
 settings.self_buffs = {
     "Fuzzy Foothairs",
 
@@ -19,9 +31,9 @@ settings.self_buffs = {
 
     "Pyromancy/CheckFor|Mana Flare",
 
-    "Ether Skin/Gem|6/MinMana|20/CheckFor|Rune of Rikkukin",
+    "Ether Skin/MinMana|20/CheckFor|Rune of Rikkukin",
 
-    "Iceflame of E`ci/Gem|7/MinMana|20",
+    "Iceflame of E`ci/MinMana|20",
 
     "Improved Familiar",
 }
@@ -38,7 +50,7 @@ settings.healing = {
 settings.assist = {
     ["nukes"] = { -- XXX implement
         ["main"] = {
-            "Ancient: Greater Concussion/Gem|9/PctAggro|98",
+            "Ancient: Greater Concussion/PctAggro|98",
             "Mind Crash/PctAggro|99",
 
             -- fire nukes:
@@ -48,8 +60,8 @@ settings.assist = {
             -- L70 Ether Flame (5848 hp, resist adj -50, cost 1550 mana)
             -- L70 Corona Flare (3770 hp, resist adj -10, cost 800 mana)
             "Scepter of Incantations/NoAggro",
-            "Chaos Flame/NoAggro/Gem|1/MinMana|5",
-            "Ether Flame/GoM/NoAggro/Gem|3",
+            "Chaos Flame/NoAggro/MinMana|5",
+            "Ether Flame/GoM/NoAggro",
         },
         ["noks"] = {
             "Draught of Ro/NoAggro/Gem|1",
@@ -57,13 +69,13 @@ settings.assist = {
 
         ["fastfire"] = {
             "Scepter of Incantations/NoAggro",
-            "Chaos Flame/NoAggro/Gem|1/MinMana|5",
-            "Ether Flame/GoM/NoAggro/Gem|3",
+            "Chaos Flame/NoAggro/MinMana|5",
+            "Ether Flame/GoM/NoAggro",
         },
 
         ["bigfire"] = {
             "Scepter of Incantations/NoAggro",
-            "Ether Flame/NoAggro/Gem|3/MinMana|5",
+            "Ether Flame/NoAggro/MinMana|5",
         },
 
         -- cold nukes:
@@ -73,11 +85,11 @@ settings.assist = {
         -- L69 Spark of Ice (1348 hp, resist adj -50, cost 319 mana, 3s cast)
         -- L69 Claw of Vox (1375 hp, resist adj -50, cost 208 mana, 5s cast)
         ["fastcold"] = {
-            "Spark of Ice/NoAggro/Gem|2/MinMana|5",
-            "Gelidin Comet/GoM/NoAggro/Gem|4/MinMana|5",
+            "Spark of Ice/NoAggro/MinMana|5",
+            "Gelidin Comet/GoM/NoAggro/MinMana|5",
         },
         ["bigcold"] = {
-            "Gelidin Comet/NoAggro/Gem|4/MinMana|5",
+            "Gelidin Comet/NoAggro/MinMana|5",
         },
     },
 
@@ -107,7 +119,7 @@ settings.assist = {
     ["longburns"] = {
         "Frenzied Devastation",
         "Ward of Destruction",
-        "Mana Blaze",
+        --"Mana Blaze",
     },
 
     ["fullburns"] = {
@@ -115,8 +127,8 @@ settings.assist = {
         "Glyph of Courage",
     },
 
-    ["pbae"] = { -- XXX impl
-        "Circle of Thunder/Gem|3",
+    ["pbae"] = {
+        "Circle of Thunder",
         "Winds of Gelid/Gem|4",
         "Circle of Fire/Gem|5",
         --"Fire Rune/Gem|8",

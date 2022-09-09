@@ -6,19 +6,22 @@ local assistTarget = nil -- the current assist target
 
 local spellSet = "main" -- the current spell set. XXX impl switching it
 
+local nearbyPBAEilter = "npc radius 50 zradius 50 los"
+
+
 function Assist.Init()
 
     if botSettings.settings.assist ~= nil then
         if botSettings.settings.assist.melee_distance == nil then
             botSettings.settings.assist.melee_distance = "auto"
         end
-        botSettings.settings.assist.melee_distance = string.lower(botSettings.settings.assist.melee_distance)
+        botSettings.settings.assist.melee_distance = tostring(botSettings.settings.assist.melee_distance):lower()
         if botSettings.settings.assist.melee_distance == "maxmelee" then
             botSettings.settings.assist.melee_distance = "auto"
         end
 
         if botSettings.settings.assist.type ~= nil then
-            botSettings.settings.assist.type = string.lower(botSettings.settings.assist.type)
+            botSettings.settings.assist.type = botSettings.settings.assist.type:lower()
         end
     end
 
@@ -60,7 +63,54 @@ function Assist.Init()
         Assist.backoff()
     end)
 
+    mq.bind("/pbaeon", function()
+        if is_orchestrator() then
+            mq.cmd.dgzexecute("/pbaeon")
+        end
+
+        if botSettings.settings.assist.pbae == nil then
+            return
+        end
+
+        if spawn_count(nearbyPBAEilter) == 0 then
+            mq.cmd.dgtell("all Ending PBAE. No nearby mobs.")
+            return
+        end
+
+        memorizePBAESpells()
+
+        mq.cmd.dgtell("all PBAE ON")
+        while true do
+            -- XXX loop until /pbaeoff
+            if spawn_count(nearbyPBAEilter) == 0 then
+                mq.cmd.dgtell("all Ending PBAE. No nearby mobs.")
+                break
+            end
+
+            if not is_casting() then
+                for k, spellRow in pairs(botSettings.settings.assist.pbae) do
+                    local spellConfig = parseSpellLine(spellRow)
+
+                    if is_spell_ready(spellConfig.Name) then
+                        print("Casting PBAE spell ", spellConfig.Name)
+                        local spellName = spellConfig.Name
+                        if is_spell_in_book(spellConfig.Name) then
+                            local spell = get_spell(spellConfig.Name)
+                            spellName = spell.RankName()
+                        end
+                        castSpell(spellName, mq.TLO.Me.ID())
+                    end
+
+                    mq.doevents()
+                    mq.delay(50)
+                end
+            end
+        end
+
+    end)
+
 end
+
 
 function Assist.backoff()
     if assistTarget ~= nil then
@@ -148,7 +198,7 @@ function Assist.castSpellAbility(spawn, row)
 
     local spell = parseSpellLine(row)
 
-   print("Assist.castSpellAbility", row, ": ", spell.Name)
+   --print("Assist.castSpellAbility ", row, ": ", spell.Name)
 
     if spell.PctAggro ~= nil then
         -- PctAggro skips cast if your aggro % is above threshold
@@ -175,7 +225,7 @@ function Assist.castSpellAbility(spawn, row)
     end
 
     if spell.MinMana ~= nil and mq.TLO.Me.PctMana() < tonumber(spell.MinMana) then
-        mq.cmd.dgtell("all SKIP MinMana ", spell.Name, ", ", mq.TLO.Me.PctMana(), " vs required " , spell.MinMana)
+        --mq.cmd.dgtell("all SKIP MinMana ", spell.Name, ", ", mq.TLO.Me.PctMana(), " vs required " , spell.MinMana)
         return false
     end
 
@@ -189,7 +239,7 @@ function Assist.castSpellAbility(spawn, row)
         return false
     end
 
-    print("Assist.castSpellAbility preparing to cast ", spell.Name)
+    --print("Assist.castSpellAbility preparing to cast ", spell.Name)
 
     if is_spell_ability_ready(spell.Name) then
         castSpell(spell.Name, spawn.ID())

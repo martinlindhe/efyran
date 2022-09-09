@@ -51,23 +51,28 @@ function QoL.Init()
     end)
 
     mq.event("tell", "#1# tells you, #2#", function(text, name, msg)
-        local s = string.lower(msg)
+        local s = msg:lower()
         if s == "buff me" or s == "buffme" then
             -- XXX commandeer all to buff this one. how to specify orchestrator if buff is in background? we enqueue it to a zone channel !!!
             mq.cmd.dgtell("XXX FIXME handle 'buffme' tell from ", name)
             mq.cmd.beep(1)
         else
             if name == mq.TLO.Me.Pet.CleanName() then
-                print("GNORING TELL FROM MY PET '".. name.. "'': ", msg)
+                print("IGNORING TELL FROM MY PET '".. name.. "'': ", msg)
                 return
             end
-            -- excludes tells from "Player`s pet" (permutation peddler)
+            -- excludes tells from "Player`s pet" (Permutation Peddler), "Player`s familiar" (Summoned Banker)
             local spawn = spawn_from_query('="'..name..'"')
-            if spawn ~= nil and spawn.Type() == "NPC" then
-                --print("GNORING TELL FROM NPC '".. name.. "'': ", msg)
+            if spawn ~= nil and (spawn.Type() == "NPC" or spawn.Type() == "Pet") then
+                --print("IGNORING TELL FROM NPC '".. name.. "'': ", msg)
                 return
             end
-            mq.cmd.dgtell("all GOT A TELL FROM", name, ": ", msg, " my pet:",mq.TLO.Me.Pet.Name())
+            if spawn ~= nil then
+                mq.cmd.dgtell("all GOT A TELL FROM", name, ": ", msg, " type ", spawn.Type())
+            else
+                mq.cmd.dgtell("all GOT A TELL FROM", name, ": ", msg)
+            end
+
             mq.cmd.beep(1)
         end
     end)
@@ -272,6 +277,11 @@ function QoL.verifySpellLines()
         end
     end
 
+    if botSettings.settings.pet ~= nil then
+        verifySpellLines("pet_heals", botSettings.settings.pet.heals)
+        verifySpellLines("pet_buffs", botSettings.settings.pet.buffs)
+    end
+
     -- XXX TODO validate more fields
 end
 
@@ -288,15 +298,6 @@ function verifySpellLines(label, lines)
         end
     end
 end
-
--- XXX add more:
--- Silk (ENC,MAG,NEC,WIZ)
--- Chain (ROG,BER,SHM,RNG)
--- Leather (DRU,BST,MNK)
--- Plate (WAR,BRD,CLR,PAL,SHD)
--- Knight(PAL,SHD)
--- Melee(BRD,BER,BST,MNK,PAL,RNG,ROG,SHD,WAR)
--- Hybrid (PAL,SHD,RNG,BST)
 
 -- runs every second
 function QoL.Tick()

@@ -189,7 +189,7 @@ settings.assist = {
         -- L59 Mana Burn AA (3000 mana into nuke???)
         -- L65 Mana Blast AA (6000 mana into nuke???)
         -- L70 Mana Blaze AA (9000 mana into nuke???)
-        "Mana Blaze",
+        --"Mana Blaze",
     },
 
     ["fullburns"] = {
@@ -197,8 +197,7 @@ settings.assist = {
         "Glyph of Courage",
     },
 
-
-    ["pbae"] = { -- XXX impl
+    ["pbae"] = {
         -- L01 Numbing Cold (14 hp, ICE, aerange 25, recast 12s, cost 6 mana)
         -- L05 Fingers of Fire (19-28 hp, FIRE, aerange 25, recast 6s, cost 47 mana)
         -- L14 Project Lightning (55-62 hp, MAGIC, aerange 25, recast 6s, cost 85 mana)

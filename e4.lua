@@ -2,10 +2,16 @@
 
 require("ezmq")
 
+mq.imgui.init('imgui-init', function()
+end)
+
+math.randomseed(mq.TLO.EverQuest.PID() + (os.clock() * 1000))
+
 require("debug")
 
 
 require("e4_Loot")
+require("e4_Hail")
 
 items   = require("e4_Items")
 

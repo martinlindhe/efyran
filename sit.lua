@@ -14,7 +14,7 @@ while true do
         mq.delay(200)
     end
 
-    if mq.TLO.Me.Sitting() and not mq.TLO.Window("SpellBookWnd").Open() and spawn_count(npcQuery) == 0 then
+    if is_sitting() and not mq.TLO.Window("SpellBookWnd").Open() and spawn_count(npcQuery) == 0 then
         if mq.TLO.Me.MaxMana()  == 0 or (mq.TLO.Me.MaxMana() > 0 and mq.TLO.Me.PctMana() == 100) then
             print("standing")
             mq.cmd.stand()

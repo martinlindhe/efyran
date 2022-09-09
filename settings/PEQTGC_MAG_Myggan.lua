@@ -247,7 +247,7 @@ settings.assist = {
         "Glyphwielder's Tunic of the Summoner",
     },
 
-    ["pbae"] = { -- XXX impl
+    ["pbae"] = {
         -- L01 Fire Flux (8-12 hp, aerange 20, recast 6s , cost 23 mana) - for PL
         -- L22 Flame Flux (89-96 hp, aerange 20, recast 6s, cost 123 mana)
         -- L39 Flame Arc (171-181 hp, aerange 20, recast 7s , cost 199 mana)

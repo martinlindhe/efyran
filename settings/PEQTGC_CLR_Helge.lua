@@ -208,8 +208,8 @@ settings.assist = {
         "Celestial Hammer",
     },
 
-    ["pbae"] = {   -- XXX implement
-        -- pbae magic nukes:
+    ["pbae"] = {
+        -- magic pbae:
         -- "Calamity/Gem|6/MinMana|10",
         -- "Catastrophe/Gem|7/MinMana|10",
     },

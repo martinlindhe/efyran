@@ -305,7 +305,7 @@ settings.assist = {
         "Nature's Boon",
     },
 
-    ["pbae"] = { -- XXX impl
+    ["pbae"] = {
         -- magic:
         -- L21 Tremor (106-122 hp, aerange 30, recast 10s, cost 200 mana)
         -- L31 Earthquake (214-246 hp, aerange 30, recast 24s, cost 375 mana)

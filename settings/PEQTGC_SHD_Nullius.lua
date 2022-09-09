@@ -1,5 +1,17 @@
 local settings = { }
 
+settings.gems = {
+    ["Theft of Agony"] = 1,
+    ["Theft of Hate"] = 2,
+    ["Touch of the Devourer"] = 3,
+    ["Ancient: Bite of Muram"] = 4,
+
+    ["Dread Gaze"] = 6,
+    ["Decrepit Skin"] = 7,
+    ["Terror of Discord"] = 8,
+    ["Inruku's Bite"] = 9
+}
+
 settings.swap = { -- XXX impl
     ["main"] = "Morguecaller|Mainhand/Shield of the Lightning Lord|Offhand/Screaming Skull of Discontent|Ranged",
     ["bfg"] = "Breezeboot's Frigid Gnasher|Mainhand",
@@ -84,7 +96,7 @@ settings.healing = {
     },
     ["lifetap"] = { -- XXX implement. was [Shadow Knight].LifeTap in e3
         -- L70 Touch of the Devourer (-740 hp, -200 magic resist, 448 mana, 10s recast)
-        "Touch of the Devourer/Gem|3/HealPct|50|MinMana|10",
+        "Touch of the Devourer/HealPct|50|MinMana|10",
     },
 }
 
@@ -120,19 +132,23 @@ settings.assist = {
         "Disarm",
     },
 
-    ["nukes"] = { -- XXX implement
+    ["nukes"] = {
         ["main"] = {
             -- L67 Terror of Discord (1800 hate, 60 mana, instant cast, 6s recast)
-            "Terror of Discord/Gem|8",
+            "Terror of Discord",
 
             -- L70 Theft of Agony (1200 hate, 100 mana, 1.5s cast, 60s recast)
-            "Theft of Agony/Gem|1",
+            "Theft of Agony",
 
-            -- L67 Inruku's Bite (250 dd, -500 disease check, 1.5s cast, 60s recast)
-            "Inruku's Bite/Gem|9",
+            -- duration taps - group heals:
+            -- L62 Zevfeer's Bite (-500 disease, 200 hp nuke + group heal)
+            -- L65 Ancient: Bite of Chaos (-500 disease, 300 hp nuke + group heal)
+            -- L67 Inruku's Bite (-500 disease, 260 hp nuke + group heal)
+            -- L70 Ancient: Bite of Muram (-500 disease, 375 hp nuke + group heal, 60s recast)
+            "Ancient: Bite of Muram",
 
             -- L70 Theft of Hate (-130 hp, increase atk)
-            "Theft of Hate/Gem|2",
+            "Theft of Hate",
         },
     },
 
@@ -147,12 +163,7 @@ settings.assist = {
         ; L62 Bond of Decay (-200 magic, 80 hp/tick self heal)
         ; L66 Bond of Inruku (-200 magic, 135 hp/tick self heal)
 
-        ; duration taps - group heals:
-        ; L62 Zevfeer's Bite (-500 disease, 200 hp nuke + group heal)
-        ; L65 Ancient: Bite of Chaos (-500 disease, 300 hp nuke + group heal)
-        ; L67 Inruku's Bite (-500 disease, 260 hp nuke + group heal)
-        ; L70 Ancient: Bite of Muram (-500 disease, 375 hp nuke + group heal)
-        Main=Ancient: Bite of Muram/Gem|4/MinMana|10
+        Main=Ancient: Bite of Muram/MinMana|10
 
         ; disease dots:
         ; L05 Disease Cloud (cost 10, -5 hp/tick)
@@ -191,6 +202,10 @@ settings.assist = {
         -- L55 Unholy Aura Discipline (cost 900 end, 5m use, 36m reuse) - increase lifetap dmg
         "Unholy Aura Discipline",
     },
+
+    ["pbae"] = {
+        "Dread Gaze",
+    }
 }
 
 return settings

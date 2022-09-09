@@ -63,7 +63,7 @@ function Follow.Init()
     end)
 
     mq.bind("/portto", function(name)
-        name = string.lower(name)
+        name = name:lower()
         if is_orchestrator() then
             mq.cmd.dgzexecute("/portto", name)
         end
@@ -193,16 +193,34 @@ function Follow.Init()
         end
 
     end)
+
+    -- hail or talk to nearby recognized NPC
+    mq.bind("/hailit", function()
+        PerformHail()
+    end)
+
+    -- tells all peers to hail or talk to nearby recognized NPC
+    mq.bind("/hailall", function()
+        if is_orchestrator() then
+            mq.cmd.dgzexecute("/hailit")
+        end
+        PerformHail()
+    end)
 end
 
 function Follow.Pause()
-    mq.cmd.afollow("off")
+    --mq.cmd.afollow("off")
+    mq.cmd("/stick off")
 end
 
 function Follow.Resume()
     if Follow.spawn ~= nil then
         print("resuming follow")
-        mq.cmd("/afollow spawn", Follow.spawn.ID())
+
+        -- XXX face upwards to not get stuck ...
+        --mq.cmd("/afollow spawn", Follow.spawn.ID())
+        mq.cmd.target("id", Follow.spawn.ID())
+        mq.cmd("/stick hold 15 uw")
     else
         print("Follow.Resume: failed. spawnID is nil")
     end
