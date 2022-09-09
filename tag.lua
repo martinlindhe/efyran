@@ -2,8 +2,7 @@
 
 require("ezmq")
 
-local radius = 40
-local spawnQuery = "npc zradius 50 radius "..radius
+local spawnQuery = "npc zradius 50 radius 40"
 
 
 local hit
@@ -24,8 +23,8 @@ while true do
     local oldX = mq.TLO.Me.X()
     local oldZ = mq.TLO.Me.Z()
 
-    if  mq.TLO.SpawnCount("pc radius 80 zradius 50")() > 1 then
-        for i=1,mq.TLO.SpawnCount(spawnQuery)() do
+    if spawn_count("pc radius 80 zradius 50") > 1 then
+        for i = 1, spawn_count(spawnQuery) do
 
             mq.doevents()
 

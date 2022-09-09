@@ -92,6 +92,8 @@ Buff Spell Level   Minimum Target Level
 
 /wornaugs                   - reports all worn augs and total hp/mana/endurance/ac
 
+/handin                     - performs NPC hand-ins, see handin.lua
+
 xxx document rest
 
 

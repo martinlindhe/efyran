@@ -24,16 +24,16 @@ settings.healing = {
 }
 
 settings.assist = {
-    ["type"] = "Melee", -- XXX "Ranged",  "Off"
-    ["ranged_distance"] = 100,
-    ["engage_percent"] = 98,  -- XXX implement!
-
+    ["type"] = "Melee",
+    ["engage_percent"] = 98,
     ["abilities"] = {
     },
-
-    ["quickburns"] = {-- XXX implememt !!!
+    ["quickburns"] = {
         -- epic 2.0: slot 9: spell crit 12%, slot 10: dot crit 12%, slot 12: accuracy 140%
         "Blade of Vesagran",
+
+        -- oow T2 bp: increase double attack by 100% for 24s, 5 min reuse
+        "Farseeker's Plate Chestguard of Harmony",
 
         -- Lxx Cacophony AA
         "Cacophony",
@@ -44,8 +44,7 @@ settings.assist = {
         -- Lxx Song of Stone AA
         "Song of Stone",
     },
-
-    ["longburns"] = {-- XXX implememt !!!
+    ["longburns"] = {
         -- L70 Dance of a Thousand Blades (dodh quest, 33 min reuse)
         "Thousand Blades",
 

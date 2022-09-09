@@ -220,7 +220,7 @@ function Buffs.Tick()
         return
     end
 
-    if is_sitting() or is_hovering() or in_neutral_zone() or window_open("MerchantWnd") or spawn_count("pc radius 100") == 1 then
+    if is_sitting() or is_hovering() or in_neutral_zone() or window_open("MerchantWnd") or window_open("GiveWnd") or window_open("BigBankWnd") or spawn_count("pc radius 100") == 1 then
         return
     end
 

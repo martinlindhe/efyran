@@ -56,7 +56,7 @@ settings.assist = {
     },
     ["quickburns"] = {
         -- oow T2 bp: (increase all melee taken by 20% for 24s, 5 min reuse) Whispering Tunic of Shadows
-        --"Whispering Tunic of Shadows", -- XXX hand in t2
+        "Whispering Tunic of Shadows",
 
         -- EPIC 2.0: Nightshade, Blade of Entropy (45% triple backstab, Deceiver's Blight Strike proc)
         "Nightshade, Blade of Entropy",

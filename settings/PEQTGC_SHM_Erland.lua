@@ -278,9 +278,8 @@ settings.assist = {
     },
 
     ["debuffs"] = {
-        -- oow t1 bp: Spiritkin Tunic (reduce resist rate by 40% for xxx sec)
-        -- oow t2 bp: Ritualchanter's Tunic of the Ancestors (reduce resists rate by xxx for 42s)
-        --"Ritualchanter's Tunic of the Ancestors",
+        -- oow t2 bp: reduce resists rate by xxx for 42s
+        "Ritualchanter's Tunic of the Ancestors",
 
         -- L65 Malos (-55 cr, -55 mr, -55 pr, -55 fr, unresistable, cost 400 mana)
         -- NOTE: Erland does Malos, Myggan does Malosinia, Kesok does Putrid Decay
@@ -299,6 +298,8 @@ settings.assist = {
 
         -- L65 Dampen Resistance AA (reduce resist chance, 10 min reuse / X min with Hastened Dampen Resistance)
         "Dampen Resistance",
+
+        "Ritualchanter's Tunic of the Ancestors",
     },
 
     ["longburns"] = {

@@ -62,7 +62,7 @@ function QoL.Init()
             -- excludes tells from "Player`s pet" (Permutation Peddler, NPC), "Player`s familiar" (Summoned Banker, Pet)
             local spawn = spawn_from_query('="'..name..'"')
             if spawn ~= nil and (spawn.Type() == "NPC" or spawn.Type() == "Pet") then
-                print("IGNORING TELL FROM "..spawn.Type().." '".. name.. "': ", msg)
+                --print("IGNORING TELL FROM "..spawn.Type().." '".. name.. "': ", msg)
                 return
             end
             if spawn ~= nil then
@@ -210,6 +210,10 @@ function QoL.Init()
         mq.cmd("/lua run combine")
     end)
 
+    mq.bind("/handin", function()
+        mq.cmd("/lua run handin")
+    end)
+
     -- reports all currently worn auguments
     mq.bind("/wornaugs", function()
         print("Currently worn auguments:")
@@ -290,7 +294,7 @@ function QoL.Init()
             return
         end
 
-        -- if my banker is not ready, check all nearby peers if one is ready to use and use it.
+        -- if my banker is not ready, check all nearby peers if one is ready and use it.
         local spawnQuery = "pc notid " .. mq.TLO.Me.ID() .. " radius 50"
 
         for i = 1, spawn_count(spawnQuery) do
@@ -405,11 +409,15 @@ function QoL.Tick()
     end
 
     -- auto accept trades
-    if mq.TLO.Window("tradewnd").Open() then
+    if mq.TLO.Window("tradewnd").Open() and not has_cursor_item() then
         if has_target() and mq.TLO.DanNet(mq.TLO.Target())() ~= nil then
             mq.cmd.dgtell("all Accepting trade in 5s with", mq.TLO.Target())
-            mq.delay(5000) -- 5.0s
-            mq.cmd.notify("tradewnd TRDW_Trade_Button leftmouseup")
+            mq.delay(5000, function() return has_cursor_item() end)
+            if not has_cursor_item() then
+                mq.cmd.notify("tradewnd TRDW_Trade_Button leftmouseup")
+            else
+                --print("Item on cursor, ignoring trade")
+            end
         else
             mq.cmd.dgtell("all Ignoring trade from unknown toon ", mq.TLO.Target())
             mq.cmd.beep(1)

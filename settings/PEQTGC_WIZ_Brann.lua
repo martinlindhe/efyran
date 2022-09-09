@@ -112,8 +112,8 @@ settings.assist = {
         "Silent Casting",
         "Call of Xuzl",
 
-        -- oow T2 bp: Academic's Robe of the Arcanists (Academic's Intellect, -25% cast time for x, 5 min reuse)
-        --"Academic's Robe of the Arcanists",
+        -- oow T2 bp: Academic's Robe of the Arcanists (Academic's Intellect, -25% cast time for 0.7 min, 5 min reuse)
+        "Academic's Robe of the Arcanists",
     },
 
     ["longburns"] = {

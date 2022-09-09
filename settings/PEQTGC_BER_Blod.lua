@@ -50,8 +50,8 @@ settings.assist = {
         "Vengeful Taelosian Blood Axe",
 
         -- oow T1 bp: Ragebound Chain Chestguard (increase melee chance to hit by 40% for 12s)
-        -- oow T2 bp: Wrathbringer's Chain Chestguard of the Vindicator
-        "Ragebound Chain Chestguard", -- XXX hand in t2
+        -- oow T2 bp: Wrathbringer's Chain Chestguard of the Vindicator (increase melee chance to hit by 40% for 24s)
+        "Wrathbringer's Chain Chestguard of the Vindicator",
 
         -- L6x Blood Pact AA, 15 min reuse
         "Blood Pact",

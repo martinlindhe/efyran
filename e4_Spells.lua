@@ -1,46 +1,3 @@
-
--- parses a spell/ability etc line with properties, returns a object
-function parseSpellLine(s)
-    -- Ward of Valiance/MinMana|50/CheckFor|Hand of Conviction
-
-    local o = {}
-    local idx = 0
-
-    --print("parseSpellLine ", s)
-
-    -- split on / separator
-    for token in string.gmatch(s, "[^/]+") do
-        idx = idx + 1
-        --print("token", idx, token)
-
-        -- separate token on | "key" + "val"
-        local found, _ = string.find(token, "|")
-        if found then
-            local key = ""
-            local subIndex = 0
-            for v in string.gmatch(token, "[^|]+") do
-                if subIndex == 0 then
-                    key = v
-                end
-                if subIndex == 1 then
-                    --print(key, " = ", v)
-                    o[key] = v
-                end
-                subIndex = subIndex + 1
-            end
-        else
-            if idx == 1 then
-                o.Name = token
-            else
-                -- expanding boolean property
-                o[token] = true
-            end
-        end
-    end
-
-    return o
-end
-
 auraNames = {
     "Myrmidon's Aura",      -- WAR/55: Increase Proc Modifier by 1%, Slot 12: 60 AC
     "Champion's Aura",      -- WAR/70: Increase Proc Modifier by 2%, Slot 12: 90 AC
@@ -285,7 +242,7 @@ function castSpell(name, spawnId)
 
         if is_brd() and is_casting() then
             mq.cmd.twist("stop")
-            mq.delay(20)
+            mq.delay(100)
         end
 
         castSpellRaw(name, spawnId, "-maxtries|3")

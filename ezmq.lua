@@ -119,12 +119,31 @@ function get_target()
     return mq.TLO.Target
 end
 
+-- target NPC by name
+function target_npc_name(name)
+    mq.cmd("/target npc "..name)
+end
+
+-- target by id
+function target_id(id)
+    mq.cmd("/target id "..id)
+end
+
 -- partial search by name, return item or nil
 function get_item(name)
     if mq.TLO.FindItem(name).ID() ~= nil then
         return mq.TLO.FindItem(name)
     end
     return nil
+end
+
+-- partial search by name, return item or nil
+function item_link(name)
+    local item = get_item(name)
+    if item == nil then
+        return name
+    end
+    return item.ItemLink("CLICKABLE")()
 end
 
 -- return true if `item` clicky effect is ready to use
@@ -172,7 +191,7 @@ end
 
 -- exact search by name, return number
 function getItemCountExact(name)
-    if mq.TLO.FindItem(name).ID() ~= nil then
+    if mq.TLO.FindItem("="..name).ID() ~= nil then
         return mq.TLO.FindItemCount("="..name)()
     end
     return 0
@@ -194,6 +213,12 @@ function is_ability_ready(name)
 end
 
 function cast_alt_ability(name, spawnID)
+
+    if is_brd() and is_casting() then
+        mq.cmd.twist("stop")
+        mq.delay(100)
+    end
+
     local cmd = '/casting "'..name..'|alt'
     if spawnID ~= nil then
         cmd = cmd .. ' -targetid|'.. tostring(spawnID)
@@ -202,6 +227,26 @@ function cast_alt_ability(name, spawnID)
     mq.cmd(cmd)
     mq.delay(1000)
     mq.delay(20000, function() return not is_casting() end)
+
+    if is_brd() then
+        local item = get_item(name)
+        if item ~= nil then
+            -- item click
+            print("cast_alt_ability item click sleep, ", item.Clicky.CastTime(), " + ", item.Clicky.Spell.RecastTime() )
+            mq.delay(item.Clicky.CastTime() + item.Clicky.Spell.RecastTime() + 1500) -- XXX recast time is 0
+        else
+            -- spell / AA
+            local spell = get_spell(name)
+            if spell ~= nil then
+                local sleepTime = spell.MyCastTime() + spell.RecastTime()
+                --print("spell sleep for '", spell.Name(), "', my cast time:", spell.MyCastTime(), ", recast time", spell.RecastTime(), " = ", sleepTime)
+                mq.delay(sleepTime)
+            end
+        end
+        print("ME BARD cast_alt_ability ", name, " -- SO I RESUME TWIST!")
+        mq.cmd.twist("start")
+    end
+
 end
 
 -- returns true if I have the buff `name` on me
@@ -433,6 +478,10 @@ function get_running_scripts_except(name)
     return others
 end
 
+function has_cursor_item()
+    return mq.TLO.Cursor.ID() ~= nil
+end
+
 -- autoinventories all items on cursor. returns false on failure
 function clear_cursor()
     while true do
@@ -591,4 +640,58 @@ function query_peer(peer, query, timeout)
     local value = mq.TLO.DanNet(peer).Q(query)()
     --print(string.format('\ayQuerying - mq.TLO.DanNet(%s).Q(%s) = %s', peer, query, value))
     return value
+end
+
+function in_table(t, val)
+    for k, v in pairs(t) do
+        if v == val then
+            return true
+        end
+    end
+    return false
+end
+
+
+local shortProperties = { "Shrink", "GoM", "NoAggro", "NoPet" }
+-- parses a spell/ability etc line with properties, returns a object
+-- example in: "Ward of Valiance/MinMana|50/CheckFor|Hand of Conviction"
+function parseSpellLine(s)
+
+    local o = {}
+    local idx = 0
+
+    -- split on / separator
+    for token in string.gmatch(s, "[^/]+") do
+        idx = idx + 1
+        --print("token ", idx, ": ", token)
+
+        -- separate token on | "key" + "val"
+        local found, _ = string.find(token, "|")
+        if found then
+            local key = ""
+            local subIndex = 0
+            for v in string.gmatch(token, "[^|]+") do
+                if subIndex == 0 then
+                    key = v
+                end
+                if subIndex == 1 then
+                    --print(key, " = ", v)
+                    o[key] = v
+                end
+                subIndex = subIndex + 1
+            end
+        else
+
+            if in_table(shortProperties, token) then
+                --print("allowed: ", token)
+                o[token] = true
+            else
+                --print("assuming name: ", token)
+                o.Name = token
+            end
+
+        end
+    end
+
+    return o
 end

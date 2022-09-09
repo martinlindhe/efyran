@@ -42,9 +42,8 @@ settings.assist = {
         -- EPIC 2.0: Vengeful Taelosian Blood Axe (+100 str, +100 str cap, 300% melee crit chance, 100 hot heal)
         "Vengeful Taelosian Blood Axe",
 
-        -- oow T1 bp: Ragebound Chain Chestguard (increase melee chance to hit by 40% for 12s)
-        -- oow T2 bp: Wrathbringer's Chain Chestguard of the Vindicator
-        "Ragebound Chain Chestguard", -- XXX get t2
+        -- oow T2 bp: increase melee chance to hit by 40% for 24s
+        --"Wrathbringer's Chain Chestguard of the Vindicator", -- XXX get bp
 
         -- L6x Blood Pact AA, 15 min reuse
         "Blood Pact",
