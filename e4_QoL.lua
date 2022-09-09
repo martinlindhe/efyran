@@ -270,6 +270,10 @@ function QoL.Init()
         end
 
     end)
+
+    mq.bind("/cohgroup", function()
+        mq.cmd("/lua run cohgroup")
+    end)
 end
 
 function QoL.verifySpellLines()

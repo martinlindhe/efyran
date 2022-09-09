@@ -73,6 +73,7 @@ Buff Spell Level   Minimum Target Level
 /rtz                        - face zoneline and run it to instruct bots to cross the zoneline
 /hailit                     - hail/talk to nearby NPC
 /hailall                    - have all peers hail/talk to nearby NPC
+/cohgroup                   - let current mage summon their group with Call of the Hero
 
 /buffon                     - auto buffs
 /buffoff
