@@ -27,20 +27,7 @@ settings.self_buffs = {
 
     "Ring of the Beast", -- Form of Endurance III (slot 5: 270 hp)
 
-    -- mana regen:
-    -- L41 Spiritual Light (3 hp + 3 mana/tick, group)
-    -- L52 Spiritual Radiance (5 hp + 5 mana/tick, group)
-    -- L59 Spiritual Purity (7 hp + 7 mana/tick, group)
-    -- L64 Spiritual Dominion (9 hp + 9 mana/tick, group)
-    -- L69 Spiritual Ascendance (10 hp + 10 mana/tick, group, cost 900 mana)
-    "Spiritual Ascendance/MinMana|20",
-
-    -- hp type 2 - Slot 4: Increase max HP:
-    -- L42 Spiritual Brawn (10 atk, 75 hp)
-    -- L60 Spiritual Strength (25 atk, 150 hp)
-    -- L62 Spiritual Vigor (40 atk, 225 hp, group)
-    -- L67 Spiritual Vitality (52 atk, 280 hp, group)
-    -- NOTE: prefer RNG buff with more atk
+    "Spiritual Ascendance/MinMana|20", -- 10 hp + 10 mana/tick, group, cost 900 mana
 }
 
 settings.pet = {
@@ -128,7 +115,6 @@ settings.healing = {
     ["who_to_heal"] = "ImportantBots", -- XXX impl
 }
 
-
 --[[
     -- TODO COMBAT BUFF
 ; combat buffs:
@@ -141,34 +127,26 @@ Combat Buff=Ferocity of Irionu/Yelwen/Gem|6/CheckFor|Infusion of the Faithful
 Combat Buff=Ferocity of Irionu/Laser/Gem|6/CheckFor|Infusion of the Faithful
 Combat Buff=Ferocity of Irionu/Knuck/Gem|6/CheckFor|Infusion of the Faithful
 Combat Buff=Ferocity of Irionu/Debre/Gem|6/CheckFor|Infusion of the Faithful
-
 Combat Buff=Ferocity of Irionu/Kniven/Gem|6/CheckFor|Infusion of the Faithful
 Combat Buff=Ferocity of Irionu/Strupen/Gem|6/CheckFor|Infusion of the Faithful
 Combat Buff=Ferocity of Irionu/Fosco/Gem|6/CheckFor|Infusion of the Faithful
 Combat Buff=Ferocity of Irionu/Lotho/Gem|6/CheckFor|Infusion of the Faithful
 Combat Buff=Ferocity of Irionu/Grimakin/Gem|6/CheckFor|Infusion of the Faithful
 Combat Buff=Ferocity of Irionu/Kedel/Gem|6/CheckFor|Infusion of the Faithful
-
 Combat Buff=Ferocity of Irionu/Blod/Gem|6/CheckFor|Infusion of the Faithful
 Combat Buff=Ferocity of Irionu/Urinfact/Gem|6/CheckFor|Infusion of the Faithful
 Combat Buff=Ferocity of Irionu/Sweetlard/Gem|6/CheckFor|Infusion of the Faithful
 Combat Buff=Ferocity of Irionu/Rupat/Gem|6/CheckFor|Infusion of the Faithful
 ]]
 
-
 settings.assist = {
     ["type"] = "Melee",
     ["engage_percent"] = 98,
-
     ["abilities"] = {
         "Kick",
-        -- L70 Tome of Rake
-        "Rake",
-
-        -- Feral Swipe AA (30s reuse)
-        "Feral Swipe",
+        "Rake", -- L70 Tome of Rake
+        "Feral Swipe", -- Feral Swipe AA (30s reuse)
     },
-
     ["nukes"] = {
         ["main"] = {
             "Roar of Thunder/PctAggro|99", -- AA, reduce aggro
@@ -190,25 +168,20 @@ settings.assist = {
             -- L68 Bestial Empathy (swarm pet, 18s recast)
             "Bestial Empathy",
         },
-
         ["fastfire"] = {
             "Ancient: Savage Ice/MinMana|60",
         },
-
         ["bigfire"] = {
             "Ancient: Savage Ice/MinMana|60"
         },
-
         ["fastcold"] = {
             "Ancient: Savage Ice/MinMana|60",
         },
-
         ["bigcold"] = {
             "Ancient: Savage Ice/MinMana|60",
         },
     },
-
-    ["dots_on_command"] = { -- XXX impl
+    ["dots_on_command"] = {
         -- L14 Sicken (3-5/tick, disease)
         -- L19 Tainted Breath (14-19/tick, poison)
         -- L35 Envenomed Breath (59-71/tick, poison, cost 181 mana)
@@ -218,20 +191,17 @@ settings.assist = {
         -- L65 Turepta Blood (168/tick, poison, cost 377 mana)
         "Turepta Blood/Gem|3/MinMana|70",
     },
-
-    ["debuffs"] = {-- XXX impl
+    ["debuffs"] = {
         -- L56 Incapacitate (-45-55 agi, -45-55 str, -21-24 ac)
         -- NOTE ENC disempower debuffs is stronger versions of this
         --"Incapacitate/Gem|3/MinMana|20/MaxTries|2",
     },
-
-    ["debuffs_on_command"] = {  -- XXX impl
+    ["debuffs_on_command"] = {
         -- slow:
         -- L65 Sha's Revenge (MAGIC, 65% slow, 3m30s duration)
         -- L70 Sha's Legacy (MAGIC -30 adj, 65% slow, 1m30s duration)
         "Sha's Legacy/Gem|3/MinMana|20/CheckFor|Balance of Discord",
     },
-
     ["quickburns"] = {
         -- oow T1 bp: Beast Tamer's Jerkin (Wild Spirit Infusion, +50% skill dmg mod, -15% dmg taken for 18s)
         -- oow T2 bp: Savagesoul Jerkin of the Wilds (Savage Spirit Infusion, +50% skill dmg mod, -15% dmg taken for 30s)
@@ -240,8 +210,7 @@ settings.assist = {
         "Frenzy of Spirit",
         "Roar of Thunder",
     },
-
-    ["longburns"] = {-- XXX implememt !!!
+    ["longburns"] = {
         "Bestial Alignment",
         "Empathic Fury",
         "Bestial Fury Discipline",

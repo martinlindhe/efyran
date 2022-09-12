@@ -8,21 +8,20 @@ function QoL.Init()
 
     if is_rof2() then
         -- rof2 client has no persistent setting for /tgb on. it has been permanently auto enabled on live
-        mq.cmd.tgb("on")
+        mq.cmd("/tgb on")
     end
 
     -- default loot setting: hide looted corpses
     mq.cmd("/hidec looted")
 
     if mq.TLO.Me.Combat() then
-        mq.cmd.attack("off")
+        mq.cmd("/attack off")
     end
 
     if is_orchestrator() then
-        mq.cmd.djoin("skillup")
+        mq.cmd("/djoin skillup")
+        mq.cmd("/djoin xp")
     end
-
-    mq.cmd.djoin("xp")
 
     if in_guild() then
         -- enable auto consent for guild

@@ -3,22 +3,26 @@
 -- @type mq
 mq = require("mq")
 
--- returns true if i am the foreground instance
+-- Am I the foreground instance?
+---@return boolean
 function is_orchestrator()
     return mq.TLO.FrameLimiter.Status() == "Foreground"
 end
 
 -- returns true if `spawn` is within maxDistance
+---@return boolean
 function is_within_distance(spawn, maxDistance)
     return spawn.Distance() <= maxDistance
 end
 
 -- returns true if location is within maxDistance
+---@return boolean
 function is_within_distance_to_loc(y, x, z, maxDistance)
     return mq.TLO.Math.Distance(y, x, z) <= maxDistance
 end
 
 -- returns true if there is line of sight between you and `spawn`
+---@return boolean
 function line_of_sight_to(spawn)
     local q = mq.TLO.Me.Y()..","..mq.TLO.Me.X()..","..mq.TLO.Me.Z()..":"..spawn.Y()..","..spawn.X()..","..spawn.Z()
     return mq.TLO.LineOfSight(q)()
@@ -45,7 +49,10 @@ function move_to_loc(y, x, z)
     mq.cmd.moveto("off")
 end
 
--- returns true if t contains v, false otherwise.
+-- Does `t` contain `v`?
+---@param t table
+---@param v any
+---@return boolean
 function in_array(t, v)
     for i=1,#t do
         if v == t[i] then return true end
@@ -53,6 +60,7 @@ function in_array(t, v)
     return false
 end
 
+---@return boolean
 function is_rof2()
     -- XXX hack, will be able to check if on emu with MacroQuest.Build value soon
     --  ? value == 1 is live (?), value 2 is test, 3 is beta, 4 is rof2-emu
@@ -64,16 +72,19 @@ function is_rof2()
 end
 
 -- returns true if peerName is another peer
+---@return boolean
 function is_peer(peerName)
     return mq.TLO.DanNet(peerName)() ~= nil
 end
 
 -- returns true if spawnID is another peer
+---@return boolean
 function is_peer_id(spawnID)
     return is_peer(spawn_from_id(spawnID).Name())
 end
 
 -- returns true if spawnID is in LoS
+---@return boolean
 function is_spawn_los(spawnID)
     local spawn = spawn_from_id(spawnID)
     return spawn ~= nil and spawn.LineOfSight()
@@ -104,11 +115,13 @@ function spawn_from_peer_name(name)
 end
 
 -- returns true if `name` is an item i have
+---@return boolean
 function have_item(name)
     return mq.TLO.FindItemCount("=" .. name)() > 0
 end
 
 -- return true if peer has a target
+---@return boolean
 function has_target()
     return mq.TLO.Target() ~= nil
 end
@@ -129,6 +142,8 @@ end
 -- target by id
 function target_id(id)
     mq.cmd("/target id "..id)
+    mq.delay(10)
+    mq.delay(1000, function() return mq.TLO.Target.ID() == tonumber(id) end)
 end
 
 -- partial search by name, return item or nil
@@ -149,6 +164,7 @@ function item_link(name)
 end
 
 -- return true if `item` clicky effect is ready to use
+---@return boolean
 function is_item_clicky_ready(name)
     local item = get_item(name)
     if item == nil then
@@ -159,11 +175,14 @@ function is_item_clicky_ready(name)
 end
 
 -- returns true if `name` is a spell currently memorized in a gem
+---@return boolean
 function is_memorized(name)
     return mq.TLO.Me.Gem(mq.TLO.Spell(name).RankName)() ~= nil
 end
 
--- returns true if `name` is a spell in my spellbook
+-- Is spell in my spellbook?
+---@param name string Spell name
+---@return boolean
 function is_spell_in_book(name)
     if is_alt_ability(name) then
         -- NOTE: some AA's overlap with spell names. use is_alt_ability() to distinguish. Examples:
@@ -172,6 +191,18 @@ function is_spell_in_book(name)
         return false
     end
     return mq.TLO.Me.Book(mq.TLO.Spell(name).RankName)() ~= nil
+end
+
+-- Is this a name of a spell?
+---@return boolean
+function is_spell(name)
+    if is_alt_ability(name) then
+        -- NOTE: some AA's overlap with spell names. use is_alt_ability() to distinguish. Examples:
+        -- CLR/06 Sanctuary / CLR Sanctuary AA
+        -- SHM/62 Ancestral Guard / SHM Ancestral Guard AA
+        return false
+    end
+    return mq.TLO.Spell(name)() ~= nil
 end
 
 -- return spell or nil
@@ -183,6 +214,7 @@ function get_spell(name)
 end
 
 -- returns true if `name` is ready to cast
+---@return boolean
 function is_spell_ready(name)
     local spell = get_spell(name)
     if spell == nil then
@@ -200,21 +232,25 @@ function getItemCountExact(name)
 end
 
 -- returns true if `name` is an AA that you have purchased
+---@return boolean
 function is_alt_ability(name)
     return mq.TLO.Me.AltAbility(name)() ~= nil
 end
 
 -- returns true if the AA `name` is ready to use
+---@return boolean
 function is_alt_ability_ready(name)
     return mq.TLO.Me.AltAbilityReady(name)()
 end
 
 -- returns true if I have the ability `name`
+---@return boolean
 function is_ability(name)
     return mq.TLO.Me.Ability(name)()
 end
 
 -- returns true if the ability `name` is ready to use
+---@return boolean
 function is_ability_ready(name)
     return mq.TLO.Me.AbilityReady(name)()
 end
@@ -257,17 +293,18 @@ function cast_alt_ability(name, spawnID)
 end
 
 -- returns true if I have the buff `name` on me
+---@return boolean
 function have_buff(name)
     local spell = mq.TLO.Spell(name)
     if spell() == nil then
-        mq.cmd.dgtell("all BEEP error, asked about odd 1buff", name)
-        mq.cmd.beep(1)
+        mq.cmd.dgtell("all have_buff ERROR: asked about odd 1buff", name)
         return false
     end
     return mq.TLO.Me.Buff(name)() ~= nil or mq.TLO.Me.Buff(spell.RankName)() ~= nil
 end
 
 -- returns true if I have the song `name` on me
+---@return boolean
 function have_song(name)
     local spell = mq.TLO.Spell(name)
     if spell() == nil then
@@ -279,35 +316,42 @@ function have_song(name)
 end
 
 -- returns true if I am casting a spell/song
+---@return boolean
 function is_casting()
     return mq.TLO.Me.Casting() ~= nil
 end
 
 -- returns true if I am moving
+---@return boolean
 function is_moving()
     return mq.TLO.Me.Moving()
 end
 
 -- returns true if I am sitting
+---@return boolean
 function is_sitting()
     return mq.TLO.Me.Sitting()
 end
 
+---@return boolean
 function is_brd()
     return mq.TLO.Me.Class.ShortName() == "BRD"
 end
 
 -- returns true if I am in a guild
+---@return boolean
 function in_guild()
     return mq.TLO.Me.Guild() ~= nil
 end
 
 -- returns true if we are in hovering state (just died, waiting for rez in the same zone)
+---@return boolean
 function is_hovering()
     return window_open("RespawnWnd")
 end
 
 -- returns true if a window `name` is open
+---@return boolean
 function window_open(name)
     return mq.TLO.Window(name).Open() == true
 end
@@ -395,6 +439,7 @@ function open_nearby_merchant()
 end
 
 -- returns true if we are in a neutral zone (be less obvious on live)
+---@return boolean
 function in_neutral_zone()
     if is_rof2() then
         -- ignore neutral zone check on emu.
@@ -453,16 +498,19 @@ function get_inventory_slot(name)
 end
 
 -- returns true if `item` is a container
+---@return boolean
 function is_container(item)
     return item ~= nil and item.Container() ~= 0
 end
 
 -- returns true if i have a pet
+---@return boolean
 function have_pet()
     return mq.TLO.Me.Pet.ID() ~= 0
 end
 
 -- returns true if `name` is a running Lua script
+---@return boolean
 function is_script_running(name)
     for pid in string.gmatch(mq.TLO.Lua.PIDs(), '([^,]+)') do
         local luainfo = mq.TLO.Lua.Script(pid)
@@ -485,6 +533,7 @@ function get_running_scripts_except(name)
     return others
 end
 
+---@return boolean
 function has_cursor_item()
     return mq.TLO.Cursor.ID() ~= nil
 end
@@ -521,14 +570,17 @@ function cast_veteran_aa(name)
     end
 end
 
+---@return boolean
 function me_healer()
     return is_healer(mq.TLO.Me.Class.ShortName())
 end
 
+---@return boolean
 function me_priest()
     return is_priest(mq.TLO.Me.Class.ShortName())
 end
 
+---@return boolean
 function me_tank()
     return is_tank(mq.TLO.Me.Class.ShortName())
 end
@@ -543,6 +595,7 @@ end
 -- Hybrid (PAL,SHD,RNG,BST)
 
 -- true if CLR,DRU,SHM,PAL,RNG,BST
+---@return boolean
 function is_healer(class)
     if class == nil then
         mq.cmd.dgtell("all is_healer called without class. did you mean me_healer() ?")
@@ -552,6 +605,7 @@ function is_healer(class)
 end
 
 -- true if CLR,DRU,SHM
+---@return boolean
 function is_priest(class)
     if class == nil then
         mq.cmd.dgtell("all is_priest called without class. did you mean me_priest() ?")
@@ -561,6 +615,7 @@ function is_priest(class)
 end
 
 -- true if WAR,PAL,SHD
+---@return boolean
 function is_tank(class)
     if class == nil then
         mq.cmd.dgtell("all ERROR: is_tank called without class. did you mean me_tank() ?")
@@ -648,6 +703,46 @@ function query_peer(peer, query, timeout)
     return value
 end
 
+local shortToLongClass = {
+    ["CLR"] = "Cleric",
+    ["DRU"] = "Druid",
+    ["SHM"] = "Shaman",
+    ["WAR"] = "Warrior",
+    ["PAL"] = "Paladin",
+    ["SHD"] = "Shadow Knight",
+    ["BRD"] = "Bard",
+    ["ROG"] = "Rogue",
+    ["BER"] = "Berserker",
+    ["MNK"] = "Monk",
+    ["RNG"] = "Ranger",
+    ["BST"] = "Beastlord",
+    ["WIZ"] = "Wizard",
+    ["MAG"] = "Magician",
+    ["ENC"] = "Enchanter",
+    ["NEC"] = "Necromancer",
+}
+
+-- returns the nearest peer by class shortname, or nil on failure
+function nearest_peer_by_class(shortClass)
+    local longName = shortToLongClass[shortClass]
+    if longName == nil then
+        mq.cmd.dgtell("all INVALID shortToLongClass ", shortClass)
+        return nil
+    end
+
+    local o = {}
+    local spawnQuery = 'pc notid '..mq.TLO.Me.ID()..' radius 100 class "'..longName..'"'
+    for i = 1, spawn_count(spawnQuery) do
+        local spawn = mq.TLO.NearestSpawn(i, spawnQuery)
+        local peer = spawn.Name()
+        if is_peer(peer) then
+            return peer
+        end
+    end
+    return nil
+end
+
+---@return boolean
 function in_table(t, val)
     for k, v in pairs(t) do
         if v == val then
@@ -667,7 +762,9 @@ function parseSpellLine(s)
     local idx = 0
 
     -- split on / separator
-    for token in string.gmatch(s, "[^/]+") do
+    local tokens = split_str(s, "/")
+
+    for k, token in pairs(tokens) do
         idx = idx + 1
         --print("token ", idx, ": ", token)
 
@@ -687,7 +784,6 @@ function parseSpellLine(s)
                 subIndex = subIndex + 1
             end
         else
-
             if in_table(shortProperties, token) then
                 --print("allowed: ", token)
                 o[token] = true
@@ -695,9 +791,28 @@ function parseSpellLine(s)
                 --print("assuming name: ", token)
                 o.Name = token
             end
-
         end
     end
 
     return o
 end
+
+function split_str(s, sSeparator)
+    assert(sSeparator ~= '')
+    local nMax = 10
+    local aRecord = {}
+    if string.len(s) > 0 then
+        nMax = nMax or -1
+        local nField, nStart = 1, 1
+        local nFirst,nLast = string.find(s, sSeparator, nStart)
+        while nFirst and nMax ~= 0 do
+            table.insert(aRecord, string.sub(s, nStart, nFirst-1))
+            nField = nField+1
+            nStart = nLast+1
+            nFirst,nLast = string.find(s, sSeparator, nStart)
+            nMax = nMax-1
+        end
+        table.insert(aRecord, string.sub(s, nStart))
+    end
+    return aRecord
+ end

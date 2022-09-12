@@ -63,9 +63,7 @@ settings.self_buffs = {
     -- NOTE: Tunare has more ATK
     "Strength of Tunare/MinMana|50",
 
-    -- L64 Spirit of the Predator (70 atk slot 2)
-    -- L69 Howl of the Predator (90 atk slot 2, double atk 3-20%)
-    "Howl of the Predator/MinMana|50",
+    "Howl of the Predator/MinMana|50", -- 90 atk slot 2, double atk 3-20%
 }
 
 settings.bot_buffs = {

@@ -34,31 +34,6 @@ settings.self_buffs = {
     "Shimmering Bauble of Trickery/Shrink",
 }
 
-settings.request_buffs = {
-    -- XXX i list all buffs that I want
-
-    -- should we ask for symbol / aegolism?
-    "symbol/IfAvailable|DRU", -- CLR
-    "ac/IfAvailable|DRU", -- CLR
-    "skin/IfAvailable|DRU", -- DRU. XXX DRU need ini
-    "aegolism/IfAvailable|CLR/IfNotAvailable|DRU", -- CLR
-
-
-
-    "focus/IfAvailable|SHM", -- shm
-
-    -- XXX alternates, BST SV or RNG buff
-    "brells/IfAvailable|PAL", -- XXX PAL need ini
-
-    -- haste
-    "enc_haste/IfAvailable|ENC",
-    "shm_haste/IfAvailable|SHM/IfNotAvailable|ENC",
-
-    -- resists
-    "dru_resist/IfAvailable|DRU", -- DRU
-    "enc_resist/IfAvailable|ENC", -- enc
-}
-
 settings.combat_buffs = { -- XXX implement
     -- L68 Commanding Voice
     "Commanding Voice/Bandy/MinEnd|5",

@@ -15,6 +15,8 @@ require("e4_Hail")
 
 items   = require("e4_Items")
 
+groupBuffs = require("e4_GroupBuffs")
+
 
 aliases = require("settings/Spell Aliases")
 

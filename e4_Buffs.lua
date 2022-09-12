@@ -2,7 +2,7 @@ require("e4_Spells")
 
 local timer = require("Timer")
 
-local Buffs = { aura = findBestAura() }
+local Buffs = { aura = findBestAura(), queue = {} }
 
 function Buffs.Init()
     mq.bind("/buffon", function()
@@ -73,8 +73,8 @@ function Buffs.Init()
                 if mq.TLO.Me.Buff(i).ID() ~= nil then
                     print("removing buff ", i, "id:",mq.TLO.Me.Buff(i).ID(), ",name:", mq.TLO.Me.Buff(i).Name())
                     mq.cmd.removebuff(mq.TLO.Me.Buff(i).Name())
-                    mq.delay(1)
                 end
+                mq.delay(1)
             end
         else
             mq.cmd.removebuff(filter)
@@ -108,16 +108,11 @@ function Buffs.Init()
         end
 
         local spawn = mq.TLO.Spawn("id " .. spawnID)
-        mq.cmd("/target id "..spawnID)
-        mq.delay(1000, function()
-            print("... targetig id ...")
-            return mq.TLO.Target.ID() == tonumber(spawnID)
-        end)
-
-        if tostring(spawn) == "NULL" then
+        if spawn() == nil then
             mq.cmd.dgtell("all BUFFIT FAIL, cannot find target id in zone ", spawnID)
             return false
         end
+        target_id(spawnID)
 
         local level = spawn.Level()
 
@@ -155,7 +150,7 @@ function Buffs.Init()
                         end
                     end
 
-                    --print("Best ", key, " buff so far is L",spellConfig.MinLevel, " ", spellConfig.Name, " target ", spawn.Name() ," L", level)
+                    --print("Best ", key, " buff so far is MinLevel ",spellConfig.MinLevel, " ", spellConfig.Name, " target ", spawn.Name() ," L", level)
                 end
             end
 
@@ -209,11 +204,22 @@ function Buffs.Init()
                 end
             end
         end
+    end)
 
+    -- enqueues a buff to be cast on a peer
+    -- is normally called from another peer, to request a buff
+    mq.bind("/queuebuff", function(buff, peer)
+        print("queuebuff buff=", buff, ", peer=", peer)
+        table.insert(Buffs.queue, {
+            ["Peer"] = peer,
+            ["Buff"] = buff,
+        })
     end)
 end
 
-local refreshBuffsTimer = timer.new_expired(3 * 1) -- 4s
+local refreshBuffsTimer = timer.new_expired(20 * 1) -- 20s
+
+local handleBuffsTimer = timer.new_expired(3 * 1) -- 3s
 
 function Buffs.Tick()
     if not is_brd() and is_casting() then
@@ -234,15 +240,105 @@ function Buffs.Tick()
         if not buffs.RefreshSelfBuffs() then
             if not buffs.RefreshAura() then
                 if not pet.Summon() then
-                    pet.BuffMyPet()
-
-                    -- XXX temp disabled bot buffs because its super slow due to dannet queries. rewrite to have bots request buffs in a channel instead.
-                    -- XXX orchestrator will decide what toon will cast the requested buff in the end (?)
-                    ------buffs.RefreshBotBuffs() -- XXX slow due to dannet queries!
+                    if not pet.BuffMyPet() then
+                        buffs.RequestBuffs()
+                    end
                 end
             end
         end
         refreshBuffsTimer:restart()
+    end
+
+    if is_casting() or is_hovering() or is_sitting() or is_moving() or mq.TLO.Me.SpellInCooldown() or window_open("SpellBookWnd") then
+        return
+    end
+
+    --print("QUEUE LEN = ", table.getn(Buffs.queue))
+    if table.getn(Buffs.queue) > 0 and handleBuffsTimer:expired() then
+        local req = table.remove(Buffs.queue, 1)
+        if req ~= nil then
+            handleBuffRequest(req)
+        else
+            mq.cmd.dgtell("all ERR queue fetch returned NIL")
+        end
+        handleBuffsTimer:restart()
+    end
+
+end
+
+
+-- returns true if spell is cast
+function handleBuffRequest(req)
+
+    --print("handleBuffRequest: Peer ", req.Peer, ", buff ", req.Buff, ", queue len ", table.getn(Buffs.queue))
+
+    local buffRows = groupBuffs[mq.TLO.Me.Class.ShortName()][req.Buff]
+    if buffRows == nil then
+        mq.cmd.dgtell("all FATAL ERROR: /queuebuff did not find groupBuffs."..mq.TLO.Me.Class.ShortName().." entry ", req.Buff)
+        return false
+    end
+
+    local spawn = spawn_from_peer_name(req.Peer)
+    if spawn == nil then
+        mq.cmd.dgtell("all FATAL ERROR: /queuebuff spawn not found", req.Peer)
+        return false
+    end
+
+    target_id(spawn.ID())
+
+    -- find the one with highest MinLevel
+    local minLevel = 0
+    local spellName = ""
+
+    local level = spawn.Level()
+
+    -- see if we have any of this buff form on
+    for idx, checkRow in pairs(buffRows) do
+        --print(checkRow)
+
+        -- XXX same logic as /buffit. do refactor
+
+        local spellConfig = parseSpellLine(checkRow)  -- XXX do not parse here, cache and reuse
+        local n = tonumber(spellConfig.MinLevel)
+        if n == nil then
+            mq.cmd.dgtell("all FATAL ERROR, group buff ", checkRow, " does not have a MinLevel setting")
+            return
+        end
+        if n > minLevel and level >= n then
+            spellName = spellConfig.Name
+            local spell = mq.TLO.Spell(spellName)
+            if spell() == nil then
+                mq.cmd.dgtell("all FATAL ERROR cant lookup ", spellName)
+                return
+            end
+            if is_spell_in_book(spellName) then
+                spellName = spell.RankName()
+                --if spell.StacksTarget() then
+                    minLevel = n
+                    --print("minLevel = ", n)
+                --else
+                    -- XXX look into: seems spell.StacksTarget() checks vs myself instead of my target... is it a mq2-lua bug ????  cant cast Symbol of Naltron from CLR with higher sytmbol on a naked WAR.
+                --    mq.cmd.dgtell("all ERROR cannot buff ", spawn.Name(), " with ", spellName, ", MinLevel ", n, " (dont stack with current buffs)")
+                --end
+            end
+
+            if n > minLevel then
+                print("Best ", req.Peer, " buff so far is MinLevel ", spellConfig.MinLevel, " ", spellConfig.Name, " target ", spawn.Name() ," L", level)
+            end
+        end
+    end
+
+    if minLevel > 0 and spellConfigAllowsCasting(spellName, spawn) then
+        if spawn.Buff(spellName)() ~= nil then
+            print("handleBuffRequest: Skip \ag", spawn.Name(), "\ax ", spellName, " (", req.Buff, "), they have buff already.")
+            return false
+        end
+
+        mq.cmd.dgtell("all Buffing \ag", spawn.Name(), "\ax with ", spellName, " (", req.Buff, ")")
+        castSpellRaw(spellName, spawn.ID(), "-maxtries|3")
+        return true
+    else
+        print("Failed to find a matching group buff ", req.Buff, ", target ", spawn.Name(), " L", level)
     end
 end
 
@@ -261,38 +357,109 @@ function Buffs.RefreshSelfBuffs()
     return false
 end
 
--- returns true if spell was cast
---[[
-function Buffs.RefreshBotBuffs()
+-- returns true if buff was requested
+function Buffs.RequestBuffs()
 
-    if botSettings.settings.bot_buffs == nil then
-        return
+    local req = botSettings.settings.request_buffs
+    if req == nil then
+        req = groupBuffs.Default[mq.TLO.Me.Class.ShortName()]
+        if req == nil then
+            mq.cmd.dgtell("all FATAL ERROR class default buffs missing for ", mq.TLO.Me.Class.ShortName())
+            mq.delay(20000)
+            return
+        end
     end
 
-    --print("Buffs.RefreshBotBuffs")
+    --print("Buffs.RequestBuffs")
 
-    for buff, names in pairs(botSettings.settings.bot_buffs) do
-        --print("xxx ",buff)
+    local availableClasses = find_available_classes()
 
-        local spellConfig = parseSpellLine(buff) -- XXX cache, dont do this all the time!
+    for k, row in pairs(req) do
+        -- "aegolism/Class|CLR/NotClass|DRU"
+        local spellConfig = parseSpellLine(row)
+        --print("I want to request \ay"..spellConfig.Name.."\ax.")
 
-        local spell = getSpellFromBuff(spellConfig.Name) -- XXX parse this once on script startup too, dont evaluate all the time !
-        if spell == nil then
-            mq.cmd.dgtell("Buffs.RefreshBotBuffs: getSpellFromBuff ", buff, " FAILED")
-            mq.cmd.beep(1)
-            return false
+        local skip = false
+        local classes = split_str(spellConfig.Class, ",")
+        for classIdx, class in pairs(classes) do
+            --print("- Class: do we have class \ax"..class.."\ay available? ", availableClasses[class] == true)
+            if availableClasses[class] ~= true then
+                skip = true
+            end
         end
 
-        for k, bot in pairs(names) do
-            if refreshBuff(buff, bot) then
+        if spellConfig.NotClass ~= nil then
+            local notClasses = split_str(spellConfig.NotClass, ",")
+            for classIdx, class in pairs(notClasses) do
+                --print("- NotClass: do we have class \ax"..class.."\ay available? ", availableClasses[class] == true)
+                if availableClasses[class] == true then
+                    skip = true
+                end
+            end
+        end
+
+        if not skip then
+            local askClass = groupBuffs.Lookup[spellConfig.Name]
+            if askClass == nil then
+                mq.cmd.dgtell("all FATAL ERROR: did not find groupBuffs.Lookup entry ", spellConfig.Name)
+                return false
+            end
+
+            local buffRows = groupBuffs[askClass][spellConfig.Name]
+            if buffRows == nil then
+                mq.cmd.dgtell("all FATAL ERROR: did not find groupBuffs."..askClass.." entry ", spellConfig.Name)
+                return false
+            end
+
+            -- see if we have any of this buff form on
+            -- XXX assume what spell will be used and see if it will stack on me.
+            local found = false
+            for idx, checkRow in pairs(buffRows) do
+                local o = parseSpellLine(checkRow)
+                if have_buff(o.Name) then
+                    --print("Will not request  \ay", spellConfig.Name, "\ax. I have buff \ay"..o.Name.."\ax.")
+                    found = true
+                    break
+                end
+            end
+
+            -- ask proper class for buff
+            if not found then
+                local peer = nearest_peer_by_class(askClass)
+                if peer == nil then
+                    mq.cmd.dgtell("all FATAL ERROR: no peer of required class found nearby: ", askClass)
+                    return true
+                end
+
+                print("Requesting buff \ax"..spellConfig.Name.."\ay from \ag"..askClass.." "..peer.."\ax ...")
+                mq.cmd.dex(peer, "/queuebuff "..spellConfig.Name.." "..mq.TLO.Me.Name())
                 return true
             end
+        else
+            --print("Will not request \ay", spellConfig.Name, "\ax. Not all classes available: \ayClass:"..spellConfig.Class..", NotClass:"..(spellConfig.NotClass or "").."\ax.")
         end
     end
 
     return false
 end
-]]--
+
+
+-- returns a table with class shortname booleans wether nearby peers are of desired classes. used by Buffs.RequestBuffs()
+function find_available_classes()
+    -- XXX loop all nearby PC spawns, check if peer, set class key, return
+    local o = {}
+
+    local spawnQuery = "pc notid " .. mq.TLO.Me.ID() .. " radius 100"
+    for i = 1, spawn_count(spawnQuery) do
+        local spawn = mq.TLO.NearestSpawn(i, spawnQuery)
+        local peer = spawn.Name()
+        if is_peer(peer) then
+            o[spawn.Class.ShortName()] = true
+        end
+    end
+    return o
+end
+
 
 -- returns true if a buff was casted
 function Buffs.RefreshAura()

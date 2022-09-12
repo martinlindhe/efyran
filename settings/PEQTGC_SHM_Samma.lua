@@ -58,43 +58,9 @@ settings.self_buffs = {
 }
 
 settings.bot_buffs = {
-    -- STR - affects ATK & carry limit
-    -- L01 Strengthen (5-10 str)
-    -- L18 Spirit Strength (16-18 str)
-    -- L28 Raging Strength (23-26 str)
-    -- L35 Tumultuous Strength (34 str, group)
-    -- L39 Furious Strength (31-34 str)
-    -- L46 Strength (65-67 str) - works on L01
-    -- L57 Maniacal Strength (68 str) - blocked by Khura's Focusing (67 str)
-    -- L58 Talisman of the Rhino (68 str, group)
-    -- L63 Strength of the Diaku (35 str, 28 dex)
-    -- L64 Talisman of the Diaku (45 str, 35 dex, group)
-    -- L67 Spirit of Might (5% skill dmg mod, cost 175 mana) - same as DRU Lion's Strength
-    -- L70 Talisman of Might (5% skill dmg mod, group, cost 700 mana)
-    -- NOTE: Kesok does Talisman of Might, Drutten does single target
-
     ["Talisman of Fortitude/MinMana|60"] = {
         "Bandy", "Nullius", "Crusade", "Manu",
     },
-
-    -- AGI - affects AC
-    -- L03 Feet like Cat (12-18 agi)
-    -- L18 Spirit of Cat (22-27 agi)
-    -- L31 Nimble (31-36 agi)
-    -- L41 Agility (41-45 agi)
-    -- L53 Deliriously Nimble (52 agi)
-    -- L57 Talisman of the Cat (52 agi, group)
-    -- L61 Agility of the Wrulan (60 agi)
-    -- L62 Talisman of the Wrulan (60 agi, group)
-
-    -- DEX - affects bard song missed notes, procs & crits
-    -- L01 Dexterous Aura (5-10 dex)
-    -- L21 Spirit of Monkey (19-20 dex)
-    -- L25 Rising Dexterity (26-30 dex)
-    -- L39 Deftness (40 dex)
-    -- L48 Dexterity (49-50 dex) - blocked by Khura's Focusing (60 dex)
-    -- L58 Mortal Deftness (60 dex)
-    -- L59 Talisman of the Raptor (60 dex, group)
 
     -- NOTE: I do focus team18, Erland does rest
     ["Talisman of Wunshi/MinMana|50"] = {
@@ -104,12 +70,6 @@ settings.bot_buffs = {
         "Kniven", "Besty", "Grimakin", "Chancer", "Fandinu",
     },
 
-    -- resist buffs:
-    -- L50 Talisman of Jasinth (45 dr, group)
-    -- L53 Talisman of Shadoo (45 pr, group)
-    -- L58 Talisman of Epuration (55 dr, 55 pr, group)
-    -- L62 Talisman of the Tribunal (65 dr, 65 pr, group)
-    -- NOTE: limited now because of 15 buff-limit
     ["Talisman of the Tribunal/MinMana|40"] = {
         "Bandy", "Manu", "Crusade", "Nullius",
     },

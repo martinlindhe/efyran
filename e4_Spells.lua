@@ -358,7 +358,7 @@ function memorizeSpell(spellRow, defaultGem)
             mq.cmd.memorize('"'..nameWithRank..'"', gem)
             mq.delay(200)
             mq.delay(5000, function()
-                return mq.TLO.Window("SpellBookWnd").Open() == false
+                return not window_open("SpellBookWnd")
             end)
             mq.delay(200)
         end

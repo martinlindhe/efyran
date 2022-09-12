@@ -66,7 +66,7 @@ function Group.Init()
             --print(' -- processing group ',idx, ', leader:', groupLeader)
 
             if mq.TLO.Me.Name() == groupLeader then
-                -- leader invites the other group members
+                -- group leader invites the other group members
                 for n = 2,6
                 do
                     local groupMember = group[n]
@@ -90,19 +90,18 @@ function Group.Init()
             mq.cmd.dgtell('Recalling raid', name, 'with leader', raidLeader)
             mq.delay(2000)
 
+            -- raid leader invites the other groups to raid
             for idx, group in pairs(Group.settings[name])
             do
                 local groupLeader = group[1]
                 if mq.TLO.DanNet(groupLeader)() ~= nil then
-                    if mq.TLO.Me.Name() == raidLeader then
-                        if mq.TLO.Me.Name() ~= groupLeader then
-                            mq.cmd.raidinvite(groupLeader)
-                        end
+                    if mq.TLO.Me.Name() == raidLeader and mq.TLO.Me.Name() ~= groupLeader then
+                        mq.cmd.raidinvite(groupLeader)
                     elseif raidLeader ~= groupLeader then
-                        --print('Telling raid leader ', raidLeader,' to invite', groupLeader)
+                        print('Telling raid leader ', raidLeader,' to invite', groupLeader)
                         mq.cmd.dexecute(raidLeader, '/raidinvite', groupLeader)
                     end
-                    -- mq.delay(50)
+                    mq.delay(50)
                 else
                     mq.cmd.dgtell("WARNING:", groupLeader, "not connected. will not invite to raid")
                 end

@@ -3,15 +3,12 @@ local settings = { }
 settings.swap = { -- XXX impl
     -- XXX to use: /bcaa //swap main
     ["main"] = "Kreljnok's Sword of Eternal Power|Mainhand/Shield of the Lightning Lord|Offhand/Plaguebreeze|Ranged",
-
-    ["bfg"] = "Breezeboot's Frigid Gnasher|Mainhand",
-
-    -- 215 range + 150 range Flight Arrow = 365
-    ["ranged"] = "Plaguebreeze|Ranged",
+    ["ranged"] = "Plaguebreeze|Ranged", -- 215 range + 150 range Flight Arrow = 365
 
     -- For raids where tanks should not riposte, like tacvi Pixtt Riel Tavas
     ["noriposte"] = "Aged Left Eye of Xygoz|Mainhand/Shield of the Lightning Lord|Offhand",
 
+    ["bfg"] = "Breezeboot's Frigid Gnasher|Mainhand",
     ["fishing"] = "Fishing Pole|Mainhand",
 
     -- for mpg trial of weaponry (group):
@@ -21,66 +18,34 @@ settings.swap = { -- XXX impl
 }
 
 settings.illusions = { -- TODO implement
-    ["default"] = "skeleton", -- XXX either item name, or name of another key
-    ["skeleton"] = "Amulet of Necropotence", -- 0s
-    ["halfling"] = "Fuzzy Foothairs", -- 0s
-    ["imp"] = "Imp Wings", -- 0s, levitate, +15 fire resist
+    ["default"]       = "skeleton", -- XXX either item name, or name of another key
+    ["skeleton"]      = "Amulet of Necropotence", -- 0s
+    ["halfling"]      = "Fuzzy Foothairs", -- 0s
+    ["imp"]           = "Imp Wings", -- 0s, levitate, +15 fire resist
     ["air_elemental"] = "Second Breath", --0s, levitate
-    ["human"] = "Circlet of Disguise", -- 7s
-    ["darkelf"] = "Guise of the Deceiver", -- 6s
+    ["human"]         = "Circlet of Disguise", -- 7s
+    ["darkelf"]       = "Guise of the Deceiver", -- 6s
 }
 
 settings.self_buffs = {
-    "Amulet of Necropotence",
+    "Amulet of Necropotence", -- XXX remove, use settings.illusions
 
-    -- Chaotic Ward (20 all resists, 67 ac) - stacks with all resist buffs. DON'T STACK WITH Form of Defense
-    "Necklace of the Steadfast Spirit",
+    "Necklace of the Steadfast Spirit", -- Chaotic Ward (20 all resists, 67 ac) - stacks with all resist buffs. DON'T STACK WITH Form of Defense
+    "Ring of the Beast", -- Form of Endurance III (slot 5: 270 hp)
+    --"Hanvar's Hoop", -- Form of Defense III (slot 10: 81 ac)
 
-    -- Form of Endurance III (slot 5: 270 hp) - Ring of the Beast (anguish)
-    "Ring of the Beast",
+    --"Kizrak's Gauntlets of Battle/CheckFor|Hastening of Salik", -- slot 3: 30% haste
 
-    -- Form of Defense III (slot 10: 81 ac) - Hanvar's Hoop (anguish)
-    --"Hanvar's Hoop",
+    --"Symbol of the Planemasters", -- Pestilence Shock proc buff (potime)
 
-    -- haste click:
-    --"Kizrak's Gauntlets of Battle",
+    --"Fearsome Shield", -- Aura of Battle (2 hp/tick, 10 atk slot 3) - don't stack with Champion
 
-    -- Pestilence Shock proc buff (potime)
-    --"Symbol of the Planemasters",
-
-    -- Aura of Battle (2 hp/tick, 10 atk slot 3) - don't stack with Champion
-    --"Fearsome Shield",
-
-    -- Shield of Pain (10 ds slot 4)
-    --"Puresteel Mantle",
+    --"Puresteel Mantle", -- Shield of Pain (10 ds slot 4)
 
     --"Shimmering Bauble of Trickery/Shrink",
 }
 
-settings.request_buffs = {
-    -- XXX i list all buffs that I want
-
-    -- should we ask for symbol / aegolism?
-    "symbol/IfAvailable|DRU", -- CLR
-    "ac/IfAvailable|DRU", -- CLR
-    "skin/IfAvailable|DRU", -- DRU. XXX DRU need ini
-    "aegolism/IfAvailable|CLR/IfNotAvailable|DRU", -- CLR
-
-
-
-    "focus/IfAvailable|SHM", -- shm
-
-    -- XXX alternates, BST SV or RNG buff
-    "brells/IfAvailable|PAL", -- XXX PAL need ini
-
-    -- haste
-    "enc_haste/IfAvailable|ENC",
-    "shm_haste/IfAvailable|SHM/IfNotAvailable|ENC",
-
-    -- resists
-    "dru_resist/IfAvailable|DRU", -- DRU
-    "enc_resist/IfAvailable|ENC", -- enc
-}
+settings.preferred_buffers = { "Stor", "Samma", "Drutten", "Trams", "Myggan", "Absint", "Arctander", "Besty", "Crusade" } -- XXX TODO impl. when asking for buffs, prefer these bots as they have stronger buffs etc
 
 settings.combat_buffs = { -- XXX implement
     -- L68 Commanding Voice
