@@ -125,6 +125,13 @@ local handinRules = {
         ["Class|BST/Savagesoul Wristband of the Wilds"]          = {"Riftseeker Heart",                 "2|Quality Feran Hide"},
     },
 
+    ["A shimmering presence/Zone|akheva"] = {
+        ["Shadowed Scepter Frame"]          = {"Summoned: Wisp Stone"},
+    },
+    ["The Spirit of Akelha`Ra/Zone|akheva"] = {
+        ["Shadowed Scepter Frame"]          = {"Essence Emerald"},
+    },
+
 }
 
 local zone = mq.TLO.Zone.ShortName():lower()
@@ -136,72 +143,25 @@ for key, t in pairs(handinRules) do
     if zone == o.Zone then
         print("zone ", o.Zone, ", ", o.Name)
 
-        local spawn = spawn_from_query("npc ="..o.Name)
-        if spawn == nil then
-            print("ERROR: Expected spawn not found in zone: ", o.Name)
-            return
-        end
+        local spawn = spawn_from_query('npc "'..o.Name..'"')
+        if spawn ~= nil then
 
-        if spawn.Distance() > 50 then
-            print("ERROR: ", o.Name, " is too far away for hand-in.")
-            return
-        end
+            if spawn.Distance() > 50 then
+                print("ERROR: ", o.Name, " is too far away for hand-in.")
+                return
+            end
 
-        -- see if we have any of the items
-        for rewardRow, components in pairs(t) do
-            local reward = parseSpellLine(rewardRow)
+            -- see if we have any of the items
+            for rewardRow, components in pairs(t) do
+                local reward = parseSpellLine(rewardRow)
+                --print("reward ", reward.Name, " .. class ", reward.Class, " class type ", type(reward.Class))
 
-            if mq.TLO.Me.Class.ShortName() == reward.Class then -- TODO more advanced class filter
-                local haveParts = false
-                local needParts = false
-                local needMessage = ""
+                if reward.Class == nil or mq.TLO.Me.Class.ShortName() == reward.Class then -- TODO more advanced class filter
+                    local haveParts = false
+                    local needParts = false
+                    local needMessage = ""
 
-                -- See if i have any of the required components
-                for i, componentRow in pairs(components) do
-                    -- optional syntax: "2|Item name", where 2 is the required item count
-                    local found, _ = string.find(componentRow, "|")
-                    local component = componentRow
-                    local count = 1
-                    if found then
-                        local key = ""
-                        local subIndex = 0
-                        for v in string.gmatch(componentRow, "[^|]+") do
-                            if subIndex == 0 then
-                                key = v
-                            end
-                            if subIndex == 1 then
-                                --print(key, " = ", v)
-                                component = v
-                                count = tonumber(key)
-                            end
-                            subIndex = subIndex + 1
-                        end
-                    end
-
-                    if have_item(component) then
-                        haveParts = true
-                        local haveCount = getItemCountExact(component)
-                        print("I have component ", component, " x ", haveCount)
-                        if haveCount < count then
-                            needParts = true
-                            needMessage = needMessage.."NEED "..component.." x "..(count-haveCount).." for "..reward.Name
-                        end
-                    else
-                        needParts = true
-                        needMessage = needMessage.."NEED "..component.." x "..count.." for "..reward.Name
-                    end
-
-                end
-
-                if haveParts and needParts then
-                    -- asks for the missing items
-                    mq.cmd.dgtell("all", needMessage)
-                elseif not needParts and haveParts then
-                    print("I HAVE ALL NEEDED PIECES, DOING HAND IN")
-
-                    target_npc_name(o.Name)
-                    move_to(spawn)
-
+                    -- See if i have any of the required components
                     for i, componentRow in pairs(components) do
                         -- optional syntax: "2|Item name", where 2 is the required item count
                         local found, _ = string.find(componentRow, "|")
@@ -222,38 +182,90 @@ for key, t in pairs(handinRules) do
                                 subIndex = subIndex + 1
                             end
                         end
+                        print("Looking for component ", component)
 
-                        -- pick up and hand over items unstacked
-                        for each = 1, count do
-                            print("Picking up ", component)
-                            local item = get_item(component)
-
-                            local itemNotifyQuery = "/nomodkey /ctrl /itemnotify in Pack"..tostring(item.ItemSlot()-22).." "..tostring(item.ItemSlot2()+1).." leftmouseup"
-                            print(itemNotifyQuery)
-                            mq.cmd(itemNotifyQuery)
-                            mq.delay(1000, function() return has_cursor_item() end)
-                            mq.delay(200)
-
-                            mq.cmd("/click left target")
-                            if not window_open("GiveWnd") then
-                                -- extra delay for server roundtrip
-                                print("give start wait")
-                                mq.delay(10000, function() return window_open("GiveWnd") end)
-                                print("donme wait")
+                        if have_item(component) then
+                            haveParts = true
+                            local haveCount = getItemCountExact(component)
+                            print("I have component ", component, " x ", haveCount)
+                            if haveCount < count then
+                                needParts = true
+                                needMessage = needMessage.."NEED "..component.." x "..(count-haveCount).." for "..reward.Name
                             end
-                            mq.delay(1000, function() return not has_cursor_item() end)
-                            mq.delay(200)
+                        else
+                            needParts = true
+                            needMessage = needMessage.."NEED "..component.." x "..count.." for "..reward.Name
                         end
 
                     end
 
-                    -- /nomodkey /notify GiveWnd GVW_Give_Button leftmouseup
+                    if haveParts and needParts then
+                        -- asks for the missing items
+                        mq.cmd.dgtell("all", needMessage)
+                    elseif not needParts and haveParts then
+                        print("I HAVE ALL NEEDED PIECES, DOING HAND IN")
 
-                    return
+                        target_npc_name(o.Name)
+                        move_to(spawn)
+
+                        for i, componentRow in pairs(components) do
+                            -- optional syntax: "2|Item name", where 2 is the required item count
+                            local found, _ = string.find(componentRow, "|")
+                            local component = componentRow
+                            local count = 1
+                            if found then
+                                local key = ""
+                                local subIndex = 0
+                                for v in string.gmatch(componentRow, "[^|]+") do
+                                    if subIndex == 0 then
+                                        key = v
+                                    end
+                                    if subIndex == 1 then
+                                        --print(key, " = ", v)
+                                        component = v
+                                        count = tonumber(key)
+                                    end
+                                    subIndex = subIndex + 1
+                                end
+                            end
+
+                            -- pick up and hand over items unstacked
+                            for each = 1, count do
+                                print("Picking up ", component)
+                                local item = get_item(component)
+
+                                local itemNotifyQuery = "/nomodkey /ctrl /itemnotify in Pack"..tostring(item.ItemSlot()-22).." "..tostring(item.ItemSlot2()+1).." leftmouseup"
+                                print(itemNotifyQuery)
+                                mq.cmd(itemNotifyQuery)
+                                mq.delay(1000, function() return has_cursor_item() end)
+                                mq.delay(200)
+
+                                mq.cmd("/click left target")
+                                if not window_open("GiveWnd") then
+                                    -- extra delay for server roundtrip
+                                    print("give start wait")
+                                    mq.delay(10000, function() return window_open("GiveWnd") end)
+                                    print("donme wait")
+                                end
+                                mq.delay(1000, function() return not has_cursor_item() end)
+                                mq.delay(200)
+                            end
+
+                        end
+
+                        -- /nomodkey /notify GiveWnd GVW_Give_Button leftmouseup
+
+                        return
+
+                    else
+                        print("XXX ODD: needParts = ",needParts, ", haveParts = ", haveParts)
+                    end
 
                 end
-
             end
+
+        else
+            print("ERROR: Expected spawn not found in zone: ", o.Name)
         end
 
     end
