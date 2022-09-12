@@ -288,8 +288,8 @@ function Heal.performLifeSupport()
     end
 
     for k, row in pairs(botSettings.settings.healing.life_support) do
-        --print("k ", k, " v ", row)
         local spellConfig = parseSpellLine(row)
+        --print("k ", k, " v ", row, ", parsed as name: ", spellConfig.Name)
 
         local skip = false
         if spellConfig.HealPct ~= nil and tonumber(spellConfig.HealPct) < mq.TLO.Me.PctHPs() then
@@ -304,9 +304,15 @@ function Heal.performLifeSupport()
             skip = true
         end
 
-        -- only cast if enough NPC:s is nearby
+        -- only cast if at least this many NPC:s is nearby
         if spellConfig.MinMobs ~= nil and spawn_count(nearbyNPCFilter) < tonumber(spellConfig.MinMobs) then
             --mq.cmd.dgtell("all performLifeSupport skip ", spellConfig.Name, ", Not enought nearby mobs. Have ", spawn_count(nearbyNPCFilter), ", need ", spellConfig.MinMobs)
+            skip = true
+        end
+
+        -- only cast if at most this many NPC:s is nearby
+        if spellConfig.MaxMobs ~= nil and spawn_count(nearbyNPCFilter) > tonumber(spellConfig.MaxMobs) then
+            --mq.cmd.dgtell("all performLifeSupport skip ", spellConfig.Name, ", Too many nearby mobs. Have ", spawn_count(nearbyNPCFilter), ", need ", spellConfig.MaxMobs)
             skip = true
         end
 
@@ -318,6 +324,11 @@ function Heal.performLifeSupport()
 
         if is_alt_ability(spellConfig.Name) and not is_alt_ability_ready(spellConfig.Name) then
             --mq.cmd.dgtell("all performLifeSupport skip ", spellConfig.Name, ", AA is not ready")
+            skip = true
+        end
+
+        if is_ability(spellConfig.Name) and not is_ability_ready(spellConfig.Name) then
+            --mq.cmd.dgtell("all performLifeSupport skip ", spellConfig.Name, ", Ability is not ready")
             skip = true
         end
 
@@ -339,32 +350,32 @@ function Heal.performLifeSupport()
         --print(" skip = ", skip, " spellConfig = ", spellConfig.Name)
 
         if not skip then
-            local spell = getSpellFromBuff(spellConfig.Name)
-
-            local spellName = spell.RankName()
-            if have_item(spellConfig.Name) or is_alt_ability(spellConfig.Name) then
-                spellName = spellConfig.Name
+            if is_ability_ready(spellConfig.Name) then
+                mq.cmd.dgtell("all USING LIFE SUPPORT ability", spellConfig.Name, "at", mq.TLO.Me.PctHPs(), "%")
+                mq.cmd("/doability "..spellConfig.Name)
+            else
+                local spell = getSpellFromBuff(spellConfig.Name)
+                local spellName = spell.RankName()
+                if have_item(spellConfig.Name) or is_alt_ability(spellConfig.Name) then
+                    spellName = spellConfig.Name
+                end
+                mq.cmd.dgtell("all USING LIFE SUPPORT", spellName, "at", mq.TLO.Me.PctHPs(), "%")
+                castSpell(spellName, mq.TLO.Me.ID())
             end
-
-            mq.cmd.dgtell("all USING LIFE SUPPORT", spellName, "at", mq.TLO.Me.PctHPs(), "%")
-            castSpell(spellName, mq.TLO.Me.ID())
-            break
+            return
         end
-
+        mq.doevents()
+        mq.delay(1)
     end
 end
 
 -- uses healing.tank_heal, returns true if spell was cast
 function healPeer(spell_list, peer, pct)
-
     --print("Heal: ", peer, " is in my queue, at ", pct, " want heal!!!")
 
     for k, heal in pairs(spell_list) do
-
         local spawn = spawn_from_peer_name(peer)
-
         local spellConfig = parseSpellLine(heal)
-
         if spawn == nil then
             -- peer died
             print("removing from heal queue, peer died: ", peer)
@@ -383,8 +394,9 @@ function healPeer(spell_list, peer, pct)
             Heal.queue:remove(peer)
             return true
         end
+        mq.doevents()
+        mq.delay(1)
     end
-
     return false
 end
 

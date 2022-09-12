@@ -4,14 +4,18 @@ local Follow = {
 
 function Follow.Init()
 
+    -- tell everyone else to click nearby door/object (pok stones, etc)
     mq.bind("/clickit", function(name)
         print("CLICKING NEARBY DOOR xxx name")
-        -- XXX click nearby door. like pok stones etc
 
-        -- XXX spawn check if door within X radius
-        mq.cmd.dgze("/doortarget")
-        mq.delay(500)
-        mq.cmd.dgze("/click left door")
+        if is_orchestrator() then
+            mq.cmd.dgzexecute("/clickit")
+        else
+            -- XXX spawn check if door within X radius
+            mq.cmd("/doortarget")
+            mq.delay(math.random(0, 10000)) -- delay 0 to 10s to not flood connection
+            mq.cmd("/click left door")
+        end
     end)
 
     mq.bind("/followon", function()
@@ -188,18 +192,18 @@ function Follow.Init()
 end
 
 function Follow.Pause()
-    --mq.cmd.afollow("off")
-    mq.cmd("/stick off")
+    mq.cmd.afollow("off")
+    --mq.cmd("/stick off")
 end
 
 function Follow.Resume()
     if Follow.spawn ~= nil then
         print("resuming follow")
+        mq.cmd("/afollow spawn", Follow.spawn.ID())
 
-        -- XXX face upwards to not get stuck ...
-        --mq.cmd("/afollow spawn", Follow.spawn.ID())
-        mq.cmd.target("id", Follow.spawn.ID())
-        mq.cmd("/stick hold 15 uw")
+        -- XXX face upwards to not get stuck using /stick
+        --mq.cmd.target("id", Follow.spawn.ID())
+        --mq.cmd("/stick hold 15 uw")
     else
         print("Follow.Resume: failed. spawnID is nil")
     end

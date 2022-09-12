@@ -1,4 +1,6 @@
 -- collection of functions to simplify working with macroquest through Lua
+
+-- @type mq
 mq = require("mq")
 
 -- returns true if i am the foreground instance
@@ -205,6 +207,11 @@ end
 -- returns true if the AA `name` is ready to use
 function is_alt_ability_ready(name)
     return mq.TLO.Me.AltAbilityReady(name)()
+end
+
+-- returns true if I have the ability `name`
+function is_ability(name)
+    return mq.TLO.Me.Ability(name)()
 end
 
 -- returns true if the ability `name` is ready to use
@@ -503,15 +510,14 @@ function clear_cursor()
 end
 
 function cast_veteran_aa(name)
-    if mq.TLO.Me.AltAbility(name)() ~= nil then
-        if mq.TLO.Me.AltAbilityReady(name)() then
-            castSpell(name, mq.TLO.Me.ID())
-            -- XXX delay full amount of time before returning, or mess up bards. ..
+    if is_alt_ability(name) then
+        if is_alt_ability_ready(name) then
+            cast_alt_ability(name)
         else
             mq.cmd.dgtell("all", "ERROR:", name, "is not ready, ready in", mq.TLO.Me.AltAbilityTimer(name).TimeHMS() )
         end
     else
-        mq.cmd.dgtell("all", "ERROR: i do not have AA", name)
+        mq.cmd.dgtell("all", "ERROR: I do not have AA", name)
     end
 end
 

@@ -11,6 +11,9 @@ function QoL.Init()
         mq.cmd.tgb("on")
     end
 
+    -- default loot setting: hide looted corpses
+    mq.cmd("/hidec looted")
+
     if mq.TLO.Me.Combat() then
         mq.cmd.attack("off")
     end
@@ -34,15 +37,22 @@ function QoL.Init()
 
     QoL.verifySpellLines()
 
-    mq.event("zoned", "You have entered #1#.", function(text, zone)
-        if zone ~= "an area where levitation effects do not function" then
-            print("I zoned into ", zone)
-            mq.delay(2000)
-            pet.ConfigureTaunt()
+    mq.event("zoning", "LOADING, PLEASE WAIT...", function(text)
+        print("zoning. waiting")
+        mq.delay(15000) -- 15s
+    end)
 
-            joinCurrentHealChannel()
-            memorizeListedSpells()
+    mq.event("zoned", "You have entered #1#.", function(text, zone)
+        if zone == "an area where levitation effects do not function" then
+            return
         end
+
+        print("I zoned into ", zone)
+        mq.delay(3000) -- 3s
+        pet.ConfigureTaunt()
+
+        joinCurrentHealChannel()
+        memorizeListedSpells()
     end)
 
     mq.event("missing_component", "You are missing #1#.", function(text, name)
@@ -183,13 +193,13 @@ function QoL.Init()
     -- open loot window on closest corpse
     mq.bind("/lcorpse", function()
         if has_target() ~= nil then
-            mq.cmd.target("clear")
+            mq.cmd("/squelch /target clear")
         end
-        mq.cmd.target("corpse radius 100")
+        mq.cmd("/target corpse radius 100")
         mq.delay(500, function()
             return has_target()
         end)
-        mq.cmd.loot()
+        mq.cmd("/loot")
     end)
 
     -- reports all toons that are not running e4

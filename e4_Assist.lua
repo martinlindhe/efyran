@@ -36,7 +36,9 @@ function Assist.Init()
         else
             spawn = spawn_from_id(mobID)
         end
-
+        if spawn == nil then
+            return
+        end
         if spawn.Type() ~= "PC" then
             if assistTarget ~= nil then
                 print("backing off existing target before assisting new")
@@ -254,6 +256,7 @@ end
 function Assist.killSpawn(spawn)
 
     assistTarget = spawn
+    local currentID = spawn.ID()
 
     print("Assist.killSpawn ", spawn.Name)
     if spawn == nil then
@@ -306,6 +309,10 @@ function Assist.killSpawn(spawn)
             print("meleeLoop: i got called off, breaking outer loop")
             break
         end
+        if assistTarget.ID() ~= currentID then
+            print("assist called on another mob, returning!")
+            return
+        end
         if spawn.Type() == "Corpse" or spawn.Type() == "NULL" then
             break
         end
@@ -318,7 +325,8 @@ function Assist.killSpawn(spawn)
             mq.cmd.target("id", spawn.ID())
         end
 
-        if melee and spawn.Distance() < spawn.MaxRangeTo() and spawn.LineOfSight() then
+        if melee and botSettings.settings.assist.abilities ~= nil
+        and spawn.Distance() < spawn.MaxRangeTo() and spawn.LineOfSight() then
             -- use melee abilities
             for v, abilityRow in pairs(botSettings.settings.assist.abilities) do
                 mq.doevents()

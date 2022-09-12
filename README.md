@@ -135,7 +135,8 @@ Many are borrowed from e3, some are new.
 for heals.life_support (Heal.performLifeSupport)
 - HealPct = when to start using this ability (number)
 - CheckFor = only cast if I don't have this in buffs/songs
-- MinMobs = only cast if this many mobs nearby (number)
+- MinMobs = only cast if at least many mobs nearby (number)
+- MaxMobs = only cast if at most this many mobs nearby (number)
 - Zone|anguish      = only use this ability in the listed zone. TODO support multiple comma-separated zones: "Zone|anguish,tacvi"
 
 

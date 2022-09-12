@@ -152,7 +152,7 @@ function PerformHail()
 
     print("Performing hail ...")
 
-    mq.delay(math.random(0, 5000)) -- delay 0 to 5s to not flood connection
+    mq.delay(math.random(0, 10000)) -- delay 0 to 10s to not flood connection
     drop_invis()
 
     local zoneTargets = hailTargets[mq.TLO.Zone.ShortName():lower()]
