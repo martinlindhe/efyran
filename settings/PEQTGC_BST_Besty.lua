@@ -6,6 +6,18 @@ settings.swap = { -- XXX impl
     ["melee"] = "Staff of Phenomenal Power|Mainhand", -- 1hb
 }
 
+settings.gems = {
+    ["Muada's Mending"] = 1, -- quick heal
+    ["Ancient: Savage Ice"] = 2,
+    ["Bestial Empathy"] = 3,
+    ["Spirit of Oroshar"] = 4, -- pet proc
+
+    ["Ferocity of Irionu"] = 6,
+    ["Healing of Mikkily"] = 7, -- pet heal
+    ["Growl of the Panther"] = 8, -- pet buff
+    ["Spiritual Ascendance"] = 9, -- bst crack
+}
+
 settings.self_buffs = {
     "Fuzzy Foothairs/CheckFor|Bestial Alignment Effect",
 
@@ -21,7 +33,7 @@ settings.self_buffs = {
     -- L59 Spiritual Purity (7 hp + 7 mana/tick, group)
     -- L64 Spiritual Dominion (9 hp + 9 mana/tick, group)
     -- L69 Spiritual Ascendance (10 hp + 10 mana/tick, group, cost 900 mana)
-    "Spiritual Ascendance/Gem|9/MinMana|20",
+    "Spiritual Ascendance/MinMana|20",
 
     -- hp type 2 - Slot 4: Increase max HP:
     -- L42 Spiritual Brawn (10 atk, 75 hp)
@@ -46,7 +58,7 @@ settings.pet = {
         -- L55 Sha's Restoration (1426-1461 hp, decrease dr 20, pr 20, cr 20, cost 404 mana)
         -- L61 Healing of Sorsha (2018-2050 hp, decrease dr 24, pr 24, cr 24, cost 495 mana)
         -- L66 Healing of Mikkily (2810 hp, decrease dr 28, pr 28, cr 28, cost 610 mana)
-        "Healing of Mikkily/HealPct|40/Gem|7/MinMana|10",
+        "Healing of Mikkily/HealPct|40/MinMana|10",
     },
 
     ["buffs"] = {
@@ -62,7 +74,7 @@ settings.pet = {
         -- L63 Spirit of Rellic (COLD: Spirit of Rellic Strike, rate mod 150)
         -- L68 Spirit of Irionu (COLD: Spirit of Irionu Strike, rate mod 150, 75 dex)
         -- L70 Spirit of Oroshar (FIRE: Spirit of Oroshar Strike, rate mod 150, 75 dex)
-        "Spirit of Oroshar/MinMana|50/Gem|4",
+        "Spirit of Oroshar/MinMana|50",
 
         -- pet haste:
         -- L37 Yekan's Quickening (43-45 str, 60% haste, 20 atk, 11-12 ac)
@@ -74,7 +86,7 @@ settings.pet = {
         "Growl of the Beast/MinMana|40",
 
         -- L69 Growl of the Panther (1 min, 20% skill dmg mod, +150 hp HoT/tick, inc maxhp 1500)
-        "Growl of the Panther/Gem|8/CheckFor|Empathic Fury",
+        "Growl of the Panther/CheckFor|Empathic Fury",
 
         -- Lxx Hobble of Spirits I AA (75 dex, Hobble of Spirits proc, rate mod 150: 40-56% snare, XXX min
         -- L70 Hobble of Spirits II AA (75 dex, Hobble of Spirits proc, rate mod 150: 50% snare, resist adj -50, 0.6 min)
@@ -91,6 +103,7 @@ settings.pet = {
 
 settings.healing = {
     ["life_support"] = {
+        "Muada's Mending/HealPct|88/MaxMobs|0", -- heal myself after fight
         "Protective Spirit Discipline/HealPct|40",
         "Distillate of Divine Healing XI/HealPct|8",
     },
@@ -109,7 +122,7 @@ settings.healing = {
         -- L62 Chloroblast (994-1044 hp, cost 331 mana)
         -- L65 Trushar's Mending (1048 hp, cost 330 mana)
         -- L67 Muada's Mending (1176-1206 hp, cost 376 mana, 3s cast time)
-        "Muada's Mending/HealPct|50/Gem|1/MinMana|5",
+        "Muada's Mending/HealPct|50/MinMana|5",
     },
 
     ["who_to_heal"] = "ImportantBots", -- XXX impl
@@ -172,26 +185,26 @@ settings.assist = {
             -- L65 Ancient: Frozen Chaos (836 hp, cost 298 mana)
             -- L69 Glacier Spear (958 hp, cost 310 mana)
             -- L70 Ancient: Savage Ice (1034 hp, cost 329 mana, 30s recast)
-            "Ancient: Savage Ice/Gem|2/MinMana|60",
+            "Ancient: Savage Ice/MinMana|60",
 
             -- L68 Bestial Empathy (swarm pet, 18s recast)
-            "Bestial Empathy/Gem|3",
+            "Bestial Empathy",
         },
 
         ["fastfire"] = {
-            "Ancient: Savage Ice/Gem|2/MinMana|60",
+            "Ancient: Savage Ice/MinMana|60",
         },
 
         ["bigfire"] = {
-            "Ancient: Savage Ice/Gem|2/MinMana|60"
+            "Ancient: Savage Ice/MinMana|60"
         },
 
         ["fastcold"] = {
-            "Ancient: Savage Ice/Gem|2/MinMana|60",
+            "Ancient: Savage Ice/MinMana|60",
         },
 
         ["bigcold"] = {
-            "Ancient: Savage Ice/Gem|2/MinMana|60",
+            "Ancient: Savage Ice/MinMana|60",
         },
     },
 

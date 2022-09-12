@@ -28,7 +28,7 @@ settings.self_buffs = {
     --"Eye of Dreams",
 }
 
-settings.healing = { -- XXX implement
+settings.healing = {
     ["life_support"] = {
         "Shield of Notes/HealPct|30",
         "Deftdance Discipline/HealPct|20",
@@ -37,17 +37,16 @@ settings.healing = { -- XXX implement
 }
 
 settings.assist = {
-    ["type"] = "Melee", -- XXX "Ranged",  "Off"
+    ["type"] = "Melee",
     ["stick_point"] = "Behind",
-    --["melee_distance"] = 12,
     ["ranged_distance"] = 100,
-    ["engage_percent"] = 98,  -- XXX implement!
+    ["engage_percent"] = 98,
 
     ["abilities"] = {
         "Boastful Bellow",
     },
 
-    ["quickburns"] = {-- XXX implememt !!!
+    ["quickburns"] = {
         -- (epic 1.5: slot 9: spell crit  8%, slot 10: dot crit  8%, slot 12: accuracy 130%) Prismatic Dragon Blade
         -- (epic 2.0: slot 9: spell crit 12%, slot 10: dot crit 12%, slot 12: accuracy 140%) Blade of Vesagran
         "Blade of Vesagran",
@@ -61,7 +60,7 @@ settings.assist = {
         "Song of Stone",
     },
 
-    ["longburns"] = {-- XXX implememt !!!
+    ["longburns"] = {
         "Thousand Blades",
         "Puretone Discipline",
     },

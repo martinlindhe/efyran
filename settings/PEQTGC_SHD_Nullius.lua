@@ -111,7 +111,7 @@ settings.pet = {
 }
 
 settings.assist = {
-    ["type"] = "Melee", -- XXX "Ranged",  "Off"
+    ["type"] = "Melee",
     ["stick_point"] = "Front",
     --["melee_distance"] = 15,   -- XXX in order to automatically be closer to boss than the rest, allow changing formula "spawn.MaxRangeTo() * 0.75"
     ["taunts"] = { -- XXX impl. used if set

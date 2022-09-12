@@ -56,10 +56,15 @@ settings.assist = {
         -- L6x Blood Pact AA, 15 min reuse
         "Blood Pact",
 
-        -- timer 8:
-        -- Lxx Battle Cry (id:5027) 10 atk, -1% melee haste (??)
+        -- timer 8 (30 min reuse):
+        -- L30 Battle Cry (id:5027) 10 atk, -1% melee haste (??)
+        -- L50 War Cry
+        -- L57 Battle Cry of Dravel
+        -- L64 War Cry of Dravel
+        -- L65 Battle Cry of the Mastruq
+        -- L65 Ancient: Cry of Chaos: +60 atk to group
         -- L70 Bloodthirst
-        --"Bloodthirst",
+        "Ancient: Cry of Chaos",
 
         -- timer 3:
         -- L54 Cleaving Rage Discipline (timer 3) - every hit a critical

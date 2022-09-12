@@ -49,9 +49,8 @@ settings.assist = {
         "Blood Pact",
 
         -- timer 8:
-        -- Lxx Battle Cry (id:5027) 10 atk, -1% melee haste (??)
-        -- L70 Bloodthirst
-        --"Bloodthirst",
+        -- L65 Ancient: Cry of Chaos: +60 atk to group
+        "Ancient: Cry of Chaos",
 
         -- timer 3:
         -- L54 Cleaving Rage Discipline (timer 3) - every hit a critical

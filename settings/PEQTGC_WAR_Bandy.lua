@@ -20,6 +20,16 @@ settings.swap = { -- XXX impl
     ["bluntdmg"] = "Girplan Hammer of Carnage|Mainhand",
 }
 
+settings.illusions = { -- TODO implement
+    ["default"] = "skeleton", -- XXX either item name, or name of another key
+    ["skeleton"] = "Amulet of Necropotence", -- 0s
+    ["halfling"] = "Fuzzy Foothairs", -- 0s
+    ["imp"] = "Imp Wings", -- 0s, levitate, +15 fire resist
+    ["air_elemental"] = "Second Breath", --0s, levitate
+    ["human"] = "Circlet of Disguise", -- 7s
+    ["darkelf"] = "Guise of the Deceiver", -- 6s
+}
+
 settings.self_buffs = {
     "Amulet of Necropotence",
 
@@ -117,11 +127,11 @@ settings.misc = {       -- XXX implement
 }
 
 settings.assist = {
-    ["type"] = "Melee", -- XXX "Ranged",  "Off"
+    ["type"] = "Melee",
     ["stick_point"] = "Front",
     --["melee_distance"] = 12,
     ["ranged_distance"] = 100,
-    ["engage_percent"] = 98,  -- XXX implement!
+    ["engage_percent"] = 98,
 
     ["taunts"] = { -- XXX impl. used if set
         "Taunt",
@@ -136,9 +146,9 @@ settings.assist = {
         --"Disarm",
     },
 
-    ["quickburns"] = {}, -- XXX implememt !!!
+    ["quickburns"] = {},
 
-    ["longburns"] = { -- XXX implememt !!!
+    ["longburns"] = {
         -- timer 3:
         -- L54 Mighty Strike Discipline (cause every attack to crit)
         -- L58 Fellstrike Discipline (increase melee damage)

@@ -11,14 +11,13 @@ settings.swap = {   -- XXX implement
 settings.self_buffs = {
     "Fuzzy Foothairs",
     "Shadowsong Cloak", -- Harmonize (increase singing skill by 9)
-    "Serrated Dart of Energy", -- Savage Guard (+25 atk, slot 5)
+    --"Serrated Dart of Energy", -- Savage Guard (+25 atk, slot 5)
     "Ring of the Beast", -- Form of Endurance III (slot 5: 270 hp)
-    --"Reaper's Ring/CheckFor|Strength of Tunare", -- +10 atk (slot 1) - Grim Aura
 }
 
 settings.healing = {
     ["life_support"] = {
-        "Shield of Notes/HealPct|30",
+        --"Shield of Notes/HealPct|30",
         "Deftdance Discipline/HealPct|20",
         "Distillate of Divine Healing XI/HealPct|8",
     }
@@ -37,13 +36,13 @@ settings.assist = {
         "Blade of Vesagran",
 
         -- Lxx Cacophony AA
-        "Cacophony",
+        --"Cacophony",
 
         -- Lxx Dance of Blades AA
-        "Dance of Blades",
+        --"Dance of Blades",
 
         -- Lxx Song of Stone AA
-        "Song of Stone",
+        --"Song of Stone",
     },
 
     ["longburns"] = {
@@ -69,7 +68,7 @@ settings.gems = {
 
 settings.songs = {
     ["general"] = {
-        -- MELEE SONGS (Storm Blade): Gerwulf, Chancer, Saberku, Lynnmary, Crust, Hypert
+        -- MELEE SONGS (Storm Blade): Gerwulf, Chancer, Saberku, Lynnmary, Crust
 
         -- PERCUSSION - Selo's Accelerating Chorus
         "Selo's Accelerating Chorus/Gem|8",
