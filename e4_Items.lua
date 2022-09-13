@@ -1,3 +1,5 @@
+local mq = require("mq")
+
 local Items = {}
 
 -- remove item link from input text
@@ -20,8 +22,7 @@ function Items.Init()
 
         name = strip_link(name)
 
-        local orchestrator = mq.TLO.FrameLimiter.Status() == "Foreground"
-        if orchestrator then
+        if is_orchestrator() then
             mq.cmd.dgzexecute("/fdi", name)
         end
 
@@ -47,8 +48,7 @@ function Items.Init()
 
         -- XXX strip item links
 
-        local orchestrator = mq.TLO.FrameLimiter.Status() == "Foreground"
-        if orchestrator then
+        if is_orchestrator() then
             mq.cmd.dgzexecute("/fmi", name)
         end
 

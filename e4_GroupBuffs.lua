@@ -14,7 +14,7 @@ GroupBuffs.Lookup = {
     ["clr_symbol"] = "CLR",
     ["clr_ac"] = "CLR",
     ["aegolism"] = "CLR",
-    ["absorb_melee"] = "CLR",
+    ["clr_vie"] = "CLR",
     ["clr_spellhaste"] = "CLR",
 
     ["dru_skin"] = "DRU",
@@ -22,7 +22,7 @@ GroupBuffs.Lookup = {
     ["corruption"] = "DRU",
     ["dru_regen"] = "DRU",
     ["dru_ds"] = "DRU",
-    ["dru_strength"] = "DRU",
+    ["dru_str"] = "DRU",
     ["skill_dmg_mod"] = "DRU",
     ["dru_runspeed"] = "DRU",
 
@@ -146,12 +146,13 @@ GroupBuffs.SHM = {
     -- L64 Talisman of the Diaku (45 str, 35 dex, group)
     -- L67 Spirit of Might (5% skill dmg mod, cost 175 mana) - same as DRU Lion's Strength
     -- L70 Talisman of Might (5% skill dmg mod, group, cost 700 mana)
+    -- NOTE: DRU has a weaker line of buffs
     ["shm_str"] = {
         "Strength/MinLevel|1",
         "Maniacal Strength/MinLevel|43",
         "Talisman of the Rhino/MinLevel|44",
         "Talisman of the Diaku/MinLevel|47",
-        "Talisman of Might/MinLEvel|62",
+        "Talisman of Might/MinLevel|62",
     },
 
     -- AGI - affects AC
@@ -266,8 +267,8 @@ GroupBuffs.CLR = {
     -- L73 Aegis of Vie (absorb 10% of melee dmg to 2496, 36 min)
     -- L75 Rallied Aegis of Vie Rk. II (absorb 10% of melee dmg to 2600, 36 min, group)
     -- L78 Shield of Vie Rk. II (absorb 10% of melee dmg to 3380, 36 min)
-    -- L80 Rallied Shield of Vie Rk. II (absorb 10% of melee dmg to 3380, 36 min, group)
-    ["absorb_melee"] = {
+    -- L80 Rallied Shield of Vie Rk. II (slot 1: absorb 10% of melee dmg to 3380, 36 min, group)
+    ["clr_vie"] = {
         "Guard of Vie/MinLevel|1",
         "Protection of Vie/MinLevel|42",
         "Bulwark of Vie/MinLevel|46",
@@ -391,7 +392,7 @@ GroupBuffs.DRU = {
     -- L55 Girdle of Karana (42 str)
     -- L62 Nature's Might (55 str)
     -- NOTE: Shaman has STR buffs too
-    ["dru_strength"] = {
+    ["dru_str"] = {
         "Storm Strength/MinLevel|1",
         "Girdle of Karana/MinLevel|42",
         "Nature's Might/MinLevel|46",
@@ -532,7 +533,7 @@ GroupBuffs.NEC = {
 GroupBuffs.RNG = {
     -- hp type 2 - Slot 4: Increase max HP
     -- L51 Strength of Nature (25 atk, 75 hp, single, cost 125 mana)
-    -- L62 Strength of Tunare (92 atk, 125 hp, group, cost 250 mana)
+    -- L62 Strength of Tunare (slot 1: 92 atk, slot 4: 125 hp, group, cost 250 mana)
     -- L67 Strength of the Hunter (75 atk, 155 hp, group, cost 325 mana)
     ["rng_hp"] = {
         "Strength of Nature/MinLevel|40",
@@ -543,7 +544,7 @@ GroupBuffs.RNG = {
     -- L56 Mark of the Predator (slot 2: 20 atk, group)
     -- L60 Call of the Predator (slot 2: 40 atk, group)
     -- L64 Spirit of the Predator (slot 2: 70 atk, group)
-    -- L69 Howl of the Predator (slot 2: 90 atk, double atk 3-20%, group)
+    -- L69 Howl of the Predator (slot 2: 90 atk, slot 9: double atk 3-20%, group)
     ["rng_atk"] = {
         "Mark of the Predator/MinLevel|43",
         "Call of the Predator/MinLevel|45",
@@ -638,9 +639,10 @@ GroupBuffs.Default.WAR = {
 
     "focus/Class|SHM",
 
-    "pal_hp/Class|PAL",                 -- 1st
-    "bst_hp/Class|BST/NotClass|PAL",    -- 2nd
-    "rng_hp/Class|RNG/NotClass|PAL,BST",-- 3rd
+    --"pal_hp/Class|PAL/CheckFor|Spiritual Vitality,Strength of Tunare",                 -- 1st
+    --"bst_hp/Class|BST/NotClass|PAL/CheckFor|Brell's Brawny Bulwark,Strength of Tunare",    -- 2nd
+    --"rng_hp/Class|RNG/NotClass|PAL,BST/CheckFor|Brell's Brawny Bulwark,Spiritual Vitality",-- 3rd
+    "rng_hp/Class|RNG",
 
     "rng_atk/Class|RNG",
     "enc_haste/Class|ENC",
@@ -659,9 +661,10 @@ GroupBuffs.Default.SHD = {
 
     "focus/Class|SHM",
 
-    "pal_hp/Class|PAL",                 -- 1st
-    "bst_hp/Class|BST/NotClass|PAL",    -- 2nd
-    "rng_hp/Class|RNG/NotClass|PAL,BST",-- 3rd
+    --"pal_hp/Class|PAL",                 -- 1st
+    --"bst_hp/Class|BST/NotClass|PAL",    -- 2nd
+    --"rng_hp/Class|RNG/NotClass|PAL,BST",-- 3rd
+    "rng_hp/Class|RNG",
 
     "rng_atk/Class|RNG",
     "enc_haste/Class|ENC",
@@ -696,10 +699,11 @@ GroupBuffs.Default.BRD = {
     "focus/Class|SHM",
 
     "rng_hp/Class|RNG",                 -- 1st
-    "bst_hp/Class|BST/NotClass|RNG",    -- 2nd
-    "pal_hp/Class|PAL/NotClass|RNG,BST",-- 3rd
+    --"bst_hp/Class|BST/NotClass|RNG",    -- 2nd
+    --"pal_hp/Class|PAL/NotClass|RNG,BST",-- 3rd
 
     "rng_atk/Class|RNG",
+    "shm_str/Class|SHM",
     "enc_haste/Class|ENC",
     "shm_haste/Class|SHM/NotClass|ENC",
 
@@ -713,9 +717,10 @@ GroupBuffs.Default.CLR = {
     "dru_skin/Class|DRU",
     "focus/Class|SHM",
 
-    "pal_hp/Class|PAL",                 -- 1st
-    "bst_hp/Class|BST/NotClass|PAL",    -- 2nd
-    "rng_hp/Class|RNG/NotClass|PAL,BST",-- 3rd
+    --"pal_hp/Class|PAL",                 -- 1st
+    --"bst_hp/Class|BST/NotClass|PAL",    -- 2nd
+    --"rng_hp/Class|RNG/NotClass|PAL,BST",-- 3rd
+    "rng_hp/Class|RNG",
 
     "enc_manaregen/Class|ENC",
     "bst_manaregen/Class|BST",
@@ -729,14 +734,16 @@ GroupBuffs.Default.DRU = {
     "clr_symbol/Class|CLR",
     "focus/Class|SHM",
 
-    "pal_hp/Class|PAL",                 -- 1st
-    "bst_hp/Class|BST/NotClass|PAL",    -- 2nd
-    "rng_hp/Class|RNG/NotClass|PAL,BST",-- 3rd
+    --"pal_hp/Class|PAL",                 -- 1st
+    --"bst_hp/Class|BST/NotClass|PAL",    -- 2nd
+    --"rng_hp/Class|RNG/NotClass|PAL,BST",-- 3rd
+    "rng_hp/Class|RNG",
 
     "enc_manaregen/Class|ENC",
     "bst_manaregen/Class|BST",
 
     "clr_spellhaste/Class|CLR",
+    "clr_vie/Class|CLR",
 
     "enc_resist/Class|ENC",
     "shm_resist/Class|SHM",
@@ -746,14 +753,16 @@ GroupBuffs.Default.SHM = {
     "clr_symbol/Class|CLR",
     "dru_skin/Class|DRU",
 
-    "pal_hp/Class|PAL",                 -- 1st
-    "bst_hp/Class|BST/NotClass|PAL",    -- 2nd
-    "rng_hp/Class|RNG/NotClass|PAL,BST",-- 3rd
+    --"pal_hp/Class|PAL",                 -- 1st
+    --"bst_hp/Class|BST/NotClass|PAL",    -- 2nd
+    --"rng_hp/Class|RNG/NotClass|PAL,BST",-- 3rd
+    "rng_hp/Class|RNG",
 
     "enc_manaregen/Class|ENC",
     "bst_manaregen/Class|BST",
 
     "clr_spellhaste/Class|CLR",
+    "clr_vie/Class|CLR",
 
     "dru_resist/Class|DRU",
     "enc_resist/Class|ENC",
@@ -765,12 +774,14 @@ GroupBuffs.Default.ENC = {
     "dru_skin/Class|DRU",
     "focus/Class|SHM",
 
-    "pal_hp/Class|PAL",                 -- 1st
-    "bst_hp/Class|BST/NotClass|PAL",    -- 2nd
-    "rng_hp/Class|RNG/NotClass|PAL,BST",-- 3rd
+    --"pal_hp/Class|PAL",                 -- 1st
+    --"bst_hp/Class|BST/NotClass|PAL",    -- 2nd
+    --"rng_hp/Class|RNG/NotClass|PAL,BST",-- 3rd
+    "rng_hp/Class|RNG",
 
     "clr_spellhaste/Class|CLR",
     "bst_manaregen/Class|BST",
+    "clr_vie/Class|CLR",
 
     "dru_resist/Class|DRU",
     "shm_resist/Class|SHM",
@@ -782,13 +793,15 @@ GroupBuffs.Default.WIZ = {
     "dru_skin/Class|DRU",
     "focus/Class|SHM",
 
-    "pal_hp/Class|PAL",                 -- 1st
-    "bst_hp/Class|BST/NotClass|PAL",    -- 2nd
-    "rng_hp/Class|RNG/NotClass|PAL,BST",-- 3rd
+    --"pal_hp/Class|PAL",                 -- 1st
+    --"bst_hp/Class|BST/NotClass|PAL",    -- 2nd
+    --"rng_hp/Class|RNG/NotClass|PAL,BST",-- 3rd
+    "rng_hp/Class|RNG",
 
     "clr_spellhaste/Class|CLR",
     "enc_manaregen/Class|ENC",
     "bst_manaregen/Class|BST",
+    "clr_vie/Class|CLR",
 
     "dru_resist/Class|DRU",
     "shm_resist/Class|SHM",
@@ -801,13 +814,15 @@ GroupBuffs.Default.MAG = {
     "dru_skin/Class|DRU",
     "focus/Class|SHM",
 
-    "pal_hp/Class|PAL",                 -- 1st
-    "bst_hp/Class|BST/NotClass|PAL",    -- 2nd
-    "rng_hp/Class|RNG/NotClass|PAL,BST",-- 3rd
+    --"pal_hp/Class|PAL",                 -- 1st
+    --"bst_hp/Class|BST/NotClass|PAL",    -- 2nd
+    --"rng_hp/Class|RNG/NotClass|PAL,BST",-- 3rd
+    "rng_hp/Class|RNG",
 
     "clr_spellhaste/Class|CLR",
     "enc_manaregen/Class|ENC",
     "bst_manaregen/Class|BST",
+    "clr_vie/Class|CLR",
 
     "dru_resist/Class|DRU",
     "shm_resist/Class|SHM",
@@ -820,12 +835,14 @@ GroupBuffs.Default.NEC = {
     "dru_skin/Class|DRU",
     "focus/Class|SHM",
 
-    "pal_hp/Class|PAL",                 -- 1st
-    "bst_hp/Class|BST/NotClass|PAL",    -- 2nd
-    "rng_hp/Class|RNG/NotClass|PAL,BST",-- 3rd
+    --"pal_hp/Class|PAL",                 -- 1st
+    --"bst_hp/Class|BST/NotClass|PAL",    -- 2nd
+    --"rng_hp/Class|RNG/NotClass|PAL,BST",-- 3rd
+    "rng_hp/Class|RNG",
 
     "clr_spellhaste/Class|CLR",
     "bst_manaregen/Class|BST",
+    "clr_vie/Class|CLR",
 
     "dru_resist/Class|DRU",
     "shm_resist/Class|SHM",
@@ -838,12 +855,13 @@ GroupBuffs.Default.RNG = {
     "dru_skin/Class|DRU",
     "focus/Class|SHM",
 
+    "shm_str/Class|SHM",
     "enc_haste/Class|ENC",
     "shm_haste/Class|SHM/NotClass|ENC",
 
     "clr_spellhaste/Class|CLR",
     "enc_manaregen/Class|ENC",
-    "bst_manaregen/Class|BST",
+    --"bst_manaregen/Class|BST",   -- XXX out of buff slots, sep 2022
 
     "dru_resist/Class|DRU",
     "enc_resist/Class|ENC",
@@ -858,6 +876,7 @@ GroupBuffs.Default.BST = {
 
     "rng_hp/Class|RNG",                 -- 1st
 
+    "shm_str/Class|SHM",
     "rng_atk/Class|RNG",
     "enc_haste/Class|ENC",
     "shm_haste/Class|SHM/NotClass|ENC",
@@ -878,9 +897,10 @@ GroupBuffs.Default.ROG = {
     "focus/Class|SHM",
 
     "rng_hp/Class|RNG",                 -- 1st
-    "bst_hp/Class|BST/NotClass|RNG",    -- 2nd
-    "pal_hp/Class|PAL/NotClass|RNG,BST",-- 3rd
+    --"bst_hp/Class|BST/NotClass|RNG",    -- 2nd
+    --"pal_hp/Class|PAL/NotClass|RNG,BST",-- 3rd
 
+    "shm_str/Class|SHM",
     "rng_atk/Class|RNG",
     "enc_haste/Class|ENC",
     "shm_haste/Class|SHM/NotClass|ENC",
@@ -897,9 +917,10 @@ GroupBuffs.Default.MNK = {
     "focus/Class|SHM",
 
     "rng_hp/Class|RNG",                 -- 1st
-    "bst_hp/Class|BST/NotClass|RNG",    -- 2nd
-    "pal_hp/Class|PAL/NotClass|RNG,BST",-- 3rd
+    --"bst_hp/Class|BST/NotClass|RNG",    -- 2nd
+    --"pal_hp/Class|PAL/NotClass|RNG,BST",-- 3rd
 
+    "shm_str/Class|SHM",
     "rng_atk/Class|RNG",
     "enc_haste/Class|ENC",
     "shm_haste/Class|SHM/NotClass|ENC",
@@ -916,9 +937,10 @@ GroupBuffs.Default.BER = {
     "focus/Class|SHM",
 
     "rng_hp/Class|RNG",                 -- 1st
-    "bst_hp/Class|BST/NotClass|RNG",    -- 2nd
-    "pal_hp/Class|PAL/NotClass|RNG,BST",-- 3rd
+    --"bst_hp/Class|BST/NotClass|RNG",    -- 2nd
+    --"pal_hp/Class|PAL/NotClass|RNG,BST",-- 3rd
 
+    "shm_str/Class|SHM",
     "rng_atk/Class|RNG",
     "enc_haste/Class|ENC",
     "shm_haste/Class|SHM/NotClass|ENC",

@@ -1,3 +1,5 @@
+local mq = require("mq")
+
 local Follow = {
     spawn = nil, -- the current spawn I am following
 }

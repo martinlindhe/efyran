@@ -25,7 +25,7 @@ local me = mq.TLO.Me
 
 local settingsRoot = "D:/dev-mq/mqnext-e4-lua/dumptoon"
 local iniFile = settingsRoot .. "/Dumptoon."..me.Name()..".ini"
-local aaMapFile = settingsRoot .. "/AAMap."..mq.TLO.MacroQuest.Server()..".ini"
+local aaMapFile = settingsRoot .. "/AAMap."..current_server()..".ini"
 
 -- dump bind point   FIXME never triggers
 mq.event("bindpoint", "You are currently bound in: #1#", function(text, where)

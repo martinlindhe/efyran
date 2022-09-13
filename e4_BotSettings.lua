@@ -34,8 +34,7 @@ function BotSettings.Init()
         mq.cmd.beep(1)
         return
     end
-    local id = mq.TLO.MacroQuest.Server() .. "_" .. mq.TLO.Me.Class.ShortName() .. "_" .. mq.TLO.Me.Name()
-    local settingsFile = settingsRoot .. "/" .. id .. ".lua"
+    local settingsFile = settingsRoot .. "/" .. peer_settings_file()
     print("Reading peer settings ", settingsFile)
 
     local settings = loadfile(settingsFile)
@@ -43,7 +42,7 @@ function BotSettings.Init()
         BotSettings.settings = settings()
     else
         -- no settings file found
-        mq.cmd.dgtell("PEER INI NOT FOUND, CREATING EMPTY ONE. PLEASE EDIT ", settingsFile)
+        mq.cmd.dgtell("all PEER INI NOT FOUND, CREATING EMPTY ONE. PLEASE EDIT ", settingsFile)
         mq.cmd.beep(1)
 
         local f = assert(io.open(settingsFile, "w"))

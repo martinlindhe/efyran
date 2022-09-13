@@ -1,5 +1,7 @@
 -- quality of life tweaks
 
+local mq = require("mq")
+
 local QoL = {}
 
 function QoL.Init()
@@ -121,6 +123,13 @@ function QoL.Init()
         mq.cmd("/hidec none")
     end)
 
+    -- report toons with few free buff slots
+    mq.bind("/freebuffslots", function(name)
+        mq.cmd("/noparse /dgaexecute all /if (${Me.FreeBuffSlots} <= 1) /dgtell all FREE BUFF SLOTS: ${Me.FreeBuffSlots}")
+    end)
+    mq.bind("/fbs", function(name) mq.cmd("/freebuffslots") end)
+
+    -- /raidinvite shorthand
     mq.bind("/ri", function(name)
         mq.cmd("/raidinvite", name)
     end)
@@ -138,15 +147,15 @@ function QoL.Init()
 
     mq.bind("/exitnotinzone", function()
         local me = mq.TLO.Me.Name()
-        mq.cmd("/noparse /dgaexecute all /if (!${SpawnCount[pc ="..me.."]}) /exit")
+        mq.cmd("/noparse /dgaexecute all /if (!${SpawnCount[pc ="..me.."]}) /exitme")
     end)
 
     mq.bind("/exitnotingroup", function()
-        mq.cmd("/noparse /dgaexecute all /if (!${Group.Members}) /exit")
+        mq.cmd("/noparse /dgaexecute all /if (!${Group.Members}) /exitme")
     end)
 
     mq.bind("/exitnotinraid", function()
-        mq.cmd("/noparse /dgaexecute all /if (!${Raid.Members}) /exit")
+        mq.cmd("/noparse /dgaexecute all /if (!${Raid.Members}) /exitme")
     end)
 
     -- report all peers who are not in current zone
@@ -336,8 +345,8 @@ function QoL.loadRequiredPlugins()
         "MQ2Cast",
     }
     for k, v in pairs(requiredPlugins) do
-        if mq.TLO.Plugin(v)() == nil then
-            mq.cmd("/plugin "..v)
+        if not is_plugin_loaded(v) then
+            load_plugin(v)
             print("WARNING: "..v.." was not loaded")
         end
     end

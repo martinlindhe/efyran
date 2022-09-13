@@ -1,3 +1,5 @@
+local mq = require("mq")
+
 require("e4_Spells")
 
 local timer = require("Timer")
@@ -161,7 +163,9 @@ function Buffs.Init()
 
                     -- sleep for the Duration
                     local spell = getSpellFromBuff(spellName)
-                    mq.delay(4000 + spell.MyCastTime() + spell.RecastTime()) -- XXX 4s for "memorize spell"
+                    if spell ~= nil then
+                        mq.delay(4000 + spell.MyCastTime() + spell.RecastTime()) -- XXX 4s for "memorize spell"
+                    end
                 end
             else
                 print("Failed to find a matching group buff ", key, ", target ", spawn.Name(), " L", level)
@@ -191,7 +195,7 @@ function Buffs.Init()
 
         -- make sure shrink is targetable check buff type
         local spell = getSpellFromBuff(spellConfig.Name)
-        if spell.TargetType() == "Single" or spell.TargetType() == "Group v1" then
+        if spell ~= nil and (spell.TargetType() == "Single" or spell.TargetType() == "Group v1") then
             -- loop over group, shrink one by one
             for n = 1,5 do
                 for i = 1, 3 do
@@ -257,11 +261,12 @@ function Buffs.Tick()
     if table.getn(Buffs.queue) > 0 and handleBuffsTimer:expired() then
         local req = table.remove(Buffs.queue, 1)
         if req ~= nil then
-            handleBuffRequest(req)
+            if handleBuffRequest(req) then
+                handleBuffsTimer:restart()
+            end
         else
             mq.cmd.dgtell("all ERR queue fetch returned NIL")
         end
-        handleBuffsTimer:restart()
     end
 
 end
@@ -334,7 +339,7 @@ function handleBuffRequest(req)
             return false
         end
 
-        mq.cmd.dgtell("all Buffing \ag", spawn.Name(), "\ax with ", spellName, " (", req.Buff, ")")
+        mq.cmd.dgtell("all Buffing \ag", spawn.Name(), "\ax with \ay", spellName, "\ax (\ay"..req.Buff.."\ax).")
         castSpellRaw(spellName, spawn.ID(), "-maxtries|3")
         return true
     else
@@ -416,8 +421,8 @@ function Buffs.RequestBuffs()
             local found = false
             for idx, checkRow in pairs(buffRows) do
                 local o = parseSpellLine(checkRow)
-                if have_buff(o.Name) then
-                    --print("Will not request  \ay", spellConfig.Name, "\ax. I have buff \ay"..o.Name.."\ax.")
+                if have_buff(o.Name) and mq.TLO.Me.Buff(o.Name).Duration.Ticks() >= 6 then
+                    --print("Will not request \ay", spellConfig.Name, "\ax. I have buff \ay"..o.Name.."\ax.")
                     found = true
                     break
                 end
@@ -433,6 +438,7 @@ function Buffs.RequestBuffs()
 
                 print("Requesting buff \ax"..spellConfig.Name.."\ay from \ag"..askClass.." "..peer.."\ax ...")
                 mq.cmd.dex(peer, "/queuebuff "..spellConfig.Name.." "..mq.TLO.Me.Name())
+
                 return true
             end
         else

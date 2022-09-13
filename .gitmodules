@@ -1,3 +1,4 @@
 [submodule "mq-definitions"]
 	path = mq-definitions
+	branch = master
 	url = https://github.com/johnfking/mq-definitions

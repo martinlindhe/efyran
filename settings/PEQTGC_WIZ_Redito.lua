@@ -24,10 +24,9 @@ settings.self_buffs = {
     -- Lxx Pyromancy AA Rank 3 (id:8408, 15% chance proc spell id:8164, -500 hate, -500 hp/tick, -50 fr)
     "Pyromancy/CheckFor|Mana Flare",
 
-    -- Reyfin's Random Musings (slot 8: 9 mana regen, slot 10: 6 hp regen)
-    "Earring of Pain Deliverance",
+    "Earring of Pain Deliverance", -- Reyfin's Random Musings (slot 8: 9 mana regen, slot 10: 6 hp regen)
 
-    "Xxeric's Matted-Fur Mask", -- Reyfin's Racing Thoughts (slot 4: 450 mana pool)
+    --"Xxeric's Matted-Fur Mask", -- Reyfin's Racing Thoughts (slot 4: 450 mana pool)
 
     "Ether Skin/MinMana|20/CheckFor|Rune of Rikkukin",
 

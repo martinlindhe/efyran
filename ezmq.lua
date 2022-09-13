@@ -1,18 +1,20 @@
 -- collection of functions to simplify working with macroquest through Lua
 
 -- @type mq
-mq = require("mq")
+local mq = require("mq")
+
+-- returns true if `spawn` is within maxDistance
+---@param spawn spawn
+---@param maxDistance number
+---@return boolean
+function is_within_distance(spawn, maxDistance)
+    return spawn.Distance() <= maxDistance
+end
 
 -- Am I the foreground instance?
 ---@return boolean
 function is_orchestrator()
     return mq.TLO.FrameLimiter.Status() == "Foreground"
-end
-
--- returns true if `spawn` is within maxDistance
----@return boolean
-function is_within_distance(spawn, maxDistance)
-    return spawn.Distance() <= maxDistance
 end
 
 -- returns true if location is within maxDistance
@@ -22,6 +24,7 @@ function is_within_distance_to_loc(y, x, z, maxDistance)
 end
 
 -- returns true if there is line of sight between you and `spawn`
+---@param spawn spawn
 ---@return boolean
 function line_of_sight_to(spawn)
     local q = mq.TLO.Me.Y()..","..mq.TLO.Me.X()..","..mq.TLO.Me.Z()..":"..spawn.Y()..","..spawn.X()..","..spawn.Z()
@@ -29,6 +32,7 @@ function line_of_sight_to(spawn)
 end
 
 -- moves to the location of `spawn` using MQ2MoveUtils
+---@param spawn spawn
 function move_to(spawn)
     print("move_to ", spawn.Name())
 
@@ -43,6 +47,9 @@ function move_to(spawn)
     mq.cmd.moveto("off")
 end
 
+---@param y number
+---@param x number
+---@param z number
 function move_to_loc(y, x, z)
     mq.cmd.moveto("loc "..y.." "..x)
     mq.delay(10000, function() return is_within_distance_to_loc(y, x, z, 15) end)
@@ -72,15 +79,18 @@ function is_rof2()
 end
 
 -- returns true if peerName is another peer
+---@param peerName string
 ---@return boolean
 function is_peer(peerName)
     return mq.TLO.DanNet(peerName)() ~= nil
 end
 
 -- returns true if spawnID is another peer
+---@param spawnID integer
 ---@return boolean
 function is_peer_id(spawnID)
-    return is_peer(spawn_from_id(spawnID).Name())
+    local spawn = spawn_from_id(spawnID)
+    return spawn ~= nil and is_peer(spawn.Name())
 end
 
 -- returns true if spawnID is in LoS
@@ -90,18 +100,21 @@ function is_spawn_los(spawnID)
     return spawn ~= nil and spawn.LineOfSight()
 end
 
--- return spawn or nil
+---@param spawnID integer
+---@return spawn|nil
 function spawn_from_id(spawnID)
-    return spawn_from_query("id ".. spawnID)
+    return spawn_from_query("id "..tostring(spawnID))
 end
 
--- return number. the number of spawns matching `query`
+-- Get the number of spawns matching `query`
+---@return integer
 function spawn_count(query)
     return mq.TLO.SpawnCount(query)()
 end
 
+---@param query string
+---@return spawn|nil
 function spawn_from_query(query)
-    --print("spawn_from_query: ", query)
     local o = mq.TLO.Spawn(query)
     if o() == nil then
         return nil
@@ -109,7 +122,8 @@ function spawn_from_query(query)
     return o
 end
 
--- returns a spawn, nil if not found
+---@param name string
+---@return spawn|nil
 function spawn_from_peer_name(name)
     return spawn_from_query("pc =".. name)
 end
@@ -126,7 +140,8 @@ function has_target()
     return mq.TLO.Target() ~= nil
 end
 
--- return the current target spawn, or nil
+-- Get the current target
+---@return spawn|nil
 function get_target()
     if not has_target() then
         return nil
@@ -134,19 +149,23 @@ function get_target()
     return mq.TLO.Target
 end
 
--- target NPC by name
+-- Target NPC by name
+---@param name string
 function target_npc_name(name)
     mq.cmd("/target npc "..name)
 end
 
--- target by id
+-- Target spawn by id
+---@param id integer
 function target_id(id)
-    mq.cmd("/target id "..id)
+    mq.cmd("/target id "..tostring(id))
     mq.delay(10)
     mq.delay(1000, function() return mq.TLO.Target.ID() == tonumber(id) end)
 end
 
--- partial search by name, return item or nil
+-- Partial search by name
+---@param name string
+---@return item|nil
 function get_item(name)
     if mq.TLO.FindItem(name).ID() ~= nil then
         return mq.TLO.FindItem(name)
@@ -154,7 +173,9 @@ function get_item(name)
     return nil
 end
 
--- partial search by name, return item or nil
+-- Partial search by name, return item name (clickable link if possible)
+---@param name string
+---@return string
 function item_link(name)
     local item = get_item(name)
     if item == nil then
@@ -163,7 +184,8 @@ function item_link(name)
     return item.ItemLink("CLICKABLE")()
 end
 
--- return true if `item` clicky effect is ready to use
+-- Is `item` clicky effect ready to use?
+---@param name string
 ---@return boolean
 function is_item_clicky_ready(name)
     local item = get_item(name)
@@ -175,13 +197,14 @@ function is_item_clicky_ready(name)
 end
 
 -- returns true if `name` is a spell currently memorized in a gem
+---@param name string
 ---@return boolean
 function is_memorized(name)
     return mq.TLO.Me.Gem(mq.TLO.Spell(name).RankName)() ~= nil
 end
 
 -- Is spell in my spellbook?
----@param name string Spell name
+---@param name string
 ---@return boolean
 function is_spell_in_book(name)
     if is_alt_ability(name) then
@@ -194,6 +217,7 @@ function is_spell_in_book(name)
 end
 
 -- Is this a name of a spell?
+---@param name string
 ---@return boolean
 function is_spell(name)
     if is_alt_ability(name) then
@@ -205,7 +229,8 @@ function is_spell(name)
     return mq.TLO.Spell(name)() ~= nil
 end
 
--- return spell or nil
+---@param name string
+---@return spell|nil
 function get_spell(name)
     if mq.TLO.Spell(name).ID() ~= nil then
         return mq.TLO.Spell(mq.TLO.Spell(name).RankName)
@@ -213,7 +238,8 @@ function get_spell(name)
     return nil
 end
 
--- returns true if `name` is ready to cast
+-- Is spell `name` ready to cast?
+---@param name string
 ---@return boolean
 function is_spell_ready(name)
     local spell = get_spell(name)
@@ -223,7 +249,9 @@ function is_spell_ready(name)
     return mq.TLO.Me.SpellReady(spell.RankName)()
 end
 
--- exact search by name, return number
+-- exact search by name
+---@param name string
+---@return integer
 function getItemCountExact(name)
     if mq.TLO.FindItem("="..name).ID() ~= nil then
         return mq.TLO.FindItemCount("="..name)()
@@ -232,29 +260,35 @@ function getItemCountExact(name)
 end
 
 -- returns true if `name` is an AA that you have purchased
+---@param name string
 ---@return boolean
 function is_alt_ability(name)
     return mq.TLO.Me.AltAbility(name)() ~= nil
 end
 
 -- returns true if the AA `name` is ready to use
+---@param name string
 ---@return boolean
 function is_alt_ability_ready(name)
     return mq.TLO.Me.AltAbilityReady(name)()
 end
 
 -- returns true if I have the ability `name`
+---@param name string
 ---@return boolean
 function is_ability(name)
     return mq.TLO.Me.Ability(name)()
 end
 
 -- returns true if the ability `name` is ready to use
+---@param name string
 ---@return boolean
 function is_ability_ready(name)
     return mq.TLO.Me.AbilityReady(name)()
 end
 
+---@param name string
+---@param spawnID integer
 function cast_alt_ability(name, spawnID)
 
     if is_brd() and is_casting() then
@@ -289,21 +323,26 @@ function cast_alt_ability(name, spawnID)
         print("ME BARD cast_alt_ability ", name, " -- SO I RESUME TWIST!")
         mq.cmd.twist("start")
     end
-
 end
 
 -- returns true if I have the buff `name` on me
+---@param name string
 ---@return boolean
 function have_buff(name)
+    --assert(type(name) == "string")
     local spell = mq.TLO.Spell(name)
     if spell() == nil then
         mq.cmd.dgtell("all have_buff ERROR: asked about odd 1buff", name)
         return false
     end
-    return mq.TLO.Me.Buff(name)() ~= nil or mq.TLO.Me.Buff(spell.RankName)() ~= nil
+    if mq.TLO.Me.Buff(name)() == name then
+        return true
+    end
+    return mq.TLO.Me.Buff(spell.RankName)() == name
 end
 
 -- returns true if I have the song `name` on me
+---@param name string
 ---@return boolean
 function have_song(name)
     local spell = mq.TLO.Spell(name)
@@ -315,48 +354,68 @@ function have_song(name)
     return mq.TLO.Me.Song(name)() ~= nil or mq.TLO.Me.Song(spell.RankName)() ~= nil
 end
 
--- returns true if I am casting a spell/song
+-- Am I casting a spell/song?
 ---@return boolean
 function is_casting()
     return mq.TLO.Me.Casting() ~= nil
 end
 
--- returns true if I am moving
+-- pauses until casting current spell is finished
+function wait_until_not_casting()
+    mq.delay(20000, function() return not is_casting() end)
+end
+
+-- Am I moving?
 ---@return boolean
 function is_moving()
     return mq.TLO.Me.Moving()
 end
 
--- returns true if I am sitting
+-- Am I sitting?
 ---@return boolean
 function is_sitting()
     return mq.TLO.Me.Sitting()
 end
 
+-- Am I a Bard?
 ---@return boolean
 function is_brd()
     return mq.TLO.Me.Class.ShortName() == "BRD"
 end
 
--- returns true if I am in a guild
+-- Am I in a guild?
 ---@return boolean
 function in_guild()
     return mq.TLO.Me.Guild() ~= nil
 end
 
--- returns true if we are in hovering state (just died, waiting for rez in the same zone)
+-- Am I in a raid?
+---@return boolean
+function in_raid()
+    return mq.TLO.Raid.Members() > 0
+end
+
+-- Am I in a group?
+---@return boolean
+function in_group()
+    return mq.TLO.Group.Members() > 0
+end
+
+-- Am I hovering? (just died, waiting for rez in the same zone)
 ---@return boolean
 function is_hovering()
     return window_open("RespawnWnd")
 end
 
--- returns true if a window `name` is open
+-- Is window `name` open?
+---@param name string
 ---@return boolean
 function window_open(name)
     return mq.TLO.Window(name).Open() == true
 end
 
--- returns true if successful
+-- Opens merchant window with `spawn`.
+---@param spawn spawn
 function open_merchant_window(spawn)
 
     if window_open("MerchantWnd") then
@@ -414,14 +473,7 @@ function open_merchant_window(spawn)
     end
 end
 
-function close_merchant_window()
-    if not window_open("MerchantWnd") then
-        return
-    end
-    mq.cmd("/notify MerchantWnd MW_Done_Button leftmouseup")
-end
-
--- Opens trade with the nearest merchant.
+-- Opens merchant with the nearest merchant.
 function open_nearby_merchant()
     if window_open("MerchantWnd") then
         return
@@ -436,6 +488,14 @@ function open_nearby_merchant()
 
     move_to(merchant)
     open_merchant_window(merchant)
+end
+
+-- Close currently open merchant window.
+function close_merchant_window()
+    if not window_open("MerchantWnd") then
+        return
+    end
+    mq.cmd("/notify MerchantWnd MW_Done_Button leftmouseup")
 end
 
 -- returns true if we are in a neutral zone (be less obvious on live)
@@ -482,13 +542,15 @@ function close_bags()
     mq.delay(1)
 end
 
+---@return integer
 function num_inventory_slots()
     -- TODO is number in a mq.TLO value?
     -- TODO return 8 on servers who only support it
     return 10
 end
 
--- returns item or nil
+---@param name string
+---@return item|nil
 function get_inventory_slot(name)
     local v = mq.TLO.Me.Inventory(name)
     if v() == nil then
@@ -498,6 +560,7 @@ function get_inventory_slot(name)
 end
 
 -- returns true if `item` is a container
+---@param item item
 ---@return boolean
 function is_container(item)
     return item ~= nil and item.Container() ~= 0
@@ -510,6 +573,7 @@ function have_pet()
 end
 
 -- returns true if `name` is a running Lua script
+---@param name string
 ---@return boolean
 function is_script_running(name)
     for pid in string.gmatch(mq.TLO.Lua.PIDs(), '([^,]+)') do
@@ -522,6 +586,7 @@ function is_script_running(name)
 end
 
 -- returns a comma-separated list of all running scripts, except for `name`.
+---@param name string
 function get_running_scripts_except(name)
     local others = ""
     for pid in string.gmatch(mq.TLO.Lua.PIDs(), '([^,]+)') do
@@ -558,10 +623,11 @@ function clear_cursor()
     end
 end
 
+---@param name string
 function cast_veteran_aa(name)
     if is_alt_ability(name) then
         if is_alt_ability_ready(name) then
-            cast_alt_ability(name)
+            cast_alt_ability(name, mq.TLO.Me.ID())
         else
             mq.cmd.dgtell("all", "ERROR:", name, "is not ready, ready in", mq.TLO.Me.AltAbilityTimer(name).TimeHMS() )
         end
@@ -595,6 +661,7 @@ end
 -- Hybrid (PAL,SHD,RNG,BST)
 
 -- true if CLR,DRU,SHM,PAL,RNG,BST
+---@param class string Class shortname.
 ---@return boolean
 function is_healer(class)
     if class == nil then
@@ -605,6 +672,7 @@ function is_healer(class)
 end
 
 -- true if CLR,DRU,SHM
+---@param class string Class shortname.
 ---@return boolean
 function is_priest(class)
     if class == nil then
@@ -615,6 +683,7 @@ function is_priest(class)
 end
 
 -- true if WAR,PAL,SHD
+---@param class string Class shortname.
 ---@return boolean
 function is_tank(class)
     if class == nil then
@@ -622,6 +691,17 @@ function is_tank(class)
         mq.cmd.beep(1)
     end
     return class == "WAR" or class == "PAL" or class == "SHD"
+end
+
+---Get the current server name
+---@return string
+function current_server()
+    return mq.TLO.MacroQuest.Server()
+end
+
+--@return string
+function peer_settings_file()
+    return mq.TLO.MacroQuest.Server() .. "_" .. mq.TLO.Me.Class.ShortName() .. "_" .. mq.TLO.Me.Name() .. ".lua"
 end
 
 local baseSlots = { -- XXX this should be accessible from mq TLO ?
@@ -663,6 +743,7 @@ local baseSlots = { -- XXX this should be accessible from mq TLO ?
 }
 
 -- returns a text representation of inventory slot id, see https://docs.macroquest.org/reference/general/slot-names/
+---@param n integer
 function inventory_slot_name(n)
     if baseSlots[n] ~= nil then
         return baseSlots[n]
@@ -694,7 +775,21 @@ function drop_invis()
     end
 end
 
+---@param name string
+---@return boolean
+function is_plugin_loaded(name)
+    return mq.TLO.Plugin(name)() ~= nil
+end
+
+---@param name string
+function load_plugin(name)
+    mq.cmd("/plugin "..name)
+end
+
 -- query a peer using MQ2DanNet
+---@param peer string
+---@param query string
+---@param timeout number
 function query_peer(peer, query, timeout)
     mq.cmdf('/dquery %s -q "%s"', peer, query)
     mq.delay(timeout or 0)
@@ -723,6 +818,7 @@ local shortToLongClass = {
 }
 
 -- returns the nearest peer by class shortname, or nil on failure
+---@param shortClass string Class shortname.
 function nearest_peer_by_class(shortClass)
     local longName = shortToLongClass[shortClass]
     if longName == nil then
@@ -752,10 +848,19 @@ function in_table(t, val)
     return false
 end
 
+---@class SpellObject
+---@field public Name string Spell name.
+---@field public Shrink boolean
+---@field public GoM boolean
+---@field public NoAggro boolean
+---@field public NoPet boolean
+
 
 local shortProperties = { "Shrink", "GoM", "NoAggro", "NoPet" }
 -- parses a spell/ability etc line with properties, returns a object
 -- example in: "Ward of Valiance/MinMana|50/CheckFor|Hand of Conviction"
+---@param s string
+---@return SpellObject
 function parseSpellLine(s)
 
     local o = {}
@@ -797,6 +902,9 @@ function parseSpellLine(s)
     return o
 end
 
+---@param s string
+---@param sSeparator string
+---@return table
 function split_str(s, sSeparator)
     assert(sSeparator ~= '')
     local nMax = 10

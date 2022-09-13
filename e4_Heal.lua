@@ -1,3 +1,5 @@
+local mq = require("mq")
+
 require('e4_Spells')
 
 local queue = require('Queue')
@@ -7,9 +9,10 @@ local Heal = {
     queue = queue.new(), -- holds toons that requested a heal
 }
 
--- returns the name of the heal channel for the current zone
+-- The name of the heal channel for the current zone.
+---@return string
 function Heal.CurrentHealChannel()
-    return string.lower(mq.TLO.MacroQuest.Server() .. "_" .. mq.TLO.Zone.ShortName() .. "_healme")
+    return string.lower(current_server() .. "_" .. mq.TLO.Zone.ShortName() .. "_healme")
 end
 
 function Heal.Init()
@@ -33,6 +36,11 @@ function Heal.Init()
                 return
             end
             local spawn = get_target()
+            if spawn == nil then
+                print("/rezit ERROR: No target to rez.")
+                return
+            end
+
             spawnID = tostring(spawn.ID())
             if spawn.Type() ~= "Corpse" then
                 print("/rezit ERROR: Target is not a corpse (type ", spawn.Type(), ")")
@@ -74,9 +82,7 @@ end
 -- joins/changes to the heal channel for current zone
 function joinCurrentHealChannel()
     -- orchestrator only joins to watch the numbers
-    local orchestrator = mq.TLO.FrameLimiter.Status() == "Foreground"
-
-    if orchestrator or me_healer() then
+    if is_orchestrator() or me_healer() then
         if heal.CurrentHealChannel() == botSettings.healme_channel then
             return
         end
@@ -355,12 +361,14 @@ function Heal.performLifeSupport()
                 mq.cmd("/doability "..spellConfig.Name)
             else
                 local spell = getSpellFromBuff(spellConfig.Name)
-                local spellName = spell.RankName()
-                if have_item(spellConfig.Name) or is_alt_ability(spellConfig.Name) then
-                    spellName = spellConfig.Name
+                if spell ~= nil then
+                    local spellName = spell.RankName()
+                    if have_item(spellConfig.Name) or is_alt_ability(spellConfig.Name) then
+                        spellName = spellConfig.Name
+                    end
+                    mq.cmd.dgtell("all USING LIFE SUPPORT", spellName, "at", mq.TLO.Me.PctHPs(), "%")
+                    castSpell(spellName, mq.TLO.Me.ID())
                 end
-                mq.cmd.dgtell("all USING LIFE SUPPORT", spellName, "at", mq.TLO.Me.PctHPs(), "%")
-                castSpell(spellName, mq.TLO.Me.ID())
             end
             return
         end

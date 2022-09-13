@@ -1,3 +1,5 @@
+local mq = require("mq")
+
 local Group = { settings = nil }
 
 -- FIXME: add /savegroup command to fill this data automatically. then we dont need to error if file not found
@@ -16,7 +18,7 @@ local settingsRoot = 'D:/dev-mq/mqnext-e4-lua/settings'
 function Group.Init()
 
     if Group.settings == nil then
-        local settingsFile = settingsRoot .. '/' .. mq.TLO.MacroQuest.Server() .. '__Saved Groups.lua'
+        local settingsFile = settingsRoot .. '/' .. current_server() .. '__Saved Groups.lua'
 
         local settings = loadfile(settingsFile)
         if settings ~= nil then
@@ -46,10 +48,10 @@ function Group.Init()
         local raidLeader = ""
         if groupNumber == nil then
             orchestrator = true
-
             mq.cmd.noparse('/dgaexecute /if (${Raid.Members} > 0) /raiddisband')
             mq.cmd.noparse('/dgaexecute /if (${Group.Members} > 0) /disband')
-            mq.delay(1000)
+            mq.delay(5000, function() return not in_raid() and not in_group() end)
+            mq.delay(2000)
         else
             print('Recalling group ', name, ' ', groupNumber)
         end
@@ -112,6 +114,7 @@ function Group.Init()
     mq.event('joingroup', '#1# invites you to join a group.', function(text, sender)
         if mq.TLO.DanNet(sender)() ~= nil then
             -- mq.cmd.dgtell('GROUP INVITE FROM ' .. sender)
+            wait_until_not_casting()
             mq.cmd.squelch('/target clear')
             mq.delay(100)
             mq.cmd.squelch('/invite')
@@ -121,6 +124,7 @@ function Group.Init()
     mq.event('joinraid', '#1# invites you to join a raid.#*#', function(text, sender)
         if mq.TLO.DanNet(sender)() ~= nil then
             -- mq.cmd.dgtell('RAID INVITE FROM ' .. sender)
+            wait_until_not_casting()
             mq.cmd.notify('ConfirmationDialogBox Yes_Button leftmouseup')
             mq.cmd.squelch('/raidaccept')
         end

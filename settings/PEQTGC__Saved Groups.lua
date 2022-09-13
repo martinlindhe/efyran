@@ -28,4 +28,19 @@ groups.port30 = {
     {"Alethea", "Trams", "Helge", "Arctander", "Myggan", "Redito"},
 }
 
+-- port54 = peq-dps54.bat
+-- classic anguish team, killed omm
+groups.port54 = {
+    {"Bandy", "Stor", "Spela", "Nullius", "Laser", "Blastar"},
+    {"Chancer", "Samma", "Knuck", "Blod", "Kniven", "Brann"},
+    {"Gerwulf", "Erland", "Azoth", "Urinfact",  "Strupen", "Drutten"},
+    {"Garotta", "Tervet", "Besty", "Sweetlard", "Fosco", "Fandinu"},
+    {"Alethea", "Trams", "Helge", "Arctander", "Myggan", "Redito"},
+    --
+    {"Sophee", "Manu", "Kamaxia", "Kasta", "Crusade", "Fisse"},
+    {"Crust", "Halsen", "Katten", "Bulf", "Papp", "Saga"},
+    {"Hypert", "Lotho", "Yelwen", "Kasper", "Maynarrd", "Umlilo"},
+    {"Moola", "Runar", "Fedt", "Arriane", "Absint", "Lofty"},
+}
+
 return groups

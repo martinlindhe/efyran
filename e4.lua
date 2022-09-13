@@ -1,5 +1,6 @@
 -- restart all: /dgaexecute /multiline ; /lua stop e4 ; /timed 5 /lua run e4
 
+local mq = require("mq")
 require("ezmq")
 
 mq.imgui.init('imgui-init', function()

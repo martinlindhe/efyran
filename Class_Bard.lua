@@ -1,3 +1,5 @@
+local mq = require("mq")
+
 local defaultMelody = "general"
 
 local Bard = { currentMelody = "" }

@@ -1,73 +1,17 @@
 local settings = { }
 
-
-settings.swap = {   -- XXX implement
-    -- Notched Blade of Bloodletting (1hs, 37 dmg, 24 delay, 15 bonus) - anguish amv
-    ["main"] = "Blade of Vesagran|Mainhand/Notched Blade of Bloodletting|Offhand",
-
-    ["noriposte"] = "Lute of False Worship|Mainhand/Shield of the Planar Assassin|Offhand",
-
-    ["fishing"] = "Fishing Pole|Mainhand",
-
-    -- for mpg group weaponry:
-    ["slashdmg"] = "Chaotic Black Scimitar|Mainhand/Edge of Eternity|Offhand",
-    ["piercedmg"] = "Blade of Vesagran|Mainhand/Blade of Annihilation Anthems|Offhand",
-    ["bluntdmg"] = "Despair|Mainhand/Frostcaller|Offhand",
+settings.swap = {
+    ["main"] = "",
 }
 
 settings.self_buffs = {
-    "Fuzzy Foothairs",
-    "Shadowsong Cloak", -- Harmonize (increase singing skill by 9)
-    "Ring of the Beast", -- Form of Endurance III (slot 6: immunity, slot 5: 270 hp)
-    --"Hanvar's Hoop", -- Form of Defense III (slot 6: immunity, slot 10: 81 ac)
-    "Irestone Band of Rage", -- Savage Guard (+25 atk, slot 5)
-    --"Eye of Dreams", -- slot 4: 400 mana pool, potime
-}
-
-settings.healing = {
-    ["life_support"] = {
-        "Shield of Notes/HealPct|30",
-        "Deftdance Discipline/HealPct|20",
-        "Distillate of Divine Healing XI/HealPct|8",
-    }
 }
 
 settings.assist = {
-    ["type"] = "Melee", -- XXX "Ranged",  "Off"
-    ["ranged_distance"] = 100,
-    ["engage_percent"] = 98,  -- XXX implement!
-
-    ["abilities"] = {
-        "Boastful Bellow",
-    },
-
-    ["quickburns"] = {-- XXX implememt !!!
-        -- epic 1.5: slot 9: spell crit  8%, slot 10: dot crit  8%, slot 12: accuracy 130% (Prismatic Dragon Blade)
-        -- epic 2.0: slot 9: spell crit 12%, slot 10: dot crit 12%, slot 12: accuracy 140% (Blade of Vesagran )
-        "Blade of Vesagran",
-
-        -- oow T1 bp: increase double attack by  30% for 12s, 5 min reuse (Traveler's Mail Chestguard)
-        -- oow T2 bp: increase double attack by 100% for 24s, 5 min reuse (Farseeker's Plate Chestguard of Harmony)
-        "Farseeker's Plate Chestguard of Harmony",
-
-        -- Lxx Dance of Blades AA
-        "Dance of Blades",
-
-        -- Lxx Cacophony AA
-        "Cacophony",
-
-        -- Lxx Song of Stone AA
-        "Song of Stone",
-
-        -- L70 Dance of a Thousand Blades (dodh quest, 33 min reuse)
-        "Thousand Blades",
-    },
-
-    ["longburns"] = {-- XXX implememt !!!
-        -- L60 Puretone Discipline (timer 3, 1h7min reuse)
-        "Puretone Discipline",
-    },
+    ["type"] = "Melee",
+    ["engage_percent"] = 98,
 }
+
 
 settings.gems = {
     ["Chorus of Life"] = 1,

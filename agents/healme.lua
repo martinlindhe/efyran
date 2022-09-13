@@ -5,7 +5,7 @@ heal = require("e4_Heal")
 timer = require("Timer")
 
 local askForHealTimer = timer.new_expired(5 * 1) -- 5s
-local askForHealPct = 94 -- at what % HP to start begging for heals
+local askForHealPct = 88 -- at what % HP to start begging for heals
 
 while true do
 

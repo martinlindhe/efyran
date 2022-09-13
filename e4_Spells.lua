@@ -1,3 +1,5 @@
+local mq = require("mq")
+
 auraNames = {
     "Myrmidon's Aura",      -- WAR/55: Increase Proc Modifier by 1%, Slot 12: 60 AC
     "Champion's Aura",      -- WAR/70: Increase Proc Modifier by 2%, Slot 12: 90 AC
@@ -83,12 +85,12 @@ function refreshBuff(buffItem, spawn)
     -- only refresh fading & missing buffs
     if mq.TLO.Me.ID() == spawn.ID() then
         -- IMPORTANT: on live, f2p restricts all spells to rank 1, so we need to look for both forms
-        if have_buff(spell.RankName) and mq.TLO.Me.Buff(spell.RankName).Duration.Ticks() >= 6 then
-            --print("target have ranked buff with remaining ticks:", mq.TLO.Me.Buff(spell.RankName).Duration.Ticks())
+        if have_buff(spell.RankName()) and mq.TLO.Me.Buff(spell.RankName()).Duration.Ticks() >= 6 then
+            --print("target have ranked buff with remaining ticks:", mq.TLO.Me.Buff(spell.RankName()).Duration.Ticks())
             return false
         end
-        if have_buff(spell.Name) and mq.TLO.Me.Buff(spell.Name).Duration.Ticks() >= 6 then
-            --print("target have buff with remaining ticks:", mq.TLO.Me.Buff(spell.Name).Duration.Ticks())
+        if have_buff(spell.Name()) and mq.TLO.Me.Buff(spell.Name()).Duration.Ticks() >= 6 then
+            --print("target have buff with remaining ticks:", mq.TLO.Me.Buff(spell.Name()).Duration.Ticks())
             return false
         end
 
@@ -99,13 +101,13 @@ function refreshBuff(buffItem, spawn)
     elseif spawn.Type() == "Pet" and spawn.ID() == mq.TLO.Me.Pet.ID() then
         -- IMPORTANT: on live, f2p restricts all spells to rank 1, so we need to look for both forms
 
-        if mq.TLO.Me.Pet.Buff(spell.RankName)() ~= nil and mq.TLO.Me.Pet.Buff(mq.TLO.Me.Pet.Buff(spell.RankName)).Duration.Ticks() >= 6 then
-            print("refreshBuff: SKIP PET BUFFING ", spell.RankName, ", duration is ", mq.TLO.Me.Pet.Buff(mq.TLO.Me.Pet.Buff(spell.RankName)).Duration.Ticks(), " ticks")
+        if mq.TLO.Me.Pet.Buff(spell.RankName())() ~= nil and mq.TLO.Me.Pet.Buff(mq.TLO.Me.Pet.Buff(spell.RankName())).Duration.Ticks() >= 6 then
+            print("refreshBuff: SKIP PET BUFFING ", spell.RankName(), ", duration is ", mq.TLO.Me.Pet.Buff(mq.TLO.Me.Pet.Buff(spell.RankName())).Duration.Ticks(), " ticks")
             return false
         end
 
-        if mq.TLO.Me.Pet.Buff(spell.Name)() ~= nil and mq.TLO.Me.Pet.Buff(mq.TLO.Me.Pet.Buff(spell.Name)).Duration.Ticks() >= 6 then
-            print("refreshBuff: SKIP PET BUFFING ", spell.Name, ", duration is ", mq.TLO.Me.Pet.Buff(mq.TLO.Me.Pet.Buff(spell.Name)).Duration.Ticks(), " ticks")
+        if mq.TLO.Me.Pet.Buff(spell.Name())() ~= nil and mq.TLO.Me.Pet.Buff(mq.TLO.Me.Pet.Buff(spell.Name())).Duration.Ticks() >= 6 then
+            print("refreshBuff: SKIP PET BUFFING ", spell.Name(), ", duration is ", mq.TLO.Me.Pet.Buff(mq.TLO.Me.Pet.Buff(spell.Name())).Duration.Ticks(), " ticks")
             return false
         end
         if is_spell_in_book(spellName) and spell.StacksPet() then
@@ -167,7 +169,7 @@ function spellConfigAllowsCasting(buffItem, spawn)
     local spellConfig = parseSpellLine(buffItem) -- XXX parse this once on script startup. dont evaluate all the time !!!
 
     local spell = getSpellFromBuff(spellConfig.Name) -- XXX parse this once on script startup too, dont evaluate all the time !
-    if spell() == nil then
+    if spell == nil then
         mq.cmd.dgtell("spellConfigAllowsCasting: getSpellFromBuff ", buffItem, " FAILED. Query = '"..spellConfig.Name.."'")
         mq.cmd.beep(1)
         return false
@@ -347,7 +349,7 @@ function memorizeSpell(spellRow, defaultGem)
     elseif botSettings.settings.gems[o.Name] ~= nil then
         gem = tostring(botSettings.settings.gems[o.Name])
     else
-        mq.cmd.dgtell("all ERROR spell/song lacks gems default slot or Gem|x argument: ", songRow)
+        mq.cmd.dgtell("all ERROR spell/song lacks gems default slot or Gem|x argument: ", spellRow)
         mq.cmd.beep(1)
     end
 
