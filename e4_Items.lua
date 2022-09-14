@@ -2,12 +2,6 @@ local mq = require("mq")
 
 local Items = {}
 
--- remove item link from input text
-function strip_link(s)
-    -- TODO IMPLEMENT. macroquest can expose existing functionality to lua, says brainiac. someone just need to write a patch
-    return s
-end
-
 function Items.Init()
     -- finds item by name in inventory/bags. NOTE: "/finditem" is reserved in eq live for "dragon hoard" feature
     mq.bind("/fdi", function(...)
@@ -18,15 +12,16 @@ function Items.Init()
         end
         name = trim(name)
 
-        print("finditem: searching for ", name  )
 
         name = strip_link(name)
+
+        print("Ssearching for ", name)
 
         if is_orchestrator() then
             mq.cmd.dgzexecute("/fdi", name)
         end
 
-        local item = get_item(name)
+        local item = find_item(name)
         if item == nil then
             --mq.cmd.dgtell("all", name, "not found")
             return nil
@@ -52,7 +47,7 @@ function Items.Init()
             mq.cmd.dgzexecute("/fmi", name)
         end
 
-        local item = get_item(name)
+        local item = find_item(name)
         if item == nil then
             mq.cmd.dgtell("all I miss", name)
             return nil

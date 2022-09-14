@@ -190,7 +190,7 @@ function Buffs.Init()
             return
         end
 
-        local item = get_item(spellConfig.Name)
+        local item = find_item(spellConfig.Name)
         print("Shrinking group members with ", spellConfig.Name, " item ", item)
 
         -- make sure shrink is targetable check buff type

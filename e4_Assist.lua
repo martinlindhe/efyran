@@ -311,7 +311,7 @@ function Assist.killSpawn(spawn)
             print("killSpawn: assist called on another mob, returning!")
             return
         end
-        if spawn == nil or spawn.Type() == "Corpse" or spawn.Type() == "NULL" then
+        if spawn == nil or spawn.ID() == 0 or spawn.Type() == "Corpse" or spawn.Type() == "NULL" then
             break
         end
 

@@ -141,7 +141,7 @@ function refreshBuff(buffItem, spawn)
 
     local pretty = spellName
     if have_item(spellConfig.Name) then
-        local item = get_item(spellConfig.Name)
+        local item = find_item(spellConfig.Name)
         if item ~= nil then
             pretty = item.ItemLink("CLICKABLE")()
         end
@@ -249,7 +249,7 @@ function castSpell(name, spawnId)
         castSpellRaw(name, spawnId, "-maxtries|3")
 
         if is_brd() then
-            local item = get_item(name)
+            local item = find_item(name)
             if item ~= nil then
                 -- item click
                 print("item click sleep, ", item.Clicky.CastTime(), " + ", item.Clicky.Spell.RecastTime() )

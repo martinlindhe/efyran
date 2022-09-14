@@ -232,7 +232,7 @@ for key, t in pairs(handinRules) do
                             -- pick up and hand over items unstacked
                             for each = 1, count do
                                 print("Picking up ", component)
-                                local item = get_item(component)
+                                local item = find_item(component)
 
                                 local itemNotifyQuery = "/nomodkey /ctrl /itemnotify in Pack"..tostring(item.ItemSlot()-22).." "..tostring(item.ItemSlot2()+1).." leftmouseup"
                                 print(itemNotifyQuery)

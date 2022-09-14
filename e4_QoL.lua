@@ -40,6 +40,14 @@ function QoL.Init()
 
     QoL.verifySpellLines()
 
+    local dead = function(text, killer)
+        mq.cmd.dgtell("all I died. Killed by "..killer)
+        mq.cmd.beep() -- the beep of death
+    end
+
+    mq.event("died", "You have been slain by #*#", dead)
+    mq.event("died", "You died.", dead)
+
     mq.event("zoning", "LOADING, PLEASE WAIT...", function(text)
         --print("zoning. waiting")
         --mq.delay(15000) -- 15s
@@ -97,13 +105,25 @@ function QoL.Init()
     end)
 
     mq.event("faction_oow_loyalists", "Your faction standing with Dranik Loyalists could not possibly get any better.", function()
-        -- XXX allow to query on all peers who lack the flag.
         if not maxFactionLoyalists then
-            mq.cmd.dgtell("xp", "max loyalist faction")
+            mq.cmd.dgtell("xp", "Maxed loyalist faction")
             maxFactionLoyalists = true
         end
     end)
 
+    -- reports faction status
+    mq.bind("/faction", function()
+        if maxFactionLoyalists then
+            print("Dranik Loyalists: max ally")
+        else
+            mq.cmd.dgtell("all WARN: not max ally with Dranik Loyalists")
+        end
+    end)
+
+    -- tell all peers to report faction status
+    mq.bind("/factionall", function()
+        mq.cmd("/dgaexecute all /faction")
+    end)
 
     -- clear all chat windows on current peer
     mq.bind("/clr", function()
@@ -347,9 +367,8 @@ function QoL.Init()
         mq.cmd("/lua run cohgroup")
     end)
 
+    -- summon nearby corpses into a pile
     mq.bind("/gathercorpses", function()
-        -- XXX summon nearby corpses into a pile
-
         if is_rof2() then
             mq.cmd.dgaexecute("/consent raid") -- XXX persistent raid consent setting on
         end
@@ -365,8 +384,8 @@ function QoL.Init()
         end
     end)
 
-    -- make all peer leave expedition
-    mq.bind("/leaveexp", function()
+    -- make all peer quit expedition
+    mq.bind("/quitexp", function()
         mq.cmd.dgtell("all Instructing peers to leave expedition ...")
         mq.cmd("/dgaexecute /dzquit")
     end)
@@ -375,6 +394,27 @@ function QoL.Init()
     mq.bind("/dzhide", function()
         mq.cmd("/noparse /dgaexecute /if (${Window[dynamiczonewnd]}) /windowstate dynamiczonewnd close")
     end)
+
+    -- report peers with at least 10 unspent AA:s
+    mq.bind("/unspentaa", function()
+        mq.cmd("/noparse /dgaexecute /if (${Me.AAPoints} >= 10 && ${Me.AAPoints} < 100) /dgtell all UNSPENT AA: ${Me.AAPoints}")
+    end)
+
+    -- report peers with less than 10 unspent AA:s
+    mq.bind("/lowunspentaa", function()
+        mq.cmd("/noparse /dgaexecute /if (${Me.AAPoints} > 1 && ${Me.AAPoints} < 10) /dgtell all UNSPENT AA: ${Me.AAPoints}")
+    end)
+
+    -- report peers with any unspent AA:s
+    mq.bind("/allunspentaa", function()
+        mq.cmd("/noparse /dgaexecute /if (${Me.AAPoints} > 0) /dgtell all UNSPENT AA: ${Me.AAPoints}")
+    end)
+
+    -- report all peer total AA:s
+    mq.bind("/totalaa", function()
+        mq.cmd("/noparse /dgaexecute /dgtell all TOTAL AA: ${Me.AAPointsTotal}")
+    end)
+
 end
 
 function QoL.loadRequiredPlugins()

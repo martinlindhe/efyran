@@ -170,7 +170,7 @@ end
 -- Partial search by name
 ---@param name string
 ---@return item|nil
-function get_item(name)
+function find_item(name)
     local item = mq.TLO.FindItem(name)
     if item() ~= nil then
         return item
@@ -182,7 +182,7 @@ end
 ---@param name string
 ---@return string
 function item_link(name)
-    local item = get_item(name)
+    local item = find_item(name)
     if item == nil then
         return name
     end
@@ -193,7 +193,7 @@ end
 ---@param name string
 ---@return boolean
 function is_item_clicky_ready(name)
-    local item = get_item(name)
+    local item = find_item(name)
     if item == nil then
         mq.cmd.dgtell("all ERROR: is_item_clicky_ready() called with item I do not have:", name)
         return false
@@ -312,7 +312,7 @@ function cast_alt_ability(name, spawnID)
     mq.delay(20000, function() return not is_casting() end)
 
     if is_brd() then
-        local item = get_item(name)
+        local item = find_item(name)
         if item ~= nil then
             -- item click
             print("cast_alt_ability item click sleep, ", item.Clicky.CastTime(), " + ", item.Clicky.Spell.RecastTime() )
@@ -1030,4 +1030,16 @@ function memorizeSpell(spellRow, defaultGem)
     end
 
     return gem
+end
+
+-- remove one item link from input text (returns item name )
+function strip_link(s)
+    -- TODO: macroquest can expose existing functionality to lua, says brainiac. someone just need to write a patch
+
+    if string.find(s, "000") then
+        print("assume item link")
+        s = string.sub(s, 58, string.len(s) - 1)
+    end
+
+    return s
 end

@@ -1,6 +1,7 @@
 -- part of e4, but runs separate to always be running asking for heals.
 
 local mq = require("mq")
+
 require("ezmq")
 heal = require("e4_Heal")
 timer = require("Timer")

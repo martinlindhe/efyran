@@ -14,7 +14,7 @@ settings.self_buffs = {
 
 settings.healing = {
     ["life_support"] = {
-        --"Desperation/HealPct|40", -- L70 Desperation AA, 22 min reuse - more dmg the closer to death
+        "Desperation/HealPct|40", -- L70 Desperation AA, 22 min reuse - more dmg the closer to death
         "Reckless Discipline/HealPct|30", -- L56 Reckless Discipline (increase riposte rate)
         "Distillate of Divine Healing XI/HealPct|8",
     }
@@ -47,7 +47,7 @@ settings.assist = {
         --"Ragebound Chain Chestguard", -- XXX get t2
 
         -- L6x Blood Pact AA, 15 min reuse
-        --"Blood Pact",
+        "Blood Pact",
 
         -- timer 8:
         -- L65 Ancient: Cry of Chaos: +60 atk to group
