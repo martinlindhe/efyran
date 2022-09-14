@@ -10,24 +10,24 @@ function Follow.Init()
     mq.bind("/clickit", function(name)
 
         -- XXX spawn check if door within X radius
-        mq.cmd("/doortarget")
+        cmd("/doortarget")
         print("CLICKING NEARBY DOOR ", mq.TLO.DoorTarget.Name(), " id ", mq.TLO.DoorTarget.ID())
 
         if is_orchestrator() then
-            mq.cmd.dgzexecute("/clickit")
+            cmd("/dgzexecute /clickit")
         else
-            mq.delay(math.random(0, 10000)) -- delay 0 to 10s to not flood connection
-            mq.cmd("/click left door")
+            unflood_delay()
+            cmd("/click left door")
         end
     end)
 
     mq.bind("/followon", function()
-        mq.cmd.dgzexecute("/followid", mq.TLO.Me.ID())
+        cmd("/dgzexecute /followid "..mq.TLO.Me.ID())
     end)
 
     mq.bind("/followoff", function(s)
         if is_orchestrator() then
-            mq.cmd.dgzexecute("/followoff")
+            cmd("/dgzexecute /followoff")
         end
         Follow.Pause()
         Follow.spawn = nil
@@ -36,7 +36,7 @@ function Follow.Init()
     -- follows another peer in LoS
     mq.bind("/followid", function(spawnID)
         if not is_peer_id(spawnID) then
-            mq.cmd.dgtell("all ERROR: /followid called on invalid spawnID", spawnID)
+            cmd("/dgtell all ERROR: /followid called on invalid spawn ID "..spawnID)
             return
         end
 
@@ -44,31 +44,31 @@ function Follow.Init()
             Follow.spawn = spawn_from_id(spawnID)
             Follow.Resume()
         else
-            mq.cmd.dgtell("all Spawn ", spawnID, " is not in LoS")
+            cmd("/dgtell all Spawn "..spawnID.." is not in LoS")
         end
     end)
 
     mq.bind("/portto", function(name)
         name = name:lower()
         if is_orchestrator() then
-            mq.cmd.dgzexecute("/portto", name)
+            cmd("/dgzexecute /portto "..name)
         end
 
-        mq.delay(math.random(0, 10000)) -- delay 0 to 10s to not flood connection
-
         local spellName
-        if mq.TLO.Me.Class.ShortName() == "WIZ" then
+        if class_shortname() == "WIZ" then
             spellName = aliases.Wizard["port " .. name]
-        elseif mq.TLO.Me.Class.ShortName() == "DRU" then
+        elseif class_shortname() == "DRU" then
             spellName = aliases.Druid["port " .. name]
         else
             return
         end
 
-        mq.cmd.dgtell("Porting to " .. name .. " (" .. spellName .. ")")
+        unflood_delay()
+
+        cmd("/dgtell all Porting to " .. name .. " (" .. spellName .. ")")
 
         if spellName == nil then
-            mq.cmd.dgtell("ERROR: no such port ", name)
+            cmd("/dgtell all ERROR: no such port "..name)
         end
 
         castSpellRaw(spellName, mq.TLO.Me.ID(), "gem5 -maxtries|3")
@@ -77,7 +77,7 @@ function Follow.Init()
     mq.bind("/evac", function(name)
 
         if is_orchestrator() then
-            mq.cmd.dgzexecute("/evac")
+            cmd("/dgzexecute /evac")
         end
 
         if botSettings.settings.evac == nil then
@@ -101,29 +101,26 @@ function Follow.Init()
     -- tell peers in zone to use Throne of Heroes
     mq.bind("/throne", function()
         if is_orchestrator() then
-            mq.cmd.dgzexecute("/throne")
+            cmd("/dgzexecute /throne")
         end
         cast_veteran_aa("Throne of Heroes")
     end)
 
-    mq.bind("/movetome", function()
-        mq.cmd.dgzexecute("/movetoid", mq.TLO.Me.ID())
-    end)
-
-    -- move to me
-    mq.bind("/mtm", function()
-        mq.cmd.dgzexecute("/movetoid", mq.TLO.Me.ID())
-    end)
+    local moveToMe = function()
+        cmd("/dgzexecute /movetoid "..mq.TLO.Me.ID())
+    end
+    mq.bind("/movetome", moveToMe)
+    mq.bind("/mtm", moveToMe)
 
     -- move to spawn ID
     mq.bind("/movetoid", function(spawnID)
         if is_orchestrator() then
-            mq.cmd.dgzexecute("/movetoid", spawnID)
+            cmd("/dgzexecute /movetoid "..spawnID)
         end
 
         local spawn = spawn_from_id(spawnID)
         if spawn == nil then
-            mq.cmd.dgtell("all No such spawn: ", spawnID)
+            cmd("/dgtell all No such spawn ID "..spawnID)
             return
         end
         move_to(spawn)
@@ -135,51 +132,50 @@ function Follow.Init()
 
         if is_orchestrator() then
             -- tell the others to cross zone line
-            mq.cmd.dgzexecute("/rtz", mq.TLO.Me.Name())
+            cmd("/dgzexecute /rtz "..mq.TLO.Me.Name())
             return
         end
 
-        mq.delay(math.random(0, 10000)) -- delay 0 to 10s to not flood connection
+        unflood_delay()
 
         -- run across (need pos + heading from orchestrator)
         local spawn = spawn_from_peer_name(startingPeer)
         if spawn == nil then
-            mq.cmd.dgtell("all ERROR: /rtz requested from peer not found: ", startingPeer)
+            cmd("/dgtell all ERROR: /rtz requested from peer not found: "..startingPeer)
             return
         end
 
-        local oldZone = mq.TLO.Zone.ShortName()
+        local oldZone = zone_shortname()
         print("MOVING THRU ZONE FROM ", oldZone)
 
-        mq.cmd.stick("off")
+        cmd("/stick off")
 
         -- move to initial position
         move_to(spawn)
 
         if not is_within_distance(spawn, 15) then
             -- unlikely
-            mq.cmd.dgtell("all /rtz ERROR: failed to move near ", spawn.Name(), ", my distance is ", spawn.Distance())
+            cmd("/dgtell all /rtz ERROR: failed to move near "..spawn.Name()..", my distance is "..spawn.Distance())
             return
         end
 
-        -- face the direction of the orchestration
-        local headingArg = "fast heading "..tostring(spawn.Heading.Degrees() * -1)
-        mq.cmd.face(headingArg)
-        mq.delay(5)
+        -- face the same direction the orchestrator is facing
+        cmd("/face fast heading "..tostring(spawn.Heading.Degrees() * -1))
+        delay(5)
 
         -- move forward
-        mq.cmd.keypress("forward hold")
-        mq.delay(6000, function()
-            local zoned = mq.TLO.Zone.ShortName() ~= oldZone
+        cmd("/keypress forward hold")
+        delay(6000, function()
+            local zoned = zone_shortname() ~= oldZone
             if zoned then
-                print("I ZONED INTO ", mq.TLO.Zone.ShortName())
+                print("I ZONED INTO ", zone_shortname())
             end
             return zoned
         end)
 
-        if mq.TLO.Zone.ShortName() == oldZone then
-            mq.cmd.dgtell("all ERROR failed to run across zone line in", oldZone)
-            mq.cmd.beep(1)
+        if zone_shortname() == oldZone then
+            cmd("/dgtell all ERROR failed to run across zone line in "..oldZone)
+            cmd("/beep 1")
         end
 
     end)
@@ -192,25 +188,25 @@ function Follow.Init()
     -- tells all peers to hail or talk to nearby recognized NPC
     mq.bind("/hailall", function()
         if is_orchestrator() then
-            mq.cmd.dgzexecute("/hailit")
+            cmd("/dgzexecute /hailit")
         end
         PerformHail()
     end)
 end
 
 function Follow.Pause()
-    mq.cmd.afollow("off")
-    --mq.cmd("/stick off")
+    cmd("/afollow off")
+    --cmd("/stick off")
 end
 
 function Follow.Resume()
     if Follow.spawn == nil then
         return
     end
-    mq.cmd("/afollow spawn", Follow.spawn.ID())
+    cmd("/afollow spawn "..Follow.spawn.ID())
 
-    --mq.cmd("/target id "..Follow.spawn.ID())
-    --mq.cmd("/stick hold 15 uw") -- face upwards to better run over obstacles
+    --cmd("/target id "..Follow.spawn.ID())
+    --cmd("/stick hold 15 uw") -- face upwards to better run over obstacles
 end
 
 return Follow

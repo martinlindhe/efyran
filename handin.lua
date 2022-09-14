@@ -1,6 +1,5 @@
 -- xxx later: can also be used for L65/l70 spell hand ins ? (if "item reward" is in spell book ?)
 
-
 require("ezmq")
 
 local handinRules = {
@@ -134,7 +133,7 @@ local handinRules = {
 
 }
 
-local zone = mq.TLO.Zone.ShortName():lower()
+local zone = zone_shortname():lower()
 
 for key, t in pairs(handinRules) do
 
@@ -156,7 +155,7 @@ for key, t in pairs(handinRules) do
                 local reward = parseSpellLine(rewardRow)
                 --print("reward ", reward.Name, " .. class ", reward.Class, " class type ", type(reward.Class))
 
-                if reward.Class == nil or mq.TLO.Me.Class.ShortName() == reward.Class then -- TODO more advanced class filter
+                if reward.Class == nil or class_shortname() == reward.Class then -- TODO more advanced class filter
                     local haveParts = false
                     local needParts = false
                     local needMessage = ""
@@ -201,7 +200,7 @@ for key, t in pairs(handinRules) do
 
                     if haveParts and needParts then
                         -- asks for the missing items
-                        mq.cmd.dgtell("all", needMessage)
+                        cmd("/dgtell all "..needMessage)
                     elseif not needParts and haveParts then
                         print("I HAVE ALL NEEDED PIECES, DOING HAND IN")
 
@@ -233,22 +232,27 @@ for key, t in pairs(handinRules) do
                             for each = 1, count do
                                 print("Picking up ", component)
                                 local item = find_item(component)
+                                if item == nil then
+                                    -- unexpected
+                                    mq.cmd.dgtell("all ERROR find_item failed on "..component)
+                                    break
+                                end
 
                                 local itemNotifyQuery = "/nomodkey /ctrl /itemnotify in Pack"..tostring(item.ItemSlot()-22).." "..tostring(item.ItemSlot2()+1).." leftmouseup"
                                 print(itemNotifyQuery)
-                                mq.cmd(itemNotifyQuery)
-                                mq.delay(1000, function() return has_cursor_item() end)
-                                mq.delay(200)
+                                cmd(itemNotifyQuery)
+                                delay(1000, function() return has_cursor_item() end)
+                                delay(200)
 
-                                mq.cmd("/click left target")
+                                cmd("/click left target")
                                 if not window_open("GiveWnd") then
                                     -- extra delay for server roundtrip
                                     print("give start wait")
-                                    mq.delay(10000, function() return window_open("GiveWnd") end)
+                                    delay(10000, function() return window_open("GiveWnd") end)
                                     print("donme wait")
                                 end
-                                mq.delay(1000, function() return not has_cursor_item() end)
-                                mq.delay(200)
+                                delay(1000, function() return not has_cursor_item() end)
+                                delay(200)
                             end
 
                         end

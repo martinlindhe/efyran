@@ -4,7 +4,7 @@ local mq = require("mq")
 require("ezmq")
 
 -- throttle LUA
---mq.cmd("/lua conf turboNum 1000")
+--cmd("/lua conf turboNum 1000")
 
 mq.imgui.init('imgui-init', function()
 end)
@@ -48,18 +48,18 @@ heal.Init()
 qol.Init()
 items.Init()
 
-mq.cmd.dgtell("all E4 started")
+cmd("/dgtell all E4 started "..time())
 
 while true do
     heal.Tick()
-    mq.doevents()
-    mq.delay(1)
+    doevents()
+    delay(1)
 
     buffs.Tick()
-    mq.doevents()
-    mq.delay(1)
+    doevents()
+    delay(1)
 
     qol.Tick()
-    mq.doevents()
-    mq.delay(1)
+    doevents()
+    delay(1)
 end

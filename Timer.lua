@@ -34,7 +34,7 @@ end
 -- Is timer expired?
 ---@return boolean
 function Timer.expired(self)
-    return os.time() > self.expires
+    return os.time() >= self.expires
 end
 
 -- Restarts timer.

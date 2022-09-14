@@ -18,18 +18,18 @@ function Items.Init()
         print("Ssearching for ", name)
 
         if is_orchestrator() then
-            mq.cmd.dgzexecute("/fdi", name)
+            cmd("/dgzexecute /fdi "..name)
         end
 
         local item = find_item(name)
         if item == nil then
-            --mq.cmd.dgtell("all", name, "not found")
+            --cmd("/dgtell all", name, "not found")
             return nil
         end
 
         local cnt = getItemCountExact(item.Name())
         local s = item.ItemLink("CLICKABLE")() .. " in " .. inventory_slot_name(item.ItemSlot()) .. " (count:".. tostring(cnt) .. ")"
-        mq.cmd.dgtell("all", s)
+        cmd("/dgtell all "..s)
     end)
 
     -- find missing item
@@ -44,12 +44,12 @@ function Items.Init()
         -- XXX strip item links
 
         if is_orchestrator() then
-            mq.cmd.dgzexecute("/fmi", name)
+            cmd("/dgzexecute /fmi "..name)
         end
 
         local item = find_item(name)
         if item == nil then
-            mq.cmd.dgtell("all I miss", name)
+            cmd("/dgtell all I miss "..name)
             return nil
         end
     end)

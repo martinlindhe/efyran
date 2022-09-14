@@ -3,5 +3,5 @@
 require("ezmq")
 
 if not is_script_running("e4") then
-    mq.cmd.dgtell("all Not running e4. ", get_running_scripts_except("e4"))
+    cmd("/dgtell all Not running e4. "..get_running_scripts_except("e4"))
 end

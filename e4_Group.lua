@@ -24,14 +24,12 @@ function Group.Init()
         if settings ~= nil then
             Group.settings = settings()
         else
-            -- XXX create skeleton file ?
             print("no Saved Groups layouts for the server found, creating ", settingsFile, " with phony data, PLEASE EDIT THIS FILE !!!")
-            mq.cmd.beep(1)
+            cmd("/beep 1")
 
             local f = assert(io.open(settingsFile, "w"))
             f:write(savedGroupsTemplate)
             f:close()
-
         end
     end
 
@@ -40,7 +38,7 @@ function Group.Init()
 
         if Group.settings[name] == nil then
             print("/recallgroup Error: no such group ", name)
-            mq.cmd.beep(1)
+            cmd("/beep 1")
             return
         end
 
@@ -48,15 +46,13 @@ function Group.Init()
         local raidLeader = ""
         if groupNumber == nil then
             orchestrator = true
-            mq.cmd.noparse('/dgaexecute /if (${Raid.Members} > 0) /raiddisband')
-            mq.cmd.noparse('/dgaexecute /if (${Group.Members} > 0) /disband')
-            mq.delay(5000, function() return not in_raid() and not in_group() end)
-            mq.delay(2000)
+            cmd("/noparse /dgaexecute /if (${Raid.Members} > 0) /raiddisband")
+            cmd("/noparse /dgaexecute /if (${Group.Members} > 0) /disband")
+            delay(5000, function() return not in_raid() and not in_group() end)
+            delay(2000)
         else
             print('Recalling group ', name, ' ', groupNumber)
         end
-
-        -- print('group data for ', name, ' is ', Group.settings[name])
 
         for idx, group in pairs(Group.settings[name])
         do
@@ -65,72 +61,65 @@ function Group.Init()
                 raidLeader = groupLeader
             end
 
-            --print(' -- processing group ',idx, ', leader:', groupLeader)
-
+            -- The group leader invites the other group members
             if mq.TLO.Me.Name() == groupLeader then
-                -- group leader invites the other group members
-                for n = 2,6
-                do
+                for n = 2, 6 do
                     local groupMember = group[n]
                     if groupMember == nil then
                         break
                     end
-                    if mq.TLO.DanNet(groupMember)() ~= nil then
+                    if is_peer(groupMember) then
                         print("Inviting ", groupMember)
-                        mq.cmd.invite(groupMember)
+                        cmd("/invite "..groupMember)
                     else
-                        mq.cmd.dgtell("WARNING:", groupMember, "not connected. will not invite to group")
+                        cmd("/dgtell all WARNING: "..groupMember.." not connected. Can not invite to group.")
                     end
                 end
             elseif orchestrator and groupLeader ~= 'NULL' then
                 print('Telling group leader ', groupLeader, ' to form group ', idx)
-                mq.cmd.dexecute(groupLeader, '/recallgroup', name, idx)
+                cmd("/dexecute "..groupLeader.." /recallgroup "..name.." "..idx)
             end
         end
 
         if orchestrator then
-            mq.cmd.dgtell('Recalling raid', name, 'with leader', raidLeader)
-            mq.delay(2000)
+            cmd("/dgtell all Recalling raid "..name.." with leader "..raidLeader)
+            delay(2000)
 
-            -- raid leader invites the other groups to raid
-            for idx, group in pairs(Group.settings[name])
-            do
+            -- The raid leader invites the other groups to raid
+            for idx, group in pairs(Group.settings[name]) do
                 local groupLeader = group[1]
-                if mq.TLO.DanNet(groupLeader)() ~= nil then
+                if is_peer(groupLeader) then
                     if mq.TLO.Me.Name() == raidLeader and mq.TLO.Me.Name() ~= groupLeader then
-                        mq.cmd.raidinvite(groupLeader)
+                        cmd("/raidinvite "..groupLeader)
                     elseif raidLeader ~= groupLeader then
                         print('Telling raid leader ', raidLeader,' to invite', groupLeader)
-                        mq.cmd.dexecute(raidLeader, '/raidinvite', groupLeader)
+                        cmd("/dexecute "..raidLeader.." /raidinvite "..groupLeader)
                     end
-                    mq.delay(50)
+                    delay(50)
                 else
-                    mq.cmd.dgtell("WARNING:", groupLeader, "not connected. will not invite to raid")
+                    cmd("/dgtell all WARNING: "..groupLeader.." not connected. will not invite to raid")
                 end
             end
         end
     end)
 
     mq.event('joingroup', '#1# invites you to join a group.', function(text, sender)
-        if mq.TLO.DanNet(sender)() ~= nil then
-            -- mq.cmd.dgtell('GROUP INVITE FROM ' .. sender)
+        if is_peer(sender) then
             wait_until_not_casting()
-            mq.cmd.squelch('/target clear')
-            mq.delay(100)
-            mq.cmd.squelch('/invite')
+            cmd("/squelch /target clear")
+            delay(100)
+            cmd("/squelch /invite")
         end
     end)
 
     mq.event('joinraid', '#1# invites you to join a raid.#*#', function(text, sender)
-        if mq.TLO.DanNet(sender)() ~= nil then
-            -- mq.cmd.dgtell('RAID INVITE FROM ' .. sender)
+        if is_peer(sender) then
             wait_until_not_casting()
-            mq.cmd.notify('ConfirmationDialogBox Yes_Button leftmouseup')
-            mq.cmd.squelch('/raidaccept')
+            cmd("/notify ConfirmationDialogBox Yes_Button leftmouseup")
+            cmd("/squelch /raidaccept")
         end
     end)
 
-    --print('DONE: Group.Init')
 end
 
 return Group

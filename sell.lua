@@ -20,7 +20,7 @@ end
 for n = 1, num_inventory_slots() do
     local pack = "Pack"..tostring(n)
     local bag = get_inventory_slot(pack)
-    if is_container(bag) then
+    if bag ~= nil and is_container(bag) then
 
         --print(bag.Name(), " ", is_container(bag))
 
@@ -57,13 +57,13 @@ for n = 1, num_inventory_slots() do
                         print("Selling ", s)
 
                         local itemNotifyQuery = "/ctrl /itemnotify in Pack"..tostring(item.ItemSlot()-22).." "..tostring(item.ItemSlot2()+1).." leftmouseup"
-                        mq.cmd(itemNotifyQuery)
-                        mq.delay(10)
+                        cmd(itemNotifyQuery)
+                        delay(10)
 
                         -- retry sell twice
                         for j = 1, 2 do
-                            mq.cmd("/shift /notify MerchantWnd MW_Sell_Button leftmouseup")
-                            mq.delay(1000, function()
+                            cmd("/shift /notify MerchantWnd MW_Sell_Button leftmouseup")
+                            delay(1000, function()
                                 -- XXX see if bag is now empty ...
                                 --print("is bag slot empty? ",  mq.TLO.Me.Inventory(pack).Item(i)()  )
                                 return mq.TLO.Me.Inventory(pack).Item(i)() == nil
@@ -77,7 +77,7 @@ for n = 1, num_inventory_slots() do
 
                     end
                 else
-                    mq.cmd.dgtell("all New loot. Marking as Keep. ", item.ItemLink("CLICKABLE")())
+                    cmd("/dgtell all New loot. Marking as Keep. ", item.ItemLink("CLICKABLE")())
                     SetLootItemSetting(loot, item, "Keep")
                 end
 

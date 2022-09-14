@@ -45,7 +45,7 @@ function Assist.Init()
 
             if is_orchestrator() then
                 -- tell everyone else to attack
-                mq.cmd("/dgzexecute /assiston "..spawn.ID())
+                cmd("/dgzexecute /assiston "..spawn.ID())
             else
                 -- we dont auto attack with main driver. XXX impl "/assiston /not|WAR" filter
                 Assist.handleAssistCall(spawn)
@@ -57,14 +57,14 @@ function Assist.Init()
     -- ends assist call
     mq.bind("/backoff", function()
         if is_orchestrator() then
-            mq.cmd("/dgzexecute /backoff")
+            cmd("/dgzexecute /backoff")
         end
         Assist.backoff()
     end)
 
     mq.bind("/pbaeon", function()
         if is_orchestrator() then
-            mq.cmd("/dgzexecute /pbaeon")
+            cmd("/dgzexecute /pbaeon")
         end
 
         if botSettings.settings.assist.pbae == nil then
@@ -74,17 +74,17 @@ function Assist.Init()
         local nearbyPBAEilter = "npc radius 50 zradius 50 los"
 
         if spawn_count(nearbyPBAEilter) == 0 then
-            mq.cmd.dgtell("all Ending PBAE. No nearby mobs.")
+            cmd("/dgtell all Ending PBAE. No nearby mobs.")
             return
         end
 
         memorizePBAESpells()
 
-        mq.cmd.dgtell("all PBAE ON")
+        cmd("/dgtell all PBAE ON")
         while true do
             -- XXX loop until /pbaeoff
             if spawn_count(nearbyPBAEilter) == 0 then
-                mq.cmd.dgtell("all Ending PBAE. No nearby mobs.")
+                cmd("/dgtell all Ending PBAE. No nearby mobs.")
                 break
             end
 
@@ -97,13 +97,15 @@ function Assist.Init()
                         local spellName = spellConfig.Name
                         if is_spell_in_book(spellConfig.Name) then
                             local spell = get_spell(spellConfig.Name)
-                            spellName = spell.RankName()
+                            if spell ~= nil then
+                                spellName = spell.RankName()
+                            end
                         end
                         castSpell(spellName, mq.TLO.Me.ID())
                     end
 
-                    mq.doevents()
-                    mq.delay(50)
+                    doevents()
+                    delay(50)
                 end
             end
         end
@@ -115,27 +117,27 @@ end
 
 function Assist.backoff()
     if assistTarget ~= nil then
-        --mq.cmd.dgtell("backing off target ", assistTarget.Name())
+        --cmd("/dgtell all backing off target ", assistTarget.Name())
         assistTarget = nil
 
         if have_pet() then
             print("Asking pet to back off")
-            mq.cmd.pet("back off")
+            cmd("/pet back off")
         end
     else
-        mq.cmd.dgtell("all XXX ignoring backoff, no spawn known!")
+        cmd("/dgtell all XXX ignoring backoff, no spawn known!")
     end
 end
 
 function Assist.handleAssistCall(spawn)
     if botSettings.settings == nil or botSettings.settings.assist == nil then
-        mq.cmd.dgtell("all WARNING: I have no assist settings")
+        cmd("/dgtell all WARNING: I have no assist settings")
         return
     end
 
     if have_pet() then
         print("Attacking with my pet ", mq.TLO.Me.Pet.CleanName())
-        mq.cmd.pet("attack", spawn.ID())
+        cmd("/pet attack "..spawn.ID())
     end
 
     Assist.killSpawn(spawn)
@@ -160,9 +162,9 @@ function Assist.summonNukeComponents()
 
     for idx, lines in pairs(botSettings.settings.assist.nukes) do
         if type(lines) == "string" then
-            mq.cmd.dgtell("all FATAL ERROR: settings.assist.nukes must be a map")
-            mq.cmd.beep(1)
-            mq.delay(10000)
+            cmd("/dgtell all FATAL ERROR: settings.assist.nukes must be a map")
+            cmd("/beep 1")
+            delay(10000)
             return
         end
         for k, row in pairs(lines) do
@@ -170,20 +172,20 @@ function Assist.summonNukeComponents()
             if spellConfig.Summon ~= nil then
                 --print("Checking summon comonents for ", spellConfig.Summon) -- XXX name is "Molten Orb".
                 if not known_spell_ability(spellConfig.Summon) then
-                    mq.cmd.dgtell("all", "I dont know spell/ability "..spellConfig.Summon)
-                    mq.cmd.beep(1)
+                    cmd("/dgtell all I dont know spell/ability "..spellConfig.Summon)
+                    cmd("/beep 1")
                 end
 
                 --print("summon prop", spell.Summon)
 
                 if getItemCountExact(spellConfig.Name) == 0 and not is_casting() then
-                    mq.cmd.dgtell("all", "Summoning", spellConfig.Name)
+                    cmd("/dgtell all Summoning "..spellConfig.Name)
                     castSpell(spellConfig.Summon, mq.TLO.Me.ID())
 
                     -- wait and inventory
                     local spell = get_spell(spellConfig.Summon)
                     if spell ~= nil then
-                        mq.delay(2000 + spell.MyCastTime())
+                        delay(2000 + spell.MyCastTime())
                         clear_cursor()
                     end
                     return true
@@ -220,23 +222,23 @@ function Assist.castSpellAbility(spawn, row)
 
     if spell.GoM ~= nil and spell.GoM then
         if have_song("Gift of Mana") then
-            --mq.cmd.dgtell("all SKIP GoM ", spell.Name, " i don't have GoM up")
+            --cmd("/dgtell all SKIP GoM ", spell.Name, " i don't have GoM up")
             return false
         end
     end
 
     if spell.MinMana ~= nil and mq.TLO.Me.PctMana() < tonumber(spell.MinMana) then
-        --mq.cmd.dgtell("all SKIP MinMana ", spell.Name, ", ", mq.TLO.Me.PctMana(), " vs required " , spell.MinMana)
+        --cmd("/dgtell all SKIP MinMana ", spell.Name, ", ", mq.TLO.Me.PctMana(), " vs required " , spell.MinMana)
         return false
     end
 
     if spell.Summon ~= nil and getItemCountExact(spell.Name) == 0 then
-        mq.cmd.dgtell("all SKIP Summon ", spell.Name, ", missing summoned item mid fight")
+        cmd("/dgtell all SKIP Summon "..spell.Name..", missing summoned item mid fight")
         return false
     end
 
     if spell.NoPet ~= nil and spell.NoPet and have_pet() then
-        mq.cmd.dgtell("all SKIP NoPet, i have a pet up")
+        cmd("/dgtell all SKIP NoPet, i have a pet up")
         return false
     end
 
@@ -244,7 +246,7 @@ function Assist.castSpellAbility(spawn, row)
 
     if is_spell_ability_ready(spell.Name) then
         castSpell(spell.Name, spawn.ID())
-        mq.delay(200)
+        delay(200)
         return true
     end
     return false
@@ -259,23 +261,23 @@ function Assist.killSpawn(spawn)
 
     print("Assist.killSpawn ", spawn.Name)
     if spawn == nil then
-        mq.cmd.dgtell("ERROR ASSSIST ON ",spawn.Name)
+        cmd("/dgtell all ERROR: killSpawn called with nil")
         return
     end
 
-    mq.cmd.target("id", spawn.ID())
+    cmd("/target id "..spawn.ID())
     follow.Pause()
 
     local melee = botSettings.settings.assist ~= nil and botSettings.settings.assist.type ~= nil and botSettings.settings.assist.type == "melee"
 
     if botSettings.settings.assist ~= nil and botSettings.settings.assist.type ~= nil and botSettings.settings.assist.type == "ranged" then
-        mq.cmd.dgtell("all XXX TODO ADD RANGED ASSIST MODE")
-        mq.cmd.beep(1)
+        cmd("/dgtell all XXX TODO ADD RANGED ASSIST MODE")
+        cmd("/beep 1")
         return
     end
 
     if melee then
-        mq.cmd.attack("on")
+        cmd("/attack on")
 
         local meleeDistance = botSettings.settings.assist.melee_distance
         if meleeDistance == "auto" then
@@ -288,15 +290,15 @@ function Assist.killSpawn(spawn)
         if botSettings.settings.assist.stick_point == "Front" then
             stickArg = "hold front " .. meleeDistance .. " uw"
             print("STICKING IN FRONT TO ",spawn.Name, " ", stickArg)
-            mq.cmd.stick(stickArg)
+            cmd("/stick "..stickArg)
         else
-            mq.cmd.stick("snaproll uw")
-            mq.delay(20, function()
-                return mq.TLO.Stick.Behind and mq.TLO.Stick.Stopped
+            cmd("/stick snaproll uw")
+            delay(200, function()
+                return mq.TLO.Stick.Behind() and mq.TLO.Stick.Stopped()
             end)
             stickArg = "hold moveback behind " .. meleeDistance .. " uw"
             print("STICKING IN BACK TO ",spawn.Name, " ", stickArg)
-            mq.cmd.stick(stickArg)
+            cmd("/stick "..stickArg)
         end
     end
 
@@ -319,8 +321,8 @@ function Assist.killSpawn(spawn)
 
         if not is_casting() and (not has_target() or mq.TLO.Target.ID() ~= spawn.ID()) then
             -- XXX will happen for healers
-            mq.cmd.dgtell("all killSpawn WARN: i lost target, restoring to ", spawn.ID(), " ", spawn.Name())
-            mq.cmd.target("id", spawn.ID())
+            cmd("/dgtell all killSpawn WARN: i lost target, restoring to "..spawn.ID().." "..spawn.Name())
+            cmd("/target id "..spawn.ID())
         end
 
         local used = false
@@ -340,7 +342,7 @@ function Assist.killSpawn(spawn)
                 end
             end
         end
-        mq.delay(1)
+        delay(1)
 
         -- caster/hybrid assist.nukes
         if not used and botSettings.settings.assist.nukes ~= nil and not is_casting() then
@@ -358,19 +360,18 @@ function Assist.killSpawn(spawn)
                     end
                 end
             else
-                mq.cmd.dgtell("all ERROR cannot nuke, have no spell set", spellSet)
+                cmd("/dgtell all ERROR cannot nuke, have no spell set "..spellSet)
             end
         end
 
-        mq.doevents()
-        mq.delay(1)
+        doevents()
+        delay(1)
 
         heal.processQueue()
     end
 
     if not is_brd() and is_casting() then
-        --mq.cmd.dgtell("all DEBUG abort cast mob dead ", mq.TLO.Me.Casting.Name)
-        mq.cmd.stopcast()
+        cmd("/stopcast")
     end
 
     if assistTarget ~= nil then
@@ -380,8 +381,8 @@ function Assist.killSpawn(spawn)
 
     assistTarget = nil
 
-    mq.cmd.attack("off")
-    mq.cmd.stick("off")
+    cmd("/attack off")
+    cmd("/stick off")
     follow.Resume()
 end
 

@@ -30,8 +30,8 @@ return settings
 
 function BotSettings.Init()
     if is_hovering() then
-        mq.cmd.dgtell("all FATAL ERROR: cannot start e4 successfully while in HOVERING mode")
-        mq.cmd.beep(1)
+        cmd("/dgtell all FATAL ERROR: cannot start e4 successfully while in HOVERING mode")
+        cmd("/beep 1")
         return
     end
     local settingsFile = settingsRoot .. "/" .. peer_settings_file()
@@ -42,8 +42,8 @@ function BotSettings.Init()
         BotSettings.settings = settings()
     else
         -- no settings file found
-        mq.cmd.dgtell("all PEER INI NOT FOUND, CREATING EMPTY ONE. PLEASE EDIT ", settingsFile)
-        mq.cmd.beep(1)
+        cmd("/dgtell all PEER INI NOT FOUND, CREATING EMPTY ONE. PLEASE EDIT "..settingsFile)
+        cmd("/beep 1")
 
         local f = assert(io.open(settingsFile, "w"))
         f:write(peerTemplate)

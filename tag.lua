@@ -26,7 +26,7 @@ while true do
     if spawn_count("pc radius 80 zradius 50") > 1 then
         for i = 1, spawn_count(spawnQuery) do
 
-            mq.doevents()
+            doevents()
 
             local spawn = mq.TLO.NearestSpawn(i, spawnQuery)
             if spawn() == nil then
@@ -36,22 +36,22 @@ while true do
             if not tagged[spawn.ID()] then
 
                 if line_of_sight_to(spawn) then
-                    mq.cmd.stick("off")
-                    mq.delay(10)
+                    cmd("/stick off")
+                    delay(10)
                     local meleeDistance = spawn.MaxRangeTo() * 0.75
 
                     print("tagging ", spawn.ID(), " ", spawn.Name())
-                    mq.cmd.target("id "..spawn.ID())
-                    mq.delay(10)
-                    mq.cmd.face("fast")
+                    cmd("/target id "..spawn.ID())
+                    delay(10)
+                    cmd("/face fast")
 
                     local stickArg = "hold " .. meleeDistance .. " uw"
-                    mq.cmd.stick(stickArg)
-                    mq.cmd.attack("on")
+                    cmd("/stick "..stickArg)
+                    cmd("/attack on")
 
                     hit = false
-                    mq.delay(5000, function()
-                        mq.doevents()
+                    delay(5000, function()
+                        doevents()
                         if spawn() == nil then
                             print("XXX inside tag delay, spawn is now nil. breaking ")
                             return true
@@ -76,13 +76,13 @@ while true do
 
     --print("ALL TAGGED, RESETTING TAGGED MOBS")
     tagged = {}
-    mq.doevents()
-    mq.delay(100)
+    doevents()
+    delay(100)
 
     move_to_loc(oldY, oldX, oldZ)
 
     if in_neutral_zone() then
-        mq.cmd.dgtell("all ERROR: Ending tag.lua in neutral zone")
+        cmd("/dgtell all ERROR: Ending tag.lua in neutral zone")
         os.exit()
     end
 

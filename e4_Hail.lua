@@ -151,13 +151,12 @@ function PerformHail()
     local text = ""
 
     print("Performing hail ...")
-
-    mq.delay(math.random(0, 10000)) -- delay 0 to 10s to not flood connection
+    unflood_delay()
     drop_invis()
 
-    local zoneTargets = hailTargets[mq.TLO.Zone.ShortName():lower()]
+    local zoneTargets = hailTargets[zone_shortname():lower()]
     if zoneTargets == nil then
-        print("Error: Didn't see anyone that I recognize in zone ", mq.TLO.Zone.ShortName():lower())
+        print("Error: Didn't see anyone that I recognize in zone ", zone_shortname())
         return
     end
 
@@ -167,15 +166,15 @@ function PerformHail()
         local spawn = mq.TLO.NearestSpawn(i, spawnQuery)
         local spawnName = spawn.CleanName()
         if zoneTargets[spawnName] ~= nil then
-            mq.cmd("/target npc "..spawnName)
+            cmd("/target npc "..spawnName)
             move_to(spawn)
-            mq.delay(200)
+            delay(200)
             if zoneTargets[spawnName] == true then
                 -- hail only
-                mq.cmd("/hail")
+                cmd("/hail")
             else
                 -- speak
-                mq.cmd("/say "..zoneTargets[spawnName])
+                cmd("/say "..zoneTargets[spawnName])
             end
         end
     end

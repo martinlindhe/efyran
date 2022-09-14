@@ -121,14 +121,6 @@ Example: "Molten Orb/NoAggro/Summon|Summon: Molten Orb"
 
 
 
-## Tricks
-
-Put all toons in the same guild:
-- easy auto consent of all toons
-- travel using guild portal and guild banner
-- guild bank, guild tribute
-
-
 
 ## Spell filter lines
 

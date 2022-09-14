@@ -8,16 +8,15 @@ local trackCount = 0
 local maxTries = 800
 
 if not is_ability_ready("Tracking") then
-    mq.cmd.dgtell("all ERROR: Do not have Tracking. Cannot train.")
+    cmd("/dgtell all ERROR: Do not have Tracking. Cannot train.")
     return
 end
 
 
 while true do
 
-    if mq.TLO.Me.Skill("Tracking")() >= mq.TLO.Skill("Tracking").SkillCap() then
-        mq.cmd.dgtell("skillup", "Tracking capped")
-        mq.cmd.beep(1)
+    if skill_value("Tracking") >= skill_cap("Tracking") then
+        cmd("/dgtell skillup Tracking capped")
         break
     end
 
@@ -27,9 +26,9 @@ while true do
 
         if not is_casting() or is_brd() then
             trackCount = trackCount + 1
-            mq.delay(3)
-            print("Tracking ", trackCount, " of ", maxTries, ", level ", mq.TLO.Me.Skill("Tracking"), "/", mq.TLO.Skill("Tracking").SkillCap())
-            mq.cmd('/doability "Tracking"')
+            delay(3)
+            print("Tracking ", trackCount, " of ", maxTries, ", level ", skill_value("Tracking"), "/",skill_cap("Tracking"))
+            cmd('/doability "Tracking"')
             if trackCount >= maxTries then
                 print("Reached max amount. Ending")
                 break
@@ -38,7 +37,7 @@ while true do
 
     end
 
-    mq.delay(1)
-    mq.doevents()
+    delay(1)
+    doevents()
 
 end

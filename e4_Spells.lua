@@ -1,39 +1,9 @@
 local mq = require("mq")
 
-auraNames = {
-    "Myrmidon's Aura",      -- WAR/55: Increase Proc Modifier by 1%, Slot 12: 60 AC
-    "Champion's Aura",      -- WAR/70: Increase Proc Modifier by 2%, Slot 12: 90 AC
-    "Disciple's Aura",      -- MNK/55: 5% riposte, 5% parry, 5% block
-    "Master's Aura",        -- MNK/70: 10% riposte, 10% parry, 10% block
-    "Aura of Rage",         -- BER/55: Increase melee Critical Damage by 20%
-    "Bloodlust Aura",       -- BER/70: Increase melee Critical Damage by 30%
-    "Aura of Insight",      -- BRD/55: Spell Damage 1-15%, Melee Overhaste 15%
-    "Aura of the Muse",     -- BRD/70: Spell Damage 1-30%, Melee Overhaste 25%
-    "Aura of the Zealot",   -- CLR/55: Slot 2: Mitigate Melee Damage by 1%
-    "Aura of the Pious",    -- CLR/70: Slot 2: Mitigate Melee Damage by 3%
-    "Aura of the Grove",    -- DRU/55: Slot 11: +10 hp/tick, -2 disease counter
-    "Aura of Life",         -- DRU/70: Slot 11: +30 hp/tick, -4 disease counter
-    "Beguiler's Aura",      -- ENC/55: Slot 11: +4 mana/tick
-    "Illusionist's Aura",   -- ENC/70: Slot 11: +6 mana/tick
-    "Holy Aura",            -- PAL/55: Spell Damage 1-15%, Melee Overhaste 15%
-    "Blessed Aura",         -- PAL/70: Spell Damage 1-30%, Melee Overhaste 25%
-}
-
--- is run at script start, so in order to update state one need to restart the script (TODO trigger event to reload and recalc all settings)
-function findBestAura()
-    local aura = nil
-    for k, name in pairs(auraNames) do
-        if have_combat_ability(name) or mq.TLO.Me.Book(name)() then
-            aura = name
-        end
-    end
-    return aura
-end
-
 function queryBot(peer, q)
     local fullQuery = peer .. ' -q ' .. q
-    mq.cmd.dquery(fullQuery)
-    mq.delay(1000, function()
+    cmd("/dquery "..fullQuery)
+    delay(1000, function()
         local state = mq.TLO.DanNet(peer).Query(q).Received()
         --print("delay ", peer, " q", q, state)
         if state == nil then
@@ -55,8 +25,8 @@ function refreshBuff(buffItem, spawn)
     if spawn.Type() ~= "PC" and spawn.Type() ~= "Pet" then
         print("will not buff ", spawn.Type(), " ", spawn.Name(), ": ", spawn.CleanName())
         if spawn.Type() ~= "Corpse" then
-            mq.cmd.dgtell("all WILL NOT BUFF ", spawn.Type(), ": ", spawn.CleanName())
-            mq.cmd.beep(1)
+            cmd("/dgtell all WILL NOT BUFF "..spawn.Type()..": "..spawn.CleanName())
+            cmd("/beep 1")
         end
         return false
     end
@@ -72,8 +42,8 @@ function refreshBuff(buffItem, spawn)
 
     local spell = getSpellFromBuff(spellConfig.Name) -- XXX parse this once on script startup too, dont evaluate all the time !
     if spell == nil then
-        mq.cmd.dgtell("refreshBuff: getSpellFromBuff ", buffItem, " FAILED")
-        mq.cmd.beep(1)
+        cmd("/dgtell all refreshBuff: getSpellFromBuff "..buffItem.." FAILED")
+        cmd("/beep 1")
         return false
     end
 
@@ -95,7 +65,7 @@ function refreshBuff(buffItem, spawn)
         end
 
         if is_spell_in_book(spellName) and not spell.Stacks() then
-            mq.cmd.dgtell("all ERROR cannot selfbuff with ", spellName, " (dont stack with current buffs)")
+            cmd("/dgtell all ERROR cannot selfbuff with "..spellName.." (dont stack with current buffs)")
             return false
         end
     elseif spawn.Type() == "Pet" and spawn.ID() == mq.TLO.Me.Pet.ID() then
@@ -111,11 +81,11 @@ function refreshBuff(buffItem, spawn)
             return false
         end
         if is_spell_in_book(spellName) and spell.StacksPet() then
-            --mq.cmd.dgtell("all ERROR cannot buff pet with ", spellName, " (dont stack with current buffs)")
+            --cmd("/dgtell all ERROR cannot buff pet with ", spellName, " (dont stack with current buffs)")
             return false
         end
     else
-        mq.cmd.dtell("all FATAL ERROR refreshBuff called with invalid spawn ", spawn.Name())
+        cmd("/dgtell all FATAL ERROR refreshBuff called with invalid spawn ", spawn.Name())
         return
     end
 
@@ -125,8 +95,8 @@ function refreshBuff(buffItem, spawn)
             gem = spellConfig.Gem
         end
         --print("attempting to memorize ", spellName .. " ... GEM ", gem)
-        mq.cmd.memorize('"'..spellName..'"', gem)
-        mq.delay(3000) -- XXX 3s
+        cmd('/memorize "'..spellName..'" '..gem)
+        delay(3000) -- XXX 3s
     end
 
     if not have_item(spellConfig.Name) and mq.TLO.Me.CurrentMana() < spell.Mana() then
@@ -162,17 +132,17 @@ end
 function spellConfigAllowsCasting(buffItem, spawn)
 
     if spawn == nil then
-        mq.cmd.dgtell("all ERROR: spellConfigAllowsCasting called with nil spawn for ", buffItem)
-        mq.cmd.beep(1)
+        cmd("/dgtell all ERROR: spellConfigAllowsCasting called with nil spawn for "..buffItem)
+        cmd("/beep 1")
         return false
     end
 
     local spellConfig = parseSpellLine(buffItem)
 
     local spell = getSpellFromBuff(spellConfig.Name)
-    if spell() == nil then
+    if spell == nil then
         --eg missing clicky while naked
-        --mq.cmd.dgtell("spellConfigAllowsCasting: getSpellFromBuff ", buffItem, " FAILED. Query = '"..spellConfig.Name.."'")
+        --cmd("/dgtell all spellConfigAllowsCasting: getSpellFromBuff ", buffItem, " FAILED. Query = '"..spellConfig.Name.."'")
         return false
     end
 
@@ -221,8 +191,8 @@ function spellConfigAllowsCasting(buffItem, spawn)
     end
     if spellConfig.Reagent ~= nil then
         -- if we lack this item, then skip.
-        if mq.TLO.FindItemCount("=" .. spellConfig.Reagent)() == 0 then
-            mq.cmd.dgtell("SKIP BUFFING ", spellConfig.Name, ", I'm out of reagent ", spellConfig.Reagent)
+        if getItemCountExact(spellConfig.Reagent) == 0 then
+            cmd("/dgtell all SKIP BUFFING "..spellConfig.Name..", I'm out of reagent "..spellConfig.Reagent)
             return false
         end
     end
@@ -234,16 +204,15 @@ end
 function castSpell(name, spawnId)
 
     if have_combat_ability(name) then
-        mq.cmd("/disc "..name)               -- NOTE: /disc argument must NOT use quotes
-    elseif mq.TLO.Me.Ability(name)() then
-        print("castSpell: /doability", name)
-        mq.cmd('/doability "'..name..'"')   -- NOTE: /doability argument must use quotes
+        cmd("/disc "..name)               -- NOTE: /disc argument must NOT use quotes
+    elseif have_ability(name) then
+        cmd('/doability "'..name..'"')   -- NOTE: /doability argument must use quotes
     else
         -- spell / aa
 
         if is_brd() and is_casting() then
-            mq.cmd.twist("stop")
-            mq.delay(100)
+            cmd("/twist stop")
+            delay(100)
         end
 
         castSpellRaw(name, spawnId, "-maxtries|3")
@@ -253,18 +222,18 @@ function castSpell(name, spawnId)
             if item ~= nil then
                 -- item click
                 print("item click sleep, ", item.Clicky.CastTime(), " + ", item.Clicky.Spell.RecastTime() )
-                mq.delay(item.Clicky.CastTime() + item.Clicky.Spell.RecastTime() + 1500) -- XXX recast time is 0
+                delay(item.Clicky.CastTime() + item.Clicky.Spell.RecastTime() + 1500) -- XXX recast time is 0
             else
                 -- spell / AA
                 local spell = get_spell(name)
                 if spell ~= nil then
                     local sleepTime = spell.MyCastTime() + spell.RecastTime()
                     --print("spell sleep for '", spell.Name(), "', my cast time:", spell.MyCastTime(), ", recast time", spell.RecastTime(), " = ", sleepTime)
-                    mq.delay(sleepTime)
+                    delay(sleepTime)
                 end
             end
             print("ME BARD castSpell ", name, " -- SO I RESUME TWIST!")
-            mq.cmd.twist("start")
+            cmd("/twist start")
         end
 
     end
@@ -275,8 +244,8 @@ function castSpellRaw(name, spawnId, extraArgs)
         extraArgs = ""
     end
     if spawnId == nil then
-        mq.cmd.dgtell("castSpellRaw FATAL ERROR: called with nil spawnId, name = ", name, " extraArgs=", extraArgs)
-        mq.cmd.beep(1)
+        cmd("/dgtell all castSpellRaw FATAL ERROR: called with nil spawnId, name = "..name.." extraArgs="..extraArgs)
+        cmd("/beep 1")
         return
     end
 
@@ -284,7 +253,7 @@ function castSpellRaw(name, spawnId, extraArgs)
 
     local castingArg = '"' .. name .. '" -targetid|'.. spawnId .. ' ' .. extraArgs
     --print("castSpellRaw: /casting", castingArg)
-    mq.cmd.casting(castingArg)
+    cmd("/casting "..castingArg)
 end
 
 -- returns datatype spell or nil if not found
@@ -292,101 +261,36 @@ function getSpellFromBuff(name)
 
     if have_item(name) then
         return mq.TLO.FindItem(name).Clicky.Spell
-    elseif mq.TLO.Me.Book(mq.TLO.Spell(name).RankName) ~= nil then
-        return mq.TLO.Spell(name)
+    elseif is_spell_in_book(name) then
+        return get_spell(name)
     elseif have_alt_ability(name) then
         return mq.TLO.Me.AltAbility(name).Spell
     elseif have_combat_ability(name) then
         return mq.TLO.Me.CombatAbility(mq.TLO.Me.CombatAbility(name))
     else
-        mq.cmd.dgtell("getSpellFromBuff ERROR: can't find buff", name)
-        mq.cmd.beep(1)
+        cmd("/dgtell all getSpellFromBuff ERROR: can't find buff "..name)
+        cmd("/beep 1")
         return nil
     end
 end
 
--- memorizes all spells listed in character settings.gems in their correct position
+-- Memorizes all spells listed in character settings.gems in their correct position.
 function memorizeListedSpells()
     if botSettings.settings.gems == nil then
         return
     end
     for spellRow, gem in pairs(botSettings.settings.gems) do
-        memorizeSpell(spellRow, gem)
+        memorize_spell(spellRow, gem)
     end
 end
 
--- memorizes all spells listed in character settings.assist.pbae in their correct position
+-- Memorizes all spells listed in character settings.assist.pbae in their correct position.
 function memorizePBAESpells()
     if botSettings.settings.assist.pbae == nil then
         print("no settings.assist.pbae configured")
         return
     end
     for k, spellRow in pairs(botSettings.settings.assist.pbae) do
-        memorizeSpell(spellRow)
+        memorize_spell(spellRow)
     end
-end
-
--- returns true if name is ready to use (spell, aa, ability or combat ability)
-function is_spell_ability_ready(name)
-
-    if not is_brd() and is_casting() then
-        return false
-    end
-
-    if is_alt_ability_ready(name) then
-        --print("is_spell_ability_ready aa TRUE", name)
-        return true
-    end
-
-    if is_memorized(name) and is_spell_ready(name) then
-        --print("is_spell_ability_ready spell TRUE", name)
-        return true
-    end
-
-    if mq.TLO.Me.CombatAbilityReady(name)() then
-        --print("is_spell_ability_ready combat ability TRUE", name)
-        return true
-    end
-
-    if mq.TLO.Me.AbilityReady(name)() then
-        --print("is_spell_ability_ready ability TRUE", name)
-        return true
-    end
-
-    if mq.TLO.FindItem(name).Clicky() ~= nil and mq.TLO.FindItem(name).Timer.Ticks() == 0 then
-        --print("is_spell_ability_ready item TRUE", name)
-        return true
-    end
-
-    return false
-end
-
-function known_spell_ability(name)
-
-    if have_alt_ability(name) then
-        --print("known_spell_ability aa TRUE", name)
-        return true
-    end
-
-    if mq.TLO.Me.Spell(name)() then
-        --print("known_spell_ability spell TRUE", name)
-        return true
-    end
-
-    if have_combat_ability(name) then
-        --print("known_spell_ability combat ability TRUE", name)
-        return true
-    end
-
-    if mq.TLO.Me.Ability(name)() then
-        --print("known_spell_ability ability TRUE", name)
-        return true
-    end
-
-    if have_item(name) then
-        --print("known_spell_ability item TRUE", name)
-        return true
-    end
-
-    return false
 end

@@ -11,29 +11,31 @@ function QoL.Init()
     QoL.loadRequiredPlugins()
 
     if is_rof2() then
+        cmd("/consent raid") -- XXX persistent raid consent setting on in INI
+
+        if in_guild() then
+            -- enable auto consent for guild
+            --cmd("/consent guild")
+        end
+
         -- rof2 client has no persistent setting for /tgb on. it has been permanently auto enabled on live
-        mq.cmd("/tgb on")
+        cmd("/tgb on")
     end
 
     -- default loot setting: hide looted corpses
-    mq.cmd("/hidec looted")
+    cmd("/hidec looted")
 
     if mq.TLO.Me.Combat() then
-        mq.cmd("/attack off")
+        cmd("/attack off")
     end
 
     if is_orchestrator() then
-        mq.cmd("/djoin skillup")
-        mq.cmd("/djoin xp")
-    end
-
-    if in_guild() then
-        -- enable auto consent for guild
-        mq.cmd("/consent guild")
+        cmd("/djoin skillup")
+        cmd("/djoin xp")
     end
 
     if not is_script_running("agents/healme") then
-        mq.cmd("/lua run agents/healme")
+        cmd("/lua run agents/healme")
     end
 
     clear_cursor()
@@ -41,8 +43,8 @@ function QoL.Init()
     QoL.verifySpellLines()
 
     local dead = function(text, killer)
-        mq.cmd.dgtell("all I died. Killed by "..killer)
-        mq.cmd.beep() -- the beep of death
+        cmd("/dgtell all I died. Killed by "..killer)
+        cmd("/beep") -- the beep of death
     end
 
     mq.event("died", "You have been slain by #*#", dead)
@@ -50,7 +52,7 @@ function QoL.Init()
 
     mq.event("zoning", "LOADING, PLEASE WAIT...", function(text)
         --print("zoning. waiting")
-        --mq.delay(15000) -- 15s
+        --delay(15000) -- 15s
     end)
 
     mq.event("zoned", "You have entered #1#.", function(text, zone)
@@ -59,7 +61,7 @@ function QoL.Init()
         end
 
         print("I zoned into ", zone)
-        mq.delay(3000) -- 3s
+        delay(3000) -- 3s
         pet.ConfigureTaunt()
 
         joinCurrentHealChannel()
@@ -68,8 +70,8 @@ function QoL.Init()
 
     mq.event("missing_component", "You are missing #1#.", function(text, name)
         if name ~= "some required components" then
-            mq.cmd.dgtell("Missing component", name)
-            mq.cmd.beep(1)
+            cmd("/dgtell all Missing component "..name)
+            cmd("/beep 1")
         end
     end)
 
@@ -77,8 +79,8 @@ function QoL.Init()
         local s = msg:lower()
         if s == "buff me" or s == "buffme" then
             -- XXX commandeer all to buff this one. how to specify orchestrator if buff is in background? we enqueue it to a zone channel !!!
-            mq.cmd.dgtell("XXX FIXME handle 'buffme' tell from ", name)
-            mq.cmd.beep(1)
+            cmd("/dgtell all XXX FIXME handle 'buffme' tell from "..name)
+            cmd("/beep 1")
         else
             -- excludes tells from "Player`s pet" (Permutation Peddler, NPC), "Player`s familiar" (Summoned Banker, Pet)
             local spawn = spawn_from_query('="'..name..'"')
@@ -87,26 +89,26 @@ function QoL.Init()
                 return
             end
             if spawn ~= nil then
-                mq.cmd.dgtell("all GOT A IN-ZONE TELL FROM", name, ": ", msg, " type ", spawn.Type())
+                cmd("/dgtell all GOT A IN-ZONE TELL FROM "..name..": "..msg.." type "..spawn.Type())
             else
-                mq.cmd.dgtell("all GOT A TELL FROM", name, ": ", msg)
+                cmd("/dgtell all GOT A TELL FROM "..name..": "..msg)
             end
 
-            mq.cmd.beep(1)
+            cmd("/beep 1")
         end
     end)
 
     mq.event("skillup", "You have become better at #1#! (#2#)", function(text, name, num)
-        mq.cmd.dgtell("skillup ".. name .. " (".. num.."/".. tostring(mq.TLO.Skill(name).SkillCap()) ..")")
+        cmd("/dgtell skillup "..name.." ("..num.."/"..skill_cap(name)..")")
     end)
 
     mq.event("xp", "You gain experience!", function()
-        mq.cmd.dgtell("xp", "gained xp")
+        cmd("/dgtell xp Gained xp")
     end)
 
     mq.event("faction_oow_loyalists", "Your faction standing with Dranik Loyalists could not possibly get any better.", function()
         if not maxFactionLoyalists then
-            mq.cmd.dgtell("xp", "Maxed loyalist faction")
+            cmd("/dgtell xp Maxed loyalist faction")
             maxFactionLoyalists = true
         end
     end)
@@ -116,134 +118,133 @@ function QoL.Init()
         if maxFactionLoyalists then
             print("Dranik Loyalists: max ally")
         else
-            mq.cmd.dgtell("all WARN: not max ally with Dranik Loyalists")
+            cmd("/dgtell all WARN: not max ally with Dranik Loyalists")
         end
     end)
 
     -- tell all peers to report faction status
     mq.bind("/factionall", function()
-        mq.cmd("/dgaexecute all /faction")
+        cmd("/dgaexecute all /faction")
     end)
 
     -- clear all chat windows on current peer
     mq.bind("/clr", function()
-        mq.cmd.clear()
+        cmd("/clear")
     end)
 
     -- clear all chat windows on all peers
     mq.bind("/cls", function()
-        mq.cmd.dgaexecute("/clear")
+        cmd("/dgaexecute /clear")
     end)
 
     mq.bind("/self", function()
-        mq.cmd("/target myself")
+        cmd("/target myself")
     end)
 
     -- hide existing corpses
     mq.bind("/hce", function()
-        mq.cmd("/hidec all")
+        cmd("/hidec all")
     end)
 
     -- hide looted corpses
     mq.bind("/hcl", function()
-        mq.cmd("/hidec looted")
+        cmd("/hidec looted")
     end)
 
     -- hide no corpses
     mq.bind("/hcn", function()
-        mq.cmd("/hidec none")
+        cmd("/hidec none")
     end)
 
     -- report toons with few free buff slots
     mq.bind("/freebuffslots", function(name)
-        mq.cmd("/noparse /dgaexecute all /if (${Me.FreeBuffSlots} <= 1) /dgtell all FREE BUFF SLOTS: ${Me.FreeBuffSlots}")
+        cmd("/noparse /dgaexecute all /if (${Me.FreeBuffSlots} <= 1) /dgtell all FREE BUFF SLOTS: ${Me.FreeBuffSlots}")
     end)
-    mq.bind("/fbs", function(name) mq.cmd("/freebuffslots") end)
+    mq.bind("/fbs", function(name) cmd("/freebuffslots") end)
 
     -- /raidinvite shorthand
     mq.bind("/ri", function(name)
-        mq.cmd("/raidinvite "..name)
+        cmd("/raidinvite "..name)
     end)
 
     -- quickly exits all eqgame.exe instances using task manager
     mq.bind("/exitall", function()
-        mq.cmd.exec('TASKKILL "/F /IM eqgame.exe" bg')
+        cmd('/exec TASKKILL "/F /IM eqgame.exe" bg')
     end)
 
     -- quickly exits my eqgame.exe instance using task manager
     mq.bind("/exitme", function()
-        mq.cmd.dgtell("all Exiting")
-        mq.cmd.exec('TASKKILL "/F /PID '..tostring(mq.TLO.EverQuest.PID())..'" bg')
+        cmd("/dgtell all Exiting")
+        cmd('/exec TASKKILL "/F /PID '..tostring(mq.TLO.EverQuest.PID())..'" bg')
     end)
 
     mq.bind("/exitnotinzone", function()
         local me = mq.TLO.Me.Name()
-        mq.cmd("/noparse /dgaexecute all /if (!${SpawnCount[pc ="..me.."]}) /exitme")
+        cmd("/noparse /dgaexecute all /if (!${SpawnCount[pc ="..me.."]}) /exitme")
     end)
 
     mq.bind("/exitnotingroup", function()
-        mq.cmd("/noparse /dgaexecute all /if (!${Group.Members}) /exitme")
+        cmd("/noparse /dgaexecute all /if (!${Group.Members}) /exitme")
     end)
 
     mq.bind("/exitnotinraid", function()
-        mq.cmd("/noparse /dgaexecute all /if (!${Raid.Members}) /exitme")
+        cmd("/noparse /dgaexecute all /if (!${Raid.Members}) /exitme")
     end)
 
     -- report all peers who are not in current zone
     mq.bind("/notinzone", function()
-        local zone = mq.TLO.Zone.ShortName()
-        mq.cmd("/noparse /dgaexecute all /if (!${Zone.ShortName.Equal["..zone.."]}) /dgtell all I'm in ${Zone.ShortName}")
+        cmd("/noparse /dgaexecute all /if (!${Zone.ShortName.Equal["..zone_shortname().."]}) /dgtell all I'm in ${Zone.ShortName}")
     end)
 
     mq.bind("/notingroup", function()
-        mq.cmd("/noparse /dgaexecute all /if (!${Me.Grouped}) /dgtell all NOT IN GROUP")
+        cmd("/noparse /dgaexecute all /if (!${Me.Grouped}) /dgtell all NOT IN GROUP")
     end)
 
     mq.bind("/ingroup", function()
-        mq.cmd("/noparse /dgaexecute all /if (${Me.Grouped}) /dgtell all IN GROUP")
+        cmd("/noparse /dgaexecute all /if (${Me.Grouped}) /dgtell all IN GROUP")
     end)
 
     mq.bind("/notinraid", function()
-        mq.cmd("/noparse /dgaexecute all /if (!${Raid.Members}) /dgtell all NOT IN RAID")
+        cmd("/noparse /dgaexecute all /if (!${Raid.Members}) /dgtell all NOT IN RAID")
     end)
 
     mq.bind("/inraid", function()
-        mq.cmd("/noparse /dgaexecute all /if (${Raid.Members}) /dgtell all IN RAID")
+        cmd("/noparse /dgaexecute all /if (${Raid.Members}) /dgtell all IN RAID")
     end)
 
     -- report all peers who are not levitating
     mq.bind("/notlevi", function()
-        mq.cmd("/noparse /dgaexecute all /if (!${Me.Levitating}) /dgtell all NOT LEVI")
+        cmd("/noparse /dgaexecute all /if (!${Me.Levitating}) /dgtell all NOT LEVI")
     end)
 
     mq.bind("/notitu", function()
-        mq.cmd("/noparse /dgaexecute all (!${Me.Buff[Sunskin].ID}) /dgtell all NOT ITU")
+        cmd("/noparse /dgaexecute all (!${Me.Buff[Sunskin].ID}) /dgtell all NOT ITU")
     end)
 
     -- report all peers who are not invisible
     mq.bind("/notinvis", function()
-        mq.cmd("/noparse /dgaexecute all /if (!${Me.Invis}) /dgtell all NOT INVIS")
+        cmd("/noparse /dgaexecute all /if (!${Me.Invis}) /dgtell all NOT INVIS")
     end)
 
     mq.bind("/invis", function()
-        mq.cmd("/noparse /dgaexecute all /if (${Me.Invis}) /dgtell all INVIS")
+        cmd("/noparse /dgaexecute all /if (${Me.Invis}) /dgtell all INVIS")
     end)
 
     -- open loot window on closest corpse
     mq.bind("/lcorpse", function()
         if has_target() ~= nil then
-            mq.cmd("/squelch /target clear")
+            cmd("/squelch /target clear")
         end
-        mq.cmd("/target corpse radius 100")
-        mq.delay(500, function()
+        cmd("/target corpse radius 100")
+        delay(500, function()
             return has_target()
         end)
-        mq.cmd("/loot")
+        cmd("/loot")
     end)
 
     -- reports all toons that are not running e4
     mq.bind("/note4", function()
-        mq.cmd("/dgaexecute /lua run note4")
+        cmd("/dgaexecute /lua run note4")
     end)
 
     mq.bind("/running", function()
@@ -254,13 +255,13 @@ function QoL.Init()
     -- runs combine.lua tradeskill script. NOTE: /combine is reserved for MacroQuest.
     mq.bind("/combineit", function()
         if is_script_running("combine") then
-            mq.cmd("/lua stop combine")
+            cmd("/lua stop combine")
         end
-        mq.cmd("/lua run combine")
+        cmd("/lua run combine")
     end)
 
     mq.bind("/handin", function()
-        mq.cmd("/lua run handin")
+        cmd("/lua run handin")
     end)
 
     -- reports all currently worn auguments
@@ -353,66 +354,71 @@ function QoL.Init()
                 local value = query_peer(peer, 'Me.AltAbilityReady['..aaName..']', 0)
                 if value == "TRUE" then
                     print("Asking ", peer, " to activate banker ...")
-                    mq.cmd.dex(peer, "/banker")
+                    cmd("/dexecute "..peer.." /banker")
                     return
                 end
             end
-            mq.delay(1)
-            mq.doevents()
+            delay(1)
+            doevents()
         end
 
     end)
 
     mq.bind("/cohgroup", function()
-        mq.cmd("/lua run cohgroup")
+        cmd("/lua run cohgroup")
+    end)
+
+    -- Tell nearby peer corpses to consent me
+    mq.bind("/consentme", function()
+        local spawnQuery = 'pccorpse radius 500'
+        for i = 1, spawn_count(spawnQuery) do
+            local spawn = mq.TLO.NearestSpawn(i, spawnQuery)
+            print("Asking "..spawn.DisplayName().." for consent ...")
+            cmd("/dexecute "..spawn.DisplayName().." /consent "..mq.TLO.Me.Name())
+        end
     end)
 
     -- summon nearby corpses into a pile
     mq.bind("/gathercorpses", function()
-        if is_rof2() then
-            mq.cmd.dgaexecute("/consent raid") -- XXX persistent raid consent setting on
-        end
-
         local spawnQuery = 'pccorpse radius 100'
         for i = 1, spawn_count(spawnQuery) do
             local spawn = mq.TLO.NearestSpawn(i, spawnQuery)
-
             target_id(spawn.ID())
-            mq.delay(2)
-            mq.cmd("/corpse")
-            mq.delay(1000, function() return spawn.Distance() < 20 end)
+            delay(2)
+            cmd("/corpse")
+            delay(1000, function() return spawn.Distance() < 20 end)
         end
     end)
 
     -- make all peer quit expedition
     mq.bind("/quitexp", function()
-        mq.cmd.dgtell("all Instructing peers to leave expedition ...")
-        mq.cmd("/dgaexecute /dzquit")
+        cmd("/dgtell all Instructing peers to leave expedition ...")
+        cmd("/dgaexecute /dzquit")
     end)
 
     -- hide all dz windows
     mq.bind("/dzhide", function()
-        mq.cmd("/noparse /dgaexecute /if (${Window[dynamiczonewnd]}) /windowstate dynamiczonewnd close")
+        cmd("/noparse /dgaexecute /if (${Window[dynamiczonewnd]}) /windowstate dynamiczonewnd close")
     end)
 
     -- report peers with at least 10 unspent AA:s
     mq.bind("/unspentaa", function()
-        mq.cmd("/noparse /dgaexecute /if (${Me.AAPoints} >= 10 && ${Me.AAPoints} < 100) /dgtell all UNSPENT AA: ${Me.AAPoints}")
+        cmd("/noparse /dgaexecute /if (${Me.AAPoints} >= 10 && ${Me.AAPoints} < 100) /dgtell all UNSPENT AA: ${Me.AAPoints}")
     end)
 
     -- report peers with less than 10 unspent AA:s
     mq.bind("/lowunspentaa", function()
-        mq.cmd("/noparse /dgaexecute /if (${Me.AAPoints} > 1 && ${Me.AAPoints} < 10) /dgtell all UNSPENT AA: ${Me.AAPoints}")
+        cmd("/noparse /dgaexecute /if (${Me.AAPoints} > 1 && ${Me.AAPoints} < 10) /dgtell all UNSPENT AA: ${Me.AAPoints}")
     end)
 
     -- report peers with any unspent AA:s
     mq.bind("/allunspentaa", function()
-        mq.cmd("/noparse /dgaexecute /if (${Me.AAPoints} > 0) /dgtell all UNSPENT AA: ${Me.AAPoints}")
+        cmd("/noparse /dgaexecute /if (${Me.AAPoints} > 0) /dgtell all UNSPENT AA: ${Me.AAPoints}")
     end)
 
     -- report all peer total AA:s
     mq.bind("/totalaa", function()
-        mq.cmd("/noparse /dgaexecute /dgtell all TOTAL AA: ${Me.AAPointsTotal}")
+        cmd("/noparse /dgaexecute /dgtell all TOTAL AA: ${Me.AAPointsTotal}")
     end)
 
 end
@@ -507,8 +513,8 @@ function verifySpellLines(label, lines)
     for k, row in pairs(lines) do
         local spellConfig = parseSpellLine(row)
         if not known_spell_ability(spellConfig.Name) then
-            mq.cmd.dgtell("all Missing "..label..": "..spellConfig.Name)
-            mq.cmd.beep(1)
+            cmd("/dgtell all Missing "..label..": "..spellConfig.Name)
+            cmd("/beep 1")
         end
     end
 end
@@ -517,25 +523,25 @@ end
 function QoL.Tick()
     -- close f2p nag screen
     if window_open("AlertWnd") then
-        mq.cmd.notify("AlertWnd ALW_Dismiss_Button leftmouseup")
+        cmd("/notify AlertWnd ALW_Dismiss_Button leftmouseup")
     end
 
     -- auto accept trades
     if window_open("tradewnd") and not has_cursor_item() then
-        if has_target() and mq.TLO.DanNet(mq.TLO.Target())() ~= nil then
-            mq.cmd.dgtell("all Accepting trade in 5s with", mq.TLO.Target())
-            mq.delay(5000, function() return has_cursor_item() end)
+        if has_target() and is_peer(mq.TLO.Target.Name()) then
+            cmd("/dgtell all Accepting trade in 5s with "..mq.TLO.Target.Name())
+            delay(5000, function() return has_cursor_item() end)
             if not has_cursor_item() then
-                mq.cmd.notify("tradewnd TRDW_Trade_Button leftmouseup")
+                cmd("/notify tradewnd TRDW_Trade_Button leftmouseup")
             end
         else
-            mq.cmd.dgtell("all \arWARN\ax Ignoring trade from non-peer ", mq.TLO.Target())
-            mq.cmd.beep(1)
+            cmd("/dgtell all \arWARN\ax Ignoring trade from non-peer "..mq.TLO.Target.Name())
+            cmd("/beep 1")
         end
     end
 
-    if mq.TLO.Me.Class.ShortName() == "WIZ" and have_pet() then
-        mq.cmd.pet("get lost")
+    if class_shortname() == "WIZ" and have_pet() then
+        cmd("/pet get lost")
     end
 
 end

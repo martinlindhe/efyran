@@ -11,29 +11,29 @@ function combine_clear_cursor()
             return true
         end
         if mq.TLO.Me.FreeInventory() == 0 then
-            mq.cmd.dgtell("all Cannot clear cursor, no free inventory slots")
-            mq.cmd.beep(1)
+            cmd("/dgtell all Cannot clear cursor, no free inventory slots")
+            cmd("/beep 1")
             return false
         end
 
         if in_array(destroyItemIDs, mq.TLO.Cursor.ID()) then
             print("Destroying ", mq.TLO.Cursor.Name(), " ...")
-            mq.cmd("/destroy")
-            mq.delay(1)
+            cmd("/destroy")
+            delay(1)
         else
             print("Putting cursor item ", mq.TLO.Cursor(), " in inventory.")
-            mq.delay(5000, function()
-                mq.cmd("/autoinventory")
+            delay(5000, function()
+                cmd("/autoinventory")
                 return mq.TLO.Cursor.ID() == nil
             end)
         end
-        mq.delay(1)
-        mq.doevents()
+        delay(1)
+        doevents()
     end
 end
 
 mq.event("missing_components", "Sorry, but you don't have everything you need for this recipe in your general inventory.", function(text, name)
-    mq.cmd.dgtell("all", "Combine ending: out of stuff")
+    cmd("/dgtell all Combine ending: out of stuff")
     os.exit()
 end)
 
@@ -52,15 +52,15 @@ while true do
     end
 
     if mq.TLO.Window("TradeskillWnd").Child("CombineButton").Enabled() then
-        mq.cmd("/notify TradeskillWnd CombineButton leftmouseup")
-        mq.delay(5000, function() return mq.TLO.Cursor.ID() ~= nil end)
+        cmd("/notify TradeskillWnd CombineButton leftmouseup")
+        delay(5000, function() return mq.TLO.Cursor.ID() ~= nil end)
         if not combine_clear_cursor() then
             print("Failed to clear cursor, giving up.")
             return
         end
     end
 
-    mq.delay(10)
-    mq.doevents()
+    delay(10)
+    doevents()
 
 end

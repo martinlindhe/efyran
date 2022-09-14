@@ -15,10 +15,10 @@ while true do
         -- ask for heals if i take damage
         local s = mq.TLO.Me.Name().." "..mq.TLO.Me.PctHPs() -- "Avicii 82"
         --print(mq.TLO.Time, "HELP HEAL ME, ", s)
-        mq.cmd.dgtell(heal.CurrentHealChannel(), s)
+        cmd("/dgtell "..heal_channel().." "..s)
         askForHealTimer:restart()
     end
 
-    mq.doevents()
-    mq.delay(10)
+    doevents()
+    delay(100)
 end

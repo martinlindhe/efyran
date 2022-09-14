@@ -1,8 +1,12 @@
 # TODO
 
+misc:
+-- TODO trigger event to reload and recalculate all settings: find best aura, re-evaluate toon settings file etc
+
+
 
 MQ2Lua gotchas:
-    /itemnotify seem to require mq.delay(1) or it wont always register
+    /itemnotify seem to require delay(1) or it wont always register
     - spell links: missing from macroquest atm.
     - detect if on emu. cant do atm
     - detect eqgame.exe build date. cant do atm. would want so i can detect rof2 or underfoot

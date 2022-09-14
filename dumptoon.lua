@@ -7,6 +7,7 @@
 
 -- TODO: can we record output from /keys to file?
 
+local mq = require("mq")
 require("ezmq")
 
 
@@ -29,110 +30,110 @@ local aaMapFile = settingsRoot .. "/AAMap."..current_server()..".ini"
 
 -- dump bind point   FIXME never triggers
 mq.event("bindpoint", "You are currently bound in: #1#", function(text, where)
-	mq.cmd.dgtell("all", "BIND POINT:", where)
-    mq.cmd.ini(iniFile, "Overview", "Bindpoint", where)
+	cmd("/dgtell all BIND POINT: "..where)
+    cmd("/ini "..iniFile.." Overview Bindpoint "..where)
 end)
 
 print("--- DUMP TOON ---")
 
 -- ask for bind point
 -- XXX mq2 window shows x,y,z coords too, how to record those?
-mq.cmd("/char")
-mq.doevents()
+cmd("/char")
+doevents()
 
 -- Overview
-mq.cmd.ini(iniFile, "Overview", "Name", me.Name())
-mq.cmd.ini(iniFile, "Overview", "Class", me.Class())
-mq.cmd.ini(iniFile, "Overview", "Race", me.Race())
-mq.cmd.ini(iniFile, "Overview", "Gender", me.Gender())
+cmd("/ini "..iniFile.." Overview Name "..me.Name())
+cmd("/ini "..iniFile.." Overview Class "..me.Class())
+cmd("/ini "..iniFile.." Overview Race ".. me.Race())
+cmd("/ini "..iniFile.." Overview Gender "..me.Gender())
 
 -- Tribute/Favor
-mq.cmd.ini(iniFile, "Favor", "Current", me.CurrentFavor())
-mq.cmd.ini(iniFile, "Favor", "Career", me.CareerFavor())
+cmd("/ini "..iniFile.." Favor Current ".. me.CurrentFavor())
+cmd("/ini "..iniFile.." Favor Career "..me.CareerFavor())
 
 -- XP
-mq.cmd.ini(iniFile, "XP", "Level", me.Level())
-mq.cmd.ini(iniFile, "XP", "Exp", me.Exp())
-mq.cmd.ini(iniFile, "XP", "AAExp", me.AAExp())
-mq.cmd.ini(iniFile, "XP", "AAPoints", me.AAPoints())
-mq.cmd.ini(iniFile, "XP", "AAPointsSpent", me.AAPointsSpent())
+cmd("/ini "..iniFile.." XP Level "..me.Level())
+cmd("/ini "..iniFile.." XP Exp "..me.Exp())
+cmd("/ini "..iniFile.." XP AAExp"..me.AAExp())
+cmd("/ini "..iniFile.." XP AAPoints"..me.AAPoints())
+cmd("/ini "..iniFile.." XP AAPointsSpent "..me.AAPointsSpent())
 -- XXX not available in peq-mq2 version: ${Me.GroupLeaderExp}, ${Me.GroupLeaderPoints}
 
 -- LDoN
-mq.cmd.ini(iniFile, "LDoN", "Points", me.LDoNPoints())
-mq.cmd.ini(iniFile, "LDoN", "GukEarned", me.GukEarned())
-mq.cmd.ini(iniFile, "LDoN", "MirEarned", me.MirEarned())
-mq.cmd.ini(iniFile, "LDoN", "MMEarned", me.MMEarned())
-mq.cmd.ini(iniFile, "LDoN", "RujEarned", me.RujEarned())
-mq.cmd.ini(iniFile, "LDoN" ,"TakEarned", me.TakEarned())
+cmd("/ini "..iniFile.." LDoN Points "..me.LDoNPoints())
+cmd("/ini "..iniFile.." LDoN GukEarned "..me.GukEarned())
+cmd("/ini "..iniFile.." LDoN MirEarned "..me.MirEarned())
+cmd("/ini "..iniFile.." LDoN MMEarned "..me.MMEarned())
+cmd("/ini "..iniFile.." LDoN RujEarned "..me.RujEarned())
+cmd("/ini "..iniFile.." LDoN TakEarned "..me.TakEarned())
 
 -- coins
-mq.cmd.ini(iniFile, "Coins", "Copper", me.Copper())
-mq.cmd.ini(iniFile, "Coins", "CopperBank", me.CopperBank())
-mq.cmd.ini(iniFile, "Coins", "Silver", me.Silver())
-mq.cmd.ini(iniFile, "Coins", "SilverBank", me.SilverBank())
-mq.cmd.ini(iniFile, "Coins", "Gold", me.Gold())
-mq.cmd.ini(iniFile, "Coins", "GoldBank", me.GoldBank())
-mq.cmd.ini(iniFile, "Coins", "Platinum", me.Platinum())
-mq.cmd.ini(iniFile, "Coins", "PlatinumBank", me.PlatinumBank())
-mq.cmd.ini(iniFile, "Coins", "PlatinumShared", me.PlatinumShared())
+cmd("/ini "..iniFile.." Coins Copper "..me.Copper())
+cmd("/ini "..iniFile.." Coins CopperBank "..me.CopperBank())
+cmd("/ini "..iniFile.." Coins Silver "..me.Silver())
+cmd("/ini "..iniFile.." Coins SilverBank "..me.SilverBank())
+cmd("/ini "..iniFile.." Coins Gold "..me.Gold())
+cmd("/ini "..iniFile.." Coins GoldBank "..me.GoldBank())
+cmd("/ini "..iniFile.." Coins Platinum "..me.Platinum())
+cmd("/ini "..iniFile.." Coins PlatinumBank "..me.PlatinumBank())
+cmd("/ini "..iniFile.." Coins PlatinumShared "..me.PlatinumShared())
 
 
 -- stats as seen by client - XXX can we get raw ones excluding gear and buffs?
 -- XXX AC and ATK numbers?
-mq.cmd.ini(iniFile, "CurrentStats", "MaxHPs", me.MaxHPs())
-mq.cmd.ini(iniFile, "CurrentStats", "MaxMana", me.MaxMana())
-mq.cmd.ini(iniFile, "CurrentStats", "MaxEndurance", me.MaxEndurance())
-mq.cmd.ini(iniFile, "CurrentStats", "STR", me.STR())
-mq.cmd.ini(iniFile, "CurrentStats", "STA", me.STA())
-mq.cmd.ini(iniFile, "CurrentStats", "AGI", me.AGI())
-mq.cmd.ini(iniFile, "CurrentStats", "DEX", me.DEX())
-mq.cmd.ini(iniFile, "CurrentStats", "WIS", me.WIS())
-mq.cmd.ini(iniFile, "CurrentStats", "INT", me.INT())
-mq.cmd.ini(iniFile, "CurrentStats", "CHA", me.CHA())
-mq.cmd.ini(iniFile, "CurrentStats", "svPoison", me.svPoison())
-mq.cmd.ini(iniFile, "CurrentStats", "svMagic", me.svMagic())
-mq.cmd.ini(iniFile, "CurrentStats", "svDisease", me.svDisease())
-mq.cmd.ini(iniFile, "CurrentStats", "svFire", me.svFire())
-mq.cmd.ini(iniFile, "CurrentStats", "svCold", me.svCold())
-mq.cmd.ini(iniFile, "CurrentStats", "svCorruption", me.svCorruption())
-mq.cmd.ini(iniFile, "CurrentStats", "svChromatic", me.svChromatic())
-mq.cmd.ini(iniFile, "CurrentStats", "svPrismatic", me.svPrismatic())
-mq.cmd.ini(iniFile, "CurrentStats", "CurrentWeight", me.CurrentWeight())
-mq.cmd.ini(iniFile, "CurrentStats", "AttackSpeed", me.AttackSpeed())
-mq.cmd.ini(iniFile, "CurrentStats", "Haste", me.Haste())
+cmd("/ini "..iniFile.." CurrentStats MaxHPs "..me.MaxHPs())
+cmd("/ini "..iniFile.." CurrentStats MaxMana "..me.MaxMana())
+cmd("/ini "..iniFile.." CurrentStats MaxEndurance "..me.MaxEndurance())
+cmd("/ini "..iniFile.." CurrentStats STR "..me.STR())
+cmd("/ini "..iniFile.." CurrentStats STA "..me.STA())
+cmd("/ini "..iniFile.." CurrentStats AGI "..me.AGI())
+cmd("/ini "..iniFile.." CurrentStats DEX "..me.DEX())
+cmd("/ini "..iniFile.." CurrentStats WIS "..me.WIS())
+cmd("/ini "..iniFile.." CurrentStats INT "..me.INT())
+cmd("/ini "..iniFile.." CurrentStats CHA "..me.CHA())
+cmd("/ini "..iniFile.." CurrentStats svPoison "..me.svPoison())
+cmd("/ini "..iniFile.." CurrentStats svMagic "..me.svMagic())
+cmd("/ini "..iniFile.." CurrentStats svDisease "..me.svDisease())
+cmd("/ini "..iniFile.." CurrentStats svFire "..me.svFire())
+cmd("/ini "..iniFile.." CurrentStats svCold "..me.svCold())
+cmd("/ini "..iniFile.." CurrentStats svCorruption"..me.svCorruption())
+cmd("/ini "..iniFile.." CurrentStats svChromatic "..me.svChromatic())
+cmd("/ini "..iniFile.." CurrentStats svPrismatic "..me.svPrismatic())
+cmd("/ini "..iniFile.." CurrentStats CurrentWeight "..me.CurrentWeight())
+cmd("/ini "..iniFile.." CurrentStats AttackSpeed "..me.AttackSpeed())
+cmd("/ini "..iniFile.." CurrentStats Haste "..me.Haste())
 
 -- bonuses from gear as seen by client
-mq.cmd.ini(iniFile, "Bonuses", "HPBonus", me.HPBonus())
-mq.cmd.ini(iniFile, "Bonuses", "HPRegenBonus", me.HPRegenBonus())
-mq.cmd.ini(iniFile, "Bonuses", "ManaBonus", me.ManaBonus())
-mq.cmd.ini(iniFile, "Bonuses", "ManaRegenBonus", me.ManaRegenBonus())
-mq.cmd.ini(iniFile, "Bonuses", "EnduranceBonus", me.EnduranceBonus())
-mq.cmd.ini(iniFile, "Bonuses", "EnduranceRegenBonus", me.EnduranceRegenBonus())
+cmd("/ini "..iniFile.." Bonuses HPBonus "..me.HPBonus())
+cmd("/ini "..iniFile.." Bonuses HPRegenBonus "..me.HPRegenBonus())
+cmd("/ini "..iniFile.." Bonuses ManaBonus "..me.ManaBonus())
+cmd("/ini "..iniFile.." Bonuses ManaRegenBonus "..me.ManaRegenBonus())
+cmd("/ini "..iniFile.." Bonuses EnduranceBonus "..me.EnduranceBonus())
+cmd("/ini "..iniFile.." Bonuses EnduranceRegenBonus "..me.EnduranceRegenBonus())
 
-mq.cmd.ini(iniFile, "Bonuses", "AccuracyBonus", me.AccuracyBonus())
-mq.cmd.ini(iniFile, "Bonuses", "AttackBonus", me.AttackBonus())
-mq.cmd.ini(iniFile, "Bonuses", "AvoidanceBonus", me.AvoidanceBonus())
-mq.cmd.ini(iniFile, "Bonuses", "ClairvoyanceBonus", me.ClairvoyanceBonus())
-mq.cmd.ini(iniFile, "Bonuses", "CombatEffectsBonus", me.CombatEffectsBonus())
-mq.cmd.ini(iniFile, "Bonuses", "DamageShieldBonus", me.DamageShieldBonus())
-mq.cmd.ini(iniFile, "Bonuses", "DamageShieldMitigationBonus", me.DamageShieldMitigationBonus())
-mq.cmd.ini(iniFile, "Bonuses", "DoTShieldBonus", me.DoTShieldBonus())
-mq.cmd.ini(iniFile, "Bonuses", "HealAmountBonus", me.HealAmountBonus())
-mq.cmd.ini(iniFile, "Bonuses", "ShieldingBonus", me.ShieldingBonus())
-mq.cmd.ini(iniFile, "Bonuses", "SpellDamageBonus", me.SpellDamageBonus())
-mq.cmd.ini(iniFile, "Bonuses", "SpellShieldBonus", me.SpellShieldBonus())
-mq.cmd.ini(iniFile, "Bonuses", "StrikeThroughBonus", me.StrikeThroughBonus())
-mq.cmd.ini(iniFile, "Bonuses", "StunResistBonus", me.StunResistBonus())
+cmd("/ini "..iniFile.." Bonuses AccuracyBonus "..me.AccuracyBonus())
+cmd("/ini "..iniFile.." Bonuses AttackBonus "..me.AttackBonus())
+cmd("/ini "..iniFile.." Bonuses AvoidanceBonus "..me.AvoidanceBonus())
+cmd("/ini "..iniFile.." Bonuses ClairvoyanceBonus "..me.ClairvoyanceBonus())
+cmd("/ini "..iniFile.." Bonuses CombatEffectsBonus "..me.CombatEffectsBonus())
+cmd("/ini "..iniFile.." Bonuses DamageShieldBonus "..me.DamageShieldBonus())
+cmd("/ini "..iniFile.." Bonuses DamageShieldMitigationBonus "..me.DamageShieldMitigationBonus())
+cmd("/ini "..iniFile.." Bonuses DoTShieldBonus "..me.DoTShieldBonus())
+cmd("/ini "..iniFile.." Bonuses HealAmountBonus "..me.HealAmountBonus())
+cmd("/ini "..iniFile.." Bonuses ShieldingBonus "..me.ShieldingBonus())
+cmd("/ini "..iniFile.." Bonuses SpellDamageBonus "..me.SpellDamageBonus())
+cmd("/ini "..iniFile.." Bonuses SpellShieldBonus "..me.SpellShieldBonus())
+cmd("/ini "..iniFile.." Bonuses StrikeThroughBonus "..me.StrikeThroughBonus())
+cmd("/ini "..iniFile.." Bonuses StunResistBonus "..me.StunResistBonus())
 
-mq.doevents()
+doevents()
 
 -- skills ... 1-78 is in use
 for i = 1, 78 do
     if me.Skill(i)() then
         if mq.TLO.Skill(i).Name() ~= "None" then
             local skillDesc = mq.TLO.Skill(i).Name().."|"..me.Skill(i)().."/"..me.SkillCap(i)()
-            mq.cmd.ini(iniFile, "Skill", i, '"'..skillDesc..'"')
+            cmd("/ini "..iniFile.." Skill "..i..' "'..skillDesc..'"')
         end
     end
 end
@@ -140,7 +141,7 @@ end
 
 -- languages (numbered 1-25)
 for i = 1, 25 do
-    mq.cmd.ini(iniFile, "LanguageSkill", i, '"'..me.Language(i)().."|"..tostring(me.LanguageSkill(i)())..'"')
+    cmd("/ini "..iniFile.." LanguageSkill "..i..' "'..me.Language(i)().."|"..tostring(me.LanguageSkill(i)())..'"')
 end
 
 
@@ -149,12 +150,12 @@ end
 if DUMP_SPELLBOOK then
     for i = 1, SPELLBOOK_SIZE do
         if me.Book(i).ID() then
-            mq.cmd.ini(iniFile, "Spells", i, '"'..tostring(me.Book(i).ID()).."|"..me.Book(i).RankName()..'"')
+            cmd("/ini "..iniFile.." Spells "..i..' "'..tostring(me.Book(i).ID()).."|"..me.Book(i).RankName()..'"')
         end
     end
 end
 
-mq.doevents()
+doevents()
 
 
 -- slot names: https://www.macroquest2.com/wiki/index.php/Slot_Names
@@ -163,25 +164,25 @@ mq.doevents()
 for i = 0, 32 do
     local key = "inv"..tostring(i)
     if me.Inventory(i).ID() then
-        mq.cmd.ini(iniFile, "Inventory", key, '"'..tostring(me.Inventory(i).ID()).."|"..me.Inventory(i).Stack().."|"..me.Inventory(i).Name()..'"')
+        cmd("/ini "..iniFile.." Inventory "..key..' "'..tostring(me.Inventory(i).ID()).."|"..me.Inventory(i).Stack().."|"..me.Inventory(i).Name()..'"')
         for a = 1, MAX_AUG_SLOTS do
             local sub = key.."_aug"..tostring(a)
             if me.Inventory(i).AugSlot(a)() ~= nil then
-                mq.cmd.ini(iniFile, "Inventory", sub, '"'..me.Inventory(i).AugSlot(a).Item.ID().."|"..me.Inventory(i).AugSlot(a).Item.Stack().."|"..me.Inventory(i).AugSlot(a)()..'"')
+                cmd("/ini "..iniFile.." Inventory "..sub..' "'..me.Inventory(i).AugSlot(a).Item.ID().."|"..me.Inventory(i).AugSlot(a).Item.Stack().."|"..me.Inventory(i).AugSlot(a)()..'"')
             else
-                mq.cmd.ini(iniFile, "Inventory", sub, "NULL")
+                cmd("/ini "..iniFile.." Inventory "..sub.." NULL")
             end
         end
     else
-        mq.cmd.ini(iniFile, "Inventory", key, "NULL")
+        cmd("/ini "..iniFile.." Inventory "..key.." NULL")
         for a = 1, MAX_AUG_SLOTS do
             local sub = key.."_aug"..tostring(a)
-            mq.cmd.ini(iniFile, "Inventory", sub, "NULL")
+            cmd("/ini "..iniFile.." Inventory "..sub.."NULL")
         end
     end
 end
 
-mq.doevents()
+doevents()
 
 -- backpack content
 for i = 1, MAX_INV_SLOTS do
@@ -190,27 +191,27 @@ for i = 1, MAX_INV_SLOTS do
         for slot = 1, mq.TLO.InvSlot(key).Item.Container() do
             local sub = key.."_slot"..tostring(slot)
             if mq.TLO.InvSlot(key).Item.Item(slot)() ~= nil then
-                mq.cmd.ini(iniFile, "Inventory", sub, '"'..mq.TLO.InvSlot(key).Item.Item(slot).ID().."|"..mq.TLO.InvSlot(key).Item.Item(slot).Stack().."|"..mq.TLO.InvSlot(key).Item.Item(slot)()..'"')
+                cmd("/ini "..iniFile.." Inventory "..sub..' "'..mq.TLO.InvSlot(key).Item.Item(slot).ID().."|"..mq.TLO.InvSlot(key).Item.Item(slot).Stack().."|"..mq.TLO.InvSlot(key).Item.Item(slot)()..'"')
                 for a = 1, MAX_AUG_SLOTS do
                     local aug = sub.."_aug"..tostring(a)
                     if mq.TLO.InvSlot(key).Item.Item(slot).AugSlot(a)() ~= nil then
-                        mq.cmd.ini(iniFile, "Inventory", aug, '"'..mq.TLO.InvSlot(key).Item.Item(slot).AugSlot(a).Item.ID().."|"..mq.TLO.InvSlot(key).Item.Item(slot).AugSlot(a).Item.Stack().."|"..mq.TLO.InvSlot(key).Item.Item(slot).AugSlot(a)()..'"')
+                        cmd("/ini "..iniFile.." Inventory "..aug..' "'..mq.TLO.InvSlot(key).Item.Item(slot).AugSlot(a).Item.ID().."|"..mq.TLO.InvSlot(key).Item.Item(slot).AugSlot(a).Item.Stack().."|"..mq.TLO.InvSlot(key).Item.Item(slot).AugSlot(a)()..'"')
                     else
-                        mq.cmd.ini(iniFile, "Inventory", aug, "NULL")
+                        cmd("/ini "..iniFile.." Inventory "..aug.." NULL")
                     end
                 end
             else
-                mq.cmd.ini(iniFile, "Inventory", sub, "NULL")
+                cmd("/ini "..iniFile.." Inventory "..sub.." NULL")
                 for a = 1, MAX_AUG_SLOTS do
                     local aug = sub.."_aug"..tostring(a)
-                    mq.cmd.ini(iniFile, "Inventory", aug, "NULL")
+                    cmd("/ini "..iniFile.." Inventory "..aug.." NULL")
                 end
             end
         end
     end
 end
 
-mq.doevents()
+doevents()
 
 -- bank top level slots: 1-24 is bank bags, 25-26 is shared bank
 for i = 1, 26 do
@@ -220,26 +221,26 @@ for i = 1, 26 do
             for e = 1, me.Bank(i).Container() do
                 local sub = key.."_slot"..tostring(e)
                 if me.Bank(i).Item(e)() ~= nil then
-                    mq.cmd.ini(iniFile, "Inventory", sub, '"'..me.Bank(i).Item(e).ID().."|"..me.Bank(i).Item(e).Stack().."|"..me.Bank(i).Item(e)()..'"')
+                    cmd("/ini "..iniFile.." Inventory "..sub..' "'..me.Bank(i).Item(e).ID().."|"..me.Bank(i).Item(e).Stack().."|"..me.Bank(i).Item(e)()..'"')
                 else
-                    mq.cmd.ini(iniFile, "Inventory", sub, "NULL")
+                    cmd("/ini "..iniFile.." Inventory "..sub.." NULL")
                 end
                 for a = 1, MAX_AUG_SLOTS do
                     local aug = sub.."_aug"..tostring(a)
                     if me.Bank(i).Item(e).AugSlot(a)() ~= nil then
-                        mq.cmd.ini(iniFile, "Inventory", aug, '"'..me.Bank(i).Item(e).AugSlot(a).Item.ID().."|"..me.Bank(i).Item(e).AugSlot(a).Item.Stack().."|"..me.Bank(i).Item(e).AugSlot(a)()..'"')
+                        cmd("/ini "..iniFile.." Inventory "..aug..' "'..me.Bank(i).Item(e).AugSlot(a).Item.ID().."|"..me.Bank(i).Item(e).AugSlot(a).Item.Stack().."|"..me.Bank(i).Item(e).AugSlot(a)()..'"')
                     else
-                        mq.cmd.ini(iniFile, "Inventory", aug, "NULL")
+                        cmd("/ini "..iniFile.." Inventory "..aug.." NULL")
                     end
                 end
             end
         else
-            mq.cmd.ini(iniFile, "Inventory", key, '"'..me.Bank(i).ID().."|"..me.Bank(i).Stack().."|"..me.Bank(i).Name()..'"')
+            cmd("/ini "..iniFile.." Inventory "..key..' "'..me.Bank(i).ID().."|"..me.Bank(i).Stack().."|"..me.Bank(i).Name()..'"')
         end
     end
 end
 
-mq.doevents()
+doevents()
 
 -- all purchased AA:s with rank
 if DUMP_KNOWN_AA then
@@ -247,17 +248,17 @@ if DUMP_KNOWN_AA then
         if me.AltAbility(i)() ~= nil then
             --print(me.AltAbility(i).ID(), ": ", me.AltAbility(i).Name())
             -- maps ID => rank|maxrank|purchased points
-            mq.cmd.ini(iniFile, "AARank", me.AltAbility(i).ID(), '"'..me.AltAbility(i).Rank().."|"..me.AltAbility(i).MaxRank().."|"..me.AltAbility(i).PointsSpent()..'"')
+            cmd("/ini "..iniFile.." AARank "..me.AltAbility(i).ID()..' "'..me.AltAbility(i).Rank().."|"..me.AltAbility(i).MaxRank().."|"..me.AltAbility(i).PointsSpent()..'"')
 
             -- if aa missing in aamap.ini, write it
             if mq.TLO.Ini(aaMapFile, "AAMap", me.AltAbility(i).ID(), "-")() == "-" then
-                mq.cmd.dgtell("FOUND NEW AA", me.AltAbility(i).ID(), me.AltAbility(i).Name())
-                mq.cmd.ini(aaMapFile, "AAMap", me.AltAbility(i).ID(), '"'..me.AltAbility(i).Name()..'"')
+                cmd("/dgtell all FOUND NEW AA "..me.AltAbility(i).ID().." "..me.AltAbility(i).Name())
+                cmd("/ini "..aaMapFile.." AAMap "..me.AltAbility(i).ID()..' "'..me.AltAbility(i).Name()..'"')
             end
         end
     end
 end
 
 local seondsElapsed = os.time() - timeStart
-mq.cmd.dgtell("all", "DUMPTOON DONE AFTER ", seondsElapsed, "s")
+cmd("/dgtell all DUMPTOON DONE AFTER "..seondsElapsed.."s")
 

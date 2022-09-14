@@ -16,5 +16,5 @@ function tprint(tbl, indent)
 end
 
 function dbg(s)
-    print(mq.TLO.Time().."| "..s)
+    print(time().."| "..s)
 end

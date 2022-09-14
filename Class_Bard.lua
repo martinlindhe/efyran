@@ -7,7 +7,7 @@ local Bard = { currentMelody = "" }
 -- tells all bards to play given melody name
 mq.bind("/playmelody", function(name)
     if is_orchestrator() then
-        mq.cmd.dgexecute("brd", "/playmelody", name)
+        cmd("/dgexecute brd /playmelody "..name)
     end
     if is_brd() then
         Bard.PlayMelody(name)
@@ -28,19 +28,19 @@ end
 function Bard.PlayMelody(name)
 
     if botSettings.settings.songs == nil then
-        mq.cmd.dgtell("ERROR no bard songs declared")
-        mq.delay(50000)
+        cmd("/dgtell all ERROR no bard songs declared")
+        delay(50000)
         return
     end
 
-    if mq.TLO.Window("MerchantWnd").Open() then
+    if window_open("MerchantWnd") then
         return
     end
 
     local songSet = botSettings.settings.songs[name:lower()]
     if songSet == nil then
-        mq.cmd.dgtell("ERROR no such song set", name)
-        mq.cmd.beep(1)
+        cmd("/dgtell all ERROR no such song set "..name)
+        cmd("/beep 1")
         return
     end
 
@@ -48,14 +48,14 @@ function Bard.PlayMelody(name)
 
     local gemSet = ""
     for v, songRow in pairs(songSet) do
-        local gem = memorizeSpell(songRow)
+        local gem = memorize_spell(songRow)
         if gem ~= nil then
             gemSet = gemSet .. gem .. " "
         end
     end
 
-    mq.cmd.twist(gemSet)
-    mq.cmd.dgtell("all Playing melody \ay"..name.."\ax.")
+    cmd("/twist "..gemSet)
+    cmd("/dgtell all Playing melody \ay"..name.."\ax.")
 
     Bard.currentMelody = name
 end
