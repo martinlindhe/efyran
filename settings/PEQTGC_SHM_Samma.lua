@@ -57,24 +57,6 @@ settings.self_buffs = {
     --"Rage/MinMana|40",
 }
 
-settings.bot_buffs = {
-    ["Talisman of Fortitude/MinMana|60"] = {
-        "Bandy", "Nullius", "Crusade", "Manu",
-    },
-
-    -- NOTE: I do focus team18, Erland does rest
-    ["Talisman of Wunshi/MinMana|50"] = {
-        -- team18
-        "Stor", "Bandy", "Crusade", "Spela", "Azoth", "Blastar",
-        "Myggan", "Absint", "Trams", "Kamaxia", "Gerwulf", "Redito",
-        "Kniven", "Besty", "Grimakin", "Chancer", "Fandinu",
-    },
-
-    ["Talisman of the Tribunal/MinMana|40"] = {
-        "Bandy", "Manu", "Crusade", "Nullius",
-    },
-}
-
 settings.combat_buffs = { -- XXX impl
 --[[
 ; combat buffs:
@@ -128,12 +110,6 @@ settings.healing = {
         "Ancestral Guard/HealPct|50",
 
         "Distillate of Divine Healing XI/HealPct|10",
-    },
-
-    ["rez"] = { -- XXX impl
-        -- L59 Incarnate Anew (90% exp, 20s cast, 700 mana)
-        -- Lxx Call of the Wild (0% rez, corpse can be properly rezzed later)
-        --"Call of the Wild",
     },
 
     ["cures"] = {

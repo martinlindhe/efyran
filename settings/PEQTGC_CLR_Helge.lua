@@ -41,17 +41,13 @@ settings.healing = {
         "Sanctuary/HealPct|13",
 
         -- L69 Ward of Retribution (add defenstive proc: Ward of Retribution Parry)
-        "Ward of Retribution/HealPct|50/Delay|3m",
+        "Ward of Retribution/HealPct|50",
 
         "Distillate of Divine Healing XI/HealPct|12",
 
         "Divine Avatar/HealPct|20",
 
         "Divine Retribution/HealPct|25",
-    },
-
-    ["rez"] = {
-        "Blessing of Resurrection",
     },
 
     ["cures"] = { -- XXX impl. was [Cures] in e3

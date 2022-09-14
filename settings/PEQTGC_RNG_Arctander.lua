@@ -66,31 +66,6 @@ settings.self_buffs = {
     "Howl of the Predator/MinMana|50", -- 90 atk slot 2, double atk 3-20%
 }
 
-settings.bot_buffs = {
-    ["Strength of Tunare/MinMana|50/CheckFor|Spiritual Vitality"] = {
-        "Besty", "Blod", "Urinfact", "Sweetlard", "Azoth", "Yelwen", "Laser", "Knuck",
-        "Kniven", "Strupen", "Fosco", "Lotho", "Grimakin",
-        "Spela", "Garotta", "Gerwulf", "Chancer", "Sophee", "Alethea", "Moola", "Saberku",
-        "Rupat", "Debre", "Kedel", "Lynnmary",
-        "Kasta", "Bulf", "Halsen", "Nacken", "Ryggen", "Papp", "Hypert", "Crust", "Pantless", "Plin",
-    },
-
-    ["Howl of the Predator/MinMana|50"] = {
-        "Azoth", "Yelwen", "Laser", "Knuck", "Fosco", "Lotho", "Grimakin", "Kniven", "Strupen",
-        "Blod", "Urinfact", "Sweetlard", "Besty",
-        "Spela", "Garotta", "Gerwulf", "Chancer", "Sophee", "Alethea", "Moola", "Saberku",
-        "Rupat", "Debre", "Kedel", "Lynnmary",
-        "Kasta", "Bulf", "Halsen", "Nacken", "Ryggen", "Papp", "Hypert", "Crust", "Pantless", "Plin",
-    },
-
-    -- ac + ds:
-    -- L62 Call of the Rathe (10 ds, 34 ac)
-    -- L67 Guard of the Earth (13 ds, 49 ac)
-    ["Guard of the Earth/MinMana|50"] = {
-        --"Bandy", "Manu", "Crusade", "Nullius",
-    }
-}
-
 settings.healing = {
     ["life_support"] = {
         "Weapon Shield Discipline/HealPct|30",

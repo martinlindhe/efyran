@@ -60,34 +60,8 @@ settings.self_buffs = {
     -- L70 Armor of the Pious (563 hp, 46 ac, 9 mana/tick)
     -- NOTE: does not stack with DRU Skin
     --"Armor of the Pious/MinMana|90/CheckFor|Balikor's Mark",
-}
 
-settings.bot_buffs = {
-    -- NOTE: Stor does team18, Helge does the rest
-    ["Aura of Devotion/MinMana|50"] = {
-        "Blastar", "Myggan", "Absint", "Trams", "Redito", "Samma", "Fandinu",
-    },
-
-    -- NOTE: Stor does team18, Helge does the rest
-    ["Panoply of Vie/MinMana|80"] = {
-        "Blastar", "Myggan", "Absint", "Trams", "Redito", "Samma", "Fandinu",
-    },
-
-    ["Ward of Valiance/MinMana|70/CheckFor|Hand of Conviction"] = {
-        "Bandy", "Manu", "Nullius", "Crusade", "Juancarlos",
-    },
-
-    -- NOTE: Stor does team18, Kamaxia does the rest
-    ["Balikor's Mark/MinMana|50"] = {
-        -- team18
-        "Bandy", "Crusade", "Spela", "Azoth", "Blastar", "Myggan", "Absint", "Trams", "Gerwulf", "Redito",
-        "Kniven", "Samma", "Besty", "Grimakin", "Chancer", "Fandinu", "Drutten",
-
-        -- pl 2021
-        "Endstand", "Nacken", "Halsen", "Ryggen", "Katten", "Tervet",
-        "Gasoline", "Saga", "Brinner", "Katan", "Kasta", "Bulf", "Papp",
-        "Pantless", "Crust", "Plin", "Hypert",
-    },
+    "Shimmering Bauble of Trickery/Shrink",
 }
 
 settings.healing = {
@@ -96,7 +70,7 @@ settings.healing = {
         "Sanctuary/HealPct|13",
 
         -- L69 Ward of Retribution (add defenstive proc: Ward of Retribution Parry)
-        "Ward of Retribution/HealPct|50/Delay|3m",
+        "Ward of Retribution/HealPct|50",
 
         "Distillate of Divine Healing XI/HealPct|12",
 
@@ -111,21 +85,6 @@ settings.healing = {
         -- defensive - stun attackers:
         -- L70 Divine Retribution I AA (id:5866, proc Divine Retribution Effect)
         "Divine Retribution/HealPct|25",
-    },
-
-    ["rez"] = { -- XXX impl? or just auto code the rez spells. theres still no new ones on LIVE, except for AE rez aa (?)
-        -- L12 Reanimation (0% exp, 6s cast, 20s recast)
-        -- L18 Reconstitution (10% exp, 6s cast, 20s recast)
-        -- L22 Reparation (20% exp, 6s cast, 20s recast)
-        -- L27 Revive (35% exp, 6s cast, 20s recast)
-        -- L32 Renewal (50% exp, 6s cast, 20s recast)
-        -- L37 Resuscitate (60% exp, 6s cast, 20s recast)
-        -- L42 Restoration (75% exp, 6s cast, 20s recast)
-        -- L47 Resurrection (90% exp, 6s cast, 700 mana)
-        -- L56 Reviviscence (96% exp, 7s cast, 600 mana)
-        -- L60 ? Water Sprinkler of Nem Ankh (epic 1.0, Reviviscence clicky. 10s cast)
-        -- Lxx Blessing of Resurrection AA (96% exp, 3s cast, 12s recast)
-        "Blessing of Resurrection",
     },
 
     ["cures"] = { -- XXX impl. was [Cures] in e3

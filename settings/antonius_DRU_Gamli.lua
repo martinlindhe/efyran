@@ -104,13 +104,6 @@ settings.healing = {
         "Distillate of Divine Healing XIII/HealPct|18",
     },
 
-    ["rez"] = { -- XXX impl
-        -- L59 Incarnate Anew (90% exp, 20s cast, 700 mana)
-        -- Lxx Call of the Wild (0% rez, corpse can be properly rezzed later)
-        --"Incarnate Anew",
-        "Call of the Wild",
-    },
-
     ["cures"] = { -- XXX impl.
         ["Cure Disease"] = {
             "Rabies/Zone|chardok",

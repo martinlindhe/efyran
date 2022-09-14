@@ -24,11 +24,6 @@ settings.healing = {
 settings.pet = {
     ["auto"] = false,
 
-    -- L07 Leering Corpse
-    -- L14 Bone Walk
-    -- Lxxxxxxxxxxxxxxxxxxxxx
-    ["spell"] = "Bone Walk/MinMana|80/Reagent|Bone Chips",
-
     ["heals"] = {
     },
 

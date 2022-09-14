@@ -21,12 +21,14 @@ function Heal.Init()
 
         if me_healer() and channel == Heal.CurrentHealChannel() and botSettings.settings.healing ~= nil then
             if string.sub(msg, 1, 1) ~= "/" then
-                -- XXX ignore text starting with a  "/"
+                -- ignore text starting with a  "/"
                 handleHealmeRequest(msg)
             end
         end
     end)
 
+    -- Perform rez on target or delegate it to nearby cleric
+    ---@param spawnID integer
     mq.bind("/rezit", function(spawnID)
         print("rezit", spawnID)
 
@@ -41,38 +43,68 @@ function Heal.Init()
                 return
             end
 
-            spawnID = tostring(spawn.ID())
+            spawnID = spawn.ID()
             if spawn.Type() ~= "Corpse" then
                 print("/rezit ERROR: Target is not a corpse (type ", spawn.Type(), ")")
                 return
             end
 
-            print("Requesting rez for ", spawn.Name())
-            mq.cmd.dgexecute(heal.CurrentHealChannel(), "/rezit "..spawn.ID())
+            if not is_clr() then
+                local clrName = nearest_peer_by_class("CLR")
+                if clrName == nil then
+                    mq.cmd.dgtell("all \arERROR\ax: Cannot request rez, no cleric nearby.")
+                    return
+                end
+                print("Requesting rez for \ay"..spawn.Name().."\ax from \ag"..clrName.."\ax.")
+                mq.cmd.dexecute(clrName, "/rezit "..spawn.ID())
+                return
+            end
         end
 
-        if botSettings.settings.healing == nil or botSettings.settings.healing.rez == nil then
-            return
-        end
-
-        -- perform rez
         local spawn = spawn_from_id(spawnID)
         if spawn == nil then
             -- unlikely
-            mq.cmd.dgtell("all ERROR: tried to rez spawnid ", spawnID, " which is not found in zone")
-            mq.cmd.beep(1)
+            mq.cmd.dgtell("all ERROR: tried to rez spawnid ", spawnID, " which is not in zone "..mq.TLO.Zone.ShortName())
             return
         end
-        print("Performing rez on ", spawnID, " ", type(spawnID), " ", spawn.Name)
+        print("Performing rez on ", spawnID, " ", type(spawnID), " ", spawn.Name())
 
-        -- find first rez that is ready to use
-        for k, rez in pairs(botSettings.settings.healing.rez) do
-            -- TODO: chose the best spell for the moment. auto code spells. now we just pick the 1st.
-            mq.cmd.dgtell("all Rezzing", spawn.Name, "with", rez)
-            castSpell(rez, spawn.ID())
-            break
+        -- try 3 times to get a rez spell before giving up (to wait for ability to become ready...)
+        for i = 1, 3 do
+            local rez = get_rez_spell_item_aa()
+            if rez ~= nil then
+                mq.cmd.dgtell("all Rezzing \ag"..spawn.Name().."\ax with \ay"..rez.."\ax. "..i.."/3")
+                castSpell(rez, spawn.ID())
+                break
+            else
+                mq.cmd.dgtell("all \arWARN\ax: Not ready to rez \ag"..spawn.Name().."\ax. "..i.."/3")
+            end
+            mq.doevents()
+            mq.delay(2000) -- 2s delay
         end
 
+    end)
+
+    -- Rezzes nearby player corpses
+    mq.bind("/aerez", function()
+        mq.cmd("/dgtell all AERez started ...")
+
+        local spawnQuery = 'pccorpse radius 100'
+        for i = 1, spawn_count(spawnQuery) do
+            local spawn = mq.TLO.NearestSpawn(i, spawnQuery)
+
+            target_id(spawn.ID())
+
+            local rez = get_rez_spell_item_aa()
+            if rez ~= nil then
+                mq.cmd.dgtell("all Rezzing", spawn.Name, "with", rez)
+                castSpell(rez, spawn.ID())
+                break
+            end
+            mq.doevents()
+            mq.delay(10000) -- 10s delay
+        end
+        print("AEREZ ENDING")
     end)
 
     joinCurrentHealChannel()
@@ -98,6 +130,7 @@ end
 
 local healQueueMaxLength = 10
 
+---@param s string
 function parseHealmeRequest(s)
     local name = ""
     local pct = 0
@@ -113,7 +146,7 @@ function parseHealmeRequest(s)
     return name, pct
 end
 
--- msg is "Avicii 75" (Name/PctHP)
+---@param msg string Example "Avicii 75" (Name/PctHP)
 function handleHealmeRequest(msg)
 
     local peer, pct = parseHealmeRequest(msg)
@@ -159,91 +192,118 @@ function Heal.Tick()
         Heal.performLifeSupport()
     end
 
-    -- check if heals need to be casted
-    if Heal.queue:size() > 0 and botSettings.settings.healing ~= nil then
-        --print("heal tick. queue is ", Heal.queue:size(), ": ", Heal.queue:describe())
-
-        -- first find any TANKS
-        if botSettings.settings.healing.tanks ~= nil and botSettings.settings.healing.tank_heal ~= nil then
-            --print("check if any listed tanks is in queue ...")
-            for k, peer in pairs(botSettings.settings.healing.tanks) do
-                if Heal.queue:contains(peer) then
-                    local pct = Heal.queue:prop(peer)
-                    if healPeer(botSettings.settings.healing.tank_heal, peer, pct) then
-                        return
-                    end
-                 end
-            end
-        end
-
-        -- then find any IMPORTANT
-        if botSettings.settings.healing.important ~= nil and botSettings.settings.healing.important_heal ~= nil then
-            --print("check if any listed important bots is in queue ...")
-            for k, peer in pairs(botSettings.settings.healing.important) do
-                if Heal.queue:contains(peer) then
-                    local pct = Heal.queue:prop(peer)
-                    if healPeer(botSettings.settings.healing.important_heal, peer, pct) then
-                        return
-                    end
-                 end
-            end
-        end
-
-        -- finally care for the rest
-        if botSettings.settings.healing.all_heal ~= nil then
-            --print("check if ANY bots is in queue...")
-            local peer = Heal.queue:peek_first()
-            if peer ~= nil then
-                local pct = Heal.queue:prop(peer)
-                --print("healing ", peer, " at pct ", pct)
-                if healPeer(botSettings.settings.healing.all_heal, peer, pct) then
-                    return
-                end
-            end
-        end
-    end
+    Heal.processQueue()
 
     Heal.acceptRez()
 
     Heal.medCheck()
 end
 
-function Heal.acceptRez()
-    if window_open("ConfirmationDialogBox") then
-        local s = mq.TLO.Window("ConfirmationDialogBox").Child("CD_TextOutput").Text()
-        -- XXX full text
+function Heal.processQueue()
+    -- check if heals need to be casted
+    if Heal.queue:size() == 0 or botSettings.settings.healing == nil then
+        return
+    end
+    --print("heal tick. queue is ", Heal.queue:size(), ": ", Heal.queue:describe())
 
-        -- Call of the Wild, druid recall to corpse, can still be rezzed.
-        -- "NAME is attempting to return you to your corpse. If you accept this, you will still be able to get a resurrection later. Do you wish this?"
-        if string.find(s, "wants to cast") ~= nil or string.find(s, "attempting to return you") ~= nil then
-            -- grab first word from sentence
-            local i = 1
-            local peer = ""
-            for w in s:gmatch("%S+") do
-                if i == 1 then
-                    peer = w
-                    break
+    -- first find any TANKS
+    if botSettings.settings.healing.tanks ~= nil and botSettings.settings.healing.tank_heal ~= nil then
+        --print("check if any listed tanks is in queue ...")
+        for k, peer in pairs(botSettings.settings.healing.tanks) do
+            if Heal.queue:contains(peer) then
+                local pct = Heal.queue:prop(peer)
+                if healPeer(botSettings.settings.healing.tank_heal, peer, pct) then
+                    return
                 end
-                i = i + 1
-            end
-
-            --print("got a rez from", peer, " ( ", spawn.Name() , ")")
-            if not is_peer(peer) then
-                mq.cmd.dgtell("all WARNING: got a rez from (NOT A PEER)", peer, ": ", s)
-                mq.cmd.beep(1)
-                mq.delay(1000) -- XXX
-                -- XXX should we decline the rez?
-                return
-            end
-            mq.cmd.dgtell("all Accepting rez from "..peer)
-            mq.cmd("/notify ConfirmationDialogBox Yes_Button leftmouseup")
-
-            -- XXX click in the RespawnWnd if open (live)
-            if window_open("RespawnWnd") then
-                mq.cmd.dgtell("all BEEP RespawnWnd is open ...")
-                mq.cmd.beep(1)
             end
         end
+    end
+
+    -- then find any IMPORTANT
+    if botSettings.settings.healing.important ~= nil and botSettings.settings.healing.important_heal ~= nil then
+        --print("check if any listed important bots is in queue ...")
+        for k, peer in pairs(botSettings.settings.healing.important) do
+            if Heal.queue:contains(peer) then
+                local pct = Heal.queue:prop(peer)
+                if healPeer(botSettings.settings.healing.important_heal, peer, pct) then
+                    return
+                end
+            end
+        end
+    end
+
+    -- finally care for the rest
+    if botSettings.settings.healing.all_heal ~= nil then
+        --print("check if ANY bots is in queue...")
+        local peer = Heal.queue:peek_first()
+        if peer ~= nil then
+            local pct = Heal.queue:prop(peer)
+            --print("healing ", peer, " at pct ", pct)
+            if healPeer(botSettings.settings.healing.all_heal, peer, pct) then
+                return
+            end
+        end
+    end
+end
+
+function Heal.acceptRez()
+    if not window_open("ConfirmationDialogBox") then
+        return
+    end
+
+    local s = mq.TLO.Window("ConfirmationDialogBox").Child("CD_TextOutput").Text()
+    -- XXX full text
+
+    -- Call of the Wild, druid recall to corpse, can still be rezzed.
+    -- "NAME is attempting to return you to your corpse. If you accept this, you will still be able to get a resurrection later. Do you wish this?"
+    if string.find(s, "wants to cast") ~= nil or string.find(s, "attempting to return you") ~= nil then
+        -- grab first word from sentence
+        local i = 1
+        local peer = ""
+        for w in s:gmatch("%S+") do
+            if i == 1 then
+                peer = w
+                break
+            end
+            i = i + 1
+        end
+
+        --print("got a rez from", peer, " ( ", spawn.Name() , ")")
+        if not is_peer(peer) then
+            mq.cmd.dgtell("all WARNING: got a rez from (NOT A PEER)", peer, ": ", s)
+            mq.cmd.beep(1)
+            mq.delay(1000) -- XXX
+            -- XXX should we decline the rez?
+            return
+        end
+        mq.cmd.dgtell("all Accepting rez from "..peer)
+        mq.cmd("/notify ConfirmationDialogBox Yes_Button leftmouseup")
+
+        -- click in the RespawnWnd if open (live)
+        if window_open("RespawnWnd") then
+            mq.cmd.dgtell("all BEEP RespawnWnd is open ...")
+            mq.cmd.beep(1)
+        end
+
+        -- let some time pass after accepting rez.
+        mq.delay(5000)
+
+        -- target my corpse
+        mq.cmd("/target "..mq.TLO.Me.Name().."'s corpse")
+        mq.delay(1000)
+
+        -- open loot window
+        mq.cmd("/loot")
+        mq.delay(5000, function() return window_open("LootWnd") end)
+
+        if not window_open("LootWnd") then
+            mq.cmd.dgtell("all ERROR FATAL CANNOT OPEN MY LOOT WINDOW.")
+            return
+        end
+
+        -- click loot all button
+        mq.cmd("/notify LootWnd LootAllButton leftmouseup")
+        mq.delay(30000, function() return not window_open("LootWnd") end)
     end
 end
 
@@ -328,7 +388,7 @@ function Heal.performLifeSupport()
             skip = true
         end
 
-        if is_alt_ability(spellConfig.Name) and not is_alt_ability_ready(spellConfig.Name) then
+        if have_alt_ability(spellConfig.Name) and not is_alt_ability_ready(spellConfig.Name) then
             --mq.cmd.dgtell("all performLifeSupport skip ", spellConfig.Name, ", AA is not ready")
             skip = true
         end
@@ -363,7 +423,7 @@ function Heal.performLifeSupport()
                 local spell = getSpellFromBuff(spellConfig.Name)
                 if spell ~= nil then
                     local spellName = spell.RankName()
-                    if have_item(spellConfig.Name) or is_alt_ability(spellConfig.Name) then
+                    if have_item(spellConfig.Name) or have_alt_ability(spellConfig.Name) then
                         spellName = spellConfig.Name
                     end
                     mq.cmd.dgtell("all USING LIFE SUPPORT", spellName, "at", mq.TLO.Me.PctHPs(), "%")
@@ -372,12 +432,13 @@ function Heal.performLifeSupport()
             end
             return
         end
-        mq.doevents()
-        mq.delay(1)
     end
 end
 
 -- uses healing.tank_heal, returns true if spell was cast
+---@param spell_list table
+---@param peer string Name of peer to heal.
+---@param pct integer Health % of peer.
 function healPeer(spell_list, peer, pct)
     --print("Heal: ", peer, " is in my queue, at ", pct, " want heal!!!")
 

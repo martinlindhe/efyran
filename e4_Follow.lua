@@ -8,13 +8,14 @@ function Follow.Init()
 
     -- tell everyone else to click nearby door/object (pok stones, etc)
     mq.bind("/clickit", function(name)
-        print("CLICKING NEARBY DOOR xxx name")
+
+        -- XXX spawn check if door within X radius
+        mq.cmd("/doortarget")
+        print("CLICKING NEARBY DOOR ", mq.TLO.DoorTarget.Name(), " id ", mq.TLO.DoorTarget.ID())
 
         if is_orchestrator() then
             mq.cmd.dgzexecute("/clickit")
         else
-            -- XXX spawn check if door within X radius
-            mq.cmd("/doortarget")
             mq.delay(math.random(0, 10000)) -- delay 0 to 10s to not flood connection
             mq.cmd("/click left door")
         end
@@ -52,6 +53,8 @@ function Follow.Init()
         if is_orchestrator() then
             mq.cmd.dgzexecute("/portto", name)
         end
+
+        mq.delay(math.random(0, 10000)) -- delay 0 to 10s to not flood connection
 
         local spellName
         if mq.TLO.Me.Class.ShortName() == "WIZ" then
@@ -136,6 +139,8 @@ function Follow.Init()
             return
         end
 
+        mq.delay(math.random(0, 10000)) -- delay 0 to 10s to not flood connection
+
         -- run across (need pos + heading from orchestrator)
         local spawn = spawn_from_peer_name(startingPeer)
         if spawn == nil then
@@ -199,16 +204,13 @@ function Follow.Pause()
 end
 
 function Follow.Resume()
-    if Follow.spawn ~= nil then
-        print("resuming follow")
-        mq.cmd("/afollow spawn", Follow.spawn.ID())
-
-        -- XXX face upwards to not get stuck using /stick
-        --mq.cmd.target("id", Follow.spawn.ID())
-        --mq.cmd("/stick hold 15 uw")
-    else
-        print("Follow.Resume: failed. spawnID is nil")
+    if Follow.spawn == nil then
+        return
     end
+    mq.cmd("/afollow spawn", Follow.spawn.ID())
+
+    --mq.cmd("/target id "..Follow.spawn.ID())
+    --mq.cmd("/stick hold 15 uw") -- face upwards to better run over obstacles
 end
 
 return Follow

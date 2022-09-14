@@ -1,3 +1,4 @@
+local mq = require("mq")
 local Queue = { values = {} }
 Queue.__index = Queue
 
@@ -26,9 +27,6 @@ function Queue.remove(self, name)
 
     if idx ~= -1 then
         table.remove(Queue.values, idx)
-    else
-        mq.cmd.dgtell("all cant find name to remove from queue", name, ", queue: ", Queue:describe())
-        mq.cmd.beep(1)
     end
 end
 

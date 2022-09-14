@@ -82,6 +82,10 @@ end
 ---@param peerName string
 ---@return boolean
 function is_peer(peerName)
+    if mq.TLO.DanNet(peerName)() == nil then
+        -- XXX happened once or twice that a toon wasnt connected to dannet. use "/dnet info" for more details
+        --mq.cmd.dgtell("all is_peer failed with " ,  peerName)
+    end
     return mq.TLO.DanNet(peerName)() ~= nil
 end
 
@@ -160,15 +164,16 @@ end
 function target_id(id)
     mq.cmd("/target id "..tostring(id))
     mq.delay(10)
-    mq.delay(1000, function() return mq.TLO.Target.ID() == tonumber(id) end)
+    mq.delay(1000, function() return mq.TLO.Target.ID() == id end)
 end
 
 -- Partial search by name
 ---@param name string
 ---@return item|nil
 function get_item(name)
-    if mq.TLO.FindItem(name).ID() ~= nil then
-        return mq.TLO.FindItem(name)
+    local item = mq.TLO.FindItem(name)
+    if item() ~= nil then
+        return item
     end
     return nil
 end
@@ -207,8 +212,8 @@ end
 ---@param name string
 ---@return boolean
 function is_spell_in_book(name)
-    if is_alt_ability(name) then
-        -- NOTE: some AA's overlap with spell names. use is_alt_ability() to distinguish. Examples:
+    if have_alt_ability(name) then
+        -- NOTE: some AA's overlap with spell names. Examples:
         -- CLR/06 Sanctuary / CLR Sanctuary AA
         -- SHM/62 Ancestral Guard / SHM Ancestral Guard AA
         return false
@@ -220,8 +225,8 @@ end
 ---@param name string
 ---@return boolean
 function is_spell(name)
-    if is_alt_ability(name) then
-        -- NOTE: some AA's overlap with spell names. use is_alt_ability() to distinguish. Examples:
+    if have_alt_ability(name) then
+        -- NOTE: some AA's overlap with spell names. Examples:
         -- CLR/06 Sanctuary / CLR Sanctuary AA
         -- SHM/62 Ancestral Guard / SHM Ancestral Guard AA
         return false
@@ -232,8 +237,9 @@ end
 ---@param name string
 ---@return spell|nil
 function get_spell(name)
-    if mq.TLO.Spell(name).ID() ~= nil then
-        return mq.TLO.Spell(mq.TLO.Spell(name).RankName)
+    local spell = mq.TLO.Spell(name)
+    if spell ~= nil then
+        return mq.TLO.Spell(spell.RankName)
     end
     return nil
 end
@@ -262,7 +268,7 @@ end
 -- returns true if `name` is an AA that you have purchased
 ---@param name string
 ---@return boolean
-function is_alt_ability(name)
+function have_alt_ability(name)
     return mq.TLO.Me.AltAbility(name)() ~= nil
 end
 
@@ -302,7 +308,7 @@ function cast_alt_ability(name, spawnID)
     end
 
     mq.cmd(cmd)
-    mq.delay(1000)
+    mq.delay(500)
     mq.delay(20000, function() return not is_casting() end)
 
     if is_brd() then
@@ -362,13 +368,19 @@ end
 
 -- pauses until casting current spell is finished
 function wait_until_not_casting()
-    mq.delay(20000, function() return not is_casting() end)
+    mq.delay(20000, function() return is_brd() or not is_casting() end)
 end
 
 -- Am I moving?
 ---@return boolean
 function is_moving()
     return mq.TLO.Me.Moving()
+end
+
+-- Am I invisible?
+---@return boolean
+function is_invisible()
+    return mq.TLO.Me.Invis()
 end
 
 -- Am I sitting?
@@ -381,6 +393,12 @@ end
 ---@return boolean
 function is_brd()
     return mq.TLO.Me.Class.ShortName() == "BRD"
+end
+
+-- Am I a Cleric?
+---@return boolean
+function is_clr()
+    return mq.TLO.Me.Class.ShortName() == "CLR"
 end
 
 -- Am I in a guild?
@@ -519,7 +537,7 @@ function open_bags()
     for i = 1, 10 do
         local pack = "Pack"..tostring(i)
         local slot = get_inventory_slot(pack)
-        if is_container(slot) and not mq.TLO.Window(pack).Open() then
+        if slot ~= nil and is_container(slot) and not mq.TLO.Window(pack).Open() then
             mq.cmd("/itemnotify "..pack.." rightmouseup")
             mq.delay(1) -- this delay is needed to ensure /itemnotify is not called too fast
             mq.delay(1000, function() return mq.TLO.Window(pack).Open() end)
@@ -533,7 +551,7 @@ function close_bags()
     for i = 1, 10 do
         local pack = "Pack"..tostring(i)
         local slot = get_inventory_slot(pack)
-        if is_container(slot) and mq.TLO.Window(pack).Open() then
+        if slot ~= nil and is_container(slot) and mq.TLO.Window(pack).Open() then
             mq.cmd("/itemnotify "..pack.." rightmouseup")
             mq.delay(1) -- this delay is needed to ensure /itemnotify is not called too fast
             mq.delay(1000, function() return not mq.TLO.Window(pack).Open() end)
@@ -625,15 +643,16 @@ end
 
 ---@param name string
 function cast_veteran_aa(name)
-    if is_alt_ability(name) then
-        if is_alt_ability_ready(name) then
-            cast_alt_ability(name, mq.TLO.Me.ID())
-        else
-            mq.cmd.dgtell("all", "ERROR:", name, "is not ready, ready in", mq.TLO.Me.AltAbilityTimer(name).TimeHMS() )
-        end
-    else
+    if not have_alt_ability(name) then
         mq.cmd.dgtell("all", "ERROR: I do not have AA", name)
+        return
     end
+    if not is_alt_ability_ready(name) then
+        mq.cmd.dgtell("all", "ERROR:", name, "is not ready, ready in", mq.TLO.Me.AltAbilityTimer(name).TimeHMS() )
+        return
+    end
+
+    cast_alt_ability(name, mq.TLO.Me.ID())
 end
 
 ---@return boolean
@@ -759,19 +778,17 @@ function drop_invis()
             mq.cmd("/doability Sneak")
             mq.delay(2000)
         end
-        if mq.TLO.Me.Invis() then
+        if is_invisible() then
             print("ROG - dropping Hide")
             mq.cmd("/doability Hide")
             mq.delay(2000)
         end
     end
+
     mq.cmd("/makemevisible")
-
-    mq.delay(1000, function() return not mq.TLO.Me.Invis() end)
-
-    if mq.TLO.Me.Invis() then
-        mq.cmd.beep()
-        mq.cmd.dgtell("all FATAL ERROR unhandled invis buff on me!")
+    mq.delay(1000, function() return not is_invisible() end)
+    if is_invisible() then
+        mq.cmd.dgtell("all \arERROR\ax Cannot make myself visible.")
     end
 end
 
@@ -819,6 +836,7 @@ local shortToLongClass = {
 
 -- returns the nearest peer by class shortname, or nil on failure
 ---@param shortClass string Class shortname.
+---@return string|nil
 function nearest_peer_by_class(shortClass)
     local longName = shortToLongClass[shortClass]
     if longName == nil then
@@ -838,6 +856,11 @@ function nearest_peer_by_class(shortClass)
     return nil
 end
 
+-- Seeds the current process with a value unlikely to be used by another process
+function seed_process()
+    math.randomseed(mq.TLO.EverQuest.PID() + (os.clock() * 1000))
+end
+
 ---@return boolean
 function in_table(t, val)
     for k, v in pairs(t) do
@@ -850,11 +873,20 @@ end
 
 ---@class SpellObject
 ---@field public Name string Spell name.
----@field public Shrink boolean
----@field public GoM boolean
----@field public NoAggro boolean
----@field public NoPet boolean
-
+---@field public Shrink boolean This is a shrink effect
+---@field public GoM boolean Only use if Gift of Mana is available.
+---@field public NoAggro boolean Only use if not on aggro list.
+---@field public NoPet boolean Only use if not having a pet.
+---@field public Class string Class shortname in upper case, comma separated value.
+---@field public NotClass string Class shortname in upper case, comma separated value.
+---@field public Gem integer The spell gem to use for casting this spell. Default is 5.
+---@field public Reagent string Required component in order to cast this spell.
+---@field public CheckFor string Comma-separated list of effects on target. A match will block the spell from being cast.
+---@field public MinMana integer % of minimum mana required to cast this spell.
+---@field public HealPct integer % of health threshold before heal is cast.
+---@field public MinMobs integer Minimum number of mobs nearby required to cast this spell.
+---@field public MaxMobs integer Maximum number of mobs nearby allowed to cast this spell.
+---@field public Zone integer Comma-separated list of zone short names where spell is allowed to cast.
 
 local shortProperties = { "Shrink", "GoM", "NoAggro", "NoPet" }
 -- parses a spell/ability etc line with properties, returns a object
@@ -924,3 +956,78 @@ function split_str(s, sSeparator)
     end
     return aRecord
  end
+
+-- Returns the name of rez spell/aa/item ready to be used, or nil
+---@ return string|nil
+function get_rez_spell_item_aa()
+    local rezzes = { -- in falling priority
+        "Blessing of Resurrection",             -- CLR/65 (sof) AA. 96% exp, 3s cast, 12s recast
+        "Water Sprinkler of Nem Ankh",          -- CLR/65 Epic 1.0. 96% exp, 10s cast
+        "Reviviscence",                         -- CLR/56. 96% exp, 7s cast, 600 mana
+        "Resurrection",                         -- CLR/47: 90% exp, 6s cast, 700 mana
+        "Restoration",                          -- CLR/42: 75% exp, 6s cast, 20s recast
+        "Resuscitate",                          -- CLR/37: 60% exp, 6s cast, 20s recast
+        "Renewal",                              -- CLR/32: 50% exp, 6s cast, 20s recast
+        "Revive",                               -- CLR/27: 35% exp, 6s cast, 20s recast
+        "Reparation",                           -- CLR/22: 20% exp, 6s cast, 20s recast
+        "Reconstitution",                       -- CLR/18: 10% exp, 6s cast, 20s recast
+        "Reanimation",                          -- CLR/12: 0% exp, 6s cast, 20s recast
+
+        "Incarnate Anew",                       -- DRU/59, SHM/59 Incarnate Anew (90% exp, 20s cast, 700 mana)
+        --"Call of the Wild",                     -- DRU/XX, SHM/xx AA, 0% exp, corpse can be properly rezzed later)
+
+        "Convergence/Reagent|Essence Emerald",  -- NEC/53 (93% exp)
+    }
+
+    -- find first rez that is ready to use
+    for k, rez in pairs(rezzes) do
+        if is_alt_ability_ready(rez) or is_spell_ready(rez) or is_item_clicky_ready(rez) then
+            return rez
+        end
+    end
+    return nil
+end
+
+---@return boolean
+function have_combat_ability(name)
+    return mq.TLO.Me.CombatAbility(name)() ~= nil
+end
+
+-- Returns nil on error
+---@param spellRow string Example: "War March of Muram/Gem|4"
+---@param defaultGem integer|nil Use nil for the default gem 5
+--@return integer|nil
+function memorizeSpell(spellRow, defaultGem)
+    local o = parseSpellLine(spellRow) -- XXX parse this once on script startup. dont evaluate all the time !!!
+
+    local nameWithRank = mq.TLO.Spell(o.Name).RankName()
+    --print("considering bard song ... ", o.Name, " ... ", nameWithRank)
+
+    if not is_spell_in_book(nameWithRank) then
+        mq.cmd.dgtell("ERROR don't know spell/song", o.Name)
+        mq.cmd.beep(1)
+        return nil
+    end
+
+    local gem = defaultGem
+    if o["Gem"] ~= nil then
+        gem = o["Gem"]
+    elseif botSettings.settings.gems[o.Name] ~= nil then
+        gem = botSettings.settings.gems[o.Name]
+    else
+        mq.cmd.dgtell("all \arWARN\ax: Spell/song lacks gems default slot or Gem|n argument: ", spellRow)
+    end
+
+    -- make sure that spell is memorized the required gem, else scribe it
+    if mq.TLO.Me.Gem(gem).Name() ~= nameWithRank then
+        print("Memorizing spell/song in gem ", gem, ": want:", nameWithRank, ", have:", mq.TLO.Me.Gem(gem).Name())
+        mq.cmd('/memorize "'..nameWithRank..'" '..gem)
+        mq.delay(200)
+        mq.delay(5000, function()
+            return not window_open("SpellBookWnd")
+        end)
+        mq.delay(200)
+    end
+
+    return gem
+end

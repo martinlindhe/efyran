@@ -1,3 +1,4 @@
+local mq = require("mq")
 local PetSpells = require("e4_PetSpells")
 
 local Pet = {}
@@ -88,13 +89,13 @@ function find_pet_spell()
     local reagent = ""
     if mq.TLO.Me.Class.ShortName() == "ENC" then
         reagent = "/Reagent|Tiny Dagger"
-    elseif mq.TLO.Me.Class.ShortName() == "NEC" and not is_alt_ability("Deathly Pact") then
+    elseif mq.TLO.Me.Class.ShortName() == "NEC" and not have_alt_ability("Deathly Pact") then
         -- NOTE: skip reagent with Deathly Pact AA
         reagent = "/Reagent|Bone Chips"
-    elseif mq.TLO.Me.Class.ShortName() == "SHD" and not is_alt_ability("Deathly Pact") then
+    elseif mq.TLO.Me.Class.ShortName() == "SHD" and not have_alt_ability("Deathly Pact") then
         -- NOTE: skip reagent with Deathly Pact AA
         reagent = "/Reagent|Bone Chips"
-    elseif mq.TLO.Me.Class.ShortName() == "MAG" and not is_alt_ability("Elemental Pact") then
+    elseif mq.TLO.Me.Class.ShortName() == "MAG" and not have_alt_ability("Elemental Pact") then
          -- NOTE: skip reagent with Elemental Pact AA
         reagent = "/Reagent|Malachite"
     end

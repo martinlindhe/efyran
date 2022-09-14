@@ -213,7 +213,7 @@ function Buffs.Init()
     -- enqueues a buff to be cast on a peer
     -- is normally called from another peer, to request a buff
     mq.bind("/queuebuff", function(buff, peer)
-        print("queuebuff buff=", buff, ", peer=", peer)
+        --print("queuebuff buff=", buff, ", peer=", peer)
         table.insert(Buffs.queue, {
             ["Peer"] = peer,
             ["Buff"] = buff,
@@ -221,16 +221,16 @@ function Buffs.Init()
     end)
 end
 
-local refreshBuffsTimer = timer.new_expired(20 * 1) -- 20s
+local refreshBuffsTimer = timer.new_random(20 * 1) -- 20s
 
-local handleBuffsTimer = timer.new_expired(3 * 1) -- 3s
+local handleBuffsTimer = timer.new_random(3 * 1) -- 3s
 
 function Buffs.Tick()
     if not is_brd() and is_casting() then
         return
     end
 
-    if is_sitting() or is_hovering() or in_neutral_zone() or window_open("MerchantWnd") or window_open("GiveWnd") or window_open("BigBankWnd") or spawn_count("pc radius 100") == 1 then
+    if follow.spawn ~= nil or is_sitting() or is_hovering() or in_neutral_zone() or window_open("MerchantWnd") or window_open("GiveWnd") or window_open("BigBankWnd") or window_open("SpellBookWnd") or window_open("LootWnd") or spawn_count("pc radius 100") == 1 then
         return
     end
 
@@ -239,8 +239,8 @@ function Buffs.Tick()
         return
     end
 
-    --print("buff tick. refresh_buffs:", botSettings.toggles.refresh_buffs, ", expired:", refreshBuffsTimer:expired(), ", still:", not mq.TLO.Me.Moving(), ", visible:", not mq.TLO.Me.Invis()  )
-    if botSettings.toggles.refresh_buffs and refreshBuffsTimer:expired() and not is_moving() and not mq.TLO.Me.Invis() then
+    --print("buff tick. refresh_buffs:", botSettings.toggles.refresh_buffs, ", expired:", refreshBuffsTimer:expired(), ", still:", not is_moving(), ", visible:", not is_invisible()  )
+    if botSettings.toggles.refresh_buffs and refreshBuffsTimer:expired() and not is_moving() and not is_invisible() then
         if not buffs.RefreshSelfBuffs() then
             if not buffs.RefreshAura() then
                 if not pet.Summon() then
@@ -352,6 +352,7 @@ function Buffs.RefreshSelfBuffs()
     if botSettings.settings.self_buffs == nil then
         return false
     end
+    print(mq.TLO.Time(), " Buffs.RefreshSelfBuffs()")
     for k, buffItem in pairs(botSettings.settings.self_buffs) do
         mq.doevents()
         if refreshBuff(buffItem, mq.TLO.Me) then
@@ -419,12 +420,19 @@ function Buffs.RequestBuffs()
             -- see if we have any of this buff form on
             -- XXX assume what spell will be used and see if it will stack on me.
             local found = false
+            local refresh = false
             for idx, checkRow in pairs(buffRows) do
                 local o = parseSpellLine(checkRow)
-                if have_buff(o.Name) and mq.TLO.Me.Buff(o.Name).Duration.Ticks() >= 6 then
-                    --print("Will not request \ay", spellConfig.Name, "\ax. I have buff \ay"..o.Name.."\ax.")
-                    found = true
-                    break
+                if have_buff(o.Name) then
+                    local ticks = mq.TLO.Me.Buff(o.Name).Duration.Ticks()
+                    if ticks ~= nil and ticks >= 6 then
+                        --print("Will not request \ay", spellConfig.Name, "\ax. I have buff \ay"..o.Name.."\ax.")
+                        found = true
+                        break
+                    else
+                        -- only check for free buff slots if we are not refreshing buff
+                        refresh = true
+                    end
                 end
             end
 
@@ -436,10 +444,13 @@ function Buffs.RequestBuffs()
                     return true
                 end
 
+                if not refresh and mq.TLO.Me.FreeBuffSlots() <= 0 then
+                    mq.cmd.dgtell("all \arWARN\ax: Won't ask for \ay"..spellConfig.Name.."\ax as I only have "..mq.TLO.Me.FreeBuffSlots().." free buff slots")
+                    return true
+                end
+
                 print("Requesting buff \ax"..spellConfig.Name.."\ay from \ag"..askClass.." "..peer.."\ax ...")
                 mq.cmd.dex(peer, "/queuebuff "..spellConfig.Name.." "..mq.TLO.Me.Name())
-
-                return true
             end
         else
             --print("Will not request \ay", spellConfig.Name, "\ax. Not all classes available: \ayClass:"..spellConfig.Class..", NotClass:"..(spellConfig.NotClass or "").."\ax.")
@@ -452,15 +463,18 @@ end
 
 -- returns a table with class shortname booleans wether nearby peers are of desired classes. used by Buffs.RequestBuffs()
 function find_available_classes()
-    -- XXX loop all nearby PC spawns, check if peer, set class key, return
+    -- loop all nearby PC spawns, check if peer, set class key, return
     local o = {}
 
-    local spawnQuery = "pc notid " .. mq.TLO.Me.ID() .. " radius 100"
+    local spawnQuery = "pc notid " .. mq.TLO.Me.ID()
     for i = 1, spawn_count(spawnQuery) do
         local spawn = mq.TLO.NearestSpawn(i, spawnQuery)
-        local peer = spawn.Name()
-        if is_peer(peer) then
-            o[spawn.Class.ShortName()] = true
+        if spawn ~= nil then
+            local shortClass = spawn.Class.ShortName()
+            local peer = spawn.Name()
+            if is_peer(peer) then
+                o[shortClass] = true
+            end
         end
     end
     return o

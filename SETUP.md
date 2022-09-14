@@ -35,6 +35,6 @@ put Items.txt in folder .\build\bin\release\resources
 
 Done.
 
-XXX, /link item doesnt work on emu... 31 aug 2022?
+XXX, /link item doesn't work on emu... 31 aug 2022?
 
 

@@ -12,23 +12,23 @@ groups.team12 = {
 -- keys: vp2, sebilis, howling stones, potime, tacvi, anguish
 -- TODO keys: vt
 groups.dps30 = {
-    {"Bandy", "Stor", "Spela", "Nullius", "Laser", "Helge"}, -- tank
-    {"Chancer", "Samma", "Knuck", "Blod", "Kniven", "Arctander"}, -- melee 1
-    {"Gerwulf", "Erland", "Azoth","Urinfact",  "Strupen", "Drutten"}, -- melee 2
-    {"Garotta", "Tervet", "Besty", "Sweetlard", "Fosco", "Myggan"}, -- melee 3
-    {"Alethea", "Trams", "Blastar", "Brann", "Fandinu", "Redito"},  -- casters + buffers
+    {"Bandy", "Stor", "Spela", "Nullius", "Laser", "Helge"},            -- tank
+    {"Chancer", "Samma", "Knuck", "Blod", "Kniven", "Arctander"},       -- melee 1
+    {"Gerwulf", "Erland", "Azoth","Urinfact",  "Strupen", "Drutten"},   -- melee 2
+    {"Garotta", "Tervet", "Besty", "Sweetlard", "Fosco", "Myggan"},     -- melee 3
+    {"Alethea", "Trams", "Blastar", "Brann", "Fandinu", "Redito"},      -- casters + buffers
 }
 
 -- port30 == peq-dps30.bat
 groups.port30 = {
-    {"Bandy", "Stor", "Spela", "Nullius", "Laser", "Blastar"},
-    {"Chancer", "Samma", "Knuck", "Blod", "Kniven", "Brann"},
-    {"Gerwulf", "Erland", "Azoth","Urinfact",  "Strupen", "Drutten"},
-    {"Garotta", "Tervet", "Besty", "Sweetlard", "Fosco", "Fandinu"},
-    {"Alethea", "Trams", "Helge", "Arctander", "Myggan", "Redito"},
+    {"Bandy", "Stor", "Spela", "Nullius", "Laser", "Blastar"},          -- WIP LDR AA
+    {"Chancer", "Samma", "Knuck", "Blod", "Kniven", "Brann"},           -- WIP LDR AA
+    {"Gerwulf", "Erland", "Azoth","Urinfact",  "Strupen", "Drutten"},   -- WIP LDR AA
+    {"Garotta", "Tervet", "Besty", "Sweetlard", "Fosco", "Fandinu"},    -- MAX
+    {"Alethea", "Trams", "Helge", "Arctander", "Myggan", "Redito"},     -- MAX
 }
 
--- port54 = peq-dps54.bat
+-- port54 = peq-dps30.bat + peq-dps54.bat
 -- classic anguish team, killed omm
 groups.port54 = {
     {"Bandy", "Stor", "Spela", "Nullius", "Laser", "Blastar"},
@@ -37,10 +37,24 @@ groups.port54 = {
     {"Garotta", "Tervet", "Besty", "Sweetlard", "Fosco", "Fandinu"},
     {"Alethea", "Trams", "Helge", "Arctander", "Myggan", "Redito"},
     --
-    {"Sophee", "Manu", "Kamaxia", "Kasta", "Crusade", "Fisse"},
+    {"Sophee", "Manu", "Kamaxia", "Kasta", "Crusade", "Fisse"},         -- WIP LDR AA
+    {"Moola", "Runar", "Fedt", "Arriane", "Absint", "Lofty"},           ---MAX
     {"Crust", "Halsen", "Katten", "Bulf", "Papp", "Saga"},
     {"Hypert", "Lotho", "Yelwen", "Kasper", "Maynarrd", "Umlilo"},
-    {"Moola", "Runar", "Fedt", "Arriane", "Absint", "Lofty"},
+}
+
+-- port30noobs = peq-dps30.bat + peq-new21.bat
+groups.port30noobs = {
+    {"Bandy", "Stor", "Spela", "Nullius", "Laser", "Blastar"},
+    {"Chancer", "Samma", "Knuck", "Blod", "Kniven", "Brann"},
+    {"Gerwulf", "Erland", "Azoth", "Urinfact",  "Strupen", "Drutten"},
+    {"Garotta", "Tervet", "Besty", "Sweetlard", "Fosco", "Fandinu"},
+    {"Alethea", "Trams", "Helge", "Arctander", "Myggan", "Redito"},
+    --
+    {"Hypert", "Katten", "Halsen", "Kasta", "Bulf", "Saga"},            -- WIP LDR AA
+    {"Pantless", "Tervet", "Ryggen", "Papp", "Nacken", "Fisse"},        -- WIP LDR AA
+    {"Plin", "Sogaard", "Endstand", "Runar", "Katan", "Brinner"},       -- WIP LDR AA
+    {"Crust", "Fedt", "Manu", "Kamaxia", "Gasoline"},                   -- WIP LDR AA
 }
 
 return groups

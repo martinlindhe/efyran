@@ -1,15 +1,10 @@
 local mq = require("mq")
 
-follow = require('e4_Follow')
-
 local Assist = {}
 
 local assistTarget = nil -- the current assist target
 
 local spellSet = "main" -- the current spell set. XXX impl switching it
-
-local nearbyPBAEilter = "npc radius 50 zradius 50 los"
-
 
 function Assist.Init()
 
@@ -30,8 +25,8 @@ function Assist.Init()
     Assist.prepareForNextFight()
 
     -- assist on mob until dead
+    ---@param mobID integer
     mq.bind("/assiston", function(mobID)
-
         local spawn
         if is_orchestrator() then
             spawn = mq.TLO.Target
@@ -50,7 +45,7 @@ function Assist.Init()
 
             if is_orchestrator() then
                 -- tell everyone else to attack
-                mq.cmd.dgze("/assiston", spawn.ID())
+                mq.cmd("/dgzexecute /assiston "..spawn.ID())
             else
                 -- we dont auto attack with main driver. XXX impl "/assiston /not|WAR" filter
                 Assist.handleAssistCall(spawn)
@@ -62,19 +57,21 @@ function Assist.Init()
     -- ends assist call
     mq.bind("/backoff", function()
         if is_orchestrator() then
-            mq.cmd.dgzexecute("/backoff")
+            mq.cmd("/dgzexecute /backoff")
         end
         Assist.backoff()
     end)
 
     mq.bind("/pbaeon", function()
         if is_orchestrator() then
-            mq.cmd.dgzexecute("/pbaeon")
+            mq.cmd("/dgzexecute /pbaeon")
         end
 
         if botSettings.settings.assist.pbae == nil then
             return
         end
+
+        local nearbyPBAEilter = "npc radius 50 zradius 50 los"
 
         if spawn_count(nearbyPBAEilter) == 0 then
             mq.cmd.dgtell("all Ending PBAE. No nearby mobs.")
@@ -305,55 +302,54 @@ function Assist.killSpawn(spawn)
 
 
     while true do
-        mq.doevents()
         if assistTarget == nil then
             -- break outer loop if /backoff was called
-            print("meleeLoop: i got called off, breaking outer loop")
+            print("killSpawn: i got called off, breaking outer loop")
             break
         end
         if assistTarget.ID() ~= currentID then
-            print("assist called on another mob, returning!")
+            print("killSpawn: assist called on another mob, returning!")
             return
         end
-        if spawn.Type() == "Corpse" or spawn.Type() == "NULL" then
+        if spawn == nil or spawn.Type() == "Corpse" or spawn.Type() == "NULL" then
             break
         end
 
         --print(spawn.Type, " assist spawn ", assistTarget)
 
-        if not has_target() or mq.TLO.Target.ID() ~= spawn.ID() then
-            -- XXX will happen for healer+nuker setups (DRU,RNG,SHM)
-            mq.cmd.dgtell("all WARN: i lost target, restoring to ", spawn.ID(), " ", spawn.Name())
+        if not is_casting() and (not has_target() or mq.TLO.Target.ID() ~= spawn.ID()) then
+            -- XXX will happen for healers
+            mq.cmd.dgtell("all killSpawn WARN: i lost target, restoring to ", spawn.ID(), " ", spawn.Name())
             mq.cmd.target("id", spawn.ID())
         end
 
+        local used = false
         if melee and botSettings.settings.assist.abilities ~= nil
         and spawn.Distance() < spawn.MaxRangeTo() and spawn.LineOfSight() then
             -- use melee abilities
             for v, abilityRow in pairs(botSettings.settings.assist.abilities) do
-                mq.doevents()
                 if assistTarget == nil then
                     -- break inner loop if /backoff was called
-                    print("melee: i got called off, breaking inner loop")
+                    print("killSpawn melee: i got called off, breaking inner loop")
                     break
                 end
 
                 if Assist.castSpellAbility(spawn, abilityRow) then
+                    used = true
                     break
                 end
             end
         end
+        mq.delay(1)
 
         -- caster/hybrid assist.nukes
-        if botSettings.settings.assist.nukes ~= nil and not is_casting() then
-            local nukes = botSettings.settings.assist.nukes[spellSet]
-            if nukes ~= nil then
-                for v, nukeRow in pairs(nukes) do
-                    mq.doevents()
+        if not used and botSettings.settings.assist.nukes ~= nil and not is_casting() then
+            if botSettings.settings.assist.nukes[spellSet] ~= nil then
+                for v, nukeRow in pairs(botSettings.settings.assist.nukes[spellSet]) do
                     --print("evaluating nuke ", nukeRow)
                     if assistTarget == nil then
                         -- break inner loop if /backoff was called
-                        print("nukes: i got called off, breaking inner loop")
+                        print("killSpawn nukes: i got called off, breaking inner loop")
                         break
                     end
 
@@ -366,7 +362,10 @@ function Assist.killSpawn(spawn)
             end
         end
 
+        mq.doevents()
         mq.delay(1)
+
+        heal.processQueue()
     end
 
     if not is_brd() and is_casting() then

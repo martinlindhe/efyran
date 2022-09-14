@@ -80,6 +80,7 @@ Buff Spell Level   Minimum Target Level
 /buffit						- buff target
 /dropbuff <name>            - drop buff from all peers in zone, partial buff name match. "all" to drop all buffs
 /dropinvis                  - drop invisibility on all peers in zone
+/gathercorpses              - summon nearby corpses into a pile
 
 /fdi             			- find item by partial name
 /fmi                        - find missing item. report peers who lack an item
@@ -111,10 +112,10 @@ Example: "Molten Orb/NoAggro/Summon|Summon: Molten Orb"
 
 ## special channels:
 
-"skillup" - ability skillups is posted here
+"skillup" - ability skill-ups is posted here
 "xp" - xp gains is posted here
 
-"server_zoneshort_healme" - heal request channel for current zone
+"server_zone_healme" - heal request channel for current zone
 
 
 

@@ -9,7 +9,7 @@ if mq.TLO.Me.Class.Name() ~= "Magician" then
     return
 end
 
-if mq.TLO.Me.Gem("Call of the Hero")() == nil then
+if not is_memorized("Call of the Hero") then
     print("Memorizing Call of the Hero")
     mq.cmd("/memorize 1771 5")
 end
@@ -35,19 +35,16 @@ while true do
 
             print("Want to coh group member ", n , " ", spawn.Name(), " dist ", spawn.Distance() )
             if is_alt_ability_ready("Call of the Hero") then
-                mq.cmd.dgtell("all CoTH:ing (AA) \ay", spawn.Name(), "\ax ...")
+                mq.cmd.dgtell("all CoTH:ing (AA) \ag"..spawn.Name().."\ax ...")
                 mq.cmd('/casting "Call of the Hero|alt" -targetid|'.. tostring(spawn.ID()) .. ' ')
             elseif is_spell_ready("Call of the Hero") then
-                mq.cmd.dgtell("all CoTH:ing (spell) \ay", spawn.Name(), "\ax ...")
+                mq.cmd.dgtell("all CoTH:ing (spell) \ag"..spawn.Name().."\ax ...")
                 mq.cmd('/casting "Call of the Hero|gem5" -targetid|'.. tostring(spawn.ID()) .. ' ')
             end
 
-            --print("Waiting")
             mq.doevents()
             mq.delay(2000)
             mq.delay(20000, function() return not is_casting() end)
-            --print("done waiting")
-            mq.delay(1000)
         end
     end
 

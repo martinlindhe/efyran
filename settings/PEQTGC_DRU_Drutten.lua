@@ -67,13 +67,6 @@ settings.healing = {
         "Distillate of Divine Healing XI/HealPct|10",
     },
 
-    ["rez"] = { -- XXX impl
-        -- L59 Incarnate Anew (90% exp, 20s cast, 700 mana)
-        -- Lxx Call of the Wild (0% rez, corpse can be properly rezzed later)
-        --"Incarnate Anew",
-        --"Call of the Wild",
-    },
-
     ["cures"] = { -- XXX impl.
 --[[
 Cure=Remove Greater Curse/Bandy/CheckFor|Clinging Apathy

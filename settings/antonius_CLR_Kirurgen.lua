@@ -45,8 +45,6 @@ settings.self_buffs = {
     "Order of the Resolute/MinMana|50/CheckFor|Hand of Temerity", -- ac
 }
 
-settings.bot_buffs = {} -- XXX
-
 settings.healing = {
     ["life_support"] = {
         -- Divine Arbitration AA - balance group HP %, 3 min reuse
@@ -61,7 +59,7 @@ settings.healing = {
         -- L70 Sanctuary AA (id:5912, removes you from combat), 1h12 min reuse
         "Sanctuary/HealPct|13",
 
-        --"Ward of Retribution/HealPct|50/Delay|3m", -- XXX buy spell
+        --"Ward of Retribution/HealPct|50", -- XXX buy spell
 
         "Distillate of Divine Healing XIII/HealPct|18",
 
@@ -75,11 +73,6 @@ settings.healing = {
         "Eleventh-Hour/HealPct|35/MinMana|60", -- XXX is MinMana check done on life_support ?
 
         "Pious Remedy/HealPct|70/MinMana|5",
-    },
-
-    ["rez"] = { -- XXX impl? or just auto code the rez spells
-        "Water Sprinkler of Nem Ankh",
-        --"Blessing of Resurrection", -- XXX get AA
     },
 
     ["cures"] = { -- XXX impl

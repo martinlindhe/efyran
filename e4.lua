@@ -3,10 +3,13 @@
 local mq = require("mq")
 require("ezmq")
 
+-- throttle LUA
+--mq.cmd("/lua conf turboNum 100")
+
 mq.imgui.init('imgui-init', function()
 end)
 
-math.randomseed(mq.TLO.EverQuest.PID() + (os.clock() * 1000))
+seed_process()
 
 require("debug")
 
@@ -48,6 +51,10 @@ items.Init()
 mq.cmd.dgtell("all E4 started")
 
 while true do
+    heal.Tick()
+    mq.doevents()
+    mq.delay(1)
+
     buffs.Tick()
     mq.doevents()
     mq.delay(1)
@@ -55,9 +62,4 @@ while true do
     qol.Tick()
     mq.doevents()
     mq.delay(1)
-
-    heal.Tick()
-    mq.doevents()
-    mq.delay(1)
 end
-

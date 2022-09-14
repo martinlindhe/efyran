@@ -76,11 +76,6 @@ settings.healing = {
 
         "Distillate of Divine Healing XIII/HealPct|12",
     },
-
-    ["rez"] = {
-        -- L53 Convergence (93% rez)
-        --"Convergence/Reagent|Essence Emerald",
-    }
 }
 
 

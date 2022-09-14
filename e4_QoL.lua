@@ -4,6 +4,8 @@ local mq = require("mq")
 
 local QoL = {}
 
+local maxFactionLoyalists = false
+
 function QoL.Init()
 
     QoL.loadRequiredPlugins()
@@ -39,8 +41,8 @@ function QoL.Init()
     QoL.verifySpellLines()
 
     mq.event("zoning", "LOADING, PLEASE WAIT...", function(text)
-        print("zoning. waiting")
-        mq.delay(15000) -- 15s
+        --print("zoning. waiting")
+        --mq.delay(15000) -- 15s
     end)
 
     mq.event("zoned", "You have entered #1#.", function(text, zone)
@@ -94,6 +96,15 @@ function QoL.Init()
         mq.cmd.dgtell("xp", "gained xp")
     end)
 
+    mq.event("faction_oow_loyalists", "Your faction standing with Dranik Loyalists could not possibly get any better.", function()
+        -- XXX allow to query on all peers who lack the flag.
+        if not maxFactionLoyalists then
+            mq.cmd.dgtell("xp", "max loyalist faction")
+            maxFactionLoyalists = true
+        end
+    end)
+
+
     -- clear all chat windows on current peer
     mq.bind("/clr", function()
         mq.cmd.clear()
@@ -131,7 +142,7 @@ function QoL.Init()
 
     -- /raidinvite shorthand
     mq.bind("/ri", function(name)
-        mq.cmd("/raidinvite", name)
+        mq.cmd("/raidinvite "..name)
     end)
 
     -- quickly exits all eqgame.exe instances using task manager
@@ -302,7 +313,7 @@ function QoL.Init()
     mq.bind("/banker", function()
         local aaName = "Summon Clockwork Banker"
         if is_alt_ability_ready(aaName) then
-            cast_alt_ability(aaName)
+            cast_alt_ability(aaName, mq.TLO.Me.ID())
             return
         end
 
@@ -335,12 +346,43 @@ function QoL.Init()
     mq.bind("/cohgroup", function()
         mq.cmd("/lua run cohgroup")
     end)
+
+    mq.bind("/gathercorpses", function()
+        -- XXX summon nearby corpses into a pile
+
+        if is_rof2() then
+            mq.cmd.dgaexecute("/consent raid") -- XXX persistent raid consent setting on
+        end
+
+        local spawnQuery = 'pccorpse radius 100'
+        for i = 1, spawn_count(spawnQuery) do
+            local spawn = mq.TLO.NearestSpawn(i, spawnQuery)
+
+            target_id(spawn.ID())
+            mq.delay(2)
+            mq.cmd("/corpse")
+            mq.delay(1000, function() return spawn.Distance() < 20 end)
+        end
+    end)
+
+    -- make all peer leave expedition
+    mq.bind("/leaveexp", function()
+        mq.cmd.dgtell("all Instructing peers to leave expedition ...")
+        mq.cmd("/dgaexecute /dzquit")
+    end)
+
+    -- hide all dz windows
+    mq.bind("/dzhide", function()
+        mq.cmd("/noparse /dgaexecute /if (${Window[dynamiczonewnd]}) /windowstate dynamiczonewnd close")
+    end)
 end
 
 function QoL.loadRequiredPlugins()
     local requiredPlugins = {
         "MQ2DanNet",
-        --"MQ2AdvPath", -- not currently used
+        "MQ2Debuffs", -- XXX not used yet. to be used for auto-cure feature
+        "MQ2AdvPath", -- XXX /afollow or /stick ?
+        --"MQ2ConstantAffinity", -- XXX
         "MQ2MoveUtils",
         "MQ2Cast",
     }
@@ -348,6 +390,18 @@ function QoL.loadRequiredPlugins()
         if not is_plugin_loaded(v) then
             load_plugin(v)
             print("WARNING: "..v.." was not loaded")
+        end
+    end
+
+    if is_rof2() then
+        local requiredEmuPlugins = {
+            "MQMountClassicModels", -- XXX make use of
+        }
+        for k, v in pairs(requiredEmuPlugins) do
+            if not is_plugin_loaded(v) then
+                load_plugin(v)
+                print("WARNING: "..v.." was not loaded")
+            end
         end
     end
 end
@@ -422,22 +476,20 @@ end
 -- runs every second
 function QoL.Tick()
     -- close f2p nag screen
-    if mq.TLO.Window("AlertWnd").Open() then
+    if window_open("AlertWnd") then
         mq.cmd.notify("AlertWnd ALW_Dismiss_Button leftmouseup")
     end
 
     -- auto accept trades
-    if mq.TLO.Window("tradewnd").Open() and not has_cursor_item() then
+    if window_open("tradewnd") and not has_cursor_item() then
         if has_target() and mq.TLO.DanNet(mq.TLO.Target())() ~= nil then
             mq.cmd.dgtell("all Accepting trade in 5s with", mq.TLO.Target())
             mq.delay(5000, function() return has_cursor_item() end)
             if not has_cursor_item() then
                 mq.cmd.notify("tradewnd TRDW_Trade_Button leftmouseup")
-            else
-                --print("Item on cursor, ignoring trade")
             end
         else
-            mq.cmd.dgtell("all Ignoring trade from unknown toon ", mq.TLO.Target())
+            mq.cmd.dgtell("all \arWARN\ax Ignoring trade from non-peer ", mq.TLO.Target())
             mq.cmd.beep(1)
         end
     end

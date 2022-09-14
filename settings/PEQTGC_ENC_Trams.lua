@@ -68,47 +68,6 @@ settings.self_buffs = {
     "Guard of Druzzil/MinMana|80",
 }
 
-settings.bot_buffs = {
-    -- NOTE: Trams do mana regen
-    ["Voice of Clairvoyance/MinMana|30"] = {
-        "Stor", "Kamaxia", "Maynarrd", "Arriane", "Gerrald", "Helge", "Hankie", "Hybregee",
-        "Drutten", "Lofty", "Samma", "Erland",
-    },
-
-    ["Voice of Clairvoyance/MinMana|50"] = {
-        "Blastar", "Fandinu", "Redito", "Brann", "Umlilo",
-        "Myggan", "Agatha", "Besty", "Arctander",
-
-        -- roof
-        "Gimaxx", "Kesok", "Shimaclop",
-
-        -- pl 2021
-        "Negan", "Fatale", "Soya", "Sliten", "Tand", "Stampe", "Krille", "Bomben", "Eldballe", "Tunnan", "Kotten", "Skarven",
-
-        "Gasoline", "Katan", "Fedt", "Sogaard", "Fisse", "Runar", "Katten", "Sogaard", "Tervet",
-        "Saga", "Brinner",
-    },
-
-    -- NOTE: Trams do group haste
-    ["Hastening of Salik/MinMana|40"] = {
-        "Bandy", "Manu", "Juancarlos", "Crusade", "Nullius",
-        "Azoth", "Yelwen", "Laser", "Knuck",
-        "Kniven", "Strupen", "Fosco", "Lotho", "Grimakin",
-        "Arctander", "Besty", "Blod", "Urinfact", "Sweetlard",
-        "Spela", "Chancer", "Gerwulf", "Garotta", "Alethea", "Sophee", "Moola", "Saberku", "Lynnmary",
-        "Rupat", "Debre", "Kedel",
-        "Nacken", "Ryggen", "Halsen", "Papp", "Kasta", "Bulf", "Endstand",
-        "Hypert", "Crust", "Plin", "Pantless",
-    },
-
-    -- NOTE: Trams and Kasper both do GoD
-    ["Guard of Druzzil/MinMana|40"] = {
-        "Bandy", "Manu", "Crusade", "Nullius",
-        "Stor", "Drutten", "Samma", "Spela",
-        "Kamaxia", "Lofty", "Erland",
-    },
-}
-
 settings.combat_buffs = { -- XXX impl
 --[[
 ; L63 Night's Dark Terror (scarecrow, Lifetap Strike proc, 45 atk, 120 dex) - DOES not stack with Avatar
@@ -146,12 +105,6 @@ settings.healing = {
 
 settings.pet = {
     ["auto"] = false,
-
-    -- Lxx Kintaz's Animation
-    -- L55 Zumaik's Animation
-    -- L62 Aeldorb's Animation
-    -- L66 Salik's Animation
-    ["spell"] = "Salik's Animation/MinMana|20/Reagent|Tiny Dagger",
 
     ["heals"] = {},
     ["buffs"] = {
