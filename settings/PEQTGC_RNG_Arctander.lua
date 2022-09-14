@@ -1,14 +1,10 @@
 local settings = { }
 
-settings.swap = { -- XXX impl
+settings.swap = {
     ["main"] = "Aurora, the Heartwood Blade|Mainhand/Notched Blade of Bloodletting|Offhand/Symbol of the Overlord|Ranged",
-
     ["bfg"] = "Breezeboot's Frigid Gnasher|Mainhand",
-
     ["ranged"] = "Plaguebreeze|Ranged",
-
     ["noriposte"] = "Fishing Pole|Mainhand/Muramite Aggressor's Bulwark|Offhand",
-
     ["fishing"] = "Fishing Pole|Mainhand",
 }
 
@@ -25,23 +21,11 @@ settings.gems = {
 
 settings.self_buffs = {
     "Fuzzy Foothairs",
+    "Veil of Intense Evolution", -- Furious Might (slot 5: 40 atk)
+    "Ring of the Beast", -- Form of Endurance III (slot 5: 270 hp)
+    --"Pendant of Discord", -- Aura of Taelosia (slot 8: 7 mana regen, slot 10: 7 hp regen)
 
-    -- atk buff:
-    -- Furious Might (slot 5: 40 atk)
-    "Veil of Intense Evolution",
-
-    -- form of endurance:
-    -- Form of Endurance III (slot 5: 270 hp) - Ring of the Beast (anguish)
-    "Ring of the Beast",
-
-    -- mana regen clicky:
-    -- Aura of Taelosia (slot 8: 7 mana regen, slot 10: 7 hp regen)
-    -- NOTE: jan 2021-out of buff slots and mana is low prio
-    --"Pendant of Discord",
-
-    -- ac + ds:
-    -- L68 Briarcoat (49 ac, 8 ds)
-    -- "Briarcoat/MinMana|70",
+    -- "Briarcoat/MinMana|70", -- 49 ac, 8 ds
 
     -- SLOT 1 PROC BUFFS:
     -- L64 Nature's Rebuke (add proc Nature's Rebuke Strike)
@@ -54,9 +38,8 @@ settings.self_buffs = {
     --"Nature Veil/MinMana|50",
     "Call of Lightning/MinMana|50",
 
-    -- L65 Mask of the Stalker (slot 3: 3 mana regen)
     -- NOTE: skipping Mask of the Stalker because out of buff slots, june 2022
-    --"Mask of the Stalker/MinMana|30",
+    --"Mask of the Stalker/MinMana|30", -- slot 3: 3 mana regen
 
     -- L62 Strength of Tunare (slot 1: 92 atk, 125 hp, group, cost 250 mana)
     -- L67 Strength of the Hunter (75 atk, 155 hp, group, cost 325 mana)

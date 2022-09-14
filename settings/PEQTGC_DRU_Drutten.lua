@@ -20,32 +20,11 @@ settings.gems = {
 
 settings.self_buffs = {
     "Fuzzy Foothairs",
-
     "Earring of Dragonkin", -- Chaotic Enlightenment (slot 8: 10 mana regen, slot 10: 6 hp regen)
-
     "Xxeric's Matted-Fur Mask", -- Reyfin's Racing Thoughts (slot 4: 450 mana pool)
 
-    -- self ds:
-    -- L07 Thistlecoat (4-6 ac, 1 ds)
-    -- Lxx Thorncoat (31 ac, 5 ds)
-    -- L56 Bladecoat (37 ac, 6 ds)
-    -- L64 Brackencoat (49 ac, 13 ds)
-    -- L68 Nettlecoat (64 ac, 17 ds)
-    --"Nettlecoat",
-
-    -- self mana regen:
-    -- L60 Mask of the Stalker (3 mana/tick)
-    -- L65 Mask of the Forest (4 mana/tick)
-    -- L70 Mask of the Wild (5 mana/tick)
-    "Mask of the Wild/MinMana|10",
-
-    -- L70 Blessing of Steeloak (43 ac, 772 hp, 9 mana/tick, cost 2210 mana, group)
-    "Blessing of Steeloak/MinMana|20",
-
-    -- L51 Circle of Winter (45 fr) - dont stack with Seasons
-    -- L52 Circle of Summer (45 cr) - stacks with Seasons
-    -- L58 Circle of Seasons (55 fr, 55 cr)
-    -- L64 Protection of Seasons (72 fr, 72 cr)
+    "Mask of the Wild/MinMana|10", -- 5 mana/tick
+    "Blessing of Steeloak/MinMana|20",  -- L70 Blessing of Steeloak (43 ac, 772 hp, 9 mana/tick, cost 2210 mana, group)
     "Protection of Seasons/MinMana|40",
 
     "Shimmering Bauble of Trickery/Shrink",

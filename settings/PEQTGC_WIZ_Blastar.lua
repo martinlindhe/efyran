@@ -20,35 +20,13 @@ settings.gems = {
 
 settings.self_buffs = {
     "Fuzzy Foothairs",
+    "Pyromancy/CheckFor|Mana Flare",     -- Lxx Pyromancy AA Rank 3 (id:8408, 15% chance proc spell id:8164, -500 hate, -500 hp/tick, -50 fr)
+    "Earring of Dragonkin", -- Chaotic Enlightenment (slot 8: 10 mana regen, slot 10: 6 hp regen)
+    --"Xxeric's Matted-Fur Mask", -- Reyfin's Racing Thoughts (slot 4: 450 mana pool)
 
-    -- Lxx Pyromancy AA Rank 3 (id:8408, 15% chance proc spell id:8164, -500 hate, -500 hp/tick, -50 fr)
-    "Pyromancy/CheckFor|Mana Flare",
-
-    -- mana regen clicky:
-    -- Chaotic Enlightenment (slot 8: 10 mana regen, slot 10: 6 hp regen)
-    "Earring of Dragonkin",
-
-    -- mana pool clicky:
-    -- Reyfin's Racing Thoughts (slot 4: 450 mana pool, tacvi)
-    -- NOTE: ran out of buff slots at 20-jan 2022
-    --"Xxeric's Matted-Fur Mask",
-
-    -- shield - does not stack with Virtue or Focus:
-    -- LXX Major Shielding
-    -- L54 Shield of the Magi (232-250 hp, 29-31 ac, 22-24 mr)
-    -- L61 Shield of the Arcane (298-300 hp, 34-36 ac, 30 mr)
-    -- L64 Shield of Maelin (350 hp, 38-39 ac, 40 mr)
-    --"Shield of Maelin/MinMana|80",
-
-    -- self rune:
-    -- L63 Force Shield (slot 1: absorb 750 dmg, 2 mana/tick)
-    -- L68 Ether Skin (slot 1: absorb 975 dmg, 3 mana/tick)
-    -- L70 Shield of Dreams (slot 1: absorb 451 dmg, slot 8: +10 resists, slot 9: 3 mana/tick)
     "Ether Skin/MinMana|20/CheckFor|Rune of Rikkukin",
 
-    -- increase spell dmg:
-    -- L63 Iceflame of E`ci (1-30% cold spell dmg for L60 nukes)
-    "Iceflame of E`ci/MinMana|20",
+    "Iceflame of E`ci/MinMana|20", -- L63 Iceflame of E`ci (1-30% cold spell dmg for L60 nukes)
 
     -- familiars - improved stacks with bard song, druzzils does not:
     -- Lxx Minor Familiar (10 all resists, casting level 2)
@@ -71,9 +49,7 @@ settings.self_buffs = {
 settings.healing = {
     ["life_support"] = {
         "Distillate of Divine Healing XI/HealPct|10",
-
-        -- Expendable AA
-        --"Glyph of Stored Life/HealPct|4",
+        --"Glyph of Stored Life/HealPct|4", -- Expendable AA
     },
 }
 

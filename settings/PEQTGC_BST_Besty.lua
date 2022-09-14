@@ -49,28 +49,9 @@ settings.pet = {
     },
 
     ["buffs"] = {
-        -- pet proc:
-        -- L13 Spirit of Lightning (Spirit of Lightning Strike proc)
-        -- L28 Spirit of Inferno (Spirit of Inferno Strike proc)
-        -- L38 Spirit of the Scorpion (Spirit of Scorpion Strike proc)
-        -- L46 Spirit of Vermin (Spirit of Vermin Strike proc)
-        -- L51 Spirit of Wind (Spirit of Wind Strike proc, rate mod 150)
-        -- L53 Spirit of the Storm (Spirit of Storm Strike, rate mod 150)
-        -- L54 Spirit of Snow (Spirit of Snow Strike, rate mod 150)
-        -- L56 Spirit of Flame (FIRE: Spirit of Flame Strike, rate mod 150)
-        -- L63 Spirit of Rellic (COLD: Spirit of Rellic Strike, rate mod 150)
-        -- L68 Spirit of Irionu (COLD: Spirit of Irionu Strike, rate mod 150, 75 dex)
-        -- L70 Spirit of Oroshar (FIRE: Spirit of Oroshar Strike, rate mod 150, 75 dex)
-        "Spirit of Oroshar/MinMana|50",
+        "Spirit of Oroshar/MinMana|50", -- pet proc
 
-        -- pet haste:
-        -- L37 Yekan's Quickening (43-45 str, 60% haste, 20 atk, 11-12 ac)
-        -- L52 Bond of the Wild (51-55 str, 60% haste, 25 atk, 13-15 ac)
-        -- L55 Omakin's Alacrity (60 str, 65-70% haste, 40 atk, 30 ac)
-        -- L59 Sha's Ferocity (99-100 str, 84-85% haste, 60 atk, 60 ac)
-        -- L64 Arag's Celerity (115 str, 85% haste, 75 atk, 71 ac)
-        -- L68 Growl of the Beast (85% haste, 90 atk, 78 ac, 5% skill dmg mod, duration 1h)
-        "Growl of the Beast/MinMana|40",
+        "Growl of the Beast/MinMana|40", -- pet haste
 
         -- L69 Growl of the Panther (1 min, 20% skill dmg mod, +150 hp HoT/tick, inc maxhp 1500)
         "Growl of the Panther/CheckFor|Empathic Fury",

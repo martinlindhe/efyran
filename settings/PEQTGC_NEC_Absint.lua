@@ -20,19 +20,9 @@ settings.pet = {
     },
 
     ["buffs"] = {
-        -- haste
-        -- L23 Intensify Death (25-33 str, 21-30% haste, 6-8 ac)
-        -- L35 Augment Death (37-45 str, 45-55% haste, 9-12 ac
-        -- L55 Augmentation of Death (52-55 str, 65% haste, 14-15 ac)
-        -- L62 Rune of Death (65 str, 70% haste, 18 ac)
-        -- L67 Glyph of Darkness (5% skills dmg mod, 84 str, 70% haste, 23 ac)
-        -- L72 Sigil of the Unnatural (6% skills dmg mod, 96 str, 70% haste, 28 ac)
-        -- L77 Sigil of the Aberrant Rk. II (10% skills dmg mod, 122 str, 70% haste, 36 ac)
-        "Glyph of Darkness/MinMana|30",
+        "Glyph of Darkness/MinMana|30", -- pet haste
 
-        "Tiny Companion/Shrink",
-
-        --"Algae Covered Stiletto/Shrink", -- XXX farm this clicky in powater
+        "Algae Covered Stiletto/Shrink", -- XXX farm this clicky in powater
     },
 }
 

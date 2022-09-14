@@ -21,13 +21,8 @@ settings.gems = {
 }
 
 settings.self_buffs = {
-    -- mana regen clicky:
-    -- Chaotic Enlightenment (slot 8: 10 mana regen, slot 10: 6 hp regen)
-    "Earring of Dragonkin",
-
-    -- mana pool clicky:
-    -- Reyfin's Racing Thoughts (slot 4: 450 mana pool, tacvi)
-    "Xxeric's Matted-Fur Mask",
+    "Earring of Dragonkin", -- Chaotic Enlightenment (slot 8: 10 mana regen, slot 10: 6 hp regen)
+    "Xxeric's Matted-Fur Mask", -- Reyfin's Racing Thoughts (slot 4: 450 mana pool)
 
     -- L59 Elemental Form: Air Rank 1 AA (id:2789, see invis, +10 all resists)
     -- L59 Elemental Form: Air Rank 2 AA (id:2790, see invis, +15 all resists)
@@ -42,19 +37,6 @@ settings.self_buffs = {
     -- L59 Elemental Form: Fire Rank 2 AA (20 ds, 15 int, casting level +3)
     -- L59 Elemental Form: Fire Rank 3 AA (30 ds, 20 int, casting level +5)
     "Elemental Form: Fire",
-
-    -- shield - does not stack with Virtue or Focus:
-    -- LXX Arch Shielding
-    -- L54 Shield of the Magi (232-250 hp, 29-31 ac, 22-24 mr)
-    -- L64 Shield of Maelin (350 hp, 38-39 ac, 40 mr)
-    --"Shield of Maelin/MinMana|80/CheckFor|Elemental Empathy R.",
-
-    -- resist buff - does not stack with druid resists:
-    -- L19 Elemental Shield (14-15 cr, 14-15 fr)
-    -- L41 Elemental Armor (30 cr, 30 fr)
-    -- L54 Elemental Cloak (45 cr, 45 fr)
-    -- L61 Elemental Barrier (60 cr, 60 fr)
-    --"Elemental Barrier/MinMana|100",
 
     "Shimmering Bauble of Trickery/Shrink",
 }
@@ -100,21 +82,8 @@ settings.pet = {
     },
 
     ["buffs"] = {
-        -- pet haste:
-        -- L11 Burnout (15 str, 12-15% haste, 7 ac)
-        -- L29 Burnout II (39-45 str, 29-35% haste, 9 ac)
-        -- L47 Burnout III (50 str, 60% haste, 13 ac)
-        -- LXX Elemental Empathy (x)
-        -- L55 Burnout IV (60 str, 65% haste, 16 ac)
-        -- L60 Ancient: Burnout Blaze (80 str, 80% haste, 22 ac, 50 atk)
-        -- L62 Burnout V (80 str, 85% haste, 22 ac, 40 atk)
-        -- L69 Elemental Fury (85% haste, 29 ac, 52 atk, 5% skill dmg mod)
-        "Elemental Fury/MinMana|25",
-
-        -- pet run speed:
-        -- L27 Expedience (20% movement, 12 min)
-        -- L58 Velocity (59-80% movement, 36 min)
-        "Velocity/MinMana|90",
+        "Elemental Fury/MinMana|25", -- pet haste
+        "Velocity/MinMana|90", -- pet run speed
 
         -- "aura":
         -- L55 Earthen Strength (5% melee dmg to nearby pets)

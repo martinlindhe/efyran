@@ -1,6 +1,6 @@
 local settings = { }
 
-settings.swap = { -- XXX impl
+settings.swap = {
     ["main"] = "Bazu Claw Hammer|Mainhand/Aegis of Superior Divinity|Offhand",
     ["fishing"] = "Fishing Pole|Mainhand",
     ["melee"] = "Weighted Hammer of Conviction|Mainhand", -- 1hb
@@ -20,46 +20,15 @@ settings.gems = {
 settings.self_buffs = {
     "Fuzzy Foothairs",
 
-    -- mana regen clicky:
-    -- Reyfin's Random Musings (slot 8: 9 mana regen, slot 10: 6 hp regen)
-    "Earring of Pain Deliverance",
-
-    -- mana pool clicky:
-    -- Reyfin's Racing Thoughts (slot 4: 450 mana pool, tacvi)
-    -- NOTE: ran out of buff slots at 20-jan 2022
-    --"Xxeric's Matted-Fur Mask",
-
-    -- Eternal Ward (15 all resists, 45 ac) - stacks with all resist buffs. DONT STACK WITH Form of Defense
-    "Lavender Cloak of Destruction",
-
-    -- rune clicky:
-    -- Mantle of Corruption (Geomantra, mitigate 20% spell dmg of 500, decrease 2 mana/tick)
-    --"Mantle of Corruption",
+    "Earring of Pain Deliverance", -- Reyfin's Random Musings (slot 8: 9 mana regen, slot 10: 6 hp regen)
+    --"Xxeric's Matted-Fur Mask", -- Reyfin's Racing Thoughts (slot 4: 450 mana pool)
+    "Lavender Cloak of Destruction",     -- Eternal Ward (15 all resists, 45 ac) - stacks with all resist buffs. DONT STACK WITH Form of Defense
+    --"Mantle of Corruption", -- Mantle of Corruption (Geomantra, mitigate 20% spell dmg of 500, decrease 2 mana/tick)
 
     "Aura of Devotion/MinMana|40",
-
-    -- absorb melee:
-    -- L40 Guard of Vie (absorb 10% melee dmg to 700)
-    -- L54 Protection of Vie (absorb 10% melee dmg to 1200)
-    -- L62 Bulwark of Vie (absorb 10% melee dmg to 1600)
-    -- L67 Panoply of Vie (absorb 10% melee dmg to 2080, 36 min)
     "Panoply of Vie/MinMana|70",
-
     "Balikor's Mark/MinMana|75/CheckFor|Hand of Conviction",
-
-    -- ac - slot 4:
-    -- L61 Ward of Gallantry (54 ac)
-    -- L66 Ward of Valiance (72 ac)
-    -- NOTE: stacks with Symbol + DRU Skin + Focus
     "Ward of Valiance/MinMana|50/CheckFor|Hand of Conviction",
-
-    -- self mana regen:
-    -- L49 Armor of the Faithful (252-275 hp, 22 ac)
-    -- L58 Blessed Armor of the Risen (294-300 hp, 30 ac, 6 mana/tick)
-    -- L65 Armor of the Zealot (450 hp, 36 ac, 8 mana/tick)
-    -- L70 Armor of the Pious (563 hp, 46 ac, 9 mana/tick)
-    -- NOTE: does not stack with DRU Skin
-    --"Armor of the Pious/MinMana|90/CheckFor|Balikor's Mark",
 
     "Shimmering Bauble of Trickery/Shrink",
 }

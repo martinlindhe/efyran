@@ -21,23 +21,9 @@ settings.gems = {
 
 settings.self_buffs = {
     "Fuzzy Foothairs",
-
-    -- Form of Defense III (slot 6: immunity, slot 10: 81 ac)
-    "Hanvar's Hoop",
-
-    -- mana regen clicky:
-    -- Reyfin's Random Musings (slot 8: 9 mana regen, slot 10: 6 hp regen)
-    "Earring of Pain Deliverance",
-
-    -- mana pool clicky:
-    -- Maelin's Meditation (slot 4: 400 mana pool)
-    --"Muramite Signet Orb",
-
-    -- shield - does not stack with Focus / Virtue: - XXX could buff and auto-drop this with a /Ungrouped property ?
-    -- L40 Arch Shielding (140-150 hp, 24-27 ac, 20 mr)
-    -- L54 Shield of the Magi (232-250 hp, 29-31 ac, 22-24 mr)
-    -- L61 Shield of the Arcane (298-300 hp, 34-36 ac, 30 mr)
-    -- L64 Shield of Maelin (350 hp, 38-39 ac, 40 mr)
+    "Hanvar's Hoop", -- Form of Defense III (slot 6: immunity, slot 10: 81 ac)
+    "Earring of Pain Deliverance", -- Reyfin's Random Musings (slot 8: 9 mana regen, slot 10: 6 hp regen)
+    --"Muramite Signet Orb", -- Maelin's Meditation (slot 4: 400 mana pool)
 
     -- self rune - slot 3:
     -- L61 Arcane Rune (absorb 1500 dmg)

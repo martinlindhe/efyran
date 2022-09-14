@@ -1,6 +1,7 @@
 local settings = { }
 
-settings.swap = {} -- XXX impl
+settings.swap = {
+}
 
 settings.gems = {
     -- XXX fill list
@@ -10,38 +11,23 @@ settings.gems = {
     ["Eleventh-Hour"] = 3,
     ["Word of Vivacity"] = 4,
 
-
+    -- 6 unused
     ["Reproval"] = 7,
     ["Catastrophe"] = 8, -- pbae
-
-
-
+    -- 9 unused
     ["Rallied Shield of Vie"] = 10,
     ["Aura of Resolve"] = 11,
     ["Kaerra's Mark"] = 12,
-
-
 }
 
+settings.mount = "Mottled Worg Bridle"
 
 settings.self_buffs = {
     -- XXX do we have any clickies?
 
-    -- self mana regen:
-    -- L49 Armor of the Faithful (252-275 hp, 22 ac)
-    -- L58 Blessed Armor of the Risen (294-300 hp, 30 ac, 6 mana/tick)
-    -- L65 Armor of the Zealot (450 hp, 36 ac, 8 mana/tick)
-    -- L70 Armor of the Pious (563 hp, 46 ac, 9 mana/tick)
-    -- L75 Armor of the Sacred Rk. II (704 hp, 58 ac, 10 mana/tick)
-    -- L80 Armor of the Solemn Rk. II (915 hp, 71 ac, 12 mana/tick)
-    -- NOTE: does not stack with DRU Skin
-
     "Aura of Resolve/MinMana|40", -- spell haste
-
     "Rallied Shield of Vie/MinMana|70", -- absorb melee dmg
-
     "Kaerra's Mark/MinMana|75/CheckFor|Hand of Temerity", -- slot 3 hp
-
     "Order of the Resolute/MinMana|50/CheckFor|Hand of Temerity", -- ac
 }
 
@@ -211,7 +197,5 @@ settings.assist = {
         -- "Catastrophe/Gem|7/MinMana|10",
     },
 }
-
-settings.mount = "Mottled Worg Bridle"
 
 return settings

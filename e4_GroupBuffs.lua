@@ -99,6 +99,20 @@ GroupBuffs.SHM = {
         "Talisman of the Tribunal/MinLevel|46",
     },
 
+    -- L23 Regeneration (5 hp/tick, 17.5 min, cost 100 mana)
+    -- L39 Chloroplast (10 hp/tick, 17.5 min, cost 200 mana)
+    -- L52 Regrowth (20 hp/tick, 17.5 min, cost 300 mana)
+    -- L61 Replenishment (40 hp/tick, 20.5 min, cost 275 mana)
+    -- L63 Blessing of Replenishment (40 hp/tick, 20.5 min, cost 650 mana, group)
+    -- L66 Spirit of Preserverance (60 hp/tick, 21 min, cost 343 mana)
+    -- L69 Talisman of Preserverance (60 hp/tick, 20.5 min, cost 812 mana, group)
+    ["shm_regen"] = {
+        "Chloroplast/MinLevel|1",
+        "Regrowth/MinLevel|41",
+        "Replenishment/MinLevel|45",
+        "Spirit of Preserverance/MinLevel|62",
+    },
+
     -- AC (slot 4, weaker than clr_ac)
     -- L03 Scale Skin (4-6 ac)
     -- L11 Turtle Skin (8-10 ac)
@@ -294,6 +308,20 @@ GroupBuffs.CLR = {
         "Aura of Purpose/MinLevel|71", -- XXX unsure of minlevel
         "Aura of Resolve/MinLevel|77", -- XXX unsure of minlevel
     },
+
+
+    -- self mana regen:
+    -- L34 Armor of Protection (202-225 hp, 15 ac)
+    -- L49 Armor of the Faithful (252-275 hp, 22 ac)
+    -- L58 Blessed Armor of the Risen (294-300 hp, 30 ac, 6 mana/tick)
+    -- L65 Armor of the Zealot (450 hp, 36 ac, 8 mana/tick)
+    -- L70 Armor of the Pious (563 hp, 46 ac, 9 mana/tick)
+    -- L75 Armor of the Sacred Rk. II (704 hp, 58 ac, 10 mana/tick)
+    -- L80 Armor of the Solemn Rk. II (915 hp, 71 ac, 12 mana/tick)
+    -- NOTE: does not stack with DRU Skin
+    ["clr_self_shielding"] = {
+        -- XXX
+    }
 }
 
 GroupBuffs.DRU = {
@@ -415,6 +443,26 @@ GroupBuffs.DRU = {
         "Spirit of Eagle/MinLevel|42",
         "Flight of Eagles/MinLevel|46",
     },
+
+    -- L07 Thistlecoat (4-6 ac, 1 ds)
+    -- Lxx Thorncoat (31 ac, 5 ds)
+    -- L56 Bladecoat (37 ac, 6 ds)
+    -- L64 Brackencoat (49 ac, 13 ds)
+    -- L68 Nettlecoat (64 ac, 17 ds)
+    -- L73 Vididicoat Rk. II (SELF, slot 2: 80 ac, slot 3: 21 ds)
+    -- L78 Viridithorn Coat (SELF, slot 2: 86 ac, slot 3: 23 ds)
+    -- L78 Viridithorn Coat Rk. II (SELF, slot 2: 98 ac, slot 3: 26 ds)
+    ["dru_self_ds"] = {
+        -- XXX
+    },
+
+    -- L60 Mask of the Stalker (3 mana/tick)
+    -- L65 Mask of the Forest (4 mana/tick)
+    -- L70 Mask of the Wild (5 mana/tick)
+    -- L80 Mask of the Shadowcat (SELF, slot 2: 9 mana/tick)
+    ["dru_self_mana"] = {
+        -- XXX
+    }
 }
 
 GroupBuffs.ENC = {
@@ -438,7 +486,7 @@ GroupBuffs.ENC = {
         "Koadic's Endless Intellect/MinLevel|45",
         "Tranquility/MinLevel|46",
         "Voice of Quellious/MinLevel|47",
-        --"Dusty Cap of the Will Breaker/MinLevel|1", -- TODO make use of this clicky. make sure its picked above other spells if available.
+        --"Dusty Cap of the Will Breaker/MinLevel|1", -- TODO make use of this clicky. make sure its picked above other spells if available. need HaveItem and NotHaveItem filters !!!
         "Voice of Clairvoyance/MinLevel|62",
         "Voice of Intuition/MinLevel|71", -- XXX minlevel
         "Voice of Cognizance/MinLevel|76", -- XXX minlevel
@@ -494,6 +542,22 @@ GroupBuffs.ENC = {
         "Rune of Ellowind/Reagent|Peridot/MinLevel|71",
         "Rune of Erradien/Reagent|Peridot/MinLevel|76",
     },
+
+    -- L01 Minor Shielding (6-10 hp, 3-4 ac)
+    -- L06 Lesser Shielding (17-30 hp, 5-9 ac, 6-10 mr)
+    -- L16 Shielding (45-50 hp, 11-13 ac, 11-12 mr)
+    -- L23 Major Shielding (68-75 hp, 16-18 ac, 14 mr)
+    -- L31 Greater Shielding (91-100 hp, 20-22 ac, 16 mr)
+    -- L40 Arch Shielding (140-150 hp, 24-27 ac, 20 mr)
+    -- L54 Shield of the Magi (232-250 hp, 29-31 ac, 22-24 mr)
+    -- L61 Shield of the Arcane (298-300 hp, 34-36 ac, 30 mr)
+    -- L64 Shield of Maelin (350 hp, 38-39 ac, 40 mr)
+    -- L66 Mystic Shield (390 hp, 46 ac, 40 mr)
+    -- NOTE:  does not stack with Virtue or Focus
+    ["enc_self_shielding"] = {
+        -- XXX
+    },
+
 }
 
 GroupBuffs.MAG = {
@@ -520,6 +584,51 @@ GroupBuffs.MAG = {
         "Maelstrom of Ro/MinLevel|46",
         "Circle of Fireskin/MinLevel|62",
     },
+
+    -- L01 Minor Shielding (6-10 hp, 3-4 ac)
+    -- L05 Lesser Shielding (17-30 hp, 5-9 ac, 6-10 mr)
+    -- L16 Shielding (45-50 hp, 11-13 ac, 11-12 mr)
+    -- L24 Major Shielding (68-75 hp, 16-18 ac, 14 mr)
+    -- L32 Greater Shielding (91-100 hp, 20-22 ac, 16 mr)
+    -- L43 Arch Shielding (140-150 hp, 24-27 ac, 20 mr)
+    -- L54 Shield of the Magi (232-250 hp, 29-31 ac, 22-24 mr)
+    -- L61 Shield of the Arcane (298-300 hp, 34-36 ac, 30 mr)
+    -- L64 Shield of Maelin (350 hp, 38-39 ac, 40 mr)
+    -- L66 Elemental Aura (390 hp, 46 ac, 40 mr)
+    -- NOTE:  does not stack with Virtue or Focus
+    ["mag_self_shielding"] = {
+        -- XXX
+        --"Elemental Aura/MinMana|80/CheckFor|Elemental Empathy R.",
+    },
+
+
+    -- L19 Elemental Shield (14-15 cr, 14-15 fr)
+    -- L41 Elemental Armor (30 cr, 30 fr)
+    -- L54 Elemental Cloak (45 cr, 45 fr)
+    -- L61 Elemental Barrier (60 cr, 60 fr)
+    -- NOTE: does not stack with druid resists
+    ["mag_self_resist"] = {
+        -- XXX
+    },
+
+    -- L11 Burnout (15 str, 12-15% haste, 7 ac)
+    -- L29 Burnout II (39-45 str, 29-35% haste, 9 ac)
+    -- L47 Burnout III (50 str, 60% haste, 13 ac)
+    -- LXX Elemental Empathy (x)
+    -- L55 Burnout IV (60 str, 65% haste, 16 ac)
+    -- L60 Ancient: Burnout Blaze (80 str, 80% haste, 22 ac, 50 atk)
+    -- L62 Burnout V (80 str, 85% haste, 22 ac, 40 atk)
+    -- L69 Elemental Fury (85% haste, 29 ac, 52 atk, 5% skill dmg mod)
+    ["mag_pet_haste"] = {
+        -- XXX
+    },
+
+    -- L27 Expedience (20% movement, 12 min)
+    -- L58 Velocity (59-80% movement, 36 min)
+    ["mag_pet_runspeed"] = {
+        -- XXX
+    },
+
 }
 
 GroupBuffs.NEC = {
@@ -527,6 +636,81 @@ GroupBuffs.NEC = {
     -- L45 Dead Men Floating (65-70 pr, water breathing, see invis, levitate, group)
     ["dmf"] = {
         "Dead Men Floating/MinLevel|1",
+    },
+
+    -- lich (dont stack with clarity line):
+    -- L06 Dark Pact (2 mana/tick, cost 3 hp/tick)
+    -- L31 Call of Bones (8 mana/tick, cost 11 hp/tick)
+    -- L48 Lich (20 mana/tick, cost 22 hp/tick)
+    -- L56 Demi Lich (31 mana/tick, cost 32 hp/tick)
+    -- L60 Arch Lich (35 mana/tick, cost 36 hp/tick, wraith)
+    -- L64 Seduction of Saryrn (50 mana/tick, cost 42 hp/tick, skeleton)
+    -- L65 Ancient: Seduction of Chaos (60 mana/tick, cost 50 hp/tick, skeleton)
+    -- L70 Dark Possession (65 mana/tick, cost 57 hp/tick, skeleton, oow expansion)
+    -- L70 Grave Pact (72 mana/tick, cost 60 hp/tick, skeleton, por expansion)
+    -- L74 Otherside Rk. II (81 mana/tick, cost 81 hp/tick, mottled skeleton)
+    -- L79 Spectralside (87 mana/tick, cost 76 hp/tick, mottled skeleton)
+    -- NOTE: if used as "Lich Spell", will cast while running
+    ["nec_lich"] = {
+        -- XXX
+    },
+
+    -- L63 Force Shield (absorb 750 dmg, 2 mana/tick)
+    -- L69 Dull Pain (absorb 975 dmg, 3 mana/tick)
+    -- L73 Wraithskin Rk. II (slot 1: absorb 1219 dmg, 4 mana/tick)
+    -- L78 Shadowskin Rk. II (slot 1: absorb 1585 dmg, 4 mana/tick)
+    -- NOTE: does not stack with ENC rune
+    ["nec_self_rune"] = {
+        -- XXX
+    },
+
+    -- L23 Intensify Death (25-33 str, 21-30% haste, 6-8 ac)
+    -- L35 Augment Death (37-45 str, 45-55% haste, 9-12 ac
+    -- L55 Augmentation of Death (52-55 str, 65% haste, 14-15 ac)
+    -- L62 Rune of Death (65 str, 70% haste, 18 ac)
+    -- L67 Glyph of Darkness (5% skills dmg mod, 84 str, 70% haste, 23 ac)
+    -- L72 Sigil of the Unnatural (6% skills dmg mod, 96 str, 70% haste, 28 ac)
+    -- L77 Sigil of the Aberrant Rk. II (10% skills dmg mod, 122 str, 70% haste, 36 ac)
+    ["nec_pet_haste"] = {
+        -- XXX
+    },
+
+    -- L01 Minor Shielding (6-10 hp, 3-4 ac)
+    -- L16 Shielding (45-50 hp, 11-13 ac, 11-12 mr)
+    -- L24 Major Shielding (68-75 hp, 16-18 ac, 14 mr)
+    -- L33 Greater Shielding (91-100 hp, 20-22 ac, 16 mr)
+    -- L41 Arch Shielding (140-150 hp, 24-27 ac, 20 mr)
+    -- L54 Shield of the Magi (232-250 hp, 29-31 ac, 22-24 mr)
+    -- L61 Shield of the Arcane (298-300 hp, 34-36 ac, 30 mr)
+    -- L64 Shield of Maelin (350 hp, 38-39 ac, 40 mr)
+    -- L66 Shadow Guard (390 hp, 46 ac, 40 mr)
+    -- NOTE:  does not stack with Virtue or Focus
+    ["nec_self_shielding"] = {
+        -- XXX
+    },
+}
+
+GroupBuffs.WIZ = {
+    -- L01 Minor Shielding (6-10 hp, 3-4 ac)
+    -- L06 Lesser Shielding (17-30 hp, 5-9 ac, 6-10 mr)
+    -- L15 Shielding (45-50 hp, 11-13 ac, 11-12 mr)
+    -- L23 Major Shielding (68-75 hp, 16-18 ac, 14 mr)
+    -- L33 Greater Shielding (91-100 hp, 20-22 ac, 16 mr)
+    -- L44 Arch Shielding (140-150 hp, 24-27 ac, 20 mr)
+    -- L54 Shield of the Magi (232-250 hp, 29-31 ac, 22-24 mr)
+    -- L61 Shield of the Arcane (298-300 hp, 34-36 ac, 30 mr)
+    -- L64 Shield of Maelin (350 hp, 38-39 ac, 40 mr)
+    -- L66 Ether Shield (390 hp, 46 ac, 40 mr)
+    -- NOTE:  does not stack with Virtue or Focus
+    ["wiz_self_shielding"] = {
+        -- XXX
+    },
+
+    -- L63 Force Shield (slot 1: absorb 750 dmg, 2 mana/tick)
+    -- L68 Ether Skin (slot 1: absorb 975 dmg, 3 mana/tick)
+    -- L70 Shield of Dreams (slot 1: absorb 451 dmg, slot 8: +10 resists, slot 9: 3 mana/tick)
+    ["wiz_self_rune"] = {
+        -- XXX
     }
 }
 
@@ -562,8 +746,37 @@ GroupBuffs.RNG = {
         "Guard of the Earth/MinLevel|62",
     },
 
-    -- TODO
+    -- L07 Skin like Wood
+    -- L21 Skin like Rock
+    -- L38 Skin like Steel
+    -- L54 Skin like Diamond
+    -- L59 Skin like Nature
+    -- L65 Natureskin (18-19 ac, 391-520 hp, 4 hp/tick)
+    -- L70 Onyx Skin (33 ac, 540 hp, 6 hp/tick)
     ["rng_skin"] = {
+        -- XXX
+    },
+
+    -- L13 Thistlecoat
+    -- L30 Barbcoat
+    -- L34 Bramblecoat
+    -- L42 Spikecoat
+    -- L60 Thorncoat
+    -- L63 Bladecoat (slot 2: 37 ac, slot 3: 6 ds)
+    -- L68 Briarcoat (slot 2: 49 ac, slot 3: 8 ds)
+    ["rng_self_ds"] = {
+        -- XXX
+    },
+
+    -- L65 Protection of the Wild (slot 1: 34 ds, slot 2: 130 atk, slot 3: 34 ac, slot 4: 125 hp)
+    -- L70 Ward of the Hunter     (slot 1: 45 ds, slot 2: 170 atk, slot 3: 49 ac, slot 4: 165 hp, slot 9: 3% double attack)
+    ["rng_self_ds_atk"] = {
+        -- XXX
+    },
+
+    -- L65 Mask of the Stalker (slot 3: 3 mana regen)
+    ["rng_self_mana"] = {
+        -- XXX
     },
 }
 
@@ -581,9 +794,60 @@ GroupBuffs.PAL = {
         "Brell's Brawny Bulwark/MinLevel|62",
     },
 
-    -- TODO
+    -- L24 Symbol of Transal
+    -- L33 Symbol of Ryltan
+    -- L46 Symbol of Pinzarn
+    -- L63 Symbol of Marzin
+    -- L67 Symbol of Jeron
+    -- L68 Jeron's Mark (group)
     ["pal_symbol"] = {
+        -- XXX
     },
+
+    -- L64 Aura of the Crusader (slot 2: 30 ac, slot 3: 342-350 hp, slot 4: 3 mana/tick)
+    -- L69 Armor of the Champion (slot 2: 39 ac, slot 3: 437 hp, slot 4: 4 mana/tick)
+    ["pal_shielding"] = {
+        -- XXX
+    },
+
+    -- proc self buffs:
+    -- L26 Instrument of Nife (undead proc Condemnation of Nife)
+    -- L45 Divine Might (proc Divine Might Effect)
+    -- L62 Ward of Nife (UNDEAD: proc Ward of Nife Strike)
+    -- L63 Pious Might (proc Pious Might Strike)
+    -- L65 Holy Order (proc Holy Order Strike)
+    -- L67 Silvered Fury (proc Silvered Fury Strike)
+    -- L68 Pious Fury (slot 1: proc Pious Fury Strike)
+    ["pal_proc_buff"] = {
+        -- XXX
+    },
+}
+
+GroupBuffs.SHD = {
+    -- Combat Innates:
+    -- L22 Vampiric Embrace (proc: Vampiric Embrace)
+    -- L37 Scream of Death (proc: Scream of Death Strike)
+    -- L67 Shroud of Discord (proc: Shroud of Discord Strike, 60 min duration) - imbues attacks with chance to steal life from target (lifetap)
+    -- L70 Decrepit Skin (slot 1: proc Decrepit Skin Parry, 4 min duration) - absorb dmg
+    ["shd_combat_innate"] = {
+        -- XXX
+    },
+
+    -- skeleton illusion with regen:
+    -- L58 Deathly Temptation (6 mana/tick, -11 hp/tick)
+    -- L64 Pact of Hate (15 mana/tick, -22 hp/tick)
+    -- L69 Pact of Decay (17 mana/tick, -25 hp/tick)
+    -- NOTE: does not stack with ENC Clairvoyance (20 mana/tick)
+    ["shd_lich"] = {
+        -- XXX
+    },
+
+    -- L60 Cloak of the Akheva (slot 3: 13 ac, slot 6: 5 ds, slot 10: 150 hp)
+    -- L65 Cloak of Luclin (slot 3: 34 ac, slot 6: 10 ds, slot 10: 280 hp)
+    -- L70 Cloak of Discord (slot 3: 49 ac, slot 6: 13 ds, slot 10: 350 hp)
+    ["shd_shielding"] = {
+        -- XXX
+    }
 }
 
 GroupBuffs.BST = {
@@ -619,6 +883,31 @@ GroupBuffs.BST = {
     ["bst_haste"] = {
         "Alacrity/MinLevel|45",
         "Celerity/MinLevel|46",
+    },
+
+    -- L37 Yekan's Quickening (43-45 str, 60% haste, 20 atk, 11-12 ac)
+    -- L52 Bond of the Wild (51-55 str, 60% haste, 25 atk, 13-15 ac)
+    -- L55 Omakin's Alacrity (60 str, 65-70% haste, 40 atk, 30 ac)
+    -- L59 Sha's Ferocity (99-100 str, 84-85% haste, 60 atk, 60 ac)
+    -- L64 Arag's Celerity (115 str, 85% haste, 75 atk, 71 ac)
+    -- L68 Growl of the Beast (85% haste, 90 atk, 78 ac, 5% skill dmg mod, duration 1h)
+    ["bst_pet_haste"] = {
+        -- XXX
+    },
+
+    -- L13 Spirit of Lightning (Spirit of Lightning Strike proc)
+    -- L28 Spirit of Inferno (Spirit of Inferno Strike proc)
+    -- L38 Spirit of the Scorpion (Spirit of Scorpion Strike proc)
+    -- L46 Spirit of Vermin (Spirit of Vermin Strike proc)
+    -- L51 Spirit of Wind (Spirit of Wind Strike proc, rate mod 150)
+    -- L53 Spirit of the Storm (Spirit of Storm Strike, rate mod 150)
+    -- L54 Spirit of Snow (Spirit of Snow Strike, rate mod 150)
+    -- L56 Spirit of Flame (FIRE: Spirit of Flame Strike, rate mod 150)
+    -- L63 Spirit of Rellic (COLD: Spirit of Rellic Strike, rate mod 150)
+    -- L68 Spirit of Irionu (COLD: Spirit of Irionu Strike, rate mod 150, 75 dex)
+    -- L70 Spirit of Oroshar (FIRE: Spirit of Oroshar Strike, rate mod 150, 75 dex)
+    ["bst_pet_proc"] = {
+        -- XXX
     },
 }
 

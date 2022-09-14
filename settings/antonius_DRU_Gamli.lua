@@ -42,26 +42,13 @@ settings.self_buffs = {
 
     "Bracelet of the Shadow Hive/Shrink",
 
-    -- L73 Vididicoat Rk. II (SELF, slot 2: 80 ac, slot 3: 21 ds)
-    -- L78 Viridithorn Coat (SELF, slot 2: 86 ac, slot 3: 23 ds)
-    -- L78 Viridithorn Coat Rk. II (SELF, slot 2: 98 ac, slot 3: 26 ds)
-    -- slot 3: 26 ds
-    "Viridithorn Coat",
+    "Viridithorn Coat", -- slot 3: 98 ac, 26 ds
+    "Coldain Hero's Insignia Ring", -- slot 2: 8 ds
+    "Legacy of Viridithorns", -- slot 1: 86 ds
+    "Wrath of the Wild",     -- slot XXX: big single hit ds
 
-    -- slot 2: 8 ds
-    "Coldain Hero's Insignia Ring",
-
-    -- slot 1: 86 ds
-    "Legacy of Viridithorns",
-
-    -- slot XXX: big single hit ds
-    "Wrath of the Wild",
-
-    -- L80 Blessing of the Ironwood Rk. II (66 ac, 1255 hp, 14 mana/tick, cost 3371 mana, group)
-    "Blessing of the Ironwood",
-
-    -- L80 Mask of the Shadowcat (SELF, slot 2: 9 mana/tick)
-    "Mask of the Shadowcat",
+    "Blessing of the Ironwood", -- L80 Blessing of the Ironwood Rk. II (66 ac, 1255 hp, 14 mana/tick, cost 3371 mana, group)
+    "Mask of the Shadowcat",     -- L80 Mask of the Shadowcat (SELF, slot 2: 9 mana/tick)
 
     -- L75 Second Life (SELF, increase divine save by 25%)
     -- L75 Second Life Rk. II (SELF, increase divine save by 29%)

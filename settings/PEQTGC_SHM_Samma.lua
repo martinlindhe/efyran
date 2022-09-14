@@ -19,21 +19,11 @@ settings.gems = {
 
 settings.self_buffs = {
     "Fuzzy Foothairs",
-
-    -- mana regen clicky:
-    -- Chaotic Enlightenment (slot 8: 10 mana regen, slot 10: 6 hp regen)
-    "Earring of Dragonkin",
-
-    -- mana pool clicky:
-    -- Reyfin's Racing Thoughts (slot 4: 450 mana pool, tacvi)
-    "Xxeric's Matted-Fur Mask",
-
-    -- hp regen clicky:
-    -- Form of Rejuvenation III (slot 12: 12 hp/tick, slot 6: immunity)
-    "Warped Mask of Animosity",
+    "Earring of Dragonkin", -- Chaotic Enlightenment (slot 8: 10 mana regen, slot 10: 6 hp regen)
+    "Xxeric's Matted-Fur Mask", -- Reyfin's Racing Thoughts (slot 4: 450 mana pool)
+    "Warped Mask of Animosity", -- Form of Rejuvenation III (slot 12: 12 hp/tick, slot 6: immunity)
 
     "Talisman of Wunshi/MinMana|15",
-
     "Talisman of the Tribunal/MinMana|50",
 
     -- bear illusion:
@@ -41,14 +31,7 @@ settings.self_buffs = {
     -- L55 Form of the Great Bear (2 hp/tick, 10 wis)
     --"Form of the Great Bear/MinMana|60",
 
-    -- regen:
-    -- L23 Regeneration (5 hp/tick, 17.5 min, cost 100 mana)
-    -- L39 Chloroplast (10 hp/tick, 17.5 min, cost 200 mana)
-    -- L52 Regrowth (20 hp/tick, 17.5 min, cost 300 mana)
-    -- L61 Replenishment (40 hp/tick, 20.5 min, cost 275 mana)
-    -- L63 Blessing of Replenishment (40 hp/tick, 20.5 min, cost 650 mana, group)
-    -- NOTE: druid handles regen buffs
-    --"Replenishment/MinMana|20/CheckFor|Regrowth of the Grove",
+    "Replenishment/MinMana|20",
 
     -- frenzy buffs:
     -- L16 Frenzy (6-10 ac, 18-25 agi, 19-28 str, 25 dex, 10 min)
@@ -94,6 +77,7 @@ settings.pet = {
     ["buffs"] = {
         -- pet haste:
         -- L50 Spirit Quickening (30 str, 20% haste, 19-27 ac, 60 min)
+        -- L56 Celerity (47-50% haste, 16 min)
         -- L63 Swift Like the Wind (60% haste, 16 min)
         -- L64 Talisman of Celerity (60% haste, 36 min, group)
         "Talisman of Celerity/MinMana|50/CheckFor|Hastening of Salik",

@@ -964,14 +964,14 @@ function get_rez_spell_item_aa()
         "Blessing of Resurrection",             -- CLR/65 (sof) AA. 96% exp, 3s cast, 12s recast
         "Water Sprinkler of Nem Ankh",          -- CLR/65 Epic 1.0. 96% exp, 10s cast
         "Reviviscence",                         -- CLR/56. 96% exp, 7s cast, 600 mana
-        "Resurrection",                         -- CLR/47: 90% exp, 6s cast, 700 mana
-        "Restoration",                          -- CLR/42: 75% exp, 6s cast, 20s recast
+        "Resurrection",                         -- CLR/47, PAL/59: 90% exp, 6s cast, 20s recast, 700 mana
+        "Restoration",                          -- CLR/42, PAL/55: 75% exp, 6s cast, 20s recast
         "Resuscitate",                          -- CLR/37: 60% exp, 6s cast, 20s recast
-        "Renewal",                              -- CLR/32: 50% exp, 6s cast, 20s recast
-        "Revive",                               -- CLR/27: 35% exp, 6s cast, 20s recast
-        "Reparation",                           -- CLR/22: 20% exp, 6s cast, 20s recast
-        "Reconstitution",                       -- CLR/18: 10% exp, 6s cast, 20s recast
-        "Reanimation",                          -- CLR/12: 0% exp, 6s cast, 20s recast
+        "Renewal",                              -- CLR/32, PAL/49: 50% exp, 6s cast, 20s recast
+        "Revive",                               -- CLR/27, PAL/39: 35% exp, 6s cast, 20s recast
+        "Reparation",                           -- CLR/22, PAL/31: 20% exp, 6s cast, 20s recast
+        "Reconstitution",                       -- CLR/18, PAL/30: 10% exp, 6s cast, 20s recast
+        "Reanimation",                          -- CLR/12, PAL/22: 0% exp, 6s cast, 20s recast
 
         "Incarnate Anew",                       -- DRU/59, SHM/59 Incarnate Anew (90% exp, 20s cast, 700 mana)
         --"Call of the Wild",                     -- DRU/XX, SHM/xx AA, 0% exp, corpse can be properly rezzed later)

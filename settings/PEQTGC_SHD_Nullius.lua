@@ -15,11 +15,8 @@ settings.gems = {
 settings.swap = { -- XXX impl
     ["main"] = "Morguecaller|Mainhand/Shield of the Lightning Lord|Offhand/Screaming Skull of Discontent|Ranged",
     ["bfg"] = "Breezeboot's Frigid Gnasher|Mainhand",
-
     ["ranged"] = "Plaguebreeze|Ranged",
-
     ["noriposte"] = "Aged Left Eye of Xygoz|Mainhand/Shield of the Lightning Lord|Offhand",
-
     ["fishing"] = "Fishing Pole|Mainhand",
 
     -- for mpg trial of weaponry (group):
@@ -31,19 +28,11 @@ settings.swap = { -- XXX impl
 settings.self_buffs = {
     "Fuzzy Foothairs",
 
-    -- Combat Innates:
-    -- L22 Vampiric Embrace (proc: Vampiric Embrace)
-    -- L37 Scream of Death (proc: Scream of Death Strike)
-    -- L67 Shroud of Discord (proc: Shroud of Discord Strike, 60 min duration) - imbues attacks with chance to steal life from target (lifetap)
-    -- L70 Decrepit Skin (slot 1: proc Decrepit Skin Parry, 4 min duration) - absorb dmg
-    "Decrepit Skin",
+    "Decrepit Skin", -- shd_combat_innate
     --Combat Buff=Decrepit Skin
 
-    -- Form of Endurance III (slot 5: 270 hp) - Ring of the Beast (anguish)
-    "Ring of the Beast",
-
-    -- Chaotic Ward (20 all resists, 67 ac) - stacks with all resist buffs. DONT STACK WITH Form of Defense
-    "Necklace of the Steadfast Spirit",
+    "Ring of the Beast",     -- Form of Endurance III (slot 5: 270 hp)
+    "Necklace of the Steadfast Spirit", -- Chaotic Ward (20 all resists, 67 ac) - stacks with all resist buffs. DONT STACK WITH Form of Defense
 
     -- PAL/SHD mana regen clicky:
     -- Glyphed Greaves of Conflict ALL/ALL: Aura of Eternity (slot 8: 5 mana regen, slot 10: 5 hp regen)
@@ -51,21 +40,11 @@ settings.self_buffs = {
     -- NOTE: NOT ENOUGH BUFF SLOTS
     --"Pendant of Discord",
 
-    -- skeleton illusion with regen:
-    -- NOTE: does not stack with ENC Clairvoyance (20 mana/tick)
-    -- L58 Deathly Temptation (6 mana/tick, -11 hp/tick)
-    -- L64 Pact of Hate (15 mana/tick, -22 hp/tick)
-    -- L69 Pact of Decay (17 mana/tick, -25 hp/tick)
-    --"Pact of Decay",
+    --"Pact of Decay", -- shd_lich
 
-    -- DS slot 2:
-    --"Cloak of Retribution",
-
-    -- XXX WANT DS slot 3:
-    --"Spined Chain Mail",
-
-    -- DS slot 4:
-    --"Pauldron of Dark Auspices",
+    --"Cloak of Retribution", -- ds slot 2
+    --"Spined Chain Mail", -- XXX WANT DS slot 3:
+    --"Pauldron of Dark Auspices", -- DS slot 4:
 
     "Shimmering Bauble of Trickery/Shrink",
 }

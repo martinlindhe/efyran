@@ -4,7 +4,7 @@ local mq = require("mq")
 require("ezmq")
 
 -- throttle LUA
-mq.cmd("/lua conf turboNum 1000")
+--mq.cmd("/lua conf turboNum 1000")
 
 mq.imgui.init('imgui-init', function()
 end)

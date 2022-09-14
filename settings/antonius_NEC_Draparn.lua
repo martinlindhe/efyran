@@ -20,42 +20,11 @@ settings.gems = {
 settings.self_buffs = {
     -- XXX clickies ?
 
-    -- lich (dont stack with clarity line):
-    -- L06 Dark Pact (2 mana/tick, cost 3 hp/tick)
-    -- L31 Call of Bones (8 mana/tick, cost 11 hp/tick)
-    -- L48 Lich (20 mana/tick, cost 22 hp/tick)
-    -- L56 Demi Lich (31 mana/tick, cost 32 hp/tick)
-    -- L60 Arch Lich (35 mana/tick, cost 36 hp/tick, wraith)
-    -- L64 Seduction of Saryrn (50 mana/tick, cost 42 hp/tick, skeleton)
-    -- L65 Ancient: Seduction of Chaos (60 mana/tick, cost 50 hp/tick, skeleton)
-    -- L70 Dark Possession (65 mana/tick, cost 57 hp/tick, skeleton, oow expansion)
-    -- L70 Grave Pact (72 mana/tick, cost 60 hp/tick, skeleton, por expansion)
-    -- L74 Otherside Rk. II (81 mana/tick, cost 81 hp/tick, mottled skeleton)
-    -- L79 Spectralside (87 mana/tick, cost 76 hp/tick, mottled skeleton)
-    -- NOTE: if used as "Lich Spell", will cast while running
-    "Spectralside",
-
-
-    -- shield - does not stack with Virtue or Focus:
-    -- L01 Minor Shielding (6-10 hp, 3-4 ac)
-    -- L16 Shielding (45-50 hp, 11-13 ac, 11-12 mr)
-    -- L24 Major Shielding (68-75 hp, 16-18 ac, 14 mr)
-    -- L33 Greater Shielding (91-100 hp, 20-22 ac, 16 mr)
-    -- L41 Arch Shielding (140-150 hp, 24-27 ac, 20 mr)
-    -- L54 Shield of the Magi (232-250 hp, 29-31 ac, 22-24 mr)
-    -- L61 Shield of the Arcane (298-300 hp, 34-36 ac, 30 mr)
-    -- L64 Shield of Maelin (350 hp, 38-39 ac, 40 mr)
-    --"Shield of Maelin/MinMana|70",
+    "Spectralside", -- lich
 
     "Dead Men Floating", -- group levitate
 
-    -- self rune, slot 1:
-    -- L63 Force Shield (absorb 750 dmg, 2 mana/tick)
-    -- L69 Dull Pain (absorb 975 dmg, 3 mana/tick)
-    -- L73 Wraithskin Rk. II (slot 1: absorb 1219 dmg, 4 mana/tick)
-    -- L78 Shadowskin Rk. II (slot 1: absorb 1585 dmg, 4 mana/tick)
-    -- NOTE: does not stack with ENC rune
-    "Shadowskin/MinMana|100/CheckFor|Rune of the Deep",
+    "Shadowskin/MinMana|100/CheckFor|Rune of the Deep", -- self rune
 }
 
 
@@ -247,18 +216,9 @@ settings.pet = {
     },
 
     ["buffs"] = {
-        -- haste
-        -- L23 Intensify Death (25-33 str, 21-30% haste, 6-8 ac)
-        -- L35 Augment Death (37-45 str, 45-55% haste, 9-12 ac
-        -- L55 Augmentation of Death (52-55 str, 65% haste, 14-15 ac)
-        -- L62 Rune of Death (65 str, 70% haste, 18 ac)
-        -- L67 Glyph of Darkness (5% skills dmg mod, 84 str, 70% haste, 23 ac)
-        -- L72 Sigil of the Unnatural (6% skills dmg mod, 96 str, 70% haste, 28 ac)
-        -- L77 Sigil of the Aberrant Rk. II (10% skills dmg mod, 122 str, 70% haste, 36 ac)
-        "Sigil of the Aberrant/MinMana|30",
+        "Sigil of the Aberrant/MinMana|30", -- pet haste
 
         "Tiny Companion/Shrink",
-
         --"Algae Covered Stiletto/Shrink", -- XXX farm this clicky in powater
     },
 }
