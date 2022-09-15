@@ -104,7 +104,7 @@ function QoL.Init()
 
     mq.event("faction_oow_loyalists", "Your faction standing with Dranik Loyalists could not possibly get any better.", function()
         if not maxFactionLoyalists then
-            cmd("/dgtell xp Maxed loyalist faction")
+            log.Info("Maxed loyalist faction")
             maxFactionLoyalists = true
         end
     end)

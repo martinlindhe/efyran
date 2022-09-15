@@ -5,6 +5,8 @@ require("e4_Spells")
 
 local timer = require("Timer")
 
+local MIN_BUFF_DURATION = 6 * 6000 -- 6 ticks, each tick is 6s
+
 local Buffs = { aura = find_best_aura(), queue = {} }
 
 function Buffs.Init()
@@ -173,6 +175,10 @@ function Buffs.Init()
         end
     end)
 
+    mq.bind("/shrinkall", function()
+        cmd("/dgzexecute /shrinkgroup")
+    end)
+
     mq.bind("/shrinkgroup", function()
         -- find the shrink clicky/spell if we got one
         local shrinkClicky = nil
@@ -339,12 +345,26 @@ function handleBuffRequest(req)
     end
 
     if minLevel > 0 and spellConfigAllowsCasting(spellName, spawn) then
-        if spawn.Buff(spellName)() ~= nil then
-            log.Info("handleBuffRequest: Skip \ag%s\ax %s (%s), they have buff already.", spawn.Name(), spellName, req.Buff)
+        if spawn.Buff(spellName)() ~= nil and spawn.Buff(spellName).Duration() >= MIN_BUFF_DURATION then
+            cmdf("/dgtell all XXX handleBuffRequest: Skip \ag%s\ax %s (%s), they have buff already.", spawn.Name(), spellName, req.Buff)
             return false
         end
+
+        -- XXX is being cast even tho target has the buff... should duck in callback
         cmdf("/dgtell all Buffing \ag%s\ax with \ay%s\ax (\ay%s\ax).", spawn.Name(), spellName, req.Buff)
         castSpellRaw(spellName, spawn.ID(), "-maxtries|3")
+        delay(100)
+        delay(10000, function()
+            if not is_casting() then
+                return true
+            end
+            if spawn.Buff(spellName)() ~= nil and spawn.Buff(spellName).Duration() >= MIN_BUFF_DURATION then
+                -- abort if they got the buff while we are casting
+                cmdf("/dgtell all \arERROR BUFFING:\ax my target %s has buff %s for %f sec, skipping.", mq.TLO.Target.Name(), spellName, mq.TLO.Target.Buff(spellName).Duration() / 1000)
+                cmdf("/interrupt")
+                return true
+            end
+        end)
         return true
     else
         log.Error("Failed to find a matching group buff %s, L%d %s", spawn.Name(), " L", level, req.Buff, level, spawn.Name())
@@ -428,8 +448,8 @@ function Buffs.RequestBuffs()
             for idx, checkRow in pairs(buffRows) do
                 local o = parseSpellLine(checkRow)
                 if have_buff(o.Name) then
-                    local ticks = mq.TLO.Me.Buff(o.Name).Duration.Ticks()
-                    if ticks ~= nil and ticks >= 6 then
+                    local duration = mq.TLO.Me.Buff(o.Name).Duration()
+                    if duration ~= nil and duration >= MIN_BUFF_DURATION then
                         --print("Will not request \ay", spellConfig.Name, "\ax. I have buff \ay"..o.Name.."\ax.")
                         found = true
                         break

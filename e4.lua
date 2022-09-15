@@ -9,9 +9,6 @@ items   = require("e4_Items")
 
 groupBuffs = require("e4_GroupBuffs")
 
-
-aliases = require("settings/Spell Aliases")
-
 botSettings = require("e4_BotSettings")
 follow  = require("e4_Follow")
 
@@ -24,37 +21,34 @@ qol     = require("e4_QoL")
 
 local bard = require("Class_Bard")
 
-local status, err = pcall(function ()
-    seed_process()
 
-    botSettings.Init()
 
-    assist.Init()
-    buffs.Init()
-    follow.Init()
-    group.Init()
-    heal.Init()
-    qol.Init()
-    items.Init()
 
-    cmd("/dgtell all E4 started "..time())
-    bard.resumeMelody()
+-- MAIN PROGRAM
+seed_process()
 
-    while true do
-        heal.Tick()
-        doevents()
-        delay(1)
+botSettings.Init()
+assist.Init()
+buffs.Init()
+follow.Init()
+group.Init()
+heal.Init()
+qol.Init()
+items.Init()
 
-        buffs.Tick()
-        doevents()
-        delay(1)
+cmd("/dgtell all E4 started "..time())
+bard.resumeMelody()
 
-        qol.Tick()
-        doevents()
-        delay(1)
-    end
-end)
+while true do
+    heal.Tick()
+    doevents()
+    delay(1)
 
-if not status then
-    cmdf("/dgtell all \arERROR\ax: %s", err)
+    buffs.Tick()
+    doevents()
+    delay(1)
+
+    qol.Tick()
+    doevents()
+    delay(1)
 end

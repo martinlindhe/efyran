@@ -25,15 +25,28 @@ function Assist.Init()
 
     Assist.prepareForNextFight()
 
-    -- assist on mob until dead
-    ---@param mobID integer
-    mq.bind("/assiston", function(mobID)
-        local spawn
-        if is_orchestrator() then
-            spawn = mq.TLO.Target
-        else
-            spawn = spawn_from_id(mobID)
+    -- tell peers to kill target until dead
+    mq.bind("/assiston", function()
+        local spawn = mq.TLO.Target
+        if spawn() == nil then -- XXX spawn()
+            return
         end
+        if spawn.Type() ~= "PC" then
+            if assistTarget ~= nil then
+                log.Debug("Backing off existing target before assisting new")
+                Assist.backoff()
+            end
+            log.Info("Calling assist on %s, type %s", spawn.DisplayName(), spawn.Type())
+
+            -- tell everyone else to attack
+            cmdf("/dgzexecute /killit %d", spawn.ID())
+        end
+    end)
+
+    -- auto assist on mob until dead
+    ---@param mobID integer
+    mq.bind("/killit", function(mobID)
+        local spawn = spawn_from_id(mobID)
         if spawn == nil then
             return
         end
@@ -52,7 +65,6 @@ function Assist.Init()
                 Assist.handleAssistCall(spawn)
             end
         end
-
     end)
 
     -- ends assist call
@@ -127,6 +139,7 @@ function Assist.backoff()
     end
 end
 
+---@param spawn spawn
 function Assist.handleAssistCall(spawn)
     if botSettings.settings == nil or botSettings.settings.assist == nil then
         cmd("/dgtell all WARNING: I have no assist settings")
@@ -135,7 +148,7 @@ function Assist.handleAssistCall(spawn)
 
     if have_pet() then
         log.Debug("Attacking with my pet %s", mq.TLO.Me.Pet.CleanName())
-        cmd("/pet attack %d", spawn.ID())
+        cmdf("/pet attack %d", spawn.ID())
     end
 
     Assist.killSpawn(spawn)
@@ -148,10 +161,15 @@ function Assist.prepareForNextFight()
     Assist.summonNukeComponents()
 end
 
--- summons missing component for nukes
+-- Summons missing component for nukes. Only for magicians
 -- eg: "Molten Orb/NoAggro/Summon|Summon: Molten Orb" (MAG)
 function Assist.summonNukeComponents()
-    if botSettings.settings.assist == nil or botSettings.settings.assist.nukes == nil then
+    if botSettings.settings.assist == nil or botSettings.settings.assist.nukes == nil or not is_mag() then
+        return
+    end
+
+    if is_casting() then
+        cmdf("/dgtell all SUMMON ERROR: i was casting %s on target %s", mq.TLO.Me.Casting.Name(), mq.TLO.Target.Name())
         return
     end
 
@@ -165,15 +183,14 @@ function Assist.summonNukeComponents()
         for k, row in pairs(lines) do
             local spellConfig = parseSpellLine(row)
             if spellConfig.Summon ~= nil then
-                --print("Checking summon comonents for ", spellConfig.Summon) -- XXX name is "Molten Orb".
                 if not known_spell_ability(spellConfig.Summon) then
                     cmdf("/dgtell all I dont know spell/ability %s", spellConfig.Summon)
                     cmd("/beep 1")
                 end
 
-                --print("summon prop", spell.Summon)
+                log.Debug("Checking summon components for %s", spellConfig.Summon) -- XXX name is "Molten Orb".
 
-                if getItemCountExact(spellConfig.Name) == 0 and not is_casting() then
+                if getItemCountExact(spellConfig.Name) == 0 then
                     cmdf("/dgtell all Summoning %s", spellConfig.Name)
                     castSpell(spellConfig.Summon, mq.TLO.Me.ID())
 
@@ -192,6 +209,8 @@ function Assist.summonNukeComponents()
 end
 
 -- return true if spell/ability was cast
+---@param spawn spawn
+---@param row string
 function Assist.castSpellAbility(spawn, row)
 
     local spell = parseSpellLine(row)
@@ -201,7 +220,7 @@ function Assist.castSpellAbility(spawn, row)
     if spell.PctAggro ~= nil then
         -- PctAggro skips cast if your aggro % is above threshold
         if mq.TLO.Me.PctAggro() < spell.PctAggro then
-            log.Info("SKIP PctAggro %s aggro %d vs required %d", spell.Name, mq.TLO.Me.PctAggro(), spell.PctAggro)
+            log.Debug("SKIP PctAggro %s aggro %d vs required %d", spell.Name, mq.TLO.Me.PctAggro(), spell.PctAggro)
             return false
         end
     end
@@ -232,18 +251,29 @@ function Assist.castSpellAbility(spawn, row)
         return false
     end
 
-    log.Debug("Assist.castSpellAbility preparing to cast %s", spell.Name)
-
     if is_spell_ability_ready(spell.Name) then
+        log.Info("Assist.castSpellAbility Casting %s", spell.Name)
         castSpell(spell.Name, spawn.ID())
         delay(200)
+        -- delay until done casting, and abort cast if target dies
+        delay(10000, function()
+            if spawn == nil then
+                cmdf("/dgtell all castSpellAbility: target died. ducking spell cast %s", mq.TLO.Me.Casting.Name())
+                cmdf("/interrupt")
+                return true
+            end
+            if not is_casting() then
+                return true
+            end
+        end)
+        log.Info("Done waiting after cast.")
         return true
     end
     return false
 end
 
--- stick and perform melee attacks
--- spawn is "userdata" type spawn
+-- Stick and perform melee attacks.
+---@param spawn spawn
 function Assist.killSpawn(spawn)
 
     assistTarget = spawn
@@ -272,7 +302,7 @@ function Assist.killSpawn(spawn)
         local meleeDistance = botSettings.settings.assist.melee_distance
         if meleeDistance == "auto" then
             meleeDistance = spawn.MaxRangeTo() * 0.75
-            log.Debug("Calculated auto melee distance %f", meleeDistance)
+            log.Info("Calculated auto melee distance %f", meleeDistance)
         end
 
         local stickArg

@@ -1,6 +1,8 @@
 local mq = require("mq")
 local log = require("knightlinc/Write")
 
+local MIN_BUFF_DURATION = 6 * 6000 -- 6 ticks, each tick is 6s
+
 function queryBot(peer, q)
     local fullQuery = peer .. ' -q ' .. q
     cmdf("/dquery %s", fullQuery)
@@ -56,11 +58,11 @@ function refreshBuff(buffItem, spawn)
     -- only refresh fading & missing buffs
     if mq.TLO.Me.ID() == spawn.ID() then
         -- IMPORTANT: on live, f2p restricts all spells to rank 1, so we need to look for both forms
-        if have_buff(spell.RankName()) and mq.TLO.Me.Buff(spell.RankName()).Duration.Ticks() >= 6 then
+        if have_buff(spell.RankName()) and mq.TLO.Me.Buff(spell.RankName()).Duration() >= MIN_BUFF_DURATION then
             --print("target have ranked buff with remaining ticks:", mq.TLO.Me.Buff(spell.RankName()).Duration.Ticks())
             return false
         end
-        if have_buff(spell.Name()) and mq.TLO.Me.Buff(spell.Name()).Duration.Ticks() >= 6 then
+        if have_buff(spell.Name()) and mq.TLO.Me.Buff(spell.Name()).Duration() >= MIN_BUFF_DURATION then
             --print("target have buff with remaining ticks:", mq.TLO.Me.Buff(spell.Name()).Duration.Ticks())
             return false
         end
@@ -72,13 +74,13 @@ function refreshBuff(buffItem, spawn)
     elseif spawn.Type() == "Pet" and spawn.ID() == mq.TLO.Me.Pet.ID() then
         -- IMPORTANT: on live, f2p restricts all spells to rank 1, so we need to look for both forms
 
-        if mq.TLO.Me.Pet.Buff(spell.RankName())() ~= nil and mq.TLO.Me.Pet.Buff(mq.TLO.Me.Pet.Buff(spell.RankName())).Duration.Ticks() >= 6 then
-            print("refreshBuff: SKIP PET BUFFING ", spell.RankName(), ", duration is ", mq.TLO.Me.Pet.Buff(mq.TLO.Me.Pet.Buff(spell.RankName())).Duration.Ticks(), " ticks")
+        if mq.TLO.Me.Pet.Buff(spell.RankName())() ~= nil and mq.TLO.Me.Pet.Buff(mq.TLO.Me.Pet.Buff(spell.RankName())).Duration() >= MIN_BUFF_DURATION then
+            print("refreshBuff: SKIP PET BUFFING ", spell.RankName(), ", duration is ", mq.TLO.Me.Pet.Buff(mq.TLO.Me.Pet.Buff(spell.RankName())).Duration() / 1000, " sec")
             return false
         end
 
-        if mq.TLO.Me.Pet.Buff(spell.Name())() ~= nil and mq.TLO.Me.Pet.Buff(mq.TLO.Me.Pet.Buff(spell.Name())).Duration.Ticks() >= 6 then
-            print("refreshBuff: SKIP PET BUFFING ", spell.Name(), ", duration is ", mq.TLO.Me.Pet.Buff(mq.TLO.Me.Pet.Buff(spell.Name())).Duration.Ticks(), " ticks")
+        if mq.TLO.Me.Pet.Buff(spell.Name())() ~= nil and mq.TLO.Me.Pet.Buff(mq.TLO.Me.Pet.Buff(spell.Name())).Duration() >= MIN_BUFF_DURATION then
+            print("refreshBuff: SKIP PET BUFFING ", spell.Name(), ", duration is ", mq.TLO.Me.Pet.Buff(mq.TLO.Me.Pet.Buff(spell.Name())).Duration() / 1000, " sec")
             return false
         end
         if is_spell_in_book(spellName) and spell.StacksPet() then
@@ -101,7 +103,7 @@ function refreshBuff(buffItem, spawn)
     end
 
     if not have_item(spellConfig.Name) and mq.TLO.Me.CurrentMana() < spell.Mana() then
-        print("SKIPPING BUFF, not enough mana. Have ", mq.TLO.Me.CurrentMana(), ", need ", spell.Mana() )
+        log.Info("SKIPPING BUFF, not enough mana. Have %d, need %d", mq.TLO.Me.CurrentMana(), spell.Mana())
         return false
     end
 
@@ -168,7 +170,7 @@ function spellConfigAllowsCasting(buffItem, spawn)
     end
 
     if spellConfig.MinMana ~= nil then
-        if mq.TLO.Me.PctMana() < tonumber(spellConfig.MinMana) then
+        if mq.TLO.Me.PctMana() < spellConfig.MinMana then
             print("SKIP BUFFING, my mana ", mq.TLO.Me.PctMana, " vs required ", spellConfig.MinMana)
             return false
         end
@@ -249,12 +251,8 @@ function castSpellRaw(name, spawnId, extraArgs)
         cmd("/beep 1")
         return
     end
-
-    --print("-- castSpellRaw " , name, " spawnId ", spawnId, ", extraArgs ", extraArgs)
-
-    local castingArg = '"' .. name .. '" -targetid|'.. spawnId .. ' ' .. extraArgs
-    --print("castSpellRaw: /casting", castingArg)
-    cmdf("/casting %s", castingArg)
+    log.Debug("-- castSpellRaw %s, spawnId %d extraArgs ", name, spawnId, extraArgs)
+    cmdf('/casting "%s" -targetid|%d %s', name, spawnId, extraArgs)
 end
 
 -- returns datatype spell or nil if not found

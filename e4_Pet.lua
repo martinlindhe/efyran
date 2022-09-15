@@ -129,7 +129,7 @@ function Pet.BuffMyPet()
         end
 
         if spellConfig.MinMana ~= nil then
-            if mq.TLO.Me.PctMana() < tonumber(spellConfig.MinMana) then
+            if mq.TLO.Me.PctMana() < spellConfig.MinMana then
                 --print("SKIP PET BUFFING, my mana ", mq.TLO.Me.PctMana, " vs required ", spellConfig.MinMana)
                 skip = true
             end

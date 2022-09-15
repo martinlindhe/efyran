@@ -406,6 +406,12 @@ function is_brd()
     return mq.TLO.Me.Class.ShortName() == "BRD"
 end
 
+-- Am I a Magician?
+---@return boolean
+function is_mag()
+    return mq.TLO.Me.Class.ShortName() == "MAG"
+end
+
 -- Am I a Cleric?
 ---@return boolean
 function is_clr()
@@ -921,7 +927,8 @@ end
 ---@field public PctAggro integer Skips cast if your aggro % is above threshold.
 ---@field public Summon string Name for summoning spell component, eg "Molten Orb/NoAggro/Summon|Summon: Molten Orb" (MAG)
 
-local shortProperties = { "Shrink", "GoM", "NoAggro", "NoPet" }
+local shortProperties = { "Shrink", "GoM", "NoAggro", "NoPet" } -- is turned into bools
+local intProperties = { "PctAggro", "MinMana" } -- is turned into integers
 -- parses a spell/ability etc line with properties, returns a object
 -- example in: "Ward of Valiance/MinMana|50/CheckFor|Hand of Conviction"
 ---@param s string
@@ -948,7 +955,9 @@ function parseSpellLine(s)
                     key = v
                 end
                 if subIndex == 1 then
-                    --print(key, " = ", v)
+                    if in_table(intProperties, key) then
+                        v = toint(v)
+                    end
                     o[key] = v
                 end
                 subIndex = subIndex + 1

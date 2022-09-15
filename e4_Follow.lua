@@ -1,6 +1,8 @@
 local mq = require("mq")
 local log = require("knightlinc/Write")
 
+local aliases = require("settings/Spell Aliases")
+
 local Follow = {
     spawn = nil, -- the current spawn I am following
 }
