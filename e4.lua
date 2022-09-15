@@ -1,18 +1,6 @@
--- restart all: /dgaexecute /multiline ; /lua stop e4 ; /timed 5 /lua run e4
-
-local mq = require("mq")
 require("ezmq")
 
--- throttle LUA
---cmd("/lua conf turboNum 1000")
-
-mq.imgui.init('imgui-init', function()
-end)
-
 seed_process()
-
-require("debug")
-
 
 require("e4_Loot")
 require("e4_Hail")
@@ -34,9 +22,7 @@ heal    = require("e4_Heal")
 pet     = require("e4_Pet")
 qol     = require("e4_QoL")
 
-
-bard    = require("Class_Bard")
-
+local bard = require("Class_Bard")
 
 botSettings.Init()
 
@@ -49,6 +35,7 @@ qol.Init()
 items.Init()
 
 cmd("/dgtell all E4 started "..time())
+bard.resumeMelody()
 
 while true do
     heal.Tick()

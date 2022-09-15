@@ -63,9 +63,8 @@ function Follow.Init()
             return
         end
 
-        unflood_delay()
-
         cmd("/dgtell all Porting to " .. name .. " (" .. spellName .. ")")
+        unflood_delay()
 
         if spellName == nil then
             cmd("/dgtell all ERROR: no such port "..name)

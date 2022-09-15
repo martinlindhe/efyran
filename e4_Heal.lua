@@ -172,9 +172,6 @@ function handleHealmeRequest(msg)
         Heal.queue:add(peer, pct)
         --print("added ", peer, " to heal queue")
     end
-
-    --print("current heal queue:")
-    --tprint(Heal.queue)
 end
 
 local lifeSupportTimer = timer.new_expired(5 * 1) -- 5s
@@ -270,8 +267,7 @@ function Heal.acceptRez()
         if not is_peer(peer) then
             cmd("/dgtell all WARNING: got a rez from (NOT A PEER) "..peer..": "..s)
             cmd("/beep 1")
-            delay(1000) -- XXX
-            -- XXX should we decline the rez?
+            delay(10000) -- 10s
             return
         end
         cmd("/dgtell all Accepting rez from "..peer)

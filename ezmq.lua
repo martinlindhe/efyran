@@ -870,7 +870,6 @@ function nearest_peer_by_class(shortClass)
         return nil
     end
 
-    local o = {}
     local spawnQuery = 'pc notid '..mq.TLO.Me.ID()..' radius 100 class "'..longName..'"'
     for i = 1, spawn_count(spawnQuery) do
         local spawn = mq.TLO.NearestSpawn(i, spawnQuery)
@@ -882,7 +881,7 @@ function nearest_peer_by_class(shortClass)
     return nil
 end
 
--- Seeds the current process with a value unlikely to be used by another process
+-- Seeds the current process with a value unlikely to be used by another process.
 function seed_process()
     math.randomseed(mq.TLO.EverQuest.PID() + (os.clock() * 1000))
 end
@@ -1047,7 +1046,7 @@ function memorize_spell(spellRow, defaultGem)
         gem = o["Gem"]
     elseif botSettings.settings.gems[o.Name] ~= nil then
         gem = botSettings.settings.gems[o.Name]
-    else
+    elseif gem == nil then
         cmd("/dgtell all \arWARN\ax: Spell/song lacks gems default slot or Gem|n argument: "..spellRow)
         gem = 5
     end
@@ -1111,11 +1110,11 @@ function strip_link(s)
     return s
 end
 
--- Delays a random amount of seconds in order not to flood the connection. 1s delay for each connected peer.
+-- Delays a random amount of seconds in order not to flood the connection. 0.5s delay for each connected peer.
 --
 -- Used to reduce CPU load while zoning many peers at once.
 function unflood_delay()
-    delay(math.random(0, mq.TLO.DanNet.PeerCount() * 1000))
+    delay(math.random(0, mq.TLO.DanNet.PeerCount() * 500))
 end
 
 -- Returns true if `name` is ready to use.

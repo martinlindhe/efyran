@@ -113,7 +113,6 @@ function Buffs.Init()
             cmd("/dgtell all BUFFIT FAIL, cannot find target id in zone "..spawnID)
             return false
         end
-        target_id(spawnID)
 
         local level = spawn.Level()
 
@@ -355,7 +354,7 @@ function Buffs.RefreshSelfBuffs()
     if botSettings.settings.self_buffs == nil then
         return false
     end
-    print(time().." Buffs.RefreshSelfBuffs()")
+    --print(time().." Buffs.RefreshSelfBuffs()")
     for k, buffItem in pairs(botSettings.settings.self_buffs) do
         doevents()
         if refreshBuff(buffItem, mq.TLO.Me) then

@@ -2,6 +2,8 @@
 
 misc:
 -- TODO trigger event to reload and recalculate all settings: find best aura, re-evaluate toon settings file etc
+-- BUG: mq.TLO.NearestSpawn() results should be fetched directly and then looped over the results, as they can change
+    in the middle of iteration otherwise.
 
 
 

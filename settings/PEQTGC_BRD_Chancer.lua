@@ -67,7 +67,7 @@ settings.gems = {
 
 settings.songs = {
     ["general"] = {
-        -- MELEE SONGS (Storm Blade): Gerwulf, Chancer, Saberku, Lynnmary
+        -- MELEE SONGS (Storm Blade): Gerwulf, Chancer, Saberku, Lynnmary, Crust, Hypert
 
         -- PERCUSSION - Selo's Accelerating Chorus
         "Selo's Accelerating Chorus/Gem|8",
