@@ -1,4 +1,5 @@
 local mq = require("mq")
+local log = require("knightlinc/Write")
 
 local defaultMelody = "general"
 
@@ -7,7 +8,7 @@ local Bard = { currentMelody = "" }
 -- tells all bards to play given melody name
 mq.bind("/playmelody", function(name)
     if is_orchestrator() then
-        cmd("/dgexecute brd /playmelody "..name)
+        cmdf("/dgexecute brd /playmelody %s", name)
     end
     if is_brd() then
         Bard.PlayMelody(name)
@@ -39,12 +40,12 @@ function Bard.PlayMelody(name)
 
     local songSet = botSettings.settings.songs[name:lower()]
     if songSet == nil then
-        cmd("/dgtell all ERROR no such song set "..name)
+        cmdf("/dgtell all ERROR no such song set %s", name)
         cmd("/beep 1")
         return
     end
 
-    print("Scribing bard song set ", name)
+    log.Info("Scribing bard song set %s", name)
 
     local gemSet = ""
     for v, songRow in pairs(songSet) do
@@ -54,8 +55,8 @@ function Bard.PlayMelody(name)
         end
     end
 
-    cmd("/twist "..gemSet)
-    cmd("/dgtell all Playing melody \ay"..name.."\ax.")
+    cmdf("/twist %s", gemSet)
+    cmdf("/dgtell all Playing melody \ay%s\ax.", name)
 
     Bard.currentMelody = name
 end

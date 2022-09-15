@@ -1,3 +1,4 @@
+local log = require("knightlinc/Write")
 
 require("persistence")
 
@@ -9,7 +10,7 @@ local lootFile = settingsRoot .. "/" .. current_server() .. "__Loot Settings.lua
 function ReadLootSettings()
     local o = persistence.load(lootFile)
     if o == nil then
-        print("No loot settings found (", lootFile, "), creating new table")
+        log.Warn("No loot settings found (", lootFile, "), creating new table")
 
         -- populate initial obj with keys A-Z, 0-9
         o = {}

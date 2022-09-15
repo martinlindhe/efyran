@@ -1,6 +1,7 @@
 -- Tell mage to summon their group with Call of the Hero
 
 local mq = require("mq")
+local log = require("knightlinc/Write")
 require("ezmq")
 
 local cothMinDistance = 50
@@ -11,7 +12,7 @@ if mq.TLO.Me.Class.Name() ~= "Magician" then
 end
 
 if not is_memorized("Call of the Hero") then
-    print("Memorizing Call of the Hero")
+    log.Info("Memorizing Call of the Hero")
     cmd("/memorize 1771 5")
 end
 
@@ -34,13 +35,13 @@ while true do
                 return
             end
 
-            print("Want to coh group member ", n , " ", spawn.Name(), " dist ", spawn.Distance() )
+            log.Info("Want to coh group member %d %s, distance %f", n,  spawn.Name(), spawn.Distance())
             if is_alt_ability_ready("Call of the Hero") then
-                cmd("/dgtell all CoTH:ing (AA) \ag"..spawn.Name().."\ax ...")
-                cmd('/casting "Call of the Hero|alt" -targetid|'.. tostring(spawn.ID()) .. ' ')
+                cmdf("/dgtell all CoTH:ing (AA) \ag%s\ax ...", spawn.Name())
+                cmdf('/casting "Call of the Hero|alt" -targetid|%d', spawn.ID())
             elseif is_spell_ready("Call of the Hero") then
-                cmd("/dgtell all CoTH:ing (spell) \ag"..spawn.Name().."\ax ...")
-                cmd('/casting "Call of the Hero|gem5" -targetid|'.. tostring(spawn.ID()) .. ' ')
+                cmdf("/dgtell all CoTH:ing (spell) \ag%s\ax ...", spawn.Name())
+                cmdf('/casting "Call of the Hero|gem5" -targetid|%d', spawn.ID())
             end
 
             doevents()

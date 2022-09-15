@@ -1,4 +1,6 @@
 local mq = require("mq")
+local log = require("knightlinc/Write")
+
 local PetSpells = require("e4_PetSpells")
 
 local Pet = {}
@@ -34,10 +36,10 @@ function Pet.Summon()
         return false
     end
 
-    print("Summoning L", spell.Level(), " pet with \ay"..spellName.."\ax.")
+    log.Info("Summoning L", spell.Level(), " pet with \ay"..spellName.."\ax.")
 
     if mq.TLO.Me.CurrentMana() < spell.Mana() then
-        print("SKIP PET SUMMON, my mana ", mq.TLO.Me.PctMana(), " vs required ", spell.Mana())
+        log.Warn("SKIP PET SUMMON, my mana ", mq.TLO.Me.PctMana(), " vs required ", spell.Mana())
         return false
     end
 
@@ -67,7 +69,7 @@ end
 function find_pet_spell()
     local pets = PetSpells[class_shortname()]
     if pets == nil then
-        cmd("/dgtell all ERROR: No pets defined for class "..mq.TLO.Me.Class.Name())
+        cmdf("/dgtell all ERROR: No pets defined for class %s", mq.TLO.Me.Class.Name())
         return nil
     end
 
@@ -82,7 +84,7 @@ function find_pet_spell()
                 name = spell.RankName()
             end
         else
-            print("Pet spell not in book: ", v)
+            log.Info("Pet spell not in book: ", v)
         end
     end
 
@@ -114,7 +116,7 @@ function Pet.BuffMyPet()
         local spellConfig = parseSpellLine(buff)  -- XXX do not parse here, cache and reuse
         local spell = getSpellFromBuff(spellConfig.Name) -- XXX parse this once on script startup too, dont evaluate all the time !
         if spell == nil then
-            cmd("/dgtell all Pet.BuffMyPet: getSpellFromBuff "..buff.." FAILED")
+            cmdf("/dgtell all Pet.BuffMyPet: getSpellFromBuff %s FAILED", buff)
             cmd("/beep 1")
             return false
         end

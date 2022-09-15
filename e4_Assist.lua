@@ -1,4 +1,5 @@
 local mq = require("mq")
+local log = require("knightlinc/Write")
 
 local Assist = {}
 
@@ -38,14 +39,14 @@ function Assist.Init()
         end
         if spawn.Type() ~= "PC" then
             if assistTarget ~= nil then
-                print("backing off existing target before assisting new")
+                log.Debug("Backing off existing target before assisting new")
                 Assist.backoff()
             end
-            --print("calling assist on spawn type ", spawn.Type)
+            log.Debug("Calling assist on spawn type %s", spawn.Type())
 
             if is_orchestrator() then
                 -- tell everyone else to attack
-                cmd("/dgzexecute /assiston "..spawn.ID())
+                cmdf("/dgzexecute /assiston %d", spawn.ID())
             else
                 -- we dont auto attack with main driver. XXX impl "/assiston /not|WAR" filter
                 Assist.handleAssistCall(spawn)
@@ -82,7 +83,7 @@ function Assist.Init()
 
         cmd("/dgtell all PBAE ON")
         while true do
-            -- XXX loop until /pbaeoff
+            -- TODO: break this loop with /pbaeoff
             if spawn_count(nearbyPBAEilter) == 0 then
                 cmd("/dgtell all Ending PBAE. No nearby mobs.")
                 break
@@ -93,7 +94,7 @@ function Assist.Init()
                     local spellConfig = parseSpellLine(spellRow)
 
                     if is_spell_ready(spellConfig.Name) then
-                        print("Casting PBAE spell ", spellConfig.Name)
+                        log.Info("Casting PBAE spell %s", spellConfig.Name)
                         local spellName = spellConfig.Name
                         if is_spell_in_book(spellConfig.Name) then
                             local spell = get_spell(spellConfig.Name)
@@ -117,15 +118,12 @@ end
 
 function Assist.backoff()
     if assistTarget ~= nil then
-        --cmd("/dgtell all backing off target ", assistTarget.Name())
+        log.Debug("Backing off target %s", assistTarget.Name())
         assistTarget = nil
-
         if have_pet() then
-            print("Asking pet to back off")
+            log.Debug("Asking pet to back off")
             cmd("/pet back off")
         end
-    else
-        cmd("/dgtell all XXX ignoring backoff, no spawn known!")
     end
 end
 
@@ -136,20 +134,17 @@ function Assist.handleAssistCall(spawn)
     end
 
     if have_pet() then
-        print("Attacking with my pet ", mq.TLO.Me.Pet.CleanName())
-        cmd("/pet attack "..spawn.ID())
+        log.Debug("Attacking with my pet %s", mq.TLO.Me.Pet.CleanName())
+        cmd("/pet attack %d", spawn.ID())
     end
 
     Assist.killSpawn(spawn)
-
     Assist.prepareForNextFight()
 end
 
 -- called at end of each /assist call
 function Assist.prepareForNextFight()
-
-    print("Assist.prepareForNextFight")
-
+    log.Debug("Assist.prepareForNextFight")
     Assist.summonNukeComponents()
 end
 
@@ -172,14 +167,14 @@ function Assist.summonNukeComponents()
             if spellConfig.Summon ~= nil then
                 --print("Checking summon comonents for ", spellConfig.Summon) -- XXX name is "Molten Orb".
                 if not known_spell_ability(spellConfig.Summon) then
-                    cmd("/dgtell all I dont know spell/ability "..spellConfig.Summon)
+                    cmdf("/dgtell all I dont know spell/ability %s", spellConfig.Summon)
                     cmd("/beep 1")
                 end
 
                 --print("summon prop", spell.Summon)
 
                 if getItemCountExact(spellConfig.Name) == 0 and not is_casting() then
-                    cmd("/dgtell all Summoning "..spellConfig.Name)
+                    cmdf("/dgtell all Summoning %s", spellConfig.Name)
                     castSpell(spellConfig.Summon, mq.TLO.Me.ID())
 
                     -- wait and inventory
@@ -201,39 +196,34 @@ function Assist.castSpellAbility(spawn, row)
 
     local spell = parseSpellLine(row)
 
-   --print("Assist.castSpellAbility ", row, ": ", spell.Name)
+   log.Debug("Assist.castSpellAbility %s: %s", row, spell.Name)
 
     if spell.PctAggro ~= nil then
         -- PctAggro skips cast if your aggro % is above threshold
-        --print("evaluating pctaggro castSpellability", spell.Name)
-        if mq.TLO.Me.PctAggro() < tonumber(spell.PctAggro) then
-            print("SKIP PctAggro ", spell.Name, " aggro ", mq.TLO.Me.PctAggro(), " vs required ", spell.PctAggro)
+        if mq.TLO.Me.PctAggro() < spell.PctAggro then
+            log.Info("SKIP PctAggro %s aggro %d vs required %d", spell.Name, mq.TLO.Me.PctAggro(), spell.PctAggro)
             return false
         end
     end
     if spell.NoAggro ~= nil and spell.NoAggro then
         -- NoAggro skips cast if you are on top of aggro
-        --print("evaluating noaggro castSpellability", spell.Name)
         if mq.TLO.Me.TargetOfTarget.ID() == mq.TLO.Me.ID() then
             --print("SKIP NoAggro ", spell.Name, " i have aggro")
             return false
         end
     end
 
-    if spell.GoM ~= nil and spell.GoM then
-        if have_song("Gift of Mana") then
-            --cmd("/dgtell all SKIP GoM ", spell.Name, " i don't have GoM up")
-            return false
-        end
+    if spell.GoM ~= nil and spell.GoM and have_song("Gift of Mana") then
+        return false
     end
 
-    if spell.MinMana ~= nil and mq.TLO.Me.PctMana() < tonumber(spell.MinMana) then
+    if spell.MinMana ~= nil and mq.TLO.Me.PctMana() < spell.MinMana then
         --cmd("/dgtell all SKIP MinMana ", spell.Name, ", ", mq.TLO.Me.PctMana(), " vs required " , spell.MinMana)
         return false
     end
 
     if spell.Summon ~= nil and getItemCountExact(spell.Name) == 0 then
-        cmd("/dgtell all SKIP Summon "..spell.Name..", missing summoned item mid fight")
+        cmdf("/dgtell all SKIP Summon %s, missing summoned item mid-fight", spell.Name)
         return false
     end
 
@@ -242,7 +232,7 @@ function Assist.castSpellAbility(spawn, row)
         return false
     end
 
-    --print("Assist.castSpellAbility preparing to cast ", spell.Name)
+    log.Debug("Assist.castSpellAbility preparing to cast %s", spell.Name)
 
     if is_spell_ability_ready(spell.Name) then
         castSpell(spell.Name, spawn.ID())
@@ -259,13 +249,13 @@ function Assist.killSpawn(spawn)
     assistTarget = spawn
     local currentID = spawn.ID()
 
-    print("Assist.killSpawn ", spawn.Name)
+    log.Debug("Assist.killSpawn %s", spawn.Name())
     if spawn == nil then
         cmd("/dgtell all ERROR: killSpawn called with nil")
         return
     end
 
-    cmd("/target id "..spawn.ID())
+    cmdf("/target id %d", spawn.ID())
     follow.Pause()
 
     local melee = botSettings.settings.assist ~= nil and botSettings.settings.assist.type ~= nil and botSettings.settings.assist.type == "melee"
@@ -282,23 +272,23 @@ function Assist.killSpawn(spawn)
         local meleeDistance = botSettings.settings.assist.melee_distance
         if meleeDistance == "auto" then
             meleeDistance = spawn.MaxRangeTo() * 0.75
-            print("calculated auto melee distance", meleeDistance)
+            log.Debug("Calculated auto melee distance %f", meleeDistance)
         end
 
         local stickArg
 
         if botSettings.settings.assist.stick_point == "Front" then
             stickArg = "hold front " .. meleeDistance .. " uw"
-            print("STICKING IN FRONT TO ",spawn.Name, " ", stickArg)
-            cmd("/stick "..stickArg)
+            log.Debug("STICKING IN FRONT TO %s: %s", spawn.Name, stickArg)
+            cmdf("/stick %s", stickArg)
         else
             cmd("/stick snaproll uw")
             delay(200, function()
                 return mq.TLO.Stick.Behind() and mq.TLO.Stick.Stopped()
             end)
             stickArg = "hold moveback behind " .. meleeDistance .. " uw"
-            print("STICKING IN BACK TO ",spawn.Name, " ", stickArg)
-            cmd("/stick "..stickArg)
+            log.Debug("STICKING IN BACK TO %s: %s", spawn.Name, stickArg)
+            cmdf("/stick %s", stickArg)
         end
     end
 
@@ -306,11 +296,11 @@ function Assist.killSpawn(spawn)
     while true do
         if assistTarget == nil then
             -- break outer loop if /backoff was called
-            print("killSpawn: i got called off, breaking outer loop")
+            log.Debug("killSpawn: i got called off, breaking outer loop")
             break
         end
         if assistTarget.ID() ~= currentID then
-            print("killSpawn: assist called on another mob, returning!")
+            log.Debug("killSpawn: assist called on another mob, returning!")
             return
         end
         if spawn == nil or spawn.ID() == 0 or spawn.Type() == "Corpse" or spawn.Type() == "NULL" then
@@ -321,8 +311,8 @@ function Assist.killSpawn(spawn)
 
         if not is_casting() and (not has_target() or mq.TLO.Target.ID() ~= spawn.ID()) then
             -- XXX will happen for healers
-            cmd("/dgtell all killSpawn WARN: i lost target, restoring to "..spawn.ID().." "..spawn.Name())
-            cmd("/target id "..spawn.ID())
+            cmdf("/dgtell all killSpawn WARN: i lost target, restoring to %d %s", spawn.ID(), spawn.Name())
+            cmdf("/target id %d", spawn.ID())
         end
 
         local used = false
@@ -332,7 +322,7 @@ function Assist.killSpawn(spawn)
             for v, abilityRow in pairs(botSettings.settings.assist.abilities) do
                 if assistTarget == nil then
                     -- break inner loop if /backoff was called
-                    print("killSpawn melee: i got called off, breaking inner loop")
+                    log.Debug("killSpawn melee: i got called off, breaking inner loop")
                     break
                 end
 
@@ -351,7 +341,7 @@ function Assist.killSpawn(spawn)
                     --print("evaluating nuke ", nukeRow)
                     if assistTarget == nil then
                         -- break inner loop if /backoff was called
-                        print("killSpawn nukes: i got called off, breaking inner loop")
+                        log.Debug("killSpawn nukes: i got called off, breaking inner loop")
                         break
                     end
 
@@ -360,7 +350,7 @@ function Assist.killSpawn(spawn)
                     end
                 end
             else
-                cmd("/dgtell all ERROR cannot nuke, have no spell set "..spellSet)
+                cmdf("/dgtell all ERROR cannot nuke, have no spell set %s", spellSet)
             end
         end
 

@@ -1,6 +1,6 @@
 require("ezmq")
 
-seed_process()
+require("knightlinc/Write")
 
 require("e4_Loot")
 require("e4_Hail")
@@ -24,29 +24,37 @@ qol     = require("e4_QoL")
 
 local bard = require("Class_Bard")
 
-botSettings.Init()
+local status, err = pcall(function ()
+    seed_process()
 
-assist.Init()
-buffs.Init()
-follow.Init()
-group.Init()
-heal.Init()
-qol.Init()
-items.Init()
+    botSettings.Init()
 
-cmd("/dgtell all E4 started "..time())
-bard.resumeMelody()
+    assist.Init()
+    buffs.Init()
+    follow.Init()
+    group.Init()
+    heal.Init()
+    qol.Init()
+    items.Init()
 
-while true do
-    heal.Tick()
-    doevents()
-    delay(1)
+    cmd("/dgtell all E4 started "..time())
+    bard.resumeMelody()
 
-    buffs.Tick()
-    doevents()
-    delay(1)
+    while true do
+        heal.Tick()
+        doevents()
+        delay(1)
 
-    qol.Tick()
-    doevents()
-    delay(1)
+        buffs.Tick()
+        doevents()
+        delay(1)
+
+        qol.Tick()
+        doevents()
+        delay(1)
+    end
+end)
+
+if not status then
+    cmdf("/dgtell all \arERROR\ax: %s", err)
 end

@@ -2,3 +2,6 @@
 	path = mq-definitions
 	branch = master
 	url = https://github.com/johnfking/mq-definitions
+[submodule "knightlinc"]
+	path = knightlinc
+	url = https://gitlab.com/Knightly1/knightlinc

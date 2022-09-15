@@ -1,6 +1,7 @@
 -- quality of life tweaks
 
 local mq = require("mq")
+local log = require("knightlinc/Write")
 
 local QoL = {}
 
@@ -50,17 +51,12 @@ function QoL.Init()
     mq.event("died", "You have been slain by #*#", dead)
     mq.event("died", "You died.", dead)
 
-    mq.event("zoning", "LOADING, PLEASE WAIT...", function(text)
-        --print("zoning. waiting")
-        --delay(15000) -- 15s
-    end)
-
     mq.event("zoned", "You have entered #1#.", function(text, zone)
         if zone == "an area where levitation effects do not function" then
             return
         end
 
-        print("I zoned into ", zone)
+        log.Debug("I zoned into ", zone)
         delay(3000) -- 3s
         pet.ConfigureTaunt()
 
@@ -85,7 +81,7 @@ function QoL.Init()
             -- excludes tells from "Player`s pet" (Permutation Peddler, NPC), "Player`s familiar" (Summoned Banker, Pet)
             local spawn = spawn_from_query('="'..name..'"')
             if spawn ~= nil and (spawn.Type() == "NPC" or spawn.Type() == "Pet") then
-                --print("IGNORING TELL FROM "..spawn.Type().." '".. name.. "': ", msg)
+                log.Debug("Ignoring tell from "..spawn.Type().." '".. name.. "': "..msg)
                 return
             end
             if spawn ~= nil then
@@ -114,17 +110,17 @@ function QoL.Init()
     end)
 
     -- reports faction status
-    mq.bind("/faction", function()
+    mq.bind("/factions", function()
         if maxFactionLoyalists then
-            print("Dranik Loyalists: max ally")
+            log.Debug("Dranik Loyalists: max ally")
         else
             cmd("/dgtell all WARN: not max ally with Dranik Loyalists")
         end
     end)
 
     -- tell all peers to report faction status
-    mq.bind("/factionall", function()
-        cmd("/dgaexecute all /faction")
+    mq.bind("/factionsall", function()
+        cmd("/dgaexecute all /factions")
     end)
 
     -- clear all chat windows on current peer
@@ -249,7 +245,7 @@ function QoL.Init()
 
     mq.bind("/running", function()
         -- XXX reports all running scripts on all toons
-        print("FIXME impl /running: report all running scripts on all toons")
+        log.Error("FIXME impl /running: report all running scripts on all toons")
     end)
 
     -- runs combine.lua tradeskill script. NOTE: /combine is reserved for MacroQuest.
@@ -264,47 +260,59 @@ function QoL.Init()
         cmd("/lua run handin")
     end)
 
+    local mmrl = function()
+        cmdf("/dex %s /makeraidleader %s", mq.TLO.Raid.Leader(), mq.TLO.Me.Name())
+    end
+    mq.bind("/makemeraidleader", mmrl)
+    mq.bind("/mmrl", mmrl)
+
     -- reports all currently worn auguments
     mq.bind("/wornaugs", function()
-        print("Currently worn auguments:")
+        log.Info("Currently worn auguments:")
         local hp = 0
         local mana = 0
         local endurance = 0
         local ac = 0
-        for i=0,22 do
+        for i = 0, 22 do
             if mq.TLO.Me.Inventory(i).ID() then
-                for a=0,mq.TLO.Me.Inventory(i).Augs() do
+                for a = 0, mq.TLO.Me.Inventory(i).Augs() do
                     if mq.TLO.Me.Inventory(i).AugSlot(a)() ~= nil then
                         local item = mq.TLO.Me.Inventory(i).AugSlot(a).Item
                         hp = hp + item.HP()
                         mana = mana + item.Mana()
                         endurance = endurance + item.Endurance()
                         ac = ac + item.AC()
-                        print(inventory_slot_name(i), " #", a, ": ", item.ItemLink("CLICKABLE")(), " ", item.HP(), " HP")
+                        log.Info(inventory_slot_name(i).." #"..a..": "..item.ItemLink("CLICKABLE")().." "..item.HP().." HP")
                     end
                 end
             end
         end
-        print("Augument total: ", hp, " HP, ", mana, " mana, ", endurance, " endurance, ", ac, " AC")
+        log.Info("Augument total: "..hp.." HP, "..mana.." mana, "..endurance.." endurance, "..ac.." AC")
     end)
 
     -- reports all owned clickies (worn, inventory, bank) worn auguments
     mq.bind("/clickies", function()
-        print("My clickies:")
+        log.Info("My clickies:")
 
-        for i=0,32 do -- equipment: 0-22 is worn gear, 23-32 is inventory top level
+        -- XXX TODO skip expendables
+
+        -- XXX 15 sep 2022: item.Expendables() seem to be broken, always returns false ? https://discord.com/channels/511690098136580097/840375268685119499/1019900421248126996
+
+        for i = 0, 32 do -- equipment: 0-22 is worn gear, 23-32 is inventory top level
             if mq.TLO.Me.Inventory(i).ID() then
                 local inv = mq.TLO.Me.Inventory(i)
                 if inv.Container() > 0 then
                     for c = 1, inv.Container() do
                         local item = inv.Item(c)
-                        if item.Clicky() ~= nil then
-                            print(inventory_slot_name(i), " # "..c.." ", item.ItemLink("CLICKABLE")(), " effect: ", item.Clicky.Spell.Name())
+                        if item.Clicky() ~= nil and (not item.Expendable()) then
+                            --print ( "one ", item.Name(), " ", item.Charges() , " ", item.Expendable())
+                            log.Info(inventory_slot_name(i).." # "..c.." "..item.ItemLink("CLICKABLE")().." effect: "..item.Clicky.Spell.Name())
                         end
                     end
                 else
-                    if inv.Clicky() ~= nil then
-                        print(inventory_slot_name(i), " ", inv.ItemLink("CLICKABLE")(), " effect: ", inv.Clicky.Spell.Name())
+                    if inv.Clicky() ~= nil and (not inv.Expendable()) then
+                        --print ( "two ", inv.Name(), " ", inv.Charges(), " ", inv.Expendable())
+                        log.Info(inventory_slot_name(i).." "..inv.ItemLink("CLICKABLE")().." effect: "..inv.Clicky.Spell.Name())
                     end
                 end
             end
@@ -317,13 +325,15 @@ function QoL.Init()
                 if inv.Container() > 0 then
                     for c = 1, inv.Container() do
                         local item = inv.Item(c)
-                        if item.Clicky() ~= nil then
-                            print(key, " # "..c.." ", item.ItemLink("CLICKABLE")(), " effect: ", item.Clicky.Spell.Name())
+                        if item.Clicky() ~= nil and (not item.Expendable()) then
+                            --print ( "three ", item.Name(), " ", item.Charges(), " ", item.Expendable())
+                            log.Info(key.." # "..c.." "..item.ItemLink("CLICKABLE")().." effect: "..item.Clicky.Spell.Name())
                         end
                     end
                 else
-                    if inv.Clicky() ~= nil then
-                        print(key, " ", inv.ItemLink("CLICKABLE")(), " effect: ", inv.Clicky.Spell.Name())
+                    if inv.Clicky() ~= nil and (not inv.Expendable()) then
+                        --print ( "four ", inv.Name(), " ", inv.Charges(), " ", inv.Expendable())
+                        log.Info(key.." "..inv.ItemLink("CLICKABLE")().." effect: "..inv.Clicky.Spell.Name())
                     end
                 end
             end
@@ -338,7 +348,7 @@ function QoL.Init()
             return
         end
 
-        print(aaName.." is not ready. Ready in "..mq.TLO.Me.AltAbilityTimer(aaName).TimeHMS())
+        log.Warn(aaName.." is not ready. Ready in "..mq.TLO.Me.AltAbilityTimer(aaName).TimeHMS())
 
         if not is_orchestrator() then
             return
@@ -351,10 +361,10 @@ function QoL.Init()
             local spawn = mq.TLO.NearestSpawn(i, spawnQuery)
             local peer = spawn.Name()
             if is_peer(peer) then
-                local value = query_peer(peer, 'Me.AltAbilityReady['..aaName..']', 0)
+                local value = query_peer(peer, "Me.AltAbilityReady["..aaName.."]", 0)
                 if value == "TRUE" then
-                    print("Asking ", peer, " to activate banker ...")
-                    cmd("/dexecute "..peer.." /banker")
+                    log.Info("Asking %s to activate banker ...", peer)
+                    cmdf("/dexecute %s /banker", peer)
                     return
                 end
             end
@@ -373,8 +383,8 @@ function QoL.Init()
         local spawnQuery = 'pccorpse radius 500'
         for i = 1, spawn_count(spawnQuery) do
             local spawn = mq.TLO.NearestSpawn(i, spawnQuery)
-            print("Asking "..spawn.DisplayName().." for consent ...")
-            cmd("/dexecute "..spawn.DisplayName().." /consent "..mq.TLO.Me.Name())
+            log.Info("Asking %s for consent ...", spawn.DisplayName())
+            cmdf("/dexecute %s /consent %s", spawn.DisplayName(), mq.TLO.Me.Name())
         end
     end)
 
@@ -421,6 +431,17 @@ function QoL.Init()
         cmd("/noparse /dgaexecute /dgtell all TOTAL AA: ${Me.AAPointsTotal}")
     end)
 
+    -- toggles debug output on/off
+    mq.bind("/debug", function()
+        if log.loglevel == "debug" then
+            log.loglevel = "info"
+            log.Info("Toggle debug info OFF")
+        else
+            log.loglevel = "debug"
+            log.Info("Toggle debug info ON")
+        end
+    end)
+
 end
 
 function QoL.loadRequiredPlugins()
@@ -428,32 +449,32 @@ function QoL.loadRequiredPlugins()
         "MQ2DanNet",
         "MQ2Debuffs", -- XXX not used yet. to be used for auto-cure feature
         "MQ2AdvPath", -- XXX /afollow or /stick ?
-        --"MQ2ConstantAffinity", -- XXX
         "MQ2MoveUtils",
         "MQ2Cast",
     }
     for k, v in pairs(requiredPlugins) do
         if not is_plugin_loaded(v) then
             load_plugin(v)
-            print("WARNING: "..v.." was not loaded")
+            log.Warn(v.." was not loaded")
         end
     end
 
     if is_rof2() then
         local requiredEmuPlugins = {
+            "MQ2ConstantAffinity",
             "MQMountClassicModels", -- XXX make use of
         }
         for k, v in pairs(requiredEmuPlugins) do
             if not is_plugin_loaded(v) then
                 load_plugin(v)
-                print("WARNING: "..v.." was not loaded")
+                log.Warn(v.." was not loaded")
             end
         end
     end
 end
 
+-- make sure I know all listed abilities
 function QoL.verifySpellLines()
-    -- make sure I know all listed abilities
 
     verifySpellLines("evac", botSettings.settings.evac)
     verifySpellLines("self_buffs", botSettings.settings.self_buffs)
@@ -501,11 +522,9 @@ function QoL.verifySpellLines()
         verifySpellLines("pet_heals", botSettings.settings.pet.heals)
         verifySpellLines("pet_buffs", botSettings.settings.pet.buffs)
     end
-
-    -- XXX TODO validate more fields
 end
 
--- warns if you lack any item etc listed in `lines`.
+-- Warns if you lack any item etc listed in `lines`.
 function verifySpellLines(label, lines)
     if lines == nil then
         return
@@ -513,13 +532,13 @@ function verifySpellLines(label, lines)
     for k, row in pairs(lines) do
         local spellConfig = parseSpellLine(row)
         if not known_spell_ability(spellConfig.Name) then
-            cmd("/dgtell all Missing "..label..": "..spellConfig.Name)
+            cmdf("/dgtell all Missing %s: %s", label, spellConfig.Name)
             cmd("/beep 1")
         end
     end
 end
 
--- runs every second
+-- Runs every second.
 function QoL.Tick()
     -- close f2p nag screen
     if window_open("AlertWnd") then
@@ -529,13 +548,13 @@ function QoL.Tick()
     -- auto accept trades
     if window_open("tradewnd") and not has_cursor_item() then
         if has_target() and is_peer(mq.TLO.Target.Name()) then
-            cmd("/dgtell all Accepting trade in 5s with "..mq.TLO.Target.Name())
+            cmdf("/dgtell all Accepting trade in 5s with %s", mq.TLO.Target.Name())
             delay(5000, function() return has_cursor_item() end)
             if not has_cursor_item() then
                 cmd("/notify tradewnd TRDW_Trade_Button leftmouseup")
             end
         else
-            cmd("/dgtell all \arWARN\ax Ignoring trade from non-peer "..mq.TLO.Target.Name())
+            cmdf("/dgtell all \arWARN\ax Ignoring trade from non-peer %s", mq.TLO.Target.Name())
             cmd("/beep 1")
         end
     end

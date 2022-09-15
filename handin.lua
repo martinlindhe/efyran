@@ -1,6 +1,7 @@
 -- xxx later: can also be used for L65/l70 spell hand ins ? (if "item reward" is in spell book ?)
 
 require("ezmq")
+local log = require("knightlinc/Write")
 
 local handinRules = {
     ["Nerask/Zone|causeway"] = { -- OOW T2 Silk
@@ -135,18 +136,18 @@ local handinRules = {
 
 local zone = zone_shortname():lower()
 
-for key, t in pairs(handinRules) do
+for npcRow, t in pairs(handinRules) do
 
-    local o = parseSpellLine(key)
+    local o = parseSpellLine(npcRow)
 
     if zone == o.Zone then
-        print("zone ", o.Zone, ", ", o.Name)
+        log.Info("Zone %s, %s", o.Zone, o.Name)
 
         local spawn = spawn_from_query('npc "'..o.Name..'"')
         if spawn ~= nil then
 
             if spawn.Distance() > 50 then
-                print("ERROR: ", o.Name, " is too far away for hand-in.")
+                log.Error("%s is too far away for hand-in.", o.Name)
                 return
             end
 
@@ -176,17 +177,17 @@ for key, t in pairs(handinRules) do
                                 if subIndex == 1 then
                                     --print(key, " = ", v)
                                     component = v
-                                    count = tonumber(key)
+                                    count = toint(key)
                                 end
                                 subIndex = subIndex + 1
                             end
                         end
-                        print("Looking for component ", component)
+                        log.Info("Looking for component %s", component)
 
                         if have_item(component) then
                             haveParts = true
                             local haveCount = getItemCountExact(component)
-                            print("I have component ", component, " x ", haveCount)
+                            log.Info("I have component %s x %d", component, haveCount)
                             if haveCount < count then
                                 needParts = true
                                 needMessage = needMessage.."NEED "..component.." x "..(count-haveCount).." for "..reward.Name
@@ -200,9 +201,9 @@ for key, t in pairs(handinRules) do
 
                     if haveParts and needParts then
                         -- asks for the missing items
-                        cmd("/dgtell all "..needMessage)
+                        cmdf("/dgtell all %s", needMessage)
                     elseif not needParts and haveParts then
-                        print("I HAVE ALL NEEDED PIECES, DOING HAND IN")
+                        log.Info("I HAVE ALL NEEDED PIECES, DOING HAND IN")
 
                         target_npc_name(o.Name)
                         move_to(spawn)
@@ -222,7 +223,7 @@ for key, t in pairs(handinRules) do
                                     if subIndex == 1 then
                                         --print(key, " = ", v)
                                         component = v
-                                        count = tonumber(key)
+                                        count = toint(key)
                                     end
                                     subIndex = subIndex + 1
                                 end
@@ -230,26 +231,22 @@ for key, t in pairs(handinRules) do
 
                             -- pick up and hand over items unstacked
                             for each = 1, count do
-                                print("Picking up ", component)
+                                log.Info("Picking up %s", component)
                                 local item = find_item(component)
                                 if item == nil then
                                     -- unexpected
-                                    mq.cmd.dgtell("all ERROR find_item failed on "..component)
+                                    cmdf("/dgtell all ERROR find_item failed on %s", component)
                                     break
                                 end
 
-                                local itemNotifyQuery = "/nomodkey /ctrl /itemnotify in Pack"..tostring(item.ItemSlot()-22).." "..tostring(item.ItemSlot2()+1).." leftmouseup"
-                                print(itemNotifyQuery)
-                                cmd(itemNotifyQuery)
+                                cmdf("/nomodkey /ctrl /itemnotify in Pack%d %d leftmouseup", item.ItemSlot() - 22, item.ItemSlot2() + 1)
                                 delay(1000, function() return has_cursor_item() end)
                                 delay(200)
 
                                 cmd("/click left target")
                                 if not window_open("GiveWnd") then
                                     -- extra delay for server roundtrip
-                                    print("give start wait")
-                                    delay(10000, function() return window_open("GiveWnd") end)
-                                    print("donme wait")
+                                    delay(5000, function() return window_open("GiveWnd") end)
                                 end
                                 delay(1000, function() return not has_cursor_item() end)
                                 delay(200)
@@ -257,19 +254,20 @@ for key, t in pairs(handinRules) do
 
                         end
 
+                        -- PRESS GIVE BUTTON. XXX left for the caller to do manually for now.
                         -- /nomodkey /notify GiveWnd GVW_Give_Button leftmouseup
 
                         return
 
                     else
-                        print("XXX ODD: needParts = ",needParts, ", haveParts = ", haveParts)
+                        log.Warn("XXX ODD: needParts = %s, haveParts = %s", bools(needParts), bools(haveParts))
                     end
 
                 end
             end
 
         else
-            print("ERROR: Expected spawn not found in zone: ", o.Name)
+            log.Error("Expected spawn not found in zone: %s", o.Name)
         end
 
     end

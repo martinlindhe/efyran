@@ -1,6 +1,7 @@
 -- cycles thru nearby npc and attacks them. to be run from melee noob to pl together with sit.lua
 
 require("ezmq")
+local log = require("knightlinc/Write")
 
 local spawnQuery = "npc zradius 50 radius 40"
 
@@ -13,7 +14,7 @@ end)
 
 
 
-print("tag.lua melee PL started, cycling thru nearby mobs ...")
+log.Info("tag.lua melee PL started, cycling thru nearby mobs ...")
 
 local tagged = {} -- track all tagged mob id:s
 
@@ -40,31 +41,31 @@ while true do
                     delay(10)
                     local meleeDistance = spawn.MaxRangeTo() * 0.75
 
-                    print("tagging ", spawn.ID(), " ", spawn.Name())
-                    cmd("/target id "..spawn.ID())
+                    log.Info("Tagging %d %s", spawn.ID(), spawn.Name())
+                    cmdf("/target id %d", spawn.ID())
                     delay(10)
                     cmd("/face fast")
 
-                    local stickArg = "hold " .. meleeDistance .. " uw"
-                    cmd("/stick "..stickArg)
+                    local stickArg =
+                    cmdf("/stick hold %f uw", meleeDistance)
                     cmd("/attack on")
 
                     hit = false
                     delay(5000, function()
                         doevents()
                         if spawn() == nil then
-                            print("XXX inside tag delay, spawn is now nil. breaking ")
+                            log.Info("Inside tag delay, spawn is now nil. breaking")
                             return true
                         end
                         if hit then
-                            print("hit is true, breaking from mob id ", spawn.ID())
+                            log.Info("Hit is true, breaking from mob id %d", spawn.ID())
                             tagged[spawn.ID()] = true
                             return true
                         end
                     end)
 
                     if tagged[spawn.ID()] == nil and spawn() ~= nil then
-                        print("never tagged mob id", spawn.ID())
+                        log.Info("Never tagged mob id %d", spawn.ID())
                     end
 
                 end

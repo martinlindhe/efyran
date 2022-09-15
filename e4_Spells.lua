@@ -1,8 +1,9 @@
 local mq = require("mq")
+local log = require("knightlinc/Write")
 
 function queryBot(peer, q)
     local fullQuery = peer .. ' -q ' .. q
-    cmd("/dquery "..fullQuery)
+    cmdf("/dquery %s", fullQuery)
     delay(1000, function()
         local state = mq.TLO.DanNet(peer).Query(q).Received()
         --print("delay ", peer, " q", q, state)
@@ -23,9 +24,9 @@ function refreshBuff(buffItem, spawn)
     --print("refreshBuff ", buffItem, ", target Name:", spawn.CleanName())
 
     if spawn.Type() ~= "PC" and spawn.Type() ~= "Pet" then
-        print("will not buff ", spawn.Type(), " ", spawn.Name(), ": ", spawn.CleanName())
+        log.Info("Will not buff %s %s: %s ", spawn.Type(), spawn.Name(), spawn.CleanName())
         if spawn.Type() ~= "Corpse" then
-            cmd("/dgtell all WILL NOT BUFF "..spawn.Type()..": "..spawn.CleanName())
+            cmdf("/dgtell all WILL NOT BUFF %s: %s", spawn.Type(), spawn.CleanName())
             cmd("/beep 1")
         end
         return false
@@ -42,7 +43,7 @@ function refreshBuff(buffItem, spawn)
 
     local spell = getSpellFromBuff(spellConfig.Name) -- XXX parse this once on script startup too, dont evaluate all the time !
     if spell == nil then
-        cmd("/dgtell all refreshBuff: getSpellFromBuff "..buffItem.." FAILED")
+        cmdf("/dgtell all refreshBuff: getSpellFromBuff %s FAILED", buffItem)
         cmd("/beep 1")
         return false
     end
@@ -65,7 +66,7 @@ function refreshBuff(buffItem, spawn)
         end
 
         if is_spell_in_book(spellName) and not spell.Stacks() then
-            cmd("/dgtell all ERROR cannot selfbuff with "..spellName.." (dont stack with current buffs)")
+            cmdf("/dgtell all ERROR cannot selfbuff with %s (dont stack with current buffs)", spellName)
             return false
         end
     elseif spawn.Type() == "Pet" and spawn.ID() == mq.TLO.Me.Pet.ID() then
@@ -85,7 +86,7 @@ function refreshBuff(buffItem, spawn)
             return false
         end
     else
-        cmd("/dgtell all FATAL ERROR refreshBuff called with invalid spawn ", spawn.Name())
+        cmdf("/dgtell all FATAL ERROR refreshBuff called with invalid spawn %s", spawn.Name())
         return
     end
 
@@ -95,7 +96,7 @@ function refreshBuff(buffItem, spawn)
             gem = spellConfig.Gem
         end
         --print("attempting to memorize ", spellName .. " ... GEM ", gem)
-        cmd('/memorize "'..spellName..'" '..gem)
+        cmdf('/memorize "%s" %d', spellName, gem)
         delay(3000) -- XXX 3s
     end
 
@@ -118,9 +119,9 @@ function refreshBuff(buffItem, spawn)
     end
 
     if spawn.Type() == "Pet" then
-        print("Buffing \agmy pet ", spawn.CleanName(), "\ax with \ay", pretty, "\ax.")
+        log.Debug("Buffing \agmy pet ", spawn.CleanName(), "\ax with \ay", pretty, "\ax.")
     else
-        print("Buffing \agmyself\ax with \ay", pretty, "\ax.")
+        log.Debug("Buffing \agmyself\ax with \ay", pretty, "\ax.")
     end
     castSpell(spellName, spawnID)
     return true
@@ -132,7 +133,7 @@ end
 function spellConfigAllowsCasting(buffItem, spawn)
 
     if spawn == nil then
-        cmd("/dgtell all ERROR: spellConfigAllowsCasting called with nil spawn for "..buffItem)
+        cmdf("/dgtell all ERROR: spellConfigAllowsCasting called with nil spawn for %s", buffItem)
         cmd("/beep 1")
         return false
     end
@@ -192,7 +193,7 @@ function spellConfigAllowsCasting(buffItem, spawn)
     if spellConfig.Reagent ~= nil then
         -- if we lack this item, then skip.
         if getItemCountExact(spellConfig.Reagent) == 0 then
-            cmd("/dgtell all SKIP BUFFING "..spellConfig.Name..", I'm out of reagent "..spellConfig.Reagent)
+            cmdf("/dgtell all SKIP BUFFING %s , I'm out of reagent %s", spellConfig.Name, spellConfig.Reagent)
             return false
         end
     end
@@ -204,9 +205,9 @@ end
 function castSpell(name, spawnId)
 
     if have_combat_ability(name) then
-        cmd("/disc "..name)               -- NOTE: /disc argument must NOT use quotes
+        cmdf("/disc %s", name)          -- NOTE: /disc argument must NOT use quotes
     elseif have_ability(name) then
-        cmd('/doability "'..name..'"')   -- NOTE: /doability argument must use quotes
+        cmdf('/doability "%s"', name)    -- NOTE: /doability argument must use quotes
     else
         -- spell / aa
 
@@ -221,8 +222,8 @@ function castSpell(name, spawnId)
             local item = find_item(name)
             if item ~= nil then
                 -- item click
-                print("item click sleep, ", item.Clicky.CastTime(), " + ", item.Clicky.Spell.RecastTime() )
-                delay(item.Clicky.CastTime() + item.Clicky.Spell.RecastTime() + 1500) -- XXX recast time is 0
+                log.Debug("Item click sleep, %d + %d", item.Clicky.CastTime(), item.Clicky.Spell.RecastTime())
+                delay(item.Clicky.CastTime() + item.Clicky.Spell.RecastTime() + 1500)
             else
                 -- spell / AA
                 local spell = get_spell(name)
@@ -232,7 +233,7 @@ function castSpell(name, spawnId)
                     delay(sleepTime)
                 end
             end
-            print("ME BARD castSpell ", name, " -- SO I RESUME TWIST!")
+            log.Debug("BARD in castSpell %s .- SO I RESUME TWIST!", name)
             cmd("/twist start")
         end
 
@@ -244,7 +245,7 @@ function castSpellRaw(name, spawnId, extraArgs)
         extraArgs = ""
     end
     if spawnId == nil then
-        cmd("/dgtell all castSpellRaw FATAL ERROR: called with nil spawnId, name = "..name.." extraArgs="..extraArgs)
+        cmdf("/dgtell all castSpellRaw FATAL ERROR: called with nil spawnId, name = %s, extraArgs = %s", name, extraArgs)
         cmd("/beep 1")
         return
     end
@@ -253,7 +254,7 @@ function castSpellRaw(name, spawnId, extraArgs)
 
     local castingArg = '"' .. name .. '" -targetid|'.. spawnId .. ' ' .. extraArgs
     --print("castSpellRaw: /casting", castingArg)
-    cmd("/casting "..castingArg)
+    cmdf("/casting %s", castingArg)
 end
 
 -- returns datatype spell or nil if not found
@@ -268,7 +269,7 @@ function getSpellFromBuff(name)
     elseif have_combat_ability(name) then
         return mq.TLO.Me.CombatAbility(mq.TLO.Me.CombatAbility(name))
     else
-        cmd("/dgtell all getSpellFromBuff ERROR: can't find buff "..name)
+        cmdf("/dgtell all getSpellFromBuff ERROR: can't find buff %s", name)
         cmd("/beep 1")
         return nil
     end
@@ -287,7 +288,7 @@ end
 -- Memorizes all spells listed in character settings.assist.pbae in their correct position.
 function memorizePBAESpells()
     if botSettings.settings.assist.pbae == nil then
-        print("no settings.assist.pbae configured")
+        log.Debug("no settings.assist.pbae configured")
         return
     end
     for k, spellRow in pairs(botSettings.settings.assist.pbae) do

@@ -1,24 +1,28 @@
 local mq = require("mq")
+local log = require("knightlinc/Write")
 
 local Items = {}
+
+
+--- collect arg into query, needed for /fdi water flask to work without quotes
+function args_string(...)
+    local s = ""
+    for i = 1, select("#",...) do
+        s = s ..  select(i,...) .. " "
+    end
+    return s
+end
 
 function Items.Init()
     -- finds item by name in inventory/bags. NOTE: "/finditem" is reserved in eq live for "dragon hoard" feature
     mq.bind("/fdi", function(...)
-        --- collect arg into query, needed for /fdi water flask to work without quotes
-        local name = ""
-        for i = 1, select("#",...) do
-            name = name ..  select(i,...) .. " "
-        end
-        name = trim(name)
-
-
+        local name = trim(args_string(...))
         name = strip_link(name)
 
-        print("Ssearching for ", name)
+        log.Info("Ssearching for %s", name)
 
         if is_orchestrator() then
-            cmd("/dgzexecute /fdi "..name)
+            cmdf("/dgzexecute /fdi %s", name)
         end
 
         local item = find_item(name)
@@ -28,35 +32,24 @@ function Items.Init()
         end
 
         local cnt = getItemCountExact(item.Name())
-        local s = item.ItemLink("CLICKABLE")() .. " in " .. inventory_slot_name(item.ItemSlot()) .. " (count:".. tostring(cnt) .. ")"
-        cmd("/dgtell all "..s)
+        cmdf("/dgtell all %s in %s (count: %d)", item.ItemLink("CLICKABLE")(), inventory_slot_name(item.ItemSlot()), cnt)
     end)
 
     -- find missing item
     mq.bind("/fmi", function(...)
-        --- collect arg into query, needed for /fdi water flask to work without quotes
-        local name = ""
-        for i = 1, select("#",...) do
-            name = name ..  select(i,...) .. " "
-        end
-        name = trim(name)
-
-        -- XXX strip item links
+        local name = trim(args_string(...))
+        name = strip_link(name)
 
         if is_orchestrator() then
-            cmd("/dgzexecute /fmi "..name)
+            cmdf("/dgzexecute /fmi %s", name)
         end
 
         local item = find_item(name)
         if item == nil then
-            cmd("/dgtell all I miss "..name)
+            cmdf("/dgtell all I miss %s", name)
             return nil
         end
     end)
-end
-
-function trim(s)
-    return s:match( "^%s*(.-)%s*$")
 end
 
 return Items

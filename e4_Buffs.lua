@@ -1,4 +1,5 @@
 local mq = require("mq")
+local log = require("knightlinc/Write")
 
 require("e4_Spells")
 
@@ -29,7 +30,7 @@ function Buffs.Init()
         if botSettings.settings.mount ~= nil then
 
             if not mq.TLO.Me.CanMount() then
-                cmd("/dgtell all MOUNT ERROR, cannot mount in "..zone_shortname())
+                cmdf("/dgtell all MOUNT ERROR, cannot mount in %s", zone_shortname())
                 return
             end
 
@@ -37,18 +38,18 @@ function Buffs.Init()
 
             local spell = getSpellFromBuff(botSettings.settings.mount)
             if spell == nil then
-                cmd("/dgtell all /mounton: getSpellFromBuff "..botSettings.settings.mount.." FAILED")
+                cmdf("/dgtell all /mounton: getSpellFromBuff %s FAILED", botSettings.settings.mount)
                 cmd("/beep 1")
                 return false
             end
 
             if have_buff(spell.RankName()) then
-                print("I am already mounted.")
+                log.Error("I am already mounted.")
                 return false
             end
 
             -- XXX dont summon if we are already mounted.
-            print("Summoning mount ", botSettings.settings.mount)
+            log.Info("Summoning mount %s ...", botSettings.settings.mount)
             castSpell(botSettings.settings.mount, mq.TLO.Me.ID())
         end
     end)
@@ -57,6 +58,7 @@ function Buffs.Init()
         if is_orchestrator() then
             cmd("/dgzexecute /mountoff")
         end
+        log.Info("Dismounting ...")
         cmd("/dismount")
     end)
 
@@ -66,19 +68,19 @@ function Buffs.Init()
             return
         end
         if is_orchestrator() then
-            cmd("/dgzexecute /dropbuff "..filter)
+            cmdf("/dgzexecute /dropbuff %s", filter)
         end
 
         if filter == "all" then
             for i=1,mq.TLO.Me.MaxBuffSlots() do
                 if mq.TLO.Me.Buff(i).ID() ~= nil then
-                    print("removing buff ", i, "id:",mq.TLO.Me.Buff(i).ID(), ",name:", mq.TLO.Me.Buff(i).Name())
-                    cmd("/removebuff "..mq.TLO.Me.Buff(i).Name())
+                    log.Debug("Removing buff %d, id: %d, name: %s", i, mq.TLO.Me.Buff(i).ID(), mq.TLO.Me.Buff(i).Name())
+                    cmdf("/removebuff %s", mq.TLO.Me.Buff(i).Name())
                 end
                 delay(1)
             end
         else
-            cmd("/removebuff "..filter)
+            cmdf("/removebuff %s", filter)
         end
     end)
 
@@ -91,7 +93,7 @@ function Buffs.Init()
     end)
 
     mq.bind("/buffme", function()
-        cmd("/dgzexecute /buffit "..mq.TLO.Me.ID())
+        cmdf("/dgzexecute /buffit %d", mq.TLO.Me.ID())
     end)
 
     -- /buffit: asks bots to cast level appropriate buffs on current target
@@ -100,7 +102,7 @@ function Buffs.Init()
         if is_orchestrator() then
             spawnID = mq.TLO.Target.ID()
             if spawnID ~= 0 then
-                cmd("/dgzexecute /buffit "..spawnID)
+                cmdf("/dgzexecute /buffit %d", spawnID)
             end
         end
 
@@ -108,22 +110,22 @@ function Buffs.Init()
             return
         end
 
-        local spawn = spawn_from_query("id " .. spawnID)
+        local spawn = spawn_from_query("id "..spawnID)
         if spawn == nil then
-            cmd("/dgtell all BUFFIT FAIL, cannot find target id in zone "..spawnID)
+            cmdf("/dgtell all BUFFIT FAIL, cannot find spawn ID %d in %s", spawnID, zone_shortname())
             return false
         end
 
         local level = spawn.Level()
 
         for key, buffs in pairs(botSettings.settings.group_buffs) do
-            print("/buffit on ",spawn, "  ", type(spawn), ", finding best group buff ", key)
+            log.Debug("/buffit on %s, type %s, finding best group buff %s", spawn, type(spawn), key)
 
             -- XXX find the one with highest MinLevel
             local minLevel = 0
             local spellName = ""
             if type(buffs) ~= "table" then
-                cmd("/dgtell all FATAL ERROR, group buffdata "..buffs.." should be a table")
+                cmdf("/dgtell all FATAL ERROR, buffdata %s should be a table", buffs)
                 return
             end
 
@@ -131,7 +133,7 @@ function Buffs.Init()
                 local spellConfig = parseSpellLine(buff)  -- XXX do not parse here, cache and reuse
                 local n = tonumber(spellConfig.MinLevel)
                 if n == nil then
-                    cmd("/dgtell all FATAL ERROR, group buff "..buff.." does not have a MinLevel setting")
+                    cmdf("/dgtell all FATAL ERROR, group buff %s does not have a MinLevel setting", buff)
                     return
                 end
                 if n > minLevel and level >= n then
@@ -139,34 +141,34 @@ function Buffs.Init()
                     spellName = spellConfig.Name
                     local spell = get_spell(spellName)
                     if spell == nil then
-                        cmd("/dgtell all FATAL ERROR cant lookup "..spellName)
+                        cmdf("/dgtell all FATAL ERROR cant lookup %s", spellName)
                         return
                     end
                     if is_spell_in_book(spellName) then
                         spellName = spell.RankName()
                         if not spell.StacksTarget() then
-                            cmd("/dgtell all ERROR cannot buff "..spawn.Name().." with "..spellName.." (dont stack with current buffs)")
+                            cmdf("/dgtell all ERROR cannot buff %s with %s (dont stack with current buffs)", spawn.Name(), spellName)
                             return
                         end
                     end
 
-                    --print("Best ", key, " buff so far is MinLevel ",spellConfig.MinLevel, " ", spellConfig.Name, " target ", spawn.Name() ," L", level)
+                    log.Debug("Best %s buff so far is MinLevel %d, Name %s, target L%d %s", key, spellConfig.MinLevel, spellConfig.Name, level, spawn.Name())
                 end
             end
 
             if minLevel > 0 then
                 if spellConfigAllowsCasting(spellName, spawn) then
-                    cmd("/dgtell all Buffing \ag"..spawn.Name().."\ax with "..spellName.." ("..key..")")
+                    cmdf("/dgtell all Buffing \ag%s\ax with %s (%s)", spawn.Name(), spellName, key)
                     castSpellRaw(spellName, spawnID, "-maxtries|3")
 
                     -- sleep for the Duration
                     local spell = getSpellFromBuff(spellName)
                     if spell ~= nil then
-                        delay(4000 + spell.MyCastTime() + spell.RecastTime()) -- XXX 4s for "memorize spell"
+                        delay(3000 + spell.MyCastTime() + spell.RecastTime()) -- XXX 3s for "memorize spell". need a better "memorize if needed and wait while memorizing"-helper
                     end
                 end
             else
-                print("Failed to find a matching group buff ", key, ", target ", spawn.Name(), " L", level)
+                log.Error("Failed to find a matching group buff %s, target L%d %s", key, level, spawn.Name())
             end
         end
     end)
@@ -184,16 +186,16 @@ function Buffs.Init()
         end
 
         if shrinkClicky == nil or not in_group() then
-            print("No Shrink clicky declared in self_buffs, giving up.")
+            log.Error("No Shrink clicky declared in self_buffs, giving up.")
             return
         end
 
         local item = find_item(spellConfig.Name)
         if item == nil then
-            cmd("/dgtell all \arERROR\ax: Did not find Shrink clicky in inventory: " .. spellConfig.Name)
+            cmdf("/dgtell all \arERROR\ax: Did not find Shrink clicky in inventory: %s", spellConfig.Name)
             return
         end
-        print("Shrinking group members with ", spellConfig.Name, " item ", item.Clicky.Spell.Name())
+        log.Info("Shrinking group members with %s", item.ItemLink("CLICKABLE")())
 
         -- make sure shrink is targetable check buff type
         local spell = getSpellFromBuff(spellConfig.Name)
@@ -202,7 +204,7 @@ function Buffs.Init()
             for n = 0, 5 do
                 for i = 1, 3 do
                     if mq.TLO.Group.Member(n)() ~= nil and not mq.TLO.Group.Member(n).OtherZone() and mq.TLO.Group.Member(n).Height() > 2.04 then
-                        print("Shrinking member ", mq.TLO.Group.Member(n)(), " from height ", mq.TLO.Group.Member(n).Height())
+                        log.Info("Shrinking member %s from height %d", mq.TLO.Group.Member(n)(), mq.TLO.Group.Member(n).Height())
                         castSpell(spellConfig.Name, mq.TLO.Group.Member(n).ID())
                         -- sleep for the Duration
                         delay(item.Clicky.CastTime() + spell.RecastTime())
@@ -232,7 +234,7 @@ function Buffs.Tick()
         return
     end
 
-    if follow.spawn ~= nil or is_sitting() or is_hovering() or in_neutral_zone() or window_open("MerchantWnd") or window_open("GiveWnd") or window_open("BigBankWnd") or window_open("SpellBookWnd") or window_open("LootWnd") or spawn_count("pc radius 100") == 1 then
+    if follow.spawn ~= nil or is_sitting() or is_hovering() or is_moving() or in_neutral_zone() or window_open("MerchantWnd") or window_open("GiveWnd") or window_open("BigBankWnd") or window_open("SpellBookWnd") or window_open("LootWnd") or spawn_count("pc radius 100") == 1 then
         return
     end
 
@@ -241,8 +243,8 @@ function Buffs.Tick()
         return
     end
 
-    --print("buff tick. refresh_buffs:", botSettings.toggles.refresh_buffs, ", expired:", refreshBuffsTimer:expired(), ", still:", not is_moving(), ", visible:", not is_invisible()  )
-    if botSettings.toggles.refresh_buffs and refreshBuffsTimer:expired() and not is_moving() and not is_invisible() then
+    if botSettings.toggles.refresh_buffs and refreshBuffsTimer:expired() and not is_invisible() then
+        log.Debug("Buff tick: refresh buffs at %s", time())
         if not buffs.RefreshSelfBuffs() then
             if not buffs.RefreshAura() then
                 if not pet.Summon() then
@@ -281,13 +283,14 @@ function handleBuffRequest(req)
 
     local buffRows = groupBuffs[class_shortname()][req.Buff]
     if buffRows == nil then
-        cmd("/dgtell all FATAL ERROR: /queuebuff did not find groupBuffs."..class_shortname().." entry "..req.Buff)
+        cmdf("/dgtell all FATAL ERROR: /queuebuff did not find groupBuffs.%s entry %s", class_shortname(), req.Buff)
         return false
     end
 
     local spawn = spawn_from_peer_name(req.Peer)
     if spawn == nil then
-        cmd("/dgtell all FATAL ERROR: /queuebuff spawn not found "..req.Peer)
+        -- happens when zoning
+        log.Error("/queuebuff spawn not found %s", req.Peer)
         return false
     end
 
@@ -308,14 +311,14 @@ function handleBuffRequest(req)
         local spellConfig = parseSpellLine(checkRow)  -- XXX do not parse here, cache and reuse
         local n = tonumber(spellConfig.MinLevel)
         if n == nil then
-            cmd("/dgtell all FATAL ERROR, group buff "..checkRow.." does not have a MinLevel setting")
+            cmdf("/dgtell all FATAL ERROR, group buff %s does not have a MinLevel setting", checkRow)
             return
         end
         if n > minLevel and level >= n then
             spellName = spellConfig.Name
             local spell = get_spell(spellName)
             if spell == nil then
-                cmd("/dgtell all FATAL ERROR cant lookup "..spellName)
+                cmdf("/dgtell all FATAL ERROR cant lookup %s", spellName)
                 return
             end
             if is_spell_in_book(spellName) then
@@ -330,22 +333,21 @@ function handleBuffRequest(req)
             end
 
             if n > minLevel then
-                print("Best ", req.Peer, " buff so far is MinLevel ", spellConfig.MinLevel, " ", spellConfig.Name, " target ", spawn.Name() ," L", level)
+                log.Debug("Best %s buff so far is MinLevel %d, Name %s, target L%d %s", req.Peer, spellConfig.MinLevel, spellConfig.Name, level, spawn.Name())
             end
         end
     end
 
     if minLevel > 0 and spellConfigAllowsCasting(spellName, spawn) then
         if spawn.Buff(spellName)() ~= nil then
-            print("handleBuffRequest: Skip \ag", spawn.Name(), "\ax ", spellName, " (", req.Buff, "), they have buff already.")
+            log.Info("handleBuffRequest: Skip \ag%s\ax %s (%s), they have buff already.", spawn.Name(), spellName, req.Buff)
             return false
         end
-
-        cmd("/dgtell all Buffing \ag"..spawn.Name().."\ax with \ay"..spellName.."\ax (\ay"..req.Buff.."\ax).")
+        cmdf("/dgtell all Buffing \ag%s\ax with \ay%s\ax (\ay%s\ax).", spawn.Name(), spellName, req.Buff)
         castSpellRaw(spellName, spawn.ID(), "-maxtries|3")
         return true
     else
-        print("Failed to find a matching group buff ", req.Buff, ", target ", spawn.Name(), " L", level)
+        log.Error("Failed to find a matching group buff %s, L%d %s", spawn.Name(), " L", level, req.Buff, level, spawn.Name())
     end
 end
 
@@ -354,7 +356,7 @@ function Buffs.RefreshSelfBuffs()
     if botSettings.settings.self_buffs == nil then
         return false
     end
-    --print(time().." Buffs.RefreshSelfBuffs()")
+    log.Debug("Buffs.RefreshSelfBuffs() %s", time())
     for k, buffItem in pairs(botSettings.settings.self_buffs) do
         doevents()
         if refreshBuff(buffItem, mq.TLO.Me) then
@@ -372,7 +374,7 @@ function Buffs.RequestBuffs()
     if req == nil then
         req = groupBuffs.Default[class_shortname()]
         if req == nil then
-            cmd("/dgtell all FATAL ERROR class default buffs missing for "..class_shortname())
+            cmdf("/dgtell all FATAL ERROR class default buffs missing for %s", class_shortname())
             delay(20000)
             return
         end
@@ -409,13 +411,13 @@ function Buffs.RequestBuffs()
         if not skip then
             local askClass = groupBuffs.Lookup[spellConfig.Name]
             if askClass == nil then
-                cmd("/dgtell all FATAL ERROR: did not find groupBuffs.Lookup entry "..spellConfig.Name)
+                cmdf("/dgtell all FATAL ERROR: did not find groupBuffs.Lookup entry %s", spellConfig.Name)
                 return false
             end
 
             local buffRows = groupBuffs[askClass][spellConfig.Name]
             if buffRows == nil then
-                cmd("/dgtell all FATAL ERROR: did not find groupBuffs."..askClass.." entry "..spellConfig.Name)
+                cmdf("/dgtell all FATAL ERROR: did not find groupBuffs.%s entry %s", askClass, spellConfig.Name)
                 return false
             end
 
@@ -442,17 +444,17 @@ function Buffs.RequestBuffs()
             if not found then
                 local peer = nearest_peer_by_class(askClass)
                 if peer == nil then
-                    cmd("/dgtell all FATAL ERROR: no peer of required class found nearby: "..askClass)
+                    cmdf("/dgtell all FATAL ERROR: no peer of required class found nearby: %s", askClass)
                     return true
                 end
 
                 if not refresh and free_buff_slots() <= 0 then
-                    cmd("/dgtell all \arWARN\ax: Won't ask for \ay"..spellConfig.Name.."\ax as I only have "..free_buff_slots().." free buff slots")
+                    cmdf("/dgtell all \arWARN\ax: Won't ask for \ay%s\ax as I only have %d free buff slots", spellConfig.Name, free_buff_slots())
                     return true
                 end
 
-                print("Requesting buff \ax"..spellConfig.Name.."\ay from \ag"..askClass.." "..peer.."\ax ...")
-                cmd("/dexecute "..peer.." /queuebuff "..spellConfig.Name.." "..mq.TLO.Me.Name())
+                log.Info("Requesting buff \ax%s\ay from \ag%s %s\ax ...", spellConfig.Name, askClass, peer)
+                cmdf("/dexecute %s /queuebuff %s %s", peer, spellConfig.Name, mq.TLO.Me.Name())
             end
         else
             --print("Will not request \ay", spellConfig.Name, "\ax. Not all classes available: \ayClass:"..spellConfig.Class..", NotClass:"..(spellConfig.NotClass or "").."\ax.")

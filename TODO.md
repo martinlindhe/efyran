@@ -5,6 +5,11 @@ misc:
 -- BUG: mq.TLO.NearestSpawn() results should be fetched directly and then looped over the results, as they can change
     in the middle of iteration otherwise.
 
+-- BUG: ?? 15 sep 2022: item.Expendables() seem to be broken, always returns false ? https://discord.com/channels/511690098136580097/840375268685119499/1019900421248126996
+    needed to fix /clickies
+
+-- /evac: hard code evac spells, reduce ini.allow for rog escape (?)
+
 
 
 MQ2Lua gotchas:
@@ -66,13 +71,6 @@ loot:
     git submodule add -b master -f https://gitlab.com/redguides/plugins/MQ2AutoLoot.git plugins/MQ2AutoLoot
     git submodule add -b master -f https://gitlab.com/redguides/plugins/MQ2AutoLootSort.git plugins/MQ2AutoLootSort
     git submodule add -b master -f https://github.com/jessebevil/MQ2LootManager.git plugins/MQ2LootManager
-
-
-
-performance:
-    - how to strip clients 2021 ??! slow load times...
-    https://www.mmobugs.com/wiki/index.php?title=MQ2EQWire
-    https://www.mmobugs.com/wiki/index.php?title=MQ2FPS
 
 
 xp tracking:

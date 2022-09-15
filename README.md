@@ -81,8 +81,8 @@ Buff Spell Level   Minimum Target Level
 /dropbuff <name>            - drop buff from all peers in zone, partial buff name match. "all" to drop all buffs
 /dropinvis                  - drop invisibility on all peers in zone
 /gathercorpses              - summon nearby corpses into a pile
-/faction                    - report faction status. currently only tracks Dranik Loyalists max ally (oow t2 armor)
-/factionall                 - tell all peers to report faction
+/factions                    - report faction status. currently only tracks Dranik Loyalists max ally (oow t2 armor)
+/factionsall                 - tell all peers to report faction
 
 /fdi             			- find item by partial name
 /fmi                        - find missing item. report peers who lack an item

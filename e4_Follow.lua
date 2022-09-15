@@ -1,4 +1,5 @@
 local mq = require("mq")
+local log = require("knightlinc/Write")
 
 local Follow = {
     spawn = nil, -- the current spawn I am following
@@ -7,11 +8,11 @@ local Follow = {
 function Follow.Init()
 
     -- tell everyone else to click nearby door/object (pok stones, etc)
-    mq.bind("/clickit", function(name)
+    mq.bind("/clickit", function()
 
         -- XXX spawn check if door within X radius
         cmd("/doortarget")
-        print("CLICKING NEARBY DOOR ", mq.TLO.DoorTarget.Name(), " id ", mq.TLO.DoorTarget.ID())
+        log.Info("CLICKING NEARBY DOOR %s, id %d", mq.TLO.DoorTarget.Name(), mq.TLO.DoorTarget.ID())
 
         if is_orchestrator() then
             cmd("/dgzexecute /clickit")
@@ -22,7 +23,7 @@ function Follow.Init()
     end)
 
     mq.bind("/followon", function()
-        cmd("/dgzexecute /followid "..mq.TLO.Me.ID())
+        cmdf("/dgzexecute /followid %d", mq.TLO.Me.ID())
     end)
 
     mq.bind("/followoff", function(s)
@@ -34,9 +35,10 @@ function Follow.Init()
     end)
 
     -- follows another peer in LoS
+    ---@param spawnID integer
     mq.bind("/followid", function(spawnID)
         if not is_peer_id(spawnID) then
-            cmd("/dgtell all ERROR: /followid called on invalid spawn ID "..spawnID)
+            cmdf("/dgtell all ERROR: /followid called on invalid spawn ID %d", spawnID)
             return
         end
 
@@ -44,14 +46,14 @@ function Follow.Init()
             Follow.spawn = spawn_from_id(spawnID)
             Follow.Resume()
         else
-            cmd("/dgtell all Spawn "..spawnID.." is not in LoS")
+            cmdf("/dgtell all Spawn %d is not in LoS", spawnID)
         end
     end)
 
     mq.bind("/portto", function(name)
         name = name:lower()
         if is_orchestrator() then
-            cmd("/dgzexecute /portto "..name)
+            cmdf("/dgzexecute /portto %s", name)
         end
 
         local spellName
@@ -63,11 +65,11 @@ function Follow.Init()
             return
         end
 
-        cmd("/dgtell all Porting to " .. name .. " (" .. spellName .. ")")
+        cmdf("/dgtell all Porting to %s (%s)", name, spellName)
         unflood_delay()
 
         if spellName == nil then
-            cmd("/dgtell all ERROR: no such port "..name)
+            cmdf("/dgtell all ERROR: no such port %s", name)
         end
 
         castSpellRaw(spellName, mq.TLO.Me.ID(), "gem5 -maxtries|3")
@@ -85,7 +87,7 @@ function Follow.Init()
 
         -- chose first one we have and use it (skip Exodus if AA is down)
         for key, evac in pairs(botSettings.settings.evac) do
-            print("finding available evac spell ", key, ": ", evac)
+            log.Info("Finding available evac spell %s: %s", key, evac)
             if mq.TLO.Me.AltAbility(evac)() ~= nil then
                 if mq.TLO.Me.AltAbilityReady(evac)() then
                     castSpellRaw(evac, mq.TLO.Me.ID(), "-maxtries|3")
@@ -106,20 +108,21 @@ function Follow.Init()
     end)
 
     local moveToMe = function()
-        cmd("/dgzexecute /movetoid "..mq.TLO.Me.ID())
+        cmdf("/dgzexecute /movetoid %d", mq.TLO.Me.ID())
     end
     mq.bind("/movetome", moveToMe)
     mq.bind("/mtm", moveToMe)
 
     -- move to spawn ID
+    ---@param spawnID integer
     mq.bind("/movetoid", function(spawnID)
         if is_orchestrator() then
-            cmd("/dgzexecute /movetoid "..spawnID)
+            cmdf("/dgzexecute /movetoid %d", spawnID)
         end
 
         local spawn = spawn_from_id(spawnID)
         if spawn == nil then
-            cmd("/dgtell all No such spawn ID "..spawnID)
+            cmdf("/dgtell all No such spawn ID %d", spawnID)
             return
         end
         move_to(spawn)
@@ -131,7 +134,7 @@ function Follow.Init()
 
         if is_orchestrator() then
             -- tell the others to cross zone line
-            cmd("/dgzexecute /rtz "..mq.TLO.Me.Name())
+            cmdf("/dgzexecute /rtz %s", mq.TLO.Me.Name())
             return
         end
 
@@ -140,12 +143,12 @@ function Follow.Init()
         -- run across (need pos + heading from orchestrator)
         local spawn = spawn_from_peer_name(startingPeer)
         if spawn == nil then
-            cmd("/dgtell all ERROR: /rtz requested from peer not found: "..startingPeer)
+            cmdf("/dgtell all ERROR: /rtz requested from peer not found: %s", startingPeer)
             return
         end
 
         local oldZone = zone_shortname()
-        print("MOVING THRU ZONE FROM ", oldZone)
+        log.Info("MOVING THRU ZONE FROM %s", oldZone)
 
         cmd("/stick off")
 
@@ -154,12 +157,12 @@ function Follow.Init()
 
         if not is_within_distance(spawn, 15) then
             -- unlikely
-            cmd("/dgtell all /rtz ERROR: failed to move near "..spawn.Name()..", my distance is "..spawn.Distance())
+            cmdf("/dgtell all /rtz ERROR: failed to move near %s, my distance is %f", spawn.Name(), spawn.Distance())
             return
         end
 
         -- face the same direction the orchestrator is facing
-        cmd("/face fast heading "..tostring(spawn.Heading.Degrees() * -1))
+        cmdf("/face fast heading %f", spawn.Heading.Degrees() * -1)
         delay(5)
 
         -- move forward
@@ -167,16 +170,15 @@ function Follow.Init()
         delay(6000, function()
             local zoned = zone_shortname() ~= oldZone
             if zoned then
-                print("I ZONED INTO ", zone_shortname())
+                log.Info("I ZONED INTO %s", zone_shortname())
             end
             return zoned
         end)
 
         if zone_shortname() == oldZone then
-            cmd("/dgtell all ERROR failed to run across zone line in "..oldZone)
+            cmdf("/dgtell all ERROR failed to run across zone line in %s", oldZone)
             cmd("/beep 1")
         end
-
     end)
 
     -- hail or talk to nearby recognized NPC
@@ -202,9 +204,9 @@ function Follow.Resume()
     if Follow.spawn == nil then
         return
     end
-    cmd("/afollow spawn "..Follow.spawn.ID())
+    cmdf("/afollow spawn %d", Follow.spawn.ID())
 
-    --cmd("/target id "..Follow.spawn.ID())
+    --cmdf("/target id %d", Follow.spawn.ID())
     --cmd("/stick hold 15 uw") -- face upwards to better run over obstacles
 end
 

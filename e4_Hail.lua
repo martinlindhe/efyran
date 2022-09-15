@@ -1,3 +1,5 @@
+local log = require("knightlinc/Write")
+
 local hailTargets = {
     ["poknowledge"] = {
         ["Soulbinder Jera"] = "bind my soul", -- soulbinder
@@ -150,13 +152,13 @@ function PerformHail()
     local npcName = ""
     local text = ""
 
-    print("Performing hail ...")
+    log.Info("Performing hail ...")
     unflood_delay()
     drop_invis()
 
     local zoneTargets = hailTargets[zone_shortname():lower()]
     if zoneTargets == nil then
-        print("Error: Didn't see anyone that I recognize in zone ", zone_shortname())
+        log.Error("Didn't see anyone that I recognize in zone ", zone_shortname())
         return
     end
 
@@ -166,7 +168,7 @@ function PerformHail()
         local spawn = mq.TLO.NearestSpawn(i, spawnQuery)
         local spawnName = spawn.CleanName()
         if zoneTargets[spawnName] ~= nil then
-            cmd("/target npc "..spawnName)
+            cmdf("/target npc %s", spawnName)
             move_to(spawn)
             delay(200)
             if zoneTargets[spawnName] == true then
@@ -174,7 +176,7 @@ function PerformHail()
                 cmd("/hail")
             else
                 -- speak
-                cmd("/say "..zoneTargets[spawnName])
+                cmdf("/say %s", zoneTargets[spawnName])
             end
         end
     end

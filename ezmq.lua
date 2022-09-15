@@ -3,6 +3,8 @@
 -- @type mq
 local mq = require("mq")
 
+local log = require("knightlinc/Write")
+
 -- returns true if `spawn` is within maxDistance
 ---@param spawn spawn
 ---@param maxDistance number
@@ -31,29 +33,29 @@ function line_of_sight_to(spawn)
     return mq.TLO.LineOfSight(q)()
 end
 
--- moves to the location of `spawn` using MQ2MoveUtils
+-- Move to the location of `spawn` using MQ2MoveUtils.
 ---@param spawn spawn
 function move_to(spawn)
-    print("move_to ", spawn.Name())
+    log.Debug("move_to ", spawn.Name())
 
     if not line_of_sight_to(spawn) then
-        cmd("/dgtell all move_to ERROR: cannot see "..spawn.Name())
-        cmd("/beep 1")
+        mq.cmdf("/dgtell all move_to ERROR: cannot see %s", spawn.Name())
+        mq.cmd("/beep 1")
         return
     end
 
-    cmd("/moveto loc "..spawn.Y().." "..spawn.X())
-    delay(10000, function() return is_within_distance(spawn, 15) end)
-    cmd("/moveto off")
+    mq.cmdf("/moveto loc %f %f", spawn.Y(), spawn.X())
+    mq.delay(10000, function() return is_within_distance(spawn, 15) end)
+    mq.cmd("/moveto off")
 end
 
 ---@param y number
 ---@param x number
 ---@param z number
 function move_to_loc(y, x, z)
-    cmd("/moveto loc "..y.." "..x)
-    delay(10000, function() return is_within_distance_to_loc(y, x, z, 15) end)
-    cmd("/moveto off")
+    mq.cmdf("/moveto loc %f %f %f", y, x, z)
+    mq.delay(10000, function() return is_within_distance_to_loc(y, x, z, 15) end)
+    mq.cmd("/moveto off")
 end
 
 -- Does `t` contain `v`?
@@ -61,7 +63,7 @@ end
 ---@param v any
 ---@return boolean
 function in_array(t, v)
-    for i=1,#t do
+    for i = 1, #t do
         if v == t[i] then return true end
     end
     return false
@@ -152,15 +154,15 @@ end
 -- Target NPC by name
 ---@param name string
 function target_npc_name(name)
-    cmd("/target npc "..name)
+    mq.cmdf("/target npc %s", name)
 end
 
 -- Target spawn by id
 ---@param id integer
 function target_id(id)
-    cmd("/target id "..tostring(id))
-    delay(10)
-    delay(1000, function() return mq.TLO.Target.ID() == id end)
+    mq.cmdf("/target id %d", id)
+    mq.delay(10)
+    mq.delay(1000, function() return mq.TLO.Target.ID() == id end)
 end
 
 -- Partial search by name
@@ -191,7 +193,7 @@ end
 function is_item_clicky_ready(name)
     local item = find_item(name)
     if item == nil then
-        cmd("/dgtell all ERROR: is_item_clicky_ready() called with item I do not have: "..name)
+        mq.cmdf("/dgtell all ERROR: is_item_clicky_ready() called with item I do not have: %s", name)
         return false
     end
     return item.Clicky() ~= nil and item.Timer.Ticks() == 0
@@ -301,36 +303,36 @@ end
 function cast_alt_ability(name, spawnID)
 
     if is_brd() and is_casting() then
-        cmd("/twist stop")
-        delay(100)
+        mq.cmd("/twist stop")
+        mq.delay(100)
     end
 
-    local cmd = '/casting "'..name..'|alt'
+    local args = '"'..name..'|alt'
     if spawnID ~= nil then
-        cmd = cmd .. ' -targetid|'.. tostring(spawnID)
+        args = args .. ' -targetid|'.. tostring(spawnID)
     end
 
-    cmd(cmd)
-    delay(500)
-    delay(20000, function() return not is_casting() end)
+    mq.cmdf("/casting %s", args)
+    mq.delay(500)
+    mq.delay(20000, function() return not is_casting() end)
 
     if is_brd() then
         local item = find_item(name)
         if item ~= nil then
             -- item click
-            print("cast_alt_ability item click sleep, ", item.Clicky.CastTime(), " + ", item.Clicky.Spell.RecastTime() )
-            delay(item.Clicky.CastTime() + item.Clicky.Spell.RecastTime() + 1500) -- XXX recast time is 0
+            log.Debug("cast_alt_ability item click sleep, %f + %f", item.Clicky.CastTime(), item.Clicky.Spell.RecastTime() )
+            mq.delay(item.Clicky.CastTime() + item.Clicky.Spell.RecastTime() + 1500) -- XXX recast time is 0
         else
             -- spell / AA
             local spell = get_spell(name)
             if spell ~= nil then
                 local sleepTime = spell.MyCastTime() + spell.RecastTime()
                 --print("spell sleep for '", spell.Name(), "', my cast time:", spell.MyCastTime(), ", recast time", spell.RecastTime(), " = ", sleepTime)
-                delay(sleepTime)
+                mq.delay(sleepTime)
             end
         end
-        print("ME BARD cast_alt_ability ", name, " -- SO I RESUME TWIST!")
-        cmd("/twist start")
+        log.Debug("BARD cast_alt_ability ", name, " -- SO I RESUME TWIST!")
+        mq.cmd("/twist start")
     end
 end
 
@@ -341,7 +343,7 @@ function have_buff(name)
     --assert(type(name) == "string")
     local spell = mq.TLO.Spell(name)
     if spell() == nil then
-        cmd("/dgtell all have_buff ERROR: asked about odd 1buff "..name)
+        mq.cmdf("/dgtell all have_buff ERROR: asked about odd 1buff %s", name)
         return false
     end
     if mq.TLO.Me.Buff(name)() == name then
@@ -356,8 +358,8 @@ end
 function have_song(name)
     local spell = mq.TLO.Spell(name)
     if spell() == nil then
-        cmd("/dgtell all BEEP error, asked about odd 2buff "..name)
-        cmd("/beep 1")
+        mq.cmdf("/dgtell all BEEP error, asked about odd 2buff %s", name)
+        mq.cmd("/beep 1")
         return false
     end
     return mq.TLO.Me.Song(name)() ~= nil or mq.TLO.Me.Song(spell.RankName)() ~= nil
@@ -371,7 +373,7 @@ end
 
 -- pauses until casting current spell is finished
 function wait_until_not_casting()
-    delay(20000, function() return is_brd() or not is_casting() end)
+    mq.delay(20000, function() return is_brd() or not is_casting() end)
 end
 
 -- Am I moving?
@@ -446,23 +448,23 @@ end
 function open_merchant_window(spawn)
 
     if window_open("MerchantWnd") then
-        cmd("/dgtell all WARNING: A merchant window was already open. Closing it")
+        mq.cmd("/dgtell all WARNING: A merchant window was already open. Closing it")
         close_merchant_window()
-        delay(1000)
+        mq.delay(1000)
     end
 
     if spawn.Distance() > 20 then
-        print("Too far away from merchant. Giving up")
+        log.Error("Too far away from merchant. Giving up")
         return
     end
 
-    cmd("/target id "..spawn.ID())
+    mq.cmdf("/target id %d", spawn.ID())
 
     local attempt = 1
     while true do
 
         if attempt >= 3 then
-            cmd("/dgtell all Giving up opening merchant window after "..attempt.." attempts")
+            mq.cmdf("/dgtell all ERROR: Giving up opening merchant window after %d attempts", attempt)
             break
         end
 
@@ -471,15 +473,15 @@ function open_merchant_window(spawn)
         end
 
         -- Right click merchant, and wait for window to open.
-        cmd("/click right target")
-        delay(5000, function() return window_open("MerchantWnd") end)
+        mq.cmd("/click right target")
+        mq.delay(5000, function() return window_open("MerchantWnd") end)
 
-        delay(500)
+        mq.delay(500)
         attempt = attempt +1
     end
 
     if not window_open("MerchantWnd") then
-        print("Giving up.. Could not open merchant window.")
+        log.Error("Giving up.. Could not open merchant window.")
     end
 
     -- Wait for merchant's item list to populate.
@@ -487,15 +489,15 @@ function open_merchant_window(spawn)
     attempt = 1
     while true do
         if attempt >= 10 then
-            print("Giving up listing merchant window items")
+            log.Error("Giving up listing merchant window items")
             break
         end
 
         if merchantTotal ~= mq.TLO.Window("MerchantWnd").Child("ItemList").Items() then
             merchantTotal = mq.TLO.Window("MerchantWnd").Child("ItemList").Items()
-            print("Merchant total: ", merchantTotal)
+            log.Info("Merchant total: ", merchantTotal)
         end
-        delay(200)
+        mq.delay(200)
         attempt = attempt +1
     end
 end
@@ -507,11 +509,11 @@ function open_nearby_merchant()
     end
     local merchant = spawn_from_query("Merchant radius 100")
     if merchant == nil then
-        print("ERROR no merchant nearby")
+        log.Error("No merchant nearby")
         return
     end
 
-    print("OPENING TRADE WITH MERCHANT ", merchant, " ", type(merchant))
+    log.Info("Opening trade window for merchant %s, type %s", merchant.Name(), type(merchant))
 
     move_to(merchant)
     open_merchant_window(merchant)
@@ -522,7 +524,7 @@ function close_merchant_window()
     if not window_open("MerchantWnd") then
         return
     end
-    cmd("/notify MerchantWnd MW_Done_Button leftmouseup")
+    mq.cmd("/notify MerchantWnd MW_Done_Button leftmouseup")
 end
 
 local neutralZones = { "guildlobby", "guildhall", "bazaar", "poknowledge", "potranquility", "nexus" }
@@ -548,12 +550,12 @@ function open_bags()
         local pack = "Pack"..tostring(i)
         local slot = get_inventory_slot(pack)
         if slot ~= nil and is_container(slot) and not mq.TLO.Window(pack).Open() then
-            cmd("/itemnotify "..pack.." rightmouseup")
-            delay(1) -- this delay is needed to ensure /itemnotify is not called too fast
-            delay(1000, function() return mq.TLO.Window(pack).Open() end)
+            mq.cmdf("/itemnotify %s rightmouseup", pack)
+            mq.delay(1) -- this delay is needed to ensure /itemnotify is not called too fast
+            mq.delay(1000, function() return mq.TLO.Window(pack).Open() end)
         end
     end
-    delay(1)
+    mq.delay(1)
 end
 
 -- closes all inventory bags
@@ -562,12 +564,12 @@ function close_bags()
         local pack = "Pack"..tostring(i)
         local slot = get_inventory_slot(pack)
         if slot ~= nil and is_container(slot) and mq.TLO.Window(pack).Open() then
-            cmd("/itemnotify "..pack.." rightmouseup")
-            delay(1) -- this delay is needed to ensure /itemnotify is not called too fast
-            delay(1000, function() return not mq.TLO.Window(pack).Open() end)
+            mq.cmdf("/itemnotify %s rightmouseup", pack)
+            mq.delay(1) -- this delay is needed to ensure /itemnotify is not called too fast
+            mq.delay(1000, function() return not mq.TLO.Window(pack).Open() end)
         end
     end
-    delay(1)
+    mq.delay(1)
 end
 
 ---@return integer
@@ -637,33 +639,32 @@ end
 function clear_cursor()
     while true do
         if mq.TLO.Cursor.ID() == nil then
-            --print("cursor clear. ending")
+            log.Debug("cursor clear. ending")
             return true
         end
         if mq.TLO.Me.FreeInventory() == 0 then
-            cmd("/dgtell all Cannot clear cursor, no free inventory slots")
-            cmd("/beep 1")
+            mq.cmd("/dgtell all Cannot clear cursor, no free inventory slots")
+            mq.cmd("/beep 1")
             return false
         end
-        cmd("/dgtell all XXX:Putting cursor item "..mq.TLO.Cursor().." in inventory.")
-        cmd("/autoinventory")
-        delay(10000, function() return mq.TLO.Cursor.ID() == nil end)
-        delay(100)
-        doevents()
+        mq.cmdf("/dgtell all Putting cursor item %s in inventory.", mq.TLO.Cursor())
+        mq.cmd("/autoinventory")
+        mq.delay(2000, function() return mq.TLO.Cursor.ID() == nil end)
+        mq.delay(100)
+        mq.doevents()
     end
 end
 
 ---@param name string
 function cast_veteran_aa(name)
     if not have_alt_ability(name) then
-        cmd("/dgtell all ERROR: I do not have AA "..name)
+        mq.cmdf("/dgtell all ERROR: I do not have AA %s", name)
         return
     end
     if not is_alt_ability_ready(name) then
-        cmd("/dgtell all ERROR: "..name.." is not ready, ready in "..mq.TLO.Me.AltAbilityTimer(name).TimeHMS() )
+        mq.cmdf("/dgtell all ERROR: %s is not ready, ready in %s", name, mq.TLO.Me.AltAbilityTimer(name).TimeHMS())
         return
     end
-
     cast_alt_ability(name, mq.TLO.Me.ID())
 end
 
@@ -696,8 +697,7 @@ end
 ---@return boolean
 function is_healer(class)
     if class == nil then
-        cmd("/dgtell all is_healer called without class. did you mean me_healer() ?")
-        cmd("/beep 1")
+        mq.cmd("/dgtell all ERROR: is_healer called without class. did you mean me_healer() ?")
     end
     return class == "CLR" or class == "DRU" or class == "SHM" or class == "PAL" or class == "RNG" or class == "BST"
 end
@@ -707,8 +707,7 @@ end
 ---@return boolean
 function is_priest(class)
     if class == nil then
-        cmd("/dgtell all is_priest called without class. did you mean me_priest() ?")
-        cmd("/beep 1")
+        mq.cmd("/dgtell all ERROR: is_priest called without class. did you mean me_priest() ?")
     end
     return class == "CLR" or class == "DRU" or class == "SHM"
 end
@@ -718,8 +717,7 @@ end
 ---@return boolean
 function is_tank(class)
     if class == nil then
-        cmd("/dgtell all ERROR: is_tank called without class. did you mean me_tank() ?")
-        cmd("/beep 1")
+        mq.cmd("/dgtell all ERROR: is_tank called without class. did you mean me_tank() ?")
     end
     return class == "WAR" or class == "PAL" or class == "SHD"
 end
@@ -779,29 +777,36 @@ function inventory_slot_name(n)
     if baseSlots[n] ~= nil then
         return baseSlots[n]
     end
-    cmd("/dgtell all ERROR: lookup inventory slot "..n.." failed")
+    mq.cmdf("/dgtell all ERROR: lookup inventory slot %d failed", n)
 end
 
 -- Makes character visible and drops sneak/hide.
 function drop_invis()
     if mq.TLO.Me.Class.ShortName() == "ROG" then
         if mq.TLO.Me.Sneaking() then
-            print("ROG - Dropping Sneak")
-            cmd("/doability Sneak")
-            delay(2000)
+            log.Debug("ROG - Dropping Sneak")
+            mq.cmd("/doability Sneak")
+            mq.delay(2000)
         end
         if is_invisible() then
-            print("ROG - dropping Hide")
-            cmd("/doability Hide")
-            delay(2000)
+            log.Debug("ROG - dropping Hide")
+            mq.cmd("/doability Hide")
+            mq.delay(2000)
         end
     end
 
-    cmd("/makemevisible")
-    delay(1000, function() return not is_invisible() end)
+    mq.cmd("/makemevisible")
+    mq.delay(1000, function() return not is_invisible() end)
     if is_invisible() then
-        cmd("/dgtell all \arERROR\ax Cannot make myself visible.")
+        mq.cmd("/dgtell all \arERROR\ax Cannot make myself visible.")
     end
+end
+
+-- Do I have the skill `name`?
+---@param name string
+---@return boolean
+function have_skill(name)
+    return mq.TLO.Me.Skill(name)() > 0
 end
 
 -- Return my skill value.
@@ -826,7 +831,7 @@ end
 
 ---@param name string
 function load_plugin(name)
-    cmd("/plugin "..name)
+    mq.cmdf("/plugin %s", name)
 end
 
 -- query a peer using MQ2DanNet
@@ -835,9 +840,9 @@ end
 ---@param timeout number
 function query_peer(peer, query, timeout)
     mq.cmdf('/dquery %s -q "%s"', peer, query)
-    delay(timeout or 0)
+    mq.delay(timeout or 0)
     local value = mq.TLO.DanNet(peer).Q(query)()
-    --print(string.format('\ayQuerying - mq.TLO.DanNet(%s).Q(%s) = %s', peer, query, value))
+    log.Debug("Querying \aymq.TLO.DanNet(%s).Q(%s)\ax = %s", peer, query, value)
     return value
 end
 
@@ -866,7 +871,7 @@ local shortToLongClass = {
 function nearest_peer_by_class(shortClass)
     local longName = shortToLongClass[shortClass]
     if longName == nil then
-        cmd("/dgtell all INVALID shortToLongClass "..shortClass)
+        mq.cmdf("/dgtell all INVALID shortToLongClass %s", shortClass)
         return nil
     end
 
@@ -1036,8 +1041,8 @@ function memorize_spell(spellRow, defaultGem)
     local o = parseSpellLine(spellRow) -- XXX parse this once on script startup. dont evaluate all the time !!!
 
     if not is_spell_in_book(o.Name) then
-        cmd("/dgtell all ERROR don't know spell/song "..o.Name)
-        cmd("/beep 1")
+        mq.cmdf("/dgtell all ERROR don't know spell/song %s", o.Name)
+        mq.cmd("/beep 1")
         return nil
     end
 
@@ -1047,20 +1052,20 @@ function memorize_spell(spellRow, defaultGem)
     elseif botSettings.settings.gems[o.Name] ~= nil then
         gem = botSettings.settings.gems[o.Name]
     elseif gem == nil then
-        cmd("/dgtell all \arWARN\ax: Spell/song lacks gems default slot or Gem|n argument: "..spellRow)
+        mq.cmdf("/dgtell all \arWARN\ax: Spell/song lacks gems default slot or Gem|n argument: %s", spellRow)
         gem = 5
     end
 
     -- make sure that spell is memorized the required gem, else scribe it
     local nameWithRank = mq.TLO.Spell(o.Name).RankName()
     if mq.TLO.Me.Gem(gem).Name() ~= nameWithRank then
-        print("Memorizing spell/song in gem ", gem, ": want:", nameWithRank, ", have:", mq.TLO.Me.Gem(gem).Name())
-        cmd('/memorize "'..nameWithRank..'" '..gem)
-        delay(200)
-        delay(5000, function()
+        log.Info("Memorizing spell/song in gem %d. Want %s, have %s", gem, nameWithRank, mq.TLO.Me.Gem(gem).Name())
+        mq.cmdf('/memorize "%s" %d', nameWithRank, gem)
+        mq.delay(200)
+        mq.delay(5000, function()
             return not window_open("SpellBookWnd")
         end)
-        delay(200)
+        mq.delay(200)
     end
 
     return gem
@@ -1102,9 +1107,8 @@ end
 ---@return string
 function strip_link(s)
     -- TODO: macroquest can expose existing functionality to lua, says brainiac. someone just need to write a patch
-
     if string.find(s, "000") then
-        print("assume item link")
+        log.Debug("strip_link: assume item link")
         s = string.sub(s, 58, string.len(s) - 1)
     end
     return s
@@ -1114,7 +1118,7 @@ end
 --
 -- Used to reduce CPU load while zoning many peers at once.
 function unflood_delay()
-    delay(math.random(0, mq.TLO.DanNet.PeerCount() * 500))
+    mq.delay(math.random(0, mq.TLO.DanNet.PeerCount() * 500))
 end
 
 -- Returns true if `name` is ready to use.
@@ -1204,6 +1208,24 @@ function zone_shortname()
     return mq.TLO.Zone.ShortName()
 end
 
+function trim(s)
+    return s:match("^%s*(.-)%s*$")
+end
+
+-- Returns "true" or "false".
+--
+-- For debug printing booleans, since lua 5.1 does not have a string format way for booleans.
+---@param b boolean
+---@return string
+function bools(b)
+    return tostring(b)
+end
+
+-- Creates a integer from a string with a decimal number.
+function toint(s)
+    return s + 0
+end
+
 -- Returns a 24-hour timestamp, in the format "HH:MM:SS".
 ---@return string
 function time()
@@ -1215,6 +1237,13 @@ end
 ---@param command string An in-game slash command (including the slash) (e.g. '/keypress DUCK').
 function cmd(command)
     mq.cmd(command)
+end
+
+---Similar to cmd() but provides C/C++ string formatting.
+---@param command string An in-game slash command (including the slash) (e.g. '/keypress %s').
+---@param ...? any Variables that provide input the formated string.
+function cmdf(command, ...)
+    mq.cmdf(command, ...)
 end
 
 ---Process queued events.

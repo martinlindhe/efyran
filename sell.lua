@@ -1,6 +1,7 @@
 -- auto sells inventory item listed in loot settings
 
 require("ezmq")
+local log = require("knightlinc/Write")
 
 require("e4_Loot")
 
@@ -35,7 +36,7 @@ for n = 1, num_inventory_slots() do
 
             if not skip then
                 if not window_open("MerchantWnd") then
-                    print("ERROR: Merchant window was closed, giving up")
+                    log.Error("Merchant window was closed, giving up")
                     return
                 end
                 -- XXX for all items without settings, they should be enqueued for moderation by orchestrator.
@@ -54,10 +55,9 @@ for n = 1, num_inventory_slots() do
                             s = s .. " x " .. item.Stack()
                         end
 
-                        print("Selling ", s)
+                        log.Error("Selling %s", s)
 
-                        local itemNotifyQuery = "/ctrl /itemnotify in Pack"..tostring(item.ItemSlot()-22).." "..tostring(item.ItemSlot2()+1).." leftmouseup"
-                        cmd(itemNotifyQuery)
+                        cmdf("/ctrl /itemnotify in Pack%d %d leftmouseup", item.ItemSlot() - 22, item.ItemSlot2() + 1)
                         delay(10)
 
                         -- retry sell twice
@@ -72,12 +72,12 @@ for n = 1, num_inventory_slots() do
 
                         -- XXX look and error if item is still in my inventory
                         if mq.TLO.Me.Inventory(pack).Item(i)() ~= nil then
-                            print("ERROR: failed to sell", item.Name())
+                            log.Error("Failed to sell %s", item.Name())
                         end
 
                     end
                 else
-                    cmd("/dgtell all New loot. Marking as Keep. ", item.ItemLink("CLICKABLE")())
+                    cmdf("/dgtell all New loot. Keeping %s", item.ItemLink("CLICKABLE")())
                     SetLootItemSetting(loot, item, "Keep")
                 end
 

@@ -1,4 +1,5 @@
 local mq = require("mq")
+local log = require("knightlinc/Write")
 
 local Group = { settings = nil }
 
@@ -24,7 +25,7 @@ function Group.Init()
         if settings ~= nil then
             Group.settings = settings()
         else
-            print("no Saved Groups layouts for the server found, creating ", settingsFile, " with phony data, PLEASE EDIT THIS FILE !!!")
+            log.Error("No Saved Groups layouts for the server found, creating %s with phony data, PLEASE EDIT THIS FILE !!!", settingsFile)
             cmd("/beep 1")
 
             local f = assert(io.open(settingsFile, "w"))
@@ -37,7 +38,7 @@ function Group.Init()
     mq.bind('/recallgroup', function(name, groupNumber)
 
         if Group.settings[name] == nil then
-            print("/recallgroup Error: no such group ", name)
+            log.Error("/recallgroup: no such group %s", name)
             cmd("/beep 1")
             return
         end
@@ -45,17 +46,16 @@ function Group.Init()
         local orchestrator = false
         local raidLeader = ""
         if groupNumber == nil then
-            orchestrator = true
+            orchestrator = true -- the instance doing /recallgroup
             cmd("/noparse /dgaexecute /if (${Raid.Members} > 0) /raiddisband")
             cmd("/noparse /dgaexecute /if (${Group.Members} > 0) /disband")
             delay(5000, function() return not in_raid() and not in_group() end)
             delay(2000)
         else
-            print('Recalling group ', name, ' ', groupNumber)
+            log.Info("Recalling group %s %d", name, groupNumber)
         end
 
-        for idx, group in pairs(Group.settings[name])
-        do
+        for idx, group in pairs(Group.settings[name]) do
             local groupLeader = group[1]
             if idx == 1 then
                 raidLeader = groupLeader
@@ -69,35 +69,36 @@ function Group.Init()
                         break
                     end
                     if is_peer(groupMember) then
-                        print("Inviting ", groupMember)
-                        cmd("/invite "..groupMember)
+                        log.Info("Inviting %s to group", groupMember)
+                        cmdf("/invite %s", groupMember)
                     else
-                        cmd("/dgtell all WARNING: "..groupMember.." not connected. Can not invite to group.")
+                        cmdf("/dgtell all ERROR: %s not connected. Can not invite to group.", groupMember)
                     end
                 end
             elseif orchestrator and groupLeader ~= 'NULL' then
-                print('Telling group leader ', groupLeader, ' to form group ', idx)
-                cmd("/dexecute "..groupLeader.." /recallgroup "..name.." "..idx)
+                log.Info("Telling group leader %s to form group %d", groupLeader, idx)
+                cmdf("/dexecute %s /recallgroup %s %d", groupLeader, name, idx)
             end
         end
 
         if orchestrator then
-            cmd("/dgtell all Recalling raid "..name.." with leader "..raidLeader)
-            delay(2000)
+            cmdf("/dgtell all Recalling raid %s with leader %s", name, raidLeader)
+--            delay(2000)
 
             -- The raid leader invites the other groups to raid
             for idx, group in pairs(Group.settings[name]) do
                 local groupLeader = group[1]
                 if is_peer(groupLeader) then
                     if mq.TLO.Me.Name() == raidLeader and mq.TLO.Me.Name() ~= groupLeader then
-                        cmd("/raidinvite "..groupLeader)
+                        log.Info("Inviting group leader %s to raid", raidLeader, groupLeader)
+                        cmdf("/raidinvite %s", groupLeader)
                     elseif raidLeader ~= groupLeader then
-                        print('Telling raid leader ', raidLeader,' to invite', groupLeader)
-                        cmd("/dexecute "..raidLeader.." /raidinvite "..groupLeader)
+                        log.Info("Telling raid leader %s to invite group leader %s to raid", raidLeader, groupLeader)
+                        cmdf("/dexecute %s /raidinvite %s", raidLeader, groupLeader)
                     end
                     delay(50)
                 else
-                    cmd("/dgtell all WARNING: "..groupLeader.." not connected. will not invite to raid")
+                    cmdf("/dgtell all WARNING: %s not connected. will not invite to raid", groupLeader)
                 end
             end
         end
