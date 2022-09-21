@@ -28,7 +28,7 @@ function Items.Init()
         local item = find_item(name)
         if item == nil then
             --cmd("/dgtell all", name, "not found")
-            return nil
+            return
         end
 
         local cnt = getItemCountExact(item.Name())
@@ -47,7 +47,7 @@ function Items.Init()
         local item = find_item(name)
         if item == nil then
             cmdf("/dgtell all I miss %s", name)
-            return nil
+            return
         end
     end)
 end

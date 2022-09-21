@@ -45,7 +45,7 @@ settings.healing = {
         -- L70 Sanctuary AA (id:5912, removes you from combat), 1h12 min reuse
         "Sanctuary/HealPct|13",
 
-        --"Ward of Retribution/HealPct|50", -- XXX buy spell
+        --"Ward of Retribution/HealPct|50/CheckFor|Ward of Retribution", -- XXX buy spell
 
         "Distillate of Divine Healing XIII/HealPct|18",
 

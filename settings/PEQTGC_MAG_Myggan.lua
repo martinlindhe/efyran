@@ -1,5 +1,7 @@
 local settings = { }
 
+settings.debug = true
+
 settings.swap = { -- XXX impl
     ["main"] = "Focus of Primal Elements|Mainhand",
 

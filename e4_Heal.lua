@@ -12,11 +12,10 @@ local Heal = {
 
 function Heal.Init()
     mq.event("dannet_chat", "[ #1# (#2#) ] #3#", function(text, peer, channel, msg)
-        --print("-- dannet_chat: chan ", channel, " msg: ", msg)
-
         if me_healer() and channel == heal_channel() and botSettings.settings.healing ~= nil then
             if string.sub(msg, 1, 1) ~= "/" then
                 -- ignore text starting with a  "/"
+                --all_tellf("-- dan net chat: chan %s, msg: %s", channel, msg)
                 handleHealmeRequest(msg)
             end
         end
@@ -81,7 +80,7 @@ function Heal.Init()
     -- Rezzes nearby player corpses
     mq.bind("/aerez", function()
         cmdf("/dgtell all AERez started in %s ...", zone_shortname())
-        delay(10)
+        wait_until_not_casting()
 
         local spawnQuery = 'pccorpse radius 100'
         for i = 1, spawn_count(spawnQuery) do
@@ -97,7 +96,7 @@ function Heal.Init()
                 cmdf("/dgtell all \arWARN\ax: Not ready to rez \ag%s\ax.", spawn.Name())
             end
             doevents()
-            delay(10000) -- 10s delay
+            delay(10000) -- 10s
         end
         log.Info("AEREZ ENDING")
     end)
@@ -158,11 +157,11 @@ function handleHealmeRequest(msg)
     -- if queue don't already contain this bot
     if not Heal.queue:contains(peer) then
         -- if queue is less than 10 requests, always add it
-        if #Heal.queue >= healQueueMaxLength then
+        if Heal.queue:size() >= healQueueMaxLength then
             -- XXX: if queue is >= 10 long, always add if listed as tank or important bot
             -- XXX: if queue is >= 10 long, add with 50% chance ... if >= 20 long, beep and ignore.
 
-            cmdf("/dgtell all queue is full ! len is %d. queue: %s", #Heal.queue, Heal.queue)
+            cmdf("/dgtell all queue is full ! len is %d. queue: %s", Heal.queue:size(), Heal.queue:describe())
             cmd("/beep 1")
             return
         end
@@ -194,16 +193,20 @@ end
 
 function Heal.processQueue()
     -- check if heals need to be casted
+    if is_clr() then
+        --all_tellf("processQueue: queue is %d: %s", Heal.queue:size(), Heal.queue:describe())
+    end
     if Heal.queue:size() == 0 or botSettings.settings.healing == nil then
         return
     end
-    log.Debug("Heal.processQueue(): queue is ", Heal.queue:size(), ": ", Heal.queue:describe())
+--    log.Debug("Heal.processQueue(): queue is %d: %s", Heal.queue:size(), Heal.queue:describe())
 
     -- first find any TANKS
     if botSettings.settings.healing.tanks ~= nil and botSettings.settings.healing.tank_heal ~= nil then
         for k, peer in pairs(botSettings.settings.healing.tanks) do
             if Heal.queue:contains(peer) then
                 local pct = Heal.queue:prop(peer)
+                log.Info("Decided to heal TANK %s at %d %%", peer, pct)
                 if healPeer(botSettings.settings.healing.tank_heal, peer, pct) then
                     return
                 end
@@ -216,6 +219,7 @@ function Heal.processQueue()
         for k, peer in pairs(botSettings.settings.healing.important) do
             if Heal.queue:contains(peer) then
                 local pct = Heal.queue:prop(peer)
+                log.Info("Decided to heal IMPORTANT %s at %d %%", peer, pct)
                 if healPeer(botSettings.settings.healing.important_heal, peer, pct) then
                     return
                 end
@@ -225,16 +229,16 @@ function Heal.processQueue()
 
     -- finally care for the rest
     if botSettings.settings.healing.all_heal ~= nil then
-        --print("check if ANY bots is in queue...")
         local peer = Heal.queue:peek_first()
         if peer ~= nil then
             local pct = Heal.queue:prop(peer)
-            --print("healing ", peer, " at pct ", pct)
+            log.Info("Decided to heal ANY %s at %d %%", peer, pct)
             if healPeer(botSettings.settings.healing.all_heal, peer, pct) then
                 return
             end
         end
     end
+    log.Debug("Heal.processQueue(): Did nothing.")
 end
 
 function Heal.acceptRez()
@@ -278,6 +282,9 @@ function Heal.acceptRez()
         -- let some time pass after accepting rez.
         delay(5000)
 
+        -- request buffs
+        buffs.RequestBuffs()
+
         -- target my corpse
         cmdf("/target %s's corpse", mq.TLO.Me.Name())
         delay(1000)
@@ -303,7 +310,7 @@ function Heal.medCheck()
         return
     end
 
-    if follow.spawn ~= nil or is_brd() or is_hovering() or is_casting() or is_moving() or window_open("SpellBookWnd") or window_open("LootWnd") then
+    if follow.spawn ~= nil or is_brd() or in_combat() or is_hovering() or is_casting() or is_moving() or window_open("SpellBookWnd") or window_open("LootWnd") then
         return
     end
 
@@ -346,7 +353,7 @@ function Heal.performLifeSupport()
         --print("k ", k, " v ", row, ", parsed as name: ", spellConfig.Name)
 
         local skip = false
-        if spellConfig.HealPct ~= nil and tonumber(spellConfig.HealPct) < mq.TLO.Me.PctHPs() then
+        if spellConfig.HealPct ~= nil and spellConfig.HealPct < mq.TLO.Me.PctHPs() then
             -- remove, dont meet heal criteria
             --print("performLifeSupport skip use of ", spellConfig.Name, ", my hp ", mq.TLO.Me.PctHPs, " vs required ", spellConfig.HealPct)
             skip = true
@@ -359,13 +366,13 @@ function Heal.performLifeSupport()
         end
 
         -- only cast if at least this many NPC:s is nearby
-        if spellConfig.MinMobs ~= nil and spawn_count(nearbyNPCFilter) < tonumber(spellConfig.MinMobs) then
+        if spellConfig.MinMobs ~= nil and spawn_count(nearbyNPCFilter) < spellConfig.MinMobs then
             --cmd("/dgtell all performLifeSupport skip ", spellConfig.Name, ", Not enought nearby mobs. Have ", spawn_count(nearbyNPCFilter), ", need ", spellConfig.MinMobs)
             skip = true
         end
 
         -- only cast if at most this many NPC:s is nearby
-        if spellConfig.MaxMobs ~= nil and spawn_count(nearbyNPCFilter) > tonumber(spellConfig.MaxMobs) then
+        if spellConfig.MaxMobs ~= nil and spawn_count(nearbyNPCFilter) > spellConfig.MaxMobs then
             --cmd("/dgtell all performLifeSupport skip ", spellConfig.Name, ", Too many nearby mobs. Have ", spawn_count(nearbyNPCFilter), ", need ", spellConfig.MaxMobs)
             skip = true
         end
@@ -428,7 +435,7 @@ end
 ---@param peer string Name of peer to heal.
 ---@param pct integer Health % of peer.
 function healPeer(spell_list, peer, pct)
-    --print("Heal: ", peer, " is in my queue, at ", pct, " want heal!!!")
+    log.Debug("healPeer: %s at %d %%", peer, pct)
 
     for k, heal in pairs(spell_list) do
         local spawn = spawn_from_peer_name(peer)
@@ -440,20 +447,41 @@ function healPeer(spell_list, peer, pct)
             return false
         elseif spellConfig.MinMana ~= nil and mq.TLO.Me.PctMana() < spellConfig.MinMana then
             log.Info("SKIP HEALING, my mana %d vs required %d", mq.TLO.Me.PctMana(), spellConfig.MinMana)
-        elseif spellConfig.HealPct ~= nil and tonumber(spellConfig.HealPct) < pct then
+        elseif spellConfig.HealPct ~= nil and spellConfig.HealPct < pct then
             -- remove, dont meet heal criteria
-            --print("removing from heal queue, dont need heal: ", peer)
-            Heal.queue:remove(peer)
-            return false
+            -- DONT RETURN HERE because specific spell does not meet criteria!
+            log.Info("Skip using of heal, heal pct for %s is %d. dont need heal at %d for %s", spellConfig.Name, spellConfig.HealPct, pct, peer)
         else
-            cmdf("/dgtell all Healing %s at %d%% with spell %s", peer, pct, spellConfig.Name)
-            castSpell(spellConfig.Name, spawn.ID())
             Heal.queue:remove(peer)
+            all_tellf("Healing \ag%s\ax at %d%% with %s", peer, pct, spellConfig.Name)
+
+            local check = castSpellAbility(spawn, heal, function()
+                if not is_casting() then
+                    all_tellf("done casting heal, breaking")
+                    return true
+                end
+                if mq.TLO.Target.ID() ~= spawn.ID() then
+                    all_tellf("target changed in heal callback, breaking")
+                    return true
+                end
+                if mq.TLO.Target() ~= nil and mq.TLO.Target.PctHPs() >= 98 then
+                    all_tellf("Ducking heal! Target was %d %%, is now %d %%", pct, mq.TLO.Target.PctHPs())
+                    cmd("/interrupt")
+                    return true
+                end
+            end)
+            if check then  -- XXX castSpellAbility should take spellConfig obj directly
+                return true
+            end
+
             return true
         end
+
         doevents()
         delay(1)
     end
+    --all_tellf("Removing from heal queue, no usable heal available for %s at %d %%", peer, pct)
+    Heal.queue:remove(peer)
     return false
 end
 

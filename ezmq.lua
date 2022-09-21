@@ -44,8 +44,16 @@ function move_to(spawn)
         return
     end
 
+    local zone = mq.TLO.Zone.ID()
+
     mq.cmdf("/moveto loc %f %f", spawn.Y(), spawn.X())
-    mq.delay(10000, function() return is_within_distance(spawn, 15) end)
+    mq.delay(10000, function()
+        if mq.TLO.Zone.ID() ~= zone then
+            -- break if we zoned
+            return true
+        end
+        return is_within_distance(spawn, 15)
+    end)
     mq.cmd("/moveto off")
 end
 
@@ -71,10 +79,7 @@ end
 
 ---@return boolean
 function is_rof2()
-    -- XXX hack, will be able to check if on emu with MacroQuest.Build value soon
-    --  ? value == 1 is live (?), value 2 is test, 3 is beta, 4 is rof2-emu
-    -- XXX BEST YET: MacroQuest.BuildName is a text string (Live, Test, Beta, Emu) ? 21 aug '22, not yet in master branch
-    if mq.TLO.EverQuest.Server() == "antonius" then
+    if mq.TLO.MacroQuest.BuildName() == "Emu" then
         return false
     end
     return true
@@ -440,6 +445,16 @@ end
 ---@return boolean
 function is_hovering()
     return window_open("RespawnWnd")
+end
+
+function is_gm()
+    return mq.TLO.Me.GM()
+end
+
+-- Am I in combat?
+---@return boolean
+function in_combat()
+    return mq.TLO.Me.CombatState() == "COMBAT"
 end
 
 -- Is window `name` open?
@@ -928,7 +943,7 @@ end
 ---@field public Summon string Name for summoning spell component, eg "Molten Orb/NoAggro/Summon|Summon: Molten Orb" (MAG)
 
 local shortProperties = { "Shrink", "GoM", "NoAggro", "NoPet" } -- is turned into bools
-local intProperties = { "PctAggro", "MinMana" } -- is turned into integers
+local intProperties = { "PctAggro", "MinMana", "HealPct", "MinMobs", "MaxMobs" } -- is turned into integers
 -- parses a spell/ability etc line with properties, returns a object
 -- example in: "Ward of Valiance/MinMana|50/CheckFor|Hand of Conviction"
 ---@param s string
@@ -1186,6 +1201,17 @@ function known_spell_ability(name)
         return true
     end
     return false
+end
+
+-- Remove all buffs from yourself.
+function drop_all_buffs()
+    for i = 1, mq.TLO.Me.MaxBuffSlots() do
+        if mq.TLO.Me.Buff(i).ID() ~= nil then
+            log.Debug("Removing buff %d, id: %d, name: %s", i, mq.TLO.Me.Buff(i).ID(), mq.TLO.Me.Buff(i).Name())
+            cmdf("/removebuff %s", mq.TLO.Me.Buff(i).Name())
+        end
+        delay(1)
+    end
 end
 
 -- returns a table with class shortname booleans wether nearby peers are of desired classes.

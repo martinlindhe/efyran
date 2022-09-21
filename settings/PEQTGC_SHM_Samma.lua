@@ -1,5 +1,7 @@
 local settings = { }
 
+settings.debug = true
+
 settings.swap = {
     ["main"] = "Blessed Spiritstaff of the Heyokah|Mainhand/Shield of the Planar Assassin|Offhand",
     ["fishing"] = "Fishing Pole|Mainhand",
@@ -166,9 +168,9 @@ settings.healing = {
         ]]
     },
 
-    ["tanks"] = {-- XXX impl
-        --"Bandy",
-        --"Manu",
+    ["tanks"] = {
+        "Bandy",
+        "Manu",
         "Crusade",
         "Nullius",
         "Juancarlos",
@@ -195,16 +197,16 @@ settings.healing = {
     -- ch:
     -- L58 Kragg's Mending (1950 hp, 10s cast, cost 400 mana)
 
-    ["tank_heal"] = {-- XXX impl
-        "Ancient: Wilslik's Mending/HealPct|45/MinMana|5",
+    ["tank_heal"] = {
+        "Ancient: Wilslik's Mending/HealPct|55/MinMana|5",
     },
 
-    ["important_heal"] = {-- XXX impl
+    ["important_heal"] = {
         "Zun'Muram's Spear of Doom/HealPct|80",
         "Ancient: Wilslik's Mending/HealPct|75/MinMana|5",
     },
 
-    ["all_heal"] = {-- XXX impl
+    ["all_heal"] = {
         "Ancient: Wilslik's Mending/HealPct|48/MinMana|20",
     },
 

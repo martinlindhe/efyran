@@ -92,10 +92,15 @@ Buff Spell Level   Minimum Target Level
 /recallgroup <name>         - recalls a group/raid formation
 
 /shrinkgroup                - shrink group members shrink spells/clickies
+/shrinkall                  - tell all to shrink their groups
 
 /wornaugs                   - reports all worn augs and total hp/mana/endurance/ac
 
 /handin                     - performs NPC hand-ins, see handin.lua
+
+/rezit                      - rez target
+/aerez                      - perform ae rez
+
 
 xxx document rest
 
@@ -148,7 +153,7 @@ for buffs (spellConfigAllowsCasting)
 - Reagent
 - Shrink
 
-for assist.abilities and assist.nukes (Assist.castSpellAbility)
+for assist.abilities and assist.nukes (castSpellAbility)
 - MinMana
 - PctAggro
 - NoAggro

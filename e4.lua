@@ -21,9 +21,6 @@ qol     = require("e4_QoL")
 
 local bard = require("Class_Bard")
 
-
-
-
 -- MAIN PROGRAM
 seed_process()
 
@@ -36,7 +33,8 @@ heal.Init()
 qol.Init()
 items.Init()
 
-cmd("/dgtell all E4 started "..time())
+
+all_tellf("E4 started")
 bard.resumeMelody()
 
 while true do

@@ -1,5 +1,7 @@
 local settings = { }
 
+settings.debug = true -- enable debug logging for this peer
+
 settings.swap = {
     ["main"] = "Bazu Claw Hammer|Mainhand/Aegis of Superior Divinity|Offhand",
     ["fishing"] = "Fishing Pole|Mainhand",
@@ -38,8 +40,8 @@ settings.healing = {
         -- L70 Sanctuary AA (id:5912, removes you from combat), 1h12 min reuse
         "Sanctuary/HealPct|13",
 
-        -- L69 Ward of Retribution (add defenstive proc: Ward of Retribution Parry)
-        "Ward of Retribution/HealPct|50",
+        -- L69 Ward of Retribution (add defenstive proc: Ward of Retribution Parry, 2 min)
+        "Ward of Retribution/HealPct|50/CheckFor|Ward of Retribution",
 
         "Distillate of Divine Healing XI/HealPct|12",
 

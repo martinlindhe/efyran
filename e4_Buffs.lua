@@ -74,13 +74,7 @@ function Buffs.Init()
         end
 
         if filter == "all" then
-            for i=1,mq.TLO.Me.MaxBuffSlots() do
-                if mq.TLO.Me.Buff(i).ID() ~= nil then
-                    log.Debug("Removing buff %d, id: %d, name: %s", i, mq.TLO.Me.Buff(i).ID(), mq.TLO.Me.Buff(i).Name())
-                    cmdf("/removebuff %s", mq.TLO.Me.Buff(i).Name())
-                end
-                delay(1)
-            end
+            drop_all_buffs()
         else
             cmdf("/removebuff %s", filter)
         end
@@ -240,12 +234,7 @@ function Buffs.Tick()
         return
     end
 
-    if follow.spawn ~= nil or is_sitting() or is_hovering() or is_moving() or in_neutral_zone() or window_open("MerchantWnd") or window_open("GiveWnd") or window_open("BigBankWnd") or window_open("SpellBookWnd") or window_open("LootWnd") or spawn_count("pc radius 100") == 1 then
-        return
-    end
-
-    if mq.TLO.Me.CombatState() == "COMBAT" then
-        -- print("skip buffing, i am in combat!")
+    if follow.spawn ~= nil or is_gm() or is_hovering() or in_combat() or is_moving() or in_neutral_zone() or window_open("MerchantWnd") or window_open("GiveWnd") or window_open("BigBankWnd") or window_open("SpellBookWnd") or window_open("LootWnd") or spawn_count("pc radius 100") == 1 then
         return
     end
 
@@ -302,6 +291,15 @@ function handleBuffRequest(req)
 
     target_id(spawn.ID())
 
+    -- wait for buff populared
+    delay(3000, function()
+        if spawn.BuffsPopulated() then
+            log.Info("Buffs populated for %s (%s)!", spawn.Name(), req.Buff)
+            return true
+        end
+    end)
+    delay(100)
+
     -- find the one with highest MinLevel
     local minLevel = 0
     local spellName = ""
@@ -346,12 +344,12 @@ function handleBuffRequest(req)
 
     if minLevel > 0 and spellConfigAllowsCasting(spellName, spawn) then
         if spawn.Buff(spellName)() ~= nil and spawn.Buff(spellName).Duration() >= MIN_BUFF_DURATION then
-            cmdf("/dgtell all XXX handleBuffRequest: Skip \ag%s\ax %s (%s), they have buff already.", spawn.Name(), spellName, req.Buff)
+            log.Info("handleBuffRequest: Skip \ag%s\ax %s (%s), they have buff already. %d sec", spawn.Name(), spellName, req.Buff, spawn.Buff(spellName).Duration())
             return false
         end
 
         -- XXX is being cast even tho target has the buff... should duck in callback
-        cmdf("/dgtell all Buffing \ag%s\ax with \ay%s\ax (\ay%s\ax).", spawn.Name(), spellName, req.Buff)
+        all_tellf("Buffing \ag%s\ax with \ay%s\ax (\ay%s\ax).", spawn.Name(), spellName, req.Buff)
         castSpellRaw(spellName, spawn.ID(), "-maxtries|3")
         delay(100)
         delay(10000, function()
@@ -360,20 +358,25 @@ function handleBuffRequest(req)
             end
             if spawn.Buff(spellName)() ~= nil and spawn.Buff(spellName).Duration() >= MIN_BUFF_DURATION then
                 -- abort if they got the buff while we are casting
-                cmdf("/dgtell all \arERROR BUFFING:\ax my target %s has buff %s for %f sec, skipping.", mq.TLO.Target.Name(), spellName, mq.TLO.Target.Buff(spellName).Duration() / 1000)
+                -- XXX also often triggers when spell had completed casting ... ??!?
+                all_tellf("\arERROR MID-BUFFING:\ax my target %s has buff %s for %f sec, ducking.", mq.TLO.Target.Name(), spellName, mq.TLO.Target.Buff(spellName).Duration() / 1000)
                 cmdf("/interrupt")
                 return true
             end
         end)
         return true
     else
-        log.Error("Failed to find a matching group buff %s, L%d %s", spawn.Name(), " L", level, req.Buff, level, spawn.Name())
+        log.Error("Failed to find a matching group buff %s, L%d %s", spawn.Name(), " L", req.Buff, level, spawn.Name())
     end
+end
+
+function all_tellf(...)
+    cmdf("/dgtell all [%s] %s", time(), string.format(...))
 end
 
 -- returns true if a buff was casted
 function Buffs.RefreshSelfBuffs()
-    if botSettings.settings.self_buffs == nil then
+    if botSettings.settings.self_buffs == nil or is_sitting() then
         return false
     end
     log.Debug("Buffs.RefreshSelfBuffs() %s", time())
@@ -486,7 +489,7 @@ end
 
 -- returns true if a buff was casted
 function Buffs.RefreshAura()
-    if Buffs.aura == nil or mq.TLO.Me.Aura(1)() ~= nil then
+    if Buffs.aura == nil or mq.TLO.Me.Aura(1)() ~= nil or is_sitting() then
         return false
     end
     castSpell(Buffs.aura, mq.TLO.Me.ID())

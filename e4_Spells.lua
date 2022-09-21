@@ -204,6 +204,7 @@ function spellConfigAllowsCasting(buffItem, spawn)
 end
 
 -- helper for casting spell, clicky, AA, combat ability
+-- XXX DEPRECATE AND USE castSpellAbility() instead.
 function castSpell(name, spawnId)
 
     if have_combat_ability(name) then
@@ -211,27 +212,46 @@ function castSpell(name, spawnId)
     elseif have_ability(name) then
         cmdf('/doability "%s"', name)    -- NOTE: /doability argument must use quotes
     else
-        -- spell / aa
+        -- item / spell / aa
 
         if is_brd() and is_casting() then
             cmd("/twist stop")
             delay(100)
         end
 
+        if not is_spell_in_book(name) and have_item(name) then
+            -- Item and spell examples: Molten Orb (MAG)
+            if not is_item_clicky_ready(name) then
+                all_tellf("ERROR: castSpell was called with item clicky not ready to cast (unlikely): %s", name)
+                return
+            end
+            name = name.."|item"
+        end
+
         castSpellRaw(name, spawnId, "-maxtries|3")
 
         if is_brd() then
-            local item = find_item(name)
-            if item ~= nil then
+            if have_item(name) then
                 -- item click
-                log.Debug("Item click sleep, %d + %d", item.Clicky.CastTime(), item.Clicky.Spell.RecastTime())
-                delay(item.Clicky.CastTime() + item.Clicky.Spell.RecastTime() + 1500)
+                local item = find_item(name)
+                if item ~= nil then
+                    log.Info("Item click sleep, %d + %d", item.Clicky.CastTime(), item.Clicky.Spell.RecastTime())
+                    delay(item.Clicky.CastTime() + item.Clicky.Spell.RecastTime() + 1500)
+                end
             else
                 -- spell / AA
                 local spell = get_spell(name)
                 if spell ~= nil then
-                    local sleepTime = spell.MyCastTime() + spell.RecastTime()
-                    --print("spell sleep for '", spell.Name(), "', my cast time:", spell.MyCastTime(), ", recast time", spell.RecastTime(), " = ", sleepTime)
+                    local mycast = 0
+                    if spell.MyCastTime() ~= nil then
+                        mycast = spell.MyCastTime()
+                    end
+                    local recast = 0
+                    if spell.RecastTime() ~= nil then
+                        recast = spell.RecastTime() -- XXX rof2 bug?
+                    end
+                    log.Info("Spell sleep for '%s', my cast time: %d, recast time %d", spell.Name(), mycast, recast)
+                    local sleepTime = mycast + recast
                     delay(sleepTime)
                 end
             end
@@ -251,8 +271,8 @@ function castSpellRaw(name, spawnId, extraArgs)
         cmd("/beep 1")
         return
     end
-    log.Debug("-- castSpellRaw %s, spawnId %d extraArgs ", name, spawnId, extraArgs)
-    cmdf('/casting "%s" -targetid|%d %s', name, spawnId, extraArgs)
+    log.Debug("-- castSpellRaw %s, spawnId %d, extraArgs %s", name, spawnId, extraArgs)
+    cmdf('/casting "%s" -targetid|%d%s', name, spawnId, extraArgs)
 end
 
 -- returns datatype spell or nil if not found

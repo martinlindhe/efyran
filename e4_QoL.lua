@@ -11,6 +11,10 @@ function QoL.Init()
 
     QoL.loadRequiredPlugins()
 
+    if botSettings.settings.debug ~= nil and botSettings.settings.debug then
+        log.loglevel = "debug"
+    end
+
     if is_rof2() then
         cmd("/consent raid") -- XXX persistent raid consent setting on in INI
 
@@ -44,12 +48,12 @@ function QoL.Init()
     QoL.verifySpellLines()
 
     local dead = function(text, killer)
-        cmd("/dgtell all I died. Killed by "..killer)
+        cmdf("/dgtell all I died. Killed by %s", killer)
         cmd("/beep") -- the beep of death
     end
 
-    mq.event("died", "You have been slain by #*#", dead)
-    mq.event("died", "You died.", dead)
+    mq.event("died1", "You have been slain by #*#", dead)
+    mq.event("died2", "You died.", dead)
 
     mq.event("zoned", "You have entered #1#.", function(text, zone)
         if zone == "an area where levitation effects do not function" then
@@ -95,17 +99,19 @@ function QoL.Init()
     end)
 
     mq.event("skillup", "You have become better at #1#! (#2#)", function(text, name, num)
-        cmd("/dgtell skillup "..name.." ("..num.."/"..skill_cap(name)..")")
+        cmdf("/dgtell skillup %s (%d/%d)", name, num, skill_cap(name))
     end)
 
     mq.event("xp", "You gain experience!", function()
         cmd("/dgtell xp Gained xp")
     end)
 
-    mq.event("faction_oow_loyalists", "Your faction standing with Dranik Loyalists could not possibly get any better.", function()
-        if not maxFactionLoyalists then
-            log.Info("Maxed loyalist faction")
-            maxFactionLoyalists = true
+    mq.event("faction_maxed", "Your faction standing with #1# could not possibly get any better.", function(text, faction)
+        if faction == "Dranik Loyalists" then
+            if not maxFactionLoyalists then
+                log.Info("Maxed loyalist faction")
+                maxFactionLoyalists = true
+            end
         end
     end)
 

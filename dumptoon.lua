@@ -7,6 +7,8 @@
 
 -- TODO: can we record output from /keys to file?
 
+
+
 local mq = require("mq")
 require("ezmq")
 
@@ -29,23 +31,38 @@ local iniFile = settingsRoot .. "/Dumptoon."..me.Name()..".ini"
 local aaMapFile = settingsRoot .. "/AAMap."..current_server()..".ini"
 
 -- dump bind point   FIXME never triggers
-mq.event("bindpoint", "You are currently bound in: #1#", function(text, where)
-	cmd("/dgtell all BIND POINT: "..where)
-    cmd("/ini "..iniFile.." Overview Bindpoint "..where)
+--mq.event("bindpoint", "You are currently bound in: #1#", function(text, where)
+--[[
+mq.event("bindpoint", "The location of your bind is: #1#, #2#, #3#", function(text, y, x, z)
+	cmd("/dgtell all BIND POINT: "..y.." "..x.." "..z)
+    cmd("/ini "..iniFile.." Overview Bindpoint "..y)
 end)
+]]--
+
+cmd("/lua stop e4")
+drop_all_buffs()
+delay(1000)
+
 
 print("--- DUMP TOON ---")
 
 -- ask for bind point
 -- XXX mq2 window shows x,y,z coords too, how to record those?
 cmd("/char")
-doevents()
+
+
 
 -- Overview
 cmd("/ini "..iniFile.." Overview Name "..me.Name())
-cmd("/ini "..iniFile.." Overview Class "..me.Class())
-cmd("/ini "..iniFile.." Overview Race ".. me.Race())
+cmd("/ini "..iniFile..' Overview Class '..me.Class.ID())
+cmd("/ini "..iniFile..' Overview Race '..me.Race.ID())
 cmd("/ini "..iniFile.." Overview Gender "..me.Gender())
+cmd("/ini "..iniFile.." Overview Deity "..me.Deity.ID())
+
+cmd("/ini "..iniFile.." Spawn Zone "..mq.TLO.Zone.ID())
+cmd("/ini "..iniFile.." Spawn X "..mq.TLO.Me.X())
+cmd("/ini "..iniFile.." Spawn Y "..mq.TLO.Me.Y())
+cmd("/ini "..iniFile.." Spawn Z "..mq.TLO.Me.Z())
 
 -- Tribute/Favor
 cmd("/ini "..iniFile.." Favor Current ".. me.CurrentFavor())
@@ -54,8 +71,8 @@ cmd("/ini "..iniFile.." Favor Career "..me.CareerFavor())
 -- XP
 cmd("/ini "..iniFile.." XP Level "..me.Level())
 cmd("/ini "..iniFile.." XP Exp "..me.Exp())
-cmd("/ini "..iniFile.." XP AAExp"..me.AAExp())
-cmd("/ini "..iniFile.." XP AAPoints"..me.AAPoints())
+cmd("/ini "..iniFile.." XP AAExp "..me.AAExp())
+cmd("/ini "..iniFile.." XP AAPoints "..me.AAPoints())
 cmd("/ini "..iniFile.." XP AAPointsSpent "..me.AAPointsSpent())
 -- XXX not available in peq-mq2 version: ${Me.GroupLeaderExp}, ${Me.GroupLeaderPoints}
 
@@ -129,11 +146,11 @@ cmd("/ini "..iniFile.." Bonuses StunResistBonus "..me.StunResistBonus())
 doevents()
 
 -- skills ... 1-78 is in use
+-- IMPORTANT: skill ID:s do not match between rof2 client and eqemu server, so export skill names. rof2 id 50 = Stringed Instruments, eqemu id 50 = Swimming
 for i = 1, 78 do
     if me.Skill(i)() then
         if mq.TLO.Skill(i).Name() ~= "None" then
-            local skillDesc = mq.TLO.Skill(i).Name().."|"..me.Skill(i)().."/"..me.SkillCap(i)()
-            cmd("/ini "..iniFile.." Skill "..i..' "'..skillDesc..'"')
+            cmd("/ini "..iniFile..' Skill "'..mq.TLO.Skill(i).Name()..'"  '..me.Skill(i)())
         end
     end
 end
@@ -141,7 +158,7 @@ end
 
 -- languages (numbered 1-25)
 for i = 1, 25 do
-    cmd("/ini "..iniFile.." LanguageSkill "..i..' "'..me.Language(i)().."|"..tostring(me.LanguageSkill(i)())..'"')
+    cmd("/ini "..iniFile..' LanguageSkill "'..me.Language(i)()..'" '..tostring(me.LanguageSkill(i)()))
 end
 
 
@@ -150,7 +167,7 @@ end
 if DUMP_SPELLBOOK then
     for i = 1, SPELLBOOK_SIZE do
         if me.Book(i).ID() then
-            cmd("/ini "..iniFile.." Spells "..i..' "'..tostring(me.Book(i).ID()).."|"..me.Book(i).RankName()..'"')
+            cmd("/ini "..iniFile.." Spells "..i.." "..tostring(me.Book(i).ID()))
         end
     end
 end
@@ -164,11 +181,11 @@ doevents()
 for i = 0, 32 do
     local key = "inv"..tostring(i)
     if me.Inventory(i).ID() then
-        cmd("/ini "..iniFile.." Inventory "..key..' "'..tostring(me.Inventory(i).ID()).."|"..me.Inventory(i).Stack().."|"..me.Inventory(i).Name()..'"')
+        cmd("/ini "..iniFile.." Inventory "..key..' "'..tostring(me.Inventory(i).ID()).."|"..me.Inventory(i).Charges()..'"')
         for a = 1, MAX_AUG_SLOTS do
             local sub = key.."_aug"..tostring(a)
             if me.Inventory(i).AugSlot(a)() ~= nil then
-                cmd("/ini "..iniFile.." Inventory "..sub..' "'..me.Inventory(i).AugSlot(a).Item.ID().."|"..me.Inventory(i).AugSlot(a).Item.Stack().."|"..me.Inventory(i).AugSlot(a)()..'"')
+                cmd("/ini "..iniFile.." Inventory "..sub..' "'..me.Inventory(i).AugSlot(a).Item.ID().."|"..me.Inventory(i).AugSlot(a).Item.Charges()..'"')
             else
                 cmd("/ini "..iniFile.." Inventory "..sub.." NULL")
             end
@@ -187,15 +204,15 @@ doevents()
 -- backpack content
 for i = 1, MAX_INV_SLOTS do
     local key = "pack"..tostring(i)
-    if mq.TLO.InvSlot(key).Item.Container() > 0 then
+    if mq.TLO.InvSlot(key).Item() ~= nil and mq.TLO.InvSlot(key).Item.Container() > 0 then
         for slot = 1, mq.TLO.InvSlot(key).Item.Container() do
             local sub = key.."_slot"..tostring(slot)
             if mq.TLO.InvSlot(key).Item.Item(slot)() ~= nil then
-                cmd("/ini "..iniFile.." Inventory "..sub..' "'..mq.TLO.InvSlot(key).Item.Item(slot).ID().."|"..mq.TLO.InvSlot(key).Item.Item(slot).Stack().."|"..mq.TLO.InvSlot(key).Item.Item(slot)()..'"')
+                cmd("/ini "..iniFile.." Inventory "..sub..' "'..mq.TLO.InvSlot(key).Item.Item(slot).ID().."|"..mq.TLO.InvSlot(key).Item.Item(slot).Charges()..'"')
                 for a = 1, MAX_AUG_SLOTS do
                     local aug = sub.."_aug"..tostring(a)
                     if mq.TLO.InvSlot(key).Item.Item(slot).AugSlot(a)() ~= nil then
-                        cmd("/ini "..iniFile.." Inventory "..aug..' "'..mq.TLO.InvSlot(key).Item.Item(slot).AugSlot(a).Item.ID().."|"..mq.TLO.InvSlot(key).Item.Item(slot).AugSlot(a).Item.Stack().."|"..mq.TLO.InvSlot(key).Item.Item(slot).AugSlot(a)()..'"')
+                        cmd("/ini "..iniFile.." Inventory "..aug..' "'..mq.TLO.InvSlot(key).Item.Item(slot).AugSlot(a).Item.ID().."|"..mq.TLO.InvSlot(key).Item.Item(slot).AugSlot(a).Item.Charges()..'"')
                     else
                         cmd("/ini "..iniFile.." Inventory "..aug.." NULL")
                     end
@@ -213,29 +230,32 @@ end
 
 doevents()
 
--- bank top level slots: 1-24 is bank bags, 25-26 is shared bank
+-- bank top level slots: 1-24 is bank bags for rof2 (bank1-24), 25-26 is shared bank (shared1-2)
 for i = 1, 26 do
     if me.Bank(i)() ~= nil then
         local key = "bank"..tostring(i)
+        if i >= 25 then
+            key = "shared"..tostring(i - 24)
+        end
+        cmd("/ini "..iniFile.." Inventory "..key..' "'..me.Bank(i).ID().."|"..me.Bank(i).Stack()..'"')
+
         if me.Bank(i).Container() > 0 then
             for e = 1, me.Bank(i).Container() do
                 local sub = key.."_slot"..tostring(e)
                 if me.Bank(i).Item(e)() ~= nil then
-                    cmd("/ini "..iniFile.." Inventory "..sub..' "'..me.Bank(i).Item(e).ID().."|"..me.Bank(i).Item(e).Stack().."|"..me.Bank(i).Item(e)()..'"')
+                    cmd("/ini "..iniFile.." Inventory "..sub..' "'..me.Bank(i).Item(e).ID().."|"..me.Bank(i).Item(e).Stack()..'"')
                 else
                     cmd("/ini "..iniFile.." Inventory "..sub.." NULL")
                 end
                 for a = 1, MAX_AUG_SLOTS do
                     local aug = sub.."_aug"..tostring(a)
                     if me.Bank(i).Item(e).AugSlot(a)() ~= nil then
-                        cmd("/ini "..iniFile.." Inventory "..aug..' "'..me.Bank(i).Item(e).AugSlot(a).Item.ID().."|"..me.Bank(i).Item(e).AugSlot(a).Item.Stack().."|"..me.Bank(i).Item(e).AugSlot(a)()..'"')
+                        cmd("/ini "..iniFile.." Inventory "..aug..' "'..me.Bank(i).Item(e).AugSlot(a).Item.ID().."|"..me.Bank(i).Item(e).AugSlot(a).Item.Stack()..'"')
                     else
                         cmd("/ini "..iniFile.." Inventory "..aug.." NULL")
                     end
                 end
             end
-        else
-            cmd("/ini "..iniFile.." Inventory "..key..' "'..me.Bank(i).ID().."|"..me.Bank(i).Stack().."|"..me.Bank(i).Name()..'"')
         end
     end
 end
@@ -246,7 +266,6 @@ doevents()
 if DUMP_KNOWN_AA then
     for i = 1, 16000 do
         if me.AltAbility(i)() ~= nil then
-            --print(me.AltAbility(i).ID(), ": ", me.AltAbility(i).Name())
             -- maps ID => rank|maxrank|purchased points
             cmd("/ini "..iniFile.." AARank "..me.AltAbility(i).ID()..' "'..me.AltAbility(i).Rank().."|"..me.AltAbility(i).MaxRank().."|"..me.AltAbility(i).PointsSpent()..'"')
 

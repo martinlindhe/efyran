@@ -7,7 +7,7 @@ local Pet = {}
 
 -- summon my pet, returns true if spell was cast
 function Pet.Summon()
-    if botSettings.settings.pet == nil then
+    if botSettings.settings.pet == nil or is_sitting() then
         --print("wont summon pet. no spell in settings")
         return false
     end
@@ -104,7 +104,7 @@ end
 
 -- returns true if spell was cast
 function Pet.BuffMyPet()
-    if botSettings.settings.pet == nil or botSettings.settings.pet.buffs == nil or not have_pet() then
+    if botSettings.settings.pet == nil or botSettings.settings.pet.buffs == nil or not have_pet() or is_sitting() then
         --print("SKIP PET BUFFING: no pet buffs or I don't have pet.")
         return false
     end
