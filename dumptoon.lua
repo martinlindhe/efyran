@@ -22,7 +22,7 @@ local DUMP_SPELLBOOK = true
 -- rof2 client:
 local SPELLBOOK_SIZE = 720      -- size of spellbook: 8 * 90 pages (RoF2)
 local MAX_INV_SLOTS  = 10
-local MAX_AUG_SLOTS  = 2
+local MAX_AUG_SLOTS  = 3
 
 local me = mq.TLO.Me
 
@@ -30,14 +30,7 @@ local settingsRoot = "D:/dev-mq/mqnext-e4-lua/dumptoon"
 local iniFile = settingsRoot .. "/Dumptoon."..me.Name()..".ini"
 local aaMapFile = settingsRoot .. "/AAMap."..current_server()..".ini"
 
--- dump bind point   FIXME never triggers
---mq.event("bindpoint", "You are currently bound in: #1#", function(text, where)
---[[
-mq.event("bindpoint", "The location of your bind is: #1#, #2#, #3#", function(text, y, x, z)
-	cmd("/dgtell all BIND POINT: "..y.." "..x.." "..z)
-    cmd("/ini "..iniFile.." Overview Bindpoint "..y)
-end)
-]]--
+
 
 cmd("/lua stop e4")
 drop_all_buffs()
@@ -45,12 +38,6 @@ delay(1000)
 
 
 print("--- DUMP TOON ---")
-
--- ask for bind point
--- XXX mq2 window shows x,y,z coords too, how to record those?
-cmd("/char")
-
-
 
 -- Overview
 cmd("/ini "..iniFile.." Overview Name "..me.Name())
@@ -60,9 +47,16 @@ cmd("/ini "..iniFile.." Overview Gender "..me.Gender())
 cmd("/ini "..iniFile.." Overview Deity "..me.Deity.ID())
 
 cmd("/ini "..iniFile.." Spawn Zone "..mq.TLO.Zone.ID())
-cmd("/ini "..iniFile.." Spawn X "..mq.TLO.Me.X())
-cmd("/ini "..iniFile.." Spawn Y "..mq.TLO.Me.Y())
-cmd("/ini "..iniFile.." Spawn Z "..mq.TLO.Me.Z())
+cmd("/ini "..iniFile.." Spawn X "..me.X())
+cmd("/ini "..iniFile.." Spawn Y "..me.Y())
+cmd("/ini "..iniFile.." Spawn Z "..me.Z())
+
+
+-- Bind points
+for i = 0, 5 do
+    cmd("/ini "..iniFile.." BindPoints "..i.." "..me.BoundLocation(i).Zone.ID().."|"..me.BoundLocation(i).X().."|"..me.BoundLocation(i).Y().."|"..me.BoundLocation(i).Z())
+end
+
 
 -- Tribute/Favor
 cmd("/ini "..iniFile.." Favor Current ".. me.CurrentFavor())
@@ -277,6 +271,15 @@ if DUMP_KNOWN_AA then
         end
     end
 end
+
+-- combat abilities
+for i = 1, 200 do
+    if me.CombatAbility(i)() ~= nil then
+        -- maps ID => rank|maxrank|purchased points
+        cmd("/ini "..iniFile.." CombatAbility "..me.CombatAbility(i).ID()..' "'..me.CombatAbility(i).Name()..'"')
+    end
+end
+
 
 local seondsElapsed = os.time() - timeStart
 cmd("/dgtell all DUMPTOON DONE AFTER "..seondsElapsed.."s")
