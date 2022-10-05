@@ -2,6 +2,7 @@
 
 local mq = require("mq")
 local log = require("knightlinc/Write")
+local follow  = require("e4_Follow")
 
 local QoL = {}
 
@@ -232,6 +233,16 @@ function QoL.Init()
         cmd("/noparse /dgaexecute all /if (${Me.Invis}) /dgtell all INVIS")
     end)
 
+    -- useful when AE FD is cast (Cleric 1.5 fight in lfay and so on)
+    mq.bind("/standall", function()
+        cmd("/noparse /dgaexecute all /if (${Me.Feigning} || ${Me.Ducking} || ${Me.Sitting}) /stand")
+    end)
+
+    -- report all peers who are not standing
+    mq.bind("/notstanding", function()
+        cmd("/noparse /dgaexecute all /if (${Me.Feigning} || ${Me.Ducking} || ${Me.Sitting}) /bc NOT STANDING")
+    end)
+
     -- open loot window on closest corpse
     mq.bind("/lcorpse", function()
         if has_target() ~= nil then
@@ -456,6 +467,7 @@ function QoL.loadRequiredPlugins()
         "MQ2Debuffs", -- XXX not used yet. to be used for auto-cure feature
         "MQ2AdvPath", -- XXX /afollow or /stick ?
         "MQ2MoveUtils",
+        "MQ2Nav",
         "MQ2Cast",
     }
     for k, v in pairs(requiredPlugins) do
@@ -568,6 +580,8 @@ function QoL.Tick()
     if class_shortname() == "WIZ" and have_pet() then
         cmd("/pet get lost")
     end
+
+    follow.Update()
 
 end
 

@@ -195,7 +195,7 @@ function spellConfigAllowsCasting(buffItem, spawn)
     if spellConfig.Reagent ~= nil then
         -- if we lack this item, then skip.
         if getItemCountExact(spellConfig.Reagent) == 0 then
-            cmdf("/dgtell all SKIP BUFFING %s , I'm out of reagent %s", spellConfig.Name, spellConfig.Reagent)
+            cmdf("/dgtell all SKIP BUFFING %s , out of reagent %s", spellConfig.Name, spellConfig.Reagent)
             return false
         end
     end

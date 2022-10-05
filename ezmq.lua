@@ -33,7 +33,7 @@ function line_of_sight_to(spawn)
     return mq.TLO.LineOfSight(q)()
 end
 
--- Move to the location of `spawn` using MQ2MoveUtils.
+-- Move to the location of `spawn` using MQ2Nav.
 ---@param spawn spawn
 function move_to(spawn)
     log.Debug("move_to ", spawn.Name())
@@ -46,15 +46,15 @@ function move_to(spawn)
 
     local zone = mq.TLO.Zone.ID()
 
-    mq.cmdf("/moveto loc %f %f", spawn.Y(), spawn.X())
+    mq.cmdf("/nav locxyz %f %f %f", spawn.X(), spawn.Y(), spawn.Z())
     mq.delay(10000, function()
         if mq.TLO.Zone.ID() ~= zone then
             -- break if we zoned
             return true
         end
-        return is_within_distance(spawn, 15)
+        return not mq.TLO.Navigation.Active() or is_within_distance(spawn, 15)
     end)
-    mq.cmd("/moveto off")
+    mq.cmd("/nav stop")
 end
 
 ---@param y number
@@ -858,13 +858,27 @@ end
 -- query a peer using MQ2DanNet
 ---@param peer string
 ---@param query string
----@param timeout number
+---@param timeout? number defaults to 1000
 function query_peer(peer, query, timeout)
     mq.cmdf('/dquery %s -q "%s"', peer, query)
-    mq.delay(timeout or 0)
+    mq.delay(timeout or 1000)
     local value = mq.TLO.DanNet(peer).Q(query)()
     log.Debug("Querying \aymq.TLO.DanNet(%s).Q(%s)\ax = %s", peer, query, value)
     return value
+end
+
+-- start observing a peer using MQ2DanNet
+---@param peer string
+---@param query string
+---@param timeout? number defaults to 0
+function observe_peer(peer, query, timeout)
+    if not mq.TLO.DanNet(peer).OSet(query)() then
+        mq.cmdf('/dobserve %s -q "%s"', peer, query)
+        log.Debug("Adding Observer - mq.TLO.DanNet(%s).O(%s)", peer, query)
+    end
+    delay(timeout or 0, function()
+        return mq.TLO.DanNet(peer).O(query).Received() ~= nil and mq.TLO.DanNet(peer).O(query).Received() > 0
+    end)
 end
 
 local shortToLongClass = {
@@ -1042,6 +1056,7 @@ function get_rez_spell_item_aa()
             return rez
         end
     end
+
     return nil
 end
 

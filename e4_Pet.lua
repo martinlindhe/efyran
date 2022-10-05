@@ -46,14 +46,13 @@ function Pet.Summon()
     if spellConfig.Reagent ~= nil then
         -- if we lack this item, then skip.
         if getItemCountExact(spellConfig.Reagent) == 0 then
-            cmd("/dgtell all SKIP PET SUMMON "..spellConfig.Name..", I'm out of reagent "..spellConfig.Reagent)
+            cmd("/dgtell all SKIP PET SUMMON "..spellConfig.Name..", out of reagent "..spellConfig.Reagent)
             return false
         end
     end
 
     castSpellRaw(spell.RankName(), mq.TLO.Me.ID(), "-maxtries|3")
-
-    delay(20000, function() return have_pet() end)
+    delay(spell.MyCastTime(), function() return have_pet() end)
 
     if not have_pet() then
         cmd("/dgtell all ERROR: Failed to summon pet.")
@@ -123,40 +122,40 @@ function Pet.BuffMyPet()
 
         local skip = false
 
-        if mq.TLO.Me.Pet.Buff(spell.Name())() ~= nil and mq.TLO.Me.Pet.Buff(mq.TLO.Me.Pet.Buff(spell.Name())).Duration.Ticks() > 4 then
-            --print("SKIP PET BUFFING ", spell.Name, ", duration is ", mq.TLO.Me.Pet.Buff(mq.TLO.Me.Pet.Buff(spell.Name)).Duration.Ticks(), " ticks")
+        if mq.TLO.Me.Pet.Buff(spellConfig.Name)() ~= nil and mq.TLO.Me.Pet.Buff(mq.TLO.Me.Pet.Buff(spellConfig.Name)).Duration.Ticks() > 4 then
+            log.Debug("SKIP PET BUFFING %s, duration is %d ticks", spellConfig.Name, mq.TLO.Me.Pet.Buff(mq.TLO.Me.Pet.Buff(spellConfig.Name)).Duration.Ticks())
             skip = true
         end
 
-        if spellConfig.MinMana ~= nil then
-            if mq.TLO.Me.PctMana() < spellConfig.MinMana then
-                --print("SKIP PET BUFFING, my mana ", mq.TLO.Me.PctMana, " vs required ", spellConfig.MinMana)
-                skip = true
-            end
+        if spellConfig.MinMana ~= nil and mq.TLO.Me.PctMana() < spellConfig.MinMana then
+            log.Debug("SKIP PET BUFFING, my mana %d vs required %d", mq.TLO.Me.PctMana(), spellConfig.MinMana)
+            skip = true
         end
-        if spellConfig.CheckFor ~= nil then
+        if spellConfig.CheckFor ~= nil and mq.TLO.Me.Pet.Buff(spellConfig.CheckFor)() ~= nil then
             -- if we got this buff on, then skip.
-            if mq.TLO.Me.Pet.Buff(spellConfig.CheckFor)() ~= nil then
-                --print("SKIP PET BUFFING ", spellConfig.Name, ", Pet have buff ", spellConfig.CheckFor, " on them")
-                skip = true
-            end
+            log.Debug("SKIP PET BUFFING %s, Pet have buff %s on them", spellConfig.Name, spellConfig.CheckFor)
+            skip = true
         end
-        if spellConfig.Reagent ~= nil then
+        if spellConfig.Reagent ~= nil and getItemCountExact(spellConfig.Reagent) == 0 then
             -- if we lack this item, then skip.
-            if getItemCountExact(spellConfig.Reagent) == 0 then
-                --cmd("/dgtell all SKIP PET BUFFING ", spellConfig.Name, ", I'm out of reagent ", spellConfig.Reagent)
-                skip = true
-            end
+            log.Info("SKIP PET BUFFING %s, out of reagent %s", spellConfig.Name,  spellConfig.Reagent)
+            skip = true
+        end
+
+
+        if have_item(spellConfig.Name) and not is_item_clicky_ready(spellConfig.Name) then
+            log.Debug("SKIP PET BUFFING %s, item clicky is not ready", spellConfig.Name)
+            skip = true
         end
 
         -- XXX on eqemu pet max shrunk is 1.0xxxxxx, on live it is (nec pet) 1.3541...
         if spellConfig.Shrink ~= nil and spellConfig.Shrink and mq.TLO.Me.Pet.Height() <= 1.36 then
-            --print("will not shrink pet with ", spellConfig.Name, " because pet height is already ", mq.TLO.Me.Pet.Height())
-            return false
+            log.Debug("will not shrink pet with %s because pet height is already %f", spellConfig.Name, mq.TLO.Me.Pet.Height())
+            skip = true
         end
 
         if not skip then
-            --print("refreshing pet buff ", spellConfig.Name)
+            log.Debug("Refreshing pet buff %s", spellConfig.Name)
             castSpell(spellConfig.Name, mq.TLO.Me.Pet.ID())
             return true
         end

@@ -36,106 +36,130 @@ cmd("/lua stop e4")
 drop_all_buffs()
 delay(1000)
 
+function writeIni(section, key, val)
+    mq.cmdf('/ini %s "%s" "%s" "%s"', iniFile, section, key, val)
+end
+
 
 print("--- DUMP TOON ---")
 
 -- Overview
-cmd("/ini "..iniFile.." Overview Name "..me.Name())
-cmd("/ini "..iniFile..' Overview Class '..me.Class.ID())
-cmd("/ini "..iniFile..' Overview Race '..me.Race.ID())
-cmd("/ini "..iniFile.." Overview Gender "..me.Gender())
-cmd("/ini "..iniFile.." Overview Deity "..me.Deity.ID())
+writeIni("Overview", "Name", me.Name())
+writeIni("Overview", "Class", me.Class.ID())
+writeIni("Overview", "Race", me.Race.ID())
+writeIni("Overview", "Gender", me.Gender())
+writeIni("Overview", "Deity", me.Deity.ID())
 
-cmd("/ini "..iniFile.." Spawn Zone "..mq.TLO.Zone.ID())
-cmd("/ini "..iniFile.." Spawn X "..me.X())
-cmd("/ini "..iniFile.." Spawn Y "..me.Y())
-cmd("/ini "..iniFile.." Spawn Z "..me.Z())
+writeIni("Spawn", "Zone", mq.TLO.Zone.ID())
+writeIni("Spawn", "X", me.X())
+writeIni("Spawn", "Y", me.Y())
+writeIni("Spawn", "Z", me.Z())
 
 
 -- Bind points
-for i = 0, 5 do
-    cmd("/ini "..iniFile.." BindPoints "..i.." "..me.BoundLocation(i).Zone.ID().."|"..me.BoundLocation(i).X().."|"..me.BoundLocation(i).Y().."|"..me.BoundLocation(i).Z())
+for i = 0, 4 do
+    writeIni("BindPoints", i, me.BoundLocation(i).Zone.ID().."|"..me.BoundLocation(i).X().."|"..me.BoundLocation(i).Y().."|"..me.BoundLocation(i).Z())
 end
 
 
 -- Tribute/Favor
-cmd("/ini "..iniFile.." Favor Current ".. me.CurrentFavor())
-cmd("/ini "..iniFile.." Favor Career "..me.CareerFavor())
+writeIni("Favor", "Current", me.CurrentFavor())
+writeIni("Favor", "Career", me.CareerFavor())
 
 -- XP
-cmd("/ini "..iniFile.." XP Level "..me.Level())
-cmd("/ini "..iniFile.." XP Exp "..me.Exp())
-cmd("/ini "..iniFile.." XP AAExp "..me.AAExp())
-cmd("/ini "..iniFile.." XP AAPoints "..me.AAPoints())
-cmd("/ini "..iniFile.." XP AAPointsSpent "..me.AAPointsSpent())
--- XXX not available in peq-mq2 version: ${Me.GroupLeaderExp}, ${Me.GroupLeaderPoints}
+writeIni("XP", "Level", me.Level())
+writeIni("XP", "Exp", me.Exp())
+writeIni("XP", "AAExp", me.AAExp())
+writeIni("XP", "AAPoints", me.AAPoints())
+writeIni("XP", "AAPointsSpent", me.AAPointsSpent())
+
+-- Group leadership XP
+writeIni("GroupXP", "GroupLeaderExp", me.GroupLeaderExp())
+writeIni("GroupXP", "GroupLeaderPoints", me.GroupLeaderPoints())
+writeIni("GroupXP", "RaidLeaderExp", me.RaidLeaderExp())
+writeIni("GroupXP", "RaidLeaderPoints", me.RaidLeaderPoints())
+
+-- points in each Group Leadership ability. XXX raid ones ??
+writeIni("GroupXP", "LAMarkNPC", me.LAMarkNPC())
+writeIni("GroupXP", "LANPCHealth", me.LANPCHealth())
+writeIni("GroupXP", "LADelegateMA", me.LADelegateMA())
+writeIni("GroupXP", "LADelegateMarkNPC", me.LADelegateMarkNPC())
+writeIni("GroupXP", "LAInspectBuffs", me.LAInspectBuffs())
+writeIni("GroupXP", "LASpellAwareness", me.LASpellAwareness())
+writeIni("GroupXP", "LAOffenseEnhancement", me.LAOffenseEnhancement())
+writeIni("GroupXP", "LAManaEnhancement", me.LAManaEnhancement())
+writeIni("GroupXP", "LAHealthEnhancement", me.LAHealthEnhancement())
+writeIni("GroupXP", "LAHealthRegen", me.LAHealthRegen())
+writeIni("GroupXP", "LAFindPathPC", me.LAFindPathPC())
+writeIni("GroupXP", "LAHoTT", me.LAHoTT())
+
 
 -- LDoN
-cmd("/ini "..iniFile.." LDoN Points "..me.LDoNPoints())
-cmd("/ini "..iniFile.." LDoN GukEarned "..me.GukEarned())
-cmd("/ini "..iniFile.." LDoN MirEarned "..me.MirEarned())
-cmd("/ini "..iniFile.." LDoN MMEarned "..me.MMEarned())
-cmd("/ini "..iniFile.." LDoN RujEarned "..me.RujEarned())
-cmd("/ini "..iniFile.." LDoN TakEarned "..me.TakEarned())
+writeIni("LDoN", "Points", me.LDoNPoints())
+writeIni("LDoN", "GukEarned", me.GukEarned())
+writeIni("LDoN", "MirEarned", me.MirEarned())
+writeIni("LDoN", "MMEarned", me.MMEarned())
+writeIni("LDoN", "RujEarned", me.RujEarned())
+writeIni("LDoN", "TakEarned", me.TakEarned())
 
 -- coins
-cmd("/ini "..iniFile.." Coins Copper "..me.Copper())
-cmd("/ini "..iniFile.." Coins CopperBank "..me.CopperBank())
-cmd("/ini "..iniFile.." Coins Silver "..me.Silver())
-cmd("/ini "..iniFile.." Coins SilverBank "..me.SilverBank())
-cmd("/ini "..iniFile.." Coins Gold "..me.Gold())
-cmd("/ini "..iniFile.." Coins GoldBank "..me.GoldBank())
-cmd("/ini "..iniFile.." Coins Platinum "..me.Platinum())
-cmd("/ini "..iniFile.." Coins PlatinumBank "..me.PlatinumBank())
-cmd("/ini "..iniFile.." Coins PlatinumShared "..me.PlatinumShared())
+writeIni("Coins", "Copper", me.Copper())
+writeIni("Coins", "CopperBank", me.CopperBank())
+writeIni("Coins", "Silver", me.Silver())
+writeIni("Coins", "SilverBank", me.SilverBank())
+writeIni("Coins", "Gold", me.Gold())
+writeIni("Coins", "GoldBank", me.GoldBank())
+writeIni("Coins", "Platinum", me.Platinum())
+writeIni("Coins", "PlatinumBank", me.PlatinumBank())
+writeIni("Coins", "PlatinumShared", me.PlatinumShared())
 
 
 -- stats as seen by client - XXX can we get raw ones excluding gear and buffs?
 -- XXX AC and ATK numbers?
-cmd("/ini "..iniFile.." CurrentStats MaxHPs "..me.MaxHPs())
-cmd("/ini "..iniFile.." CurrentStats MaxMana "..me.MaxMana())
-cmd("/ini "..iniFile.." CurrentStats MaxEndurance "..me.MaxEndurance())
-cmd("/ini "..iniFile.." CurrentStats STR "..me.STR())
-cmd("/ini "..iniFile.." CurrentStats STA "..me.STA())
-cmd("/ini "..iniFile.." CurrentStats AGI "..me.AGI())
-cmd("/ini "..iniFile.." CurrentStats DEX "..me.DEX())
-cmd("/ini "..iniFile.." CurrentStats WIS "..me.WIS())
-cmd("/ini "..iniFile.." CurrentStats INT "..me.INT())
-cmd("/ini "..iniFile.." CurrentStats CHA "..me.CHA())
-cmd("/ini "..iniFile.." CurrentStats svPoison "..me.svPoison())
-cmd("/ini "..iniFile.." CurrentStats svMagic "..me.svMagic())
-cmd("/ini "..iniFile.." CurrentStats svDisease "..me.svDisease())
-cmd("/ini "..iniFile.." CurrentStats svFire "..me.svFire())
-cmd("/ini "..iniFile.." CurrentStats svCold "..me.svCold())
-cmd("/ini "..iniFile.." CurrentStats svCorruption"..me.svCorruption())
-cmd("/ini "..iniFile.." CurrentStats svChromatic "..me.svChromatic())
-cmd("/ini "..iniFile.." CurrentStats svPrismatic "..me.svPrismatic())
-cmd("/ini "..iniFile.." CurrentStats CurrentWeight "..me.CurrentWeight())
-cmd("/ini "..iniFile.." CurrentStats AttackSpeed "..me.AttackSpeed())
-cmd("/ini "..iniFile.." CurrentStats Haste "..me.Haste())
+writeIni("CurrentStats", "MaxHPs", me.MaxHPs())
+writeIni("CurrentStats", "MaxMana", me.MaxMana())
+writeIni("CurrentStats", "MaxEndurance", me.MaxEndurance())
+writeIni("CurrentStats", "STR", me.STR())
+writeIni("CurrentStats", "STA", me.STA())
+writeIni("CurrentStats", "AGI", me.AGI())
+writeIni("CurrentStats", "DEX", me.DEX())
+writeIni("CurrentStats", "WIS", me.WIS())
+writeIni("CurrentStats", "INT", me.INT())
+writeIni("CurrentStats", "CHA", me.CHA())
+writeIni("CurrentStats", "svPoison", me.svPoison())
+writeIni("CurrentStats", "svMagic", me.svMagic())
+writeIni("CurrentStats", "svDisease", me.svDisease())
+writeIni("CurrentStats", "svFire", me.svFire())
+writeIni("CurrentStats", "svCold", me.svCold())
+writeIni("CurrentStats", "svCorruption", me.svCorruption())
+writeIni("CurrentStats", "svChromatic", me.svChromatic())
+writeIni("CurrentStats", "svPrismatic", me.svPrismatic())
+writeIni("CurrentStats", "CurrentWeight", me.CurrentWeight())
+writeIni("CurrentStats", "AttackSpeed", me.AttackSpeed())
+writeIni("CurrentStats", "Haste", me.Haste())
 
 -- bonuses from gear as seen by client
-cmd("/ini "..iniFile.." Bonuses HPBonus "..me.HPBonus())
-cmd("/ini "..iniFile.." Bonuses HPRegenBonus "..me.HPRegenBonus())
-cmd("/ini "..iniFile.." Bonuses ManaBonus "..me.ManaBonus())
-cmd("/ini "..iniFile.." Bonuses ManaRegenBonus "..me.ManaRegenBonus())
-cmd("/ini "..iniFile.." Bonuses EnduranceBonus "..me.EnduranceBonus())
-cmd("/ini "..iniFile.." Bonuses EnduranceRegenBonus "..me.EnduranceRegenBonus())
+writeIni("Bonuses", "HPBonus", me.HPBonus())
+writeIni("Bonuses", "HPRegenBonus", me.HPRegenBonus())
+writeIni("Bonuses", "ManaBonus", me.ManaBonus())
+writeIni("Bonuses", "ManaRegenBonus", me.ManaRegenBonus())
+writeIni("Bonuses", "EnduranceBonus", me.EnduranceBonus())
+writeIni("Bonuses", "EnduranceRegenBonus", me.EnduranceRegenBonus())
 
-cmd("/ini "..iniFile.." Bonuses AccuracyBonus "..me.AccuracyBonus())
-cmd("/ini "..iniFile.." Bonuses AttackBonus "..me.AttackBonus())
-cmd("/ini "..iniFile.." Bonuses AvoidanceBonus "..me.AvoidanceBonus())
-cmd("/ini "..iniFile.." Bonuses ClairvoyanceBonus "..me.ClairvoyanceBonus())
-cmd("/ini "..iniFile.." Bonuses CombatEffectsBonus "..me.CombatEffectsBonus())
-cmd("/ini "..iniFile.." Bonuses DamageShieldBonus "..me.DamageShieldBonus())
-cmd("/ini "..iniFile.." Bonuses DamageShieldMitigationBonus "..me.DamageShieldMitigationBonus())
-cmd("/ini "..iniFile.." Bonuses DoTShieldBonus "..me.DoTShieldBonus())
-cmd("/ini "..iniFile.." Bonuses HealAmountBonus "..me.HealAmountBonus())
-cmd("/ini "..iniFile.." Bonuses ShieldingBonus "..me.ShieldingBonus())
-cmd("/ini "..iniFile.." Bonuses SpellDamageBonus "..me.SpellDamageBonus())
-cmd("/ini "..iniFile.." Bonuses SpellShieldBonus "..me.SpellShieldBonus())
-cmd("/ini "..iniFile.." Bonuses StrikeThroughBonus "..me.StrikeThroughBonus())
-cmd("/ini "..iniFile.." Bonuses StunResistBonus "..me.StunResistBonus())
+writeIni("Bonuses", "AccuracyBonus", me.AccuracyBonus())
+writeIni("Bonuses", "AttackBonus", me.AttackBonus())
+writeIni("Bonuses", "AvoidanceBonus", me.AvoidanceBonus())
+writeIni("Bonuses", "ClairvoyanceBonus", me.ClairvoyanceBonus())
+writeIni("Bonuses", "CombatEffectsBonus", me.CombatEffectsBonus())
+writeIni("Bonuses", "DamageShieldBonus", me.DamageShieldBonus())
+writeIni("Bonuses", "DamageShieldMitigationBonus", me.DamageShieldMitigationBonus())
+writeIni("Bonuses", "DoTShieldBonus", me.DoTShieldBonus())
+writeIni("Bonuses", "HealAmountBonus", me.HealAmountBonus())
+writeIni("Bonuses", "ShieldingBonus", me.ShieldingBonus())
+writeIni("Bonuses", "SpellDamageBonus", me.SpellDamageBonus())
+writeIni("Bonuses", "SpellShieldBonus", me.SpellShieldBonus())
+writeIni("Bonuses", "StrikeThroughBonus", me.StrikeThroughBonus())
+writeIni("Bonuses", "StunResistBonus", me.StunResistBonus())
 
 doevents()
 
@@ -144,7 +168,7 @@ doevents()
 for i = 1, 78 do
     if me.Skill(i)() then
         if mq.TLO.Skill(i).Name() ~= "None" then
-            cmd("/ini "..iniFile..' Skill "'..mq.TLO.Skill(i).Name()..'"  '..me.Skill(i)())
+            writeIni("Skill", mq.TLO.Skill(i).Name(), me.Skill(i)())
         end
     end
 end
@@ -152,7 +176,7 @@ end
 
 -- languages (numbered 1-25)
 for i = 1, 25 do
-    cmd("/ini "..iniFile..' LanguageSkill "'..me.Language(i)()..'" '..tostring(me.LanguageSkill(i)()))
+    writeIni("LanguageSkill", me.Language(i)(), me.LanguageSkill(i)())
 end
 
 
@@ -161,7 +185,7 @@ end
 if DUMP_SPELLBOOK then
     for i = 1, SPELLBOOK_SIZE do
         if me.Book(i).ID() then
-            cmd("/ini "..iniFile.." Spells "..i.." "..tostring(me.Book(i).ID()))
+            writeIni("Spells", i, me.Book(i).ID())
         end
     end
 end
@@ -175,20 +199,20 @@ doevents()
 for i = 0, 32 do
     local key = "inv"..tostring(i)
     if me.Inventory(i).ID() then
-        cmd("/ini "..iniFile.." Inventory "..key..' "'..tostring(me.Inventory(i).ID()).."|"..me.Inventory(i).Charges()..'"')
+        writeIni("Inventory", key, me.Inventory(i).ID().."|"..me.Inventory(i).Charges())
         for a = 1, MAX_AUG_SLOTS do
             local sub = key.."_aug"..tostring(a)
             if me.Inventory(i).AugSlot(a)() ~= nil then
-                cmd("/ini "..iniFile.." Inventory "..sub..' "'..me.Inventory(i).AugSlot(a).Item.ID().."|"..me.Inventory(i).AugSlot(a).Item.Charges()..'"')
+                writeIni("Inventory", sub, me.Inventory(i).AugSlot(a).Item.ID().."|"..me.Inventory(i).AugSlot(a).Item.Charges())
             else
-                cmd("/ini "..iniFile.." Inventory "..sub.." NULL")
+                writeIni("Inventory", sub, "NULL")
             end
         end
     else
-        cmd("/ini "..iniFile.." Inventory "..key.." NULL")
+        writeIni("Inventory", key, "NULL")
         for a = 1, MAX_AUG_SLOTS do
             local sub = key.."_aug"..tostring(a)
-            cmd("/ini "..iniFile.." Inventory "..sub.."NULL")
+            writeIni("Inventory", sub, "NULL")
         end
     end
 end
@@ -202,20 +226,20 @@ for i = 1, MAX_INV_SLOTS do
         for slot = 1, mq.TLO.InvSlot(key).Item.Container() do
             local sub = key.."_slot"..tostring(slot)
             if mq.TLO.InvSlot(key).Item.Item(slot)() ~= nil then
-                cmd("/ini "..iniFile.." Inventory "..sub..' "'..mq.TLO.InvSlot(key).Item.Item(slot).ID().."|"..mq.TLO.InvSlot(key).Item.Item(slot).Charges()..'"')
+                writeIni("Inventory", sub, mq.TLO.InvSlot(key).Item.Item(slot).ID().."|"..mq.TLO.InvSlot(key).Item.Item(slot).Charges())
                 for a = 1, MAX_AUG_SLOTS do
                     local aug = sub.."_aug"..tostring(a)
                     if mq.TLO.InvSlot(key).Item.Item(slot).AugSlot(a)() ~= nil then
-                        cmd("/ini "..iniFile.." Inventory "..aug..' "'..mq.TLO.InvSlot(key).Item.Item(slot).AugSlot(a).Item.ID().."|"..mq.TLO.InvSlot(key).Item.Item(slot).AugSlot(a).Item.Charges()..'"')
+                        writeIni("Inventory", aug, mq.TLO.InvSlot(key).Item.Item(slot).AugSlot(a).Item.ID().."|"..mq.TLO.InvSlot(key).Item.Item(slot).AugSlot(a).Item.Charges())
                     else
-                        cmd("/ini "..iniFile.." Inventory "..aug.." NULL")
+                        writeIni("Inventory", aug, "NULL")
                     end
                 end
             else
-                cmd("/ini "..iniFile.." Inventory "..sub.." NULL")
+                writeIni("Inventory", sub, "NULL")
                 for a = 1, MAX_AUG_SLOTS do
                     local aug = sub.."_aug"..tostring(a)
-                    cmd("/ini "..iniFile.." Inventory "..aug.." NULL")
+                    writeIni("Inventory", aug, "NULL")
                 end
             end
         end
@@ -231,22 +255,22 @@ for i = 1, 26 do
         if i >= 25 then
             key = "shared"..tostring(i - 24)
         end
-        cmd("/ini "..iniFile.." Inventory "..key..' "'..me.Bank(i).ID().."|"..me.Bank(i).Stack()..'"')
+        writeIni("Inventory", key, me.Bank(i).ID().."|"..me.Bank(i).Stack())
 
         if me.Bank(i).Container() > 0 then
             for e = 1, me.Bank(i).Container() do
                 local sub = key.."_slot"..tostring(e)
                 if me.Bank(i).Item(e)() ~= nil then
-                    cmd("/ini "..iniFile.." Inventory "..sub..' "'..me.Bank(i).Item(e).ID().."|"..me.Bank(i).Item(e).Stack()..'"')
+                    writeIni("Inventory", sub, me.Bank(i).Item(e).ID().."|"..me.Bank(i).Item(e).Stack())
                 else
-                    cmd("/ini "..iniFile.." Inventory "..sub.." NULL")
+                    writeIni("Inventory", sub, "NULL")
                 end
                 for a = 1, MAX_AUG_SLOTS do
                     local aug = sub.."_aug"..tostring(a)
                     if me.Bank(i).Item(e).AugSlot(a)() ~= nil then
-                        cmd("/ini "..iniFile.." Inventory "..aug..' "'..me.Bank(i).Item(e).AugSlot(a).Item.ID().."|"..me.Bank(i).Item(e).AugSlot(a).Item.Stack()..'"')
+                        writeIni("Inventory", aug, me.Bank(i).Item(e).AugSlot(a).Item.ID().."|"..me.Bank(i).Item(e).AugSlot(a).Item.Stack())
                     else
-                        cmd("/ini "..iniFile.." Inventory "..aug.." NULL")
+                        writeIni("Inventory", aug, "NULL")
                     end
                 end
             end
@@ -261,7 +285,7 @@ if DUMP_KNOWN_AA then
     for i = 1, 16000 do
         if me.AltAbility(i)() ~= nil then
             -- maps ID => rank|maxrank|purchased points
-            cmd("/ini "..iniFile.." AARank "..me.AltAbility(i).ID()..' "'..me.AltAbility(i).Rank().."|"..me.AltAbility(i).MaxRank().."|"..me.AltAbility(i).PointsSpent()..'"')
+            writeIni("AARank", me.AltAbility(i).ID(), me.AltAbility(i).Rank().."|"..me.AltAbility(i).MaxRank().."|"..me.AltAbility(i).PointsSpent())
 
             -- if aa missing in aamap.ini, write it
             if mq.TLO.Ini(aaMapFile, "AAMap", me.AltAbility(i).ID(), "-")() == "-" then
@@ -276,7 +300,7 @@ end
 for i = 1, 200 do
     if me.CombatAbility(i)() ~= nil then
         -- maps ID => rank|maxrank|purchased points
-        cmd("/ini "..iniFile.." CombatAbility "..me.CombatAbility(i).ID()..' "'..me.CombatAbility(i).Name()..'"')
+        writeIni("CombatAbility", me.CombatAbility(i).ID(), me.CombatAbility(i).Name())
     end
 end
 

@@ -225,7 +225,7 @@ function Buffs.Init()
     end)
 end
 
-local refreshBuffsTimer = timer.new_random(20 * 1) -- 20s
+local refreshBuffsTimer = timer.new_random(10 * 1) -- 10s
 
 local handleBuffsTimer = timer.new_random(3 * 1) -- 3s
 
@@ -318,6 +318,16 @@ function handleBuffRequest(req)
             cmdf("/dgtell all FATAL ERROR, group buff %s does not have a MinLevel setting", checkRow)
             return
         end
+        -- XXX debug source of nil
+        if type(n) ~= "number" then
+            all_tellf("FATAL n is not a number")
+        end
+        if type(minLevel) ~= "number" then
+            all_tellf("FATAL minLevel is not a number")
+        end
+        if type(level) ~= "number" then
+            all_tellf("FATAL level is not a number")
+        end
         if n > minLevel and level >= n then
             spellName = spellConfig.Name
             local spell = get_spell(spellName)
@@ -366,7 +376,7 @@ function handleBuffRequest(req)
         end)
         return true
     else
-        log.Error("Failed to find a matching group buff %s, L%d %s", spawn.Name(), " L", req.Buff, level, spawn.Name())
+        all_tellf("Failed to find a matching group buff %s, L%d %s", req.Buff, level, spawn.Name())
     end
 end
 

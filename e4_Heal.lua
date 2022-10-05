@@ -91,6 +91,7 @@ function Heal.Init()
                 target_id(spawn.ID())
                 cmdf("/dgtell all Rezzing %s with %s", spawn.Name(), rez)
                 castSpell(rez, spawn.ID())
+                wait_until_not_casting()
                 break
             else
                 cmdf("/dgtell all \arWARN\ax: Not ready to rez \ag%s\ax.", spawn.Name())
@@ -122,7 +123,7 @@ function joinCurrentHealChannel()
     end
 end
 
-local healQueueMaxLength = 10
+local healQueueMaxLength = 20
 
 ---@param s string
 ---@return string, integer
@@ -205,7 +206,7 @@ function Heal.processQueue()
     if botSettings.settings.healing.tanks ~= nil and botSettings.settings.healing.tank_heal ~= nil then
         for k, peer in pairs(botSettings.settings.healing.tanks) do
             if Heal.queue:contains(peer) then
-                local pct = Heal.queue:prop(peer)
+                local pct = toint(Heal.queue:prop(peer))
                 log.Info("Decided to heal TANK %s at %d %%", peer, pct)
                 if healPeer(botSettings.settings.healing.tank_heal, peer, pct) then
                     return
@@ -218,7 +219,7 @@ function Heal.processQueue()
     if botSettings.settings.healing.important ~= nil and botSettings.settings.healing.important_heal ~= nil then
         for k, peer in pairs(botSettings.settings.healing.important) do
             if Heal.queue:contains(peer) then
-                local pct = Heal.queue:prop(peer)
+                local pct = toint(Heal.queue:prop(peer))
                 log.Info("Decided to heal IMPORTANT %s at %d %%", peer, pct)
                 if healPeer(botSettings.settings.healing.important_heal, peer, pct) then
                     return
@@ -231,7 +232,7 @@ function Heal.processQueue()
     if botSettings.settings.healing.all_heal ~= nil then
         local peer = Heal.queue:peek_first()
         if peer ~= nil then
-            local pct = Heal.queue:prop(peer)
+            local pct = toint(Heal.queue:prop(peer))
             log.Info("Decided to heal ANY %s at %d %%", peer, pct)
             if healPeer(botSettings.settings.healing.all_heal, peer, pct) then
                 return
@@ -451,7 +452,12 @@ function healPeer(spell_list, peer, pct)
             -- remove, dont meet heal criteria
             -- DONT RETURN HERE because specific spell does not meet criteria!
             log.Info("Skip using of heal, heal pct for %s is %d. dont need heal at %d for %s", spellConfig.Name, spellConfig.HealPct, pct, peer)
+
+        elseif not is_spell_in_book(spellConfig.Name) and have_item(spellConfig.Name) and not is_item_clicky_ready(spellConfig.Name) then
+            -- SKIP clickies that is not ready
+            log.Info("Skip using of heal to heal %s at %d, clicky %s is not ready", peer, pct, spellConfig.Name)
         else
+
             Heal.queue:remove(peer)
             all_tellf("Healing \ag%s\ax at %d%% with %s", peer, pct, spellConfig.Name)
 

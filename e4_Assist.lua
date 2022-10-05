@@ -1,9 +1,9 @@
 local mq = require("mq")
 local log = require("knightlinc/Write")
 
-local Assist = {}
-
-local assistTarget = nil -- the current assist target
+local Assist = {
+    target = nil, -- the current spawn I am attacking
+}
 
 local spellSet = "main" -- the current spell set. XXX impl switching it
 
@@ -34,7 +34,7 @@ function Assist.Init()
             return
         end
         if spawn.Type() ~= "PC" then
-            if assistTarget ~= nil then
+            if Assist.target ~= nil then
                 log.Debug("Backing off existing target before assisting new")
                 Assist.backoff()
             end
@@ -53,7 +53,7 @@ function Assist.Init()
             return
         end
         if spawn.Type() ~= "PC" then
-            if assistTarget ~= nil then
+            if Assist.target ~= nil then
                 log.Debug("Backing off existing target before assisting new")
                 Assist.backoff()
             end
@@ -124,9 +124,9 @@ end
 
 
 function Assist.backoff()
-    if assistTarget ~= nil then
-        log.Debug("Backing off target %s", assistTarget.Name())
-        assistTarget = nil
+    if Assist.target ~= nil then
+        log.Debug("Backing off target %s", Assist.target.Name())
+        Assist.target = nil
         if have_pet() then
             log.Debug("Asking pet to back off")
             cmd("/pet back off")
@@ -139,11 +139,6 @@ function Assist.handleAssistCall(spawn)
     if botSettings.settings == nil or botSettings.settings.assist == nil then
         cmd("/dgtell all WARNING: I have no assist settings")
         return
-    end
-
-    if have_pet() then
-        log.Debug("Attacking with my pet %s", mq.TLO.Me.Pet.CleanName())
-        cmdf("/pet attack %d", spawn.ID())
     end
 
     Assist.killSpawn(spawn)
@@ -164,7 +159,7 @@ function Assist.summonNukeComponents()
     end
 
     if is_casting() then
-        cmdf("/dgtell all SUMMON ERROR: i was casting %s on target %s", mq.TLO.Me.Casting.Name(), mq.TLO.Target.Name())
+        log.Info("WARNING: cannot summon nuke components. I am busy casting %s on target %s", mq.TLO.Me.Casting.Name(), mq.TLO.Target.Name())
         return
     end
 
@@ -183,18 +178,22 @@ function Assist.summonNukeComponents()
                     cmd("/beep 1")
                 end
 
-                log.Debug("Checking summon components for %s", spellConfig.Summon) -- XXX name is "Molten Orb".
+                log.Debug("Checking summon components for %s", spellConfig.Summon)
 
                 if getItemCountExact(spellConfig.Name) == 0 then
                     all_tellf("Summoning %s", spellConfig.Name)
-                    delay(100)
+                    --delay(100)
                     castSpell(spellConfig.Summon, mq.TLO.Me.ID())
+                    all_tellf("DBG Summoned %s", spellConfig.Name)
 
                     -- wait and inventory
                     local spell = get_spell(spellConfig.Summon)
                     if spell ~= nil then
+                        all_tellf("DBG Summoned %s - waiting", spellConfig.Name)
                         delay(2000 + spell.MyCastTime())
+                        all_tellf("DBG Summoned %s - clearing", spellConfig.Name)
                         clear_cursor()
+                        all_tellf("DBG Summoned %s - cleared", spellConfig.Name)
                     end
                     return true
                 end
@@ -275,7 +274,7 @@ end
 ---@param spawn spawn
 function Assist.killSpawn(spawn)
 
-    assistTarget = spawn
+    Assist.target = spawn
     local currentID = spawn.ID()
 
     if spawn == nil then
@@ -284,8 +283,15 @@ function Assist.killSpawn(spawn)
     end
 
     log.Debug("Assist.killSpawn %s", spawn.Name())
+
+    if have_pet() then
+        log.Debug("Attacking with my pet %s", mq.TLO.Me.Pet.CleanName())
+        cmdf("/pet attack %d", spawn.ID())
+    end
+
     cmdf("/target id %d", spawn.ID())
     follow.Pause()
+    delay(1)
 
     local melee = botSettings.settings.assist ~= nil and botSettings.settings.assist.type ~= nil and botSettings.settings.assist.type == "melee"
 
@@ -296,13 +302,22 @@ function Assist.killSpawn(spawn)
     end
 
     if melee then
-        cmd("/attack on")
 
         local meleeDistance = botSettings.settings.assist.melee_distance
         if meleeDistance == "auto" then
             meleeDistance = spawn.MaxRangeTo() * 0.75
             log.Info("Calculated auto melee distance %f", meleeDistance)
         end
+
+        if not mq.TLO.Navigation.MeshLoaded() then
+            all_tellf("MISSING NAVMESH FOR %s", zone_shortname())
+            return
+        end
+
+        -- use mq2nav to navigate close to the mob, THEN use stick
+        move_to(spawn)
+
+        cmd("/attack on")
 
         local stickArg
 
@@ -324,12 +339,12 @@ function Assist.killSpawn(spawn)
 
     while true do
         --log.Debug("killSpawn %s loop start, melee = %s", spawn.Name(), bools(melee))
-        if assistTarget == nil then
+        if Assist.target == nil then
             -- break outer loop if /backoff was called
             log.Debug("killSpawn: i got called off, breaking outer loop")
             break
         end
-        if assistTarget.ID() ~= currentID then
+        if Assist.target.ID() ~= currentID then
             log.Debug("killSpawn: assist called on another mob, returning!")
             return
         end
@@ -351,7 +366,7 @@ function Assist.killSpawn(spawn)
         and spawn.Distance() < spawn.MaxRangeTo() and spawn.LineOfSight() then
             -- use melee abilities
             for v, abilityRow in pairs(botSettings.settings.assist.abilities) do
-                if assistTarget == nil then
+                if Assist.target == nil then
                     -- break inner loop if /backoff was called
                     log.Debug("killSpawn melee: i got called off, breaking inner loop")
                     break
@@ -372,7 +387,7 @@ function Assist.killSpawn(spawn)
             if botSettings.settings.assist.nukes[spellSet] ~= nil then
                 for v, nukeRow in pairs(botSettings.settings.assist.nukes[spellSet]) do
                     log.Debug("Evaluating nuke %s", nukeRow)
-                    if assistTarget == nil then
+                    if Assist.target == nil then
                         -- break inner loop if /backoff was called
                         log.Debug("killSpawn nukes: i got called off, breaking inner loop")
                         break
@@ -397,16 +412,15 @@ function Assist.killSpawn(spawn)
         cmd("/stopcast")
     end
 
-    if assistTarget ~= nil then
+    if Assist.target ~= nil then
         -- did not get called off during fight
         Assist.prepareForNextFight()
     end
 
-    assistTarget = nil
+    Assist.target = nil
 
     cmd("/attack off")
     cmd("/stick off")
-    follow.Resume()
 end
 
 return Assist
