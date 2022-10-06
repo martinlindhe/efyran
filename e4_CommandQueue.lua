@@ -1,20 +1,23 @@
 --local mq = require("mq")
 local log = require("knightlinc/Write")
 
+local bard = require("Class_Bard")
+
 ---@class CommandQueueValue
 ---@field public Name string Name
----@field public Prop string Property
+---@field public Arg string Argument
 
 local CommandQueue = {
     ---@type CommandQueueValue[]
     queue = {},
 }
 
---@param name string
-function CommandQueue.Add(name)
+---@param name string
+---@param arg? string optional argument
+function CommandQueue.Add(name, arg)
     table.insert(CommandQueue.queue, {
         ["Name"] = name,
-        --["Prop"] = prop,
+        ["Arg"] = arg,
     })
 end
 
@@ -66,6 +69,8 @@ function CommandQueue.Process()
 
         joinCurrentHealChannel()
         memorizeListedSpells()
+    elseif v.Name == "playmelody" then
+        bard.PlayMelody(v.Arg)
     else
         all_tellf("ERROR unknown command in queue: %s", v.Name)
     end

@@ -5,20 +5,18 @@ require("knightlinc/Write")
 require("e4_Loot")
 require("e4_Hail")
 
-items   = require("e4_Items")
+local items   = require("e4_Items")
 
-groupBuffs = require("e4_GroupBuffs")
 local commandQueue = require("e4_CommandQueue")
 
-botSettings = require("e4_BotSettings")
-follow  = require("e4_Follow")
+local botSettings = require("e4_BotSettings")
+local follow  = require("e4_Follow")
 
-assist  = require("e4_Assist")
-buffs   = require("e4_Buffs")
-group   = require("e4_Group")
-heal    = require("e4_Heal")
-pet     = require("e4_Pet")
-qol     = require("e4_QoL")
+local assist  = require("e4_Assist")
+local buffs   = require("e4_Buffs")
+local group   = require("e4_Group")
+local heal    = require("e4_Heal")
+local qol     = require("e4_QoL")
 
 local bard = require("Class_Bard")
 

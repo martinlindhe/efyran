@@ -3,8 +3,10 @@ local log = require("knightlinc/Write")
 
 require("e4_Spells")
 
+local botSettings = require("e4_BotSettings")
 local queue = require("Queue")
 local timer = require("Timer")
+local follow  = require("e4_Follow")
 
 local Heal = {
     queue = queue.new(), -- holds toons that requested a heal

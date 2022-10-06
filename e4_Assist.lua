@@ -1,6 +1,10 @@
 local mq = require("mq")
 local log = require("knightlinc/Write")
 
+local follow  = require("e4_Follow")
+local botSettings = require("e4_BotSettings")
+local heal    = require("e4_Heal")
+
 local Assist = {
     target = nil, -- the current spawn I am attacking
 }

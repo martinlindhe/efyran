@@ -2,6 +2,10 @@ local mq = require("mq")
 local log = require("knightlinc/Write")
 
 require("e4_Spells")
+local follow  = require("e4_Follow")
+local pet     = require("e4_Pet")
+local botSettings = require("e4_BotSettings")
+local groupBuffs = require("e4_GroupBuffs")
 
 local timer = require("Timer")
 
@@ -244,11 +248,11 @@ function Buffs.Tick()
 
     if botSettings.toggles.refresh_buffs and refreshBuffsTimer:expired() and not is_invisible() then
         log.Debug("Buff tick: refresh buffs at %s", time())
-        if not buffs.RefreshSelfBuffs() then
-            if not buffs.RefreshAura() then
+        if not Buffs.RefreshSelfBuffs() then
+            if not Buffs.RefreshAura() then
                 if not pet.Summon() then
                     if not pet.BuffMyPet() then
-                        buffs.RequestBuffs()
+                        Buffs.RequestBuffs()
                     end
                 end
             end

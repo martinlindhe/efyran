@@ -1072,44 +1072,6 @@ function free_buff_slots()
     return mq.TLO.Me.FreeBuffSlots()
 end
 
--- Returns nil on error
----@param spellRow string Example: "War March of Muram/Gem|4"
----@param defaultGem integer|nil Use nil for the default gem 5
---@return integer|nil
-function memorize_spell(spellRow, defaultGem)
-    local o = parseSpellLine(spellRow) -- XXX parse this once on script startup. dont evaluate all the time !!!
-
-    if not is_spell_in_book(o.Name) then
-        mq.cmdf("/dgtell all ERROR don't know spell/song %s", o.Name)
-        mq.cmd("/beep 1")
-        return nil
-    end
-
-    local gem = defaultGem
-    if o["Gem"] ~= nil then
-        gem = o["Gem"]
-    elseif botSettings.settings.gems[o.Name] ~= nil then
-        gem = botSettings.settings.gems[o.Name]
-    elseif gem == nil then
-        mq.cmdf("/dgtell all \arWARN\ax: Spell/song lacks gems default slot or Gem|n argument: %s", spellRow)
-        gem = 5
-    end
-
-    -- make sure that spell is memorized the required gem, else scribe it
-    local nameWithRank = mq.TLO.Spell(o.Name).RankName()
-    if mq.TLO.Me.Gem(gem).Name() ~= nameWithRank then
-        log.Info("Memorizing spell/song in gem %d. Want %s, have %s", gem, nameWithRank, mq.TLO.Me.Gem(gem).Name())
-        mq.cmdf('/memorize "%s" %d', nameWithRank, gem)
-        mq.delay(200)
-        mq.delay(5000, function()
-            return not window_open("SpellBookWnd")
-        end)
-        mq.delay(200)
-    end
-
-    return gem
-end
-
 local auraNames = {
     "Myrmidon's Aura",      -- WAR/55: Increase Proc Modifier by 1%, Slot 12: 60 AC
     "Champion's Aura",      -- WAR/70: Increase Proc Modifier by 2%, Slot 12: 90 AC

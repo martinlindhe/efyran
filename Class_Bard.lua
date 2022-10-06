@@ -1,19 +1,10 @@
 local mq = require("mq")
 local log = require("knightlinc/Write")
+local botSettings = require("e4_BotSettings")
 
 local defaultMelody = "general"
 
 local Bard = { currentMelody = "" }
-
--- tells all bards to play given melody name
-mq.bind("/playmelody", function(name)
-    if is_orchestrator() then
-        cmdf("/dgexecute brd /playmelody %s", name)
-    end
-    if is_brd() then
-        Bard.PlayMelody(name)
-    end
-end)
 
 function Bard.resumeMelody()
     if is_brd() then

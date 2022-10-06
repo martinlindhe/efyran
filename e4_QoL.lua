@@ -2,8 +2,10 @@
 
 local mq = require("mq")
 local log = require("knightlinc/Write")
+
 local follow  = require("e4_Follow")
 local commandQueue = require("e4_CommandQueue")
+local botSettings = require("e4_BotSettings")
 
 local QoL = {}
 
@@ -110,6 +112,16 @@ function QoL.Init()
                 log.Info("Maxed loyalist faction")
                 maxFactionLoyalists = true
             end
+        end
+    end)
+
+    -- tells all bards to play given melody name
+    mq.bind("/playmelody", function(name)
+        if is_orchestrator() then
+            cmdf("/dgexecute brd /playmelody %s", name)
+        end
+        if is_brd() then
+            commandQueue.Add("playmelody", name)
         end
     end)
 
