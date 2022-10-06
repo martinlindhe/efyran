@@ -19,10 +19,10 @@ function is_orchestrator()
     return mq.TLO.FrameLimiter.Status() == "Foreground"
 end
 
--- returns true if location is within maxDistance
+-- returns true if location is within maxDistance from you
 ---@return boolean
 function is_within_distance_to_loc(y, x, z, maxDistance)
-    return mq.TLO.Math.Distance(y, x, z) <= maxDistance
+    return mq.TLO.Math.Distance(string.format("%f,%f,%f", y, x, z)) <= maxDistance
 end
 
 -- returns true if there is line of sight between you and `spawn`
