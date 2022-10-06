@@ -8,6 +8,7 @@ require("e4_Hail")
 items   = require("e4_Items")
 
 groupBuffs = require("e4_GroupBuffs")
+local commandQueue = require("e4_CommandQueue")
 
 botSettings = require("e4_BotSettings")
 follow  = require("e4_Follow")
@@ -43,6 +44,10 @@ while true do
     delay(1)
 
     buffs.Tick()
+    doevents()
+    delay(1)
+
+    commandQueue.Process()
     doevents()
     delay(1)
 

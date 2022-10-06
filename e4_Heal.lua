@@ -1,9 +1,9 @@
 local mq = require("mq")
 local log = require("knightlinc/Write")
 
-require('e4_Spells')
+require("e4_Spells")
 
-local queue = require('Queue')
+local queue = require("Queue")
 local timer = require("Timer")
 
 local Heal = {
@@ -206,6 +206,7 @@ function Heal.processQueue()
             if Heal.queue:contains(peer) then
                 local pct = toint(Heal.queue:prop(peer))
                 log.Info("Decided to heal TANK %s at %d %%", peer, pct)
+                Heal.queue:remove(peer)
                 if healPeer(botSettings.settings.healing.tank_heal, peer, pct) then
                     return
                 end
@@ -219,6 +220,7 @@ function Heal.processQueue()
             if Heal.queue:contains(peer) then
                 local pct = toint(Heal.queue:prop(peer))
                 log.Info("Decided to heal IMPORTANT %s at %d %%", peer, pct)
+                Heal.queue:remove(peer)
                 if healPeer(botSettings.settings.healing.important_heal, peer, pct) then
                     return
                 end
@@ -232,6 +234,7 @@ function Heal.processQueue()
         if peer ~= nil then
             local pct = toint(Heal.queue:prop(peer))
             log.Info("Decided to heal ANY %s at %d %%", peer, pct)
+            Heal.queue:remove(peer)
             if healPeer(botSettings.settings.healing.all_heal, peer, pct) then
                 return
             end
@@ -441,8 +444,6 @@ function healPeer(spell_list, peer, pct)
         local spellConfig = parseSpellLine(heal)
         if spawn == nil then
             -- peer died
-            log.Info("Removing from heal queue, peer died: %s", peer)
-            Heal.queue:remove(peer)
             return false
         elseif spellConfig.MinMana ~= nil and mq.TLO.Me.PctMana() < spellConfig.MinMana then
             log.Info("SKIP HEALING, my mana %d vs required %d", mq.TLO.Me.PctMana(), spellConfig.MinMana)
@@ -455,11 +456,9 @@ function healPeer(spell_list, peer, pct)
             -- SKIP clickies that is not ready
             log.Info("Skip using of heal to heal %s at %d, clicky %s is not ready", peer, pct, spellConfig.Name)
         else
-
-            Heal.queue:remove(peer)
             all_tellf("Healing \ag%s\ax at %d%% with %s", peer, pct, spellConfig.Name)
 
-            local check = castSpellAbility(spawn, heal, function()
+            local check = castSpellAbility(spawn, heal, function() -- XXX castSpellAbility should take spellConfig obj directly
                 if not is_casting() then
                     all_tellf("done casting heal, breaking")
                     return true
@@ -474,18 +473,9 @@ function healPeer(spell_list, peer, pct)
                     return true
                 end
             end)
-            if check then  -- XXX castSpellAbility should take spellConfig obj directly
-                return true
-            end
-
             return true
         end
-
-        doevents()
-        delay(1)
     end
-    --all_tellf("Removing from heal queue, no usable heal available for %s at %d %%", peer, pct)
-    Heal.queue:remove(peer)
     return false
 end
 

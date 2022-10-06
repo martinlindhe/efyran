@@ -3,6 +3,7 @@
 local mq = require("mq")
 local log = require("knightlinc/Write")
 local follow  = require("e4_Follow")
+local commandQueue = require("e4_CommandQueue")
 
 local QoL = {}
 
@@ -62,11 +63,7 @@ function QoL.Init()
         end
 
         log.Debug("I zoned into ", zone)
-        delay(3000) -- 3s
-        pet.ConfigureTaunt()
-
-        joinCurrentHealChannel()
-        memorizeListedSpells()
+        commandQueue.Add("zoned")
     end)
 
     mq.event("missing_component", "You are missing #1#.", function(text, name)

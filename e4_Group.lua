@@ -1,9 +1,11 @@
 local mq = require("mq")
 local log = require("knightlinc/Write")
 
+local commandQueue = require("e4_CommandQueue")
+
 local Group = { settings = nil }
 
--- FIXME: add /savegroup command to fill this data automatically. then we dont need to error if file not found
+-- FIXME: add /savegroup command to fill this data automatically
 local savedGroupsTemplate = [[
 local groups = { }
 groups.team12 = {
@@ -106,18 +108,13 @@ function Group.Init()
 
     mq.event('joingroup', '#1# invites you to join a group.', function(text, sender)
         if is_peer(sender) then
-            wait_until_not_casting()
-            cmd("/squelch /target clear")
-            delay(100)
-            cmd("/squelch /invite")
+            commandQueue.Add("joingroup")
         end
     end)
 
     mq.event('joinraid', '#1# invites you to join a raid.#*#', function(text, sender)
         if is_peer(sender) then
-            wait_until_not_casting()
-            cmd("/notify ConfirmationDialogBox Yes_Button leftmouseup")
-            cmd("/squelch /raidaccept")
+            commandQueue.Add("joinraid")
         end
     end)
 
