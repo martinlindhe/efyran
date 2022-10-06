@@ -13,10 +13,8 @@ local Heal = {
 function Heal.Init()
     mq.event("dannet_chat", "[ #1# (#2#) ] #3#", function(text, peer, channel, msg)
         if me_healer() and channel == heal_channel() and botSettings.settings.healing ~= nil then
-            if string.sub(msg, 1, 1) ~= "/" then
-                -- ignore text starting with a  "/"
-                --all_tellf("-- dan net chat: chan %s, msg: %s", channel, msg)
-                handleHealmeRequest(msg)
+            if string.sub(msg, 1, 1) ~= "/" then -- ignore text starting with a  "/"
+                enqueueHealmeRequest(msg)
             end
         end
     end)
@@ -143,7 +141,7 @@ function parseHealmeRequest(s)
 end
 
 ---@param msg string Example "Avicii 75" (Name/PctHP)
-function handleHealmeRequest(msg)
+function enqueueHealmeRequest(msg)
 
     local peer, pct = parseHealmeRequest(msg)
     --print("heal peer ", peer," pct ", pct)
