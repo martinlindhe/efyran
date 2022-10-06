@@ -173,7 +173,7 @@ function handleBuffRequest(req)
         end)
         return true
     else
-        all_tellf("Failed to find a matching group buff %s, L%d %s", req.Buff, level, spawn.Name())
+        all_tellf("ERROR: I do not have any buffs matching %s to cast on L%d %s", req.Buff, level, spawn.Name())
     end
 end
 
