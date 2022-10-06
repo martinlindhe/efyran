@@ -125,8 +125,13 @@ function refreshBuff(buffItem, spawn)
     if spawn.Type() == "Pet" then
         log.Debug("Buffing \agmy pet %s\ax with \ay%s\ax.", spawn.CleanName(), pretty)
     else
-        log.Debug("Buffing \agmyself\ax with \ay%s\ax.", pretty)
+        log.Debug("Buffing \agmyself\ax with \ay%s\ax.  Target type %s", pretty, spell.TargetType())
+        if spell.TargetType() == "Self" then
+            -- don't target myself on self-buffs
+            spawnID = nil
+        end
     end
+
     castSpell(spellName, spawnID)
     return true
 end
@@ -211,13 +216,14 @@ end
 ---@param spawnId integer|nil
 function castSpell(name, spawnId)
 
-    log.Debug("castSpell: %s", name)
     if have_combat_ability(name) then
+        --log.Debug("castSpell DISC: %s", name)
         cmdf("/disc %s", name)          -- NOTE: /disc argument must NOT use quotes
     elseif have_ability(name) then
-        cmdf('/doability "%s"', name)    -- NOTE: /doability argument must use quotes
+        --log.Debug("castSpell ABILITY: %s", name)
+        cmdf('/doability "%s"', name)   -- NOTE: /doability argument must use quotes
     else
-        -- item / spell / aa
+        --log.Debug("castSpell ITEM/SPELL/AA: %s", name)
 
         if is_brd() and is_casting() then
             cmd("/twist stop")

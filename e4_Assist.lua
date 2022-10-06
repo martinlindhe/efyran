@@ -163,16 +163,10 @@ function castSpellAbility(spawn, row, callback)
         spawnID = spawn.ID()
     end
     castSpell(spell.Name, spawnID)
-    delay(200)
-    -- delay until done casting, and abort cast if target dies
 
+    -- delay until done casting
     if callback == nil then
         callback = function()
-            if spawn == nil then
-                all_tellf("castSpellAbility: target died. ducking spell cast %s", mq.TLO.Me.Casting.Name())
-                cmdf("/interrupt")
-                return true
-            end
             if not is_casting() then
                 return true
             end
@@ -268,7 +262,7 @@ function Assist.killSpawn(spawn)
 
         if not is_casting() and (not has_target() or mq.TLO.Target.ID() ~= spawn.ID()) then
             -- XXX will happen for healers
-            all_tellf("killSpawn WARN: i lost target, restoring to %d %s. Previous target was %s", spawn.ID(), spawn.Name(), mq.TLO.Target.Name())
+            all_tellf("killSpawn WARN: i lost target, restoring to %s. Previous target was %s", spawn.Name(), mq.TLO.Target.Name())
             cmdf("/target id %d", spawn.ID())
         end
 
