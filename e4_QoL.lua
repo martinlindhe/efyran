@@ -157,7 +157,7 @@ function QoL.Init()
         if is_orchestrator() then
             cmd("/dgzexecute /backoff")
         end
-        Assist.backoff()
+        assist.backoff()
     end)
 
     mq.bind("/pbaeon", function()

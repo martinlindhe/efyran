@@ -208,7 +208,7 @@ end
 ---@param name string
 ---@return boolean
 function is_memorized(name)
-    return mq.TLO.Me.Gem(mq.TLO.Spell(name).RankName)() ~= nil
+    return mq.TLO.Me.Gem(mq.TLO.Spell(name).RankName())() ~= nil
 end
 
 -- Is spell in my spellbook?
@@ -221,7 +221,7 @@ function is_spell_in_book(name)
         -- SHM/62 Ancestral Guard / SHM Ancestral Guard AA
         return false
     end
-    return mq.TLO.Me.Book(mq.TLO.Spell(name).RankName)() ~= nil
+    return mq.TLO.Me.Book(mq.TLO.Spell(name).RankName())() ~= nil
 end
 
 -- Is this a name of a spell?
@@ -242,7 +242,7 @@ end
 function get_spell(name)
     local spell = mq.TLO.Spell(name)
     if spell ~= nil then
-        return mq.TLO.Spell(spell.RankName)
+        return mq.TLO.Spell(spell.RankName())
     end
     return nil
 end

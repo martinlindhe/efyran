@@ -4,6 +4,7 @@ local log = require("knightlinc/Write")
 local botSettings = require("e4_BotSettings")
 local bard = require("Class_Bard")
 local assist  = require("e4_Assist")
+local pet     = require("e4_Pet")
 local aliases = require("settings/Spell Aliases")
 
 ---@class CommandQueueValue
@@ -142,7 +143,7 @@ function CommandQueue.Process()
             end
         end
     elseif v.Name == "killit" then
-        local spawn = spawn_from_id(v.Arg)
+        local spawn = spawn_from_id(toint(v.Arg))
         if spawn == nil then
             return
         end

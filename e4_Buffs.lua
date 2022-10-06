@@ -74,7 +74,7 @@ end
 -- returns true if spell is cast
 function handleBuffRequest(req)
 
-    --print("handleBuffRequest: Peer ", req.Peer, ", buff ", req.Buff, ", queue len ", table.getn(Buffs.queue))
+    log.Info("handleBuffRequest: Peer %s, buff %s, queue len %d", req.Peer, req.Buff, #Buffs.queue)
 
     local buffRows = groupBuffs[class_shortname()][req.Buff]
     if buffRows == nil then
@@ -94,7 +94,7 @@ function handleBuffRequest(req)
     -- wait for buff populared
     delay(3000, function()
         if spawn.BuffsPopulated() then
-            log.Info("Buffs populated for %s (%s)!", spawn.Name(), req.Buff)
+            log.Debug("Buffs populated for %s (%s)", spawn.Name(), req.Buff)
             return true
         end
     end)
@@ -106,7 +106,7 @@ function handleBuffRequest(req)
 
     local level = spawn.Level()
 
-    -- see if we have any of this buff form on
+    -- see if we have any rank of this buff
     for idx, checkRow in pairs(buffRows) do
         --print(checkRow)
 
@@ -144,9 +144,6 @@ function handleBuffRequest(req)
                     -- XXX look into: seems spell.StacksTarget() checks vs myself instead of my target... is it a mq2-lua bug ????  cant cast Symbol of Naltron from CLR with higher sytmbol on a naked WAR.
                 --    cmd("/dgtell all ERROR cannot buff ", spawn.Name(), " with ", spellName, ", MinLevel ", n, " (dont stack with current buffs)")
                 --end
-            end
-
-            if n > minLevel then
                 log.Debug("Best %s buff so far is MinLevel %d, Name %s, target L%d %s", req.Peer, spellConfig.MinLevel, spellConfig.Name, level, spawn.Name())
             end
         end

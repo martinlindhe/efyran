@@ -7,6 +7,7 @@ local botSettings = require("e4_BotSettings")
 local queue = require("Queue")
 local timer = require("Timer")
 local follow  = require("e4_Follow")
+local buffs   = require("e4_Buffs")
 
 local Heal = {
     queue = queue.new(), -- holds toons that requested a heal
