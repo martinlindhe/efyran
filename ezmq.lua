@@ -876,7 +876,7 @@ function observe_peer(peer, query, timeout)
         mq.cmdf('/dobserve %s -q "%s"', peer, query)
         log.Debug("Adding Observer - mq.TLO.DanNet(%s).O(%s)", peer, query)
     end
-    delay(timeout or 0, function()
+    mq.delay(timeout or 0, function()
         return mq.TLO.DanNet(peer).O(query).Received() ~= nil and mq.TLO.DanNet(peer).O(query).Received() > 0
     end)
 end
@@ -1223,7 +1223,7 @@ function drop_all_buffs()
     for i = 1, mq.TLO.Me.MaxBuffSlots() do
         if mq.TLO.Me.Buff(i).ID() ~= nil then
             log.Debug("Removing buff %d, id: %d, name: %s", i, mq.TLO.Me.Buff(i).ID(), mq.TLO.Me.Buff(i).Name())
-            cmdf("/removebuff %s", mq.TLO.Me.Buff(i).Name())
+            mq.cmdf("/removebuff %s", mq.TLO.Me.Buff(i).Name())
         end
         delay(1)
     end
