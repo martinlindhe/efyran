@@ -80,9 +80,9 @@ end
 ---@return boolean
 function is_rof2()
     if mq.TLO.MacroQuest.BuildName() == "Emu" then
-        return false
+        return true
     end
-    return true
+    return false
 end
 
 -- returns true if peerName is another peer

@@ -102,9 +102,13 @@ function Buffs.Init()
             end
         end
 
+        -- XXX group_buffs was nuked
         if botSettings.settings.group_buffs == nil then
+            log.Info("Stopping /buffit, no group_buffs configured!")
             return
         end
+
+        log.Debug("Handling /buffit request for spawn %s", spawnID)
 
         local spawn = spawn_from_query("id "..spawnID)
         if spawn == nil then

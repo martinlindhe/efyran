@@ -1,7 +1,7 @@
 [submodule "mq-definitions"]
 	path = mq-definitions
 	branch = master
-	url = https://github.com/johnfking/mq-definitions
+	url = https://github.com/macroquest/mq-definitions
 [submodule "knightlinc"]
 	path = knightlinc
 	url = https://gitlab.com/Knightly1/knightlinc

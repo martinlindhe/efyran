@@ -530,12 +530,6 @@ function QoL.verifySpellLines()
         end
     end
 
-    if botSettings.settings.group_buffs ~= nil then
-        for k, v in pairs(botSettings.settings.group_buffs) do
-            verifySpellLines(k, v)
-        end
-    end
-
     if botSettings.settings.pet ~= nil then
         verifySpellLines("pet_heals", botSettings.settings.pet.heals)
         verifySpellLines("pet_buffs", botSettings.settings.pet.buffs)
