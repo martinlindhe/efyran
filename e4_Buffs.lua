@@ -159,14 +159,15 @@ function handleBuffRequest(req)
         all_tellf("Buffing \ag%s\ax with \ay%s\ax (\ay%s\ax).", spawn.Name(), spellName, req.Buff)
         castSpellRaw(spellName, spawn.ID(), "-maxtries|3")
         delay(100)
+        doevents()
         delay(10000, function()
             if not is_casting() then
                 return true
             end
             if spawn.Buff(spellName)() ~= nil and spawn.Buff(spellName).Duration() >= MIN_BUFF_DURATION then
                 -- abort if they got the buff while we are casting
-                -- XXX also often triggers when spell had completed casting ... ??!?
-                all_tellf("\arERROR MID-BUFFING:\ax my target %s has buff %s for %f sec, ducking.", mq.TLO.Target.Name(), spellName, mq.TLO.Target.Buff(spellName).Duration() / 1000)
+                -- FIXME: this often triggers when spell had completed casting
+                log.Info("handleBuffRequest: My target %s has buff %s for %f sec, ducking.", mq.TLO.Target.Name(), spellName, mq.TLO.Target.Buff(spellName).Duration() / 1000)
                 cmdf("/interrupt")
                 return true
             end
@@ -182,7 +183,7 @@ function Buffs.RefreshSelfBuffs()
     if botSettings.settings.self_buffs == nil or is_sitting() then
         return false
     end
-    log.Debug("Buffs.RefreshSelfBuffs() %s", time())
+    --log.Debug("Buffs.RefreshSelfBuffs()")
     for k, buffItem in pairs(botSettings.settings.self_buffs) do
         doevents()
         if refreshBuff(buffItem, mq.TLO.Me) then
@@ -295,7 +296,7 @@ function Buffs.RefreshAura()
     if Buffs.aura == nil or mq.TLO.Me.Aura(1)() ~= nil or is_sitting() then
         return false
     end
-    castSpell(Buffs.aura, mq.TLO.Me.ID())
+    castSpellAbility(nil, Buffs.aura)
     return true
 end
 

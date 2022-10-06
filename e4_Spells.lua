@@ -123,9 +123,9 @@ function refreshBuff(buffItem, spawn)
     end
 
     if spawn.Type() == "Pet" then
-        log.Debug("Buffing \agmy pet ", spawn.CleanName(), "\ax with \ay", pretty, "\ax.")
+        log.Debug("Buffing \agmy pet %s\ax with \ay%s\ax.", spawn.CleanName(), pretty)
     else
-        log.Debug("Buffing \agmyself\ax with \ay", pretty, "\ax.")
+        log.Debug("Buffing \agmyself\ax with \ay%s\ax.", pretty)
     end
     castSpell(spellName, spawnID)
     return true
@@ -206,9 +206,12 @@ function spellConfigAllowsCasting(buffItem, spawn)
 end
 
 -- helper for casting spell, clicky, AA, combat ability
--- XXX DEPRECATE AND USE castSpellAbility() instead.
+-- XXX dont use directly, use castSpellAbility() instead.
+---@param name string spell name
+---@param spawnId integer|nil
 function castSpell(name, spawnId)
 
+    log.Debug("castSpell: %s", name)
     if have_combat_ability(name) then
         cmdf("/disc %s", name)          -- NOTE: /disc argument must NOT use quotes
     elseif have_ability(name) then
@@ -243,14 +246,14 @@ function castSpell(name, spawnId)
             else
                 -- spell / AA
                 local spell = get_spell(name)
-                if spell ~= nil then
+                if spell ~= nil and spell.Name() ~= nil then
                     local mycast = 0
                     if spell.MyCastTime() ~= nil then
                         mycast = spell.MyCastTime()
                     end
                     local recast = 0
                     if spell.RecastTime() ~= nil then
-                        recast = spell.RecastTime() -- XXX rof2 bug?
+                        recast = spell.RecastTime()
                     end
                     log.Info("Spell sleep for '%s', my cast time: %d, recast time %d", spell.Name(), mycast, recast)
                     local sleepTime = mycast + recast
@@ -264,17 +267,19 @@ function castSpell(name, spawnId)
     end
 end
 
+---@param name string spell name
+---@param spawnId integer|nil
 function castSpellRaw(name, spawnId, extraArgs)
     if extraArgs == nil then
         extraArgs = ""
     end
     if spawnId == nil then
-        all_tellf("castSpellRaw FATAL ERROR: called with nil spawnId, name = %s, extraArgs = %s", name, extraArgs)
-        cmd("/beep 1")
-        return
+        --log.Debug("-- castSpellRaw %s, extraArgs %s", name, extraArgs)
+        cmdf('/casting "%s"%s', name, extraArgs)
+    else
+        --log.Debug("-- castSpellRaw %s, spawnId %d, extraArgs %s", name, spawnId, extraArgs)
+        cmdf('/casting "%s" -targetid|%d%s', name, spawnId, extraArgs)
     end
-    log.Debug("-- castSpellRaw %s, spawnId %d, extraArgs %s", name, spawnId, extraArgs)
-    cmdf('/casting "%s" -targetid|%d%s', name, spawnId, extraArgs)
 end
 
 -- returns datatype spell or nil if not found

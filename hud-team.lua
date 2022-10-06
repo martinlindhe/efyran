@@ -16,16 +16,6 @@ local shouldDrawGUI = true
 
 local hudTeamData = {}
 
--- XXX move to ezmq
-function get_spell_from_id(id)
-    local spell = mq.TLO.Spell(id)
-    if spell() == nil then
-        return nil
-    end
-    return spell
-end
-
-
 mq.imgui.init("ui-team", function()
     if openGUI then
         openGUI, shouldDrawGUI = ImGui.Begin("Team", openGUI)
@@ -40,8 +30,8 @@ mq.imgui.init("ui-team", function()
         ImGui.Text("Count")
         ImGui.NextColumn()
 
-        --ImGui.Text(string.format("%d (local)", mq.TLO.Time.MilliSecond()))
-        ImGui.ProgressBar(mq.TLO.Time.MilliSecond() / 1000) -- 1 = 100%
+        ImGui.Text(string.format("%s (local)", mq.TLO.Time.Time24()))
+        --ImGui.ProgressBar(mq.TLO.Time.MilliSecond() / 1000) -- 1 = 100%
         ImGui.NextColumn()
 
         if shouldDrawGUI then
@@ -49,17 +39,17 @@ mq.imgui.init("ui-team", function()
                 ImGui.Text(k)
                 ImGui.NextColumn()
 
-                ImGui.Text(v["Casting"])
+                ImGui.Text(v.Casting)
                 ImGui.NextColumn()
 
-                ImGui.Text(v["Target"])
+                ImGui.Text(v.Target)
                 ImGui.NextColumn()
 
-                ImGui.Text(v["Polls"])
+                ImGui.Text(v.Polls)
                 ImGui.NextColumn()
 
-                --ImGui.Text(v["Time"])
-                ImGui.ProgressBar(tonumber(v["Time"]) / 1000) -- 1 = 100%
+                ImGui.Text(v.Time)
+                --ImGui.ProgressBar(tonumber(v.Time) / 1000) -- 1 = 100%
                 ImGui.NextColumn()
             end
         end
@@ -72,8 +62,8 @@ end)
 -- XXX 1. register watchers on all toons for their HP, MANA, casting spell & target
 
 
-local timeQuery = 'Time.MilliSecond' -- XXX any way to get higher precision from a TLO? (can only query TLO members with MQ2DanNet)
---local timeQuery = 'Time.Raw'
+--local timeQuery = 'Time.MilliSecond' -- XXX needs PR https://github.com/macroquest/macroquest/pull/640
+local timeQuery = 'Time.Time24'
 local castingQuery = 'Me.Casting.ID'
 local targetQuery = 'Target.ID'
 
@@ -82,9 +72,7 @@ local targetQuery = 'Target.ID'
 --    local peer = mq.TLO.DanNet.Peers(i)()
 
 
--- if my banker is not ready, check all nearby peers if one is ready and use it.
 local spawnQuery = "pc notid " .. mq.TLO.Me.ID() .. " radius 50"
-
 
 while true do
     for i = 1, spawn_count(spawnQuery) do
@@ -93,31 +81,38 @@ while true do
         if peer ~= nil and mq.TLO.DanNet(peer)() ~= nil then
             if hudTeamData[peer] == nil then
                 -- register initial observers
-                observe_peer(peer, timeQuery)
-                observe_peer(peer, castingQuery)
-                observe_peer(peer, targetQuery)
+                observe_peer(peer, timeQuery, 1000)
+                observe_peer(peer, castingQuery, 1000)
+                observe_peer(peer, targetQuery, 1000)
                 hudTeamData[peer] = {}
-                hudTeamData[peer]["Polls"] = 0
+                hudTeamData[peer].Polls = 0
             end
 
-            hudTeamData[peer]["Time"] = mq.TLO.DanNet(peer).O(timeQuery)()
+            hudTeamData[peer].Time = mq.TLO.DanNet(peer).O(timeQuery)()
 
-            local spell = get_spell_from_id(mq.TLO.DanNet(peer).O(castingQuery)())
+            local spellID = mq.TLO.DanNet(peer).O(castingQuery)()
             local spellName = ""
-            if spell ~= nil then
-                spellName = get_spell_from_id(spell).Name()
+            if spellID ~= "NULL" then
+                local spell = get_spell_from_id(spellID)
+                if spell ~= nil then
+                    spellName = spell.Name()
+                end
             end
-            hudTeamData[peer]["Casting"] = spellName
+            hudTeamData[peer].Casting = spellName
 
-            local target = spawn_from_id(mq.TLO.DanNet(peer).O(targetQuery)())
+            local targetID = mq.TLO.DanNet(peer).O(targetQuery)()
             local targetName = ""
-            if target ~= nil then
-                targetName = target.Name()
+            if targetID ~= "" then
+                local target = spawn_from_id(targetID)
+                if target ~= nil then
+                    targetName = target.Name()
+                end
             end
-            hudTeamData[peer]["Target"] = targetName
-            hudTeamData[peer]["Polls"] = hudTeamData[peer]["Polls"] + 1
+            hudTeamData[peer].Target = targetName
+            hudTeamData[peer].Polls = hudTeamData[peer].Polls + 1
         end
-        delay(1) -- XXX what is reasonable delay ?
     end
 
+    delay(1) -- XXX what is reasonable delay ?
+--    doevents()
 end

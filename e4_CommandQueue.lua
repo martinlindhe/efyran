@@ -5,11 +5,13 @@ local botSettings = require("e4_BotSettings")
 local bard = require("Class_Bard")
 local assist  = require("e4_Assist")
 local pet     = require("e4_Pet")
+local group   = require("e4_Group")
 local aliases = require("settings/Spell Aliases")
 
 ---@class CommandQueueValue
 ---@field public Name string Name
 ---@field public Arg string Argument
+---@field public Arg2 string Second argument
 
 local CommandQueue = {
     ---@type CommandQueueValue[]
@@ -18,10 +20,12 @@ local CommandQueue = {
 
 ---@param name string
 ---@param arg? string optional argument
-function CommandQueue.Add(name, arg)
+---@param arg2? string optional argument
+function CommandQueue.Add(name, arg, arg2)
     table.insert(CommandQueue.queue, {
         ["Name"] = name,
         ["Arg"] = arg,
+        ["Arg2"] = arg2,
     })
 end
 
@@ -176,17 +180,9 @@ function CommandQueue.Process()
             if not is_casting() then
                 for k, spellRow in pairs(botSettings.settings.assist.pbae) do
                     local spellConfig = parseSpellLine(spellRow)
-
                     if is_spell_ready(spellConfig.Name) then
                         log.Info("Casting PBAE spell %s", spellConfig.Name)
-                        local spellName = spellConfig.Name
-                        if is_spell_in_book(spellConfig.Name) then
-                            local spell = get_spell(spellConfig.Name)
-                            if spell ~= nil then
-                                spellName = spell.RankName()
-                            end
-                        end
-                        castSpell(spellName, mq.TLO.Me.ID())
+                        castSpellAbility(mq.TLO.Me, spellRow)
                     end
 
                     doevents()
@@ -318,6 +314,8 @@ function CommandQueue.Process()
         end
     elseif v.Name == "hailit" then
         PerformHail()
+    elseif v.Name == "recallgroup" then
+        group.RecallGroup(v.Arg, v.Arg2)
     elseif v.Name == "rezit" then
         local spawnID = toint(v.Arg)
         local spawn = spawn_from_id(spawnID)
@@ -333,7 +331,7 @@ function CommandQueue.Process()
             local rez = get_rez_spell_item_aa()
             if rez ~= nil then
                 all_tellf("Rezzing \ag%s\ax with \ay%s\ax. %d/3", spawn.Name(), rez, i)
-                castSpell(rez, spawn.ID())
+                castSpellAbility(spawn, rez)
                 break
             else
                 all_tellf("\arWARN\ax: Not ready to rez \ag%s\ax. %d/3", spawn.Name(), i)

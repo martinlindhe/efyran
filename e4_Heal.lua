@@ -29,13 +29,14 @@ function Heal.Init()
 
         local spawnQuery = 'pccorpse radius 100'
         for i = 1, spawn_count(spawnQuery) do
+            ---@type spawn
             local spawn = mq.TLO.NearestSpawn(i, spawnQuery)
 
             local rez = get_rez_spell_item_aa()
             if rez ~= nil then
                 target_id(spawn.ID())
                 all_tellf("Rezzing %s with %s", spawn.Name(), rez)
-                castSpell(rez, spawn.ID())
+                castSpellAbility(spawn, rez)
                 wait_until_not_casting()
                 break
             else
@@ -371,7 +372,7 @@ function Heal.performLifeSupport()
                         spellName = spellConfig.Name
                     end
                     all_tellf("USING LIFE SUPPORT %s at %d%%", spellName, mq.TLO.Me.PctHPs())
-                    castSpell(spellName, mq.TLO.Me.ID())
+                    castSpellAbility(nil, spellName)
                 end
             end
             return

@@ -124,7 +124,7 @@ function Pet.BuffMyPet()
         local skip = false
 
         if mq.TLO.Me.Pet.Buff(spellConfig.Name)() ~= nil and mq.TLO.Me.Pet.Buff(mq.TLO.Me.Pet.Buff(spellConfig.Name)).Duration.Ticks() > 4 then
-            log.Debug("SKIP PET BUFFING %s, duration is %d ticks", spellConfig.Name, mq.TLO.Me.Pet.Buff(mq.TLO.Me.Pet.Buff(spellConfig.Name)).Duration.Ticks())
+            --log.Debug("SKIP PET BUFFING %s, duration is %d ticks", spellConfig.Name, mq.TLO.Me.Pet.Buff(mq.TLO.Me.Pet.Buff(spellConfig.Name)).Duration.Ticks())
             skip = true
         end
 
@@ -157,7 +157,7 @@ function Pet.BuffMyPet()
 
         if not skip then
             log.Debug("Refreshing pet buff %s", spellConfig.Name)
-            castSpell(spellConfig.Name, mq.TLO.Me.Pet.ID())
+            castSpellAbility(mq.TLO.Me.Pet, spellConfig.Name)
             return true
         end
     end

@@ -20,12 +20,11 @@ local bard = require("Class_Bard")
 seed_process()
 
 botSettings.Init()
-assist.Init()
 buffs.Init()
 group.Init()
 heal.Init()
 qol.Init()
-
+assist.Init()
 
 all_tellf("E4 started")
 bard.resumeMelody()

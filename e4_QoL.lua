@@ -48,10 +48,6 @@ function QoL.Init()
         cmd("/lua run agents/healme")
     end
 
-    clear_cursor()
-
-    QoL.verifySpellLines()
-
     local dead = function(text, killer)
         all_tellf("I died. Killed by %s", killer)
         cmd("/beep") -- the beep of death
@@ -293,7 +289,7 @@ function QoL.Init()
 
             -- XXX dont summon if we are already mounted.
             log.Info("Summoning mount %s ...", botSettings.settings.mount)
-            castSpell(botSettings.settings.mount, mq.TLO.Me.ID())
+            castSpellAbility(nil, botSettings.settings.mount)
         end
     end)
 
@@ -318,7 +314,6 @@ function QoL.Init()
         commandQueue.Add("clickit")
     end)
 
-
     mq.bind("/portto", function(name)
         name = name:lower()
         if is_orchestrator() then
@@ -327,8 +322,6 @@ function QoL.Init()
 
         commandQueue.Add("portto", name)
     end)
-
-
 
     mq.bind("/followon", function()
         cmdf("/dgzexecute /followid %d", mq.TLO.Me.ID())
@@ -793,6 +786,23 @@ function QoL.Init()
         end
     end)
 
+    -- Recalls group setup from settings. The orchestrator (caller) will tell the rest how to form up
+    mq.bind('/recallgroup', function(name, groupNumber)
+        commandQueue.Add("recallgroup", name, groupNumber)
+    end)
+
+    mq.event('joingroup', '#1# invites you to join a group.', function(text, sender)
+        if is_peer(sender) then
+            commandQueue.Add("joingroup")
+        end
+    end)
+
+    mq.event('joinraid', '#1# invites you to join a raid.#*#', function(text, sender)
+        if is_peer(sender) then
+            commandQueue.Add("joinraid")
+        end
+    end)
+
     -- toggles debug output on/off
     mq.bind("/debug", function()
         if log.loglevel == "debug" then
@@ -804,6 +814,9 @@ function QoL.Init()
         end
     end)
 
+    clear_cursor()
+
+    QoL.verifySpellLines()
 end
 
 function QoL.loadRequiredPlugins()

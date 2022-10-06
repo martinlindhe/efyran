@@ -1,5 +1,6 @@
 local settings = { }
 
+settings.debug = true
 
 settings.swap = {   -- XXX implement
     -- Notched Blade of Bloodletting (1hs, 37 dmg, 24 delay, 15 bonus) - anguish amv

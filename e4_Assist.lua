@@ -28,7 +28,6 @@ function Assist.Init()
     end
 
     Assist.prepareForNextFight()
-
 end
 
 
@@ -92,17 +91,17 @@ function Assist.summonNukeComponents()
                 if getItemCountExact(spellConfig.Name) == 0 then
                     all_tellf("Summoning %s", spellConfig.Name)
                     --delay(100)
-                    castSpell(spellConfig.Summon, mq.TLO.Me.ID())
-                    all_tellf("DBG Summoned %s", spellConfig.Name)
+                    castSpell(spellConfig.Summon, nil)
+                    log.Warn("DEBUG Summoned %s", spellConfig.Name)
 
                     -- wait and inventory
                     local spell = get_spell(spellConfig.Summon)
                     if spell ~= nil then
-                        all_tellf("DBG Summoned %s - waiting", spellConfig.Name)
+                        log.Warn("DEBUG Summoned %s - waiting", spellConfig.Name)
                         delay(2000 + spell.MyCastTime())
-                        all_tellf("DBG Summoned %s - clearing", spellConfig.Name)
+                        --log.Warn("DEBUG Summoned %s - clearing", spellConfig.Name)
                         clear_cursor()
-                        all_tellf("DBG Summoned %s - cleared", spellConfig.Name)
+                        --log.Warn("DEBUG Summoned %s - cleared", spellConfig.Name)
                     end
                     return true
                 end
@@ -120,7 +119,7 @@ function castSpellAbility(spawn, row, callback)
 
     local spell = parseSpellLine(row)
 
-   log.Debug("castSpellAbility %s: %s", row, spell.Name)
+    log.Debug("castSpellAbility %s, row = %s", spell.Name, row)
 
     if spell.PctAggro ~= nil and mq.TLO.Me.PctAggro() < spell.PctAggro then
         -- PctAggro skips cast if your aggro % is above threshold
@@ -152,29 +151,35 @@ function castSpellAbility(spawn, row, callback)
         return false
     end
 
-    local cb = function()
-        if spawn == nil then
-            all_tellf("castSpellAbility: target died. ducking spell cast %s", mq.TLO.Me.Casting.Name())
-            cmdf("/interrupt")
-            return true
-        end
-        if not is_casting() then
-            return true
-        end
-    end
-    if callback ~= nil then
-        cb = callback
-    end
-
-    if not is_spell_ability_ready(spell.Name) then
+    if not is_spell_in_book(spell.Name) and have_item(spell.Name) and not is_item_clicky_ready(spell.Name) then
+        -- Item and spell examples: Molten Orb (MAG)
+        log.Info("SKIP cast, item clicky not ready: %s", spell.Name)
         return false
     end
 
-    log.Info("castSpellAbility Casting %s", spell.Name)
-    castSpell(spell.Name, spawn.ID())
+    log.Debug("castSpellAbility START CAST %s", spell.Name)
+    local spawnID = nil
+    if spawn ~= nil then
+        spawnID = spawn.ID()
+    end
+    castSpell(spell.Name, spawnID)
     delay(200)
     -- delay until done casting, and abort cast if target dies
-    delay(10000, cb)
+
+    if callback == nil then
+        callback = function()
+            if spawn == nil then
+                all_tellf("castSpellAbility: target died. ducking spell cast %s", mq.TLO.Me.Casting.Name())
+                cmdf("/interrupt")
+                return true
+            end
+            if not is_casting() then
+                return true
+            end
+        end
+    end
+
+    delay(10000, callback)
     log.Info("Done waiting after cast.")
     return true
 end

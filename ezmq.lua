@@ -247,6 +247,16 @@ function get_spell(name)
     return nil
 end
 
+---@param id number spell id
+---@return spell|nil
+function get_spell_from_id(id)
+    local spell = mq.TLO.Spell(id)
+    if spell() ~= nil then
+        return spell
+    end
+    return nil
+end
+
 -- Is spell `name` ready to cast?
 ---@param name string
 ---@return boolean
@@ -660,7 +670,7 @@ end
 function clear_cursor()
     while true do
         if mq.TLO.Cursor.ID() == nil then
-            log.Debug("cursor clear. ending")
+            --log.Debug("cursor clear. ending")
             return true
         end
         if mq.TLO.Me.FreeInventory() == 0 then
