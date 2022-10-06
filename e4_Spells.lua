@@ -30,7 +30,7 @@ function refreshBuff(buffItem, spawn)
     if spawn.Type() ~= "PC" and spawn.Type() ~= "Pet" then
         log.Info("Will not buff %s %s: %s ", spawn.Type(), spawn.Name(), spawn.CleanName())
         if spawn.Type() ~= "Corpse" then
-            cmdf("/dgtell all WILL NOT BUFF %s: %s", spawn.Type(), spawn.CleanName())
+            all_tellf("WILL NOT BUFF %s: %s", spawn.Type(), spawn.CleanName())
             cmd("/beep 1")
         end
         return false
@@ -47,7 +47,7 @@ function refreshBuff(buffItem, spawn)
 
     local spell = getSpellFromBuff(spellConfig.Name) -- XXX parse this once on script startup too, dont evaluate all the time !
     if spell == nil then
-        cmdf("/dgtell all refreshBuff: getSpellFromBuff %s FAILED", buffItem)
+        all_tellf("refreshBuff: getSpellFromBuff %s FAILED", buffItem)
         cmd("/beep 1")
         return false
     end
@@ -70,7 +70,7 @@ function refreshBuff(buffItem, spawn)
         end
 
         if is_spell_in_book(spellName) and not spell.Stacks() then
-            cmdf("/dgtell all ERROR cannot selfbuff with %s (dont stack with current buffs)", spellName)
+            all_tellf("ERROR cannot selfbuff with %s (dont stack with current buffs)", spellName)
             return false
         end
     elseif spawn.Type() == "Pet" and spawn.ID() == mq.TLO.Me.Pet.ID() then
@@ -86,11 +86,11 @@ function refreshBuff(buffItem, spawn)
             return false
         end
         if is_spell_in_book(spellName) and spell.StacksPet() then
-            --cmd("/dgtell all ERROR cannot buff pet with ", spellName, " (dont stack with current buffs)")
+            --all_tellf("ERROR cannot buff pet with %s (dont stack with current buffs)", spellName)
             return false
         end
     else
-        cmdf("/dgtell all FATAL ERROR refreshBuff called with invalid spawn %s", spawn.Name())
+        all_tellf("FATAL ERROR refreshBuff called with invalid spawn %s", spawn.Name())
         return
     end
 
@@ -137,7 +137,7 @@ end
 function spellConfigAllowsCasting(buffItem, spawn)
 
     if spawn == nil then
-        cmdf("/dgtell all ERROR: spellConfigAllowsCasting called with nil spawn for %s", buffItem)
+        all_tellf("ERROR: spellConfigAllowsCasting called with nil spawn for %s", buffItem)
         cmd("/beep 1")
         return false
     end
@@ -197,7 +197,7 @@ function spellConfigAllowsCasting(buffItem, spawn)
     if spellConfig.Reagent ~= nil then
         -- if we lack this item, then skip.
         if getItemCountExact(spellConfig.Reagent) == 0 then
-            cmdf("/dgtell all SKIP BUFFING %s , out of reagent %s", spellConfig.Name, spellConfig.Reagent)
+            all_tellf("SKIP BUFFING %s , out of reagent %s", spellConfig.Name, spellConfig.Reagent)
             return false
         end
     end
@@ -269,7 +269,7 @@ function castSpellRaw(name, spawnId, extraArgs)
         extraArgs = ""
     end
     if spawnId == nil then
-        cmdf("/dgtell all castSpellRaw FATAL ERROR: called with nil spawnId, name = %s, extraArgs = %s", name, extraArgs)
+        all_tellf("castSpellRaw FATAL ERROR: called with nil spawnId, name = %s, extraArgs = %s", name, extraArgs)
         cmd("/beep 1")
         return
     end
@@ -289,7 +289,7 @@ function getSpellFromBuff(name)
     elseif have_combat_ability(name) then
         return mq.TLO.Me.CombatAbility(mq.TLO.Me.CombatAbility(name))
     else
-        cmdf("/dgtell all getSpellFromBuff ERROR: can't find buff %s", name)
+        all_tellf("getSpellFromBuff ERROR: can't find buff %s", name)
         cmd("/beep 1")
         return nil
     end
@@ -324,7 +324,7 @@ function memorize_spell(spellRow, defaultGem)
     local o = parseSpellLine(spellRow) -- XXX parse this once on script startup. dont evaluate all the time !!!
 
     if not is_spell_in_book(o.Name) then
-        mq.cmdf("/dgtell all ERROR don't know spell/song %s", o.Name)
+        all_tellf("ERROR don't know spell/song %s", o.Name)
         mq.cmd("/beep 1")
         return nil
     end
@@ -335,7 +335,7 @@ function memorize_spell(spellRow, defaultGem)
     elseif botSettings.settings.gems[o.Name] ~= nil then
         gem = botSettings.settings.gems[o.Name]
     elseif gem == nil then
-        mq.cmdf("/dgtell all \arWARN\ax: Spell/song lacks gems default slot or Gem|n argument: %s", spellRow)
+        all_tellf("\arWARN\ax: Spell/song lacks gems default slot or Gem|n argument: %s", spellRow)
         gem = 5
     end
 

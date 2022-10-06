@@ -7,7 +7,7 @@ require("ezmq")
 local cothMinDistance = 50
 
 if mq.TLO.Me.Class.Name() ~= "Magician" then
-    cmd("/dgtell all ERROR: I am not a Magician, so I cannot Call of the Hero")
+    all_tellf("ERROR: I am not a Magician, so I cannot Call of the Hero")
     return
 end
 
@@ -17,7 +17,7 @@ if not is_memorized("Call of the Hero") then
 end
 
 if not in_group() then
-    cmd("/dgtell all CoTH ERROR: I am not grouped")
+    all_tellf("CoTH ERROR: I am not grouped")
     return
 end
 
@@ -31,16 +31,16 @@ while true do
             done = false
 
             if getItemCountExact("Pearl") == 0 then
-                cmd("/dgtell all I am out of Pearls! I need to be re-stocked before I can cast Call of the Hero.")
+                all_tellf("I am out of Pearls! I need to be re-stocked before I can cast Call of the Hero.")
                 return
             end
 
             log.Info("Want to coh group member %d %s, distance %f", n,  spawn.Name(), spawn.Distance())
             if is_alt_ability_ready("Call of the Hero") then
-                cmdf("/dgtell all CoTH:ing (AA) \ag%s\ax ...", spawn.Name())
+                all_tellf("CoTH:ing (AA) \ag%s\ax ...", spawn.Name())
                 cmdf('/casting "Call of the Hero|alt" -targetid|%d', spawn.ID())
             elseif is_spell_ready("Call of the Hero") then
-                cmdf("/dgtell all CoTH:ing (spell) \ag%s\ax ...", spawn.Name())
+                all_tellf("CoTH:ing (spell) \ag%s\ax ...", spawn.Name())
                 cmdf('/casting "Call of the Hero|gem5" -targetid|%d', spawn.ID())
             end
 
@@ -51,7 +51,7 @@ while true do
     end
 
     if done then
-        cmd("/dgtell all GROUP COTH DONE")
+        all_tellf("GROUP COTH DONE")
         return
     end
 

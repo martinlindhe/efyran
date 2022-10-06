@@ -39,7 +39,7 @@ function move_to(spawn)
     log.Debug("move_to ", spawn.Name())
 
     if not line_of_sight_to(spawn) then
-        mq.cmdf("/dgtell all move_to ERROR: cannot see %s", spawn.Name())
+        all_tellf("move_to ERROR: cannot see %s", spawn.Name())
         mq.cmd("/beep 1")
         return
     end
@@ -198,7 +198,7 @@ end
 function is_item_clicky_ready(name)
     local item = find_item(name)
     if item == nil then
-        mq.cmdf("/dgtell all ERROR: is_item_clicky_ready() called with item I do not have: %s", name)
+        all_tellf("ERROR: is_item_clicky_ready() called with item I do not have: %s", name)
         return false
     end
     return item.Clicky() ~= nil and item.Timer.Ticks() == 0
@@ -348,7 +348,7 @@ function have_buff(name)
     --assert(type(name) == "string")
     local spell = mq.TLO.Spell(name)
     if spell() == nil then
-        mq.cmdf("/dgtell all have_buff ERROR: asked about odd 1buff %s", name)
+        all_tellf("have_buff ERROR: asked about odd 1buff %s", name)
         return false
     end
     if mq.TLO.Me.Buff(name)() == name then
@@ -363,7 +363,7 @@ end
 function have_song(name)
     local spell = mq.TLO.Spell(name)
     if spell() == nil then
-        mq.cmdf("/dgtell all BEEP error, asked about odd 2buff %s", name)
+        all_tellf("BEEP error, asked about odd 2buff %s", name)
         mq.cmd("/beep 1")
         return false
     end
@@ -469,7 +469,7 @@ end
 function open_merchant_window(spawn)
 
     if window_open("MerchantWnd") then
-        mq.cmd("/dgtell all WARNING: A merchant window was already open. Closing it")
+        all_tellf("WARNING: A merchant window was already open. Closing it")
         close_merchant_window()
         mq.delay(1000)
     end
@@ -485,7 +485,7 @@ function open_merchant_window(spawn)
     while true do
 
         if attempt >= 3 then
-            mq.cmdf("/dgtell all ERROR: Giving up opening merchant window after %d attempts", attempt)
+            all_tellf("ERROR: Giving up opening merchant window after %d attempts", attempt)
             break
         end
 
@@ -664,11 +664,11 @@ function clear_cursor()
             return true
         end
         if mq.TLO.Me.FreeInventory() == 0 then
-            mq.cmd("/dgtell all Cannot clear cursor, no free inventory slots")
+            all_tellf("Cannot clear cursor, no free inventory slots")
             mq.cmd("/beep 1")
             return false
         end
-        mq.cmdf("/dgtell all Putting cursor item %s in inventory.", mq.TLO.Cursor())
+        all_tellf("Putting cursor item %s in inventory.", mq.TLO.Cursor())
         mq.cmd("/autoinventory")
         mq.delay(2000, function() return mq.TLO.Cursor.ID() == nil end)
         mq.delay(100)
@@ -679,11 +679,11 @@ end
 ---@param name string
 function cast_veteran_aa(name)
     if not have_alt_ability(name) then
-        mq.cmdf("/dgtell all ERROR: I do not have AA %s", name)
+        all_tellf("ERROR: I do not have AA %s", name)
         return
     end
     if not is_alt_ability_ready(name) then
-        mq.cmdf("/dgtell all ERROR: %s is not ready, ready in %s", name, mq.TLO.Me.AltAbilityTimer(name).TimeHMS())
+        all_tellf("ERROR: %s is not ready, ready in %s", name, mq.TLO.Me.AltAbilityTimer(name).TimeHMS())
         return
     end
     cast_alt_ability(name, mq.TLO.Me.ID())
@@ -718,7 +718,7 @@ end
 ---@return boolean
 function is_healer(class)
     if class == nil then
-        mq.cmd("/dgtell all ERROR: is_healer called without class. did you mean me_healer() ?")
+        all_tellf("ERROR: is_healer called without class. did you mean me_healer() ?")
     end
     return class == "CLR" or class == "DRU" or class == "SHM" or class == "PAL" or class == "RNG" or class == "BST"
 end
@@ -728,7 +728,7 @@ end
 ---@return boolean
 function is_priest(class)
     if class == nil then
-        mq.cmd("/dgtell all ERROR: is_priest called without class. did you mean me_priest() ?")
+        all_tellf("ERROR: is_priest called without class. did you mean me_priest() ?")
     end
     return class == "CLR" or class == "DRU" or class == "SHM"
 end
@@ -738,7 +738,7 @@ end
 ---@return boolean
 function is_tank(class)
     if class == nil then
-        mq.cmd("/dgtell all ERROR: is_tank called without class. did you mean me_tank() ?")
+        all_tellf("ERROR: is_tank called without class. did you mean me_tank() ?")
     end
     return class == "WAR" or class == "PAL" or class == "SHD"
 end
@@ -798,7 +798,7 @@ function inventory_slot_name(n)
     if baseSlots[n] ~= nil then
         return baseSlots[n]
     end
-    mq.cmdf("/dgtell all ERROR: lookup inventory slot %d failed", n)
+    all_tellf("ERROR: lookup inventory slot %d failed", n)
 end
 
 -- Makes character visible and drops sneak/hide.
@@ -819,7 +819,7 @@ function drop_invis()
     mq.cmd("/makemevisible")
     mq.delay(1000, function() return not is_invisible() end)
     if is_invisible() then
-        mq.cmd("/dgtell all \arERROR\ax Cannot make myself visible.")
+        all_tellf("\arERROR\ax Cannot make myself visible.")
     end
 end
 
@@ -906,7 +906,7 @@ local shortToLongClass = {
 function nearest_peer_by_class(shortClass)
     local longName = shortToLongClass[shortClass]
     if longName == nil then
-        mq.cmdf("/dgtell all INVALID shortToLongClass %s", shortClass)
+        all_tellf("INVALID shortToLongClass %s", shortClass)
         return nil
     end
 
@@ -1187,7 +1187,6 @@ function drop_all_buffs()
             log.Debug("Removing buff %d, id: %d, name: %s", i, mq.TLO.Me.Buff(i).ID(), mq.TLO.Me.Buff(i).Name())
             mq.cmdf("/removebuff %s", mq.TLO.Me.Buff(i).Name())
         end
-        delay(1)
     end
 end
 
@@ -1222,6 +1221,20 @@ end
 
 function trim(s)
     return s:match("^%s*(.-)%s*$")
+end
+
+-- Send a text to all peers thru MQ2DanNet
+function all_tellf(...)
+    cmdf("/dgtell all [%s] %s", time(), string.format(...))
+end
+
+--- collect arg into query, needed for /fdi water flask to work without quotes
+function args_string(...)
+    local s = ""
+    for i = 1, select("#",...) do
+        s = s ..  select(i,...) .. " "
+    end
+    return s
 end
 
 -- Returns "true" or "false".

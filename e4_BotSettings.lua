@@ -38,7 +38,7 @@ end
 
 function BotSettings.Init()
     if is_hovering() then
-        cmd("/dgtell all FATAL ERROR: cannot start e4 successfully while in HOVERING mode")
+        all_tellf("ERROR: cannot start e4 successfully while in HOVERING mode")
         cmd("/beep 1")
         return
     end
@@ -49,7 +49,7 @@ function BotSettings.Init()
         BotSettings.settings = settings()
     else
         -- no settings file found
-        cmdf("/dgtell all PEER INI NOT FOUND, CREATING EMPTY ONE. PLEASE EDIT %s", settingsFile)
+        all_tellf("PEER INI NOT FOUND, CREATING EMPTY ONE. PLEASE EDIT %s", settingsFile)
         cmd("/beep 1")
 
         local f = assert(io.open(settingsFile, "w"))

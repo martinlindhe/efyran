@@ -27,7 +27,7 @@ while true do
     doevents()
 
     if in_neutral_zone() then
-        cmd("/dgtell all ERROR: Ending sit.lua in neutral zone")
+        all_tellf("ERROR: Ending sit.lua in neutral zone")
         os.exit()
     end
 

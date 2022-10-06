@@ -20,7 +20,7 @@ end
 function Bard.PlayMelody(name)
 
     if botSettings.settings.songs == nil then
-        cmd("/dgtell all ERROR no bard songs declared")
+        all_tellf("ERROR no bard songs declared")
         delay(50000)
         return
     end
@@ -31,7 +31,7 @@ function Bard.PlayMelody(name)
 
     local songSet = botSettings.settings.songs[name:lower()]
     if songSet == nil then
-        cmdf("/dgtell all ERROR no such song set %s", name)
+        all_tellf("ERROR no such song set %s", name)
         cmd("/beep 1")
         return
     end
@@ -47,7 +47,7 @@ function Bard.PlayMelody(name)
     end
 
     cmdf("/twist %s", gemSet)
-    cmdf("/dgtell all Playing melody \ay%s\ax.", name)
+    all_tellf("Playing melody \ay%s\ax.", name)
 
     Bard.currentMelody = name
 end

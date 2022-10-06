@@ -289,7 +289,7 @@ if DUMP_KNOWN_AA then
 
             -- if aa missing in aamap.ini, write it
             if mq.TLO.Ini(aaMapFile, "AAMap", me.AltAbility(i).ID(), "-")() == "-" then
-                cmd("/dgtell all FOUND NEW AA "..me.AltAbility(i).ID().." "..me.AltAbility(i).Name())
+                all_tellf("FOUND NEW AA "..me.AltAbility(i).ID().." "..me.AltAbility(i).Name())
                 cmd("/ini "..aaMapFile.." AAMap "..me.AltAbility(i).ID()..' "'..me.AltAbility(i).Name()..'"')
             end
         end
@@ -306,5 +306,5 @@ end
 
 
 local seondsElapsed = os.time() - timeStart
-cmd("/dgtell all DUMPTOON DONE AFTER "..seondsElapsed.."s")
+all_tellf("DUMPTOON DONE AFTER "..seondsElapsed.."s")
 

@@ -74,7 +74,7 @@ function Group.Init()
                         log.Info("Inviting %s to group", groupMember)
                         cmdf("/invite %s", groupMember)
                     else
-                        cmdf("/dgtell all ERROR: %s not connected. Can not invite to group.", groupMember)
+                        all_tellf("ERROR: %s not connected. Can not invite to group.", groupMember)
                     end
                 end
             elseif orchestrator and groupLeader ~= 'NULL' then
@@ -84,7 +84,7 @@ function Group.Init()
         end
 
         if orchestrator then
-            cmdf("/dgtell all Recalling raid %s with leader %s", name, raidLeader)
+            all_tellf("Recalling raid %s with leader %s", name, raidLeader)
 --            delay(2000)
 
             -- The raid leader invites the other groups to raid
@@ -100,7 +100,7 @@ function Group.Init()
                     end
                     delay(50)
                 else
-                    cmdf("/dgtell all WARNING: %s not connected. will not invite to raid", groupLeader)
+                    all_tellf("WARNING: %s not connected. will not invite to raid", groupLeader)
                 end
             end
         end

@@ -21,65 +21,9 @@ function Heal.Init()
         end
     end)
 
-    -- Perform rez on target or delegate it to nearby cleric
-    ---@param spawnID integer
-    mq.bind("/rezit", function(spawnID)
-        if is_orchestrator() then
-            if not has_target() then
-                log.Error("/rezit: No corpse targeted.")
-                return
-            end
-            local spawn = get_target()
-            if spawn == nil then
-                log.Error("/rezit: No target to rez.")
-                return
-            end
-
-            spawnID = spawn.ID()
-            if spawn.Type() ~= "Corpse" then
-                log.Error("/rezit: Target is not a corpse. Type %s",  spawn.Type())
-                return
-            end
-
-            if not is_clr() then
-                local clrName = nearest_peer_by_class("CLR")
-                if clrName == nil then
-                    cmd("/dgtell all \arERROR\ax: Cannot request rez, no cleric nearby.")
-                    return
-                end
-                log.Info("Requesting rez for \ay%s\ax from \ag%s\ax.", spawn.Name(), clrName)
-                cmdf("/dexecute %s /rezit %d", clrName, spawn.ID())
-                return
-            end
-        end
-
-        local spawn = spawn_from_id(spawnID)
-        if spawn == nil then
-            -- unlikely
-            cmdf("/dgtell all ERROR: tried to rez spawnid %s which is not in zone %s", spawnID, zone_shortname())
-            return
-        end
-        log.Info("Performing rez on %s, %d %s", spawn.Name(), spawnID, type(spawnID))
-
-        -- try 3 times to get a rez spell before giving up (to wait for ability to become ready...)
-        for i = 1, 3 do
-            local rez = get_rez_spell_item_aa()
-            if rez ~= nil then
-                cmdf("/dgtell all Rezzing \ag%s\ax with \ay%s\ax. %d/3", spawn.Name(), rez, i)
-                castSpell(rez, spawn.ID())
-                break
-            else
-                cmdf("/dgtell all \arWARN\ax: Not ready to rez \ag%s\ax. %d/3", spawn.Name(), i)
-            end
-            doevents()
-            delay(2000) -- 2s delay
-        end
-
-    end)
-
     -- Rezzes nearby player corpses
     mq.bind("/aerez", function()
-        cmdf("/dgtell all AERez started in %s ...", zone_shortname())
+        all_tellf("AERez started in %s ...", zone_shortname())
         wait_until_not_casting()
 
         local spawnQuery = 'pccorpse radius 100'
@@ -89,12 +33,12 @@ function Heal.Init()
             local rez = get_rez_spell_item_aa()
             if rez ~= nil then
                 target_id(spawn.ID())
-                cmdf("/dgtell all Rezzing %s with %s", spawn.Name(), rez)
+                all_tellf("Rezzing %s with %s", spawn.Name(), rez)
                 castSpell(rez, spawn.ID())
                 wait_until_not_casting()
                 break
             else
-                cmdf("/dgtell all \arWARN\ax: Not ready to rez \ag%s\ax.", spawn.Name())
+                all_tellf("\arWARN\ax: Not ready to rez \ag%s\ax.", spawn.Name())
             end
             doevents()
             delay(10000) -- 10s
@@ -151,7 +95,7 @@ function enqueueHealmeRequest(msg)
     -- ignore if not in zone
     local spawn = spawn_from_peer_name(peer)
     if tostring(spawn) == "NULL" then
-        cmdf("/dgtell all Peer is not in zone, ignoring heal request from '%s'", peer)
+        all_tellf("Peer is not in zone, ignoring heal request from '%s'", peer)
         return
     end
 
@@ -162,7 +106,7 @@ function enqueueHealmeRequest(msg)
             -- XXX: if queue is >= 10 long, always add if listed as tank or important bot
             -- XXX: if queue is >= 10 long, add with 50% chance ... if >= 20 long, beep and ignore.
 
-            cmdf("/dgtell all queue is full ! len is %d. queue: %s", Heal.queue:size(), Heal.queue:describe())
+            all_tellf("queue is full ! len is %d. queue: %s", Heal.queue:size(), Heal.queue:describe())
             cmd("/beep 1")
             return
         end
@@ -269,17 +213,17 @@ function Heal.acceptRez()
 
         log.Debug("Got a rez from %s", peer)
         if not is_peer(peer) then
-            cmdf("/dgtell all WARNING: got a rez from (NOT A PEER) %s: %s", peer, s)
+            all_tellf("WARNING: got a rez from (NOT A PEER) %s: %s", peer, s)
             cmd("/beep 1")
             delay(10000) -- 10s
             return
         end
-        cmdf("/dgtell all Accepting rez from %s", peer)
+        all_tellf("Accepting rez from %s", peer)
         cmd("/notify ConfirmationDialogBox Yes_Button leftmouseup")
 
         -- click in the RespawnWnd if open (live)
         if window_open("RespawnWnd") then
-            cmd("/dgtell all BEEP RespawnWnd is open ...")
+            all_tellf("BEEP RespawnWnd is open ...")
             cmd("/beep 1")
         end
 
@@ -298,7 +242,7 @@ function Heal.acceptRez()
         delay(5000, function() return window_open("LootWnd") end)
 
         if not window_open("LootWnd") then
-            cmd("/dgtell all ERROR FATAL CANNOT OPEN MY LOOT WINDOW.")
+            all_tellf("ERROR FATAL CANNOT OPEN MY LOOT WINDOW.")
             return
         end
 
@@ -320,10 +264,10 @@ function Heal.medCheck()
 
     if mq.TLO.Me.MaxMana() > 0 then
         if mq.TLO.Me.PctMana() < 70 and mq.TLO.Me.Standing() then
-            cmdf("/dgtell all Low mana, medding at %d%%", mq.TLO.Me.PctMana())
+            all_tellf("Low mana, medding at %d%%", mq.TLO.Me.PctMana())
             cmd("/sit on")
         elseif mq.TLO.Me.PctMana() >= 100 and not mq.TLO.Me.Standing() and not mq.TLO.Me.Ducking() then
-            cmd("/dgtell all Ending medbreak, full mana.")
+            all_tellf("Ending medbreak, full mana.")
             cmd("/sit off")
         end
     end
@@ -341,13 +285,13 @@ function Heal.performLifeSupport()
 
     if botSettings.settings.healing == nil or botSettings.settings.healing.life_support == nil then
         if mq.TLO.Me.PctHPs() < 70 then
-            cmdf("/dgtell all performLifeSupport ERROR I dont have healing.life_support configured. Current HP is %d%%", mq.TLO.Me.PctHPs())
+            all_tellf("performLifeSupport ERROR I dont have healing.life_support configured. Current HP is %d%%", mq.TLO.Me.PctHPs())
         end
         return
     end
 
     if mq.TLO.Me.Ducking() then
-        cmd("/dgtell all performLifeSupport WARNING: Standing up. Was ducking")
+        all_tellf("performLifeSupport WARNING: Standing up. Was ducking")
         cmd("/stand")
         delay(20)
     end
@@ -404,7 +348,7 @@ function Heal.performLifeSupport()
 
         if is_spell_in_book(spellConfig.Name) then
             if not is_memorized(spellConfig.Name) then
-                cmdf("/dgtell all performLifeSupport skip %s, spell is not memorized", spellConfig.Name)
+                all_tellf("performLifeSupport skip %s, spell is not memorized", spellConfig.Name)
                 skip = true
             elseif not is_spell_ready(spellConfig.Name) then
                 --cmd("/dgtell all performLifeSupport skip ", spellConfig.Name, ", spell is not ready")
@@ -416,7 +360,7 @@ function Heal.performLifeSupport()
 
         if not skip then
             if is_ability_ready(spellConfig.Name) then
-                cmdf("/dgtell all USING LIFE SUPPORT ability %s at %d%%", spellConfig.Name, mq.TLO.Me.PctHPs())
+                all_tellf("USING LIFE SUPPORT ability %s at %d%%", spellConfig.Name, mq.TLO.Me.PctHPs())
                 cmdf("/doability %s", spellConfig.Name)
             else
                 local spell = getSpellFromBuff(spellConfig.Name)
@@ -425,7 +369,7 @@ function Heal.performLifeSupport()
                     if have_item(spellConfig.Name) or have_alt_ability(spellConfig.Name) then
                         spellName = spellConfig.Name
                     end
-                    cmdf("/dgtell all USING LIFE SUPPORT %s at %d%%", spellName, mq.TLO.Me.PctHPs())
+                    all_tellf("USING LIFE SUPPORT %s at %d%%", spellName, mq.TLO.Me.PctHPs())
                     castSpell(spellName, mq.TLO.Me.ID())
                 end
             end

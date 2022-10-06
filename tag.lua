@@ -83,7 +83,7 @@ while true do
     move_to_loc(oldY, oldX, oldZ)
 
     if in_neutral_zone() then
-        cmd("/dgtell all ERROR: Ending tag.lua in neutral zone")
+        all_tellf("ERROR: Ending tag.lua in neutral zone")
         os.exit()
     end
 

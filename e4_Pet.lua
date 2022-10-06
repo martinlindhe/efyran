@@ -14,7 +14,7 @@ function Pet.Summon()
     end
 
     if have_pet() then
-        --cmd("/dgtell all wont summon pet. i already have one!", mq.TLO.Me.Pet.Name())
+        --all_tellf("wont summon pet. i already have one!", mq.TLO.Me.Pet.Name())
         return false
     end
 
@@ -25,7 +25,7 @@ function Pet.Summon()
 
     local spellName = find_pet_spell()
     if spellName == nil then
-        cmd("/dgtell all ERROR: Can't summon pet. No spell found.")
+        all_tellf("ERROR: Can't summon pet. No spell found.")
         return false
     end
 
@@ -33,7 +33,7 @@ function Pet.Summon()
 
     local spell = get_spell(spellConfig.Name)
     if spell == nil then
-        cmd("/dgtell all ERROR: Failed to lookup spell "..spellConfig.Name)
+        all_tellf("ERROR: Failed to lookup spell "..spellConfig.Name)
         return false
     end
 
@@ -47,7 +47,7 @@ function Pet.Summon()
     if spellConfig.Reagent ~= nil then
         -- if we lack this item, then skip.
         if getItemCountExact(spellConfig.Reagent) == 0 then
-            cmd("/dgtell all SKIP PET SUMMON "..spellConfig.Name..", out of reagent "..spellConfig.Reagent)
+            all_tellf("SKIP PET SUMMON "..spellConfig.Name..", out of reagent "..spellConfig.Reagent)
             return false
         end
     end
@@ -56,7 +56,7 @@ function Pet.Summon()
     delay(spell.MyCastTime(), function() return have_pet() end)
 
     if not have_pet() then
-        cmd("/dgtell all ERROR: Failed to summon pet.")
+        all_tellf("ERROR: Failed to summon pet.")
         cmd("/beep 1")
         return false
     end
@@ -69,7 +69,7 @@ end
 function find_pet_spell()
     local pets = PetSpells[class_shortname()]
     if pets == nil then
-        cmdf("/dgtell all ERROR: No pets defined for class %s", mq.TLO.Me.Class.Name())
+        all_tellf("ERROR: No pets defined for class %s", mq.TLO.Me.Class.Name())
         return nil
     end
 
@@ -116,7 +116,7 @@ function Pet.BuffMyPet()
         local spellConfig = parseSpellLine(buff)  -- XXX do not parse here, cache and reuse
         local spell = getSpellFromBuff(spellConfig.Name) -- XXX parse this once on script startup too, dont evaluate all the time !
         if spell == nil then
-            cmdf("/dgtell all Pet.BuffMyPet: getSpellFromBuff %s FAILED", buff)
+            all_tellf("Pet.BuffMyPet: getSpellFromBuff %s FAILED", buff)
             cmd("/beep 1")
             return false
         end

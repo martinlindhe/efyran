@@ -77,7 +77,7 @@ for n = 1, num_inventory_slots() do
 
                     end
                 else
-                    cmdf("/dgtell all New loot. Keeping %s", item.ItemLink("CLICKABLE")())
+                    all_tellf("New loot. Keeping %s", item.ItemLink("CLICKABLE")())
                     SetLootItemSetting(loot, item, "Keep")
                 end
 

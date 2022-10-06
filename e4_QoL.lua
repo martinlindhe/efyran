@@ -3,6 +3,7 @@
 local mq = require("mq")
 local log = require("knightlinc/Write")
 
+local assist  = require("e4_Assist")
 local follow  = require("e4_Follow")
 local commandQueue = require("e4_CommandQueue")
 local botSettings = require("e4_BotSettings")
@@ -52,7 +53,7 @@ function QoL.Init()
     QoL.verifySpellLines()
 
     local dead = function(text, killer)
-        cmdf("/dgtell all I died. Killed by %s", killer)
+        all_tellf("I died. Killed by %s", killer)
         cmd("/beep") -- the beep of death
     end
 
@@ -70,7 +71,7 @@ function QoL.Init()
 
     mq.event("missing_component", "You are missing #1#.", function(text, name)
         if name ~= "some required components" then
-            cmd("/dgtell all Missing component "..name)
+            all_tellf("Missing component %s", name)
             cmd("/beep 1")
         end
     end)
@@ -79,7 +80,7 @@ function QoL.Init()
         local s = msg:lower()
         if s == "buff me" or s == "buffme" then
             -- XXX commandeer all to buff this one. how to specify orchestrator if buff is in background? we enqueue it to a zone channel !!!
-            cmd("/dgtell all XXX FIXME handle 'buffme' tell from "..name)
+            all_tellf("FIXME handle 'buffme' tell from %s", name)
             cmd("/beep 1")
         else
             -- excludes tells from "Player`s pet" (Permutation Peddler, NPC), "Player`s familiar" (Summoned Banker, Pet)
@@ -89,9 +90,9 @@ function QoL.Init()
                 return
             end
             if spawn ~= nil then
-                cmd("/dgtell all GOT A IN-ZONE TELL FROM "..name..": "..msg.." type "..spawn.Type())
+                all_tellf("GOT A IN-ZONE TELL FROM "..name..": "..msg.." type "..spawn.Type())
             else
-                cmd("/dgtell all GOT A TELL FROM "..name..": "..msg)
+                all_tellf("GOT A TELL FROM "..name..": "..msg)
             end
 
             cmd("/beep 1")
@@ -125,12 +126,310 @@ function QoL.Init()
         end
     end)
 
+    -- tell peers to kill target until dead
+    mq.bind("/assiston", function()
+        -- XXX impl "/assiston /not|WAR" filter
+
+        local spawn = mq.TLO.Target
+        if spawn() == nil then
+            return
+        end
+        if spawn.Type() ~= "PC" then
+            if assist.target ~= nil then
+                log.Debug("Backing off existing target before assisting new")
+                assist.backoff()
+            end
+            log.Info("Calling assist on %s, type %s", spawn.DisplayName(), spawn.Type())
+
+            -- tell everyone else to attack
+            cmdf("/dgzexecute /killit %d", spawn.ID())
+        end
+    end)
+
+    -- auto assist on mob until dead
+    ---@param mobID string
+    mq.bind("/killit", function(mobID)
+        commandQueue.Add("killit", mobID)
+    end)
+
+    -- ends assist call
+    mq.bind("/backoff", function()
+        if is_orchestrator() then
+            cmd("/dgzexecute /backoff")
+        end
+        Assist.backoff()
+    end)
+
+    mq.bind("/pbaeon", function()
+        if is_orchestrator() then
+            cmd("/dgzexecute /pbaeon")
+        end
+        if botSettings.settings.assist.pbae == nil then
+            return
+        end
+        commandQueue.Add("pbaeon")
+    end)
+
+    -- if filter == "all", drop all. else drop partially matched buffs
+    mq.bind("/dropbuff", function(filter)
+        if filter == nil then
+            return
+        end
+        if is_orchestrator() then
+            cmdf("/dgzexecute /dropbuff %s", filter)
+        end
+
+        if filter == "all" then
+            drop_all_buffs()
+        else
+            cmdf("/removebuff %s", filter)
+        end
+    end)
+
+    mq.bind("/dropinvis", function()
+        if is_orchestrator() then
+            cmd("/dgzexecute /dropinvis")
+        end
+        commandQueue.Add("dropinvis")
+    end)
+
+    -- /buffit: asks bots to cast level appropriate buffs on current target
+    mq.bind("/buffit", function(spawnID)
+        log.Debug("buffit %s", spawnID)
+        if is_orchestrator() then
+            spawnID = mq.TLO.Target.ID()
+            if spawnID ~= 0 then
+                cmdf("/dgzexecute /buffit %d", spawnID)
+            end
+        end
+
+        -- XXX group_buffs was nuked
+        if botSettings.settings.group_buffs == nil then
+            log.Info("Stopping /buffit, no group_buffs configured!")
+            return
+        end
+
+        commandQueue.Add("buffit", spawnID)
+    end)
+
+    mq.bind("/buffme", function()
+        cmdf("/dgzexecute /buffit %d", mq.TLO.Me.ID())
+    end)
+
+    mq.bind("/buffon", function()
+        botSettings.toggles.refresh_buffs = true
+        if is_orchestrator() then
+            cmd("/dgzexecute /buffon")
+        end
+    end)
+
+    mq.bind("/buffoff", function()
+        botSettings.toggles.refresh_buffs = false
+        if is_orchestrator() then
+            cmd("/dgzexecute /buffoff")
+        end
+    end)
+
+    -- Perform rez on target or delegate it to nearby cleric
+    ---@param spawnID string
+    mq.bind("/rezit", function(spawnID)
+        if is_orchestrator() then
+            if not has_target() then
+                log.Error("/rezit: No corpse targeted.")
+                return
+            end
+            local spawn = get_target()
+            if spawn == nil then
+                log.Error("/rezit: No target to rez.")
+                return
+            end
+
+            spawnID = spawn.ID()
+            if spawn.Type() ~= "Corpse" then
+                log.Error("/rezit: Target is not a corpse. Type %s",  spawn.Type())
+                return
+            end
+
+            if not is_clr() then
+                local clrName = nearest_peer_by_class("CLR")
+                if clrName == nil then
+                    all_tellf("\arERROR\ax: Cannot request rez, no cleric nearby.")
+                    return
+                end
+                log.Info("Requesting rez for \ay%s\ax from \ag%s\ax.", spawn.Name(), clrName)
+                cmdf("/dexecute %s /rezit %d", clrName, spawn.ID())
+                return
+            end
+        end
+
+        commandQueue.Add("rezit", tostring(spawnID))
+    end)
+
+    mq.bind("/mounton", function()
+        if is_orchestrator() then
+            cmd("/dgzexecute /mounton")
+        end
+
+        if botSettings.settings.mount ~= nil then
+
+            if not mq.TLO.Me.CanMount() then
+                all_tellf("MOUNT ERROR, cannot mount in %s", zone_shortname())
+                return
+            end
+
+            -- XXX see if mount clicky buff is on us already
+
+            local spell = getSpellFromBuff(botSettings.settings.mount)
+            if spell == nil then
+                all_tellf("/mounton: getSpellFromBuff %s FAILED", botSettings.settings.mount)
+                cmd("/beep 1")
+                return false
+            end
+
+            if have_buff(spell.RankName()) then
+                log.Error("I am already mounted.")
+                return false
+            end
+
+            -- XXX dont summon if we are already mounted.
+            log.Info("Summoning mount %s ...", botSettings.settings.mount)
+            castSpell(botSettings.settings.mount, mq.TLO.Me.ID())
+        end
+    end)
+
+    mq.bind("/mountoff", function()
+        if is_orchestrator() then
+            cmd("/dgzexecute /mountoff")
+        end
+        log.Info("Dismounting ...")
+        cmd("/dismount")
+    end)
+
+    mq.bind("/shrinkall", function()
+        cmd("/dgzexecute /shrinkgroup")
+    end)
+
+    mq.bind("/shrinkgroup", function()
+        commandQueue.Add("shrinkgroup")
+    end)
+
+    -- tell everyone else to click nearby door/object (pok stones, etc)
+    mq.bind("/clickit", function()
+        commandQueue.Add("clickit")
+    end)
+
+
+    mq.bind("/portto", function(name)
+        name = name:lower()
+        if is_orchestrator() then
+            cmdf("/dgzexecute /portto %s", name)
+        end
+
+        commandQueue.Add("portto", name)
+    end)
+
+
+
+    mq.bind("/followon", function()
+        cmdf("/dgzexecute /followid %d", mq.TLO.Me.ID())
+    end)
+
+    mq.bind("/followoff", function(s)
+        if is_orchestrator() then
+            cmd("/dgzexecute /followoff")
+        end
+        follow.Pause()
+        follow.spawn = nil
+    end)
+
+    -- follows another peer in LoS
+    ---@param spawnID integer
+    mq.bind("/followid", function(spawnID)
+        if not is_peer_id(spawnID) then
+            all_tellf("ERROR: /followid called on invalid spawn ID %d", spawnID)
+            return
+        end
+
+        follow.spawn = spawn_from_id(spawnID)
+    end)
+
+    mq.bind("/evac", function(name)
+
+        if is_orchestrator() then
+            cmd("/dgzexecute /evac")
+        end
+
+        if botSettings.settings.evac == nil then
+            return
+        end
+
+        -- chose first one we have and use it (skip Exodus if AA is down)
+        for key, evac in pairs(botSettings.settings.evac) do
+            log.Info("Finding available evac spell %s: %s", key, evac)
+            if mq.TLO.Me.AltAbility(evac)() ~= nil then
+                if mq.TLO.Me.AltAbilityReady(evac)() then
+                    castSpellRaw(evac, mq.TLO.Me.ID(), "-maxtries|3")
+                    return
+                end
+            else
+                castSpellRaw(evac, mq.TLO.Me.ID(), "gem5 -maxtries|3")
+            end
+        end
+    end)
+
+    -- tell peers in zone to use Throne of Heroes
+    mq.bind("/throne", function()
+        if is_orchestrator() then
+            cmd("/dgzexecute /throne")
+        end
+        cast_veteran_aa("Throne of Heroes")
+    end)
+
+    local moveToMe = function()
+        cmdf("/dgzexecute /movetoid %d", mq.TLO.Me.ID())
+    end
+    mq.bind("/movetome", moveToMe)
+    mq.bind("/mtm", moveToMe)
+
+    -- move to spawn ID
+    ---@param spawnID string
+    mq.bind("/movetoid", function(spawnID)
+        if is_orchestrator() then
+            cmdf("/dgzexecute /movetoid %d", spawnID)
+        end
+        commandQueue.Add("movetoid", spawnID)
+    end)
+
+    -- run through zone based on the position of startingPeer
+    -- stand near a zoneline and face in the direction of the zoneline, run command for bots to move forward to the other zone
+    mq.bind("/rtz", function(startingPeerName)
+        if is_orchestrator() then
+            -- tell the others to cross zone line
+            cmdf("/dgzexecute /rtz %s", mq.TLO.Me.Name())
+            return
+        end
+        commandQueue.Add("rtz", startingPeerName)
+    end)
+
+    -- hail or talk to nearby recognized NPC
+    mq.bind("/hailit", function()
+        commandQueue.Add("hailit")
+    end)
+
+    -- tells all peers to hail or talk to nearby recognized NPC
+    mq.bind("/hailall", function()
+        if is_orchestrator() then
+            cmd("/dgzexecute /hailit")
+        end
+        commandQueue.Add("hailit")
+    end)
+
     -- reports faction status
     mq.bind("/factions", function()
         if maxFactionLoyalists then
             log.Debug("Dranik Loyalists: max ally")
         else
-            cmd("/dgtell all WARN: not max ally with Dranik Loyalists")
+            all_tellf("FACTION: Not max ally with Dranik Loyalists")
         end
     end)
 
@@ -186,7 +485,7 @@ function QoL.Init()
 
     -- quickly exits my eqgame.exe instance using task manager
     mq.bind("/exitme", function()
-        cmd("/dgtell all Exiting")
+        all_tellf("Exiting")
         cmd('/exec TASKKILL "/F /PID '..tostring(mq.TLO.EverQuest.PID())..'" bg')
     end)
 
@@ -428,7 +727,7 @@ function QoL.Init()
 
     -- make all peer quit expedition
     mq.bind("/quitexp", function()
-        cmd("/dgtell all Instructing peers to leave expedition ...")
+        all_tellf("Instructing peers to leave expedition ...")
         cmd("/dgaexecute /dzquit")
     end)
 
@@ -455,6 +754,43 @@ function QoL.Init()
     -- report all peer total AA:s
     mq.bind("/totalaa", function()
         cmd("/noparse /dgaexecute /dgtell all TOTAL AA: ${Me.AAPointsTotal}")
+    end)
+
+    -- finds item by name in inventory/bags. NOTE: "/finditem" is reserved in eq live for "dragon hoard" feature
+    mq.bind("/fdi", function(...)
+        local name = trim(args_string(...))
+        name = strip_link(name)
+
+        log.Info("Ssearching for %s", name)
+
+        if is_orchestrator() then
+            cmdf("/dgzexecute /fdi %s", name)
+        end
+
+        local item = find_item(name)
+        if item == nil then
+            --all_tellf("%s not found", name)
+            return
+        end
+
+        local cnt = getItemCountExact(item.Name())
+        all_tellf("%s in %s (count: %d)", item.ItemLink("CLICKABLE")(), inventory_slot_name(item.ItemSlot()), cnt)
+    end)
+
+    -- find missing item
+    mq.bind("/fmi", function(...)
+        local name = trim(args_string(...))
+        name = strip_link(name)
+
+        if is_orchestrator() then
+            cmdf("/dgzexecute /fmi %s", name)
+        end
+
+        local item = find_item(name)
+        if item == nil then
+            all_tellf("I miss %s", name)
+            return
+        end
     end)
 
     -- toggles debug output on/off
@@ -553,7 +889,7 @@ function verifySpellLines(label, lines)
     for k, row in pairs(lines) do
         local spellConfig = parseSpellLine(row)
         if not known_spell_ability(spellConfig.Name) then
-            cmdf("/dgtell all Missing %s: %s", label, spellConfig.Name)
+            all_tellf("Missing %s: %s", label, spellConfig.Name)
             cmd("/beep 1")
         end
     end
@@ -569,13 +905,13 @@ function QoL.Tick()
     -- auto accept trades
     if window_open("tradewnd") and not has_cursor_item() then
         if has_target() and is_peer(mq.TLO.Target.Name()) then
-            cmdf("/dgtell all Accepting trade in 5s with %s", mq.TLO.Target.Name())
+            all_tellf("Accepting trade in 5s with %s", mq.TLO.Target.Name())
             delay(5000, function() return has_cursor_item() end)
             if not has_cursor_item() then
                 cmd("/notify tradewnd TRDW_Trade_Button leftmouseup")
             end
         else
-            cmdf("/dgtell all \arWARN\ax Ignoring trade from non-peer %s", mq.TLO.Target.Name())
+            all_tellf("\arWARN\ax Ignoring trade from non-peer %s", mq.TLO.Target.Name())
             cmd("/beep 1")
         end
     end

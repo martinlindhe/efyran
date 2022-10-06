@@ -29,101 +29,6 @@ function Assist.Init()
 
     Assist.prepareForNextFight()
 
-    -- tell peers to kill target until dead
-    mq.bind("/assiston", function()
-        -- XXX impl "/assiston /not|WAR" filter
-
-        local spawn = mq.TLO.Target
-        if spawn() == nil then -- XXX spawn()
-            return
-        end
-        if spawn.Type() ~= "PC" then
-            if Assist.target ~= nil then
-                log.Debug("Backing off existing target before assisting new")
-                Assist.backoff()
-            end
-            log.Info("Calling assist on %s, type %s", spawn.DisplayName(), spawn.Type())
-
-            -- tell everyone else to attack
-            cmdf("/dgzexecute /killit %d", spawn.ID())
-        end
-    end)
-
-    -- auto assist on mob until dead
-    ---@param mobID integer
-    mq.bind("/killit", function(mobID)
-        local spawn = spawn_from_id(mobID)
-        if spawn == nil then
-            return
-        end
-        if spawn.Type() ~= "PC" then
-            if Assist.target ~= nil then
-                log.Debug("Backing off existing target before assisting new")
-                Assist.backoff()
-            end
-            log.Debug("Killing %s, type %s", spawn.DisplayName(), spawn.Type())
-            Assist.handleAssistCall(spawn)
-        end
-    end)
-
-    -- ends assist call
-    mq.bind("/backoff", function()
-        if is_orchestrator() then
-            cmd("/dgzexecute /backoff")
-        end
-        Assist.backoff()
-    end)
-
-    mq.bind("/pbaeon", function()
-        if is_orchestrator() then
-            cmd("/dgzexecute /pbaeon")
-        end
-
-        if botSettings.settings.assist.pbae == nil then
-            return
-        end
-
-        local nearbyPBAEilter = "npc radius 50 zradius 50 los"
-
-        if spawn_count(nearbyPBAEilter) == 0 then
-            cmd("/dgtell all Ending PBAE. No nearby mobs.")
-            return
-        end
-
-        memorizePBAESpells()
-
-        cmd("/dgtell all PBAE ON")
-        while true do
-            -- TODO: break this loop with /pbaeoff
-            if spawn_count(nearbyPBAEilter) == 0 then
-                cmd("/dgtell all Ending PBAE. No nearby mobs.")
-                break
-            end
-
-            if not is_casting() then
-                for k, spellRow in pairs(botSettings.settings.assist.pbae) do
-                    local spellConfig = parseSpellLine(spellRow)
-
-                    if is_spell_ready(spellConfig.Name) then
-                        log.Info("Casting PBAE spell %s", spellConfig.Name)
-                        local spellName = spellConfig.Name
-                        if is_spell_in_book(spellConfig.Name) then
-                            local spell = get_spell(spellConfig.Name)
-                            if spell ~= nil then
-                                spellName = spell.RankName()
-                            end
-                        end
-                        castSpell(spellName, mq.TLO.Me.ID())
-                    end
-
-                    doevents()
-                    delay(50)
-                end
-            end
-        end
-
-    end)
-
 end
 
 
@@ -141,7 +46,7 @@ end
 ---@param spawn spawn
 function Assist.handleAssistCall(spawn)
     if botSettings.settings == nil or botSettings.settings.assist == nil then
-        cmd("/dgtell all WARNING: I have no assist settings")
+        all_tellf("WARNING: I have no assist settings")
         return
     end
 
@@ -169,7 +74,7 @@ function Assist.summonNukeComponents()
 
     for idx, lines in pairs(botSettings.settings.assist.nukes) do
         if type(lines) == "string" then
-            cmd("/dgtell all FATAL ERROR: settings.assist.nukes must be a map")
+            all_tellf("FATAL ERROR: settings.assist.nukes must be a map")
             cmd("/beep 1")
             delay(10000)
             return
@@ -178,7 +83,7 @@ function Assist.summonNukeComponents()
             local spellConfig = parseSpellLine(row)
             if spellConfig.Summon ~= nil then
                 if not known_spell_ability(spellConfig.Summon) then
-                    cmdf("/dgtell all I dont know spell/ability %s", spellConfig.Summon)
+                    all_tellf("I dont know spell/ability %s", spellConfig.Summon)
                     cmd("/beep 1")
                 end
 
@@ -233,7 +138,7 @@ function castSpellAbility(spawn, row, callback)
     end
 
     if spell.MinMana ~= nil and mq.TLO.Me.PctMana() < spell.MinMana then
-        --cmd("/dgtell all SKIP MinMana ", spell.Name, ", ", mq.TLO.Me.PctMana(), " vs required " , spell.MinMana)
+        log.Info("SKIP MinMana %s, %d vs required %d", spell.Name,  mq.TLO.Me.PctMana(), spell.MinMana)
         return false
     end
 
@@ -243,13 +148,13 @@ function castSpellAbility(spawn, row, callback)
     end
 
     if spell.NoPet ~= nil and spell.NoPet and have_pet() then
-        cmd("/dgtell all SKIP NoPet, i have a pet up")
+        all_tellf("SKIP NoPet, i have a pet up")
         return false
     end
 
     local cb = function()
         if spawn == nil then
-            cmdf("/dgtell all castSpellAbility: target died. ducking spell cast %s", mq.TLO.Me.Casting.Name())
+            all_tellf("castSpellAbility: target died. ducking spell cast %s", mq.TLO.Me.Casting.Name())
             cmdf("/interrupt")
             return true
         end
@@ -282,7 +187,7 @@ function Assist.killSpawn(spawn)
     local currentID = spawn.ID()
 
     if spawn == nil then
-        cmd("/dgtell all ERROR: killSpawn called with nil")
+        all_tellf("ERROR: killSpawn called with nil")
         return
     end
 
@@ -358,7 +263,7 @@ function Assist.killSpawn(spawn)
 
         if not is_casting() and (not has_target() or mq.TLO.Target.ID() ~= spawn.ID()) then
             -- XXX will happen for healers
-            all_tellf("/dgtell all [%s] killSpawn WARN: i lost target, restoring to %d %s. Previous target was %s", time(), spawn.ID(), spawn.Name(), mq.TLO.Target.Name())
+            all_tellf("killSpawn WARN: i lost target, restoring to %d %s. Previous target was %s", spawn.ID(), spawn.Name(), mq.TLO.Target.Name())
             cmdf("/target id %d", spawn.ID())
         end
 
@@ -402,7 +307,7 @@ function Assist.killSpawn(spawn)
                     end
                 end
             else
-                cmdf("/dgtell all ERROR cannot nuke, have no spell set %s", spellSet)
+                all_tellf("ERROR cannot nuke, have no spell set %s", spellSet)
             end
         end
 

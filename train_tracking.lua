@@ -8,7 +8,7 @@ local trackCount = 0
 local maxTries = 800
 
 if not is_ability_ready("Tracking") then
-    cmd("/dgtell all ERROR: Do not have Tracking. Cannot train.")
+    all_tellf("ERROR: Do not have Tracking. Cannot train.")
     return
 end
 

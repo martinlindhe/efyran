@@ -201,7 +201,7 @@ for npcRow, t in pairs(handinRules) do
 
                     if haveParts and needParts then
                         -- asks for the missing items
-                        cmdf("/dgtell all %s", needMessage)
+                        all_tellf("%s", needMessage)
                     elseif not needParts and haveParts then
                         log.Info("I HAVE ALL NEEDED PIECES, DOING HAND IN")
 
@@ -235,7 +235,7 @@ for npcRow, t in pairs(handinRules) do
                                 local item = find_item(component)
                                 if item == nil then
                                     -- unexpected
-                                    cmdf("/dgtell all ERROR find_item failed on %s", component)
+                                    all_tellf("ERROR find_item failed on %s", component)
                                     break
                                 end
 

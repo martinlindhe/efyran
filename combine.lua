@@ -11,7 +11,7 @@ function combine_clear_cursor()
             return true
         end
         if mq.TLO.Me.FreeInventory() == 0 then
-            cmd("/dgtell all Cannot clear cursor, no free inventory slots")
+            all_tellf("Cannot clear cursor, no free inventory slots")
             cmd("/beep 1")
             return false
         end
@@ -33,7 +33,7 @@ function combine_clear_cursor()
 end
 
 mq.event("missing_components", "Sorry, but you don't have everything you need for this recipe in your general inventory.", function(text, name)
-    cmd("/dgtell all Combine ending: out of stuff")
+    all_tellf("Combine ending: out of stuff")
     os.exit()
 end)
 
