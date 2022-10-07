@@ -12,11 +12,17 @@ local timer = require("Timer")
 
 local MIN_BUFF_DURATION = 6 * 6000 -- 6 ticks, each tick is 6s
 
+---@class buffQueueValue
+---@field public Peer string Peer name
+---@field public Buff string Name of buff group
+---@field public Force boolean Should we force-cast, or respect existing buff timers?
+
 local Buffs = {
     -- my aura spell, if any
     aura = find_best_aura(),
 
     -- queue of incoming buff requests
+    ---@type buffQueueValue[]
     queue = {},
 
     -- my available buff groups (space separated string)
@@ -29,11 +35,12 @@ local Buffs = {
 function Buffs.Init()
     -- enqueues a buff to be cast on a peer
     -- is normally called from another peer, to request a buff
-    mq.bind("/queuebuff", function(buff, peer)
+    mq.bind("/queuebuff", function(buff, peer, force)
         --print("queuebuff buff=", buff, ", peer=", peer)
         table.insert(Buffs.queue, {
             ["Peer"] = peer,
             ["Buff"] = buff,
+            ["Force"] = force == "force",
         })
     end)
 
@@ -141,7 +148,7 @@ function Buffs.BuffIt(spawnID)
     end
 
     for key in Buffs.available:gmatch("%S+") do
-        cmdf("/queuebuff %s %s", key, spawn.Name())
+        cmdf("/queuebuff %s %s force", key, spawn.Name())
     end
 end
 
@@ -154,20 +161,21 @@ function getClassBuffGroup(classShort, buffGroup)
 end
 
 -- returns true if spell is cast
+---@param req buffQueueValue
 function handleBuffRequest(req)
 
-    log.Info("handleBuffRequest: Peer %s, buff %s, queue len %d", req.Peer, req.Buff, #Buffs.queue)
+    log.Info("handleBuffRequest: Peer %s, buff %s, queue len %d, force = %s", req.Peer, req.Buff, #Buffs.queue, tostring(req.Force))
 
     local buffRows = groupBuffs[class_shortname()][req.Buff]
     if buffRows == nil then
-        all_tellf("FATAL ERROR: /queuebuff did not find groupBuffs.%s entry %s", class_shortname(), req.Buff)
+        all_tellf("ERROR: handleBuffRequest: did not find groupBuffs.%s entry %s", class_shortname(), req.Buff)
         return false
     end
 
     local spawn = spawn_from_peer_name(req.Peer)
     if spawn == nil then
         -- happens when zoning
-        log.Error("/queuebuff spawn not found %s", req.Peer)
+        log.Error("handleBuffRequest: Spawn not found %s", req.Peer)
         return false
     end
 
@@ -232,7 +240,7 @@ function handleBuffRequest(req)
     end
 
     if minLevel > 0 and spellConfigAllowsCasting(spellName, spawn) then
-        if spawn.Buff(spellName)() ~= nil and spawn.Buff(spellName).Duration() >= MIN_BUFF_DURATION then
+        if not req.Force and spawn.Buff(spellName)() ~= nil and spawn.Buff(spellName).Duration() >= MIN_BUFF_DURATION then
             log.Info("handleBuffRequest: Skip \ag%s\ax %s (%s), they have buff already. %d sec", spawn.Name(), spellName, req.Buff, spawn.Buff(spellName).Duration())
             return false
         end
@@ -246,7 +254,7 @@ function handleBuffRequest(req)
             if not is_casting() then
                 return true
             end
-            if spawn.Buff(spellName)() ~= nil and spawn.Buff(spellName).Duration() >= MIN_BUFF_DURATION then
+            if not req.Force and spawn.Buff(spellName)() ~= nil and spawn.Buff(spellName).Duration() >= MIN_BUFF_DURATION then
                 -- abort if they got the buff while we are casting
                 -- FIXME: this often triggers when spell had completed casting
                 log.Info("handleBuffRequest: My target %s has buff %s for %f sec, ducking.", mq.TLO.Target.Name(), spellName, mq.TLO.Target.Buff(spellName).Duration() / 1000)
