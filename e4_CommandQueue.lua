@@ -1,4 +1,4 @@
---local mq = require("mq")
+local mq = require("mq")
 local log = require("knightlinc/Write")
 
 local botSettings = require("e4_BotSettings")
@@ -79,6 +79,7 @@ function CommandQueue.Process()
 
         joinCurrentHealChannel()
         memorizeListedSpells()
+        buffs.AnnounceAvailablity()
     elseif v.Name == "dropinvis" then
         drop_invis()
     elseif v.Name == "playmelody" then

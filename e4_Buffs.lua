@@ -6,6 +6,7 @@ local follow  = require("e4_Follow")
 local pet     = require("e4_Pet")
 local botSettings = require("e4_BotSettings")
 local groupBuffs = require("e4_GroupBuffs")
+local bard = require("Class_Bard")
 
 local timer = require("Timer")
 
@@ -36,6 +37,17 @@ function Buffs.Init()
         })
     end)
 
+    Buffs.AnnounceAvailablity()
+
+    bard.resumeMelody()
+end
+
+local refreshBuffsTimer = timer.new_random(10 * 1) -- 10s
+
+local handleBuffsTimer = timer.new_random(2 * 1) -- 2s
+
+-- broadcasts what buff groups we can cast
+function Buffs.AnnounceAvailablity()
     -- see what class group buffs I have and prepare a list of them so I can announce availability.
     local classBuffGroups = groupBuffs[class_shortname()]
     if classBuffGroups == nil then
@@ -59,10 +71,6 @@ function Buffs.Init()
         cmdf("/dgtell all #available-buffs %s", Buffs.available)
     end
 end
-
-local refreshBuffsTimer = timer.new_random(10 * 1) -- 10s
-
-local handleBuffsTimer = timer.new_random(3 * 1) -- 3s
 
 function Buffs.Tick()
     if not is_brd() and is_casting() then
@@ -227,7 +235,7 @@ function handleBuffRequest(req)
             all_tellf("FATAL minLevel is not a number")
         end
         if type(level) ~= "number" then
-            all_tellf("FATAL level is not a number")
+            all_tellf("FATAL level is not a number: %s: %s", type(level), tostring(level))
         end
         if n > minLevel and level >= n then
             spellName = spellConfig.Name
@@ -316,12 +324,12 @@ function Buffs.RequestBuffs()
     for k, row in pairs(req) do
         -- "aegolism/Class|CLR/NotClass|DRU"
         local spellConfig = parseSpellLine(row)
-        --print("I want to request \ay"..spellConfig.Name.."\ax.")
+        --log.Debug("Considering to request \ay%s\ax.", spellConfig.Name)
 
         local skip = false
         local classes = split_str(spellConfig.Class, ",")
         for classIdx, class in pairs(classes) do
-            --print("- Class: do we have class \ax"..class.."\ay available? ", availableClasses[class] == true)
+            log.Debug("- Class: do we have class \ax%s\ay available? %s", class, tostring(availableClasses[class] == true))
             if availableClasses[class] ~= true then
                 skip = true
             end
@@ -330,7 +338,7 @@ function Buffs.RequestBuffs()
         if spellConfig.NotClass ~= nil then
             local notClasses = split_str(spellConfig.NotClass, ",")
             for classIdx, class in pairs(notClasses) do
-                --print("- NotClass: do we have class \ax"..class.."\ay available? ", availableClasses[class] == true)
+                log.Debug("- NotClass: do we have class \ax%s\ay available? %s", class, tostring(availableClasses[class] == true))
                 if availableClasses[class] == true then
                     skip = true
                 end
@@ -359,7 +367,7 @@ function Buffs.RequestBuffs()
                 if have_buff(o.Name) then
                     local duration = mq.TLO.Me.Buff(o.Name).Duration()
                     if duration ~= nil and duration >= MIN_BUFF_DURATION then
-                        --print("Will not request \ay", spellConfig.Name, "\ax. I have buff \ay"..o.Name.."\ax.")
+                        --log.Debug("Will not request \ay%s\ax. I have buff \ay%s\ax for %d more ticks.", spellConfig.Name, o.Name, duration)
                         found = true
                         break
                     else
@@ -371,9 +379,9 @@ function Buffs.RequestBuffs()
 
             -- ask proper class for buff
             if not found then
-                local peer = nearest_peer_by_class(askClass)
+                local peer = Buffs.findAvailableBuffer(spellConfig.Name)
                 if peer == nil then
-                    all_tellf("FATAL ERROR: no peer of required class found nearby: %s", askClass)
+                    all_tellf("FATAL ERROR: no peer of required class for buff %s found nearby: %s", spellConfig.Name, askClass)
                     return true
                 end
 
@@ -386,11 +394,23 @@ function Buffs.RequestBuffs()
                 cmdf("/dexecute %s /queuebuff %s %s", peer, spellConfig.Name, mq.TLO.Me.Name())
             end
         else
-            --print("Will not request \ay", spellConfig.Name, "\ax. Not all classes available: \ayClass:"..spellConfig.Class..", NotClass:"..(spellConfig.NotClass or "").."\ax.")
+            log.Debug("Will not request \ay%s\ax. Required class combo is not met: \ayClass:%s, NotClass:%s\ax.", spellConfig.Name, spellConfig.Class, spellConfig.NotClass or "")
         end
     end
 
     return false
+end
+
+-- Find the closest buffer peer who announced they have the desired buff available
+---@return string|nil
+function Buffs.findAvailableBuffer(buffGroup)
+    for peer, buffGroups in pairs(Buffs.otherAvailable) do
+        if buffGroups:find(buffGroup) then
+            --log.Debug("peer %s, buff groups: %s", peer, buffGroups)
+            return peer
+        end
+    end
+    return nil
 end
 
 -- returns true if a buff was casted

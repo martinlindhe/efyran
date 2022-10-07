@@ -15,8 +15,6 @@ local group   = require("e4_Group")
 local heal    = require("e4_Heal")
 local qol     = require("e4_QoL")
 
-local bard = require("Class_Bard")
-
 seed_process()
 
 botSettings.Init()
@@ -27,7 +25,6 @@ qol.Init()
 assist.Init()
 
 all_tellf("E4 started")
-bard.resumeMelody()
 
 -- MAIN LOOP
 while true do
