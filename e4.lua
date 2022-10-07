@@ -3,6 +3,7 @@ require("ezmq")
 require("knightlinc/Write")
 
 require("e4_Loot")
+require("e4_Hail")
 
 local commandQueue = require("e4_CommandQueue")
 
