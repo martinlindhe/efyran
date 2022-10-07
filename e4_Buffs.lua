@@ -70,6 +70,72 @@ function Buffs.Tick()
 
 end
 
+function Buffs.BuffIt(spawnID)
+
+    log.Debug("Handling /buffit request for spawn %s", spawnID)
+
+    local spawn = spawn_from_query("id "..spawnID)
+    if spawn == nil then
+        all_tellf("BUFFIT FAIL, cannot find spawn ID %d in %s", spawnID, zone_shortname())
+        return false
+    end
+
+    local level = spawn.Level()
+
+    for key, buffs in pairs(botSettings.settings.group_buffs) do
+        log.Debug("/buffit on %s, type %s, finding best group buff %s", spawn, type(spawn), key)
+
+        -- XXX find the one with highest MinLevel
+        local minLevel = 0
+        local spellName = ""
+        if type(buffs) ~= "table" then
+            all_tellf("FATAL ERROR, buffdata %s should be a table", buffs)
+            return
+        end
+
+        for k, buff in pairs(buffs) do
+            local spellConfig = parseSpellLine(buff)  -- XXX do not parse here, cache and reuse
+            local n = tonumber(spellConfig.MinLevel)
+            if n == nil then
+                all_tellf("FATAL ERROR, group buff %s does not have a MinLevel setting", buff)
+                return
+            end
+            if n > minLevel and level >= n then
+                minLevel = n
+                spellName = spellConfig.Name
+                local spell = get_spell(spellName)
+                if spell == nil then
+                    all_tellf("FATAL ERROR cant lookup %s", spellName)
+                    return
+                end
+                if is_spell_in_book(spellName) then
+                    spellName = spell.RankName()
+                    if not spell.StacksTarget() then
+                        all_tellf("ERROR cannot buff %s with %s (dont stack with current buffs)", spawn.Name(), spellName)
+                        return
+                    end
+                end
+
+                log.Debug("Best %s buff so far is MinLevel %d, Name %s, target L%d %s", key, spellConfig.MinLevel, spellConfig.Name, level, spawn.Name())
+            end
+        end
+
+        if minLevel > 0 then
+            if spellConfigAllowsCasting(spellName, spawn) then
+                all_tellf("Buffing \ag%s\ax with %s (%s)", spawn.Name(), spellName, key)
+                castSpellRaw(spellName, spawnID, "-maxtries|3")
+
+                -- sleep for the Duration
+                local spell = getSpellFromBuff(spellName)
+                if spell ~= nil then
+                    delay(3000 + spell.MyCastTime() + spell.RecastTime()) -- XXX 3s for "memorize spell". need a better "memorize if needed and wait while memorizing"-helper
+                end
+            end
+        else
+            log.Error("Failed to find a matching group buff %s, target L%d %s", key, level, spawn.Name())
+        end
+    end
+end
 
 -- returns true if spell is cast
 function handleBuffRequest(req)
@@ -296,7 +362,7 @@ function Buffs.RefreshAura()
     if Buffs.aura == nil or mq.TLO.Me.Aura(1)() ~= nil or is_sitting() then
         return false
     end
-    castSpellAbility(nil, Buffs.aura)
+    castSpellRaw(Buffs.aura, nil)
     return true
 end
 

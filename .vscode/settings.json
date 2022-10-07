@@ -69,4 +69,5 @@
     "Lua.workspace.library": [
         "./mq-definitions",
     ],
+    "Lua.completion.autoRequire": false,
 }

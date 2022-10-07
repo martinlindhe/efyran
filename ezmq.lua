@@ -880,15 +880,15 @@ end
 -- start observing a peer using MQ2DanNet
 ---@param peer string
 ---@param query string
----@param timeout? number defaults to 0
-function observe_peer(peer, query, timeout)
-    if not mq.TLO.DanNet(peer).OSet(query)() then
-        mq.cmdf('/dobserve %s -q "%s"', peer, query)
-        log.Debug("Adding Observer - mq.TLO.DanNet(%s).O(%s)", peer, query)
+function observe_peer(peer, query)
+    if mq.TLO.DanNet(peer).OSet(query)() then
+        --drop previous observer
+        mq.cmdf('/dobserve %s -q "%s" -drop', peer, query)
+        delay(100)
     end
-    mq.delay(timeout or 0, function()
-        return mq.TLO.DanNet(peer).O(query).Received() ~= nil and mq.TLO.DanNet(peer).O(query).Received() > 0
-    end)
+
+    mq.cmdf('/dobserve %s -q "%s"', peer, query)
+    log.Debug("Adding Observer - mq.TLO.DanNet(%s).O(%s)", peer, query)
 end
 
 local shortToLongClass = {

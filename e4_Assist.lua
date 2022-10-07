@@ -89,19 +89,14 @@ function Assist.summonNukeComponents()
                 log.Debug("Checking summon components for %s", spellConfig.Summon)
 
                 if getItemCountExact(spellConfig.Name) == 0 then
-                    all_tellf("Summoning %s", spellConfig.Name)
-                    --delay(100)
-                    castSpell(spellConfig.Summon, nil)
-                    log.Warn("DEBUG Summoned %s", spellConfig.Name)
+                    log.Info("Summoning %s", spellConfig.Name)
+                    castSpellRaw(spellConfig.Summon, nil)
 
                     -- wait and inventory
                     local spell = get_spell(spellConfig.Summon)
                     if spell ~= nil then
-                        log.Warn("DEBUG Summoned %s - waiting", spellConfig.Name)
                         delay(2000 + spell.MyCastTime())
-                        --log.Warn("DEBUG Summoned %s - clearing", spellConfig.Name)
                         clear_cursor()
-                        --log.Warn("DEBUG Summoned %s - cleared", spellConfig.Name)
                     end
                     return true
                 end

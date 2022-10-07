@@ -59,8 +59,7 @@ mq.imgui.init("ui-team", function()
 end)
 
 
--- XXX 1. register watchers on all toons for their HP, MANA, casting spell & target
-
+-- register watchers on all toons for their HP, MANA, casting spell & target
 
 --local timeQuery = 'Time.MilliSecond' -- XXX needs PR https://github.com/macroquest/macroquest/pull/640
 local timeQuery = 'Time.Time24'
@@ -72,18 +71,18 @@ local targetQuery = 'Target.ID'
 --    local peer = mq.TLO.DanNet.Peers(i)()
 
 
-local spawnQuery = "pc notid " .. mq.TLO.Me.ID() .. " radius 50"
+
+local spawnQuery = "pc notid " .. mq.TLO.Me.ID()
 
 while true do
-    for i = 1, spawn_count(spawnQuery) do
-        local spawn = mq.TLO.NearestSpawn(i, spawnQuery)
-        local peer = spawn.Name()
+
+    for peer in string.gmatch(mq.TLO.DanNet.Peers(), "([^|]+)") do
         if peer ~= nil and mq.TLO.DanNet(peer)() ~= nil then
             if hudTeamData[peer] == nil then
                 -- register initial observers
-                observe_peer(peer, timeQuery, 1000)
-                observe_peer(peer, castingQuery, 1000)
-                observe_peer(peer, targetQuery, 1000)
+                observe_peer(peer, timeQuery)
+                observe_peer(peer, castingQuery)
+                observe_peer(peer, targetQuery)
                 hudTeamData[peer] = {}
                 hudTeamData[peer].Polls = 0
             end

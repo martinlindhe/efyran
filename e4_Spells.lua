@@ -125,7 +125,7 @@ function refreshBuff(buffItem, spawn)
     if spawn.Type() == "Pet" then
         log.Debug("Buffing \agmy pet %s\ax with \ay%s\ax.", spawn.CleanName(), pretty)
     else
-        log.Debug("Buffing \agmyself\ax with \ay%s\ax.  Target type %s", pretty, spell.TargetType())
+        log.Debug("Buffing \agmyself\ax with \ay%s\ax.", pretty)
         if spell.TargetType() == "Self" then
             -- don't target myself on self-buffs
             spawnID = nil
