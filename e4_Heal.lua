@@ -31,32 +31,6 @@ function Heal.Init()
         end
     end)
 
-    -- Rezzes nearby player corpses
-    mq.bind("/aerez", function()
-        all_tellf("AERez started in %s ...", zone_shortname())
-        wait_until_not_casting()
-
-        local spawnQuery = 'pccorpse radius 100'
-        for i = 1, spawn_count(spawnQuery) do
-            ---@type spawn
-            local spawn = mq.TLO.NearestSpawn(i, spawnQuery)
-
-            local rez = get_rez_spell_item_aa()
-            if rez ~= nil then
-                target_id(spawn.ID())
-                all_tellf("Rezzing %s with %s", spawn.Name(), rez)
-                castSpellAbility(spawn, rez)
-                wait_until_not_casting()
-                break
-            else
-                all_tellf("\arWARN\ax: Not ready to rez \ag%s\ax.", spawn.Name())
-            end
-            doevents()
-            delay(10000) -- 10s
-        end
-        log.Info("AEREZ ENDING")
-    end)
-
     joinCurrentHealChannel()
     memorizeListedSpells()
 end
@@ -190,7 +164,7 @@ function Heal.processQueue()
         local peer = Heal.queue:peek_first()
         if peer ~= nil then
             local pct = toint(Heal.queue:prop(peer))
-            log.Info("Decided to heal ANY %s at %d %%", peer, pct)
+            log.Debug("Decided to heal ANY %s at %d %%", peer, pct)
             Heal.queue:remove(peer)
             if healPeer(botSettings.settings.healing.all_heal, peer, pct) then
                 return
@@ -407,8 +381,10 @@ function healPeer(spell_list, peer, pct)
         elseif spellConfig.HealPct ~= nil and spellConfig.HealPct < pct then
             -- remove, dont meet heal criteria
             -- DONT RETURN HERE because specific spell does not meet criteria!
-            log.Info("Skip using of heal, heal pct for %s is %d. dont need heal at %d for %s", spellConfig.Name, spellConfig.HealPct, pct, peer)
-
+            log.Debug("Skip using of heal, heal pct for %s is %d. dont need heal at %d for %s", spellConfig.Name, spellConfig.HealPct, pct, peer)
+        elseif not is_spell_in_book(spellConfig.Name) and not have_item(spellConfig.Name) then
+            -- SKIP clickes that is not on me
+            log.Warn("Skip using of heal to heal %s at %d, I do not have item on me: %s", peer, pct, spellConfig.Name)
         elseif not is_spell_in_book(spellConfig.Name) and have_item(spellConfig.Name) and not is_item_clicky_ready(spellConfig.Name) then
             -- SKIP clickies that is not ready
             log.Info("Skip using of heal to heal %s at %d, clicky %s is not ready", peer, pct, spellConfig.Name)

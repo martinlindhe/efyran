@@ -131,7 +131,7 @@ Example: "Molten Orb/NoAggro/Summon|Summon: Molten Orb"
 
 
 
-## special channels:
+## Special channels
 
 "skillup" - ability skill-ups is posted here
 "xp" - xp gains is posted here

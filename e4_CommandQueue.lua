@@ -279,6 +279,36 @@ function CommandQueue.Process()
             doevents()
             delay(2000) -- 2s delay
         end
+    elseif v.Name == "aerez" then
+        local spawnQuery = 'pccorpse radius 100'
+        local corpses = spawn_count(spawnQuery)
+
+        all_tellf("AERez started in %s (%d corpses) ...", zone_shortname(), corpses)
+        wait_until_not_casting()
+
+        for i = 1, corpses do
+            ---@type spawn
+            local spawn = mq.TLO.NearestSpawn(i, spawnQuery)
+            if spawn ~= nil and spawn ~= "NULL" then
+                log.Info("Trying to rez %s", spawn.Name())
+                target_id(spawn.ID())
+
+                local rez = get_rez_spell_item_aa()
+                if rez ~= nil then
+                    if spawn ~= nil then
+                        all_tellf("Rezzing %s with %s", spawn.Name(), rez)
+                        castSpellRaw(rez, spawn.ID())
+                        delay(3000)
+                        wait_until_not_casting()
+                    end
+                else
+                    all_tellf("\arWARN\ax: Not ready to rez \ag%s\ax.", spawn.Name())
+                end
+            end
+            doevents()
+            delay(12000)
+        end
+        log.Info("AEREZ ENDING")
     else
         all_tellf("ERROR unknown command in queue: %s", v.Name)
     end

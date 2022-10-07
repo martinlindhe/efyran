@@ -198,7 +198,7 @@ end
 function is_item_clicky_ready(name)
     local item = find_item(name)
     if item == nil then
-        all_tellf("ERROR: is_item_clicky_ready() called with item I do not have: %s", name)
+        log.Warn("is_item_clicky_ready() called with item I do not have: %s", name)
         return false
     end
     return item.Clicky() ~= nil and item.Timer.Ticks() == 0

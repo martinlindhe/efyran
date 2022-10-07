@@ -300,7 +300,7 @@ function getSpellFromBuff(name)
     elseif have_combat_ability(name) then
         return mq.TLO.Me.CombatAbility(mq.TLO.Me.CombatAbility(name))
     else
-        all_tellf("getSpellFromBuff ERROR: can't find buff %s", name)
+        log.Error("getSpellFromBuff: can't find buff %s", name)
         return nil
     end
 end
@@ -335,7 +335,7 @@ function memorize_spell(spellRow, defaultGem)
 
     if not is_spell_in_book(o.Name) then
         all_tellf("ERROR don't know spell/song %s", o.Name)
-        mq.cmd("/beep 1")
+        cmd("/beep 1")
         return nil
     end
 

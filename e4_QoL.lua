@@ -68,7 +68,6 @@ function QoL.Init()
     mq.event("missing_component", "You are missing #1#.", function(text, name)
         if name ~= "some required components" then
             all_tellf("Missing component %s", name)
-            cmd("/beep 1")
         end
     end)
 
@@ -806,6 +805,11 @@ function QoL.Init()
             log.loglevel = "debug"
             log.Info("Toggle debug info ON")
         end
+    end)
+
+    -- Rezzes nearby player corpses
+    mq.bind("/aerez", function()
+        commandQueue.Add("aerez")
     end)
 
     clear_cursor()
