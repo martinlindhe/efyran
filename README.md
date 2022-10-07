@@ -37,6 +37,20 @@ also rework buffing like this:
 
 
 
+## Debugging
+
+To begin, type `/debug`
+
+This will toggle the display of debug messages on your toon.
+This value defaults to false and is not remembered across sessions.
+
+If you want to permanently enable debugging, you need to add a per-character setting:
+
+```lua
+local settings = { }
+
+settings.debug = true -- enable debug logging for this peer
+```
 
 
 ## buff spell level and PC target levels
