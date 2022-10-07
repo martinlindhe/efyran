@@ -121,12 +121,12 @@ GroupBuffs.SHM = {
     -- L42 Guardian (23-24 ac)
     -- L54 Shroud of the Spirits (26-30 ac)
     -- L62 Ancestral Guard (36 ac)
-    -- L67 Acestral Bulwark (46 ac)
+    -- L67 Ancestral Bulwark (46 ac)
     ["shm_ac"] = {
         "Guardian/MinLevel|1",
         "Shroud of the Spirits/MinLevel|42",
         "Ancestral Guard/MinLevel|46",
-        "Acestral Bulwark/MinLevel|62",
+        "Ancestral Bulwark/MinLevel|62",
     },
 
     -- STA - affects HP
