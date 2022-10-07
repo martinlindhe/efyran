@@ -85,7 +85,7 @@ function CommandQueue.Process()
     elseif v.Name == "playmelody" then
         bard.PlayMelody(v.Arg)
     elseif v.Name == "buffit" then
-        buffs.BuffIt(v.Arg)
+        buffs.BuffIt(toint(v.Arg))
     elseif v.Name == "killit" then
         local spawn = spawn_from_id(toint(v.Arg))
         if spawn == nil then

@@ -21,7 +21,7 @@ settings.gems = {
 settings.self_buffs = {
     "Fuzzy Foothairs/CheckFor|Bestial Alignment Effect",
 
-    "Chaos-Imbued Leather Leggings", -- Aura of Eternity (+5 mana regen slot 8)
+    --"Chaos-Imbued Leather Leggings", -- Aura of Eternity (+5 mana regen slot 8)
 
     "Veil of Intense Evolution", -- Furious Might (slot 5: 40 atk)
 

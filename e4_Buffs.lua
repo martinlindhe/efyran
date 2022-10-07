@@ -19,7 +19,7 @@ local Buffs = {
     -- queue of incoming buff requests
     queue = {},
 
-    -- my available buff groups
+    -- my available buff groups (space separated string)
     available = "",
 
     -- others available buff groups (key = peer, val = space separated string)
@@ -113,7 +113,24 @@ function Buffs.Tick()
 
 end
 
+---@param spawnID integer
 function Buffs.BuffIt(spawnID)
+
+    if Buffs.available == nil then
+        log.Debug("Stopping /buffit, no group_buffs available!")
+        return
+    end
+
+    if not is_peer_id(spawnID) then
+        all_tellf("ERROR got a BuffIt request from unknown spawn %s", spawnID)
+        return
+    end
+
+    local spawn = spawn_from_id(spawnID)
+    if spawn == nil then
+        all_tellf("ERROR BuffIt: spawn_from_id() failed for %s", spawnID)
+        return
+    end
 
     log.Debug("Handling /buffit request for spawn %s", spawnID)
 
@@ -123,60 +140,16 @@ function Buffs.BuffIt(spawnID)
         return false
     end
 
-    local level = spawn.Level()
+    for key in Buffs.available:gmatch("%S+") do
+        cmdf("/queuebuff %s %s", key, spawn.Name())
+    end
+end
 
-    for key, buffs in pairs(botSettings.settings.group_buffs) do
-        log.Debug("/buffit on %s, type %s, finding best group buff %s", spawn, type(spawn), key)
-
-        -- XXX find the one with highest MinLevel
-        local minLevel = 0
-        local spellName = ""
-        if type(buffs) ~= "table" then
-            all_tellf("FATAL ERROR, buffdata %s should be a table", buffs)
-            return
-        end
-
-        for k, buff in pairs(buffs) do
-            local spellConfig = parseSpellLine(buff)  -- XXX do not parse here, cache and reuse
-            local n = tonumber(spellConfig.MinLevel)
-            if n == nil then
-                all_tellf("FATAL ERROR, group buff %s does not have a MinLevel setting", buff)
-                return
-            end
-            if n > minLevel and level >= n then
-                minLevel = n
-                spellName = spellConfig.Name
-                local spell = get_spell(spellName)
-                if spell == nil then
-                    all_tellf("FATAL ERROR cant lookup %s", spellName)
-                    return
-                end
-                if is_spell_in_book(spellName) then
-                    spellName = spell.RankName()
-                    if not spell.StacksTarget() then
-                        all_tellf("ERROR cannot buff %s with %s (dont stack with current buffs)", spawn.Name(), spellName)
-                        return
-                    end
-                end
-
-                log.Debug("Best %s buff so far is MinLevel %d, Name %s, target L%d %s", key, spellConfig.MinLevel, spellConfig.Name, level, spawn.Name())
-            end
-        end
-
-        if minLevel > 0 then
-            if spellConfigAllowsCasting(spellName, spawn) then
-                all_tellf("Buffing \ag%s\ax with %s (%s)", spawn.Name(), spellName, key)
-                castSpellRaw(spellName, spawnID, "-maxtries|3")
-
-                -- sleep for the Duration
-                local spell = getSpellFromBuff(spellName)
-                if spell ~= nil then
-                    delay(3000 + spell.MyCastTime() + spell.RecastTime()) -- XXX 3s for "memorize spell". need a better "memorize if needed and wait while memorizing"-helper
-                end
-            end
-        else
-            log.Error("Failed to find a matching group buff %s, target L%d %s", key, level, spawn.Name())
-        end
+function getClassBuffGroup(classShort, buffGroup)
+    local buffRows = groupBuffs[classShort][buffGroup]
+    if buffRows == nil then
+        all_tellf("FATAL ERROR: /queuebuff did not find groupBuffs.%s entry %s", classShort, buffGroup)
+        return false
     end
 end
 

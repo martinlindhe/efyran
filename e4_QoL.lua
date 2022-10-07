@@ -199,12 +199,6 @@ function QoL.Init()
             end
         end
 
-        -- XXX group_buffs was nuked
-        if botSettings.settings.group_buffs == nil then
-            log.Info("Stopping /buffit, no group_buffs configured!")
-            return
-        end
-
         commandQueue.Add("buffit", spawnID)
     end)
 
