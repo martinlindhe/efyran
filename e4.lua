@@ -3,7 +3,6 @@ require("ezmq")
 require("knightlinc/Write")
 
 require("e4_Loot")
-require("e4_Hail")
 
 local commandQueue = require("e4_CommandQueue")
 
@@ -33,15 +32,12 @@ bard.resumeMelody()
 while true do
     heal.Tick()
     doevents()
-    delay(1)
 
     buffs.Tick()
     doevents()
-    delay(1)
 
     commandQueue.Process()
     doevents()
-    delay(1)
 
     qol.Tick()
     doevents()

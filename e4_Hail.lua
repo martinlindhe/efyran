@@ -1,5 +1,7 @@
 local log = require("knightlinc/Write")
 
+local Hail = {}
+
 local hailTargets = {
     ["poknowledge"] = {
         ["Soulbinder Jera"] = "bind my soul", -- soulbinder
@@ -148,7 +150,7 @@ local hailTargets = {
     },
 }
 
-function PerformHail()
+function Hail.PerformHail()
     local npcName = ""
     local text = ""
 
@@ -184,3 +186,5 @@ function PerformHail()
     -- some hails result in rewards
     clear_cursor()
 end
+
+return Hail

@@ -2,6 +2,7 @@
 local log = require("knightlinc/Write")
 
 local botSettings = require("e4_BotSettings")
+local hail = require("e4_Hail")
 local buffs   = require("e4_Buffs")
 local bard = require("Class_Bard")
 local assist  = require("e4_Assist")
@@ -251,7 +252,7 @@ function CommandQueue.Process()
             cmd("/beep 1")
         end
     elseif v.Name == "hailit" then
-        PerformHail()
+        hail.PerformHail()
     elseif v.Name == "recallgroup" then
         group.RecallGroup(v.Arg, v.Arg2)
     elseif v.Name == "rezit" then
