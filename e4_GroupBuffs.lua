@@ -104,13 +104,13 @@ GroupBuffs.SHM = {
     -- L52 Regrowth (20 hp/tick, 17.5 min, cost 300 mana)
     -- L61 Replenishment (40 hp/tick, 20.5 min, cost 275 mana)
     -- L63 Blessing of Replenishment (40 hp/tick, 20.5 min, cost 650 mana, group)
-    -- L66 Spirit of Preserverance (60 hp/tick, 21 min, cost 343 mana)
-    -- L69 Talisman of Preserverance (60 hp/tick, 20.5 min, cost 812 mana, group)
+    -- L66 Spirit of Perseverance (60 hp/tick, 21 min, cost 343 mana)
+    -- L69 Talisman of Perseverance (60 hp/tick, 20.5 min, cost 812 mana, group)
     ["shm_regen"] = {
         "Chloroplast/MinLevel|1",
         "Regrowth/MinLevel|41",
         "Replenishment/MinLevel|45",
-        "Spirit of Preserverance/MinLevel|62",
+        "Spirit of Perseverance/MinLevel|62",
     },
 
     -- AC (slot 4, weaker than clr_ac)
