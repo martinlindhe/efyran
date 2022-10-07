@@ -22,7 +22,7 @@ end
 function testParseSpellLine()
     local o = parseSpellLine("Ward of Valiance/MinMana|50/CheckFor|Hand of Conviction")
     assert(o.Name == "Ward of Valiance")
-    assert(o.MinMana == "50")
+    assert(o.MinMana == 50)
     assert(o.CheckFor == "Hand of Conviction")
 
     o = parseSpellLine("Ancient: Nova Strike/GoM/NoAggro")
@@ -56,3 +56,15 @@ end
 
 testParseSpellLine()
 test_split_str()
+
+
+
+function test_strip_dannet_peer()
+    local o = strip_dannet_peer("server_name")
+    assert(o == "Name")
+
+    o = strip_dannet_peer("name")
+    assert(o == "Name")
+ end
+
+ test_strip_dannet_peer()

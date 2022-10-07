@@ -1247,6 +1247,20 @@ function args_string(...)
     return s
 end
 
+--- Upper-cases the first letter of input string
+function ucfirst(s)
+    return (s:gsub("^%l", string.upper))
+end
+
+-- removes server name part from a dannet peer name, and capitalizes it
+function strip_dannet_peer(s)
+    local pos = string.find(s, "_")
+    if pos ~= nil then
+        s = string.sub(s, pos + 1)
+    end
+    return ucfirst(s)
+end
+
 -- Returns "true" or "false".
 --
 -- For debug printing booleans, since lua 5.1 does not have a string format way for booleans.

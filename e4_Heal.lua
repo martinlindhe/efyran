@@ -14,8 +14,17 @@ local Heal = {
 }
 
 function Heal.Init()
-    mq.event("dannet_chat", "[ #1# (#2#) ] #3#", function(text, peer, channel, msg)
-        if me_healer() and channel == heal_channel() and botSettings.settings.healing ~= nil then
+    mq.event("dannet_chat", "[ #1# (#2#) ] #3#", function(text, dnetPeer, channel, msg)
+        if string.sub(msg, 1, 16) == "#available-buffs" then
+            local peerName = strip_dannet_peer(dnetPeer)
+
+            -- if peer is in my zone, remember their announcement
+            if spawn_from_peer_name(peerName) ~= nil then
+                local available = string.sub(msg, 18)
+                log.Info("%s ANNOUNCED AVAILABLE BUFFS: %s", peerName, available)
+                buffs.otherAvailable[peerName] = available
+            end
+        elseif me_healer() and channel == heal_channel() and botSettings.settings.healing ~= nil then
             if string.sub(msg, 1, 1) ~= "/" then -- ignore text starting with a  "/"
                 enqueueHealmeRequest(msg)
             end

@@ -11,7 +11,19 @@ local timer = require("Timer")
 
 local MIN_BUFF_DURATION = 6 * 6000 -- 6 ticks, each tick is 6s
 
-local Buffs = { aura = find_best_aura(), queue = {} }
+local Buffs = {
+    -- my aura spell, if any
+    aura = find_best_aura(),
+
+    -- queue of incoming buff requests
+    queue = {},
+
+    -- my available buff groups
+    available = "",
+
+    -- others available buff groups (key = peer, val = space separated string)
+    otherAvailable = {},
+}
 
 function Buffs.Init()
     -- enqueues a buff to be cast on a peer
@@ -23,6 +35,29 @@ function Buffs.Init()
             ["Buff"] = buff,
         })
     end)
+
+    -- see what class group buffs I have and prepare a list of them so I can announce availability.
+    local classBuffGroups = groupBuffs[class_shortname()]
+    if classBuffGroups == nil then
+        return
+    end
+
+    local availableBuffGroups = ""
+    for groupIdx, buffGroup in pairs(classBuffGroups) do
+        -- see if we have any rank of this buff
+        for rowIdx, checkRow in pairs(buffGroup) do
+            local spellConfig = parseSpellLine(checkRow)
+            if is_spell_in_book(spellConfig.Name) then
+                availableBuffGroups = availableBuffGroups .. " " .. groupIdx
+                break
+            end
+        end
+    end
+    Buffs.available = trim(availableBuffGroups)
+    if string.len(Buffs.available) > 0 then
+        log.Info("My available buff groups: ", Buffs.available)
+        cmdf("/dgtell all #available-buffs %s", Buffs.available)
+    end
 end
 
 local refreshBuffsTimer = timer.new_random(10 * 1) -- 10s
@@ -267,6 +302,7 @@ function Buffs.RequestBuffs()
     if req == nil then
         req = groupBuffs.Default[class_shortname()]
         if req == nil then
+            -- unlikely
             all_tellf("FATAL ERROR class default buffs missing for %s", class_shortname())
             delay(20000)
             return
