@@ -301,7 +301,6 @@ function getSpellFromBuff(name)
         return mq.TLO.Me.CombatAbility(mq.TLO.Me.CombatAbility(name))
     else
         all_tellf("getSpellFromBuff ERROR: can't find buff %s", name)
-        cmd("/beep 1")
         return nil
     end
 end

@@ -764,6 +764,12 @@ function peer_settings_file()
     return mq.TLO.MacroQuest.Server() .. "_" .. mq.TLO.Me.Class.ShortName() .. "_" .. mq.TLO.Me.Name() .. ".lua"
 end
 
+-- Returns a Level/Name compbo describing yourself, such as "WAR/100 Gimp"
+---@return string
+function present_myself()
+    return string.format("%s/%d %s", mq.TLO.Me.Class.ShortName(), mq.TLO.Me.Level(), mq.TLO.Me.Name())
+end
+
 local baseSlots = { -- XXX this should be accessible from mq TLO ?
     [0] = "charm",
     [1] = "leftear",

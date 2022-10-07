@@ -164,7 +164,7 @@ end
 ---@param req buffQueueValue
 function handleBuffRequest(req)
 
-    log.Info("handleBuffRequest: Peer %s, buff %s, queue len %d, force = %s", req.Peer, req.Buff, #Buffs.queue, tostring(req.Force))
+    log.Debug("handleBuffRequest: Peer %s, buff %s, queue len %d, force = %s", req.Peer, req.Buff, #Buffs.queue, tostring(req.Force))
 
     local buffRows = groupBuffs[class_shortname()][req.Buff]
     if buffRows == nil then
@@ -264,7 +264,7 @@ function handleBuffRequest(req)
         end)
         return true
     else
-        all_tellf("ERROR: I do not have any buffs matching %s to cast on L%d %s", req.Buff, level, spawn.Name())
+        log.Warning("ERROR: I do not have any buffs matching %s to cast on L%d %s", req.Buff, level, spawn.Name())
     end
 end
 
@@ -362,8 +362,8 @@ function Buffs.RequestBuffs()
             if not found then
                 local peer = Buffs.findAvailableBuffer(spellConfig.Name)
                 if peer == nil then
-                    all_tellf("FATAL ERROR: no peer of required class for buff %s found nearby: %s", spellConfig.Name, askClass)
-                    return true
+                    log.Info("No peer of required class for buff %s found nearby: %s", spellConfig.Name, askClass)
+                    return false
                 end
 
                 if not refresh and free_buff_slots() <= 0 then
