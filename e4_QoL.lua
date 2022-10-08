@@ -186,6 +186,18 @@ function QoL.Init()
         commandQueue.Add("dropinvis")
     end)
 
+    mq.bind("/reportmana", function()
+        if is_orchestrator() then
+            cmd("/dgzexecute /reportmana")
+        end
+        if not mq.TLO.Me.Class.CanCast() then
+            return
+        end
+        if mq.TLO.Me.PctMana() < 100 then
+            all_tellf("%dm", mq.TLO.Me.PctMana())
+        end
+    end)
+
     -- /buffit: asks bots to cast level appropriate buffs on current target
     mq.bind("/buffit", function(spawnID)
         log.Debug("buffit %s", spawnID)
