@@ -1,6 +1,6 @@
 local aliases = {}
 
-aliases.Beastlord = {
+aliases.BST = {
     ["sd"] = "Spiritual Dominion",
     ["sow"] = "Spirit of Wolf",
     ["sv"] = "Spiritual Vitality",
@@ -15,7 +15,7 @@ aliases.Beastlord = {
     ["invis"] = "Invisibility",
 }
 
-aliases.Cleric = {
+aliases.CLR = {
     ["ac"] = "Ward of Valiance",
     ["armor"] = "Ward of Valiance",
     ["aor"] = "Aura of Reverence",
@@ -56,7 +56,7 @@ aliases.Cleric = {
     --["purify"] = "Purify Soul",
 }
 
-aliases.Druid = {
+aliases.DRU = {
     ["bind"] = "Bind Affinity",
     ["bot9"] = "Blessing of the Nine",
     ["9s"] = "Blessing of the Nine",
@@ -149,7 +149,7 @@ aliases.Druid = {
     ["port bloodfields"] = "Circle of Bloodfields",
 }
 
-aliases.Enchanter = {
+aliases.ENC = {
     ["bind"] = "Bind Affinity",
     ["eb"] = "Everlasting Breath",
     ["god"] = "Guard of Druzzil",
@@ -184,7 +184,7 @@ aliases.Enchanter = {
     ["str"] = "Berserker Strength",
 }
 
-aliases.Magician = {
+aliases.MAG = {
     ["bind"] = "Bind Affinity",
     ["coh"] = "Call of the Hero",
     ["coth"] = "Call of the Hero",
@@ -193,7 +193,7 @@ aliases.Magician = {
     ["rods"] = "Mass Mystical Transvergence",
 }
 
-aliases.Necromancer = {
+aliases.NEC = {
     ["bind"] = "Bind Affinity",
     ["dmf"] = "Dead Men Floating",
     ["ivu"] = "Shadow of Death",
@@ -203,7 +203,7 @@ aliases.Necromancer = {
     ["twitch"] = "Sedulous Subversion",
 }
 
-aliases.Paladin = {
+aliases.PAL = {
     ["bss"] = "Brell's Stalwart Shield",
     ["rgc"] = "Remove Greater Curse",
     ["bbb"] = "Brell's Brawny Bulwark",
@@ -213,7 +213,7 @@ aliases.Paladin = {
     ["ac"] = "Bulkwark of Piety",
 }
 
-aliases.Ranger = {
+aliases.RNG = {
     ["cow"] = "Circle of Winter",
     ["cos"] = "Circle of Summer",
     ["cor"] = "Call of the Rathe",
@@ -244,13 +244,13 @@ aliases.Ranger = {
     ["invis"] = "Superior Camouflage",
 }
 
-aliases["Shadow Knight"] = {  -- XXX ?!??!
+aliases.SHD = {
     ["Voice"] = "Voice of Thule",
     ["VoT"] = "Voice of Thule",
     ["Thule"] = "Voice of Thule",
 }
 
-aliases.Shaman = {
+aliases.SHM = {
     ["bor"] = "Blessing of Replenishment",
     ["regen"] = "Talisman of Perseverance",
     ["bind"] = "Bind Affinity",
@@ -283,7 +283,7 @@ aliases.Shaman = {
     ["sloth"] = "Lingering Sloth",
 }
 
-aliases.Wizard  = {
+aliases.WIZ  = {
     ["bind"] = "Bind Affinity",
     ["decess"] = "Greater Decession",
     ["bulwark"] = "Bulwark of Calrena",

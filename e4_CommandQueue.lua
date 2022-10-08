@@ -185,9 +185,9 @@ function CommandQueue.Process()
         local name = v.Name
         local spellName
         if class_shortname() == "WIZ" then
-            spellName = aliases.Wizard["port " .. name]
+            spellName = aliases.WIZ["port " .. name]
         elseif class_shortname() == "DRU" then
-            spellName = aliases.Druid["port " .. name]
+            spellName = aliases.DRU["port " .. name]
         else
             return
         end
