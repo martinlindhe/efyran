@@ -54,10 +54,10 @@ function Pet.Summon()
 
     castSpellRaw(spell.RankName(), mq.TLO.Me.ID(), "-maxtries|3")
     delay(spell.MyCastTime(), function() return have_pet() end)
+    delay(500)
 
     if not have_pet() then
         all_tellf("ERROR: Failed to summon pet.")
-        cmd("/beep 1")
         return false
     end
 

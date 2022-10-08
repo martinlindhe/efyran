@@ -264,7 +264,7 @@ function handleBuffRequest(req)
         end)
         return true
     else
-        log.Warning("ERROR: I do not have any buffs matching %s to cast on L%d %s", req.Buff, level, spawn.Name())
+        log.Warn("\arERROR: I do not have any buffs matching %s\ax to cast on L%d %s", req.Buff, level, spawn.Name())
     end
 end
 
@@ -310,7 +310,7 @@ function Buffs.RequestBuffs()
         local skip = false
         local classes = split_str(spellConfig.Class, ",")
         for classIdx, class in pairs(classes) do
-            log.Debug("- Class: do we have class \ax%s\ay available? %s", class, tostring(availableClasses[class] == true))
+            --log.Debug("- Class: do we have class \ax%s\ay available? %s", class, tostring(availableClasses[class] == true))
             if availableClasses[class] ~= true then
                 skip = true
             end
@@ -319,7 +319,7 @@ function Buffs.RequestBuffs()
         if spellConfig.NotClass ~= nil then
             local notClasses = split_str(spellConfig.NotClass, ",")
             for classIdx, class in pairs(notClasses) do
-                log.Debug("- NotClass: do we have class \ax%s\ay available? %s", class, tostring(availableClasses[class] == true))
+                --log.Debug("- NotClass: do we have class \ax%s\ay available? %s", class, tostring(availableClasses[class] == true))
                 if availableClasses[class] == true then
                     skip = true
                 end

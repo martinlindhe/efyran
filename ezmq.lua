@@ -38,11 +38,11 @@ end
 function move_to(spawn)
     log.Debug("move_to ", spawn.Name())
 
-    if not line_of_sight_to(spawn) then
-        all_tellf("move_to ERROR: cannot see %s", spawn.Name())
-        mq.cmd("/beep 1")
-        return
-    end
+    --if not line_of_sight_to(spawn) then
+    --    all_tellf("move_to ERROR: cannot see %s", spawn.Name())
+    --    mq.cmd("/beep 1")
+    --    return
+    --end
 
     local zone = mq.TLO.Zone.ID()
 

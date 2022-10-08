@@ -23,11 +23,7 @@ local lastHeading = ""
 
 -- called from QoL.Tick() on every tick
 function Follow.Update()
-    if Follow.spawn == nil then
-        return
-    end
-
-    if Follow.spawn.Distance3D() > Follow.spawn.MaxRangeTo() then
+    if Follow.spawn ~= nil and Follow.spawn.Distance3D() > Follow.spawn.MaxRangeTo() then
         if not mq.TLO.Navigation.Active() then
             cmdf("/nav id %d | dist=15 log=critical", Follow.spawn.ID())
         elseif lastHeading ~= Follow.spawn.HeadingTo() then

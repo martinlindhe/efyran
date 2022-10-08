@@ -7,6 +7,7 @@ local assist  = require("e4_Assist")
 local follow  = require("e4_Follow")
 local commandQueue = require("e4_CommandQueue")
 local botSettings = require("e4_BotSettings")
+local pet     = require("e4_Pet")
 
 local QoL = {}
 
@@ -47,6 +48,8 @@ function QoL.Init()
     if not is_script_running("agents/healme") then
         cmd("/lua run agents/healme")
     end
+
+    pet.ConfigureTaunt()
 
     local dead = function(text, killer)
         all_tellf("I died. Killed by %s", killer)

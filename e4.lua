@@ -1,6 +1,6 @@
 require("ezmq")
 
-require("knightlinc/Write")
+local log = require("knightlinc/Write")
 
 require("e4_Loot")
 require("e4_Hail")
@@ -24,7 +24,7 @@ heal.Init()
 qol.Init()
 assist.Init()
 
-all_tellf("E4 started")
+log.Info("E4 started")
 
 -- MAIN LOOP
 while true do
