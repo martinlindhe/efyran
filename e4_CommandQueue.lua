@@ -53,6 +53,11 @@ function CommandQueue.PeekFirst()
     return nil
 end
 
+-- Clears the command queue
+function CommandQueue.Clear()
+    CommandQueue.queue = {}
+end
+
 function CommandQueue.Process()
     --log.Debug("CommandQueue.Process()")
 
@@ -129,6 +134,23 @@ function CommandQueue.Process()
                     doevents()
                     delay(50)
                 end
+            end
+        end
+    elseif v.Name == "evac" then
+        if botSettings.settings.evac == nil then
+            return
+        end
+
+        -- chose first one we have and use it (skip Exodus if AA is down)
+        for key, evac in pairs(botSettings.settings.evac) do
+            log.Info("Finding available evac spell %s: %s", key, evac)
+            if mq.TLO.Me.AltAbility(evac)() ~= nil then
+                if mq.TLO.Me.AltAbilityReady(evac)() then
+                    castSpellRaw(evac, mq.TLO.Me.ID(), "-maxtries|3")
+                    return
+                end
+            else
+                castSpellRaw(evac, mq.TLO.Me.ID(), "gem5 -maxtries|3")
             end
         end
     elseif v.Name == "shrinkgroup" then

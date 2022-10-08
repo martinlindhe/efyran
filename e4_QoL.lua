@@ -63,6 +63,7 @@ function QoL.Init()
         if zone == "an area where levitation effects do not function" then
             return
         end
+        commandQueue.Clear()
         commandQueue.Add("zoned")
     end)
 
@@ -353,27 +354,12 @@ function QoL.Init()
     end)
 
     mq.bind("/evac", function(name)
-
         if is_orchestrator() then
             cmd("/dgzexecute /evac")
         end
 
-        if botSettings.settings.evac == nil then
-            return
-        end
-
-        -- chose first one we have and use it (skip Exodus if AA is down)
-        for key, evac in pairs(botSettings.settings.evac) do
-            log.Info("Finding available evac spell %s: %s", key, evac)
-            if mq.TLO.Me.AltAbility(evac)() ~= nil then
-                if mq.TLO.Me.AltAbilityReady(evac)() then
-                    castSpellRaw(evac, mq.TLO.Me.ID(), "-maxtries|3")
-                    return
-                end
-            else
-                castSpellRaw(evac, mq.TLO.Me.ID(), "gem5 -maxtries|3")
-            end
-        end
+        commandQueue.Clear()
+        commandQueue.Add("evac")
     end)
 
     -- tell peers in zone to use Throne of Heroes

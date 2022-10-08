@@ -1,6 +1,8 @@
 local settings = { }
 
-settings.swap = { -- XXX impl
+settings.debug = true
+
+settings.swap = {
     ["main"] = "Nightshade, Blade of Entropy|Mainhand/Aneuk Dagger of Eye Gouging|Offhand/Sorrowmourn Stone|Ranged",
 
     ["bfg"] = "Breezeboot's Frigid Gnasher|Mainhand",
