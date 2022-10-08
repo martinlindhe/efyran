@@ -1,5 +1,7 @@
 local settings = { }
 
+settings.debug = true
+
 settings.swap = {
     ["main"] = "Staff of Everliving Brambles|Mainhand/Shield of the Planar Assassin|Offhand",
     ["fishing"] = "Fishing Pole|Mainhand",

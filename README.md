@@ -53,7 +53,7 @@ settings.debug = true -- enable debug logging for this peer
 ```
 
 
-## buff spell level and PC target levels
+## Buff spell level and PC target levels
 
 Buff Spell Level   Minimum Target Level
 1-50:				Level 1
@@ -68,13 +68,15 @@ Buff Spell Level   Minimum Target Level
 66+: 				Level 62
 
 
-## Terminology used
+## Terminology
 - Orchestrator = the main driver toon you are playing from
 - Peer = A connected character that you control
+- Buff group = A tag such as "clr_symbol", which translates to a table of the Cleric "Symbol" line of buffs
 
 
-## command reference
+## Command reference
 
+```
 /assiston ${Target.ID}      - run from main driver, tells bots to kill ID
 /backoff                    - call of assist
 /pbaeon                     - start PBAE
@@ -95,8 +97,8 @@ Buff Spell Level   Minimum Target Level
 /dropbuff <name>            - drop buff from all peers in zone, partial buff name match. "all" to drop all buffs
 /dropinvis                  - drop invisibility on all peers in zone
 /gathercorpses              - summon nearby corpses into a pile
-/factions                    - report faction status. currently only tracks Dranik Loyalists max ally (oow t2 armor)
-/factionsall                 - tell all peers to report faction
+/factions                   - report faction status. currently only tracks Dranik Loyalists max ally (oow t2 armor)
+/factionsall             	- tell all peers to report faction
 
 /fdi             			- find item by partial name
 /fmi                        - find missing item. report peers who lack an item
@@ -114,7 +116,7 @@ Buff Spell Level   Minimum Target Level
 
 /rezit                      - rez target
 /aerez                      - perform ae rez
-
+```
 
 xxx document rest
 

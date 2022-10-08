@@ -60,8 +60,6 @@ function QoL.Init()
         if zone == "an area where levitation effects do not function" then
             return
         end
-
-        log.Debug("I zoned into ", zone)
         commandQueue.Add("zoned")
     end)
 
@@ -527,9 +525,15 @@ function QoL.Init()
         cmd("/noparse /dgaexecute all /if (${Me.Invis}) /dgtell all INVIS")
     end)
 
-    -- useful when AE FD is cast (Cleric 1.5 fight in lfay and so on)
+    -- useful when AE FD is cast (oow, wos Shadowhunter, Cleric 1.5 fight in lfay and so on)
     mq.bind("/standall", function()
+        log.Info("Requested ALL peers to /stand")
         cmd("/noparse /dgaexecute all /if (${Me.Feigning} || ${Me.Ducking} || ${Me.Sitting}) /stand")
+    end)
+
+    mq.bind("/sitall", function()
+        log.Info("Requested ALL peers to /sit")
+        cmd("/noparse /dgaexecute all /if (${Me.Standing}) /sit")
     end)
 
     -- report all peers who are not standing
@@ -810,6 +814,11 @@ function QoL.Init()
     -- Rezzes nearby player corpses
     mq.bind("/aerez", function()
         commandQueue.Add("aerez")
+    end)
+
+    -- Cast AoE Flight of Eagles
+    mq.bind("/aefoe", function()
+        commandQueue.Add("aefoe")
     end)
 
     clear_cursor()

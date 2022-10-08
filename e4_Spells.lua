@@ -276,16 +276,15 @@ end
 ---@param name string spell name
 ---@param spawnId integer|nil
 function castSpellRaw(name, spawnId, extraArgs)
-    if extraArgs == nil then
-        extraArgs = ""
+    local exe = string.format('/casting "%s"', name)
+    if spawnId ~= nil then
+        exe = exe .. string.format(" -targetid|%d", spawnId)
     end
-    if spawnId == nil then
-        --log.Debug("-- castSpellRaw %s, extraArgs %s", name, extraArgs)
-        cmdf('/casting "%s"%s', name, extraArgs)
-    else
-        --log.Debug("-- castSpellRaw %s, spawnId %d, extraArgs %s", name, spawnId, extraArgs)
-        cmdf('/casting "%s" -targetid|%d%s', name, spawnId, extraArgs)
+    if extraArgs ~= nil then
+        exe = exe .. " " .. extraArgs
     end
+    log.Debug("-- castSpellRaw: %s", exe)
+    cmdf(exe)
 end
 
 -- returns datatype spell or nil if not found
@@ -362,4 +361,21 @@ function memorize_spell(spellRow, defaultGem)
     end
 
     return gem
+end
+
+---@param spellName string
+function cast_mgb_spell(spellName)
+    if not is_alt_ability_ready("Mass Group Buff") then
+        all_tellf("\arMass Group Buff is not available...\ax Ready in %s", mq.TLO.Me.AltAbilityTimer("Mass Group Buff").TimeHMS())
+        return
+    end
+    if not is_spell_in_book(spellName) then
+        all_tellf("\ar%s is not available...", spellName)
+        return
+    end
+
+    cast_alt_ability("Mass Group Buff", nil)
+    delay(100)
+    all_tellf("\agMGB %s inc\ax...", spellName)
+    castSpellRaw(spellName, nil, "-maxtries|3")
 end

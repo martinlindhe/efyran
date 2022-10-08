@@ -382,11 +382,11 @@ function Buffs.RequestBuffs()
     return false
 end
 
--- Find the closest buffer peer who announced they have the desired buff available
+-- Find the closest buffer peer who announced they have the desired buff group available
 ---@return string|nil
 function Buffs.findAvailableBuffer(buffGroup)
-    for peer, buffGroups in pairs(Buffs.otherAvailable) do
-        if buffGroups:find(buffGroup) then
+    for peer, availableGroups in pairs(Buffs.otherAvailable) do
+        if availableGroups:find(buffGroup) then
             --log.Debug("peer %s, buff groups: %s", peer, buffGroups)
             return peer
         end

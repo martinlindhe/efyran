@@ -75,6 +75,7 @@ function CommandQueue.Process()
         cmd("/notify ConfirmationDialogBox Yes_Button leftmouseup")
         cmd("/squelch /raidaccept")
     elseif v.Name == "zoned" then
+        log.Debug("I zoned into ", zone_shortname())
         pet.ConfigureTaunt()
 
         joinCurrentHealChannel()
@@ -309,6 +310,12 @@ function CommandQueue.Process()
             delay(12000)
         end
         log.Info("AEREZ ENDING")
+    elseif v.Name == "aefoe" then
+        if class_shortname() ~= "DRU" then
+            log.Error("I am not a druid")
+            return
+        end
+        cast_mgb_spell("Flight of Eagles")
     else
         all_tellf("ERROR unknown command in queue: %s", v.Name)
     end

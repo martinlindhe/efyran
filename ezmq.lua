@@ -314,7 +314,7 @@ function is_combat_ability_ready(name)
 end
 
 ---@param name string
----@param spawnID integer
+---@param spawnID integer|nil
 function cast_alt_ability(name, spawnID)
 
     if is_brd() and is_casting() then
@@ -322,13 +322,13 @@ function cast_alt_ability(name, spawnID)
         mq.delay(100)
     end
 
-    local args = '"'..name..'|alt'
+    local args = '"'..name..'|alt -maxtries|3'
     if spawnID ~= nil then
         args = args .. ' -targetid|'.. tostring(spawnID)
     end
 
     mq.cmdf("/casting %s", args)
-    mq.delay(500)
+    mq.delay(50)
     mq.delay(20000, function() return not is_casting() end)
 
     if is_brd() then
