@@ -240,6 +240,7 @@ function Assist.killSpawn(spawn)
     end
 
     local debuffsUsed = {}
+    local dotsUsed = {}
 
     while true do
         --log.Debug("killSpawn %s loop start, melee = %s", spawn.Name(), bools(melee))
@@ -269,19 +270,30 @@ function Assist.killSpawn(spawn)
         -- perform debuffs ONE TIME EACH on assist before starting nukes
         if not used and botSettings.settings.assist.debuffs ~= nil and not is_casting() and spawn ~= nil then
             for v, row in pairs(botSettings.settings.assist.debuffs) do
-                log.Debug("Evaluating debuff %s", row)
-                if Assist.target == nil then
-                    -- break inner loop if /backoff was called
-                    log.Debug("killSpawn debuffs: i got called off, breaking inner loop")
-                    break
-                end
-
                 local spellConfig = parseSpellLine(row)
-                if debuffsUsed[row] == nil and is_spell_ability_ready(spellConfig.Name) then
-                    all_tellf("Trying to debuf %s with %s", spawn.Name(), row)
+                log.Debug("Evaluating debuff %s", spellConfig.Name)
+                if Assist.target ~= nil and debuffsUsed[row] == nil and is_spell_ability_ready(spellConfig.Name) then
+                    log.Info("Trying to debuff %s with %s", spawn.Name(), spellConfig.Name)
                     if castSpellAbility(spawn, row) then
-                        all_tellf("Debuffed %s with %s", spawn.Name(), row)
+                        all_tellf("Debuffed %s with %s", spawn.Name(), spellConfig.Name)
                         debuffsUsed[row] = true
+                        used = true
+                        break
+                    end
+                end
+            end
+        end
+
+        -- perform dots ONE TIME EACH on assist before staring nukes
+        if not used and botSettings.settings.assist.dots ~= nil and not is_casting() and spawn ~= nil then
+            for v, row in pairs(botSettings.settings.assist.dots) do
+                local spellConfig = parseSpellLine(row)
+                log.Debug("Evaluating dot %s", spellConfig.Name)
+                if Assist.target ~= nil and dotsUsed[row] == nil and is_spell_ability_ready(spellConfig.Name) then
+                    log.Info("Trying to dot %s with %s", spawn.Name(), spellConfig.Name)
+                    if castSpellAbility(spawn, row) then
+                        all_tellf("Dotted %s with %s", spawn.Name(), spellConfig.Name)
+                        dotsUsed[row] = true
                         used = true
                         break
                     end
@@ -293,13 +305,7 @@ function Assist.killSpawn(spawn)
         and spawn ~= nil and spawn.Distance() < spawn.MaxRangeTo() and spawn.LineOfSight() then
             -- use melee abilities
             for v, abilityRow in pairs(botSettings.settings.assist.abilities) do
-                if Assist.target == nil then
-                    -- break inner loop if /backoff was called
-                    log.Debug("killSpawn melee: i got called off, breaking inner loop")
-                    break
-                end
-
-                if castSpellAbility(spawn, abilityRow) then
+                if Assist.target ~= nil and castSpellAbility(spawn, abilityRow) then
                     used = true
                     break
                 end
@@ -314,13 +320,7 @@ function Assist.killSpawn(spawn)
             if botSettings.settings.assist.nukes[spellSet] ~= nil then
                 for v, row in pairs(botSettings.settings.assist.nukes[spellSet]) do
                     log.Debug("Evaluating nuke %s", row)
-                    if Assist.target == nil then
-                        -- break inner loop if /backoff was called
-                        log.Debug("killSpawn nukes: i got called off, breaking inner loop")
-                        break
-                    end
-
-                    if castSpellAbility(spawn, row) then
+                    if Assist.target ~= nil and castSpellAbility(spawn, row) then
                         break
                     end
                 end
