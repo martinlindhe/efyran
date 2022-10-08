@@ -3,13 +3,22 @@ local log = require("knightlinc/Write")
 -- FIXME: relative path...
 local settingsRoot = "D:/dev-mq/mqnext-e4-lua/settings"
 
-local BotSettings = {
-    ["healme_channel"] = "", -- healme channel for current zone
-    ["toggles"] = {
-        ["refresh_buffs"] = true,   -- /buffon, /buffoff
-    },
-}
+---@class PeerSettingsFileStruct
+---@field public assist PeerSettingsAssist
 
+---@class PeerSettingsAssist
+---@field public type string "melee" or "ranged"
+---@field public melee_distance string|integer "auto" or a number
+
+local BotSettings = {
+    healme_channel = "", -- healme channel for current zone
+    toggles = {
+        refresh_buffs = true,   -- /buffon, /buffoff
+    },
+
+    ---@type PeerSettingsFileStruct
+    settings = {},
+}
 
 -- XXX improve peer template generation
 local peerTemplate = [[

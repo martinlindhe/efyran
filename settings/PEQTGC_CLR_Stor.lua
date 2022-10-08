@@ -173,13 +173,6 @@ settings.healing = {
     },
 
     ["group_heal"] = { -- XXX impl
-        -- group heals:
-        -- L30 Word of Health (380-485 hp, cost 302 mana)
-        -- L57 Word of Restoration (1788-1818 hp, cost 898 mana)
-        -- L60 Word of Redemption (7500 hp, cost 1100 mana)
-        -- L64 Word of Replenishment (2500 hp, -14 dr, -14 pr, -7 curse, cost 1100 mana)
-        -- L69 Word of Vivification (3417-3427 hp, -21 dr, -21 pr, -14 curse, cost 1357 mana)
-
         -- group hot:
         -- L70 Elixir of Divinity (900 hp/tick, group, cost 1550 mana)
         -- XXX add celestial regen aa here?!

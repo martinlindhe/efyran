@@ -202,9 +202,19 @@ function QoL.Init()
         end
     end)
 
+    -- make all clerics cast their curing group heal spell
+    mq.bind("/groupheal", function()
+        if is_orchestrator() then
+            cmd("/dgzexecute /groupheal")
+        end
+        if class_shortname() ~= "CLR" then
+            return
+        end
+        commandQueue.Add("groupheal")
+    end)
+
     -- /buffit: asks bots to cast level appropriate buffs on current target
     mq.bind("/buffit", function(spawnID)
-        log.Debug("buffit %s", spawnID)
         if is_orchestrator() then
             spawnID = mq.TLO.Target.ID()
             if spawnID ~= 0 then

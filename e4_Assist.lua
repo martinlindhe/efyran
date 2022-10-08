@@ -121,6 +121,9 @@ function castSpellAbility(spawn, row, callback)
         log.Debug("SKIP PctAggro %s aggro %d vs required %d", spell.Name, mq.TLO.Me.PctAggro(), spell.PctAggro)
         return false
     end
+    if spell.PctAggro ~= nil and mq.TLO.Me.PctAggro() >= spell.PctAggro then
+        log.Debug("WILL USE %s, PctAggro is %d vs required %d", spell.Name, mq.TLO.Me.PctAggro(), spell.PctAggro)
+    end
     if spell.NoAggro ~= nil and spell.NoAggro and mq.TLO.Me.TargetOfTarget.ID() == mq.TLO.Me.ID() then
         -- NoAggro skips cast if you are on top of aggro
         --print("SKIP NoAggro ", spell.Name, " i have aggro")
@@ -284,6 +287,9 @@ function Assist.killSpawn(spawn)
             end
         end
 
+        doevents()
+        delay(1)
+
         -- perform dots ONE TIME EACH on assist before staring nukes
         if not used and botSettings.settings.assist.dots ~= nil and not is_casting() and spawn ~= nil then
             for v, row in pairs(botSettings.settings.assist.dots) do
@@ -301,11 +307,15 @@ function Assist.killSpawn(spawn)
             end
         end
 
+        doevents()
+        delay(1)
+
         if not used and melee and botSettings.settings.assist.abilities ~= nil
         and spawn ~= nil and spawn.Distance() < spawn.MaxRangeTo() and spawn.LineOfSight() then
             -- use melee abilities
-            for v, abilityRow in pairs(botSettings.settings.assist.abilities) do
-                if Assist.target ~= nil and castSpellAbility(spawn, abilityRow) then
+            for v, row in pairs(botSettings.settings.assist.abilities) do
+                local spellConfig = parseSpellLine(row)
+                if Assist.target ~= nil and is_spell_ability_ready(spellConfig.Name) and castSpellAbility(spawn, row) then
                     used = true
                     break
                 end

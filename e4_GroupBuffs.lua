@@ -211,6 +211,15 @@ GroupBuffs.SHM = {
     },
 }
 
+GroupBuffs.ClericGroupHeal = {
+    -- priority: the first spell in list that is memorized and not on cooldown will be used
+    "Word of Vivification",     -- L69: 3417-3427 hp, -21 dr, -21 pr, -14 curse, cost 1357 mana
+    "Word of Replenishment",    -- L64: 2500 hp, -14 dr, -14 pr, -7 curse, cost 1100 mana
+    "Word of Redemption",       -- L60: 7500 hp, cost 1100 mana
+    "Word of Restoration",      -- L57: 1788-1818 hp, cost 898 mana
+    "Word of Health",           -- L30: 380-485 hp, cost 302 mana
+}
+
 GroupBuffs.CLR = {
     -- slot 3 hp buff - symbol line:
     -- L41 Symbol of Naltron (406-525 hp)

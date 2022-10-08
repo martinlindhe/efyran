@@ -8,6 +8,7 @@ local bard = require("Class_Bard")
 local assist  = require("e4_Assist")
 local pet     = require("e4_Pet")
 local group   = require("e4_Group")
+local groupBuffs = require("e4_GroupBuffs")
 local aliases = require("settings/Spell Aliases")
 
 ---@class CommandQueueValue
@@ -153,6 +154,16 @@ function CommandQueue.Process()
                 castSpellRaw(evac, mq.TLO.Me.ID(), "gem5 -maxtries|3")
             end
         end
+    elseif v.Name == "groupheal" then
+
+        for idx, groupHeal in pairs(groupBuffs.ClericGroupHeal) do
+            if is_spell_ready(groupHeal) then
+                all_tellf("Casting group heal \ag%s\ax ...", groupHeal)
+                castSpellRaw(groupHeal, nil)
+                return
+            end
+        end
+
     elseif v.Name == "shrinkgroup" then
         -- find the shrink clicky/spell if we got one
         local shrinkClicky = nil

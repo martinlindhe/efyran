@@ -89,7 +89,7 @@ function Buffs.Tick()
     end
 
     if botSettings.toggles.refresh_buffs and refreshBuffsTimer:expired() and not is_invisible() then
-        log.Debug("Buff tick: refresh buffs at %s", time())
+        --log.Debug("Buff tick: refresh buffs at %s", time())
         if not Buffs.RefreshSelfBuffs() then
             if not Buffs.RefreshAura() then
                 if not pet.Summon() then
@@ -375,7 +375,7 @@ function Buffs.RequestBuffs()
                 cmdf("/dexecute %s /queuebuff %s %s", peer, spellConfig.Name, mq.TLO.Me.Name())
             end
         else
-            log.Debug("Will not request \ay%s\ax. Required class combo is not met: \ayClass:%s, NotClass:%s\ax.", spellConfig.Name, spellConfig.Class, spellConfig.NotClass or "")
+            --log.Debug("Will not request \ay%s\ax. Required class combo is not met: \ayClass:%s, NotClass:%s\ax.", spellConfig.Name, spellConfig.Class, spellConfig.NotClass or "")
         end
     end
 
