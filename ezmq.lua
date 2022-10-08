@@ -971,9 +971,10 @@ end
 ---@field public MinLevel integer Minimum level.
 ---@field public PctAggro integer Skips cast if your aggro % is above threshold.
 ---@field public Summon string Name for summoning spell component, eg "Molten Orb/NoAggro/Summon|Summon: Molten Orb" (MAG)
+---@field public MaxTries integer Max number of casts
 
 local shortProperties = { "Shrink", "GoM", "NoAggro", "NoPet" } -- is turned into bools
-local intProperties = { "PctAggro", "MinMana", "HealPct", "MinMobs", "MaxMobs" } -- is turned into integers
+local intProperties = { "PctAggro", "MinMana", "HealPct", "MinMobs", "MaxMobs", "MaxTries" } -- is turned into integers
 -- parses a spell/ability etc line with properties, returns a object
 -- example in: "Ward of Valiance/MinMana|50/CheckFor|Hand of Conviction"
 ---@param s string

@@ -169,7 +169,7 @@ function castSpellAbility(spawn, row, callback)
     end
 
     delay(10000, callback)
-    log.Info("Done waiting after cast.")
+    log.Debug("castSpellAbility: Done waiting after cast.")
     return true
 end
 
@@ -239,6 +239,7 @@ function Assist.killSpawn(spawn)
         end
     end
 
+    local debuffsUsed = {}
 
     while true do
         --log.Debug("killSpawn %s loop start, melee = %s", spawn.Name(), bools(melee))
@@ -261,12 +262,35 @@ function Assist.killSpawn(spawn)
             cmdf("/target id %d", spawn.ID())
         end
 
-        doevents("dannet_chat")
+        doevents()
         delay(1)
 
         local used = false
-        if melee and botSettings.settings.assist.abilities ~= nil
-        and spawn.Distance() < spawn.MaxRangeTo() and spawn.LineOfSight() then
+        -- perform debuffs ONE TIME EACH on assist before starting nukes
+        if not used and botSettings.settings.assist.debuffs ~= nil and not is_casting() and spawn ~= nil then
+            for v, row in pairs(botSettings.settings.assist.debuffs) do
+                log.Debug("Evaluating debuff %s", row)
+                if Assist.target == nil then
+                    -- break inner loop if /backoff was called
+                    log.Debug("killSpawn debuffs: i got called off, breaking inner loop")
+                    break
+                end
+
+                local spellConfig = parseSpellLine(row)
+                if debuffsUsed[row] == nil and is_spell_ability_ready(spellConfig.Name) then
+                    all_tellf("Trying to debuf %s with %s", spawn.Name(), row)
+                    if castSpellAbility(spawn, row) then
+                        all_tellf("Debuffed %s with %s", spawn.Name(), row)
+                        debuffsUsed[row] = true
+                        used = true
+                        break
+                    end
+                end
+            end
+        end
+
+        if not used and melee and botSettings.settings.assist.abilities ~= nil
+        and spawn ~= nil and spawn.Distance() < spawn.MaxRangeTo() and spawn.LineOfSight() then
             -- use melee abilities
             for v, abilityRow in pairs(botSettings.settings.assist.abilities) do
                 if Assist.target == nil then
@@ -282,21 +306,21 @@ function Assist.killSpawn(spawn)
             end
         end
 
-        doevents("dannet_chat")
+        doevents()
         delay(1)
 
         -- caster/hybrid assist.nukes
-        if not used and botSettings.settings.assist.nukes ~= nil and not is_casting() then
+        if not used and botSettings.settings.assist.nukes ~= nil and not is_casting() and spawn ~= nil then
             if botSettings.settings.assist.nukes[spellSet] ~= nil then
-                for v, nukeRow in pairs(botSettings.settings.assist.nukes[spellSet]) do
-                    log.Debug("Evaluating nuke %s", nukeRow)
+                for v, row in pairs(botSettings.settings.assist.nukes[spellSet]) do
+                    log.Debug("Evaluating nuke %s", row)
                     if Assist.target == nil then
                         -- break inner loop if /backoff was called
                         log.Debug("killSpawn nukes: i got called off, breaking inner loop")
                         break
                     end
 
-                    if castSpellAbility(spawn, nukeRow) then
+                    if castSpellAbility(spawn, row) then
                         break
                     end
                 end
@@ -305,7 +329,7 @@ function Assist.killSpawn(spawn)
             end
         end
 
-        doevents("dannet_chat")
+        doevents()
         delay(1)
 
         heal.processQueue()

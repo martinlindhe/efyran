@@ -33,6 +33,11 @@ function testParseSpellLine()
     o = parseSpellLine("Class|DRU/Everspring Jerkin of the Tangled Briars")
     assert(o.Name == "Everspring Jerkin of the Tangled Briars")
     assert(o.Class == "DRU")
+
+    o = parseSpellLine("Balance of Discord/MaxTries|3/MinMana|10")
+    assert(o.Name == "Balance of Discord")  -- XXX wrong. why?
+    assert(o.MaxTries == 3)
+    assert(o.MinMana == 10)
 end
 
 

@@ -224,7 +224,7 @@ settings.healing = {
 }
 
 settings.assist = {
-    ["nukes"] = { -- XXX implement
+    ["nukes"] = {
         ["main"] = {
             -- ice nukes:
             -- L14 Spirit Strike (72-78 hp, cost 44 mana)
@@ -272,8 +272,8 @@ settings.assist = {
     },
 
     ["debuffs"] = {
-        -- oow t1 bp: Spiritkin Tunic (reduce resist rate by 40% for xxx sec)
-        -- oow t2 bp: Ritualchanter's Tunic of the Ancestors (reduce resists rate by xxx for 42s / 0.7 min)
+        -- oow t1 bp: Spiritkin Tunic (reduce resist rate by 40% for 30s)
+        -- oow t2 bp: Ritualchanter's Tunic of the Ancestors (reduce resists rate by xxx for 42s)
         "Ritualchanter's Tunic of the Ancestors",
 
         -- slow:
@@ -288,7 +288,7 @@ settings.assist = {
         -- L69 Balance of Discord (MAGIC: resist adj -60, 75% slow, 1.5 min, 1.5s cast, 350 mana)
         -- L70 Hungry Plague (DISEASE: resist adj -50, 40% slow, 1 min, 3s cast, 450 mana)
         -- NOTE: Samma is main slower!
-        "Balance of Discord/MaxTries/3|MinMana|10",
+        "Balance of Discord/MaxTries|3/MinMana|10",
 
         -- malos (slot 2: cr, slot 3: mr, slot 4: pr, slot 5: fr):
         -- L60 Malo (-45 cr, -45 mr, -45 pr, -45 fr, unresistable, cost 350 mana)
