@@ -879,6 +879,10 @@ function QoL.verifySpellLines()
 
     if botSettings.settings.assist ~= nil then
         verifySpellLines("taunts", botSettings.settings.assist.taunts)
+        verifySpellLines("debuffs", botSettings.settings.assist.debuffs)
+        verifySpellLines("dots", botSettings.settings.assist.dots)
+        verifySpellLines("debuffs_on_command", botSettings.settings.assist.debuffs_on_command)
+        verifySpellLines("dots_on_command", botSettings.settings.assist.dots_on_command)
         verifySpellLines("pbae", botSettings.settings.assist.pbae)
         verifySpellLines("abilities", botSettings.settings.assist.abilities)
         verifySpellLines("quickburns", botSettings.settings.assist.quickburns)
@@ -924,7 +928,7 @@ function verifySpellLines(label, lines)
     for k, row in pairs(lines) do
         local spellConfig = parseSpellLine(row)
         if not known_spell_ability(spellConfig.Name) then
-            all_tellf("Missing %s: %s", label, spellConfig.Name)
+            all_tellf("Missing %s: %s (row = %s)", label, spellConfig.Name, row)
             cmd("/beep 1")
         end
     end
