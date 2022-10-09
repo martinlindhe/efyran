@@ -1338,7 +1338,6 @@ end
 ---@return boolean true if we match
 ---@param line string
 function matches_filter_line(line)
-    -- XXX 1 split on space
     local class = class_shortname()
     local tokens = split_str(line, " ")
     for k, v in pairs(tokens) do

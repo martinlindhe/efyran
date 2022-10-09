@@ -126,9 +126,7 @@ function QoL.Init()
     -- tell peers to kill target until dead
     ---@param filter string|nil such as "/only|ROG"
     mq.bind("/assiston", function(...)
-        -- XXX impl "/assiston /not|WAR" filter
         local filter = trim(args_string(...))
-
         local spawn = mq.TLO.Target
         if spawn() == nil then
             return
@@ -150,7 +148,7 @@ function QoL.Init()
 
     -- auto assist on mob until dead
     ---@param mobID string
-    ---@param filter string|nil
+    ---@param ... string|nil
     mq.bind("/killit", function(mobID, ...)
         local filter = trim(args_string(...))
         commandQueue.Add("killit", mobID, filter)

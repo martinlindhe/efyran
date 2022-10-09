@@ -77,7 +77,7 @@ Buff Spell Level   Minimum Target Level
 ## Command reference
 
 ```
-/assiston ${Target.ID}      - run from main driver, tells bots to kill ID
+/assiston ${Target.ID}      - run from main driver, tell peers to kill spawn by ID
 /backoff                    - call of assist
 /pbaeon                     - start PBAE
 
