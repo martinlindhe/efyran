@@ -379,3 +379,39 @@ function cast_mgb_spell(spellName)
     all_tellf("\agMGB %s inc\ax...", spellName)
     castSpellRaw(spellName, nil, "-maxtries|3")
 end
+
+function cast_evac_spell()
+    -- DRU/WIZ Lxx Exodus AA (instant cast, recast time 72 min)
+    if is_ability_ready("Exodus") then
+        cast_alt_ability("Exodus")
+        return
+    end
+
+    if class_shortname() == "DRU" then
+        -- L57 Succor (9s cast, cost 100 mana)
+        if is_spell_in_book("Succor") then
+            castSpellRaw("Succor", nil, "gem5 -maxtries|3")
+            return
+        end
+
+        -- L18 Lesser Succor (10.5s cast, cost 150 mana)
+        if is_spell_in_book("Lesser Succor") then
+            castSpellRaw("Lesser Succor", nil, "gem5 -maxtries|3")
+            return
+        end
+        log.Error("I have no evac spell!")
+    elseif class_shortname() == "WIZ" then
+        -- L57 Evacuate (9s cast, cost 100 mana)
+        if is_spell_in_book("Evacuate") then
+            castSpellRaw("Evacuate", nil, "gem5 -maxtries|3")
+            return
+        end
+
+        -- L18 Lesser Evacuate (10.5s cast, cost 150 mana)
+        if is_spell_in_book("Lesser Evacuate") then
+            castSpellRaw("Lesser Evacuate", nil, "gem5 -maxtries|3")
+            return
+        end
+        log.Error("I have no evac spell!")
+    end
+end

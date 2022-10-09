@@ -189,11 +189,6 @@ RadiantCure=Wanton Destruction/MinSick|1/Zone|anguish,txevu
     --["who_to_hot"] = "Tanks", -- XXX impl
 }
 
-settings.evac = {
-    "Exodus", -- Lxx Exodus AA (instant cast, recast time 72 min)
-    "Succor", -- L57 Succor (9s cast, cost 100 mana)
-}
-
 settings.assist = {
     ["nukes"] = { -- XXX implement
         ["main"] = {

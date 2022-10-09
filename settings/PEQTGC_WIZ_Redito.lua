@@ -108,12 +108,6 @@ settings.assist = {
     },
 }
 
-
-settings.evac = {
-    "Exodus",
-    "Evacuate",
-}
-
 settings.wizard = { -- XXX impl / rearrange
 --[[
 Auto-Harvest (On/Off)=On

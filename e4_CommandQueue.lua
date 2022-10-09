@@ -67,7 +67,7 @@ function CommandQueue.Process()
         return
     end
 
-    log.Info("Performing command %s", v.Name)
+    log.Info("Performing command \ay%s\ax (%s, %s)", v.Name, v.Arg, v.Arg2)
 
     CommandQueue.Remove(v.Name)
 
@@ -145,22 +145,7 @@ function CommandQueue.Process()
             end
         end
     elseif v.Name == "evac" then
-        if botSettings.settings.evac == nil then
-            return
-        end
-
-        -- chose first one we have and use it (skip Exodus if AA is down)
-        for key, evac in pairs(botSettings.settings.evac) do
-            log.Info("Finding available evac spell %s: %s", key, evac)
-            if mq.TLO.Me.AltAbility(evac)() ~= nil then
-                if mq.TLO.Me.AltAbilityReady(evac)() then
-                    castSpellRaw(evac, mq.TLO.Me.ID(), "-maxtries|3")
-                    return
-                end
-            else
-                castSpellRaw(evac, mq.TLO.Me.ID(), "gem5 -maxtries|3")
-            end
-        end
+        cast_evac_spell()
     elseif v.Name == "groupheal" then
 
         for idx, groupHeal in pairs(groupBuffs.ClericGroupHeal) do

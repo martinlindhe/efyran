@@ -5,8 +5,6 @@ misc:
 -- BUG: mq.TLO.NearestSpawn() results should be fetched directly and then looped over the results, as they can change
     in the middle of iteration otherwise.
 
--- BUG: ?? 15 sep 2022: item.Expendables() seem to be broken, always returns false ? https://discord.com/channels/511690098136580097/840375268685119499/1019900421248126996
-    needed to fix /clickies
 
 -- /evac: hard code evac spells, reduce ini.allow for rog escape (?)
 

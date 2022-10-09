@@ -135,11 +135,6 @@ settings.assist = {
     },
 }
 
-settings.evac = {
-    "Exodus",
-    "Evacuate",
-}
-
 settings.wizard = { -- XXX impl / rearrange
 --[[
 [Wizard]

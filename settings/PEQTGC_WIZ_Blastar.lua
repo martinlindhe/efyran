@@ -205,16 +205,6 @@ settings.assist = {
     },
 }
 
-
-settings.evac = {
-    -- L18 Lesser Evacuate (10.5s cast, cost 150 mana)
-    -- L57 Evacuate (9s cast, cost 100 mana)
-    -- Lxx Exodus AA (instant cast, recast time 72 min)
-    "Exodus",
-
-    "Evacuate",
-}
-
 settings.wizard = { -- XXX impl / rearrange
 --[[
 Auto-Harvest (On/Off)=On

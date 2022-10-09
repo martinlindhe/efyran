@@ -877,7 +877,6 @@ end
 -- make sure I know all listed abilities
 function QoL.verifySpellLines()
 
-    verifySpellLines("evac", botSettings.settings.evac)
     verifySpellLines("self_buffs", botSettings.settings.self_buffs)
 
     if botSettings.settings.assist ~= nil then
