@@ -710,6 +710,21 @@ function me_priest()
 end
 
 ---@return boolean
+function me_caster()
+    return is_caster(mq.TLO.Me.Class.ShortName())
+end
+
+---@return boolean
+function me_melee()
+    return is_melee(mq.TLO.Me.Class.ShortName())
+end
+
+---@return boolean
+function me_hybrid()
+    return is_hybrid(mq.TLO.Me.Class.ShortName())
+end
+
+---@return boolean
 function me_tank()
     return is_tank(mq.TLO.Me.Class.ShortName())
 end
@@ -720,8 +735,6 @@ end
 -- Leather (DRU,BST,MNK)
 -- Plate (WAR,BRD,CLR,PAL,SHD)
 -- Knight (PAL,SHD)
--- Melee (BRD,BER,BST,MNK,PAL,RNG,ROG,SHD,WAR)
--- Hybrid (PAL,SHD,RNG,BST)
 
 -- true if CLR,DRU,SHM,PAL,RNG,BST
 ---@param class string Class shortname.
@@ -733,6 +746,26 @@ function is_healer(class)
     return class == "CLR" or class == "DRU" or class == "SHM" or class == "PAL" or class == "RNG" or class == "BST"
 end
 
+-- true if BRD,BER,BST,MNK,PAL,RNG,ROG,SHD,WAR
+---@param class string Class shortname.
+---@return boolean
+function is_melee(class)
+    if class == nil then
+        all_tellf("ERROR: is_priest called without class. did you mean me_melee() ?")
+    end
+    return class == "BRD" or class == "BER" or class == "BST" or class == "MNK" or class == "PAL" or class == "RNG" or class == "ROG" or class == "SHD" or class == "WAR"
+end
+
+-- true if PAL,SHD,RNG,BST
+---@param class string Class shortname.
+---@return boolean
+function is_hybrid(class)
+    if class == nil then
+        all_tellf("ERROR: is_priest called without class. did you mean me_hybrid() ?")
+    end
+    return class == "PAL" or class == "SHD" or class == "RNG" or class == "BST"
+end
+
 -- true if CLR,DRU,SHM
 ---@param class string Class shortname.
 ---@return boolean
@@ -741,6 +774,16 @@ function is_priest(class)
         all_tellf("ERROR: is_priest called without class. did you mean me_priest() ?")
     end
     return class == "CLR" or class == "DRU" or class == "SHM"
+end
+
+-- true if WIZ,MAG,ENC,NEC
+---@param class string Class shortname.
+---@return boolean
+function is_caster(class)
+    if class == nil then
+        all_tellf("ERROR: is_caster called without class. did you mean me_caster() ?")
+    end
+    return class == "WIZ" or class == "MAG" or class == "ENC" or class == "NEC"
 end
 
 -- true if WAR,PAL,SHD
@@ -982,16 +1025,9 @@ local intProperties = { "PctAggro", "MinMana", "HealPct", "MinMobs", "MaxMobs", 
 function parseSpellLine(s)
 
     local o = {}
-    local idx = 0
-
-    -- split on / separator
     local tokens = split_str(s, "/")
 
     for k, token in pairs(tokens) do
-        idx = idx + 1
-        --print("token ", idx, ": ", token)
-
-        -- separate token on | "key" + "val"
         local found, _ = string.find(token, "|")
         if found then
             local key = ""
@@ -1015,6 +1051,35 @@ function parseSpellLine(s)
             else
                 --print("assuming name: ", token)
                 o.Name = token
+            end
+        end
+    end
+
+    return o
+end
+
+---@class FilterObject
+---@field public Only string
+---@field public Not string
+
+-- parses a filter line with properties, returns a object
+-- example in: "Only/WAR"
+---@param s string
+---@return FilterObject
+function parseFilterLine(s)
+
+    local o = {}
+    local tokens = split_str(s, "/")
+
+    for k, token in pairs(tokens) do
+        --log.Debug("token: %s", token)
+        if token ~= nil then
+            local found, _ = string.find(token, "|")
+            if found then
+                local key = ucfirst(token:sub(1, found - 1))
+                local val = token:sub(found + 1)
+                --log.Debug("key = %s, val = %s", key, val)
+                o[key] = val
             end
         end
     end
@@ -1254,6 +1319,77 @@ function args_string(...)
     return s
 end
 
+-- Check wether our class/name matches the given filter
+---@param filter string A filter, such as "/only|WAR", or "/not|casters"
+---@return boolean true if we match filter
+function matches_filter(filter)
+    local filterConfig = parseFilterLine(filter)
+    if filterConfig.Only ~= nil and not matches_filter_line(filterConfig.Only) then
+        log.Info("I am not matching this ONLY line: %s", filterConfig.Only)
+        return false
+    end
+    if filterConfig.Not ~= nil and matches_filter_line(filterConfig.Not) then
+        log.Info("I am matching this NOT line: %s", filterConfig.Not)
+        return false
+    end
+    return true
+end
+
+---@return boolean true if we match
+---@param line string
+function matches_filter_line(line)
+    -- XXX 1 split on space
+    local class = class_shortname()
+    local tokens = split_str(line, " ")
+    for k, v in pairs(tokens) do
+        if class == v then
+            return true
+        end
+        if v == "priests" and is_priest(class) then
+            return true
+        end
+        if v == "casters" and is_caster(class) then
+            return true
+        end
+        if v == "tanks" and is_tank(class) then
+            return true
+        end
+        if v == "melee" and is_melee(class) then
+            return true
+        end
+        if v == "hybrid" and is_hybrid(class) then
+            return true
+        end
+    end
+    return false
+end
+
+function hex_dump(str)
+    local len = string.len( str )
+    local dump = ""
+    local hex = ""
+    local asc = ""
+
+    for i = 1, len do
+        if 1 == i % 8 then
+            dump = dump .. hex .. asc .. "\n"
+            hex = string.format( "%04x: ", i - 1 )
+            asc = ""
+        end
+
+        local ord = string.byte( str, i )
+        hex = hex .. string.format( "%02x ", ord )
+        if ord >= 32 and ord <= 126 then
+            asc = asc .. string.char( ord )
+        else
+            asc = asc .. "."
+        end
+    end
+
+    return dump .. hex
+            .. string.rep( "   ", 8 - len % 8 ) .. asc
+end
+
 --- Upper-cases the first letter of input string
 function ucfirst(s)
     return (s:gsub("^%l", string.upper))
@@ -1266,6 +1402,19 @@ function strip_dannet_peer(s)
         s = string.sub(s, pos + 1)
     end
     return ucfirst(s)
+end
+
+function dump(o)
+    if type(o) == 'table' then
+       local s = '{ '
+       for k,v in pairs(o) do
+          if type(k) ~= 'number' then k = '"'..k..'"' end
+          s = s .. '['..k..'] = ' .. dump(v) .. ','
+       end
+       return s .. '} '
+    else
+       return tostring(o)
+    end
 end
 
 -- Returns "true" or "false".

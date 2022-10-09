@@ -1,24 +1,6 @@
 
 require("ezmq")
 
--- Print contents of `tbl`, with indentation.
--- `indent` sets the initial level of indentation.
-function tprint(tbl, indent)
-    if not indent then indent = 0 end
-    for k, v in pairs(tbl) do
-        local formatting = string.rep("  ", indent) .. k .. ": "
-        if type(v) == "table" then
-            print(formatting)
-            tprint(v, indent+1)
-        elseif type(v) == 'boolean' then
-            print(formatting .. tostring(v))
-        else
-            print(formatting .. v)
-        end
-    end
-end
-
-
 function testParseSpellLine()
     local o = parseSpellLine("Ward of Valiance/MinMana|50/CheckFor|Hand of Conviction")
     assert(o.Name == "Ward of Valiance")
@@ -35,34 +17,30 @@ function testParseSpellLine()
     assert(o.Class == "DRU")
 
     o = parseSpellLine("Balance of Discord/MaxTries|3/MinMana|10")
-    assert(o.Name == "Balance of Discord")  -- XXX wrong. why?
+    assert(o.Name == "Balance of Discord")
     assert(o.MaxTries == 3)
     assert(o.MinMana == 10)
 end
 
+function testParseFilterLine()
+    local o = parseFilterLine("/only|WAR")
+    print("dumped filterConfig: " .. dump(o))
+    print("hex: ".. hex_dump(o.Only))
 
+    assert(o.Only == "WAR")
+    assert(o.Not == nil)
+end
 
-
-
-
- function test_split_str()
+function test_split_str()
     local o = split_str("Hello,World", ",")
     assert(o[1] == "Hello")
     assert(o[2] == "World")
-
 
     o = split_str("Ward of Valiance/MinMana|50/CheckFor|Hand of Conviction", "/")
     assert(o[1] == "Ward of Valiance")
     assert(o[2] == "MinMana|50")
     assert(o[3] == "CheckFor|Hand of Conviction")
  end
-
-
-
-testParseSpellLine()
-test_split_str()
-
-
 
 function test_strip_dannet_peer()
     local o = strip_dannet_peer("server_name")
@@ -72,4 +50,8 @@ function test_strip_dannet_peer()
     assert(o == "Name")
  end
 
- test_strip_dannet_peer()
+testParseSpellLine()
+testParseFilterLine()
+
+test_split_str()
+test_strip_dannet_peer()

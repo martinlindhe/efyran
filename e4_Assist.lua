@@ -151,7 +151,7 @@ function castSpellAbility(spawn, row, callback)
 
     if not is_spell_in_book(spell.Name) and have_item(spell.Name) and not is_item_clicky_ready(spell.Name) then
         -- Item and spell examples: Molten Orb (MAG)
-        log.Info("SKIP cast, item clicky not ready: %s", spell.Name)
+        log.Debug("SKIP cast, item clicky not ready: %s", spell.Name)
         return false
     end
 

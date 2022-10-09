@@ -96,7 +96,10 @@ function CommandQueue.Process()
     elseif v.Name == "killit" then
         local filter = v.Arg2
         if filter ~= nil then
-            all_tellf("XXX filter is: %s", filter)
+            if not matches_filter(filter) then
+                log.Info("Not matching filter, giving up: %s", filter)
+                return
+            end
         end
         local spawn = spawn_from_id(toint(v.Arg))
         if spawn == nil then
