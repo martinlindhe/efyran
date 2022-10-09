@@ -124,8 +124,10 @@ function QoL.Init()
     end)
 
     -- tell peers to kill target until dead
-    mq.bind("/assiston", function()
+    ---@param filter string|nil such as "/only|ROG"
+    mq.bind("/assiston", function(...)
         -- XXX impl "/assiston /not|WAR" filter
+        local filter = trim(args_string(...))
 
         local spawn = mq.TLO.Target
         if spawn() == nil then
@@ -136,17 +138,22 @@ function QoL.Init()
                 log.Debug("Backing off existing target before assisting new")
                 assist.backoff()
             end
+            local exe = string.format("/dgzexecute /killit %d", spawn.ID())
+            if filter ~= nil then
+                exe = exe .. " " .. filter
+            end
             log.Info("Calling assist on %s, type %s", spawn.DisplayName(), spawn.Type())
 
-            -- tell everyone else to attack
-            cmdf("/dgzexecute /killit %d", spawn.ID())
+            cmdf(exe)
         end
     end)
 
     -- auto assist on mob until dead
     ---@param mobID string
-    mq.bind("/killit", function(mobID)
-        commandQueue.Add("killit", mobID)
+    ---@param filter string|nil
+    mq.bind("/killit", function(mobID, ...)
+        local filter = trim(args_string(...))
+        commandQueue.Add("killit", mobID, filter)
     end)
 
     -- ends assist call

@@ -94,6 +94,10 @@ function CommandQueue.Process()
     elseif v.Name == "buffit" then
         buffs.BuffIt(toint(v.Arg))
     elseif v.Name == "killit" then
+        local filter = v.Arg2
+        if filter ~= nil then
+            all_tellf("XXX filter is: %s", filter)
+        end
         local spawn = spawn_from_id(toint(v.Arg))
         if spawn == nil then
             return
