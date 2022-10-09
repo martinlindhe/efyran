@@ -370,6 +370,7 @@ function QoL.Init()
         end
 
         follow.spawn = spawn_from_id(spawnID)
+        follow.Update()
     end)
 
     mq.bind("/evac", function(name)
@@ -379,6 +380,14 @@ function QoL.Init()
 
         commandQueue.Clear()
         commandQueue.Add("evac")
+    end)
+
+    -- cast Radiant Cure
+    mq.bind("/rc", function(name)
+        if is_orchestrator() then
+            cmd("/dgzexecute /rc")
+        end
+        commandQueue.Add("radiantcure")
     end)
 
     -- tell peers in zone to use Throne of Heroes
@@ -852,7 +861,7 @@ function QoL.loadRequiredPlugins()
         "MQ2Debuffs", -- XXX not used yet. to be used for auto-cure feature
         "MQ2AdvPath", -- XXX /afollow or /stick ?
         "MQ2MoveUtils",
-        "MQ2Nav",
+        --"MQ2Nav",
         "MQ2Cast",
     }
     for k, v in pairs(requiredPlugins) do
@@ -962,9 +971,6 @@ function QoL.Tick()
     if class_shortname() == "WIZ" and have_pet() then
         cmd("/pet get lost")
     end
-
-    follow.Update()
-
 end
 
 return QoL

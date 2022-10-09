@@ -796,7 +796,7 @@ function is_tank(class)
     return class == "WAR" or class == "PAL" or class == "SHD"
 end
 
----Get the current server name
+---Get the current server name ("antonius" for Antonius Bayle)
 ---@return string
 function current_server()
     return mq.TLO.MacroQuest.Server()
@@ -1341,7 +1341,7 @@ function matches_filter_line(line)
     local class = class_shortname()
     local tokens = split_str(line, " ")
     for k, v in pairs(tokens) do
-        if class == v:upper() then
+        if class == v:upper() or class == "me" then
             return true
         end
         if v == "priests" and is_priest(class) then

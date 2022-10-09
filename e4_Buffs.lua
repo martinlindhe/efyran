@@ -44,8 +44,6 @@ function Buffs.Init()
         })
     end)
 
-    Buffs.AnnounceAvailablity()
-
     bard.resumeMelody()
 end
 
@@ -77,8 +75,13 @@ function Buffs.AnnounceAvailablity()
     Buffs.available = trim(availableBuffGroups)
     if string.len(Buffs.available) > 0 then
         log.Info("My available buff groups: %s", Buffs.available)
-        cmdf("/dgtell all #available-buffs %s", Buffs.available)
+        cmdf("/dgtell %s #available-buffs %s", dannet_zone_channel(), Buffs.available)
     end
+end
+
+function dannet_zone_channel()
+    local name = "zone_" .. current_server() .. "_" .. zone_shortname()
+    return name:lower()
 end
 
 function Buffs.Tick()

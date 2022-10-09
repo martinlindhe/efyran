@@ -86,11 +86,12 @@ function CommandQueue.Process()
 
         joinCurrentHealChannel()
         memorizeListedSpells()
-        buffs.AnnounceAvailablity()
     elseif v.Name == "dropinvis" then
         drop_invis()
     elseif v.Name == "playmelody" then
         bard.PlayMelody(v.Arg)
+    elseif v.Name == "radiantcure" then
+        cast_radiant_cure()
     elseif v.Name == "buffit" then
         buffs.BuffIt(toint(v.Arg))
     elseif v.Name == "killit" then

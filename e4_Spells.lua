@@ -427,3 +427,15 @@ function click_nearby_door()
     unflood_delay()
     cmd("/click left door")
 end
+
+function cast_radiant_cure()
+    if not have_alt_ability("Radiant Cure") then
+        return
+    end
+    if is_alt_ability_ready("Radiant Cure") then
+        all_tellf("Radiant Cure inc ...")
+        cast_alt_ability("Radiant Cure")
+    else
+        all_tellf("Radiant Cure is ready in %s", mq.TLO.Me.AltAbilityTimer("Radiant Cure").TimeHMS())
+    end
+end
