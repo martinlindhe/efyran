@@ -381,7 +381,10 @@ function cast_mgb_spell(spellName)
 end
 
 function cast_evac_spell()
-    -- DRU/WIZ Lxx Exodus AA (instant cast, recast time 72 min)
+    -- DRU/WIZ L59 Exodus AA (instant cast)
+    -- Hastened Exodus reduces recast time by 10% per rank
+    -- Rank 0: recast time 72 min
+    -- Rank 4: recast time XX min
     if is_ability_ready("Exodus") then
         cast_alt_ability("Exodus")
         return

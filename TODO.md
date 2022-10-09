@@ -13,7 +13,6 @@ misc:
 MQ2Lua gotchas:
     /itemnotify seem to require delay(1) or it wont always register
     - spell links: missing from macroquest atm.
-    - detect if on emu. cant do atm
     - detect eqgame.exe build date. cant do atm. would want so i can detect rof2 or underfoot
 
 
@@ -90,6 +89,3 @@ QoL:
     /count command - report bots + zones if not nearby
 
     auto disable option "Auto Turn On AFK" on bot
-
-    disable free to play nagging url open at exit (kill processes???): MQ2NoGold (mmobugs) or MQ2NoNagWindows (redguides)
-

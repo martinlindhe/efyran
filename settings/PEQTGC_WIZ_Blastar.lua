@@ -26,7 +26,7 @@ settings.self_buffs = {
 
     "Ether Skin/MinMana|20/CheckFor|Rune of Rikkukin",
 
-    "Iceflame of E`ci/MinMana|20", -- L63 Iceflame of E`ci (1-30% cold spell dmg for L60 nukes)
+    --"Iceflame of E`ci/MinMana|20", -- L63 Iceflame of E`ci (1-30% cold spell dmg for L60 nukes)
 
     -- familiars - improved stacks with bard song, druzzils does not:
     -- Lxx Minor Familiar (10 all resists, casting level 2)

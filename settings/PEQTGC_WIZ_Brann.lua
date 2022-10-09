@@ -33,7 +33,7 @@ settings.self_buffs = {
 
     "Ether Skin/MinMana|20/CheckFor|Rune of Rikkukin",
 
-    "Iceflame of E`ci/MinMana|20",
+    --"Iceflame of E`ci/MinMana|20",
 
     "Improved Familiar",
 }

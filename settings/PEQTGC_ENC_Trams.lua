@@ -22,7 +22,7 @@ settings.gems = {
 settings.self_buffs = {
     "Fuzzy Foothairs",
     "Hanvar's Hoop", -- Form of Defense III (slot 6: immunity, slot 10: 81 ac)
-    "Earring of Pain Deliverance", -- Reyfin's Random Musings (slot 8: 9 mana regen, slot 10: 6 hp regen)
+    --"Earring of Pain Deliverance", -- Reyfin's Random Musings (slot 8: 9 mana regen, slot 10: 6 hp regen)
     --"Muramite Signet Orb", -- Maelin's Meditation (slot 4: 400 mana pool)
 
     -- self rune - slot 3:

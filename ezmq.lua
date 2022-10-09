@@ -1001,8 +1001,8 @@ end
 ---@field public GoM boolean Only use if Gift of Mana is available.
 ---@field public NoAggro boolean Only use if not on aggro list.
 ---@field public NoPet boolean Only use if not having a pet.
----@field public Class string Class shortname in upper case, comma separated value.
----@field public NotClass string Class shortname in upper case, comma separated value.
+---@field public Class string Class filter list.
+---@field public NotClass string Class filter list.
 ---@field public Gem integer The spell gem to use for casting this spell. Default is 5.
 ---@field public Reagent string Required component in order to cast this spell.
 ---@field public CheckFor string Comma-separated list of effects on target. A match will block the spell from being cast.
@@ -1129,7 +1129,7 @@ function get_rez_spell_item_aa()
         "Incarnate Anew",                       -- DRU/59, SHM/59 Incarnate Anew (90% exp, 20s cast, 700 mana)
         --"Call of the Wild",                     -- DRU/XX, SHM/xx AA, 0% exp, corpse can be properly rezzed later)
 
-        "Convergence/Reagent|Essence Emerald",  -- NEC/53 (93% exp)
+        --"Convergence/Reagent|Essence Emerald",  -- NEC/53 (93% exp)
     }
 
     -- find first rez that is ready to use

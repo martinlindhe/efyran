@@ -52,7 +52,7 @@ function joinCurrentHealChannel()
     end
 end
 
-local healQueueMaxLength = 20
+local healQueueMaxLength = 25
 
 ---@param s string
 ---@return string, integer

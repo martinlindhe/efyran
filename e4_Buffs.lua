@@ -25,7 +25,7 @@ local Buffs = {
     ---@type buffQueueValue[]
     queue = {},
 
-    -- my available buff groups (space separated string)
+    ---@type string my available buff groups (space separated string)
     available = "",
 
     -- others available buff groups (key = peer, val = space separated string)
@@ -48,6 +48,8 @@ function Buffs.Init()
 
     bard.resumeMelody()
 end
+
+local announceBuffsTimer = timer.new_random(2 * 60) -- 2 minutes
 
 local refreshBuffsTimer = timer.new_random(10 * 1) -- 10s
 
@@ -74,7 +76,7 @@ function Buffs.AnnounceAvailablity()
     end
     Buffs.available = trim(availableBuffGroups)
     if string.len(Buffs.available) > 0 then
-        log.Info("My available buff groups: ", Buffs.available)
+        log.Info("My available buff groups: %s", Buffs.available)
         cmdf("/dgtell all #available-buffs %s", Buffs.available)
     end
 end
@@ -84,11 +86,11 @@ function Buffs.Tick()
         return
     end
 
-    if follow.spawn ~= nil or is_gm() or is_hovering() or in_combat() or is_moving() or in_neutral_zone() or window_open("MerchantWnd") or window_open("GiveWnd") or window_open("BigBankWnd") or window_open("SpellBookWnd") or window_open("LootWnd") or spawn_count("pc radius 100") == 1 then
+    if follow.spawn ~= nil or is_gm() or is_invisible() or is_hovering() or in_combat() or is_moving() or in_neutral_zone() or window_open("MerchantWnd") or window_open("GiveWnd") or window_open("BigBankWnd") or window_open("SpellBookWnd") or window_open("LootWnd") or spawn_count("pc radius 100") == 1 then
         return
     end
 
-    if botSettings.toggles.refresh_buffs and refreshBuffsTimer:expired() and not is_invisible() then
+    if botSettings.toggles.refresh_buffs and refreshBuffsTimer:expired() then
         --log.Debug("Buff tick: refresh buffs at %s", time())
         if not Buffs.RefreshSelfBuffs() then
             if not Buffs.RefreshAura() then
@@ -100,6 +102,11 @@ function Buffs.Tick()
             end
         end
         refreshBuffsTimer:restart()
+    end
+
+    if announceBuffsTimer:expired() then
+        Buffs.AnnounceAvailablity()
+        announceBuffsTimer:restart()
     end
 
     if is_casting() or is_hovering() or is_sitting() or is_moving() or mq.TLO.Me.SpellInCooldown() or window_open("SpellBookWnd") then
@@ -117,7 +124,6 @@ function Buffs.Tick()
             all_tellf("ERROR queue fetch returned NIL") -- unlikely
         end
     end
-
 end
 
 ---@param spawnID integer
@@ -147,8 +153,12 @@ function Buffs.BuffIt(spawnID)
         return false
     end
 
-    for key in Buffs.available:gmatch("%S+") do
-        cmdf("/queuebuff %s %s force", key, spawn.Name())
+    -- get the buffs for my class from spawn class default buffs.
+    for idx, key in pairs(groupBuffs.Default[spawn.Class.ShortName()]) do
+        local spellConfig = parseSpellLine(key)
+        if spellConfig.Class == class_shortname() then
+            cmdf("/queuebuff %s %s force", spellConfig.Name, spawn.Name())
+        end
     end
 end
 
@@ -361,18 +371,17 @@ function Buffs.RequestBuffs()
             -- ask proper class for buff
             if not found then
                 local peer = Buffs.findAvailableBuffer(spellConfig.Name)
-                if peer == nil then
-                    log.Info("No peer of required class for buff %s found nearby: %s", spellConfig.Name, askClass)
-                    return false
+                if peer ~= nil then
+                    if not refresh and free_buff_slots() <= 0 then
+                        all_tellf("\arWARN\ax: Won't ask for \ay%s\ax as I only have %d free buff slots", spellConfig.Name, free_buff_slots())
+                        return true
+                    else
+                        log.Info("Requesting buff \ax%s\ay from \ag%s %s\ax ...", spellConfig.Name, askClass, peer)
+                        cmdf("/dexecute %s /queuebuff %s %s", peer, spellConfig.Name, mq.TLO.Me.Name())
+                    end
+                else
+                    log.Debug("No peer of required class for buff %s found nearby: %s", spellConfig.Name, askClass)
                 end
-
-                if not refresh and free_buff_slots() <= 0 then
-                    all_tellf("\arWARN\ax: Won't ask for \ay%s\ax as I only have %d free buff slots", spellConfig.Name, free_buff_slots())
-                    return true
-                end
-
-                log.Info("Requesting buff \ax%s\ay from \ag%s %s\ax ...", spellConfig.Name, askClass, peer)
-                cmdf("/dexecute %s /queuebuff %s %s", peer, spellConfig.Name, mq.TLO.Me.Name())
             end
         else
             --log.Debug("Will not request \ay%s\ax. Required class combo is not met: \ayClass:%s, NotClass:%s\ax.", spellConfig.Name, spellConfig.Class, spellConfig.NotClass or "")
