@@ -1341,7 +1341,7 @@ function matches_filter_line(line)
     local class = class_shortname()
     local tokens = split_str(line, " ")
     for k, v in pairs(tokens) do
-        if class == v then
+        if class == v:upper() then
             return true
         end
         if v == "priests" and is_priest(class) then

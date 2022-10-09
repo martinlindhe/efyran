@@ -418,3 +418,12 @@ function cast_evac_spell()
         log.Error("I have no evac spell!")
     end
 end
+
+function click_nearby_door()
+    -- XXX check if door within X radius
+    cmd("/doortarget")
+    log.Info("CLICKING NEARBY DOOR %s, id %d", mq.TLO.DoorTarget.Name(), mq.TLO.DoorTarget.ID())
+
+    unflood_delay()
+    cmd("/click left door")
+end

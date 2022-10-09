@@ -196,16 +196,10 @@ function CommandQueue.Process()
             end
         end
     elseif v.Name == "clickit" then
-        -- XXX check if door within X radius
-        cmd("/doortarget")
-        log.Info("CLICKING NEARBY DOOR %s, id %d", mq.TLO.DoorTarget.Name(), mq.TLO.DoorTarget.ID())
-
-        if is_orchestrator() then
-            cmd("/dgzexecute /clickit")
-        else
-            unflood_delay()
-            cmd("/click left door")
+        if v.Arg ~= nil and matches_filter(v.Arg) then
+            click_nearby_door()
         end
+
     elseif v.Name == "portto" then
         local name = v.Name
         local spellName

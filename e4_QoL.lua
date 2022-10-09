@@ -332,8 +332,13 @@ function QoL.Init()
     end)
 
     -- tell everyone else to click nearby door/object (pok stones, etc)
-    mq.bind("/clickit", function()
-        commandQueue.Add("clickit")
+    mq.bind("/clickit", function(...)
+        local filter = trim(args_string(...))
+
+        if is_orchestrator() then
+            cmdf("/dgzexecute /clickit %s", filter)
+        end
+        commandQueue.Add("clickit", filter)
     end)
 
     mq.bind("/portto", function(name)
@@ -341,7 +346,6 @@ function QoL.Init()
         if is_orchestrator() then
             cmdf("/dgzexecute /portto %s", name)
         end
-
         commandQueue.Add("portto", name)
     end)
 
