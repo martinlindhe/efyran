@@ -289,7 +289,6 @@ end
 
 -- returns datatype spell or nil if not found
 function getSpellFromBuff(name)
-
     if have_item(name) then
         return mq.TLO.FindItem(name).Clicky.Spell
     elseif is_spell_in_book(name) then
@@ -299,7 +298,7 @@ function getSpellFromBuff(name)
     elseif have_combat_ability(name) then
         return mq.TLO.Me.CombatAbility(mq.TLO.Me.CombatAbility(name))
     else
-        log.Error("getSpellFromBuff: can't find buff %s", name)
+        log.Error("getSpellFromBuff: can't find %s", name)
         return nil
     end
 end

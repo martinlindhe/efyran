@@ -11,6 +11,9 @@ local buffs   = require("e4_Buffs")
 
 local Heal = {
     queue = queue.new(), -- holds toons that requested a heal
+
+    ---@type string
+    healme_channel = "", -- healme channel for current zone
 }
 
 function Heal.Init()
@@ -39,16 +42,16 @@ end
 function joinCurrentHealChannel()
     -- orchestrator only joins to watch the numbers
     if is_orchestrator() or me_healer() then
-        if heal_channel() == botSettings.healme_channel then
+        if heal_channel() == Heal.healme_channel then
             return
         end
 
-        if botSettings.healme_channel ~= "" then
-            cmdf("/dleave %s", botSettings.healme_channel)
+        if Heal.healme_channel ~= "" then
+            cmdf("/dleave %s", Heal.healme_channel)
         end
 
-        botSettings.healme_channel = heal_channel()
-        cmdf("/djoin %s", botSettings.healme_channel)
+        Heal.healme_channel = heal_channel()
+        cmdf("/djoin %s", Heal.healme_channel)
     end
 end
 

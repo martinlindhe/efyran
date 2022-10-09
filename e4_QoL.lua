@@ -8,6 +8,7 @@ local follow  = require("e4_Follow")
 local commandQueue = require("e4_CommandQueue")
 local botSettings = require("e4_BotSettings")
 local pet     = require("e4_Pet")
+local buffs   = require("e4_Buffs")
 
 local QoL = {}
 
@@ -124,7 +125,7 @@ function QoL.Init()
     end)
 
     -- tell peers to kill target until dead
-    ---@param filter string|nil such as "/only|ROG"
+    ---@param ... string|nil such as "/only|ROG"
     mq.bind("/assiston", function(...)
         local filter = trim(args_string(...))
         local spawn = mq.TLO.Target
@@ -235,14 +236,14 @@ function QoL.Init()
     end)
 
     mq.bind("/buffon", function()
-        botSettings.toggles.refresh_buffs = true
+        buffs.refreshBuffs = true
         if is_orchestrator() then
             cmd("/dgzexecute /buffon")
         end
     end)
 
     mq.bind("/buffoff", function()
-        botSettings.toggles.refresh_buffs = false
+        buffs.refreshBuffs = false
         if is_orchestrator() then
             cmd("/dgzexecute /buffoff")
         end

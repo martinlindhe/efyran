@@ -30,6 +30,9 @@ local Buffs = {
 
     -- others available buff groups (key = peer, val = space separated string)
     otherAvailable = {},
+
+    ---@type boolean /buffon, /buffoff
+    refreshBuffs = true,
 }
 
 function Buffs.Init()
@@ -93,7 +96,7 @@ function Buffs.Tick()
         return
     end
 
-    if botSettings.toggles.refresh_buffs and refreshBuffsTimer:expired() then
+    if Buffs.refresh_buffs and refreshBuffsTimer:expired() then
         --log.Debug("Buff tick: refresh buffs at %s", time())
         if not Buffs.RefreshSelfBuffs() then
             if not Buffs.RefreshAura() then

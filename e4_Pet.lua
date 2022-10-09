@@ -165,7 +165,7 @@ function Pet.BuffMyPet()
 end
 
 function Pet.ConfigureTaunt()
-    if not have_pet() then
+    if not have_pet() or botSettings.settings.pet == nil then
         return
     end
     --print("Configuring pet")

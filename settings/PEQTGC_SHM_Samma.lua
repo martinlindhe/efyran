@@ -1,3 +1,4 @@
+---@type PeerSettings
 local settings = { }
 
 settings.debug = true
@@ -70,13 +71,13 @@ Combat Buff=
 
 
 settings.pet = {
-    ["auto"] = false,
+    auto = false,
 
-    ["heals"] = {
+    heals = {
         "Ancient: Wilslik's Mending/HealPct|25/MinMana|70",
     },
 
-    ["buffs"] = {
+    buffs = {
         -- pet haste:
         -- L50 Spirit Quickening (30 str, 20% haste, 19-27 ac, 60 min)
         -- L56 Celerity (47-50% haste, 16 min)
@@ -87,7 +88,7 @@ settings.pet = {
 }
 
 settings.healing = {
-    ["life_support"] = {
+    life_support = {
         -- Ancestral Guard - 15 min reuse
         -- Lxx Ancestral Guard Rank 1 AA (id:8218,  mitigate 25% melee dmg until 5000 absorbed)
         -- Lxx Ancestral Guard Rank 2 AA (id:8219,  mitigate 50% melee dmg until 5000 absorbed)
@@ -98,7 +99,7 @@ settings.healing = {
         "Distillate of Divine Healing XI/HealPct|10",
     },
 
-    ["cures"] = {
+    cures = {
         --[[
         [Cures]
         ; Keldovan the Harrier - decrease healing effectiveness by 80%
@@ -168,7 +169,7 @@ settings.healing = {
         ]]
     },
 
-    ["tanks"] = {
+    tanks = {
         "Bandy",
         "Manu",
         "Crusade",
@@ -176,7 +177,7 @@ settings.healing = {
         "Juancarlos",
     },
 
-    ["important"] = {
+    important = {
         "Stor", "Kamaxia", "Maynarrd", "Arriane", "Helge", "Gerrald", "Hankie",
         "Drutten", "Lofty", "Gimaxx", "Erland", "Kesok",
     },
@@ -197,22 +198,22 @@ settings.healing = {
     -- ch:
     -- L58 Kragg's Mending (1950 hp, 10s cast, cost 400 mana)
 
-    ["tank_heal"] = {
+    tank_heal = {
         "Ancient: Wilslik's Mending/HealPct|55/MinMana|5",
     },
 
-    ["important_heal"] = {
+    important_heal = {
         "Zun'Muram's Spear of Doom/HealPct|80",
         "Ancient: Wilslik's Mending/HealPct|75/MinMana|5",
     },
 
-    ["all_heal"] = {
+    all_heal = {
         "Ancient: Wilslik's Mending/HealPct|48/MinMana|20",
     },
 
-    ["who_to_heal"] = "Tanks/ImportantBots/All", -- XXX impl
+    who_to_heal = "Tanks/ImportantBots/All", -- XXX impl
 
-    ["hot"] = { -- XXX impl
+    hot = { -- XXX impl
         -- hot - slot 1:
         -- L65 Quiescence (420 hp/tick, 0.4 min, cost 280 mana)
         -- L65 Breath of Trushar (630 hp/tick, 0.4 min, cost 420 mana)
@@ -220,11 +221,11 @@ settings.healing = {
         "Spiritual Serenity/HealPct|85/CheckFor|Pious Elixir",
     },
 
-    ["who_to_hot"] = "Tanks", -- XXX impl
+    who_to_hot = "Tanks", -- XXX impl
 }
 
 settings.assist = {
-    ["nukes"] = {
+    nukes = {
         ["main"] = {
             -- ice nukes:
             -- L14 Spirit Strike (72-78 hp, cost 44 mana)
@@ -247,7 +248,7 @@ settings.assist = {
         },
     },
 
-    ["dots"] = {
+    dots = {
         -- disease dot:
         -- L04 Sicken (3-5/tick)
         -- L19 Affliction (20-25/tick)
@@ -271,7 +272,7 @@ settings.assist = {
         -- L70 Nectar of Pain (596 hp/tick, cost 660 mana, 0.7 min, -30 resist adj)
     },
 
-    ["debuffs"] = {
+    debuffs = {
         -- oow t1 bp: Spiritkin Tunic (reduce resist rate by 40% for 30s)
         -- oow t2 bp: Ritualchanter's Tunic of the Ancestors (reduce resists rate by xxx for 42s)
         "Ritualchanter's Tunic of the Ancestors",
@@ -310,11 +311,11 @@ settings.assist = {
         --"Virulent Paralysis",
     },
 
-    ["debuffs_on_command"] = {  -- XXX impl
+    debuffs_on_command = {  -- XXX impl
         "Hungry Plague/Gem|7/MinMana|30",
     },
 
-    ["quickburns"] = {
+    quickburns = {
         -- epic 1.5: Crafted Talisman of Fates
         -- epic 2.0: Blessed Spiritstaff of the Heyokah
         "Blessed Spiritstaff of the Heyokah",
@@ -329,7 +330,7 @@ settings.assist = {
         "Dampen Resistance",
     },
 
-    ["longburns"] = {
+    longburns = {
         -- Ancestral Aid Rank 1 AA (xxx)
         -- Ancestral Aid Rank 2 AA (id:5934, str/agi/dex cap+60, HoT cap +305)
         -- Ancestral Aid Rank 3 AA (id:5935, str/agi/dex cap+90, HoT cap +333)
@@ -340,7 +341,7 @@ settings.assist = {
         "Call of the Ancients",
     },
 
-    ["pbae"] = {
+    pbae = {
         -- ae slow:
         -- L58 Tigir's Insects (50% slow, decrease hate 200, aerange 20, 3 min)
         -- L70 Vindictive Spirit (50% slow, -100 magic adj, aerange 50, 0.3 min)
