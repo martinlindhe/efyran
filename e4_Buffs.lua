@@ -96,7 +96,7 @@ function Buffs.Tick()
         return
     end
 
-    if Buffs.refresh_buffs and refreshBuffsTimer:expired() then
+    if Buffs.refreshBuffs and refreshBuffsTimer:expired() then
         --log.Debug("Buff tick: refresh buffs at %s", time())
         if not Buffs.RefreshSelfBuffs() then
             if not Buffs.RefreshAura() then
