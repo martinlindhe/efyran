@@ -44,4 +44,49 @@ function Follow.Update()
     end
 end
 
+---@param startingPeer string peer name
+function Follow.RunToZone(startingPeer)
+    unflood_delay()
+
+    -- run across (need pos + heading from orchestrator)
+    local spawn = spawn_from_peer_name(startingPeer)
+    if spawn == nil then
+        all_tellf("ERROR: /rtz requested from peer not found: %s", startingPeer)
+        return
+    end
+
+    local oldZone = zone_shortname()
+    log.Info("MOVING THRU ZONE FROM %s", oldZone)
+
+    cmd("/stick off")
+
+    -- move to initial position
+    move_to(spawn)
+
+    if not is_within_distance(spawn, 15) then
+        -- unlikely
+        all_tellf("/rtz ERROR: failed to move near %s, my distance is %f", spawn.Name(), spawn.Distance())
+        return
+    end
+
+    -- face the same direction the orchestrator is facing
+    cmdf("/face fast heading %f", spawn.Heading.Degrees() * -1)
+    delay(5)
+
+    -- move forward
+    cmd("/keypress forward hold")
+    delay(6000, function()
+        local zoned = zone_shortname() ~= oldZone
+        if zoned then
+            log.Info("I ZONED INTO %s", zone_shortname())
+        end
+        return zoned
+    end)
+
+    if zone_shortname() == oldZone then
+        all_tellf("ERROR failed to run across zone line in %s", oldZone)
+        cmd("/beep 1")
+    end
+end
+
 return Follow

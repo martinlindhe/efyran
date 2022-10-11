@@ -2,6 +2,8 @@ local mq = require("mq")
 local log = require("knightlinc/Write")
 
 local botSettings = require("e4_BotSettings")
+local aliases = require("settings/Spell Aliases")
+local groupBuffs = require("e4_GroupBuffs")
 
 local MIN_BUFF_DURATION = 6 * 6000 -- 6 ticks, each tick is 6s
 
@@ -434,5 +436,171 @@ function cast_radiant_cure()
         use_alt_ability("Radiant Cure")
     else
         all_tellf("Radiant Cure is ready in %s", mq.TLO.Me.AltAbilityTimer("Radiant Cure").TimeHMS())
+    end
+end
+
+-- Perform the "/portto <name>" command
+---@param name string
+function cast_port_to(name)
+    local spellName
+    if class_shortname() == "WIZ" then
+        spellName = aliases.WIZ["port " .. name]
+    elseif class_shortname() == "DRU" then
+        spellName = aliases.DRU["port " .. name]
+    else
+        return
+    end
+
+    all_tellf("Porting to %s (%s)", name, spellName)
+    unflood_delay()
+
+    if spellName == nil then
+        all_tellf("ERROR: no such port %s", name)
+    end
+
+    wait_until_not_casting()
+    castSpellRaw(spellName, mq.TLO.Me.ID(), "gem5 -maxtries|3")
+    wait_until_not_casting()
+end
+
+function cast_group_heal()
+    for idx, groupHeal in pairs(groupBuffs.GroupHealSpells) do
+        if is_spell_ready(groupHeal) then
+            all_tellf("Casting group heal \ag%s\ax ...", groupHeal)
+            castSpellRaw(groupHeal, nil)
+            return
+        end
+    end
+end
+
+function shrink_group()
+    -- find the shrink clicky/spell if we got one
+    local shrinkClicky = nil
+    local spellConfig
+    for key, buff in pairs(botSettings.settings.self_buffs) do
+        spellConfig = parseSpellLine(buff)
+        if spellConfig.Shrink ~= nil and spellConfig.Shrink then
+            shrinkClicky = buff
+            break
+        end
+    end
+
+    if shrinkClicky == nil or not in_group() then
+        log.Error("No Shrink clicky declared in self_buffs, giving up.")
+        return
+    end
+
+    local item = find_item(spellConfig.Name)
+    if item == nil then
+        all_tellf("\arERROR\ax: Did not find Shrink clicky in inventory: %s", spellConfig.Name)
+        return
+    end
+    log.Info("Shrinking group members with %s", item.ItemLink("CLICKABLE")())
+
+    -- make sure shrink is targetable check buff type
+    local spell = getSpellFromBuff(spellConfig.Name)
+    if spell ~= nil and (spell.TargetType() == "Single" or spell.TargetType() == "Group v1") then
+        -- loop over group, shrink one by one starting with yourself
+        for n = 0, 5 do
+            for i = 1, 3 do
+                if mq.TLO.Group.Member(n)() ~= nil and not mq.TLO.Group.Member(n).OtherZone() and mq.TLO.Group.Member(n).Height() > 2.04 then
+                    log.Info("Shrinking member %s from height %d", mq.TLO.Group.Member(n)(), mq.TLO.Group.Member(n).Height())
+                    castSpell(spellConfig.Name, mq.TLO.Group.Member(n).ID())
+                    -- sleep for the Duration
+                    delay(item.Clicky.CastTime() + spell.RecastTime())
+                end
+            end
+        end
+    end
+end
+
+---@param spawnID integer
+function rez_it(spawnID)
+    local spawn = spawn_from_id(spawnID)
+    if spawn == nil then
+        -- unlikely
+        all_tellf("ERROR: tried to rez spawnid %s which is not in zone %s", spawnID, zone_shortname())
+        return
+    end
+    log.Info("Performing rez on %s, %d %s", spawn.Name(), spawnID, type(spawnID))
+
+    -- try 3 times to get a rez spell before giving up (to wait for ability to become ready...)
+    for i = 1, 3 do
+        local rez = get_rez_spell_item_aa()
+        if rez ~= nil then
+            all_tellf("Rezzing \ag%s\ax with \ay%s\ax. %d/3", spawn.Name(), rez, i)
+            castSpellAbility(spawn, rez)
+            break
+        else
+            all_tellf("\arWARN\ax: Not ready to rez \ag%s\ax. %d/3", spawn.Name(), i)
+        end
+        doevents()
+        delay(2000) -- 2s delay
+    end
+end
+
+function ae_rez()
+    local spawnQuery = 'pccorpse radius 100'
+    local corpses = spawn_count(spawnQuery)
+
+    all_tellf("AERez started in %s (%d corpses) ...", zone_shortname(), corpses)
+    wait_until_not_casting()
+
+    for i = 1, corpses do
+        ---@type spawn
+        local spawn = mq.TLO.NearestSpawn(i, spawnQuery)
+        if spawn ~= nil and spawn ~= "NULL" then
+            log.Info("Trying to rez %s", spawn.Name())
+            target_id(spawn.ID())
+
+            local rez = get_rez_spell_item_aa()
+            if rez ~= nil then
+                if spawn ~= nil then
+                    all_tellf("Rezzing %s with %s", spawn.Name(), rez)
+                    castSpellRaw(rez, spawn.ID())
+                    delay(3000)
+                    wait_until_not_casting()
+                end
+            else
+                all_tellf("\arWARN\ax: Not ready to rez \ag%s\ax.", spawn.Name())
+            end
+        end
+        doevents()
+        delay(12000)
+    end
+    log.Info("AEREZ ENDING")
+end
+
+function pbae_loop()
+
+    local nearbyPBAEilter = "npc radius 50 zradius 50 los"
+
+    if spawn_count(nearbyPBAEilter) == 0 then
+        all_tellf("Ending PBAE. No nearby mobs.")
+        return
+    end
+
+    memorizePBAESpells()
+
+    all_tellf("PBAE ON")
+    while true do
+        -- TODO: break this loop with /pbaeoff
+        if spawn_count(nearbyPBAEilter) == 0 then
+            all_tellf("Ending PBAE. No nearby mobs.")
+            break
+        end
+
+        if not is_casting() then
+            for k, spellRow in pairs(botSettings.settings.assist.pbae) do
+                local spellConfig = parseSpellLine(spellRow)
+                if is_spell_ready(spellConfig.Name) then
+                    log.Info("Casting PBAE spell %s", spellConfig.Name)
+                    castSpellAbility(mq.TLO.Me, spellRow)
+                end
+
+                doevents()
+                delay(50)
+            end
+        end
     end
 end

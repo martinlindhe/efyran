@@ -106,10 +106,10 @@ function Assist.summonNukeComponents()
     end
 end
 
--- return true if spell/ability was cast
----@param spawn|nil spawn
+---@param spawn spawn|nil
 ---@param row string
 ---@param callback? fun(): boolean
+---@return boolean true if spell/ability was cast
 function castSpellAbility(spawn, row, callback)
 
     local spell = parseSpellLine(row)
