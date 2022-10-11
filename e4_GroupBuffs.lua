@@ -1,11 +1,11 @@
 local GroupBuffs = {} -- XXX the name is misleading, it is both group and single target buffs
 
 GroupBuffs.Lookup = {
-    ["stamina"] = "SHM",
-    ["focus"] = "SHM",
-    ["runspeed"] = "SHM",
+    ["shm_focus"] = "SHM",
+    ["shm_runspeed"] = "SHM",
     ["shm_haste"] = "SHM",
     ["shm_resist"] = "SHM",
+    ["shm_sta"] = "SHM",
     ["shm_str"] = "SHM",
     ["shm_agi"] = "SHM",
     ["shm_dex"] = "SHM",
@@ -13,29 +13,31 @@ GroupBuffs.Lookup = {
 
     ["clr_symbol"] = "CLR",
     ["clr_ac"] = "CLR",
-    ["aegolism"] = "CLR",
+    ["clr_aegolism"] = "CLR",
     ["clr_vie"] = "CLR",
     ["clr_spellhaste"] = "CLR",
 
     ["dru_skin"] = "DRU",
     ["dru_resist"] = "DRU",
-    ["corruption"] = "DRU",
+    ["dru_corruption"] = "DRU",
     ["dru_regen"] = "DRU",
     ["dru_ds"] = "DRU",
     ["dru_str"] = "DRU",
-    ["skill_dmg_mod"] = "DRU",
+    ["dru_skill_dmg_mod"] = "DRU",
     ["dru_runspeed"] = "DRU",
 
     ["enc_manaregen"] = "ENC",
     ["enc_haste"] = "ENC",
     ["enc_resist"] = "ENC",
-    ["group_rune"] = "ENC",
-    ["rune"] = "ENC",
+    ["enc_cha"] = "ENC",
+    ["enc_group_rune"] = "ENC",
+    ["enc_single_rune"] = "ENC",
 
-    ["ds"] = "MAG",
-    ["groupds"] = "MAG",
+    ["mag_group_ds"] = "MAG",
+    ["mag_single_ds"] = "MAG",
 
-    ["dmf"] = "NEC",
+    ["nec_group_levitate"] = "NEC",
+    ["nec_single_levitate"] = "NEC",
 
     ["rng_hp"] = "RNG",
     ["rng_atk"] = "RNG",
@@ -48,6 +50,10 @@ GroupBuffs.Lookup = {
     ["bst_manaregen"] = "BST",
     ["bst_hp"] = "BST",
     ["bst_haste"] = "BST",
+    ["bst_focus"] = "BST",
+    ["bst_sta"] = "BST",
+    ["bst_str"] = "BST",
+    ["bst_dex"] = "BST",
 }
 
 GroupBuffs.SHM = {
@@ -64,7 +70,7 @@ GroupBuffs.SHM = {
     -- L65 Focus of the Seventh (544 hp, 75 str, 70 dex, cost 1800 mana, group)
     -- L68 Wunshi's Focusing (680 hp, 85 str, 85 dex, str cap 85, dex cap 85, cost 780 mana)
     -- L70 Talisman of Wunshi (680 hp, 85 str, 85 dex, str cap 85, dex cap 85, cost 2340 mana)
-    ["focus"] = {
+    ["shm_focus"] = {
         "Harnessing of Spirit/MinLevel|1",
         "Khura's Focusing/MinLevel|45",
         "Focus of the Seventh/MinLevel|47",
@@ -73,7 +79,7 @@ GroupBuffs.SHM = {
 
     -- L09 Spirit of Wolf (48-55% speed, 36 min)
     -- L36 Spirit of Bih`Li (48-55% run speed, 15 atk, 36 min, group)
-    ["runspeed"] = {
+    ["shm_runspeed"] = {
         "Spirit of Bih`Li/MinLevel|1/CheckFor|Flight of Eagles",
     },
 
@@ -272,7 +278,7 @@ GroupBuffs.CLR = {
     -- L75 Hand of Tenacity Rk. II (2234 hp, 118 ac, group)
     -- L7x Temerity ??? XXX
     -- L80 Hand of Temerity (2457 hp, 126 ac, group)
-    ["aegolism"] = {
+    ["clr_aegolism"] = {
         "Blessing of Temperance/MinLevel|1",
         "Blessing of Aegolism/MinLevel|45",
         "Hand of Virtue/MinLevel|47",
@@ -358,21 +364,25 @@ GroupBuffs.DRU = {
     -- cold & fire resists:
     -- L20 Resist Fire (slot 1: 30-40 fr)
     -- L30 Resist Cold (slot 1: 39-40 cr)
-    -- L51 Circle of Winter (slot 1: 45 fr) - don't stack with Protection of Seasons
-    -- L52 Circle of Summer (slot 4: 45 cr) - stack with Protection of Seasons
+    -- L51 Circle of Winter (slot 1: 45 fr)
     -- L58 Circle of Seasons (slot 1: 55 fr, slot 4: 55 cr)
     -- L64 Protection of Seasons (slot 1: 72 fr, slot 2: 72 cr)
-    ["dru_resist"] = {-- XXX unused
+    ["dru_fire_resist"] = {
         "Resist Fire/MinLevel|1",
-        "Resist Cold/MinLevel|1",
+        "Circle of Winter/MinLevel|40",
         "Circle of Seasons/MinLevel|44",
         "Protection of Seasons/MinLevel|47",
+    },
+
+    -- L52 Circle of Summer (slot 4: 45 cr) - stack with Protection of Seasons
+    ["dru_cold_resist"] = {
+        "Circle of Summer/MinLevel|41",
     },
 
     -- corruption resists (CLR/DRU):
     -- L73 Resist Corruption Rk. III (slot 1: 20 corruption resist, 36 min, 50 mana)
     -- L78 Forbear Corruption Rk. II (slot 1: 23 corruption resist, 36 min, 50 mana)
-    ["corruption"] = { -- XXX unused
+    ["dru_corruption"] = { -- XXX unused
         "Resist Corruption/MinLevel|71",    -- XXX unsure of minlevel
         "Forbear Corruption/MinLevel|76",   -- XXX unsure of minlevel
     },
@@ -414,13 +424,22 @@ GroupBuffs.DRU = {
     -- L77 Viridifloral Bulwark Rk. II (86 ds, 15 min)
     -- L80 Legacy of Viridithorns Rk. II (86 ds, 15 min, group)
     -- NOTE: MAGE DS IS STRONGER
-    ["dru_ds"] = {
+    ["dru_single_ds"] = {
         "Shield of Thorns/MinLevel|1",
         "Shield of Blades/MinLevel|44",
         "Shield of Bracken/MinLevel|46",
-        "Nettle Shield/MinLevel|62", -- XXX unsure of minlevel
-        "Viridifloral Shield/MinLevel|71",  -- XXX unsure of minlevel
-        "Viridifloral Bulwark/MinLevel|76", -- XXX unsure of minlevel
+        "Nettle Shield/MinLevel|62",
+        "Viridifloral Shield/MinLevel|71",  -- XXX minlevel
+        "Viridifloral Bulwark/MinLevel|76", -- XXX minlevel
+    },
+
+    ["dru_group_ds"] = {
+        "Legacy of Spike/MinLevel|1",
+        "Legacy of Thorn/MinLevel|44",
+        "Legacy of Bracken/MinLevel|47",
+        "Legacy of Nettles/MinLevel|62",
+        "Legacy of Viridiflora/MinLevel|71",  -- XXX minlevel
+        "Legacy of Viridithorns/MinLevel|76", -- XXX minlevel
     },
 
     -- L07 Strength of Earth (8-15 str)
@@ -438,12 +457,12 @@ GroupBuffs.DRU = {
     -- L67 Lion's Strength (increase skills dmg mod by 5%, cost 165 mana)
     -- L71 Mammoth's Strength Rk. III (increase skills dmg mod by 8%, cost 215 mana)
     -- NOTE: SHM has group version of these spells
-    ["skill_dmg_mod"] = {
+    ["dru_skill_dmg_mod"] = {
         "Lion's Strength/MinLevel|62",
         "Mammoth's Strength/MinLevel|71", -- XXX minlevel
     },
 
-    -- L09 Spirit of Wolf (48-55% speed, 36 min)
+    -- L10 Spirit of Wolf (48-55% speed, 36 min)
     -- L35 Pack Spirit (47-55% speed, 36 min, group)
     -- L54 Spirit of Eagle (57-70% speed, 1 hour)
     -- L62 Flight of Eagles (70% speed, 1 hour, group)
@@ -454,7 +473,10 @@ GroupBuffs.DRU = {
     },
 
     -- L07 Thistlecoat (4-6 ac, 1 ds)
-    -- Lxx Thorncoat (31 ac, 5 ds)
+    -- L17 Barbcoat (10-12 ac, 2 ds)
+    -- L27 Bramblecoat (16-18 ac, 3 ds)
+    -- L37 Spikecoat (23-25 ac, 4 ds)
+    -- L47 Thorncoat (31 ac, 5 ds)
     -- L56 Bladecoat (37 ac, 6 ds)
     -- L64 Brackencoat (49 ac, 13 ds)
     -- L68 Nettlecoat (64 ac, 17 ds)
@@ -527,10 +549,18 @@ GroupBuffs.ENC = {
         "Guard of Druzzil/MinLevel|46",
     },
 
+    -- L18 Sympathetic Aura (15-18 cha)
+    -- L31 Radiant Visage (25-30 cha)
+    -- L46 Adorning Grace (40 cha)
+    -- L56 Overwhelming Splendor (50 cha)
+    ["enc_cha"] = {
+        -- XXX
+    },
+
     -- slot 1:
     -- L69 Rune of Rikkukin (absorb 1500 dmg, group)
     -- L79 Rune of the Deep Rk. II (absorb 4118 dmg, slot 2: defensive proc Blurred Shadows Rk. II)
-    ["group_rune"] = {
+    ["enc_group_rune"] = {
         "Rune of Rikkukin/MinLevel|62",
         "Rune of the Deep/MinLevel|76", -- XXX unsure of minlevel
     },
@@ -543,7 +573,7 @@ GroupBuffs.ENC = {
     -- L67 Rune of Salik (absorb 1105 dmg)
     -- L71 Rune of Ellowind (absorb 2160 dmg)
     -- L76 Rune of Erradien Rk. II (absorb 5631 dmg)
-    ["rune"] = {
+    ["enc_single_rune"] = {
         "Rune IV/Reagent|Peridot/MinLevel|1",
         "Rune V/Reagent|Peridot/MinLevel|41",
         "Rune of Zebuxoruk/Reagent|Peridot/MinLevel|45",
@@ -562,7 +592,7 @@ GroupBuffs.ENC = {
     -- L61 Shield of the Arcane (298-300 hp, 34-36 ac, 30 mr)
     -- L64 Shield of Maelin (350 hp, 38-39 ac, 40 mr)
     -- L66 Mystic Shield (390 hp, 46 ac, 40 mr)
-    -- NOTE:  does not stack with Virtue or Focus
+    -- NOTE: does not stack with Virtue or Focus
     ["enc_self_shielding"] = {
         -- XXX
     },
@@ -581,14 +611,14 @@ GroupBuffs.MAG = {
     -- L63 Maelstrom of Ro (48 ds, 45 fr, 15 min, group)
     -- L66 Fireskin (62 ds - slot 1, 45 fr, 15 min, single)
     -- L70 Circle of Fireskin (62 ds, 45 fr, 15 min, group)
-    ["ds"] = {
-        -- single ds buff
+    ["mag_single_ds"] = {
         "Shield of Lava/MinLevel|1",
         "Cadeau of Flame/MinLevel|43",
         "Flameshield of Ro/MinLevel|45",
         "Fireskin/MinLevel|62",
     },
-    ["groupds"] = {
+    ["mag_group_ds"] = {
+        "Shield of Lava/MinLevel|1", -- single
         "Boon of Immolation/MinLevel|41",
         "Maelstrom of Ro/MinLevel|46",
         "Circle of Fireskin/MinLevel|62",
@@ -604,7 +634,7 @@ GroupBuffs.MAG = {
     -- L61 Shield of the Arcane (298-300 hp, 34-36 ac, 30 mr)
     -- L64 Shield of Maelin (350 hp, 38-39 ac, 40 mr)
     -- L66 Elemental Aura (390 hp, 46 ac, 40 mr)
-    -- NOTE:  does not stack with Virtue or Focus
+    -- NOTE: does not stack with Virtue or Focus
     ["mag_self_shielding"] = {
         -- XXX
         --"Elemental Aura/MinMana|80/CheckFor|Elemental Empathy R.",
@@ -643,8 +673,11 @@ GroupBuffs.MAG = {
 GroupBuffs.NEC = {
     -- L41 Dead Man Floating (61-70 pr, water breathing, see invis, levitate)
     -- L45 Dead Men Floating (65-70 pr, water breathing, see invis, levitate, group)
-    ["dmf"] = {
+    ["nec_group_levitate"] = {
         "Dead Men Floating/MinLevel|1",
+    },
+    ["nec_single_levitate"] = {
+        "Dead Man Floating/MinLevel|1",
     },
 
     -- lich (dont stack with clarity line):
@@ -693,7 +726,7 @@ GroupBuffs.NEC = {
     -- L61 Shield of the Arcane (298-300 hp, 34-36 ac, 30 mr)
     -- L64 Shield of Maelin (350 hp, 38-39 ac, 40 mr)
     -- L66 Shadow Guard (390 hp, 46 ac, 40 mr)
-    -- NOTE:  does not stack with Virtue or Focus
+    -- NOTE: does not stack with Virtue or Focus
     ["nec_self_shielding"] = {
         -- XXX
     },
@@ -710,7 +743,7 @@ GroupBuffs.WIZ = {
     -- L61 Shield of the Arcane (298-300 hp, 34-36 ac, 30 mr)
     -- L64 Shield of Maelin (350 hp, 38-39 ac, 40 mr)
     -- L66 Ether Shield (390 hp, 46 ac, 40 mr)
-    -- NOTE:  does not stack with Virtue or Focus
+    -- NOTE: does not stack with Virtue or Focus
     ["wiz_self_shielding"] = {
         -- XXX
     },
@@ -894,6 +927,46 @@ GroupBuffs.BST = {
         "Celerity/MinLevel|46",
     },
 
+    -- weak focus - HP slot 1: Increase Max HP
+    -- L53 Talisman of Tnarg (132-150 hp)
+    -- L58 Talisman of Altuna (230-250 hp)
+    -- L62 Talisman of Kragg (365-500 hp)
+    -- L67 Focus of Alladnu (513 hp)
+    ["bst_focus"] = {
+        "Talisman of Tnarg/MinLevel|41",
+        "Talisman of Altuna/MinLevel|44",
+        "Talisman of Kragg/MinLevel|46",
+        "Focus of Alladnu/MinLevel|62",
+    },
+
+    -- L17 Spirit of Bear (11-15 sta)
+    -- L37 Spirit of Ox (19-23 sta)
+    -- L52 Health (27-31 sta)
+    -- L57 Stamina (36-40 sta)
+    ["bst_sta"] = {
+        "Spirit of Ox/MinLevel|1",
+        "Health/MinLevel|41",
+        "Stamina/MinLevel|43",
+    },
+
+    -- L14 Strengthen (5-10 str)
+    -- L28 Spirit Strength (16-18 str)
+    -- L41 Raging Strength (23-26 str)
+    -- L54 Furious Strength (31-34 str)
+    ["bst_str"] = {
+        "Raging Strength/MinLevel|1",
+        "Furious Strength/MinLevel|42",
+    },
+
+    -- L38 Spirit of Monkey (19-20 dex)
+    -- L53 Deftness (40 dex)
+    -- L57 Dexterity (49-50 dex) - blocked by Khura's Focusing (60 dex)
+    ["bst_dex"] = {
+        "Spirit of Monkey/MinLevel|1",
+        "Deftness/MinLevel|41",
+        "Dexterity/MinLevel|43",
+    },
+
     -- L37 Yekan's Quickening (43-45 str, 60% haste, 20 atk, 11-12 ac)
     -- L52 Bond of the Wild (51-55 str, 60% haste, 25 atk, 13-15 ac)
     -- L55 Omakin's Alacrity (60 str, 65-70% haste, 40 atk, 30 ac)
@@ -929,13 +1002,13 @@ GroupBuffs.Default.WAR = {
     --"clr_symbol/Class|DRU,CLR",         -- CLR
     --"clr_ac/Class|DRU,CLR",             -- CLR
     --"dru_skin/Class|DRU,CLR",           -- DRU
-    --"aegolism/Class|CLR/NotClass|DRU",  -- CLR
+    --"clr_aegolism/Class|CLR/NotClass|DRU",  -- CLR
 
     "clr_symbol/Class|CLR",
     "clr_ac/Class|CLR",
     "dru_skin/Class|DRU",
 
-    "focus/Class|SHM",
+    "shm_focus/Class|SHM",
 
     --"pal_hp/Class|PAL/CheckFor|Spiritual Vitality,Strength of Tunare",                 -- 1st
     --"bst_hp/Class|BST/NotClass|PAL/CheckFor|Brell's Brawny Bulwark,Strength of Tunare",    -- 2nd
@@ -957,7 +1030,7 @@ GroupBuffs.Default.SHD = {
     "clr_ac/Class|CLR",
     "dru_skin/Class|DRU",
 
-    "focus/Class|SHM",
+    "shm_focus/Class|SHM",
 
     --"pal_hp/Class|PAL",                 -- 1st
     --"bst_hp/Class|BST/NotClass|PAL",    -- 2nd
@@ -979,7 +1052,7 @@ GroupBuffs.Default.PAL = {
     "clr_ac/Class|CLR",
     "dru_skin/Class|DRU",
 
-    "focus/Class|SHM",
+    "shm_focus/Class|SHM",
 
     "rng_atk/Class|RNG",
     "enc_haste/Class|ENC",
@@ -994,7 +1067,7 @@ GroupBuffs.Default.BRD = {
     "clr_symbol/Class|CLR",
     "clr_ac/Class|CLR",
     "dru_skin/Class|DRU",
-    "focus/Class|SHM",
+    "shm_focus/Class|SHM",
 
     "rng_hp/Class|RNG",                 -- 1st
     --"bst_hp/Class|BST/NotClass|RNG",    -- 2nd
@@ -1013,7 +1086,7 @@ GroupBuffs.Default.BRD = {
 GroupBuffs.Default.CLR = {
     -- XXX should do self buff + aego ?
     "dru_skin/Class|DRU",
-    "focus/Class|SHM",
+    "shm_focus/Class|SHM",
 
     --"pal_hp/Class|PAL",                 -- 1st
     --"bst_hp/Class|BST/NotClass|PAL",    -- 2nd
@@ -1030,7 +1103,7 @@ GroupBuffs.Default.CLR = {
 
 GroupBuffs.Default.DRU = {
     "clr_symbol/Class|CLR",
-    "focus/Class|SHM",
+    "shm_focus/Class|SHM",
 
     --"pal_hp/Class|PAL",                 -- 1st
     --"bst_hp/Class|BST/NotClass|PAL",    -- 2nd
@@ -1070,7 +1143,7 @@ GroupBuffs.Default.ENC = {
     "clr_symbol/Class|CLR",
     "clr_ac/Class|CLR",
     "dru_skin/Class|DRU",
-    "focus/Class|SHM",
+    "shm_focus/Class|SHM",
 
     --"pal_hp/Class|PAL",                 -- 1st
     --"bst_hp/Class|BST/NotClass|PAL",    -- 2nd
@@ -1089,7 +1162,7 @@ GroupBuffs.Default.WIZ = {
     "clr_symbol/Class|CLR",
     "clr_ac/Class|CLR",
     "dru_skin/Class|DRU",
-    "focus/Class|SHM",
+    "shm_focus/Class|SHM",
 
     --"pal_hp/Class|PAL",                 -- 1st
     --"bst_hp/Class|BST/NotClass|PAL",    -- 2nd
@@ -1110,7 +1183,7 @@ GroupBuffs.Default.MAG = {
     "clr_symbol/Class|CLR",
     "clr_ac/Class|CLR",
     "dru_skin/Class|DRU",
-    "focus/Class|SHM",
+    "shm_focus/Class|SHM",
 
     --"pal_hp/Class|PAL",                 -- 1st
     --"bst_hp/Class|BST/NotClass|PAL",    -- 2nd
@@ -1131,7 +1204,7 @@ GroupBuffs.Default.NEC = {
     "clr_symbol/Class|CLR",
     "clr_ac/Class|CLR",
     "dru_skin/Class|DRU",
-    "focus/Class|SHM",
+    "shm_focus/Class|SHM",
 
     --"pal_hp/Class|PAL",                 -- 1st
     --"bst_hp/Class|BST/NotClass|PAL",    -- 2nd
@@ -1151,7 +1224,7 @@ GroupBuffs.Default.RNG = {
     "clr_symbol/Class|CLR",
     "clr_ac/Class|CLR",
     "dru_skin/Class|DRU",
-    "focus/Class|SHM",
+    "shm_focus/Class|SHM",
 
     "shm_str/Class|SHM",
     "enc_haste/Class|ENC",
@@ -1170,7 +1243,7 @@ GroupBuffs.Default.BST = {
     "clr_symbol/Class|CLR",
     "clr_ac/Class|CLR",
     "dru_skin/Class|DRU",
-    "focus/Class|SHM",
+    "shm_focus/Class|SHM",
 
     "rng_hp/Class|RNG",                 -- 1st
 
@@ -1192,7 +1265,7 @@ GroupBuffs.Default.ROG = {
     "clr_symbol/Class|CLR",
     "clr_ac/Class|CLR",
     "dru_skin/Class|DRU",
-    "focus/Class|SHM",
+    "shm_focus/Class|SHM",
 
     "rng_hp/Class|RNG",                 -- 1st
     --"bst_hp/Class|BST/NotClass|RNG",    -- 2nd
@@ -1212,7 +1285,7 @@ GroupBuffs.Default.MNK = {
     "clr_symbol/Class|CLR",
     "clr_ac/Class|CLR",
     "dru_skin/Class|DRU",
-    "focus/Class|SHM",
+    "shm_focus/Class|SHM",
 
     "rng_hp/Class|RNG",                 -- 1st
     --"bst_hp/Class|BST/NotClass|RNG",    -- 2nd
@@ -1232,7 +1305,7 @@ GroupBuffs.Default.BER = {
     "clr_symbol/Class|CLR",
     "clr_ac/Class|CLR",
     "dru_skin/Class|DRU",
-    "focus/Class|SHM",
+    "shm_focus/Class|SHM",
 
     "rng_hp/Class|RNG",                 -- 1st
     --"bst_hp/Class|BST/NotClass|RNG",    -- 2nd
