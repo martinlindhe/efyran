@@ -143,10 +143,12 @@ function CommandQueue.Process()
         rez_it(toint(v.Arg))
     elseif v.Name == "aerez" then
         ae_rez()
-    elseif v.Name == "aefoe" then
-        if class_shortname() == "DRU" then
-            cast_mgb_spell("Flight of Eagles")
+    elseif v.Name == "mgb" then
+        if not is_spell_in_book(v.Arg) and not have_alt_ability(v.Arg) then
+            all_tellf("FATAL: I cannot mgb this, dont have it: %s", v.Arg)
+            return
         end
+        cast_mgb_spell(v.Arg)
     else
         all_tellf("ERROR unknown command in queue: %s", v.Name)
     end

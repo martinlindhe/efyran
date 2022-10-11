@@ -843,10 +843,23 @@ function QoL.Init()
         commandQueue.Add("aerez")
     end)
 
-    -- Cast AoE Flight of Eagles
-    mq.bind("/aefoe", function()
-        commandQueue.Add("aefoe")
-    end)
+    -- MGB CLR Celestial Regeneration
+    mq.bind("/aecr", function() commandQueue.Add("mgb", "Celestial Regeneration") end)
+
+    -- MGB DRU Spirit of the Wood
+    mq.bind("/aesotw", function() commandQueue.Add("mgb", "Spirit of the Wood") end)
+
+    -- MGB SHM Ancestral Aid
+    mq.bind("/aeaa", function() commandQueue.Add("mgb", "Ancestral Aid") end)
+
+    -- MGB DRU Flight of Eagles
+    mq.bind("/aefoe", function() commandQueue.Add("mgb", "Flight of Eagles") end)
+
+    -- MGB NEC Dead Men Floating
+    mq.bind("/aedmf", function() commandQueue.Add("mgb", "Dead Men Floating") end)
+
+    -- MGB ENC Rune of Rikkukin
+    mq.bind("/aerr", function() commandQueue.Add("mgb", "Rune of Rikkukin") end)
 
     clear_cursor()
 

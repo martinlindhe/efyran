@@ -368,15 +368,20 @@ function cast_mgb_spell(spellName)
         all_tellf("\arMass Group Buff is not available...\ax Ready in %s", mq.TLO.Me.AltAbilityTimer("Mass Group Buff").TimeHMS())
         return
     end
-    if not is_spell_in_book(spellName) then
+
+    if not have_alt_ability(spellName) and not is_spell_in_book(spellName) then
         all_tellf("\ar%s is not available...", spellName)
         return
     end
 
     use_alt_ability("Mass Group Buff", nil)
-    delay(100)
+    delay(1000)
     all_tellf("\agMGB %s inc\ax...", spellName)
-    castSpellRaw(spellName, nil, "-maxtries|3")
+    if have_alt_ability(spellName) then
+        use_alt_ability(spellName)
+    else
+        castSpellRaw(spellName, nil, "gem5 -maxtries|3")
+    end
 end
 
 function cast_evac_spell()
