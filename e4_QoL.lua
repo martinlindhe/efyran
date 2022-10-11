@@ -847,6 +847,7 @@ function QoL.Init()
     mq.bind("/aecr", function() commandQueue.Add("mgb", "Celestial Regeneration") end)
 
     -- MGB DRU Spirit of the Wood
+    mq.bind("/aesow",  function() commandQueue.Add("mgb", "Spirit of the Wood") end)
     mq.bind("/aesotw", function() commandQueue.Add("mgb", "Spirit of the Wood") end)
 
     -- MGB SHM Ancestral Aid
@@ -860,6 +861,16 @@ function QoL.Init()
 
     -- MGB ENC Rune of Rikkukin
     mq.bind("/aerr", function() commandQueue.Add("mgb", "Rune of Rikkukin") end)
+
+    -- MGB BST Paragon of Spirit
+    mq.bind("/aepos", function() commandQueue.Add("mgb", "Paragon of Spirit") end)
+
+    -- MGB RNG Auspice of the Hunter
+    mq.bind("/aeaoh",  function() commandQueue.Add("mgb", "Auspice of the Hunter") end)
+    mq.bind("/aeaoth", function() commandQueue.Add("mgb", "Auspice of the Hunter") end)
+
+    -- MGB BER warcry
+    mq.bind("/aecry", function() commandQueue.Add("aecry") end)
 
     clear_cursor()
 

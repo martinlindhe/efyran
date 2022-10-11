@@ -384,6 +384,40 @@ function cast_mgb_spell(spellName)
     end
 end
 
+local aeWarCryCombatAbilities = {
+    "Bloodthirst",                  -- L70, slot 3: Add Defensive Proc: Bloodthirst Effect (30% dmg mod)
+    "Ancient: Cry of Chaos",        -- L65, slot 2: Hundred Hands Effect, slot 11: 60 atk
+    "Battle Cry of the Mastruq",    -- L65, slot 2: Hundred Hands Effect, slot 11: 50 atk
+    "War Cry of Dravel",            -- L64, slot 2: Hundred Hands Effect, slot 11: 40 atk
+    "Battle Cry of Dravel",         -- L57, slot 2: Hundred Hands Effect, slot 11: 30 atk
+    "War Cry",                      -- L50, slot 2: Hundred Hands Effect, slot 11: 20 atk
+    "Battle Cry",                   -- L30, slot 2: Hundred Hands Effect, slot 11: 10 atk
+}
+
+-- Use the best available AE berserker war cry combat ability
+function cast_ae_cry()
+    if not have_alt_ability("Cry of Battle") then
+        all_tellf("\arCry of Battle is not available...\ax Need to purchase AA")
+        return
+    end
+    if not is_alt_ability_ready("Cry of Battle") then
+        all_tellf("\arCry of Battle is not available...\ax Ready in %s", mq.TLO.Me.AltAbilityTimer("Cry of Battle").TimeHMS())
+        return
+    end
+
+    for idx, name in pairs(aeWarCryCombatAbilities) do
+        if have_combat_ability(name) then
+            use_alt_ability("Cry of Battle", nil)
+            delay(1000)
+            all_tellf("\agMGB %s inc\ax...", name)
+            use_combat_ability(name)
+            return
+        end
+    end
+
+    all_tellf("\arNo war cry ability available...\ax Need to purchase discs")
+end
+
 function cast_evac_spell()
     -- DRU/WIZ L59 Exodus AA (instant cast)
     -- Hastened Exodus reduces recast time by 10% per rank
