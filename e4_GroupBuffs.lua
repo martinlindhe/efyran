@@ -218,13 +218,25 @@ GroupBuffs.SHM = {
     },
 }
 
-GroupBuffs.ClericGroupHeal = {
+GroupBuffs.GroupHealSpells = {
     -- priority: the first spell in list that is memorized and not on cooldown will be used
-    "Word of Vivification",     -- L69: 3417-3427 hp, -21 dr, -21 pr, -14 curse, cost 1357 mana
-    "Word of Replenishment",    -- L64: 2500 hp, -14 dr, -14 pr, -7 curse, cost 1100 mana
-    "Word of Redemption",       -- L60: 7500 hp, cost 1100 mana
-    "Word of Restoration",      -- L57: 1788-1818 hp, cost 898 mana
-    "Word of Health",           -- L30: 380-485 hp, cost 302 mana
+
+    -- CLR - cast group heals with cure component
+    "Word of Vivification",     -- CLR/69: 3417-3427 hp, -21 dr, -21 pr, -14 curse, cost 1357 mana
+    "Word of Replenishment",    -- CLR/64: 2500 hp, -14 dr, -14 pr, -7 curse, cost 1100 mana
+    "Word of Redemption",       -- CLR/60: 7500 hp, cost 1100 mana
+    "Word of Restoration",      -- CLR/57: 1788-1818 hp, cost 898 mana
+    "Word of Health",           -- CLR/30: 380-485 hp, cost 302 mana
+
+    "Hand of Piety",            -- PAL/??: AA Rank 1-XXX (24 min reuse with Hastened Piety Rank 3)
+    "Wave of Piety",            -- PAL/70: 1316 hp, cost 1048 mana
+    "Wave of Trushar",          -- PAL/65: 1143 hp, cost 921 mana
+    "Wave of Marr",             -- PAL/65: 960 hp, cost 850 mana
+    "Healing Wave of Prexus",   -- PAL/58: 688-698 hp
+    "Wave of Healing",          -- PAL/55: 439-489 hp
+    "Wave of Life",             -- PAL/39: 201-219 hp
+
+    -- "Moonshadow",               -- DRU/70: 1500 hp, cost 1100 mana (18s recast time)
 }
 
 GroupBuffs.CLR = {

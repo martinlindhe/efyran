@@ -36,7 +36,7 @@ settings.self_buffs = {
 }
 
 settings.healing = {
-    ["life_support"] = {
+    life_support = {
         -- L70 Sanctuary AA (id:5912, removes you from combat), 1h12 min reuse
         --"Sanctuary/HealPct|13",
 
@@ -50,7 +50,7 @@ settings.healing = {
         "Divine Retribution/HealPct|25",
     },
 
-    ["tanks"] = {
+    tanks = {
         "Bandy",
         "Nullius",
         "Manu",
@@ -58,7 +58,7 @@ settings.healing = {
         --"Juancarlos",
     },
 
-    ["tank_heal"] = {
+    tank_heal = {
         -- fast heals:
         -- L58 Ethereal Light (1980-2000 hp, 3.8s cast, 490 mana)
         -- L63 Supernal Light (2730-2750 hp, 3.8s cast, 600 mana)
@@ -69,41 +69,26 @@ settings.healing = {
         "Ancient: Hallowed Light/HealPct|80/MinMana|5",
     },
 
-    ["important"] = {"Spela"},
-    ["important_heal"] = {"Pious Remedy/HealPct|65/MinMana|30"},
+    important = {"Spela"},
+    important_heal = {"Pious Remedy/HealPct|65/MinMana|30"},
 
-    ["all_heal"] = {
+    all_heal = {
         "Weighted Hammer of Conviction/HealPct|40", -- tacvi clicky
         "Pious Remedy/HealPct|25/MinMana|30",
     },
 
-    ["group_heal"] = { -- XXX impl
-        -- group heals:
-        -- L30 Word of Health (380-485 hp, cost 302 mana)
-        -- L57 Word of Restoration (1788-1818 hp, cost 898 mana)
-        -- L60 Word of Redemption (7500 hp, cost 1100 mana)
-        -- L64 Word of Replenishment (2500 hp, -14 dr, -14 pr, -7 curse, cost 1100 mana)
-        -- L69 Word of Vivification (3417-3427 hp, -21 dr, -21 pr, -14 curse, cost 1357 mana)
+    who_to_heal = "Tanks/All", -- XXX impl
 
-        -- group hot:
-        -- L70 Elixir of Divinity (900 hp/tick, group, cost 1550 mana)
-        -- XXX add celestial regen aa here?!
-    },
-
-    ["pet_heal"] = {}, -- XXX impl
-
-    ["who_to_heal"] = "Tanks/All", -- XXX impl
-
-    ["divine_arbitration"] = 60,    -- XXX impl. was [Cleric] Divine Arbitrsation pct in e3
-    ["celestial_regeneration"] = 25, -- XXX impl. was [Cleric] Celestial Regeneration pct in e3
+    divine_arbitration = 60,    -- XXX impl. was [Cleric] Divine Arbitrsation pct in e3
+    celestial_regeneration = 25, -- XXX impl. was [Cleric] Celestial Regeneration pct in e3
 
     -- L69 Yaulp VII (80 atk, 14 mana/tick, 100 dex, 30% haste)
-    ["yaulp"] = "Yaulp VII",    -- was e3 [Cleric].Yaulp Spell   XXX impl?  or hard code yaulp spell names?
-    ["auto_yaulp"] = false, -- was e3 [Cleric].Auto-Yaulp (On/Off)  XXX impl.
+    yaulp = "Yaulp VII",    -- was e3 [Cleric].Yaulp Spell   XXX impl?  or hard code yaulp spell names?
+    auto_yaulp = false, -- was e3 [Cleric].Auto-Yaulp (On/Off)  XXX impl.
 }
 
 settings.assist = {
-    ["nukes"] = {
+    nukes = {
         ["main"] = {
             -- magic nukes:
             -- L44 Retribution (372-390 hp, cost 144 mana)
@@ -119,7 +104,7 @@ settings.assist = {
         }
     },
 
-    ["quickburns"] = { -- XXX implememt !!!
+    quickburns = {
         -- oow T2 bp: Faithbringer's Breastplate of Conviction (increase healing spell potency by 1-50% for 0.7 min)
         "Faithbringer's Breastplate of Conviction",
 
@@ -127,7 +112,7 @@ settings.assist = {
         "Celestial Hammer",
     },
 
-    ["pbae"] = {
+    pbae = {
         -- magic pbae:
         -- "Calamity/Gem|6/MinMana|10",
         -- "Catastrophe/Gem|7/MinMana|10",

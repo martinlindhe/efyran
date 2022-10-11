@@ -213,9 +213,6 @@ function QoL.Init()
         if is_orchestrator() then
             cmd("/dgzexecute /groupheal")
         end
-        if class_shortname() ~= "CLR" then
-            return
-        end
         commandQueue.Add("groupheal")
     end)
 

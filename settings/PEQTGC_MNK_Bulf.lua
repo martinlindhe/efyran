@@ -14,7 +14,7 @@ settings.self_buffs = {
 }
 
 settings.healing = {
-    ["life_support"] = {
+    life_support = {
         "Mend/HealPct|50",
         "Distillate of Divine Healing XI/HealPct|10",
         --"Imitate Death/HealPct|6",

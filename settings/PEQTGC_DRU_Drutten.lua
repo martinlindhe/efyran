@@ -14,6 +14,7 @@ settings.gems = {
     ["Solstice Strike"] = 2, -- fire nuke
     ["Immolation of the Sun"] = 3, -- debuff+dot
     ["Wasp Swarm"] = 4, -- dot
+
     ["Blessing of Steeloak"] = 6,
     ["Hand of Ro"] = 7,
     ["Remove Greater Curse"] = 8,

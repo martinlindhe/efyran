@@ -107,7 +107,7 @@ function Assist.summonNukeComponents()
 end
 
 -- return true if spell/ability was cast
----@param spawn spawn
+---@param spawn|nil spawn
 ---@param row string
 ---@param callback? fun(): boolean
 function castSpellAbility(spawn, row, callback)

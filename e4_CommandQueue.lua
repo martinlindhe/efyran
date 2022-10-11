@@ -149,7 +149,7 @@ function CommandQueue.Process()
         cast_evac_spell()
     elseif v.Name == "groupheal" then
 
-        for idx, groupHeal in pairs(groupBuffs.ClericGroupHeal) do
+        for idx, groupHeal in pairs(groupBuffs.GroupHealSpells) do
             if is_spell_ready(groupHeal) then
                 all_tellf("Casting group heal \ag%s\ax ...", groupHeal)
                 castSpellRaw(groupHeal, nil)

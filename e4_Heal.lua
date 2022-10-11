@@ -267,7 +267,7 @@ local nearbyNPCFilter = "npc radius 75 zradius 75"
 function Heal.performLifeSupport()
     --log.Debug("Heal.performLifeSupport")
 
-    if have_buff("Resurrection Sickness") then
+    if have_buff("Resurrection Sickness") or mq.TLO.Me.PctHPs() >= 98 then
         return
     end
 
@@ -293,50 +293,34 @@ function Heal.performLifeSupport()
             -- remove, dont meet heal criteria
             --print("performLifeSupport skip use of ", spellConfig.Name, ", my hp ", mq.TLO.Me.PctHPs, " vs required ", spellConfig.HealPct)
             skip = true
-        end
-
-        -- if we got this buff/song on, then skip.
-        if spellConfig.CheckFor ~= nil and (have_buff(spellConfig.CheckFor) or have_song(spellConfig.CheckFor)) then
+        elseif spellConfig.CheckFor ~= nil and (have_buff(spellConfig.CheckFor) or have_song(spellConfig.CheckFor)) then
+            -- if we got this buff/song on, then skip.
             --cmd("/dgtell all performLifeSupport skip ", spellConfig.Name, ", I have buff ", spellConfig.CheckFor, " on me")
             skip = true
-        end
-
-        -- only cast if at least this many NPC:s is nearby
-        if spellConfig.MinMobs ~= nil and spawn_count(nearbyNPCFilter) < spellConfig.MinMobs then
+        elseif spellConfig.MinMobs ~= nil and spawn_count(nearbyNPCFilter) < spellConfig.MinMobs then
+            -- only cast if at least this many NPC:s is nearby
             --cmd("/dgtell all performLifeSupport skip ", spellConfig.Name, ", Not enought nearby mobs. Have ", spawn_count(nearbyNPCFilter), ", need ", spellConfig.MinMobs)
             skip = true
-        end
-
-        -- only cast if at most this many NPC:s is nearby
-        if spellConfig.MaxMobs ~= nil and spawn_count(nearbyNPCFilter) > spellConfig.MaxMobs then
+        elseif spellConfig.MaxMobs ~= nil and spawn_count(nearbyNPCFilter) > spellConfig.MaxMobs then
+            -- only cast if at most this many NPC:s is nearby
             --cmd("/dgtell all performLifeSupport skip ", spellConfig.Name, ", Too many nearby mobs. Have ", spawn_count(nearbyNPCFilter), ", need ", spellConfig.MaxMobs)
             skip = true
-        end
-
-        if spellConfig.Zone ~= nil and zone_shortname() ~= spellConfig.Zone then
+        elseif spellConfig.Zone ~= nil and zone_shortname() ~= spellConfig.Zone then
             -- TODO: allow multiple zones listed as comma separated shortnames
             --cmd("/dgtell all performLifeSupport skip ", spellConfig.Name, ", we are in zone ", zone_shortname(), " vs required ", spellConfig.Zone)
             skip = true
-        end
-
-        if have_alt_ability(spellConfig.Name) and not is_alt_ability_ready(spellConfig.Name) then
+        elseif have_alt_ability(spellConfig.Name) and not is_alt_ability_ready(spellConfig.Name) then
             --cmd("/dgtell all performLifeSupport skip ", spellConfig.Name, ", AA is not ready")
             skip = true
-        end
-
-        if have_ability(spellConfig.Name) and not is_ability_ready(spellConfig.Name) then
+        elseif have_ability(spellConfig.Name) and not is_ability_ready(spellConfig.Name) then
             --cmd("/dgtell all performLifeSupport skip ", spellConfig.Name, ", Ability is not ready")
             skip = true
-        end
-
-        if have_item(spellConfig.Name) and not is_item_clicky_ready(spellConfig.Name) then
+        elseif have_item(spellConfig.Name) and not is_item_clicky_ready(spellConfig.Name) then
             --cmd("/dgtell all performLifeSupport skip ", spellConfig.Name, ", item clicky is not ready")
             skip = true
-        end
-
-        if is_spell_in_book(spellConfig.Name) then
+        elseif is_spell_in_book(spellConfig.Name) then
             if not is_memorized(spellConfig.Name) then
-                all_tellf("performLifeSupport skip %s, spell is not memorized", spellConfig.Name)
+                all_tellf("performLifeSupport skip %s, spell is not memorized (fix: list it in settings.gems so it can be used)", spellConfig.Name)
                 skip = true
             elseif not is_spell_ready(spellConfig.Name) then
                 --cmd("/dgtell all performLifeSupport skip ", spellConfig.Name, ", spell is not ready")
@@ -359,9 +343,9 @@ function Heal.performLifeSupport()
                     end
                     all_tellf("USING LIFE SUPPORT %s at %d%%", spellName, mq.TLO.Me.PctHPs())
                     castSpellAbility(nil, spellName)
+                    return
                 end
             end
-            return
         end
     end
 end

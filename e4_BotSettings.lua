@@ -19,18 +19,19 @@ local botSettings = {
 
 -- XXX improve peer template generation
 local peerTemplate = [[
+---@type PeerSettings
 local settings = { }
 
 settings.swap = {
-    ["main"] = "",
+    main = "",
 }
 
 settings.self_buffs = {
 }
 
 settings.assist = {
-    ["type"] = "Melee",
-    ["engage_percent"] = 98,
+    type = "Melee",
+    engage_percent = 98,
 }
 
 return settings
