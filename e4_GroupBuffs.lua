@@ -641,7 +641,6 @@ GroupBuffs.MAG = {
         --"Elemental Aura/MinMana|80/CheckFor|Elemental Empathy R.",
     },
 
-
     -- L19 Elemental Shield (14-15 cr, 14-15 fr)
     -- L41 Elemental Armor (30 cr, 30 fr)
     -- L54 Elemental Cloak (45 cr, 45 fr)
@@ -698,6 +697,10 @@ GroupBuffs.NEC = {
         -- XXX
     },
 
+    -- L14 Shieldskin (absorb 27-55 dmg, reagent Cat's Eye Agate)
+    -- L22 Leatherskin (absorb 71-118 dmg, reagent Bloodstone)
+    -- L32 Steelskin (absorb 168-230 dmg, reagent Jasper)
+    -- L52 Manaskin (absorb 521-600 dmg, 1 mana/tick, reagent Peridot)
     -- L63 Force Shield (absorb 750 dmg, 2 mana/tick)
     -- L69 Dull Pain (absorb 975 dmg, 3 mana/tick)
     -- L73 Wraithskin Rk. II (slot 1: absorb 1219 dmg, 4 mana/tick)

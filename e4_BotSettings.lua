@@ -5,6 +5,8 @@ local settingsRoot = "D:/dev-mq/mqnext-e4-lua/settings"
 
 ---@class PeerSettings
 ---@field public assist PeerSettingsAssist
+---@field public self_buffs string[]|nil spellRows of self buffs
+---@field public request_buffs string[]|nil spellRows of buff groups to request
 
 ---@class PeerSettingsAssist
 ---@field public type string "melee" or "ranged"

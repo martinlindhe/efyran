@@ -24,7 +24,7 @@ function Heal.Init()
             -- if peer is in my zone, remember their announcement
             if spawn_from_peer_name(peerName) ~= nil then
                 local available = string.sub(msg, 18)
-                log.Debug("%s ANNOUNCED AVAILABLE BUFFS: %s", peerName, available)
+                --log.Debug("%s ANNOUNCED AVAILABLE BUFFS: %s", peerName, available)
                 buffs.otherAvailable[peerName] = available
             end
         elseif me_healer() and channel == heal_channel() and botSettings.settings.healing ~= nil then

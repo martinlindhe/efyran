@@ -373,7 +373,7 @@ function buffs.RequestBuffs()
 
             -- ask proper class for buff
             if not found then
-                local peer = Buffs.findAvailableBuffer(spellConfig.Name)
+                local peer = buffs.findAvailableBuffer(spellConfig.Name)
                 if peer ~= nil then
                     if not refresh and free_buff_slots() <= 0 then
                         all_tellf("\arWARN\ax: Won't ask for \ay%s\ax as I only have %d free buff slots", spellConfig.Name, free_buff_slots())

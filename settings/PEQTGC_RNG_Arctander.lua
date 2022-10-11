@@ -84,7 +84,7 @@ settings.assist = {
         "Kick",
     },
 
-    ["nukes"] = { -- XXX implement
+    ["nukes"] = {
         -- fire nukes - timer 1:
         -- L65 Sylvan Burn (673 hp, 0.5s cast, cost 242 mana)
         -- L69 Hearth Embers (842 hp, 0.5s cast, cost 275 mana, 30s recast)
@@ -119,7 +119,7 @@ settings.assist = {
         },
     },
 
-    ["dots"] = { -- XXX implement. was called "DoTs on assist" in e3
+    ["dots"] = {
         -- magic dots:
         -- L67 Locust Swarm (magic -100 adj, 173-179 hp/tick, 1m, cost 406 mana)
         -- NOTE: RNG dot wont stack with DRU dot which is stronger ???
@@ -129,20 +129,20 @@ settings.assist = {
         "Entrap/MaxTries|2",
     },
 
-    ["debuffs"] = {-- XXX impl
+    ["debuffs"] = {
         -- snare:
         -- L69 Earthen Shackles (chromatic -50 adj, 3.0 min, 55-60% snare)
         --"Earthen Shackles/Gem|3",
     },
 
-    ["debuffs_on_command"] = {  -- XXX impl
+    ["debuffs_on_command"] = {
     },
 
     ["targetae"] = { -- XXX impl???
         "Hail of Arrows/MinMana|5",
     },
 
-    ["quickburns"] = {-- XXX implememt !!!
+    ["quickburns"] = {
         -- combat skill - timer 1:
         -- L55 Trueshot Discipline (XXX)
         -- L69 Warder's Wrath (33m45s reuse, increase accuracy and crit rate for 1m)
@@ -168,7 +168,7 @@ settings.assist = {
         "Frost Wind",
     },
 
-    ["longburns"] = {-- XXX implememt !!!
+    ["longburns"] = {
         -- AA 15 min reuse (also MGB:ed, so disabled)
         --"Auspice of the Hunter",      -- XXX condition: only use if MGB AA is down and more than 15 min cooldown.
     },

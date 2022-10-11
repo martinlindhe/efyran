@@ -33,6 +33,7 @@ curing:
     https://gitlab.com/redguides/plugins/MQ2Debuffs
 
 
+
 moving:
     - LATER: check out MQ2Nav. XXX how to download "1.5 gigabyte" of community nav meshes? redguide offers them with membership...
     - check out https://gitlab.com/redguides/plugins/mq2portalsetter
