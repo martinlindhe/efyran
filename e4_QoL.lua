@@ -839,9 +839,7 @@ function QoL.Init()
     end)
 
     -- Rezzes nearby player corpses
-    mq.bind("/aerez", function()
-        commandQueue.Add("aerez")
-    end)
+    mq.bind("/aerez", function() commandQueue.Add("aerez") end)
 
     -- MGB CLR Celestial Regeneration
     mq.bind("/aecr", function() commandQueue.Add("mgb", "Celestial Regeneration") end)

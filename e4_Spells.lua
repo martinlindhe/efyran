@@ -384,6 +384,7 @@ function cast_mgb_spell(spellName)
     end
 end
 
+-- XXX Can one ae bloodthirst, the other a cry of chaos and they stack?
 local aeWarCryCombatAbilities = {
     "Bloodthirst",                  -- L70, slot 3: Add Defensive Proc: Bloodthirst Effect (30% dmg mod)
     "Ancient: Cry of Chaos",        -- L65, slot 2: Hundred Hands Effect, slot 11: 60 atk

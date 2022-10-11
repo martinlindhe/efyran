@@ -13,6 +13,7 @@ settings.gems = {
     ["Pious Elixir"] = 2,
     ["Aura of Devotion"] = 3,
     ["Ancient: Hallowed Light"] = 4,
+    ["Puratus"] = 5, -- XXX also temp gem
     ["Word of Vivification"] = 6,
     ["Balikor's Mark"] = 7,
     ["Ward of Retribution"] = 8,

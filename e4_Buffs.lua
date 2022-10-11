@@ -4,6 +4,7 @@ local log = require("knightlinc/Write")
 require("e4_Spells")
 local follow  = require("e4_Follow")
 local pet     = require("e4_Pet")
+local cure    = require("e4_Cure")
 local botSettings = require("e4_BotSettings")
 local groupBuffs = require("e4_GroupBuffs")
 local bard = require("Class_Bard")
@@ -56,6 +57,8 @@ local refreshBuffsTimer = timer.new_random(10 * 1) -- 10s
 
 local handleBuffsTimer = timer.new_random(2 * 1) -- 2s
 
+local checkDebuffsTimer = timer.new_random(1) -- XXX
+
 -- broadcasts what buff groups we can cast
 function buffs.AnnounceAvailablity()
     -- see what class group buffs I have and prepare a list of them so I can announce availability.
@@ -92,7 +95,9 @@ function buffs.Tick()
         return
     end
 
-    if follow.spawn ~= nil or is_gm() or is_invisible() or is_hovering() or in_combat() or is_moving() or in_neutral_zone() or window_open("MerchantWnd") or window_open("GiveWnd") or window_open("BigBankWnd") or window_open("SpellBookWnd") or window_open("LootWnd") or spawn_count("pc radius 100") == 1 then
+    if follow.spawn ~= nil or is_gm() or is_invisible() or is_hovering() or in_combat() or is_moving() or in_neutral_zone()
+    or window_open("MerchantWnd") or window_open("GiveWnd") or window_open("BigBankWnd") or window_open("SpellBookWnd")
+    or window_open("LootWnd") or spawn_count("pc radius 100") == 1 then
         return
     end
 
@@ -115,6 +120,11 @@ function buffs.Tick()
         announceBuffsTimer:restart()
     end
 
+    if checkDebuffsTimer:expired() then
+        buffs.HandleSelfDebuffs()
+        checkDebuffsTimer:restart()
+    end
+
     if is_casting() or is_hovering() or is_sitting() or is_moving() or mq.TLO.Me.SpellInCooldown() or window_open("SpellBookWnd") then
         return
     end
@@ -126,6 +136,30 @@ function buffs.Tick()
                 handleBuffsTimer:restart()
             end
         end
+    end
+end
+
+--- Find debuffs to handle
+function buffs.HandleSelfDebuffs()
+    --log.Debug("buffs.HandleSelfDebuffs")
+
+    if mq.TLO.Debuff.Count() > 0 then
+        all_tellf("Debuffed: %d poison, %d disease, %d curse, %d corruption. hp drain %d, mana drain %d, end drain %s, slowed %s, spell slowed %s, snared %s, casting level %s, healing eff %s, spell dmg eff %s",
+            mq.TLO.Debuff.Poisons(), mq.TLO.Debuff.Diseases(), mq.TLO.Debuff.Curses(), mq.TLO.Debuff.Corruptions(),
+            mq.TLO.Debuff.HPDrain(), mq.TLO.Debuff.ManaDrain(), mq.TLO.Debuff.EnduranceDrain(),
+            tostring(mq.TLO.Debuff.Slowed()), tostring(mq.TLO.Debuff.SpellSlowed()), tostring(mq.TLO.Debuff.Snared()),
+            tostring(mq.TLO.Debuff.CastingLevel()), tostring(mq.TLO.Debuff.HealingEff()), tostring(mq.TLO.Debuff.SpellDmgEff()))
+
+        -- XXX see if we have a recognized debuff
+
+        for idx, row in pairs(cure.detrimental) do
+            local spellConfig = parseSpellLine(row)
+            if mq.TLO.Me.Buff(spellConfig.Name) then
+                log.Info("I have debuff \ar%s\ax, need \ay%s\ax cure", spellConfig.Name, spellConfig.Cure)
+                -- XXX use a cure ability, or beg for a cure
+            end
+        end
+
     end
 end
 
