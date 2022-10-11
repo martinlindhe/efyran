@@ -1,30 +1,31 @@
 local settings = { }
 
+settings.debug = true
+
 settings.swap = { -- XXX impl
-    -- XXX to use: /bcaa //swap main
-    ["main"] = "Kreljnok's Sword of Eternal Power|Mainhand/Shield of the Lightning Lord|Offhand/Plaguebreeze|Ranged",
-    ["ranged"] = "Plaguebreeze|Ranged", -- 215 range + 150 range Flight Arrow = 365
+    main     = "Kreljnok's Sword of Eternal Power|Mainhand/Shield of the Lightning Lord|Offhand/Plaguebreeze|Ranged",
+    ranged   = "Plaguebreeze|Ranged", -- 215 range + 150 range Flight Arrow = 365
 
-    -- For raids where tanks should not riposte, like tacvi Pixtt Riel Tavas
-    ["noriposte"] = "Aged Left Eye of Xygoz|Mainhand/Shield of the Lightning Lord|Offhand",
+    -- for raids where tanks should not riposte, like tacvi Pixtt Riel Tavas
+    noriposte = "Aged Left Eye of Xygoz|Mainhand/Shield of the Lightning Lord|Offhand",
 
-    ["bfg"] = "Breezeboot's Frigid Gnasher|Mainhand",
-    ["fishing"] = "Fishing Pole|Mainhand",
+    bfg       = "Breezeboot's Frigid Gnasher|Mainhand",
+    fishing   = "Fishing Pole|Mainhand",
 
-    -- for mpg trial of weaponry (group):
-    ["slashdmg"] = "Greatsword of Mortification|Mainhand",
-    ["piercedmg"] = "Warspear of Vexation|Mainhand",
-    ["bluntdmg"] = "Girplan Hammer of Carnage|Mainhand",
+    -- for mpg trial of weaponry (group)
+    slashdmg  = "Greatsword of Mortification|Mainhand",
+    piercedmg = "Warspear of Vexation|Mainhand",
+    bluntdmg  = "Girplan Hammer of Carnage|Mainhand",
 }
 
 settings.illusions = { -- TODO implement
-    ["default"]       = "skeleton", -- XXX either item name, or name of another key
-    ["skeleton"]      = "Amulet of Necropotence", -- 0s
-    ["halfling"]      = "Fuzzy Foothairs", -- 0s
-    ["imp"]           = "Imp Wings", -- 0s, levitate, +15 fire resist
-    ["air_elemental"] = "Second Breath", --0s, levitate
-    ["human"]         = "Circlet of Disguise", -- 7s
-    ["darkelf"]       = "Guise of the Deceiver", -- 6s
+    default       = "skeleton", -- XXX either item name, or name of another key
+    skeleton      = "Amulet of Necropotence", -- 0s
+    halfling      = "Fuzzy Foothairs", -- 0s
+    imp           = "Imp Wings", -- 0s, levitate, +15 fire resist
+    air_elemental = "Second Breath", --0s, levitate
+    human         = "Circlet of Disguise", -- 7s
+    darkelf       = "Guise of the Deceiver", -- 6s
 }
 
 settings.self_buffs = {
@@ -53,7 +54,7 @@ settings.combat_buffs = { -- XXX implement
 }
 
 settings.healing = {
-    ["life_support"] = {
+    life_support = {
         -- epic 2.0 Kreljnok's Sword of Eternal Power (group 800 hp)
         --"Kreljnok's Sword of Eternal Power/HealPct|50",
 
@@ -92,18 +93,18 @@ settings.misc = {       -- XXX implement
 }
 
 settings.assist = {
-    ["type"] = "Melee",
-    ["stick_point"] = "Front",
-    --["melee_distance"] = 12,
-    ["ranged_distance"] = 100,
-    ["engage_percent"] = 98,
+    type = "Melee",
+    stick_point = "Front",
+    --melee_distance = 12,
+    ranged_distance = 100,
+    engage_percent = 98,
 
-    ["taunts"] = { -- XXX impl. used if set
+    taunts = { -- XXX impl. used if set
         "Taunt",
         -- XXX add more + ae taunts
     },
 
-    ["abilities"] = {
+    abilities = {
         "Knee Strike",
         "Bash",
         "Kick",
@@ -111,9 +112,9 @@ settings.assist = {
         --"Disarm",
     },
 
-    ["quickburns"] = {},
+    quickburns = {},
 
-    ["longburns"] = {
+    longburns = {
         -- timer 3:
         -- L54 Mighty Strike Discipline (cause every attack to crit)
         -- L58 Fellstrike Discipline (increase melee damage)

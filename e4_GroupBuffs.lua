@@ -18,7 +18,8 @@ GroupBuffs.Lookup = {
     ["clr_spellhaste"] = "CLR",
 
     ["dru_skin"] = "DRU",
-    ["dru_resist"] = "DRU",
+    ["dru_fire_resist"] = "DRU",
+    ["dru_cold_resist"] = "DRU",
     ["dru_corruption"] = "DRU",
     ["dru_regen"] = "DRU",
     ["dru_ds"] = "DRU",
@@ -1019,7 +1020,7 @@ GroupBuffs.Default.WAR = {
     "enc_haste/Class|ENC",
     "shm_haste/Class|SHM/NotClass|ENC",
 
-    "dru_resist/Class|DRU",
+    "dru_fire_resist/Class|DRU",
     "enc_resist/Class|ENC",
     "shm_resist/Class|SHM",
 }
@@ -1041,7 +1042,7 @@ GroupBuffs.Default.SHD = {
     "enc_haste/Class|ENC",
     "shm_haste/Class|SHM/NotClass|ENC",
 
-    "dru_resist/Class|DRU",
+    "dru_fire_resist/Class|DRU",
     "enc_resist/Class|ENC",
     "shm_resist/Class|SHM",
 }
@@ -1058,7 +1059,7 @@ GroupBuffs.Default.PAL = {
     "enc_haste/Class|ENC",
     "shm_haste/Class|SHM/NotClass|ENC",
 
-    "dru_resist/Class|DRU",
+    "dru_fire_resist/Class|DRU",
     "enc_resist/Class|ENC",
     "shm_resist/Class|SHM",
 }
@@ -1078,7 +1079,7 @@ GroupBuffs.Default.BRD = {
     "enc_haste/Class|ENC",
     "shm_haste/Class|SHM/NotClass|ENC",
 
-    "dru_resist/Class|DRU",
+    "dru_fire_resist/Class|DRU",
     "enc_resist/Class|ENC",
     "shm_resist/Class|SHM",
 }
@@ -1096,7 +1097,7 @@ GroupBuffs.Default.CLR = {
     "enc_manaregen/Class|ENC",
     "bst_manaregen/Class|BST",
 
-    "dru_resist/Class|DRU",
+    "dru_fire_resist/Class|DRU",
     "enc_resist/Class|ENC",
     "shm_resist/Class|SHM",
 }
@@ -1135,7 +1136,7 @@ GroupBuffs.Default.SHM = {
     "clr_spellhaste/Class|CLR",
     "clr_vie/Class|CLR",
 
-    "dru_resist/Class|DRU",
+    "dru_fire_resist/Class|DRU",
     "enc_resist/Class|ENC",
 }
 
@@ -1154,7 +1155,7 @@ GroupBuffs.Default.ENC = {
     "bst_manaregen/Class|BST",
     "clr_vie/Class|CLR",
 
-    "dru_resist/Class|DRU",
+    "dru_fire_resist/Class|DRU",
     "shm_resist/Class|SHM",
 }
 
@@ -1174,7 +1175,7 @@ GroupBuffs.Default.WIZ = {
     "bst_manaregen/Class|BST",
     "clr_vie/Class|CLR",
 
-    "dru_resist/Class|DRU",
+    "dru_fire_resist/Class|DRU",
     "shm_resist/Class|SHM",
     "enc_resist/Class|ENC",
 }
@@ -1195,7 +1196,7 @@ GroupBuffs.Default.MAG = {
     "bst_manaregen/Class|BST",
     "clr_vie/Class|CLR",
 
-    "dru_resist/Class|DRU",
+    "dru_fire_resist/Class|DRU",
     "shm_resist/Class|SHM",
     "enc_resist/Class|ENC",
 }
@@ -1215,7 +1216,7 @@ GroupBuffs.Default.NEC = {
     "bst_manaregen/Class|BST",
     "clr_vie/Class|CLR",
 
-    "dru_resist/Class|DRU",
+    "dru_fire_resist/Class|DRU",
     "shm_resist/Class|SHM",
     "enc_resist/Class|ENC",
 }
@@ -1234,7 +1235,7 @@ GroupBuffs.Default.RNG = {
     "enc_manaregen/Class|ENC",
     --"bst_manaregen/Class|BST",   -- XXX out of buff slots, sep 2022
 
-    "dru_resist/Class|DRU",
+    "dru_fire_resist/Class|DRU",
     "enc_resist/Class|ENC",
     "shm_resist/Class|SHM",
 }
@@ -1256,7 +1257,7 @@ GroupBuffs.Default.BST = {
     "enc_manaregen/Class|ENC",
     "bst_manaregen/Class|BST",
 
-    "dru_resist/Class|DRU",
+    "dru_fire_resist/Class|DRU",
     "enc_resist/Class|ENC",
     "shm_resist/Class|SHM",
 }
@@ -1276,7 +1277,7 @@ GroupBuffs.Default.ROG = {
     "enc_haste/Class|ENC",
     "shm_haste/Class|SHM/NotClass|ENC",
 
-    "dru_resist/Class|DRU",
+    "dru_fire_resist/Class|DRU",
     "enc_resist/Class|ENC",
     "shm_resist/Class|SHM",
 }
@@ -1296,7 +1297,7 @@ GroupBuffs.Default.MNK = {
     "enc_haste/Class|ENC",
     "shm_haste/Class|SHM/NotClass|ENC",
 
-    "dru_resist/Class|DRU",
+    "dru_fire_resist/Class|DRU",
     "enc_resist/Class|ENC",
     "shm_resist/Class|SHM",
 }
@@ -1316,7 +1317,7 @@ GroupBuffs.Default.BER = {
     "enc_haste/Class|ENC",
     "shm_haste/Class|SHM/NotClass|ENC",
 
-    "dru_resist/Class|DRU",
+    "dru_fire_resist/Class|DRU",
     "enc_resist/Class|ENC",
     "shm_resist/Class|SHM",
 }

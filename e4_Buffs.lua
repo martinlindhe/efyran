@@ -17,7 +17,7 @@ local MIN_BUFF_DURATION = 6 * 6000 -- 6 ticks, each tick is 6s
 ---@field public Buff string Name of buff group
 ---@field public Force boolean Should we force-cast, or respect existing buff timers?
 
-local Buffs = {
+local buffs = {
     -- my aura spell, if any
     aura = find_best_aura(),
 
@@ -35,12 +35,12 @@ local Buffs = {
     refreshBuffs = true,
 }
 
-function Buffs.Init()
+function buffs.Init()
     -- enqueues a buff to be cast on a peer
     -- is normally called from another peer, to request a buff
     mq.bind("/queuebuff", function(buff, peer, force)
         --print("queuebuff buff=", buff, ", peer=", peer)
-        table.insert(Buffs.queue, {
+        table.insert(buffs.queue, {
             ["Peer"] = peer,
             ["Buff"] = buff,
             ["Force"] = force == "force",
@@ -57,7 +57,7 @@ local refreshBuffsTimer = timer.new_random(10 * 1) -- 10s
 local handleBuffsTimer = timer.new_random(2 * 1) -- 2s
 
 -- broadcasts what buff groups we can cast
-function Buffs.AnnounceAvailablity()
+function buffs.AnnounceAvailablity()
     -- see what class group buffs I have and prepare a list of them so I can announce availability.
     local classBuffGroups = groupBuffs[class_shortname()]
     if classBuffGroups == nil then
@@ -75,10 +75,10 @@ function Buffs.AnnounceAvailablity()
             end
         end
     end
-    Buffs.available = trim(availableBuffGroups)
-    if string.len(Buffs.available) > 0 then
-        log.Info("My available buff groups: %s", Buffs.available)
-        cmdf("/dgtell %s #available-buffs %s", dannet_zone_channel(), Buffs.available)
+    buffs.available = trim(availableBuffGroups)
+    if string.len(buffs.available) > 0 then
+        log.Info("My available buff groups: %s", buffs.available)
+        cmdf("/dgtell %s #available-buffs %s", dannet_zone_channel(), buffs.available)
     end
 end
 
@@ -87,7 +87,7 @@ function dannet_zone_channel()
     return name:lower()
 end
 
-function Buffs.Tick()
+function buffs.Tick()
     if not is_brd() and is_casting() then
         return
     end
@@ -96,13 +96,13 @@ function Buffs.Tick()
         return
     end
 
-    if Buffs.refreshBuffs and refreshBuffsTimer:expired() then
+    if buffs.refreshBuffs and refreshBuffsTimer:expired() then
         --log.Debug("Buff tick: refresh buffs at %s", time())
-        if not Buffs.RefreshSelfBuffs() then
-            if not Buffs.RefreshAura() then
+        if not buffs.RefreshSelfBuffs() then
+            if not buffs.RefreshAura() then
                 if not pet.Summon() then
                     if not pet.BuffMyPet() then
-                        Buffs.RequestBuffs()
+                        buffs.RequestBuffs()
                     end
                 end
             end
@@ -111,7 +111,7 @@ function Buffs.Tick()
     end
 
     if announceBuffsTimer:expired() then
-        Buffs.AnnounceAvailablity()
+        buffs.AnnounceAvailablity()
         announceBuffsTimer:restart()
     end
 
@@ -119,23 +119,20 @@ function Buffs.Tick()
         return
     end
 
-    --print("QUEUE LEN = ", table.getn(Buffs.queue))
-    if #Buffs.queue > 0 and handleBuffsTimer:expired() then
-        local req = table.remove(Buffs.queue, 1)
+    if #buffs.queue > 0 and handleBuffsTimer:expired() then
+        local req = table.remove(buffs.queue, 1)
         if req ~= nil then
             if handleBuffRequest(req) then
                 handleBuffsTimer:restart()
             end
-        else
-            all_tellf("ERROR queue fetch returned NIL") -- unlikely
         end
     end
 end
 
 ---@param spawnID integer
-function Buffs.BuffIt(spawnID)
+function buffs.BuffIt(spawnID)
 
-    if Buffs.available == nil then
+    if buffs.available == nil then
         log.Debug("Stopping /buffit, no group_buffs available!")
         return
     end
@@ -180,7 +177,7 @@ end
 ---@param req buffQueueValue
 function handleBuffRequest(req)
 
-    log.Debug("handleBuffRequest: Peer %s, buff %s, queue len %d, force = %s", req.Peer, req.Buff, #Buffs.queue, tostring(req.Force))
+    log.Debug("handleBuffRequest: Peer %s, buff %s, queue len %d, force = %s", req.Peer, req.Buff, #buffs.queue, tostring(req.Force))
 
     local buffRows = groupBuffs[class_shortname()][req.Buff]
     if buffRows == nil then
@@ -285,7 +282,7 @@ function handleBuffRequest(req)
 end
 
 -- returns true if a buff was casted
-function Buffs.RefreshSelfBuffs()
+function buffs.RefreshSelfBuffs()
     if botSettings.settings.self_buffs == nil or is_sitting() then
         return false
     end
@@ -301,7 +298,7 @@ function Buffs.RefreshSelfBuffs()
 end
 
 -- returns true if buff was requested
-function Buffs.RequestBuffs()
+function buffs.RequestBuffs()
 
     local req = botSettings.settings.request_buffs
     if req == nil then
@@ -345,13 +342,13 @@ function Buffs.RequestBuffs()
         if not skip then
             local askClass = groupBuffs.Lookup[spellConfig.Name]
             if askClass == nil then
-                all_tellf("FATAL ERROR: did not find groupBuffs.Lookup entry %s", spellConfig.Name)
+                all_tellf("\arFATAL ERROR\ax: did not find groupBuffs.Lookup entry %s", spellConfig.Name)
                 return false
             end
 
             local buffRows = groupBuffs[askClass][spellConfig.Name]
             if buffRows == nil then
-                all_tellf("FATAL ERROR: did not find groupBuffs.%s entry %s", askClass, spellConfig.Name)
+                all_tellf("\arFATAL ERROR\ax: did not find groupBuffs.%s entry %s", askClass, spellConfig.Name)
                 return false
             end
 
@@ -399,8 +396,8 @@ end
 
 -- Find the closest buffer peer who announced they have the desired buff group available
 ---@return string|nil
-function Buffs.findAvailableBuffer(buffGroup)
-    for peer, availableGroups in pairs(Buffs.otherAvailable) do
+function buffs.findAvailableBuffer(buffGroup)
+    for peer, availableGroups in pairs(buffs.otherAvailable) do
         if availableGroups:find(buffGroup) then
             --log.Debug("peer %s, buff groups: %s", peer, buffGroups)
             return peer
@@ -410,13 +407,17 @@ function Buffs.findAvailableBuffer(buffGroup)
 end
 
 -- returns true if a buff was casted
-function Buffs.RefreshAura()
-    if Buffs.aura == nil or mq.TLO.Me.Aura(1)() ~= nil or is_sitting() then
+function buffs.RefreshAura()
+    if buffs.aura == nil or mq.TLO.Me.Aura(1)() ~= nil or is_sitting() then
         return false
     end
-    castSpellRaw(Buffs.aura, nil)
+    if have_combat_ability(buffs.aura) then
+        use_combat_ability(buffs.aura)
+    else
+        castSpellRaw(buffs.aura, nil)
+    end
     return true
 end
 
-return Buffs
+return buffs
 

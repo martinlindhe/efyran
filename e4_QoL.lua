@@ -396,7 +396,7 @@ function QoL.Init()
         if is_orchestrator() then
             cmd("/dgzexecute /throne")
         end
-        cast_veteran_aa("Throne of Heroes")
+        use_veteran_aa("Throne of Heroes")
     end)
 
     local moveToMe = function()
@@ -689,7 +689,7 @@ function QoL.Init()
     mq.bind("/banker", function()
         local aaName = "Summon Clockwork Banker"
         if is_alt_ability_ready(aaName) then
-            cast_alt_ability(aaName, mq.TLO.Me.ID())
+            use_alt_ability(aaName, mq.TLO.Me.ID())
             return
         end
 

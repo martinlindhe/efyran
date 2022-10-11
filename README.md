@@ -65,8 +65,8 @@ Buff Spell Level   Minimum Target Level
 60-61: 				Level 45
 62-63: 				Level 46
 64-65: 				Level 47
-66+: 				Level 62
-
+66-70: 				Level 62
+71+:                ???
 
 ## Terminology
 - Orchestrator = the main driver toon you are playing from

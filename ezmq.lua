@@ -314,8 +314,20 @@ function is_combat_ability_ready(name)
 end
 
 ---@param name string
+function use_combat_ability(name)
+    -- /disc argument MUST NOT use quotes
+    mq.cmdf("/disc %s", name)
+end
+
+---@param name string
+function use_ability(name)
+    -- /doability argument MUST use quotes
+    mq.cmdf('/doability "%s"', name)
+end
+
+---@param name string
 ---@param spawnID integer|nil
-function cast_alt_ability(name, spawnID)
+function use_alt_ability(name, spawnID)
 
     if is_brd() and is_casting() then
         mq.cmd("/twist stop")
@@ -335,7 +347,7 @@ function cast_alt_ability(name, spawnID)
         local item = find_item(name)
         if item ~= nil then
             -- item click
-            log.Debug("cast_alt_ability item click sleep, %f + %f", item.Clicky.CastTime(), item.Clicky.Spell.RecastTime() )
+            log.Debug("use_alt_ability item click sleep, %f + %f", item.Clicky.CastTime(), item.Clicky.Spell.RecastTime() )
             mq.delay(item.Clicky.CastTime() + item.Clicky.Spell.RecastTime() + 1500) -- XXX recast time is 0
         else
             -- spell / AA
@@ -346,7 +358,7 @@ function cast_alt_ability(name, spawnID)
                 mq.delay(sleepTime)
             end
         end
-        log.Debug("BARD cast_alt_ability ", name, " -- SO I RESUME TWIST!")
+        log.Debug("BARD use_alt_ability ", name, " -- SO I RESUME TWIST!")
         mq.cmd("/twist start")
     end
 end
@@ -687,7 +699,7 @@ function clear_cursor()
 end
 
 ---@param name string
-function cast_veteran_aa(name)
+function use_veteran_aa(name)
     if not have_alt_ability(name) then
         all_tellf("ERROR: I do not have AA %s", name)
         return
@@ -696,7 +708,7 @@ function cast_veteran_aa(name)
         all_tellf("ERROR: %s is not ready, ready in %s", name, mq.TLO.Me.AltAbilityTimer(name).TimeHMS())
         return
     end
-    cast_alt_ability(name, mq.TLO.Me.ID())
+    use_alt_ability(name, mq.TLO.Me.ID())
 end
 
 ---@return boolean

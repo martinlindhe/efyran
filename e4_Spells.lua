@@ -217,11 +217,9 @@ end
 function castSpell(name, spawnId)
 
     if have_combat_ability(name) then
-        --log.Debug("castSpell DISC: %s", name)
-        cmdf("/disc %s", name)          -- NOTE: /disc argument must NOT use quotes
+        use_combat_ability(name)
     elseif have_ability(name) then
-        --log.Debug("castSpell ABILITY: %s", name)
-        cmdf('/doability "%s"', name)   -- NOTE: /doability argument must use quotes
+        use_ability(name)
     else
         --log.Debug("castSpell ITEM/SPELL/AA: %s", name)
 
@@ -373,7 +371,7 @@ function cast_mgb_spell(spellName)
         return
     end
 
-    cast_alt_ability("Mass Group Buff", nil)
+    use_alt_ability("Mass Group Buff", nil)
     delay(100)
     all_tellf("\agMGB %s inc\ax...", spellName)
     castSpellRaw(spellName, nil, "-maxtries|3")
@@ -385,7 +383,7 @@ function cast_evac_spell()
     -- Rank 0: recast time 72 min
     -- Rank 4: recast time XX min
     if is_ability_ready("Exodus") then
-        cast_alt_ability("Exodus")
+        use_alt_ability("Exodus")
         return
     end
 
@@ -433,7 +431,7 @@ function cast_radiant_cure()
     end
     if is_alt_ability_ready("Radiant Cure") then
         all_tellf("Radiant Cure inc ...")
-        cast_alt_ability("Radiant Cure")
+        use_alt_ability("Radiant Cure")
     else
         all_tellf("Radiant Cure is ready in %s", mq.TLO.Me.AltAbilityTimer("Radiant Cure").TimeHMS())
     end
