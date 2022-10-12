@@ -384,9 +384,7 @@ function cast_mgb_spell(spellName)
     end
 end
 
--- XXX Can one ae bloodthirst, the other a cry of chaos and they stack?
 local aeWarCryCombatAbilities = {
-    "Bloodthirst",                  -- L70, slot 3: Add Defensive Proc: Bloodthirst Effect (30% dmg mod)
     "Ancient: Cry of Chaos",        -- L65, slot 2: Hundred Hands Effect, slot 11: 60 atk
     "Battle Cry of the Mastruq",    -- L65, slot 2: Hundred Hands Effect, slot 11: 50 atk
     "War Cry of Dravel",            -- L64, slot 2: Hundred Hands Effect, slot 11: 40 atk
@@ -418,6 +416,35 @@ function cast_ae_cry()
 
     all_tellf("\arNo war cry ability available...\ax Need to purchase discs")
 end
+
+local aeWBloodthirstCombatAbilities = {
+    "Bloodthirst",                  -- L70, slot 3: Add Defensive Proc: Bloodthirst Effect (30% dmg mod)
+}
+
+-- Use the best available AE berserker war cry combat ability
+function cast_ae_bloodthirst()
+    if not have_alt_ability("Cry of Battle") then
+        all_tellf("\arCry of Battle is not available...\ax Need to purchase AA")
+        return
+    end
+    if not is_alt_ability_ready("Cry of Battle") then
+        all_tellf("\arCry of Battle is not available...\ax Ready in %s", mq.TLO.Me.AltAbilityTimer("Cry of Battle").TimeHMS())
+        return
+    end
+
+    for idx, name in pairs(aeWBloodthirstCombatAbilities) do
+        if have_combat_ability(name) then
+            use_alt_ability("Cry of Battle", nil)
+            delay(1000)
+            all_tellf("\agMGB %s inc\ax...", name)
+            use_combat_ability(name)
+            return
+        end
+    end
+
+    all_tellf("\arNo Bloodthirst ability available...\ax Need to purchase discs")
+end
+
 
 function cast_evac_spell()
     -- DRU/WIZ L59 Exodus AA (instant cast)

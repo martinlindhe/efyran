@@ -867,8 +867,11 @@ function QoL.Init()
     mq.bind("/aeaoh",  function() commandQueue.Add("mgb", "Auspice of the Hunter") end)
     mq.bind("/aeaoth", function() commandQueue.Add("mgb", "Auspice of the Hunter") end)
 
-    -- MGB BER warcry
+    -- MGB BER war cry
     mq.bind("/aecry", function() commandQueue.Add("aecry") end)
+
+    -- MGB BER Bloodthirst
+    mq.bind("/aebloodthirst", function() commandQueue.Add("aebloodthirst") end)
 
     clear_cursor()
 

@@ -150,7 +150,9 @@ function CommandQueue.Process()
         end
         cast_mgb_spell(v.Arg)
     elseif v.Name == "aecry" then
-        cast_ae_cry(v.Arg)
+        cast_ae_cry()
+    elseif v.Name == "aebloodthirst" then
+        cast_ae_bloodthirst()
     else
         all_tellf("ERROR unknown command in queue: %s", v.Name)
     end
