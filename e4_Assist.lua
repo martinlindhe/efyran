@@ -215,13 +215,8 @@ function Assist.killSpawn(spawn)
             log.Info("Calculated auto melee distance %f", meleeDistance)
         end
 
-        if not mq.TLO.Navigation.MeshLoaded() then
-            all_tellf("MISSING NAVMESH FOR %s", zone_shortname())
-            return
-        end
-
         -- use mq2nav to navigate close to the mob, THEN use stick
-        move_to(spawn)
+        move_to(spawn.ID())
 
         cmd("/attack on")
 

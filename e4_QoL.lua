@@ -175,18 +175,7 @@ function QoL.Init()
 
     -- if filter == "all", drop all. else drop partially matched buffs
     mq.bind("/dropbuff", function(filter)
-        if filter == nil then
-            return
-        end
-        if is_orchestrator() then
-            cmdf("/dgzexecute /dropbuff %s", filter)
-        end
-
-        if filter == "all" then
-            drop_all_buffs()
-        else
-            cmdf("/removebuff %s", filter)
-        end
+        commandQueue.Add("dropbuff", filter)
     end)
 
     mq.bind("/dropinvis", function()
@@ -224,7 +213,6 @@ function QoL.Init()
                 cmdf("/dgzexecute /buffit %d", spawnID)
             end
         end
-
         commandQueue.Add("buffit", spawnID)
     end)
 
@@ -285,32 +273,7 @@ function QoL.Init()
         if is_orchestrator() then
             cmd("/dgzexecute /mounton")
         end
-
-        if botSettings.settings.mount ~= nil then
-
-            if not mq.TLO.Me.CanMount() then
-                all_tellf("MOUNT ERROR, cannot mount in %s", zone_shortname())
-                return
-            end
-
-            -- XXX see if mount clicky buff is on us already
-
-            local spell = getSpellFromBuff(botSettings.settings.mount)
-            if spell == nil then
-                all_tellf("/mounton: getSpellFromBuff %s FAILED", botSettings.settings.mount)
-                cmd("/beep 1")
-                return false
-            end
-
-            if have_buff(spell.RankName()) then
-                log.Error("I am already mounted.")
-                return false
-            end
-
-            -- XXX dont summon if we are already mounted.
-            log.Info("Summoning mount %s ...", botSettings.settings.mount)
-            castSpellAbility(nil, botSettings.settings.mount)
-        end
+        commandQueue.Add("mount-on")
     end)
 
     mq.bind("/mountoff", function()
@@ -334,7 +297,7 @@ function QoL.Init()
         local filter = trim(args_string(...))
 
         if is_orchestrator() then
-            cmdf("/dgzexecute /clickit %s", filter)
+            mq.cmdf("/dgzexecute /clickit %s", filter)
         end
         commandQueue.Add("clickit", filter)
     end)
@@ -342,13 +305,13 @@ function QoL.Init()
     mq.bind("/portto", function(name)
         name = name:lower()
         if is_orchestrator() then
-            cmdf("/dgzexecute /portto %s", name)
+            mq.cmdf("/dgzexecute /portto %s", name)
         end
         commandQueue.Add("portto", name)
     end)
 
     mq.bind("/followon", function()
-        cmdf("/dgzexecute /followid %d", mq.TLO.Me.ID())
+        mq.cmdf("/dgzexecute /followid %d", mq.TLO.Me.ID())
     end)
 
     mq.bind("/followoff", function(s)
@@ -373,9 +336,9 @@ function QoL.Init()
 
     mq.bind("/evac", function(name)
         if is_orchestrator() then
-            cmd("/dgzexecute /evac")
+            mq.cmd("/dgzexecute /evac")
         end
-
+        -- clear queue so that evac happens next
         commandQueue.Clear()
         commandQueue.Add("evac")
     end)
@@ -383,7 +346,7 @@ function QoL.Init()
     -- cast Radiant Cure
     mq.bind("/rc", function(name)
         if is_orchestrator() then
-            cmd("/dgzexecute /rc")
+            mq.cmd("/dgzexecute /rc")
         end
         commandQueue.Add("radiantcure")
     end)
@@ -391,16 +354,13 @@ function QoL.Init()
     -- tell peers in zone to use Throne of Heroes
     mq.bind("/throne", function()
         if is_orchestrator() then
-            cmd("/dgzexecute /throne")
+            mq.cmd("/dgzexecute /throne")
         end
-        use_veteran_aa("Throne of Heroes")
+        commandQueue.Add("use-veteran-aa", "Throne of Heroes")
     end)
 
-    local moveToMe = function()
-        cmdf("/dgzexecute /movetoid %d", mq.TLO.Me.ID())
-    end
-    mq.bind("/movetome", moveToMe)
-    mq.bind("/mtm", moveToMe)
+    mq.bind("/movetome", function() mq.cmdf("/dgzexecute /movetoid %d", mq.TLO.Me.ID()) end)
+    mq.bind("/mtm", function()  mq.cmd("/movetome") end)
 
     -- move to spawn ID
     ---@param spawnID string
@@ -445,145 +405,89 @@ function QoL.Init()
     end)
 
     -- tell all peers to report faction status
-    mq.bind("/factionsall", function()
-        cmd("/dgaexecute all /factions")
-    end)
+    mq.bind("/factionsall", function() mq.cmd("/dgaexecute all /factions") end)
 
     -- clear all chat windows on current peer
-    mq.bind("/clr", function()
-        cmd("/clear")
-    end)
+    mq.bind("/clr", function() mq.cmd("/clear") end)
 
     -- clear all chat windows on all peers
-    mq.bind("/cls", function()
-        cmd("/dgaexecute /clear")
-    end)
+    mq.bind("/cls", function() mq.cmd("/dgaexecute /clear") end)
 
-    mq.bind("/self", function()
-        cmd("/target myself")
-    end)
+    mq.bind("/self", function() mq.cmd("/target myself") end)
 
     -- hide existing corpses
-    mq.bind("/hce", function()
-        cmd("/hidec all")
-    end)
+    mq.bind("/hce", function() mq.cmd("/hidec all") end)
 
     -- hide looted corpses
-    mq.bind("/hcl", function()
-        cmd("/hidec looted")
-    end)
+    mq.bind("/hcl", function() mq.cmd("/hidec looted") end)
 
     -- hide no corpses
-    mq.bind("/hcn", function()
-        cmd("/hidec none")
-    end)
+    mq.bind("/hcn", function() mq.cmd("/hidec none") end)
 
     -- report toons with few free buff slots
-    mq.bind("/freebuffslots", function(name)
-        cmd("/noparse /dgaexecute all /if (${Me.FreeBuffSlots} <= 1) /dgtell all FREE BUFF SLOTS: ${Me.FreeBuffSlots}")
-    end)
-    mq.bind("/fbs", function(name) cmd("/freebuffslots") end)
+    mq.bind("/freebuffslots", function(name) mq.cmd("/noparse /dgaexecute all /if (${Me.FreeBuffSlots} <= 1) /dgtell all FREE BUFF SLOTS: ${Me.FreeBuffSlots}") end)
+    mq.bind("/fbs", function(name) mq.cmd("/freebuffslots") end)
 
     -- /raidinvite shorthand
-    mq.bind("/ri", function(name)
-        cmd("/raidinvite "..name)
-    end)
+    mq.bind("/ri", function(name) mq.cmdf("/raidinvite %s", name) end)
 
     -- quickly exits all eqgame.exe instances using task manager
     mq.bind("/exitall", function()
-        cmd('/exec TASKKILL "/F /IM eqgame.exe" bg')
+        mq.cmd('/exec TASKKILL "/F /IM eqgame.exe" bg')
     end)
 
     -- quickly exits my eqgame.exe instance using task manager
     mq.bind("/exitme", function()
         all_tellf("Exiting")
-        cmd('/exec TASKKILL "/F /PID '..tostring(mq.TLO.EverQuest.PID())..'" bg')
+        mq.cmd('/exec TASKKILL "/F /PID '..tostring(mq.TLO.EverQuest.PID())..'" bg')
     end)
 
-    mq.bind("/exitnotinzone", function()
-        local me = mq.TLO.Me.Name()
-        cmd("/noparse /dgaexecute all /if (!${SpawnCount[pc ="..me.."]}) /exitme")
-    end)
+    mq.bind("/exitnotinzone", function() mq.cmdf("/noparse /dgaexecute all /if (!${SpawnCount[pc =%s]}) /exitme", mq.TLO.Me.Name()) end)
 
-    mq.bind("/exitnotingroup", function()
-        cmd("/noparse /dgaexecute all /if (!${Group.Members}) /exitme")
-    end)
+    mq.bind("/exitnotingroup", function() mq.cmd("/noparse /dgaexecute all /if (!${Group.Members}) /exitme") end)
 
-    mq.bind("/exitnotinraid", function()
-        cmd("/noparse /dgaexecute all /if (!${Raid.Members}) /exitme")
-    end)
+    mq.bind("/exitnotinraid", function() mq.cmd("/noparse /dgaexecute all /if (!${Raid.Members}) /exitme") end)
 
     -- report all peers who are not in current zone
-    mq.bind("/notinzone", function()
-        cmd("/noparse /dgaexecute all /if (!${Zone.ShortName.Equal["..zone_shortname().."]}) /dgtell all I'm in ${Zone.ShortName}")
-    end)
+    mq.bind("/notinzone", function() mq.cmdf("/noparse /dgaexecute all /if (!${SpawnCount[pc =%s]}) /dgtell all I'm in ${Zone.ShortName}", mq.TLO.Me.Name()) end)
 
-    mq.bind("/notingroup", function()
-        cmd("/noparse /dgaexecute all /if (!${Me.Grouped}) /dgtell all NOT IN GROUP")
-    end)
+    mq.bind("/notingroup", function() mq.cmd("/noparse /dgaexecute all /if (!${Me.Grouped}) /dgtell all NOT IN GROUP") end)
 
-    mq.bind("/ingroup", function()
-        cmd("/noparse /dgaexecute all /if (${Me.Grouped}) /dgtell all IN GROUP")
-    end)
+    mq.bind("/ingroup", function() mq.cmd("/noparse /dgaexecute all /if (${Me.Grouped}) /dgtell all IN GROUP") end)
 
-    mq.bind("/notinraid", function()
-        cmd("/noparse /dgaexecute all /if (!${Raid.Members}) /dgtell all NOT IN RAID")
-    end)
+    mq.bind("/notinraid", function() mq.cmd("/noparse /dgaexecute all /if (!${Raid.Members}) /dgtell all NOT IN RAID") end)
 
-    mq.bind("/inraid", function()
-        cmd("/noparse /dgaexecute all /if (${Raid.Members}) /dgtell all IN RAID")
-    end)
+    mq.bind("/inraid", function() mq.cmd("/noparse /dgaexecute all /if (${Raid.Members}) /dgtell all IN RAID") end)
 
     -- report all peers who are not levitating
-    mq.bind("/notlevi", function()
-        cmd("/noparse /dgaexecute all /if (!${Me.Levitating}) /dgtell all NOT LEVI")
-    end)
+    mq.bind("/notlevi", function() mq.cmd("/noparse /dgaexecute all /if (!${Me.Levitating}) /dgtell all NOT LEVI") end)
 
-    mq.bind("/notitu", function()
-        cmd("/noparse /dgaexecute all (!${Me.Buff[Sunskin].ID}) /dgtell all NOT ITU")
-    end)
+    mq.bind("/notitu", function() mq.cmd("/noparse /dgaexecute all (!${Me.Buff[Sunskin].ID}) /dgtell all NOT ITU") end)
 
     -- report all peers who are not invisible
-    mq.bind("/notinvis", function()
-        cmd("/noparse /dgaexecute all /if (!${Me.Invis}) /dgtell all NOT INVIS")
-    end)
+    mq.bind("/notinvis", function() mq.cmd("/noparse /dgaexecute all /if (!${Me.Invis}) /dgtell all NOT INVIS") end)
 
-    mq.bind("/invis", function()
-        cmd("/noparse /dgaexecute all /if (${Me.Invis}) /dgtell all INVIS")
-    end)
+    mq.bind("/invis", function() mq.cmd("/noparse /dgaexecute all /if (${Me.Invis}) /dgtell all INVIS") end)
 
     -- useful when AE FD is cast (oow, wos Shadowhunter, Cleric 1.5 fight in lfay and so on)
     mq.bind("/standall", function()
         log.Info("Requested ALL peers to /stand")
-        cmd("/noparse /dgaexecute all /if (${Me.Feigning} || ${Me.Ducking} || ${Me.Sitting}) /stand")
+        mq.cmd("/noparse /dgaexecute all /if (${Me.Feigning} || ${Me.Ducking} || ${Me.Sitting}) /stand")
     end)
 
     mq.bind("/sitall", function()
         log.Info("Requested ALL peers to /sit")
-        cmd("/noparse /dgaexecute all /if (${Me.Standing}) /sit")
+        mq.cmd("/noparse /dgaexecute all /if (${Me.Standing}) /sit")
     end)
 
     -- report all peers who are not standing
-    mq.bind("/notstanding", function()
-        cmd("/noparse /dgaexecute all /if (${Me.Feigning} || ${Me.Ducking} || ${Me.Sitting}) /bc NOT STANDING")
-    end)
+    mq.bind("/notstanding", function() mq.cmd("/noparse /dgaexecute all /if (${Me.Feigning} || ${Me.Ducking} || ${Me.Sitting}) /bc NOT STANDING") end)
 
     -- open loot window on closest corpse
-    mq.bind("/lcorpse", function()
-        if has_target() ~= nil then
-            cmd("/squelch /target clear")
-        end
-        cmd("/target corpse radius 100")
-        delay(500, function()
-            return has_target()
-        end)
-        cmd("/loot")
-    end)
+    mq.bind("/lcorpse", function() commandQueue.Add("open-nearby-corpse") end)
 
     -- reports all toons that are not running e4
-    mq.bind("/note4", function()
-        cmd("/dgaexecute /lua run note4")
-    end)
+    mq.bind("/note4", function() mq.cmd("/dgaexecute /lua run note4") end)
 
     mq.bind("/running", function()
         -- XXX reports all running scripts on all toons
@@ -609,138 +513,25 @@ function QoL.Init()
     mq.bind("/mmrl", mmrl)
 
     -- reports all currently worn auguments
-    mq.bind("/wornaugs", function()
-        log.Info("Currently worn auguments:")
-        local hp = 0
-        local mana = 0
-        local endurance = 0
-        local ac = 0
-        for i = 0, 22 do
-            if mq.TLO.Me.Inventory(i).ID() then
-                for a = 0, mq.TLO.Me.Inventory(i).Augs() do
-                    if mq.TLO.Me.Inventory(i).AugSlot(a)() ~= nil then
-                        local item = mq.TLO.Me.Inventory(i).AugSlot(a).Item
-                        hp = hp + item.HP()
-                        mana = mana + item.Mana()
-                        endurance = endurance + item.Endurance()
-                        ac = ac + item.AC()
-                        log.Info(inventory_slot_name(i).." #"..a..": "..item.ItemLink("CLICKABLE")().." "..item.HP().." HP")
-                    end
-                end
-            end
-        end
-        log.Info("Augument total: "..hp.." HP, "..mana.." mana, "..endurance.." endurance, "..ac.." AC")
-    end)
+    mq.bind("/wornaugs", function() commandQueue.Add("reportwornaugs") end)
 
     -- reports all owned clickies (worn, inventory, bank) worn auguments
-    mq.bind("/clickies", function()
-        log.Info("My clickies:")
-
-        -- XXX TODO skip expendables
-
-        -- XXX 15 sep 2022: item.Expendables() seem to be broken, always returns false ? https://discord.com/channels/511690098136580097/840375268685119499/1019900421248126996
-
-        for i = 0, 32 do -- equipment: 0-22 is worn gear, 23-32 is inventory top level
-            if mq.TLO.Me.Inventory(i).ID() then
-                local inv = mq.TLO.Me.Inventory(i)
-                if inv.Container() > 0 then
-                    for c = 1, inv.Container() do
-                        local item = inv.Item(c)
-                        if item.Clicky() ~= nil and (not item.Expendable()) then
-                            --print ( "one ", item.Name(), " ", item.Charges() , " ", item.Expendable())
-                            log.Info(inventory_slot_name(i).." # "..c.." "..item.ItemLink("CLICKABLE")().." effect: "..item.Clicky.Spell.Name())
-                        end
-                    end
-                else
-                    if inv.Clicky() ~= nil and (not inv.Expendable()) then
-                        --print ( "two ", inv.Name(), " ", inv.Charges(), " ", inv.Expendable())
-                        log.Info(inventory_slot_name(i).." "..inv.ItemLink("CLICKABLE")().." effect: "..inv.Clicky.Spell.Name())
-                    end
-                end
-            end
-        end
-
-        for i = 1, 26 do -- bank top level slots: 1-24 is bank bags, 25-26 is shared bank
-            if mq.TLO.Me.Bank(i)() ~= nil then
-                local key = "bank"..tostring(i)
-                local inv = mq.TLO.Me.Bank(i)
-                if inv.Container() > 0 then
-                    for c = 1, inv.Container() do
-                        local item = inv.Item(c)
-                        if item.Clicky() ~= nil and (not item.Expendable()) then
-                            --print ( "three ", item.Name(), " ", item.Charges(), " ", item.Expendable())
-                            log.Info(key.." # "..c.." "..item.ItemLink("CLICKABLE")().." effect: "..item.Clicky.Spell.Name())
-                        end
-                    end
-                else
-                    if inv.Clicky() ~= nil and (not inv.Expendable()) then
-                        --print ( "four ", inv.Name(), " ", inv.Charges(), " ", inv.Expendable())
-                        log.Info(key.." "..inv.ItemLink("CLICKABLE")().." effect: "..inv.Clicky.Spell.Name())
-                    end
-                end
-            end
-        end
-    end)
+    mq.bind("/clickies", function() commandQueue.Add("reportclickies") end)
 
     -- cast Summon Clockwork Banker veteran AA yourself, or the first available nearby peer
-    mq.bind("/banker", function()
-        local aaName = "Summon Clockwork Banker"
-        if is_alt_ability_ready(aaName) then
-            use_alt_ability(aaName, mq.TLO.Me.ID())
-            return
-        end
+    mq.bind("/banker", function() commandQueue.Add("summonbanker") end)
 
-        log.Warn(aaName.." is not ready. Ready in "..mq.TLO.Me.AltAbilityTimer(aaName).TimeHMS())
+    -- MAG: use Call of the Hero to summon the group to you
+    mq.bind("/cohgroup", function() mq.cmd("/lua run cohgroup") end)
 
-        if not is_orchestrator() then
-            return
-        end
-
-        -- if my banker is not ready, check all nearby peers if one is ready and use it.
-        local spawnQuery = "pc notid " .. mq.TLO.Me.ID() .. " radius 50"
-
-        for i = 1, spawn_count(spawnQuery) do
-            local spawn = mq.TLO.NearestSpawn(i, spawnQuery)
-            local peer = spawn.Name()
-            if is_peer(peer) then
-                local value = query_peer(peer, "Me.AltAbilityReady["..aaName.."]", 0)
-                if value == "TRUE" then
-                    log.Info("Asking %s to activate banker ...", peer)
-                    cmdf("/dexecute %s /banker", peer)
-                    return
-                end
-            end
-            delay(1)
-            doevents()
-        end
-
-    end)
-
-    mq.bind("/cohgroup", function()
-        cmd("/lua run cohgroup")
-    end)
-
-    -- Tell nearby peer corpses to consent me
-    mq.bind("/consentme", function()
-        local spawnQuery = 'pccorpse radius 500'
-        for i = 1, spawn_count(spawnQuery) do
-            local spawn = mq.TLO.NearestSpawn(i, spawnQuery)
-            log.Info("Asking %s for consent ...", spawn.DisplayName())
-            cmdf("/dexecute %s /consent %s", spawn.DisplayName(), mq.TLO.Me.Name())
-        end
-    end)
+    -- Ask peer owners of nearby corpses to consent me
+    mq.bind("/consentme", function() commandQueue.Add("consentme") end)
 
     -- summon nearby corpses into a pile
-    mq.bind("/gathercorpses", function()
-        local spawnQuery = 'pccorpse radius 100'
-        for i = 1, spawn_count(spawnQuery) do
-            local spawn = mq.TLO.NearestSpawn(i, spawnQuery)
-            target_id(spawn.ID())
-            delay(2)
-            cmd("/corpse")
-            delay(1000, function() return spawn.Distance() < 20 end)
-        end
-    end)
+    mq.bind("/gathercorpses", function() commandQueue.Add("gathercorpses") end)
+
+    -- tell peers to attempt to loot their corpses
+    mq.bind("/lootcorpses", function() commandQueue.Add("lootcorpse") end)
 
     -- make all peer quit expedition
     mq.bind("/quitexp", function()
@@ -749,71 +540,38 @@ function QoL.Init()
     end)
 
     -- hide all dz windows
-    mq.bind("/dzhide", function()
-        cmd("/noparse /dgaexecute /if (${Window[dynamiczonewnd]}) /windowstate dynamiczonewnd close")
-    end)
+    mq.bind("/dzhide", function() mq.cmd("/noparse /dgaexecute /if (${Window[dynamiczonewnd]}) /windowstate dynamiczonewnd close") end)
 
     -- report peers with at least 10 unspent AA:s
-    mq.bind("/unspentaa", function()
-        cmd("/noparse /dgaexecute /if (${Me.AAPoints} >= 10 && ${Me.AAPoints} < 100) /dgtell all UNSPENT AA: ${Me.AAPoints}")
-    end)
+    mq.bind("/unspentaa", function() mq.cmd("/noparse /dgaexecute /if (${Me.AAPoints} >= 10 && ${Me.AAPoints} < 100) /dgtell all UNSPENT AA: ${Me.AAPoints}") end)
 
     -- report peers with less than 10 unspent AA:s
-    mq.bind("/lowunspentaa", function()
-        cmd("/noparse /dgaexecute /if (${Me.AAPoints} > 1 && ${Me.AAPoints} < 10) /dgtell all UNSPENT AA: ${Me.AAPoints}")
-    end)
+    mq.bind("/lowunspentaa", function() mq.cmd("/noparse /dgaexecute /if (${Me.AAPoints} > 1 && ${Me.AAPoints} < 10) /dgtell all UNSPENT AA: ${Me.AAPoints}") end)
 
     -- report peers with any unspent AA:s
-    mq.bind("/allunspentaa", function()
-        cmd("/noparse /dgaexecute /if (${Me.AAPoints} > 0) /dgtell all UNSPENT AA: ${Me.AAPoints}")
-    end)
+    mq.bind("/allunspentaa", function() mq.cmd("/noparse /dgaexecute /if (${Me.AAPoints} > 0) /dgtell all UNSPENT AA: ${Me.AAPoints}") end)
 
     -- report all peer total AA:s
-    mq.bind("/totalaa", function()
-        cmd("/noparse /dgaexecute /dgtell all TOTAL AA: ${Me.AAPointsTotal}")
-    end)
+    mq.bind("/totalaa", function() mq.cmd("/noparse /dgaexecute /dgtell all TOTAL AA: ${Me.AAPointsTotal}") end)
 
     -- finds item by name in inventory/bags. NOTE: "/finditem" is reserved in eq live for "dragon hoard" feature
     mq.bind("/fdi", function(...)
         local name = trim(args_string(...))
-        name = strip_link(name)
-
-        log.Info("Ssearching for %s", name)
-
-        if is_orchestrator() then
-            cmdf("/dgzexecute /fdi %s", name)
+        if name ~= "" then
+            commandQueue.Add("finditem", name)
         end
-
-        local item = find_item(name)
-        if item == nil then
-            --all_tellf("%s not found", name)
-            return
-        end
-
-        local cnt = getItemCountExact(item.Name())
-        all_tellf("%s in %s (count: %d)", item.ItemLink("CLICKABLE")(), inventory_slot_name(item.ItemSlot()), cnt)
     end)
 
     -- find missing item
     mq.bind("/fmi", function(...)
         local name = trim(args_string(...))
-        name = strip_link(name)
-
-        if is_orchestrator() then
-            cmdf("/dgzexecute /fmi %s", name)
-        end
-
-        local item = find_item(name)
-        if item == nil then
-            all_tellf("I miss %s", name)
-            return
+        if name ~= "" then
+            commandQueue.Add("findmissingitem", name)
         end
     end)
 
     -- Recalls group setup from settings. The orchestrator (caller) will tell the rest how to form up
-    mq.bind('/recallgroup', function(name, groupNumber)
-        commandQueue.Add("recallgroup", name, groupNumber)
-    end)
+    mq.bind('/recallgroup', function(name, groupNumber) commandQueue.Add("recallgroup", name, groupNumber) end)
 
     mq.event('joingroup', '#1# invites you to join a group.', function(text, sender)
         if is_peer(sender) then

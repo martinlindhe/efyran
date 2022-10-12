@@ -33,28 +33,27 @@ function line_of_sight_to(spawn)
     return mq.TLO.LineOfSight(q)()
 end
 
+local globalSettings = require("e4_Settings")
+
 -- Move to the location of `spawn` using MQ2Nav.
----@param spawn spawn
-function move_to(spawn)
-    log.Debug("move_to ", spawn.Name())
+---@param spawnID integer
+function move_to(spawnID)
+    log.Debug("move_to %d", spawnID)
 
-    --if not line_of_sight_to(spawn) then
-    --    all_tellf("move_to ERROR: cannot see %s", spawn.Name())
-    --    mq.cmd("/beep 1")
-    --    return
-    --end
+    local spawn = spawn_from_id(spawnID)
 
-    local zone = mq.TLO.Zone.ID()
+    if not line_of_sight_to(spawn) then
+        all_tellf("move_to ERROR: cannot see %s", spawn.Name())
+        return
+    end
 
-    mq.cmdf("/nav locxyz %f %f %f", spawn.X(), spawn.Y(), spawn.Z())
-    mq.delay(10000, function()
-        if mq.TLO.Zone.ID() ~= zone then
-            -- break if we zoned
-            return true
-        end
-        return not mq.TLO.Navigation.Active() or is_within_distance(spawn, 15)
-    end)
-    mq.cmd("/nav stop")
+    if globalSettings.followMode:lower() == "mq2nav" then
+        mq.cmdf("/nav id %d", spawnID)
+    elseif globalSettings.followMode:lower() == "mq2advpath" then
+        mq.cmdf("/afollow spawn %d", spawnID)
+    elseif globalSettings.followMode:lower() == "mq2moveutils" then
+        mq.cmdf("/moveto id %d", spawnID)
+    end
 end
 
 ---@param y number
@@ -165,9 +164,11 @@ end
 -- Target spawn by id
 ---@param id integer
 function target_id(id)
-    mq.cmdf("/target id %d", id)
-    mq.delay(10)
-    mq.delay(1000, function() return mq.TLO.Target.ID() == id end)
+    if id ~= nil then
+        mq.cmdf("/target id %d", id)
+        mq.delay(10)
+        mq.delay(1000, function() return mq.TLO.Target.ID() == id end)
+    end
 end
 
 -- Partial search by name
@@ -558,7 +559,7 @@ function open_nearby_merchant()
 
     log.Info("Opening trade window for merchant %s, type %s", merchant.Name(), type(merchant))
 
-    move_to(merchant)
+    move_to(merchant.ID())
     open_merchant_window(merchant)
 end
 

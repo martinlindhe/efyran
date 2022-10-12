@@ -128,11 +128,7 @@ function CommandQueue.Process()
     elseif v.Name == "portto" then
         cast_port_to(v.Name)
     elseif v.Name == "movetoid" then
-        local spawnID = toint(v.Arg)
-        local spawn = spawn_from_id(spawnID)
-        if spawn ~= nil then
-            move_to(spawn)
-        end
+        move_to(toint(v.Arg))
     elseif v.Name == "rtz" then
         follow.RunToZone(v.Arg)
     elseif v.Name == "hailit" then
@@ -153,6 +149,42 @@ function CommandQueue.Process()
         cast_ae_cry()
     elseif v.Name == "aebloodthirst" then
         cast_ae_bloodthirst()
+    elseif v.Name == "lootcorpse" then
+        loot_my_corpse()
+    elseif v.Name == "consentme" then
+        consent_me()
+    elseif v.Name == "gathercorpses" then
+        gather_corpses()
+    elseif v.Name == "finditem" then
+        report_find_item(v.Arg)
+    elseif v.Name == "findmissingitem" then
+        report_find_missing_item(v.Arg)
+    elseif v.Name == "reportclickies" then
+        report_clickies()
+    elseif v.Name == "summonbanker" then
+        local aaName = "Summon Clockwork Banker"
+        if is_alt_ability_ready(aaName) then
+            use_alt_ability(aaName, nil)
+            return
+        end
+
+        log.Warn(aaName.." is not ready. Ready in "..mq.TLO.Me.AltAbilityTimer(aaName).TimeHMS())
+
+        if not is_orchestrator() then
+            return
+        end
+
+        ask_nearby_peer_to_activate_aa(aaName)
+    elseif v.Name == "reportwornaugs" then
+        report_worn_augs()
+    elseif v.Name == "open-nearby-corpse" then
+        open_nearby_corpse()
+    elseif v.Name == "use-veteran-aa" then
+        use_veteran_aa(v.Arg)
+    elseif v.Name == "dropbuff" then
+        drop_buff(v.Arg)
+    elseif v.Name == "mount-on" then
+        mount_on()
     else
         all_tellf("ERROR unknown command in queue: %s", v.Name)
     end

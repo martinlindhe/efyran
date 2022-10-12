@@ -95,7 +95,6 @@ function enqueueHealmeRequest(msg)
             -- XXX: if queue is >= 10 long, add with 50% chance ... if >= 20 long, beep and ignore.
 
             all_tellf("queue is full ! len is %d. queue: %s", Heal.queue:size(), Heal.queue:describe())
-            cmd("/beep 1")
             return
         end
 
@@ -221,22 +220,7 @@ function Heal.acceptRez()
         -- request buffs
         buffs.RequestBuffs()
 
-        -- target my corpse
-        cmdf("/target %s's corpse", mq.TLO.Me.Name())
-        delay(1000)
-
-        -- open loot window
-        cmd("/loot")
-        delay(5000, function() return window_open("LootWnd") end)
-
-        if not window_open("LootWnd") then
-            all_tellf("ERROR FATAL CANNOT OPEN MY LOOT WINDOW.")
-            return
-        end
-
-        -- click loot all button
-        cmd("/notify LootWnd LootAllButton leftmouseup")
-        delay(30000, function() return not window_open("LootWnd") end)
+        loot_my_corpse()
     end
 end
 

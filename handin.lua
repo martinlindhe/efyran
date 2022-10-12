@@ -206,7 +206,7 @@ for npcRow, t in pairs(handinRules) do
                         log.Info("I HAVE ALL NEEDED PIECES, DOING HAND IN")
 
                         target_npc_name(o.Name)
-                        move_to(spawn)
+                        move_to(spawn.ID())
 
                         for i, componentRow in pairs(components) do
                             -- optional syntax: "2|Item name", where 2 is the required item count

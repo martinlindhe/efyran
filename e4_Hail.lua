@@ -171,7 +171,7 @@ function Hail.PerformHail()
         local spawnName = spawn.CleanName()
         if zoneTargets[spawnName] ~= nil then
             cmdf("/target npc %s", spawnName)
-            move_to(spawn)
+            move_to(spawn.ID())
             delay(200)
             if zoneTargets[spawnName] == true then
                 -- hail only

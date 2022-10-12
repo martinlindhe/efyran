@@ -154,8 +154,8 @@ function buffs.HandleSelfDebuffs()
 
         for idx, row in pairs(cure.detrimental) do
             local spellConfig = parseSpellLine(row)
-            if mq.TLO.Me.Buff(spellConfig.Name) then
-                log.Info("I have debuff \ar%s\ax, need \ay%s\ax cure", spellConfig.Name, spellConfig.Cure)
+            if mq.TLO.Me.Buff(spellConfig.Name).ID() ~= nil then
+                log.Info("I have debuff \ar%s\ax, need \ay%s\ax cure.", spellConfig.Name, spellConfig.Cure)
                 -- XXX use a cure ability, or beg for a cure
             end
         end

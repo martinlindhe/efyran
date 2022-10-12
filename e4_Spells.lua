@@ -417,10 +417,6 @@ function cast_ae_cry()
     all_tellf("\arNo war cry ability available...\ax Need to purchase discs")
 end
 
-local aeWBloodthirstCombatAbilities = {
-    "Bloodthirst",                  -- L70, slot 3: Add Defensive Proc: Bloodthirst Effect (30% dmg mod)
-}
-
 -- Use the best available AE berserker war cry combat ability
 function cast_ae_bloodthirst()
     if not have_alt_ability("Cry of Battle") then
@@ -432,17 +428,17 @@ function cast_ae_bloodthirst()
         return
     end
 
-    for idx, name in pairs(aeWBloodthirstCombatAbilities) do
-        if have_combat_ability(name) then
-            use_alt_ability("Cry of Battle", nil)
-            delay(1000)
-            all_tellf("\agMGB %s inc\ax...", name)
-            use_combat_ability(name)
-            return
-        end
+    -- L70, slot 3: Add Defensive Proc: Bloodthirst Effect (30% dmg mod)
+    local name = "Bloodthirst"
+    if have_combat_ability(name) then
+        use_alt_ability("Cry of Battle", nil)
+        delay(1000)
+        all_tellf("\agMGB %s inc\ax...", name)
+        use_combat_ability(name)
+        return
     end
 
-    all_tellf("\arNo Bloodthirst ability available...\ax Need to purchase discs")
+    all_tellf("\ar%s ability not available...\ax Need to purchase discs", name)
 end
 
 
@@ -610,20 +606,20 @@ function ae_rez()
     local spawnQuery = 'pccorpse radius 100'
     local corpses = spawn_count(spawnQuery)
 
-    all_tellf("AERez started in %s (%d corpses) ...", zone_shortname(), corpses)
+    all_tellf("\amAERez started in %s\ax (%d corpses) ...", zone_shortname(), corpses)
     wait_until_not_casting()
 
     for i = 1, corpses do
         ---@type spawn
         local spawn = mq.TLO.NearestSpawn(i, spawnQuery)
-        if spawn ~= nil and spawn ~= "NULL" then
+        if spawn ~= nil and spawn.ID() ~= nil then
             log.Info("Trying to rez %s", spawn.Name())
             target_id(spawn.ID())
 
             local rez = get_rez_spell_item_aa()
             if rez ~= nil then
                 if spawn ~= nil then
-                    all_tellf("Rezzing %s with %s", spawn.Name(), rez)
+                    all_tellf("\amRezzing %s\ax with %s", spawn.Name(), rez)
                     castSpellRaw(rez, spawn.ID())
                     delay(3000)
                     wait_until_not_casting()
@@ -635,7 +631,7 @@ function ae_rez()
         doevents()
         delay(12000)
     end
-    log.Info("AEREZ ENDING")
+    all_tellf("\amAEREZ DONE\ax")
 end
 
 function pbae_loop()
@@ -670,4 +666,234 @@ function pbae_loop()
             end
         end
     end
+end
+
+function consent_me()
+    local spawnQuery = 'pccorpse radius 500'
+    for i = 1, spawn_count(spawnQuery) do
+        local spawn = mq.TLO.NearestSpawn(i, spawnQuery)
+        log.Info("Asking %s for consent ...", spawn.DisplayName())
+        cmdf("/dexecute %s /consent %s", spawn.DisplayName(), mq.TLO.Me.Name())
+    end
+end
+
+-- ask for consent, then gathers corpses
+function gather_corpses()
+    consent_me()
+    delay(1000)
+
+    local spawnQuery = 'pccorpse radius 100'
+    for i = 1, spawn_count(spawnQuery) do
+        local spawn = mq.TLO.NearestSpawn(i, spawnQuery)
+        target_id(spawn.ID())
+        delay(2)
+        cmd("/corpse")
+        delay(1000, function() return spawn.Distance() < 20 end)
+    end
+end
+
+function loot_my_corpse()
+    -- target my corpse
+    cmdf("/target %s's corpse", mq.TLO.Me.Name())
+    delay(1000)
+
+    -- open loot window
+    cmd("/loot")
+    delay(5000, function() return window_open("LootWnd") end)
+
+    if not window_open("LootWnd") then
+        all_tellf("ERROR FATAL CANNOT OPEN MY LOOT WINDOW.")
+        return
+    end
+
+    -- click loot all button
+    cmd("/notify LootWnd LootAllButton leftmouseup")
+    delay(30000, function() return not window_open("LootWnd") end)
+end
+
+-- used by /fdi
+---@param name string
+function report_find_item(name)
+    name = strip_link(name)
+    log.Info("Searching for %s", name)
+
+    if is_orchestrator() then
+        cmdf("/dgzexecute /fdi %s", name)
+    end
+
+    local item = find_item(name)
+    if item == nil then
+        --all_tellf("%s not found", name)
+        return
+    end
+
+    local cnt = getItemCountExact(item.Name())
+    all_tellf("%s in %s (count: %d)", item.ItemLink("CLICKABLE")(), inventory_slot_name(item.ItemSlot()), cnt)
+end
+
+-- used by /fmi
+---@param name string
+function report_find_missing_item(name)
+    name = strip_link(name)
+
+    if is_orchestrator() then
+        cmdf("/dgzexecute /fmi %s", name)
+    end
+
+    local item = find_item(name)
+    if item == nil then
+        all_tellf("I miss %s", name)
+        return
+    end
+end
+
+function report_clickies()
+    log.Info("My clickies:")
+
+    -- XXX TODO skip expendables
+
+    -- XXX 15 sep 2022: item.Expendables() seem to be broken, always returns false ? https://discord.com/channels/511690098136580097/840375268685119499/1019900421248126996
+
+    for i = 0, 32 do -- equipment: 0-22 is worn gear, 23-32 is inventory top level
+        if mq.TLO.Me.Inventory(i).ID() then
+            local inv = mq.TLO.Me.Inventory(i)
+            if inv.Container() > 0 then
+                for c = 1, inv.Container() do
+                    local item = inv.Item(c)
+                    if item.Clicky() ~= nil and (not item.Expendable()) then
+                        --print ( "one ", item.Name(), " ", item.Charges() , " ", item.Expendable())
+                        log.Info(inventory_slot_name(i).." # "..c.." "..item.ItemLink("CLICKABLE")().." effect: "..item.Clicky.Spell.Name())
+                    end
+                end
+            else
+                if inv.Clicky() ~= nil and (not inv.Expendable()) then
+                    --print ( "two ", inv.Name(), " ", inv.Charges(), " ", inv.Expendable())
+                    log.Info(inventory_slot_name(i).." "..inv.ItemLink("CLICKABLE")().." effect: "..inv.Clicky.Spell.Name())
+                end
+            end
+        end
+    end
+
+    for i = 1, 26 do -- bank top level slots: 1-24 is bank bags, 25-26 is shared bank
+        if mq.TLO.Me.Bank(i)() ~= nil then
+            local key = "bank"..tostring(i)
+            local inv = mq.TLO.Me.Bank(i)
+            if inv.Container() > 0 then
+                for c = 1, inv.Container() do
+                    local item = inv.Item(c)
+                    if item.Clicky() ~= nil and (not item.Expendable()) then
+                        --print ( "three ", item.Name(), " ", item.Charges(), " ", item.Expendable())
+                        log.Info(key.." # "..c.." "..item.ItemLink("CLICKABLE")().." effect: "..item.Clicky.Spell.Name())
+                    end
+                end
+            else
+                if inv.Clicky() ~= nil and (not inv.Expendable()) then
+                    --print ( "four ", inv.Name(), " ", inv.Charges(), " ", inv.Expendable())
+                    log.Info(key.." "..inv.ItemLink("CLICKABLE")().." effect: "..inv.Clicky.Spell.Name())
+                end
+            end
+        end
+    end
+end
+
+function report_worn_augs()
+    log.Info("Currently worn auguments:")
+    local hp = 0
+    local mana = 0
+    local endurance = 0
+    local ac = 0
+    for i = 0, 22 do
+        if mq.TLO.Me.Inventory(i).ID() then
+            for a = 0, mq.TLO.Me.Inventory(i).Augs() do
+                if mq.TLO.Me.Inventory(i).AugSlot(a)() ~= nil then
+                    local item = mq.TLO.Me.Inventory(i).AugSlot(a).Item
+                    hp = hp + item.HP()
+                    mana = mana + item.Mana()
+                    endurance = endurance + item.Endurance()
+                    ac = ac + item.AC()
+                    log.Info(inventory_slot_name(i).." #"..a..": "..item.ItemLink("CLICKABLE")().." "..item.HP().." HP")
+                end
+            end
+        end
+    end
+    log.Info("Augument total: "..hp.." HP, "..mana.." mana, "..endurance.." endurance, "..ac.." AC")
+end
+
+-- check all nearby peers if their banker is ready and use it.
+---@param aaName string
+function ask_nearby_peer_to_activate_aa(aaName)
+    local spawnQuery = "pc notid " .. mq.TLO.Me.ID() .. " radius 50"
+
+    for i = 1, spawn_count(spawnQuery) do
+        local spawn = mq.TLO.NearestSpawn(i, spawnQuery)
+        local peer = spawn.Name()
+        if is_peer(peer) then
+            local value = query_peer(peer, "Me.AltAbilityReady["..aaName.."]", 0)
+            if value == "TRUE" then
+                log.Info("Asking %s to activate banker ...", peer)
+                cmdf("/dexecute %s /banker", peer)
+                return
+            end
+        end
+        delay(1)
+        doevents()
+    end
+end
+
+-- used by /lcorpse
+function open_nearby_corpse()
+    if has_target() ~= nil then
+        cmd("/squelch /target clear")
+    end
+    cmd("/target corpse radius 100")
+    delay(500, function()
+        return has_target()
+    end)
+    cmd("/loot")
+end
+
+---@param filter string
+function drop_buff(filter)
+    if filter == nil then
+        return
+    end
+    if is_orchestrator() then
+        cmdf("/dgzexecute /dropbuff %s", filter)
+    end
+
+    if filter == "all" then
+        drop_all_buffs()
+    else
+        cmdf("/removebuff %s", filter)
+    end
+end
+
+-- summons my mount
+function mount_on()
+    if botSettings.settings.mount == nil then
+        return
+    end
+
+    if not mq.TLO.Me.CanMount() then
+        all_tellf("MOUNT ERROR, cannot mount in %s", zone_shortname())
+        return
+    end
+
+    -- XXX see if mount clicky buff is on us already
+
+    local spell = getSpellFromBuff(botSettings.settings.mount)
+    if spell == nil then
+        all_tellf("/mounton: getSpellFromBuff %s FAILED", botSettings.settings.mount)
+        cmd("/beep 1")
+        return false
+    end
+
+    if have_buff(spell.RankName()) then
+        log.Error("I am already mounted.")
+        return false
+    end
+
+    -- XXX dont summon if we are already mounted.
+    log.Info("Summoning mount %s ...", botSettings.settings.mount)
+    castSpellAbility(nil, botSettings.settings.mount)
 end

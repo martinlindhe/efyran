@@ -23,6 +23,10 @@ function Follow.Update()
     local exe = ""
     if Follow.spawn ~= nil and Follow.spawn.Distance3D() > Follow.spawn.MaxRangeTo() then
         if globalSettings.followMode:lower() == "mq2nav" then
+            if not mq.TLO.Navigation.MeshLoaded() then
+                all_tellf("MISSING NAVMESH FOR %s", zone_shortname())
+                return
+            end
             if not mq.TLO.Navigation.Active() or lastHeading ~= Follow.spawn.HeadingTo() then
                 exe = string.format("/nav id %d | dist=15 log=critical", Follow.spawn.ID())
                 lastHeading = Follow.spawn.HeadingTo()
@@ -61,7 +65,7 @@ function Follow.RunToZone(startingPeer)
     cmd("/stick off")
 
     -- move to initial position
-    move_to(spawn)
+    move_to(spawn.ID())
 
     if not is_within_distance(spawn, 15) then
         -- unlikely
