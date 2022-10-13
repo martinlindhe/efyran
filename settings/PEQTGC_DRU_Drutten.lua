@@ -3,10 +3,9 @@ local settings = { }
 settings.debug = true
 
 settings.swap = {
-    ["main"] = "Staff of Everliving Brambles|Mainhand/Shield of the Planar Assassin|Offhand",
-    ["fishing"] = "Fishing Pole|Mainhand",
-
-    ["melee"] = "Staff of Everliving Brambles|Mainhand", -- 1h blunt
+    main = "Staff of Everliving Brambles|Mainhand/Shield of the Planar Assassin|Offhand",
+    fishing = "Fishing Pole|Mainhand",
+    melee = "Staff of Everliving Brambles|Mainhand", -- 1h blunt
 }
 
 settings.gems = {
@@ -15,10 +14,10 @@ settings.gems = {
     ["Immolation of the Sun"] = 3, -- debuff+dot
     ["Wasp Swarm"] = 4, -- dot
 
-    ["Blessing of Steeloak"] = 6,
-    ["Hand of Ro"] = 7,
-    ["Remove Greater Curse"] = 8,
-    ["Skin of the Reptile"] = 9,
+    ["Blessing of Steeloak"] = 6, -- hp buff
+    ["Hand of Ro"] = 7, -- debuff
+    ["Remove Greater Curse"] = 8, -- cure
+    ["Skin of the Reptile"] = 9, -- defensive proc buff
 }
 
 settings.self_buffs = {
@@ -34,7 +33,7 @@ settings.self_buffs = {
 }
 
 settings.healing = {
-    ["life_support"] = {
+    life_support = {
         -- L70 Convergence of Spirits I AA (1000 hp instant, 500 hp/tick, 60 ds, 54 ac)
         -- L70 Convergence of Spirits II AA (1500 hp instant, 750 hp/tick, 65 ds, 60 ac)
         -- L70 Convergence of Spirits III AA (2000 hp instant, 1000 hp/tick, 70 ds, 66 ac)
@@ -49,18 +48,18 @@ settings.healing = {
         "Distillate of Divine Healing XI/HealPct|10",
     },
 
-    ["tanks"] = {
+    tanks = {
         --"Bandy",
         "Nullius",
         --"Manu",
         "Crusade",
     },
 
-    ["tank_heal"] = {
+    tank_heal = {
         "Ancient: Chlorobon/HealPct|35/MinMana|5",
     },
 
-    ["all_heal"] = {
+    all_heal = {
         -- fast heal:
         -- L29 Greater Healing (280-350 hp, cost 115 mana)
         -- L44 Healing Water (395-425 hp, cost 150 mana)
@@ -77,7 +76,7 @@ settings.healing = {
         "Ancient: Chlorobon/HealPct|60/MinMana|20",
     },
 
-    ["important"] = {
+    important = {
         "Stor",
         "Kamaxia",
         "Maynarrd",
@@ -95,18 +94,18 @@ settings.healing = {
         "Kesok",
     },
 
-    ["important_heal"] = {
+    important_heal = {
         "Kelp-Covered Hammer/HealPct|85", -- tacvi clicky
 
         "Ancient: Chlorobon/HealPct|75/MinMana|5",
     },
 
-    ["group_heal"] = { -- XXX impl
+    group_heal = { -- XXX impl
         -- group heals:
         -- L70 Moonshadow (1500 hp, cost 1100 mana, 4.5s cast, 18s recast)
     },
 
-    ["hot"] = { -- XXX impl
+    hot = { -- XXX impl
         -- hot v2 - stacks with CLR/SHM/PAL HoT:
         -- L60 Nature's Recovery (slot 2: 30 hp/tick, 3.0 min, recast 90s, cost 250 mana)
         -- L63 Spirit of the Wood AA
@@ -117,38 +116,46 @@ settings.healing = {
 }
 
 settings.assist = {
-    ["nukes"] = { -- XXX implement
-        ["main"] = {
-            -- fire nukes:
-            -- L28 Combust (156-182 hp, cost 85 mana)
-            -- L38 Firestrike (402-422 hp, cost 138 mana)
-            -- L48 Starfire (634 hp, cost 186 mana)
-            -- L54 Scoriae (986 hp, cost 264 mana)
-            -- L59 Wildfire (1294 hp, cost 335 mana)
-            -- L64 Summer's Flame (1600 hp, cost 395 mana)
-            -- L65 Sylvan Fire (1761 hp, cost 435 mana)
-            -- L69 Solstice Strike (2201 hp, cost 494 mana)
-            "Solstice Strike/NoAggro/MinMana|30",
-        },
-        ["fastfire"] = {
-            "Solstice Strike/NoAggro/MinMana|30",
-        },
+    -- fire nukes:
+    -- L01 Burst of Flame (3-5 hp, cost 4 mana)
+    -- L03 Burst of Fire (11-14 hp, cost 7 mana)
+    -- L08 Ignite (38-46 hp, cost 21 mana)
+    -- L28 Combust (156-182 hp, cost 85 mana)
+    -- L38 Firestrike (402-422 hp, cost 138 mana)
+    -- L48 Starfire (634 hp, cost 186 mana)
+    -- L54 Scoriae (986 hp, cost 264 mana)
+    -- L59 Wildfire (1294 hp, cost 335 mana)
+    -- L60 Ancient: Starfire of Ro (1350 hp, cost 300 mana)
+    -- L64 Summer's Flame (1600 hp, cost 395 mana)
+    -- L65 Sylvan Fire (1761 hp, cost 435 mana)
+    -- L69 Solstice Strike (2201 hp, cost 494 mana)
+    -- L70 Dawnstrike (2125 hp, cost 482 mana. chance to proc spell buff that adjust dmg of next nuke)
 
-        ["fastcold"] = {
-            -- cold nukes:
-            -- L47 Ice (511-538 hp, cost 142 mana)
-            -- L55 Frost (837 hp, cost 202 mana)
-            -- L60 Moonfire (1132 hp, cost 263 mana)
-            -- L65 Winter's Frost (1375 hp, cost 305 mana)
-            -- L65 Ancient: Chaos Frost (1450 hp, cost 290 mana)
-            -- L70 Glitterfrost (1892 hp, cost 381 mana)
-            -- L70 Ancient: Glacier Frost (2042 hp, cost 405 mana)
+    -- cold nukes:
+    -- L47 Ice (511-538 hp, cost 142 mana)
+    -- L55 Frost (837 hp, cost 202 mana)
+    -- L60 Moonfire (1132 hp, cost 263 mana)
+    -- L65 Winter's Frost (1375 hp, cost 305 mana)
+    -- L65 Ancient: Chaos Frost (1450 hp, cost 290 mana)
+    -- L70 Glitterfrost (1892 hp, cost 381 mana)
+    -- L70 Ancient: Glacier Frost (2042 hp, cost 405 mana)
+    nukes = {
+        main = {
+            "Solstice Strike/NoAggro/MinMana|30",
+        },
+        -- fastfire == main
+        -- bigfire == main
+
+        fastcold = {
             "Ancient: Glacier Frost/Gem|2/NoAggro/MinMana|30",
         },
+        bigcold = {
+            "Ancient: Glacier Frost/Gem|2/NoAggro/MinMana|30",
+        }
     },
 
 
-    ["dots"] = { -- XXX  impl [DoTs on Assist]
+    dots = {
         -- fire dot + debuff:
         -- L67 Immolation of the Sun (-174-178 hp/tick, slot 3: -40 fr, slot 10: -36 ac, resist adj -50)
         "Immolation of the Sun/MaxTries|2",
@@ -165,7 +172,7 @@ settings.assist = {
         --"Vengeance of the Sun/Gem|4",
     },
 
-    ["debuffs_on_command"] = { -- XXX impl
+    debuffs_on_command = { -- XXX impl
         -- snares:
         -- Lxx Ensnare
         -- L61 Mire Thorns (chromatic -20, snare 55-60%, 3.0 min, cast time 3s, cost 75 mana)
@@ -200,7 +207,7 @@ settings.assist = {
         "Glacier Breath/Gem|6/MaxTries|2",
     },
 
-    ["quickburns"] = {
+    quickburns = {
         -- epic 1.5: Staff of Living Brambles
         -- epic 2.0: Staff of Everliving Brambles
         "Staff of Everliving Brambles",
@@ -217,22 +224,22 @@ settings.assist = {
         "Nature's Boon",
     },
 
-    ["longburns"] = {
+    longburns = {
         -- L65 Nature's Boon Rank 1 AA (ae heal ward)
         "Nature's Boon",
     },
 
-    ["pbae"] = {
-        -- magic:
-        -- L21 Tremor (106-122 hp, aerange 30, recast 10s, cost 200 mana)
-        -- L31 Earthquake (214-246 hp, aerange 30, recast 24s, cost 375 mana)
-        -- L48 Upheaval (618-725 hp, aerange 35, recast 24, cost 625 mana)
-        -- L61 Catastrophe (850 hp, aerange 35, recast 24s, cost 650 mana)
-        -- L66 Earth Shiver (1105 hp, aerange 35, recast 24s, cost 812 mana)
-        -- L70 Hungry Vines (ae snare, aerange 50, recast 30s, cost 500 mana, duration 12s)
+    -- magic:
+    -- L21 Tremor (106-122 hp, aerange 30, recast 10s, cost 200 mana)
+    -- L31 Earthquake (214-246 hp, aerange 30, recast 24s, cost 375 mana)
+    -- L48 Upheaval (618-725 hp, aerange 35, recast 24, cost 625 mana)
+    -- L61 Catastrophe (850 hp, aerange 35, recast 24s, cost 650 mana)
+    -- L66 Earth Shiver (1105 hp, aerange 35, recast 24s, cost 812 mana)
+    -- L70 Hungry Vines (ae snare, aerange 50, recast 30s, cost 500 mana, duration 12s)
+    pbae = {
         --"Earth Shiver/Gem|6/MinMana|10",
-        --"Catastrophe/Gem|8/MinMana|10",
-        --"Upheaval/Gem|7/MinMana|10",
+        --"Catastrophe/Gem|7/MinMana|10",
+        --"Upheaval/Gem|8/MinMana|10",
     }
 }
 

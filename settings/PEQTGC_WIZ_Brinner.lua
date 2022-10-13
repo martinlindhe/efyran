@@ -54,14 +54,12 @@ settings.assist = {
         ["noks"] = {
             "Draught of Ro/NoAggro/Gem|1",
         },
-        ["fastfire"] = {
-            "Chaos Flame/NoAggro/MinMana|5",
-            "Ancient: Core Fire/GoM/NoAggro",
-            "Scepter of Incantations/NoAggro",
-        },
-        ["bigfire"] = {
-            "Ancient: Core Fire/NoAggro/MinMana|5",
+        -- fastfire == main
+        bigfire = {
+            "Concussion/PctAggro|98",
+            "Mind Crash/PctAggro|99",
             "Scepter of Incantations",
+            "Ancient: Core Fire/NoAggro/MinMana|5",
         },
         ["fastcold"] = {
             "Spark of Ice/NoAggro/MinMana|5",

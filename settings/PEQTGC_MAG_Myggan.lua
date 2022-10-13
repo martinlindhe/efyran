@@ -2,13 +2,13 @@ local settings = { }
 
 settings.debug = true
 
-settings.swap = { -- XXX impl
-    ["main"] = "Focus of Primal Elements|Mainhand",
+settings.swap = {
+    main = "Focus of Primal Elements|Mainhand",
 
-    ["fishing"] = "Fishing Pole|Mainhand",
+    fishing = "Fishing Pole|Mainhand",
 
     -- Focus of Primal Elements (1hb)
-    ["melee"] = "Focus of Primal Elements|Mainhand",
+    melee = "Focus of Primal Elements|Mainhand",
 }
 
 settings.gems = {
@@ -63,7 +63,7 @@ settings.combat_buffs = {
 }
 
 settings.healing = {
-    ["life_support"] = {
+    life_support = {
         "Shared Health/HealPct|60",
         "Distillate of Divine Healing XI/HealPct|10",
     }
@@ -76,14 +76,14 @@ settings.pet = {
     -- L60 Transon's Elemental Renewal (849-873 hp, -20 dr pr curse, cost 237 mana)
     -- L64 Planar Renewal (1190-1200 hp, -24 dr pr curse, cost 290 mana)
     -- L69 Renewal of Jerikor (1635-1645 hp, -28 dr pr curse, cost 358 mana)
-    ["heals"] = {
+    heals = {
         "Renewal of Jerikor/HealPct|40",
 
         -- L6x Replenish Companion AA (36 min reuse)
         "Replenish Companion/HealPct|50", -- was [Magician].pet mend" in e3
     },
 
-    ["buffs"] = {
+    buffs = {
         "Elemental Fury/MinMana|25", -- pet haste
         "Velocity/MinMana|90", -- pet run speed
 
@@ -129,7 +129,7 @@ settings.pet = {
 }
 
 settings.assist = {
-    ["nukes"] = {
+    nukes = {
         -- fire nukes:
         -- L33 Cinder Bolt (499-510 hp, cost 165 mana)
         -- Lxx
@@ -148,7 +148,7 @@ settings.assist = {
         -- L70 Ancient: Nova Strike (2377 hp, 6.3s cast, cost 525 mana)
 
         -- L70 Raging Servant (1650 mana, swarm pet)
-        ["main"] = {
+        main = {
             "Raging Servant/GoM",
 
             -- L69 Summon: Molten Orb (10 charge 700 hp fire nuke, -10 fire adj, instant cast, 12s recast)
@@ -160,22 +160,12 @@ settings.assist = {
             -- tacvi clicky:
             "Dagger of Evil Summons/NoAggro",
         },
-        ["noks"] = {
+        noks = {
             "Sun Vortex/NoAggro/Gem|1",
         },
-        ["fastfire"] = {
-            "Raging Servant/GoM",
-            "Burning Earth/NoAggro",
-            "Dagger of Evil Summons/NoAggro",
-            "Molten Orb/NoAggro/Summon|Summon: Molten Orb",
-        },
-        ["bigfire"] = {
-            "Raging Servant/GoM",
-            "Ancient: Nova Strike/NoAggro",
-            "Dagger of Evil Summons/NoAggro",
-            "Molten Orb/NoAggro/Summon|Summon: Molten Orb",
-        },
-        ["fastcold"] = {
+        --fastfire == main
+        --bigfire == main
+        fastcold = {
             "Raging Servant/GoM",
 
             -- magic nukes:
@@ -185,7 +175,7 @@ settings.assist = {
         },
     },
 
-    ["debuffs"] = { -- XXX impl
+    debuffs = {
         -- malos:
         -- L22 Malaise (-15-20 cr, -15-20 mr, -15-20 pr, -15-20 fr, cost 60 mana)
         -- L44 Malaisement (-36-40 cr, -36-40 mr, -36-40 pr, -36-40 fr, cost 100 mana)
@@ -196,11 +186,11 @@ settings.assist = {
         --"Malosinia/MaxTries|2/MinMana|10", -- XXX MaxTries
     },
 
-    ["debuffs_on_command"] = {  -- XXX impl
+    debuffs_on_command = {  -- XXX impl
         "Malosinia/MaxTries|3/MinMana|10",
     },
 
-    ["quickburns"] = {-- XXX implememt !!!
+    quickburns = {
         "Silent Casting",
         "Frenzied Burnout",
         "Host of the Elements",
@@ -218,7 +208,7 @@ settings.assist = {
         "Glyphwielder's Tunic of the Summoner",
     },
 
-    ["pbae"] = {
+    pbae = {
         -- L01 Fire Flux (8-12 hp, aerange 20, recast 6s , cost 23 mana) - for PL
         -- L22 Flame Flux (89-96 hp, aerange 20, recast 6s, cost 123 mana)
         -- L39 Flame Arc (171-181 hp, aerange 20, recast 7s , cost 199 mana)

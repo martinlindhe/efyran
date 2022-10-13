@@ -67,15 +67,13 @@ settings.assist = {
             "Draught of Ro/NoAggro/Gem|1",
         },
 
-        fastfire = {
-            "Scepter of Incantations/NoAggro",
-            "Chaos Flame/NoAggro/MinMana|5",
-            "Ether Flame/GoM/NoAggro",
-        },
-
+        -- fastfire == main
         bigfire = {
-            "Scepter of Incantations/NoAggro",
-            "Ether Flame/NoAggro/MinMana|5",
+            "Ancient: Greater Concussion/PctAggro|98",
+            "Mind Crash/PctAggro|99",
+
+            "Scepter of Incantations",
+            "Ancient: Core Fire/NoAggro/MinMana|5",
         },
 
         -- cold nukes:
