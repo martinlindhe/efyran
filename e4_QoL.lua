@@ -151,6 +151,9 @@ function QoL.Init()
     ---@param mobID string
     ---@param ... string|nil
     mq.bind("/killit", function(mobID, ...)
+        if is_gm() then
+            return
+        end
         local filter = trim(args_string(...))
         commandQueue.Add("killit", mobID, filter)
     end)
@@ -318,7 +321,7 @@ function QoL.Init()
         if is_orchestrator() then
             cmd("/dgzexecute /followoff")
         end
-        follow.Pause()
+        follow.Stop()
         follow.spawn = nil
     end)
 
@@ -340,7 +343,7 @@ function QoL.Init()
         end
         -- clear queue so that evac happens next
         commandQueue.Clear()
-        commandQueue.Add("evac")
+        commandQueue.Add("evacuate")
     end)
 
     -- cast Radiant Cure

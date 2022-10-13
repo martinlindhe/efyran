@@ -196,7 +196,7 @@ function Assist.killSpawn(spawn)
     end
 
     cmdf("/target id %d", spawn.ID())
-    follow.Pause()
+    follow.Stop()
     delay(1)
 
     local melee = botSettings.settings.assist ~= nil and botSettings.settings.assist.type ~= nil and botSettings.settings.assist.type == "melee"

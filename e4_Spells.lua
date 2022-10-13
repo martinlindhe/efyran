@@ -443,11 +443,13 @@ end
 
 
 function cast_evac_spell()
+    -- XXX TODO use rogue "Stealthy Getaway", need to be hidden in order to use it
+
     -- DRU/WIZ L59 Exodus AA (instant cast)
     -- Hastened Exodus reduces recast time by 10% per rank
     -- Rank 0: recast time 72 min
     -- Rank 4: recast time XX min
-    if is_ability_ready("Exodus") then
+    if is_alt_ability_ready("Exodus") then
         use_alt_ability("Exodus")
         return
     end

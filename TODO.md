@@ -6,8 +6,6 @@ misc:
     in the middle of iteration otherwise.
 
 
--- /evac: hard code evac spells, reduce ini.allow for rog escape (?)
-
 
 
 MQ2Lua gotchas:

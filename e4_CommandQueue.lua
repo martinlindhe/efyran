@@ -115,7 +115,7 @@ function CommandQueue.Process()
         end
     elseif v.Name == "pbaeon" then
         pbae_loop()
-    elseif v.Name == "evac" then
+    elseif v.Name == "evacuate" then
         cast_evac_spell()
     elseif v.Name == "groupheal" then
         cast_group_heal()
