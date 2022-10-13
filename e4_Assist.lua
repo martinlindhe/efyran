@@ -33,7 +33,7 @@ end
 
 function Assist.backoff()
     if Assist.target ~= nil then
-        log.Debug("Backing off target %s", Assist.target.Name())
+        log.Info("Backing off target %s", Assist.target.Name())
         Assist.target = nil
         if have_pet() then
             log.Debug("Asking pet to back off")
@@ -180,11 +180,15 @@ end
 ---@param spawn spawn
 function Assist.killSpawn(spawn)
 
+    Assist.backoff()
+
     Assist.target = spawn
     local currentID = spawn.ID()
 
-    if spawn == nil then
-        all_tellf("ERROR: killSpawn called with nil")
+    if spawn == nil or (spawn.Type() ~= "NPC" and spawn.Type() ~= "Pet") then
+        if spawn ~= nil then
+            log.Info("Ignoring assist call on %s (%s)", spawn.Name(), spawn.Type())
+        end
         return
     end
 
@@ -211,7 +215,7 @@ function Assist.killSpawn(spawn)
 
         local meleeDistance = botSettings.settings.assist.melee_distance
         if meleeDistance == "auto" then
-            meleeDistance = spawn.MaxRangeTo() * 0.75
+            meleeDistance = spawn.MaxRangeTo() * 0.60 -- XXX too far in riftseekers with 0.75
             log.Info("Calculated auto melee distance %f", meleeDistance)
         end
 

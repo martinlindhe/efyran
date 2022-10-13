@@ -102,17 +102,13 @@ function CommandQueue.Process()
             end
         end
         local spawn = spawn_from_id(toint(v.Arg))
-        if spawn == nil then
+        if spawn == nil or spawn.Type() == "PC" then
             return
         end
-        if spawn.Type() ~= "PC" then
-            if assist.target ~= nil then
-                log.Debug("Backing off existing target before assisting new")
-                assist.backoff()
-            end
-            log.Debug("Killing %s, type %s", spawn.DisplayName(), spawn.Type())
-            assist.handleAssistCall(spawn)
-        end
+
+        log.Debug("Killing %s, type %s", spawn.DisplayName(), spawn.Type())
+        assist.handleAssistCall(spawn)
+
     elseif v.Name == "pbaeon" then
         pbae_loop()
     elseif v.Name == "evacuate" then

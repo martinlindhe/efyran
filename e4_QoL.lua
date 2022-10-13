@@ -54,9 +54,8 @@ function QoL.Init()
 
     local dead = function(text, killer)
         all_tellf("I died. Killed by %s", killer)
-        cmd("/beep") -- the beep of death
+        mq.cmd("/beep") -- the beep of death
     end
-
     mq.event("died1", "You have been slain by #*#", dead)
     mq.event("died2", "You died.", dead)
 
@@ -129,22 +128,16 @@ function QoL.Init()
     mq.bind("/assiston", function(...)
         local filter = trim(args_string(...))
         local spawn = mq.TLO.Target
-        if spawn() == nil then
+        if spawn() == nil or spawn.Type() == "PC" then
             return
         end
-        if spawn.Type() ~= "PC" then
-            if assist.target ~= nil then
-                log.Debug("Backing off existing target before assisting new")
-                assist.backoff()
-            end
-            local exe = string.format("/dgzexecute /killit %d", spawn.ID())
-            if filter ~= nil then
-                exe = exe .. " " .. filter
-            end
-            log.Info("Calling assist on %s, type %s", spawn.DisplayName(), spawn.Type())
-
-            cmdf(exe)
+        local exe = string.format("/dgzexecute /killit %d", spawn.ID())
+        if filter ~= nil then
+            exe = exe .. " " .. filter
         end
+        log.Info("Calling assist on %s, type %s", spawn.DisplayName(), spawn.Type())
+        mq.cmdf(exe)
+        commandQueue.Add("killit", tostring(spawn.ID()), filter)
     end)
 
     -- auto assist on mob until dead
