@@ -219,11 +219,8 @@ function Assist.Tick()
         cmdf("/target id %d", spawn.ID())
     end
 
-
-
-    local used = false
     -- perform debuffs ONE TIME EACH on assist before starting nukes
-    if not used and botSettings.settings.assist.debuffs ~= nil and not is_casting() and spawn ~= nil then
+    if botSettings.settings.assist.debuffs ~= nil and not is_casting() and spawn ~= nil then
         for v, row in pairs(botSettings.settings.assist.debuffs) do
             local spellConfig = parseSpellLine(row)
             log.Debug("Evaluating debuff %s", spellConfig.Name)
@@ -232,15 +229,14 @@ function Assist.Tick()
                 if castSpellAbility(spawn, row) then
                     all_tellf("Debuffed %s with %s", spawn.Name(), spellConfig.Name)
                     Assist.debuffsUsed[row] = true
-                    used = true
-                    break
+                    return
                 end
             end
         end
     end
 
     -- perform dots ONE TIME EACH on assist before staring nukes
-    if not used and botSettings.settings.assist.dots ~= nil and not is_casting() and spawn ~= nil then
+    if botSettings.settings.assist.dots ~= nil and not is_casting() and spawn ~= nil then
         for v, row in pairs(botSettings.settings.assist.dots) do
             local spellConfig = parseSpellLine(row)
             log.Debug("Evaluating dot %s", spellConfig.Name)
@@ -249,27 +245,25 @@ function Assist.Tick()
                 if castSpellAbility(spawn, row) then
                     all_tellf("Dotted %s with %s", spawn.Name(), spellConfig.Name)
                     Assist.dotsUsed[row] = true
-                    used = true
-                    break
+                    return
                 end
             end
         end
     end
 
-    if not used and melee and botSettings.settings.assist.abilities ~= nil
+    if melee and botSettings.settings.assist.abilities ~= nil
     and spawn ~= nil and spawn.Distance() < spawn.MaxRangeTo() and spawn.LineOfSight() then
         -- use melee abilities
         for v, row in pairs(botSettings.settings.assist.abilities) do
             local spellConfig = parseSpellLine(row)
             if Assist.target ~= nil and is_spell_ability_ready(spellConfig.Name) and castSpellAbility(spawn, row) then
-                used = true
-                break
+                return
             end
         end
     end
 
     -- caster/hybrid assist.nukes
-    if not used and botSettings.settings.assist.nukes ~= nil and not is_casting() and spawn ~= nil then
+    if botSettings.settings.assist.nukes ~= nil and not is_casting() and spawn ~= nil then
         if botSettings.settings.assist.nukes[Assist.spellSet] == nil then
             all_tellf("\arERROR I have no spell set '%s'\ax, reverting to spell set 'main'", Assist.spellSet)
             Assist.spellSet = "main"
@@ -280,7 +274,7 @@ function Assist.Tick()
                 local spellConfig = parseSpellLine(row)
                 if Assist.target ~= nil and is_spell_ability_ready(spellConfig.Name) and castSpellAbility(spawn, row) then
                     all_tellf("Nuked with %s (spell set %s)", row, Assist.spellSet)
-                    break
+                    return
                 end
             end
         else
