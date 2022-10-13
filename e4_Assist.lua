@@ -11,6 +11,9 @@ local Assist = {
     -- the current spell set
     spellSet = "main",
 
+    -- current max melee distance
+    meleeDistance = 0.,
+
     -- the debuffs/dots used on current target
     debuffsUsed = {},
     dotsUsed = {},
@@ -35,6 +38,15 @@ function Assist.Init()
             botSettings.settings.assist.type = botSettings.settings.assist.type:lower()
         end
     end
+
+    -- Adjust Melee distance if too far away msg, because spawn.MaxDistanceTo() is not exact
+    mq.event("melee-out-of-range", "Your target is too far away, get closer!", function()
+        local t = Assist.meleeDistance - 1
+        if t >= 9 then
+            log.Info("Reducing max distance from %f to %f", Assist.meleeDistance, t)
+            Assist.meleeDistance = t
+        end
+    end)
 
     Assist.prepareForNextFight()
 end
@@ -150,32 +162,33 @@ function Assist.beginKillSpawnID(spawn)
 
     if melee then
 
-        local meleeDistance = botSettings.settings.assist.melee_distance
-        if meleeDistance == "auto" then
-            meleeDistance = spawn.MaxRangeTo() * 0.60 -- XXX too far in riftseekers with 0.75
-            log.Info("Calculated auto melee distance %f", meleeDistance)
+        if botSettings.settings.assist.melee_distance == "auto" then
+            Assist.meleeDistance = spawn.MaxRangeTo() * 0.50 -- XXX too far in riftseekers with 0.75. XXX cant disarm in riftseekers with 0.60
+            log.Info("Calculated auto melee distance %f", Assist.meleeDistance)
         end
 
         -- use mq2nav to navigate close to the mob, THEN use stick
         move_to(spawn.ID())
 
         cmd("/attack on")
+    end
+end
 
-        local stickArg
+function Assist.meleeStick()
+    local stickArg
 
-        if botSettings.settings.assist.stick_point == "Front" then
-            stickArg = "hold front " .. meleeDistance .. " uw"
-            log.Debug("STICKING IN FRONT TO %s: %s", spawn.Name, stickArg)
-            cmdf("/stick %s", stickArg)
-        else
-            cmd("/stick snaproll uw")
-            delay(200, function()
-                return mq.TLO.Stick.Behind() and mq.TLO.Stick.Stopped()
-            end)
-            stickArg = "hold moveback behind " .. meleeDistance .. " uw"
-            log.Debug("STICKING IN BACK TO %s: %s", spawn.Name, stickArg)
-            cmdf("/stick %s", stickArg)
-        end
+    if botSettings.settings.assist.stick_point == "Front" then
+        stickArg = "hold front " .. Assist.meleeDistance .. " uw"
+        log.Debug("STICKING IN FRONT TO %s: %s", Assist.target.Name(), stickArg)
+        cmdf("/stick %s", stickArg)
+    else
+        cmd("/stick snaproll uw")
+        delay(200, function()
+            return mq.TLO.Stick.Behind() and mq.TLO.Stick.Stopped()
+        end)
+        stickArg = "hold moveback behind " .. Assist.meleeDistance .. " uw"
+        log.Debug("STICKING IN BACK TO %s: %s", Assist.target.Name(), stickArg)
+        cmdf("/stick %s", stickArg)
     end
 end
 
@@ -247,6 +260,10 @@ function Assist.Tick()
 
     log.Info("Assist.Tick()")
 
+    if melee and Assist.target.MaxRangeTo() > Assist.meleeDistance then
+        Assist.meleeStick()
+    end
+
     if not is_casting() and (not has_target() or mq.TLO.Target.ID() ~= spawn.ID()) then
         -- XXX will happen for healers
         all_tellf("killSpawn WARN: i lost target, restoring to %s. Previous target was %s", spawn.Name(), mq.TLO.Target.Name())
@@ -279,7 +296,7 @@ function Assist.Tick()
 
     -- use melee abilities
     if melee and botSettings.settings.assist.abilities ~= nil
-    and spawn ~= nil and spawn.Distance() < spawn.MaxRangeTo() and spawn.LineOfSight()
+    and spawn ~= nil and spawn.Distance() < Assist.meleeDistance and spawn.LineOfSight()
     and Assist.performSpellAbility(botSettings.settings.assist.abilities, "ability") then
         return
     end

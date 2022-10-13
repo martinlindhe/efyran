@@ -222,6 +222,11 @@ function castSpellAbility(spawn, row, callback)
 
     log.Debug("castSpellAbility %s, row = %s", spell.Name, row)
 
+    if have_ability(spell.Name) and not is_ability_ready(spell.Name) then
+        log.Debug("castSpellAbility ABILITY %s, not ready!", spell.Name)
+        return false
+    end
+
     if spell.PctAggro ~= nil and mq.TLO.Me.PctAggro() < spell.PctAggro then
         -- PctAggro skips cast if your aggro % is above threshold
         log.Debug("SKIP PctAggro %s aggro %d vs required %d", spell.Name, mq.TLO.Me.PctAggro(), spell.PctAggro)
@@ -291,6 +296,7 @@ function castSpell(name, spawnId)
     if have_combat_ability(name) then
         use_combat_ability(name)
     elseif have_ability(name) then
+        log.Debug("calling use_ability %s", name)
         use_ability(name)
     else
         --log.Debug("castSpell ITEM/SPELL/AA: %s", name)
