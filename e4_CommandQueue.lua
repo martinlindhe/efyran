@@ -196,8 +196,43 @@ function CommandQueue.Process()
         else
             log.Error("Unknown burns set '%s'", v.Arg)
         end
+    elseif v.Name == "ward" then
+        use_ward(v.Arg)
     else
         all_tellf("ERROR unknown command in queue: %s", v.Name)
+    end
+end
+
+-- Use a ward AA (priests)
+---@param kind string kind of ward ("heal", "cure")
+function use_ward(kind)
+    if kind == "cure" then
+        local aaName = "Ward of Purity"
+        if have_alt_ability(aaName) then
+            if is_alt_ability_ready(aaName) then
+                all_tellf("Dropping %s ward '%s' ...", kind, aaName)
+                use_alt_ability(aaName)
+            else
+                all_tellf("\ar%s ward '%s' is not ready\ax. Ready in %s", kind, aaName, mq.TLO.Me.AltAbilityTimer(aaName).TimeHMS())
+            end
+        end
+    elseif kind == "heal" then
+        local healWards = {
+            "Exquisite Benediction", -- CLR
+            "Nature's Boon",         -- DRU
+            "Call of the Ancients",  -- SHM
+        }
+        for k, aaName in pairs(healWards) do
+            if have_alt_ability(aaName) then
+                if is_alt_ability_ready(aaName) then
+                    all_tellf("Dropping \ay%s ward\ax '%s' ...", kind, aaName)
+                    use_alt_ability(aaName)
+                else
+                    all_tellf("\ar%s ward '%s' is not ready\ax. Ready in %s", kind, aaName, mq.TLO.Me.AltAbilityTimer(aaName).TimeHMS())
+                end
+                return
+            end
+        end
     end
 end
 

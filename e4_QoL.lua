@@ -179,6 +179,12 @@ function QoL.Init()
         commandQueue.Add("burns", "fullburns")
     end)
 
+    -- Use cure ward AA "Ward of Purity" (CLR)
+    mq.bind("/cureward", function() commandQueue.Add("ward", "cure") end)
+
+    -- Use heal ward AA (CLR/DRU/SHM)
+    mq.bind("/healward", function() commandQueue.Add("ward", "heal") end)
+
     -- ends assist call
     mq.bind("/backoff", function()
         if is_orchestrator() then

@@ -95,6 +95,16 @@ function buffs.Tick()
         return
     end
 
+    if announceBuffsTimer:expired() then
+        buffs.AnnounceAvailablity()
+        announceBuffsTimer:restart()
+    end
+
+    if checkDebuffsTimer:expired() then
+        buffs.HandleSelfDebuffs()
+        checkDebuffsTimer:restart()
+    end
+
     if follow.spawn ~= nil or is_gm() or is_invisible() or is_hovering() or in_combat() or is_moving() or in_neutral_zone()
     or window_open("MerchantWnd") or window_open("GiveWnd") or window_open("BigBankWnd") or window_open("SpellBookWnd")
     or window_open("LootWnd") or spawn_count("pc radius 100") == 1 then
@@ -113,16 +123,6 @@ function buffs.Tick()
             end
         end
         refreshBuffsTimer:restart()
-    end
-
-    if announceBuffsTimer:expired() then
-        buffs.AnnounceAvailablity()
-        announceBuffsTimer:restart()
-    end
-
-    if checkDebuffsTimer:expired() then
-        buffs.HandleSelfDebuffs()
-        checkDebuffsTimer:restart()
     end
 
     if is_casting() or is_hovering() or is_sitting() or is_moving() or mq.TLO.Me.SpellInCooldown() or window_open("SpellBookWnd") then
