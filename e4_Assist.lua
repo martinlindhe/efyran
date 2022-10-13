@@ -1,5 +1,6 @@
 local mq = require("mq")
 local log = require("knightlinc/Write")
+local timer = require("Timer")
 
 local follow  = require("e4_Follow")
 local botSettings = require("e4_BotSettings")
@@ -54,13 +55,13 @@ end
 -- Are we assisting on a target?
 ---@return boolean
 function Assist.IsAssisting()
-    return Assist.target ~= nil
+    return Assist.targetID ~= nil
 end
 
 
 function Assist.backoff()
-    if Assist.target ~= nil then
-        log.Info("Backing off target %s", Assist.target.Name())
+    if Assist.targetID ~= nil then
+        log.Info("Backing off target %d", Assist.targetID)
         Assist.EndFight()
     end
 end
@@ -72,7 +73,7 @@ function Assist.handleAssistCall(spawn)
         return
     end
 
-    Assist.beginKillSpawnID(spawn)
+    Assist.beginKillSpawnID(spawn.ID())
 end
 
 -- called at end of each /assist call
@@ -129,26 +130,25 @@ function Assist.summonNukeComponents()
 end
 
 -- Sets current assist target and initalizes combat.
----@param spawn spawn
-function Assist.beginKillSpawnID(spawn)
+---@param spawnID integer
+function Assist.beginKillSpawnID(spawnID)
 
     Assist.backoff()
 
-    Assist.target = spawn
-    local currentID = spawn.ID()
+    Assist.targetID = spawnID
 
-    if spawn == nil then
+    if spawnID == 0 then
         return
     end
 
-    log.Debug("Assist.beginKillSpawnID %s", spawn.Name())
+    log.Info("Assist.beginKillSpawnID %d", spawnID)
 
     if have_pet() then
         log.Debug("Attacking with my pet %s", mq.TLO.Me.Pet.CleanName())
-        cmdf("/pet attack %d", spawn.ID())
+        cmdf("/pet attack %d", spawnID)
     end
 
-    cmdf("/target id %d", spawn.ID())
+    cmdf("/target id %d", spawnID)
     follow.Pause()
     delay(1)
 
@@ -161,16 +161,18 @@ function Assist.beginKillSpawnID(spawn)
     end
 
     if melee then
+        local spawn = spawn_from_id(Assist.targetID)
+        if spawn == nil then
+            return
+        end
 
         if botSettings.settings.assist.melee_distance == "auto" then
             Assist.meleeDistance = spawn.MaxRangeTo() * 0.50 -- XXX too far in riftseekers with 0.75. XXX cant disarm in riftseekers with 0.60
             log.Info("Calculated auto melee distance %f", Assist.meleeDistance)
+        else
+            Assist.meleeDistance = tonumber(botSettings.settings.assist.melee_distance)
         end
-
-        -- use mq2nav to navigate close to the mob, THEN use stick
-        move_to(spawn.ID())
-
-        cmd("/attack on")
+        move_to(spawnID)
     end
 end
 
@@ -179,21 +181,21 @@ function Assist.meleeStick()
 
     if botSettings.settings.assist.stick_point == "Front" then
         stickArg = "hold front " .. Assist.meleeDistance .. " uw"
-        log.Debug("STICKING IN FRONT TO %s: %s", Assist.target.Name(), stickArg)
-        cmdf("/stick %s", stickArg)
+        log.Debug("STICKING IN FRONT TO %d: %s", Assist.targetID, stickArg)
+        mq.cmdf("/stick %s", stickArg)
     else
-        cmd("/stick snaproll uw")
-        delay(200, function()
+        mq.cmd("/stick snaproll uw")
+        mq.delay(200, function()
             return mq.TLO.Stick.Behind() and mq.TLO.Stick.Stopped()
         end)
         stickArg = "hold moveback behind " .. Assist.meleeDistance .. " uw"
-        log.Debug("STICKING IN BACK TO %s: %s", Assist.target.Name(), stickArg)
-        cmdf("/stick %s", stickArg)
+        log.Debug("STICKING IN BACK TO %d: %s", Assist.targetID, stickArg)
+        mq.cmdf("/stick %s", stickArg)
     end
 end
 
 function Assist.EndFight()
-    Assist.target = nil
+    Assist.targetID = 0
     Assist.debuffsUsed = {}
     Assist.dotsUsed = {}
     Assist.quickburns = false
@@ -221,7 +223,7 @@ end
 ---@param used? array optionally keep track of used abilites
 ---@return boolean
 function Assist.performSpellAbility(abilityRows, category, used)
-    if Assist.target == nil then
+    if Assist.targetID == 0 then
         -- signal ability was used, in order to leave Assist.Tick() quickly when target is nil
         return true
     end
@@ -229,11 +231,16 @@ function Assist.performSpellAbility(abilityRows, category, used)
         local spellConfig = parseSpellLine(row)
         log.Info("Evaluating %s %s", category, spellConfig.Name)
         if (used == nil or used[row] == nil)
-        and Assist.target ~= nil and is_spell_ability_ready(spellConfig.Name)
+        and is_spell_ability_ready(spellConfig.Name)
         and (is_brd() or not is_casting()) then
-            log.Info("Trying to %s %s with %s", category, Assist.target.Name(), spellConfig.Name)
-            if castSpellAbility(Assist.target, row) then
-                all_tellf("Did \ay%s\ax on %s with %s", category, Assist.target.Name(), spellConfig.Name)
+            local spawn = spawn_from_id(Assist.targetID)
+            if not spawn then
+                -- signal ability was used, in order to leave Assist.Tick() quickly when target is nil
+                return true
+            end
+            log.Info("Trying to %s on %s with %s", category, spawn.Name(), spellConfig.Name)
+            if castSpellAbility(spawn, row) then
+                log.Info("Did \ay%s\ax on %s with %s", category, spawn.Name(), spellConfig.Name)
                 if used ~= nil then
                     used[row] = true
                 end
@@ -244,29 +251,42 @@ function Assist.performSpellAbility(abilityRows, category, used)
     return false
 end
 
+local assistStickTimer = timer.new_expired(3 * 1) -- 3s
+
 -- updates current fight progress
 function Assist.Tick()
-    if Assist.target == nil then
+    if Assist.targetID == 0 then
         return
     end
 
     local melee = botSettings.settings.assist ~= nil and botSettings.settings.assist.type ~= nil and botSettings.settings.assist.type == "melee"
-    local spawn = Assist.target
+    local spawn = spawn_from_id(Assist.targetID)
 
-    if spawn == nil or spawn.ID() == 0 or spawn.Type() == "Corpse" or spawn.Type() == "NULL" then
+    if spawn == nil then
         Assist.EndFight()
         return
     end
 
     log.Info("Assist.Tick()")
 
-    if melee and Assist.target.MaxRangeTo() > Assist.meleeDistance then
+    if melee and spawn.MaxRangeTo() > Assist.meleeDistance and assistStickTimer:expired() then
+        log.Info("stick update meleeDistance %f!", Assist.meleeDistance)
         Assist.meleeStick()
+        assistStickTimer:restart()
+    end
+
+    if spawn == nil or spawn.ID() == 0 or spawn.Type() == "Corpse" or spawn.Type() == "NULL" then
+        Assist.EndFight()
+        return
+    end
+
+    if melee and not mq.TLO.Me.Combat() then
+        cmd("/attack on")
     end
 
     if not is_casting() and (not has_target() or mq.TLO.Target.ID() ~= spawn.ID()) then
-        -- XXX will happen for healers
-        all_tellf("killSpawn WARN: i lost target, restoring to %s. Previous target was %s", spawn.Name(), mq.TLO.Target.Name())
+        -- XXX
+        all_tellf("killSpawn WARN: i lost target, restoring to %s (%s). Previous target was %s", spawn.Name(), spawn.Type(), mq.TLO.Target.Name())
         cmdf("/target id %d", spawn.ID())
     end
 

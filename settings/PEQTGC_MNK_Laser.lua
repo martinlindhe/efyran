@@ -27,7 +27,6 @@ settings.healing = {
 
 settings.assist = {
     ["type"] = "Melee",
-    ["melee_distance"] = 12,
     ["engage_percent"] = 98,  -- XXX implement!
 
     ["abilities"] = {
