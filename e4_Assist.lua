@@ -202,20 +202,33 @@ function Assist.EndFight()
     Assist.prepareForNextFight()
 end
 
+-- Returns true if spell/ability was used
 ---@param abilityRows string[]
 ---@param category string purely descriptive in log messages
-function Assist.performAbility(abilityRows, category)
+---@param used? array optionally keep track of used abilites
+---@return boolean
+function Assist.performSpellAbility(abilityRows, category, used)
+    if Assist.target == nil then
+        -- signal ability was used, in order to leave Assist.Tick() quickly when target is nil
+        return true
+    end
     for v, row in pairs(abilityRows) do
         local spellConfig = parseSpellLine(row)
         log.Info("Evaluating %s %s", category, spellConfig.Name)
-        if Assist.target ~= nil and is_spell_ability_ready(spellConfig.Name) and (is_brd() or not is_casting()) then
+        if (used == nil or used[row] == nil)
+        and Assist.target ~= nil and is_spell_ability_ready(spellConfig.Name)
+        and (is_brd() or not is_casting()) then
             log.Info("Trying to %s %s with %s", category, Assist.target.Name(), spellConfig.Name)
             if castSpellAbility(Assist.target, row) then
                 all_tellf("Did \ay%s\ax on %s with %s", category, Assist.target.Name(), spellConfig.Name)
-                return
+                if used ~= nil then
+                    used[row] = true
+                end
+                return true
             end
         end
     end
+    return false
 end
 
 -- updates current fight progress
@@ -228,7 +241,6 @@ function Assist.Tick()
     local spawn = Assist.target
 
     if spawn == nil or spawn.ID() == 0 or spawn.Type() == "Corpse" or spawn.Type() == "NULL" then
-        -- target has died
         Assist.EndFight()
         return
     end
@@ -241,62 +253,35 @@ function Assist.Tick()
         cmdf("/target id %d", spawn.ID())
     end
 
-    if Assist.quickburns then
-        if Assist.performAbility(botSettings.settings.assist.quickburns, "quickburn") then
-            return
-        end
+    if Assist.quickburns and Assist.performSpellAbility(botSettings.settings.assist.quickburns, "quickburn") then
+        return
     end
 
-    if Assist.longburns then
-        if Assist.performAbility(botSettings.settings.assist.longburns, "longburn") then
-            return
-        end
+    if Assist.longburns and Assist.performSpellAbility(botSettings.settings.assist.longburns, "longburn") then
+        return
     end
 
-    if Assist.fullburns then
-        if Assist.performAbility(botSettings.settings.assist.fullburns, "fullburn") then
-            return
-        end
+    if Assist.fullburns and Assist.performSpellAbility(botSettings.settings.assist.fullburns, "fullburn") then
+        return
     end
 
     -- perform debuffs ONE TIME EACH on assist before starting nukes
-    if botSettings.settings.assist.debuffs ~= nil and not is_casting() and spawn ~= nil then
-        for v, row in pairs(botSettings.settings.assist.debuffs) do
-            local spellConfig = parseSpellLine(row)
-            log.Debug("Evaluating debuff %s", spellConfig.Name)
-            if Assist.target ~= nil and Assist.debuffsUsed[row] == nil and is_spell_ability_ready(spellConfig.Name) then
-                log.Info("Trying to debuff %s with %s", spawn.Name(), spellConfig.Name)
-                if castSpellAbility(spawn, row) then
-                    all_tellf("Debuffed %s with %s", spawn.Name(), spellConfig.Name)
-                    Assist.debuffsUsed[row] = true
-                    return
-                end
-            end
-        end
+    if botSettings.settings.assist.debuffs ~= nil and not is_casting() and spawn ~= nil
+    and Assist.performSpellAbility(botSettings.settings.assist.debuffs, "debuff", Assist.debuffsUsed) then
+        return
     end
 
     -- perform dots ONE TIME EACH on assist before staring nukes
-    if botSettings.settings.assist.dots ~= nil and not is_casting() and spawn ~= nil then
-        for v, row in pairs(botSettings.settings.assist.dots) do
-            local spellConfig = parseSpellLine(row)
-            log.Debug("Evaluating dot %s", spellConfig.Name)
-            if Assist.target ~= nil and Assist.dotsUsed[row] == nil and is_spell_ability_ready(spellConfig.Name) then
-                log.Info("Trying to dot %s with %s", spawn.Name(), spellConfig.Name)
-                if castSpellAbility(spawn, row) then
-                    all_tellf("Dotted %s with %s", spawn.Name(), spellConfig.Name)
-                    Assist.dotsUsed[row] = true
-                    return
-                end
-            end
-        end
+    if botSettings.settings.assist.dots ~= nil and not is_casting() and spawn ~= nil
+    and Assist.performSpellAbility(botSettings.settings.assist.dots, "dot", Assist.dotsUsed) then
+        return
     end
 
+    -- use melee abilities
     if melee and botSettings.settings.assist.abilities ~= nil
-    and spawn ~= nil and spawn.Distance() < spawn.MaxRangeTo() and spawn.LineOfSight() then
-        -- use melee abilities
-        if Assist.performAbility(botSettings.settings.assist.abilities, "ability") then
-            return
-        end
+    and spawn ~= nil and spawn.Distance() < spawn.MaxRangeTo() and spawn.LineOfSight()
+    and Assist.performSpellAbility(botSettings.settings.assist.abilities, "ability") then
+        return
     end
 
     -- caster/hybrid assist.nukes
@@ -306,7 +291,7 @@ function Assist.Tick()
             Assist.spellSet = "main"
         end
         if botSettings.settings.assist.nukes[Assist.spellSet] ~= nil then
-            if Assist.performAbility(botSettings.settings.assist.nukes[Assist.spellSet], "nuke") then
+            if Assist.performSpellAbility(botSettings.settings.assist.nukes[Assist.spellSet], "nuke") then
                 return
             end
         else
