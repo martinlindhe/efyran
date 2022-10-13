@@ -34,6 +34,9 @@ local buffs = {
 
     ---@type boolean /buffon, /buffoff
     refreshBuffs = true,
+
+    ---@type integer
+    lastPlayerCount = 0,
 }
 
 function buffs.Init()
@@ -51,7 +54,7 @@ function buffs.Init()
     bard.resumeMelody()
 end
 
-local announceBuffsTimer = timer.new_random(2 * 60) -- 2 minutes
+local announceBuffsTimer = timer.new_expires_in(2 * 60, 3) -- 2 minutes
 
 local refreshBuffsTimer = timer.new_random(10 * 1) -- 10s
 
@@ -68,6 +71,13 @@ function buffs.AnnounceAvailablity()
     if classBuffGroups == nil then
         return
     end
+
+    -- only announce if number of players in zone changes (less spam)
+    local playerCount = spawn_count("pc")
+    if playerCount == buffs.lastPlayerCount then
+        return
+    end
+    buffs.lastPlayerCount = playerCount
 
     local availableBuffGroups = ""
     for groupIdx, buffGroup in pairs(classBuffGroups) do
@@ -95,6 +105,12 @@ end
 -- announce buff availability, handle debuffs, refresh buffs/auras/pets/pet buffs, request buffs and handle buff requests
 function buffs.Tick()
     if not is_brd() and is_casting() then
+        return
+    end
+
+    -- XXX combat buffs should be done here (TODO implement combat buffs)
+
+    if in_combat() then
         return
     end
 
