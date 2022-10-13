@@ -45,6 +45,10 @@ while true do
     doevents()
     delay(1)
 
+    assist.Tick()
+    doevents()
+    delay(1)
+
     if followUpdateTimer:expired() then
         follow.Update()
         followUpdateTimer:restart()

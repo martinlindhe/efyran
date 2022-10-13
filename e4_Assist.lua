@@ -10,6 +10,10 @@ local Assist = {
 
     -- the current spell set
     spellSet = "main",
+
+    -- the debuffs/dots used on current target
+    debuffsUsed = {},
+    dotsUsed = {},
 }
 
 function Assist.Init()
@@ -50,8 +54,7 @@ function Assist.handleAssistCall(spawn)
         return
     end
 
-    Assist.killSpawn(spawn)
-    Assist.prepareForNextFight()
+    Assist.beginKillSpawnID(spawn)
 end
 
 -- called at end of each /assist call
@@ -177,23 +180,20 @@ function castSpellAbility(spawn, row, callback)
     return true
 end
 
--- Stick and perform melee attacks.
+-- Sets current assist target and initalizes combat.
 ---@param spawn spawn
-function Assist.killSpawn(spawn)
+function Assist.beginKillSpawnID(spawn)
 
     Assist.backoff()
 
     Assist.target = spawn
     local currentID = spawn.ID()
 
-    if spawn == nil or (spawn.Type() ~= "NPC" and spawn.Type() ~= "Pet") then
-        if spawn ~= nil then
-            log.Info("Ignoring assist call on %s (%s)", spawn.Name(), spawn.Type())
-        end
+    if spawn == nil then
         return
     end
 
-    log.Debug("Assist.killSpawn %s", spawn.Name())
+    log.Debug("Assist.beginKillSpawnID %s", spawn.Name())
 
     if have_pet() then
         log.Debug("Attacking with my pet %s", mq.TLO.Me.Pet.CleanName())
@@ -241,129 +241,110 @@ function Assist.killSpawn(spawn)
             cmdf("/stick %s", stickArg)
         end
     end
+end
 
-    local debuffsUsed = {}
-    local dotsUsed = {}
+-- updates current fight progress
+function Assist.Tick()
+    if Assist.target == nil then
+        return
+    end
 
-    while true do
-        --log.Debug("killSpawn %s loop start, melee = %s", spawn.Name(), bools(melee))
-        if Assist.target == nil then
-            -- break outer loop if /backoff was called
-            log.Debug("killSpawn: i got called off, breaking outer loop")
-            break
-        end
-        if Assist.target.ID() ~= currentID then
-            log.Debug("killSpawn: assist called on another mob, returning!")
-            return
-        end
-        if spawn == nil or spawn.ID() == 0 or spawn.Type() == "Corpse" or spawn.Type() == "NULL" then
-            break
+    local melee = botSettings.settings.assist ~= nil and botSettings.settings.assist.type ~= nil and botSettings.settings.assist.type == "melee"
+    local spawn = Assist.target
+
+    if spawn == nil or spawn.ID() == 0 or spawn.Type() == "Corpse" or spawn.Type() == "NULL" then
+        -- target has died
+        if not is_brd() and is_casting() then
+            cmd("/stopcast")
         end
 
-        if not is_casting() and (not has_target() or mq.TLO.Target.ID() ~= spawn.ID()) then
-            -- XXX will happen for healers
-            all_tellf("killSpawn WARN: i lost target, restoring to %s. Previous target was %s", spawn.Name(), mq.TLO.Target.Name())
-            cmdf("/target id %d", spawn.ID())
-        end
+        Assist.prepareForNextFight()
+        Assist.target = nil
+        Assist.debuffsUsed = {}
+        Assist.dotsUsed = {}
 
-        doevents()
-        delay(1)
+        cmd("/attack off")
+        cmd("/stick off")
+        return
+    end
 
-        local used = false
-        -- perform debuffs ONE TIME EACH on assist before starting nukes
-        if not used and botSettings.settings.assist.debuffs ~= nil and not is_casting() and spawn ~= nil then
-            for v, row in pairs(botSettings.settings.assist.debuffs) do
-                local spellConfig = parseSpellLine(row)
-                log.Debug("Evaluating debuff %s", spellConfig.Name)
-                if Assist.target ~= nil and debuffsUsed[row] == nil and is_spell_ability_ready(spellConfig.Name) then
-                    log.Info("Trying to debuff %s with %s", spawn.Name(), spellConfig.Name)
-                    if castSpellAbility(spawn, row) then
-                        all_tellf("Debuffed %s with %s", spawn.Name(), spellConfig.Name)
-                        debuffsUsed[row] = true
-                        used = true
-                        break
-                    end
-                end
-            end
-        end
+    log.Info("Assist.Tick()")
 
-        doevents()
-        delay(1)
+    if not is_casting() and (not has_target() or mq.TLO.Target.ID() ~= spawn.ID()) then
+        -- XXX will happen for healers
+        all_tellf("killSpawn WARN: i lost target, restoring to %s. Previous target was %s", spawn.Name(), mq.TLO.Target.Name())
+        cmdf("/target id %d", spawn.ID())
+    end
 
-        -- perform dots ONE TIME EACH on assist before staring nukes
-        if not used and botSettings.settings.assist.dots ~= nil and not is_casting() and spawn ~= nil then
-            for v, row in pairs(botSettings.settings.assist.dots) do
-                local spellConfig = parseSpellLine(row)
-                log.Debug("Evaluating dot %s", spellConfig.Name)
-                if Assist.target ~= nil and dotsUsed[row] == nil and is_spell_ability_ready(spellConfig.Name) then
-                    log.Info("Trying to dot %s with %s", spawn.Name(), spellConfig.Name)
-                    if castSpellAbility(spawn, row) then
-                        all_tellf("Dotted %s with %s", spawn.Name(), spellConfig.Name)
-                        dotsUsed[row] = true
-                        used = true
-                        break
-                    end
-                end
-            end
-        end
 
-        doevents()
-        delay(1)
 
-        if not used and melee and botSettings.settings.assist.abilities ~= nil
-        and spawn ~= nil and spawn.Distance() < spawn.MaxRangeTo() and spawn.LineOfSight() then
-            -- use melee abilities
-            for v, row in pairs(botSettings.settings.assist.abilities) do
-                local spellConfig = parseSpellLine(row)
-                if Assist.target ~= nil and is_spell_ability_ready(spellConfig.Name) and castSpellAbility(spawn, row) then
+    local used = false
+    -- perform debuffs ONE TIME EACH on assist before starting nukes
+    if not used and botSettings.settings.assist.debuffs ~= nil and not is_casting() and spawn ~= nil then
+        for v, row in pairs(botSettings.settings.assist.debuffs) do
+            local spellConfig = parseSpellLine(row)
+            log.Debug("Evaluating debuff %s", spellConfig.Name)
+            if Assist.target ~= nil and Assist.debuffsUsed[row] == nil and is_spell_ability_ready(spellConfig.Name) then
+                log.Info("Trying to debuff %s with %s", spawn.Name(), spellConfig.Name)
+                if castSpellAbility(spawn, row) then
+                    all_tellf("Debuffed %s with %s", spawn.Name(), spellConfig.Name)
+                    Assist.debuffsUsed[row] = true
                     used = true
                     break
                 end
             end
         end
+    end
 
-        doevents()
-        delay(1)
-
-        -- caster/hybrid assist.nukes
-        if not used and botSettings.settings.assist.nukes ~= nil and not is_casting() and spawn ~= nil then
-            if botSettings.settings.assist.nukes[Assist.spellSet] == nil then
-                all_tellf("\arERROR I have no spell set '%s'\ax, reverting to spell set 'main'", Assist.spellSet)
-                Assist.spellSet = "main"
-            end
-            if botSettings.settings.assist.nukes[Assist.spellSet] ~= nil then
-                for v, row in pairs(botSettings.settings.assist.nukes[Assist.spellSet]) do
-                    log.Debug("Evaluating nuke %s", row)
-                    local spellConfig = parseSpellLine(row)
-                    if Assist.target ~= nil and is_spell_ability_ready(spellConfig.Name) and castSpellAbility(spawn, row) then
-                        all_tellf("Nuked with %s (spell set %s)", row, Assist.spellSet)
-                        break
-                    end
+    -- perform dots ONE TIME EACH on assist before staring nukes
+    if not used and botSettings.settings.assist.dots ~= nil and not is_casting() and spawn ~= nil then
+        for v, row in pairs(botSettings.settings.assist.dots) do
+            local spellConfig = parseSpellLine(row)
+            log.Debug("Evaluating dot %s", spellConfig.Name)
+            if Assist.target ~= nil and Assist.dotsUsed[row] == nil and is_spell_ability_ready(spellConfig.Name) then
+                log.Info("Trying to dot %s with %s", spawn.Name(), spellConfig.Name)
+                if castSpellAbility(spawn, row) then
+                    all_tellf("Dotted %s with %s", spawn.Name(), spellConfig.Name)
+                    Assist.dotsUsed[row] = true
+                    used = true
+                    break
                 end
-            else
-                all_tellf("ERROR cannot nuke, have no spell set %s", Assist.spellSet)
             end
         end
-
-        doevents()
-        delay(1)
-
-        heal.processQueue()
     end
 
-    if not is_brd() and is_casting() then
-        cmd("/stopcast")
+    if not used and melee and botSettings.settings.assist.abilities ~= nil
+    and spawn ~= nil and spawn.Distance() < spawn.MaxRangeTo() and spawn.LineOfSight() then
+        -- use melee abilities
+        for v, row in pairs(botSettings.settings.assist.abilities) do
+            local spellConfig = parseSpellLine(row)
+            if Assist.target ~= nil and is_spell_ability_ready(spellConfig.Name) and castSpellAbility(spawn, row) then
+                used = true
+                break
+            end
+        end
     end
 
-    if Assist.target ~= nil then
-        -- did not get called off during fight
-        Assist.prepareForNextFight()
+    -- caster/hybrid assist.nukes
+    if not used and botSettings.settings.assist.nukes ~= nil and not is_casting() and spawn ~= nil then
+        if botSettings.settings.assist.nukes[Assist.spellSet] == nil then
+            all_tellf("\arERROR I have no spell set '%s'\ax, reverting to spell set 'main'", Assist.spellSet)
+            Assist.spellSet = "main"
+        end
+        if botSettings.settings.assist.nukes[Assist.spellSet] ~= nil then
+            for v, row in pairs(botSettings.settings.assist.nukes[Assist.spellSet]) do
+                log.Debug("Evaluating nuke %s", row)
+                local spellConfig = parseSpellLine(row)
+                if Assist.target ~= nil and is_spell_ability_ready(spellConfig.Name) and castSpellAbility(spawn, row) then
+                    all_tellf("Nuked with %s (spell set %s)", row, Assist.spellSet)
+                    break
+                end
+            end
+        else
+            all_tellf("ERROR cannot nuke, have no spell set %s", Assist.spellSet)
+        end
     end
 
-    Assist.target = nil
-
-    cmd("/attack off")
-    cmd("/stick off")
 end
 
 return Assist

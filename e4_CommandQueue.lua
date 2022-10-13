@@ -102,7 +102,7 @@ function CommandQueue.Process()
             end
         end
         local spawn = spawn_from_id(toint(v.Arg))
-        if spawn == nil or spawn.Type() == "PC" then
+        if spawn == nil or (spawn.Type() == "PC" or spawn.Type() == "Pet") then
             return
         end
 
