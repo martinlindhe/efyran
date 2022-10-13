@@ -160,6 +160,25 @@ function QoL.Init()
         commandQueue.Add("killit", mobID, filter)
     end)
 
+    mq.bind("/quickburns", function()
+        if is_orchestrator() then
+            cmd("/dgzexecute /quickburns")
+        end
+        commandQueue.Add("burns", "quickburns")
+    end)
+    mq.bind("/longburns", function()
+        if is_orchestrator() then
+            cmd("/dgzexecute /longburns")
+        end
+        commandQueue.Add("burns", "longburns")
+    end)
+    mq.bind("/fullburns", function()
+        if is_orchestrator() then
+            cmd("/dgzexecute /fullburns")
+        end
+        commandQueue.Add("burns", "fullburns")
+    end)
+
     -- ends assist call
     mq.bind("/backoff", function()
         if is_orchestrator() then
@@ -473,6 +492,13 @@ function QoL.Init()
     mq.bind("/notinvis", function() mq.cmd("/noparse /dgaexecute all /if (!${Me.Invis}) /dgtell all NOT INVIS") end)
 
     mq.bind("/invis", function() mq.cmd("/noparse /dgaexecute all /if (${Me.Invis}) /dgtell all INVIS") end)
+
+    -- make peers in zone face my target
+    mq.bind("/facetarget", function() mq.cmdf("/dgaexecute %s /face fast id %d", dannet_zone_channel(), mq.TLO.Target.ID()) end)
+    mq.bind("/facetgt", function() mq.cmd("/facetarget") end)
+
+    -- make peers in zone face me
+    mq.bind("/faceme", function() mq.cmdf("/dgzexecute /face fast id %d", mq.TLO.Me.ID()) end)
 
     -- useful when AE FD is cast (oow, wos Shadowhunter, Cleric 1.5 fight in lfay and so on)
     mq.bind("/standall", function()

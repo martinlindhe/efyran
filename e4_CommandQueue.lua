@@ -181,6 +181,21 @@ function CommandQueue.Process()
         drop_buff(v.Arg)
     elseif v.Name == "mount-on" then
         mount_on()
+    elseif v.Name == "burns" then
+        if not assist.IsAssisting() then
+            log.Info("Ignoring \ay%s\ax burns request (not in combat)", v.Arg)
+            return
+        end
+        log.Info("Enabling burns \ay%s\ax", v.Arg)
+        if v.Arg == "quickburns" then
+            assist.quickburns = true
+        elseif v.Arg == "longburns" then
+            assist.longburns = true
+        elseif v.Arg == "fullburns" then
+            assist.fullburns = true
+        else
+            log.Error("Unknown burns set '%s'", v.Arg)
+        end
     else
         all_tellf("ERROR unknown command in queue: %s", v.Name)
     end

@@ -83,6 +83,10 @@ Buff Spell Level   Minimum Target Level
 /pbaeon                     - start PBAE
 /spellset <name>            - switch currently used spell set. defaults to "main"
 
+/quickburns
+/longburns
+/fullburns
+
 
 /followon					- tell peers to follow you
 /followoff					- tell peers to stop

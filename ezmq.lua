@@ -1225,24 +1225,24 @@ function is_spell_ability_ready(name)
         return false
     end
     if is_alt_ability_ready(name) then
-        --print("is_spell_ability_ready aa TRUE", name)
+        log.Debug("is_spell_ability_ready aa TRUE", name)
         return true
     end
     if is_memorized(name) and is_spell_ready(name) then
-        --print("is_spell_ability_ready spell TRUE", name)
+        log.Debug("is_spell_ability_ready spell TRUE", name)
         return true
     end
     if is_combat_ability_ready(name) then
-        --print("is_spell_ability_ready combat ability TRUE", name)
+        log.Debug("is_spell_ability_ready combat ability TRUE", name)
         return true
     end
     if is_ability_ready(name) then
-        --print("is_spell_ability_ready ability TRUE", name)
+        log.Debug("is_spell_ability_ready ability TRUE", name)
         return true
     end
     local item = find_item(name)
     if item ~= nil and item.Clicky() ~= nil and item.Timer.Ticks() == 0 then
-        --print("is_spell_ability_ready item TRUE", name)
+        log.Debug("is_spell_ability_ready item TRUE", name)
         return true
     end
     return false

@@ -14,6 +14,10 @@ local Assist = {
     -- the debuffs/dots used on current target
     debuffsUsed = {},
     dotsUsed = {},
+
+    quickburns = false,
+    longburns = false,
+    fullburns = false,
 }
 
 function Assist.Init()
@@ -45,7 +49,6 @@ end
 function Assist.backoff()
     if Assist.target ~= nil then
         log.Info("Backing off target %s", Assist.target.Name())
-        Assist.target = nil
         Assist.EndFight()
     end
 end
@@ -177,6 +180,13 @@ function Assist.beginKillSpawnID(spawn)
 end
 
 function Assist.EndFight()
+    Assist.target = nil
+    Assist.debuffsUsed = {}
+    Assist.dotsUsed = {}
+    Assist.quickburns = false
+    Assist.longburns = false
+    Assist.fullburns = false
+
     if not is_brd() and is_casting() then
         cmd("/stopcast")
     end
@@ -186,14 +196,26 @@ function Assist.EndFight()
         cmd("/pet back off")
     end
 
-    Assist.target = nil
-    Assist.debuffsUsed = {}
-    Assist.dotsUsed = {}
-
     cmd("/attack off")
     cmd("/stick off")
 
     Assist.prepareForNextFight()
+end
+
+---@param abilityRows string[]
+---@param category string purely descriptive in log messages
+function Assist.performAbility(abilityRows, category)
+    for v, row in pairs(abilityRows) do
+        local spellConfig = parseSpellLine(row)
+        log.Info("Evaluating %s %s", category, spellConfig.Name)
+        if Assist.target ~= nil and is_spell_ability_ready(spellConfig.Name) and (is_brd() or not is_casting()) then
+            log.Info("Trying to %s %s with %s", category, Assist.target.Name(), spellConfig.Name)
+            if castSpellAbility(Assist.target, row) then
+                all_tellf("Did \ay%s\ax on %s with %s", category, Assist.target.Name(), spellConfig.Name)
+                return
+            end
+        end
+    end
 end
 
 -- updates current fight progress
@@ -217,6 +239,24 @@ function Assist.Tick()
         -- XXX will happen for healers
         all_tellf("killSpawn WARN: i lost target, restoring to %s. Previous target was %s", spawn.Name(), mq.TLO.Target.Name())
         cmdf("/target id %d", spawn.ID())
+    end
+
+    if Assist.quickburns then
+        if Assist.performAbility(botSettings.settings.assist.quickburns, "quickburn") then
+            return
+        end
+    end
+
+    if Assist.longburns then
+        if Assist.performAbility(botSettings.settings.assist.longburns, "longburn") then
+            return
+        end
+    end
+
+    if Assist.fullburns then
+        if Assist.performAbility(botSettings.settings.assist.fullburns, "fullburn") then
+            return
+        end
     end
 
     -- perform debuffs ONE TIME EACH on assist before starting nukes
@@ -254,11 +294,8 @@ function Assist.Tick()
     if melee and botSettings.settings.assist.abilities ~= nil
     and spawn ~= nil and spawn.Distance() < spawn.MaxRangeTo() and spawn.LineOfSight() then
         -- use melee abilities
-        for v, row in pairs(botSettings.settings.assist.abilities) do
-            local spellConfig = parseSpellLine(row)
-            if Assist.target ~= nil and is_spell_ability_ready(spellConfig.Name) and castSpellAbility(spawn, row) then
-                return
-            end
+        if Assist.performAbility(botSettings.settings.assist.abilities, "ability") then
+            return
         end
     end
 
@@ -269,13 +306,8 @@ function Assist.Tick()
             Assist.spellSet = "main"
         end
         if botSettings.settings.assist.nukes[Assist.spellSet] ~= nil then
-            for v, row in pairs(botSettings.settings.assist.nukes[Assist.spellSet]) do
-                log.Debug("Evaluating nuke %s", row)
-                local spellConfig = parseSpellLine(row)
-                if Assist.target ~= nil and is_spell_ability_ready(spellConfig.Name) and castSpellAbility(spawn, row) then
-                    all_tellf("Nuked with %s (spell set %s)", row, Assist.spellSet)
-                    return
-                end
+            if Assist.performAbility(botSettings.settings.assist.nukes[Assist.spellSet], "nuke") then
+                return
             end
         else
             all_tellf("ERROR cannot nuke, have no spell set %s", Assist.spellSet)
