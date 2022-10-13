@@ -40,11 +40,10 @@ while true do
 
     qol.Tick()
     doevents()
-    delay(1)
 
     assist.Tick()
     doevents()
-    delay(1)
 
     follow.Tick()
+    delay(1)
 end

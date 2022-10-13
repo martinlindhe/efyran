@@ -1081,7 +1081,7 @@ GroupBuffs.Default.PAL = {
 
 GroupBuffs.Default.BRD = {
     "clr_symbol/Class|CLR",
-    "clr_ac/Class|CLR",
+    --"clr_ac/Class|CLR",
     "dru_skin/Class|DRU",
     "shm_focus/Class|SHM",
 
@@ -1157,7 +1157,7 @@ GroupBuffs.Default.SHM = {
 
 GroupBuffs.Default.ENC = {
     "clr_symbol/Class|CLR",
-    "clr_ac/Class|CLR",
+    --"clr_ac/Class|CLR",
     "dru_skin/Class|DRU",
     "shm_focus/Class|SHM",
 
@@ -1176,7 +1176,7 @@ GroupBuffs.Default.ENC = {
 
 GroupBuffs.Default.WIZ = {
     "clr_symbol/Class|CLR",
-    "clr_ac/Class|CLR",
+    --"clr_ac/Class|CLR",
     "dru_skin/Class|DRU",
     "shm_focus/Class|SHM",
 
@@ -1197,7 +1197,7 @@ GroupBuffs.Default.WIZ = {
 
 GroupBuffs.Default.MAG = {
     "clr_symbol/Class|CLR",
-    "clr_ac/Class|CLR",
+    --"clr_ac/Class|CLR",
     "dru_skin/Class|DRU",
     "shm_focus/Class|SHM",
 
@@ -1209,7 +1209,7 @@ GroupBuffs.Default.MAG = {
     "clr_spellhaste/Class|CLR",
     "enc_manaregen/Class|ENC",
     "bst_manaregen/Class|BST",
-    "clr_vie/Class|CLR",
+    --"clr_vie/Class|CLR",
 
     "dru_fire_resist/Class|DRU",
     "shm_resist/Class|SHM",
@@ -1218,7 +1218,7 @@ GroupBuffs.Default.MAG = {
 
 GroupBuffs.Default.NEC = {
     "clr_symbol/Class|CLR",
-    "clr_ac/Class|CLR",
+    --"clr_ac/Class|CLR",
     "dru_skin/Class|DRU",
     "shm_focus/Class|SHM",
 
@@ -1229,7 +1229,7 @@ GroupBuffs.Default.NEC = {
 
     "clr_spellhaste/Class|CLR",
     "bst_manaregen/Class|BST",
-    "clr_vie/Class|CLR",
+    --"clr_vie/Class|CLR",
 
     "dru_fire_resist/Class|DRU",
     "shm_resist/Class|SHM",
@@ -1238,7 +1238,7 @@ GroupBuffs.Default.NEC = {
 
 GroupBuffs.Default.RNG = {
     "clr_symbol/Class|CLR",
-    "clr_ac/Class|CLR",
+    --"clr_ac/Class|CLR",
     "dru_skin/Class|DRU",
     "shm_focus/Class|SHM",
 
@@ -1257,7 +1257,7 @@ GroupBuffs.Default.RNG = {
 
 GroupBuffs.Default.BST = {
     "clr_symbol/Class|CLR",
-    "clr_ac/Class|CLR",
+    --"clr_ac/Class|CLR",
     "dru_skin/Class|DRU",
     "shm_focus/Class|SHM",
 
@@ -1279,7 +1279,7 @@ GroupBuffs.Default.BST = {
 
 GroupBuffs.Default.ROG = {
     "clr_symbol/Class|CLR",
-    "clr_ac/Class|CLR",
+    --"clr_ac/Class|CLR",
     "dru_skin/Class|DRU",
     "shm_focus/Class|SHM",
 
@@ -1299,7 +1299,7 @@ GroupBuffs.Default.ROG = {
 
 GroupBuffs.Default.MNK = {
     "clr_symbol/Class|CLR",
-    "clr_ac/Class|CLR",
+    --"clr_ac/Class|CLR",
     "dru_skin/Class|DRU",
     "shm_focus/Class|SHM",
 
@@ -1319,7 +1319,7 @@ GroupBuffs.Default.MNK = {
 
 GroupBuffs.Default.BER = {
     "clr_symbol/Class|CLR",
-    "clr_ac/Class|CLR",
+    --"clr_ac/Class|CLR",
     "dru_skin/Class|DRU",
     "shm_focus/Class|SHM",
 

@@ -54,11 +54,11 @@ function buffs.Init()
     bard.resumeMelody()
 end
 
-local announceBuffsTimer = timer.new_expires_in(2 * 60, 3) -- 2 minutes
+local announceBuffsTimer = timer.new_expires_in(2 * 60, 3) -- announce buffs 3 sec after script start, then every 2 minutes
 
 local refreshBuffsTimer = timer.new_random(10 * 1) -- 10s
 
-local requestBuffsTimer = timer.new_random(30 * 1) -- 30s
+local requestBuffsTimer = timer.new_random(60 * 1) -- 60s
 
 local handleBuffsTimer = timer.new_random(2 * 1) -- 2s
 

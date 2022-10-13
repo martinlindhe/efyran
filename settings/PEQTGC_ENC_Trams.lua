@@ -16,7 +16,7 @@ settings.gems = {
     ["Ancient: Neurosis"] = 6,
     ["Mana Flare"] = 7,
     ["Rune of Rikkukin"] = 8,
-    ["Hastening of Salik"] = 9,
+    ["Hastening of Salik"] = 9, -- group haste
 }
 
 settings.self_buffs = {
