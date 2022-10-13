@@ -130,7 +130,7 @@ function castSpellAbility(spawn, row, callback)
         return false
     end
 
-    if spell.GoM ~= nil and spell.GoM and have_song("Gift of Mana") then
+    if spell.GoM ~= nil and spell.GoM and not have_song("Gift of Mana") then
         return false
     end
 
@@ -329,7 +329,9 @@ function Assist.killSpawn(spawn)
             if botSettings.settings.assist.nukes[spellSet] ~= nil then
                 for v, row in pairs(botSettings.settings.assist.nukes[spellSet]) do
                     log.Debug("Evaluating nuke %s", row)
-                    if Assist.target ~= nil and castSpellAbility(spawn, row) then
+                    local spellConfig = parseSpellLine(row)
+                    if Assist.target ~= nil and is_spell_ability_ready(spellConfig.Name) and castSpellAbility(spawn, row) then
+                        all_tellf("Nuked with %s (spell set %s)", row, spellSet)
                         break
                     end
                 end
