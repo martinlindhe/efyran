@@ -23,8 +23,8 @@ botSettings.Init()
 buffs.Init()
 group.Init()
 heal.Init()
-qol.Init()
 assist.Init()
+qol.Init() -- NOTE: qol.Init() also verifies spell lines, so it should be called last
 
 log.Info("E4 started")
 

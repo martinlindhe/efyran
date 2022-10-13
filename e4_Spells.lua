@@ -283,7 +283,7 @@ function castSpellRaw(name, spawnId, extraArgs)
     if extraArgs ~= nil then
         exe = exe .. " " .. extraArgs
     end
-    log.Debug("-- castSpellRaw: %s", exe)
+    --log.Debug("-- castSpellRaw: %s", exe)
     cmdf(exe)
 end
 
