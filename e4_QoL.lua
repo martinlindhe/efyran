@@ -349,20 +349,11 @@ function QoL.Init()
             cmd("/dgzexecute /followoff")
         end
         follow.Stop()
-        follow.spawn = nil
     end)
 
     -- follows another peer in LoS
-    ---@param spawnID integer
-    mq.bind("/followid", function(spawnID)
-        if not is_peer_id(spawnID) then
-            all_tellf("ERROR: /followid called on invalid spawn ID %d", spawnID)
-            return
-        end
-
-        follow.spawn = spawn_from_id(spawnID)
-        follow.Update()
-    end)
+    ---@param spawnID string
+    mq.bind("/followid", function(spawnID) follow.Start(toint(spawnID)) end)
 
     mq.bind("/evac", function(name)
         if is_orchestrator() then

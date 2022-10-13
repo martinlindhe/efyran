@@ -1,10 +1,32 @@
 local mq = require("mq")
 local log = require("knightlinc/Write")
+local timer = require("Timer")
+
 local globalSettings = require("e4_Settings")
 
 local Follow = {
     spawn = nil, -- the current spawn I am following
 }
+
+-- Starts to follow spawn ID (usually the orchestrator)
+---@param spawnID integer
+function Follow.Start(spawnID)
+    if not is_peer_id(spawnID) then
+        all_tellf("ERROR: /followid called on invalid spawn ID %d", spawnID)
+        return
+    end
+    local spawn = spawn_from_id(spawnID)
+    if spawn == nil then
+        return
+    end
+    if not spawn.LineOfSight() then
+        all_tellf("I cannot see %s", spawn.Name())
+        return
+    end
+    log.Debug("Follow start on %d %s", spawnID, spawn.Name())
+    Follow.spawn = spawn
+    Follow.Update()
+end
 
 function Follow.Pause()
     if globalSettings.followMode:lower() == "mq2nav" and mq.TLO.Navigation.Active() then
@@ -21,12 +43,22 @@ function Follow.Stop()
     Follow.spawn = nil
 end
 
+local followUpdateTimer = timer.new_expired(5 * 1) -- 5s
+
+function Follow.Tick()
+    if followUpdateTimer:expired() then
+        Follow.Update()
+        followUpdateTimer:restart()
+    end
+end
+
 local lastHeading = ""
 
 -- called from QoL.Tick() on every tick
 function Follow.Update()
     local exe = ""
     if Follow.spawn ~= nil and Follow.spawn.Distance3D() > Follow.spawn.MaxRangeTo() then
+        log.Debug("Follow.Update, mode %s, distance %f", globalSettings.followMode, Follow.spawn.Distance3D())
         if globalSettings.followMode:lower() == "mq2nav" then
             if not mq.TLO.Navigation.MeshLoaded() then
                 all_tellf("MISSING NAVMESH FOR %s", zone_shortname())
@@ -42,7 +74,7 @@ function Follow.Update()
             end
         elseif globalSettings.followMode:lower() == "mq2moveutils" then
             --if not mq.TLO.Stick.Active() or lastHeading ~= Follow.spawn.HeadingTo() then
-                cmdf("/target id %d", Follow.spawn.ID())
+                mq.cmdf("/target id %d", Follow.spawn.ID())
                 exe = string.format("/stick hold 15 uw") -- face upwards to better run over obstacles
                 --exe = string.format("/moveto id %d", Follow.spawn.ID())
             --end
@@ -50,7 +82,7 @@ function Follow.Update()
     end
     if exe ~= "" then
         log.Info("Follow.Update: %s", exe)
-        cmd(exe)
+        mq.cmd(exe)
     end
 end
 

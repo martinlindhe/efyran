@@ -22,6 +22,9 @@ local Assist = {
     quickburns = false,
     longburns = false,
     fullburns = false,
+
+    ---@type integer
+    lastFollowID = 0,
 }
 
 function Assist.Init()
@@ -55,7 +58,7 @@ end
 -- Are we assisting on a target?
 ---@return boolean
 function Assist.IsAssisting()
-    return Assist.targetID ~= nil
+    return Assist.targetID ~= 0
 end
 
 
@@ -145,12 +148,13 @@ function Assist.beginKillSpawnID(spawnID)
 
     if have_pet() then
         log.Debug("Attacking with my pet %s", mq.TLO.Me.Pet.CleanName())
-        cmdf("/pet attack %d", spawnID)
+        mq.cmdf("/pet attack %d", spawnID)
     end
 
-    cmdf("/target id %d", spawnID)
-    follow.Pause()
-    delay(1)
+    Assist.lastFollowID = follow.spawn.ID()
+    follow.Stop()
+
+    mq.cmdf("/target id %d", spawnID)
 
     local melee = botSettings.settings.assist ~= nil and botSettings.settings.assist.type ~= nil and botSettings.settings.assist.type == "melee"
 
@@ -215,6 +219,10 @@ function Assist.EndFight()
     cmd("/stick off")
 
     Assist.prepareForNextFight()
+
+    if Assist.lastFollowID ~= 0 then
+        follow.Start(Assist.lastFollowID)
+    end
 end
 
 -- Returns true if spell/ability was used
@@ -223,6 +231,9 @@ end
 ---@param used? array optionally keep track of used abilites
 ---@return boolean
 function Assist.performSpellAbility(abilityRows, category, used)
+    if abilityRows == nil then
+        return false
+    end
     if Assist.targetID == 0 then
         -- signal ability was used, in order to leave Assist.Tick() quickly when target is nil
         return true

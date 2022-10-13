@@ -1,7 +1,6 @@
 # TODO
 
 misc:
--- TODO trigger event to reload and recalculate all settings: find best aura, re-evaluate toon settings file etc
 -- BUG: mq.TLO.NearestSpawn() results should be fetched directly and then looped over the results, as they can change
     in the middle of iteration otherwise.
 
@@ -17,7 +16,6 @@ MQ2Lua gotchas:
 
 
 
-OLD TODO ....:::
 
 
 item swap:
@@ -33,16 +31,13 @@ curing:
 
 
 moving:
-    - LATER: check out MQ2Nav. XXX how to download "1.5 gigabyte" of community nav meshes? redguide offers them with membership...
     - check out https://gitlab.com/redguides/plugins/mq2portalsetter
 
 
 tribute:
     https://gitlab.com/redguides/plugins/MQ2TributeManager
 
-corpses:
-    - autoloot, see https://www.mmobugs.com/wiki/index.php?title=MQ2Rez
-    - check out https://gitlab.com/redguides/plugins/mq2rez
+
 
 
 dps meter:
@@ -53,7 +48,7 @@ dps meter:
 
 DanNet:
     - channels... can we have one called "debug" and a external listener program for that channel ???
-    - can we log channel text to disk?
+    - can we log channel text to disk?  use sqlite backend for a logger
 
 
 loot:
@@ -87,4 +82,3 @@ QoL:
 
     /count command - report bots + zones if not nearby
 
-    auto disable option "Auto Turn On AFK" on bot

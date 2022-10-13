@@ -42,9 +42,9 @@ function buffs.Init()
     mq.bind("/queuebuff", function(buff, peer, force)
         --print("queuebuff buff=", buff, ", peer=", peer)
         table.insert(buffs.queue, {
-            ["Peer"] = peer,
-            ["Buff"] = buff,
-            ["Force"] = force == "force",
+            Peer = peer,
+            Buff = buff,
+            Force = force == "force",
         })
     end)
 
@@ -54,6 +54,8 @@ end
 local announceBuffsTimer = timer.new_random(2 * 60) -- 2 minutes
 
 local refreshBuffsTimer = timer.new_random(10 * 1) -- 10s
+
+local requestBuffsTimer = timer.new_random(30 * 1) -- 30s
 
 local handleBuffsTimer = timer.new_random(2 * 1) -- 2s
 
@@ -90,6 +92,7 @@ function dannet_zone_channel()
     return name:lower()
 end
 
+-- announce buff availability, handle debuffs, refresh buffs/auras/pets/pet buffs, request buffs and handle buff requests
 function buffs.Tick()
     if not is_brd() and is_casting() then
         return
@@ -107,22 +110,24 @@ function buffs.Tick()
 
     if follow.spawn ~= nil or is_gm() or is_invisible() or is_hovering() or in_combat() or is_moving() or in_neutral_zone()
     or window_open("MerchantWnd") or window_open("GiveWnd") or window_open("BigBankWnd") or window_open("SpellBookWnd")
-    or window_open("LootWnd") or spawn_count("pc radius 100") == 1 then
+    or window_open("LootWnd") then
         return
     end
 
     if buffs.refreshBuffs and refreshBuffsTimer:expired() then
-        --log.Debug("Buff tick: refresh buffs at %s", time())
         if not buffs.RefreshSelfBuffs() then
             if not buffs.RefreshAura() then
                 if not pet.Summon() then
-                    if not pet.BuffMyPet() then
-                        buffs.RequestBuffs()
-                    end
+                    pet.BuffMyPet()
                 end
             end
         end
         refreshBuffsTimer:restart()
+    end
+
+    if requestBuffsTimer:expired() then
+        buffs.RequestBuffs()
+        requestBuffsTimer:restart()
     end
 
     if is_casting() or is_hovering() or is_sitting() or is_moving() or mq.TLO.Me.SpellInCooldown() or window_open("SpellBookWnd") then

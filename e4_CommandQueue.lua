@@ -25,9 +25,9 @@ local CommandQueue = {
 ---@param arg2? string optional argument
 function CommandQueue.Add(name, arg, arg2)
     table.insert(CommandQueue.queue, {
-        ["Name"] = name,
-        ["Arg"] = arg,
-        ["Arg2"] = arg2,
+        Name = name,
+        Arg = arg,
+        Arg2 = arg2,
     })
 end
 

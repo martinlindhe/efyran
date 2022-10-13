@@ -1225,24 +1225,24 @@ function is_spell_ability_ready(name)
         return false
     end
     if is_alt_ability_ready(name) then
-        log.Debug("is_spell_ability_ready aa TRUE", name)
+        --log.Debug("is_spell_ability_ready aa TRUE", name)
         return true
     end
     if is_memorized(name) and is_spell_ready(name) then
-        log.Debug("is_spell_ability_ready spell TRUE", name)
+        --log.Debug("is_spell_ability_ready spell TRUE", name)
         return true
     end
     if is_combat_ability_ready(name) then
-        log.Debug("is_spell_ability_ready combat ability TRUE", name)
+        --log.Debug("is_spell_ability_ready combat ability TRUE", name)
         return true
     end
     if is_ability_ready(name) then
-        log.Debug("is_spell_ability_ready ability TRUE", name)
+        --log.Debug("is_spell_ability_ready ability TRUE", name)
         return true
     end
     local item = find_item(name)
     if item ~= nil and item.Clicky() ~= nil and item.Timer.Ticks() == 0 then
-        log.Debug("is_spell_ability_ready item TRUE", name)
+        --log.Debug("is_spell_ability_ready item TRUE", name)
         return true
     end
     return false
@@ -1338,11 +1338,11 @@ end
 function matches_filter(filter)
     local filterConfig = parseFilterLine(filter)
     if filterConfig.Only ~= nil and not matches_filter_line(filterConfig.Only) then
-        log.Info("I am not matching this ONLY line: %s", filterConfig.Only)
+        log.Debug("I am not matching this ONLY line: %s", filterConfig.Only)
         return false
     end
     if filterConfig.Not ~= nil and matches_filter_line(filterConfig.Not) then
-        log.Info("I am matching this NOT line: %s", filterConfig.Not)
+        log.Debug("I am matching this NOT line: %s", filterConfig.Not)
         return false
     end
     return true

@@ -2,8 +2,6 @@ require("ezmq")
 
 local log = require("knightlinc/Write")
 
-local timer = require("Timer")
-
 require("e4_Loot")
 require("e4_Hail")
 
@@ -28,7 +26,6 @@ qol.Init() -- NOTE: qol.Init() also verifies spell lines, so it should be called
 
 log.Info("E4 started")
 
-local followUpdateTimer = timer.new_expired(5 * 1) -- 5s
 
 -- MAIN LOOP
 while true do
@@ -49,8 +46,5 @@ while true do
     doevents()
     delay(1)
 
-    if followUpdateTimer:expired() and not assist.IsAssisting() then
-        follow.Update()
-        followUpdateTimer:restart()
-    end
+    follow.Tick()
 end
