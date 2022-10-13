@@ -48,8 +48,8 @@ settings.healing = {
 }
 
 settings.assist = {
-    ["nukes"] = { -- XXX implement
-        ["main"] = {
+    nukes = {
+        main = {
             "Ancient: Greater Concussion/PctAggro|98",
             "Mind Crash/PctAggro|99",
 
@@ -63,17 +63,17 @@ settings.assist = {
             "Chaos Flame/NoAggro/MinMana|5",
             "Ether Flame/GoM/NoAggro",
         },
-        ["noks"] = {
+        noks = {
             "Draught of Ro/NoAggro/Gem|1",
         },
 
-        ["fastfire"] = {
+        fastfire = {
             "Scepter of Incantations/NoAggro",
             "Chaos Flame/NoAggro/MinMana|5",
             "Ether Flame/GoM/NoAggro",
         },
 
-        ["bigfire"] = {
+        bigfire = {
             "Scepter of Incantations/NoAggro",
             "Ether Flame/NoAggro/MinMana|5",
         },
@@ -84,11 +84,11 @@ settings.assist = {
         -- L69 Gelidin Comet (3385 hp, resist adj -10, cost 650 mana)
         -- L69 Spark of Ice (1348 hp, resist adj -50, cost 319 mana, 3s cast)
         -- L69 Claw of Vox (1375 hp, resist adj -50, cost 208 mana, 5s cast)
-        ["fastcold"] = {
+        fastcold = {
             "Spark of Ice/NoAggro/MinMana|5",
             "Gelidin Comet/GoM/NoAggro/MinMana|5",
         },
-        ["bigcold"] = {
+        bigcold = {
             "Gelidin Comet/NoAggro/MinMana|5",
         },
     },

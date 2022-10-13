@@ -7,9 +7,10 @@ local heal    = require("e4_Heal")
 
 local Assist = {
     target = nil, -- the current spawn I am attacking
-}
 
-local spellSet = "main" -- the current spell set. XXX impl switching it
+    -- the current spell set
+    spellSet = "main",
+}
 
 function Assist.Init()
 
@@ -200,7 +201,7 @@ function Assist.killSpawn(spawn)
     end
 
     cmdf("/target id %d", spawn.ID())
-    follow.Stop()
+    follow.Pause()
     delay(1)
 
     local melee = botSettings.settings.assist ~= nil and botSettings.settings.assist.type ~= nil and botSettings.settings.assist.type == "melee"
@@ -326,17 +327,21 @@ function Assist.killSpawn(spawn)
 
         -- caster/hybrid assist.nukes
         if not used and botSettings.settings.assist.nukes ~= nil and not is_casting() and spawn ~= nil then
-            if botSettings.settings.assist.nukes[spellSet] ~= nil then
-                for v, row in pairs(botSettings.settings.assist.nukes[spellSet]) do
+            if botSettings.settings.assist.nukes[Assist.spellSet] == nil then
+                all_tellf("\arERROR I have no spell set '%s'\ax, reverting to spell set 'main'", Assist.spellSet)
+                Assist.spellSet = "main"
+            end
+            if botSettings.settings.assist.nukes[Assist.spellSet] ~= nil then
+                for v, row in pairs(botSettings.settings.assist.nukes[Assist.spellSet]) do
                     log.Debug("Evaluating nuke %s", row)
                     local spellConfig = parseSpellLine(row)
                     if Assist.target ~= nil and is_spell_ability_ready(spellConfig.Name) and castSpellAbility(spawn, row) then
-                        all_tellf("Nuked with %s (spell set %s)", row, spellSet)
+                        all_tellf("Nuked with %s (spell set %s)", row, Assist.spellSet)
                         break
                     end
                 end
             else
-                all_tellf("ERROR cannot nuke, have no spell set %s", spellSet)
+                all_tellf("ERROR cannot nuke, have no spell set %s", Assist.spellSet)
             end
         end
 

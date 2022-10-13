@@ -80,6 +80,7 @@ Buff Spell Level   Minimum Target Level
 /assiston ${Target.ID}      - run from main driver, tell peers to kill spawn by ID
 /backoff                    - call of assist
 /pbaeon                     - start PBAE
+/spellset <name>            - switch currently used spell set. defaults to "main"
 
 
 /followon					- tell peers to follow you

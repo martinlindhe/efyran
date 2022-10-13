@@ -1,9 +1,9 @@
 local settings = { }
 
 settings.swap = { -- XXX impl
-    ["main"] = "Staff of Phenomenal Power|Mainhand",
-    ["fishing"] = "Fishing Pole|Mainhand",
-    ["melee"] = "Staff of Phenomenal Power|Mainhand", -- 1hb
+    main = "Staff of Phenomenal Power|Mainhand",
+    fishing = "Fishing Pole|Mainhand",
+    melee = "Staff of Phenomenal Power|Mainhand", -- 1hb
 }
 
 settings.gems = {
@@ -47,15 +47,15 @@ settings.self_buffs = {
 
 
 settings.healing = {
-    ["life_support"] = {
+    life_support = {
         "Distillate of Divine Healing XI/HealPct|10",
         --"Glyph of Stored Life/HealPct|4", -- Expendable AA
     },
 }
 
 settings.assist = {
-    ["nukes"] = {
-        ["main"] = {
+    nukes = {
+        main = {
             -- defensive - lower aggro:
             -- L37 Concussion (-400 hate, 2s cast)
             --- Maelin's Leggings of Lore (Concussion 2s cast) - pop ep legs
@@ -91,17 +91,17 @@ settings.assist = {
             "Ancient: Core Fire/GoM/NoAggro",
         },
 
-        ["noks"] = {
+        noks = {
             "Draught of Ro/NoAggro/Gem|1",
         },
 
-        ["fastfire"] = {
+        fastfire = {
             "Chaos Flame/NoAggro/MinMana|5",
             "Ancient: Core Fire/GoM/NoAggro",
             "Scepter of Incantations/NoAggro",
         },
 
-        ["bigfire"] = {
+        bigfire = {
             "Ancient: Core Fire/NoAggro/MinMana|5",
             "Scepter of Incantations",
         },
@@ -123,11 +123,11 @@ settings.assist = {
         -- L69 Spark of Ice (1348 hp, resist adj -50, cost 319 mana, 3s cast)
         -- L69 Claw of Vox (1375 hp, resist adj -50, cost 208 mana, 5s cast)
         -- L70 Ancient: Spear of Gelaqua (1976 hp, resist adj -10, cost 345 mana, 3.5s cast)
-        ["fastcold"] = {
+        fastcold = {
             "Spark of Ice/NoAggro/MinMana|5",
             "Gelidin Comet/GoM/NoAggro/Gem|4/MinMana|5",
         },
-        ["bigcold"] = {
+        bigcold = {
             "Gelidin Comet/NoAggro/Gem|4/MinMana|5",
         },
 
@@ -145,7 +145,7 @@ settings.assist = {
         -- L68 Thundaka (3233 hp, cost 656 mana)
     },
 
-    ["quickburns"] = { -- XXX impl
+    quickburns = {
         "Ward of Destruction",
         "Call of Xuzl",
 
@@ -159,7 +159,7 @@ settings.assist = {
         "Staff of Phenomenal Power",
     },
 
-    ["longburns"] = {
+    longburns = {
         "Frenzied Devastation",
 
         -- L59 Mana Burn AA (3000 mana into nuke???)
@@ -168,12 +168,12 @@ settings.assist = {
         --"Mana Blaze",
     },
 
-    ["fullburns"] = {
+    fullburns = {
         -- Expendable AA (increase dmg)
         "Glyph of Courage",
     },
 
-    ["pbae"] = {
+    pbae = {
         -- L01 Numbing Cold (14 hp, ICE, aerange 25, recast 12s, cost 6 mana)
         -- L05 Fingers of Fire (19-28 hp, FIRE, aerange 25, recast 6s, cost 47 mana)
         -- L14 Project Lightning (55-62 hp, MAGIC, aerange 25, recast 6s, cost 85 mana)
@@ -191,7 +191,7 @@ settings.assist = {
         --"Fire Rune/Gem|8",
     },
 
-    ["targetae"] = { -- XXX impl?
+    targetae = { -- XXX impl?
         -- L12 Firestorm (41 hp, FIRE, adj -10, aerange 25, recast 12s, cost 34 mana)
         -- L24 Column of Lightning (128-136 hp, FIRE, aerange 15, recast 6s, cost 130 mana)
         -- L26 Energy Storm (238 hp, MAGIC, adj -10, aerange 25, recast 12s, cost 148 mana)

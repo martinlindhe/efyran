@@ -6,7 +6,7 @@ local Follow = {
     spawn = nil, -- the current spawn I am following
 }
 
-function Follow.Stop()
+function Follow.Pause()
     if globalSettings.followMode:lower() == "mq2nav" and mq.TLO.Navigation.Active() then
         cmd("/nav stop")
     elseif globalSettings.followMode:lower() == "mq2advpath" then
@@ -14,8 +14,14 @@ function Follow.Stop()
     elseif globalSettings.followMode:lower() == "mq2moveutils" then
         cmd("/stick off")
     end
+end
+
+function Follow.Stop()
+    Follow.Pause()
     Follow.spawn = nil
 end
+
+local lastHeading = ""
 
 -- called from QoL.Tick() on every tick
 function Follow.Update()

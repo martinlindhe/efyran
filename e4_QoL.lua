@@ -123,6 +123,15 @@ function QoL.Init()
         end
     end)
 
+    -- change spell set
+    mq.bind("/spellset", function(name)
+        if is_orchestrator() then
+            cmdf("/dgzexecute /spellset %s", name)
+        end
+        log.Info("Changed spellset to %s", name)
+        assist.spellSet = name
+    end)
+
     -- tell peers to kill target until dead
     ---@param ... string|nil such as "/only|ROG"
     mq.bind("/assiston", function(...)
