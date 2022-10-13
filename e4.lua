@@ -49,7 +49,7 @@ while true do
     doevents()
     delay(1)
 
-    if followUpdateTimer:expired() then
+    if followUpdateTimer:expired() and not assist.IsAssisting() then
         follow.Update()
         followUpdateTimer:restart()
     end

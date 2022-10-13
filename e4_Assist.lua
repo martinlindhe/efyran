@@ -35,15 +35,18 @@ function Assist.Init()
     Assist.prepareForNextFight()
 end
 
+-- Are we assisting on a target?
+---@return boolean
+function Assist.IsAssisting()
+    return Assist.target ~= nil
+end
+
 
 function Assist.backoff()
     if Assist.target ~= nil then
         log.Info("Backing off target %s", Assist.target.Name())
         Assist.target = nil
-        if have_pet() then
-            log.Debug("Asking pet to back off")
-            cmd("/pet back off")
-        end
+        Assist.EndFight()
     end
 end
 
@@ -243,6 +246,26 @@ function Assist.beginKillSpawnID(spawn)
     end
 end
 
+function Assist.EndFight()
+    if not is_brd() and is_casting() then
+        cmd("/stopcast")
+    end
+
+    if have_pet() then
+        log.Debug("Asking pet to back off")
+        cmd("/pet back off")
+    end
+
+    Assist.target = nil
+    Assist.debuffsUsed = {}
+    Assist.dotsUsed = {}
+
+    cmd("/attack off")
+    cmd("/stick off")
+
+    Assist.prepareForNextFight()
+end
+
 -- updates current fight progress
 function Assist.Tick()
     if Assist.target == nil then
@@ -254,17 +277,7 @@ function Assist.Tick()
 
     if spawn == nil or spawn.ID() == 0 or spawn.Type() == "Corpse" or spawn.Type() == "NULL" then
         -- target has died
-        if not is_brd() and is_casting() then
-            cmd("/stopcast")
-        end
-
-        Assist.prepareForNextFight()
-        Assist.target = nil
-        Assist.debuffsUsed = {}
-        Assist.dotsUsed = {}
-
-        cmd("/attack off")
-        cmd("/stick off")
+        Assist.EndFight()
         return
     end
 
