@@ -68,6 +68,7 @@ Buff Spell Level   Minimum Target Level
 66-70: 				Level 62
 71+:                ???
 
+
 ## Terminology
 - Orchestrator = the main driver toon you are playing from
 - Peer = A connected character that you control
@@ -130,6 +131,11 @@ xxx document rest
 mag: in e3 you could list Molten Orb as a nuke and it will auto summon,
 in e4 it was changed to work with any spells, so you need to be explicit with the Summon filter.
 Example: "Molten Orb/NoAggro/Summon|Summon: Molten Orb"
+
+--
+e3 has a concept of Bot Buffs and Group Buffs. We chose to instead implement a beg-for-buff system,
+which makes use of "buff groups" (tags mapping to multiple buffs). This setup allows for zero configuration
+auto buffing with default settings, while still allowing fine grained control where you need to.
 
 
 
