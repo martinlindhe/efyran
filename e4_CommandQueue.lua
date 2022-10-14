@@ -47,7 +47,7 @@ end
 
 ---@return CommandQueueValue|nil
 function CommandQueue.PeekFirst()
-    for k, v in pairs(CommandQueue.queue) do
+    for k, v in ipairs(CommandQueue.queue) do
         return v
     end
     return nil

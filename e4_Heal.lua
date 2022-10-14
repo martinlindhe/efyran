@@ -268,7 +268,7 @@ function Heal.performLifeSupport()
         delay(20)
     end
 
-    for k, row in pairs(botSettings.settings.healing.life_support) do
+    for k, row in ipairs(botSettings.settings.healing.life_support) do
         local spellConfig = parseSpellLine(row)
         --print("k ", k, " v ", row, ", parsed as name: ", spellConfig.Name)
 
@@ -341,7 +341,7 @@ end
 function healPeer(spell_list, peer, pct)
     log.Debug("healPeer: %s at %d %%", peer, pct)
 
-    for k, heal in pairs(spell_list) do
+    for k, heal in ipairs(spell_list) do
         local spawn = spawn_from_peer_name(peer)
         local spellConfig = parseSpellLine(heal)
         if spawn == nil then

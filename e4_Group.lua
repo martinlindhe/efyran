@@ -58,7 +58,7 @@ function Group.RecallGroup(name, groupNumber)
         log.Info("Recalling group %s %d", name, groupNumber)
     end
 
-    for idx, group in pairs(Group.settings[name]) do
+    for idx, group in ipairs(Group.settings[name]) do
         local groupLeader = group[1]
         if idx == 1 then
             raidLeader = groupLeader

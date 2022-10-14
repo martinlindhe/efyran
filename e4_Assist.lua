@@ -238,7 +238,7 @@ function Assist.performSpellAbility(abilityRows, category, used)
         -- signal ability was used, in order to leave Assist.Tick() quickly when target is nil
         return true
     end
-    for v, row in pairs(abilityRows) do
+    for v, row in ipairs(abilityRows) do
         local spellConfig = parseSpellLine(row)
         log.Info("Evaluating %s %s", category, spellConfig.Name)
         if (used == nil or used[row] == nil)

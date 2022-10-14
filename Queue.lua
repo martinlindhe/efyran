@@ -46,11 +46,7 @@ function Queue.contains(self, name)
 end
 
 function Queue.size(self)
-    local n = 0
-    for k, v in pairs(Queue.values) do
-        n = n + 1
-    end
-    return n
+    return #Queue.values
 end
 
 ---@return string|nil
@@ -65,7 +61,7 @@ end
 
 -- returns first element from queue, or nil if empty
 function Queue.peek_first(self)
-    for k, v in pairs(Queue.values) do
+    for k, v in ipairs(Queue.values) do
         return v.Name
     end
     return nil
