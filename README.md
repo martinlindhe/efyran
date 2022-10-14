@@ -1,22 +1,25 @@
+# efyran
+
+The road to massive everquest botting.
+
+[efyran](https://en.wikipedia.org/wiki/European_route_E4) is a bot macro for Macroquest, written in Lua.
+
+It was created after playing with and modding the older [E3 macro](https://github.com/cream24/Macros) over a number of years.
+
+Some concepts are borrowed from E3, while others are new. No code has been reused from E3.
+
+
 ## How auto healing works
 
-Instead of all healers constantly monitoring everyone, the bots instead report when they need healing.
+Instead of all healers constantly monitoring everyone, the peers instead report when they need healing.
 
 All healers join the special zone healing channel, "server_shortname_healme".
 
 When a bot is < 100%, they report their name and current HP % to the healme channel, "Avicii 73".
 
-Bot waits 5 seconds before asking for another heal.
+Healers read the message and given some conditions, puts the message on their internal heal queue.
 
----
-
-Healers read the message and given some conditions, puts the message+timestamp on the heal queue.
-
-Conditions:
-x- if queue don't already contain this bot
-x if queue is less than 10 requests, always add it
-- if queue is >= 10 long, always add if listed as tank or important bot
-- if queue is >= 10 long, add with 50% chance ... if >= 20 long, beep and ignore.
+The heal queue is separate from the command queue and is always prioritized ahead of other actions.
 
 When picking from the queue:
 - tanks, then important bots is always picked ahead of the rest in queue
@@ -24,15 +27,12 @@ When picking from the queue:
 
 
 
-
-
 # How auto buffing works
 
-TODO TODO TODO--
+e3 had a concept of Bot Buffs and Group Buffs. We chose to instead implement a beg-for-buff system,
+which makes use of "buff groups" (tags mapping to multiple buffs). This setup allows for a zero-configuration
+buff bot with default settings, while still allowing fine grained control where you need to.
 
-also rework buffing like this:
-	- bots request the buffs from nearby bots.
-	this way a bot will be able to: ask for conviction if no DRU nearby. DROP conviction etc if DRU shows up.
 
 
 
@@ -55,6 +55,7 @@ settings.debug = true -- enable debug logging for this peer
 
 ## Buff spell level and PC target levels
 
+```
 Buff Spell Level   Minimum Target Level
 1-50:				Level 1
 51: 				Level 40
@@ -67,7 +68,7 @@ Buff Spell Level   Minimum Target Level
 64-65: 				Level 47
 66-70: 				Level 62
 71+:                ???
-
+```
 
 ## Terminology
 - Orchestrator = the main driver toon you are playing from
@@ -136,10 +137,6 @@ mag: in e3 you could list Molten Orb as a nuke and it will auto summon,
 in e4 it was changed to work with any spells, so you need to be explicit with the Summon filter.
 Example: "Molten Orb/NoAggro/Summon|Summon: Molten Orb"
 
---
-e3 has a concept of Bot Buffs and Group Buffs. We chose to instead implement a beg-for-buff system,
-which makes use of "buff groups" (tags mapping to multiple buffs). This setup allows for zero configuration
-auto buffing with default settings, while still allowing fine grained control where you need to.
 
 
 
