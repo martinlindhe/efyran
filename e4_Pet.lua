@@ -76,7 +76,7 @@ function find_pet_spell()
     local level = 1
     local name = ""
     for i,v in ipairs(pets) do
-        if is_spell_in_book(v) then
+        if have_spell(v) then
             local spell = get_spell(v)
             -- print("Considering L",spell.Level(), " ", spell.RankName())
             if spell ~= nil and spell.Level() > level then

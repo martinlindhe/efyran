@@ -55,7 +55,7 @@ function refreshBuff(buffItem, spawn)
     end
 
     local spellName = spellConfig.Name
-    if is_spell_in_book(spellConfig.Name) then
+    if have_spell(spellConfig.Name) then
         spellName = spell.RankName()
     end
 
@@ -71,7 +71,7 @@ function refreshBuff(buffItem, spawn)
             return false
         end
 
-        if is_spell_in_book(spellName) and not spell.Stacks() then
+        if have_spell(spellName) and not spell.Stacks() then
             all_tellf("ERROR cannot selfbuff with %s (dont stack with current buffs)", spellName)
             return false
         end
@@ -87,7 +87,7 @@ function refreshBuff(buffItem, spawn)
             print("refreshBuff: SKIP PET BUFFING ", spell.Name(), ", duration is ", mq.TLO.Me.Pet.Buff(mq.TLO.Me.Pet.Buff(spell.Name())).Duration() / 1000, " sec")
             return false
         end
-        if is_spell_in_book(spellName) and spell.StacksPet() then
+        if have_spell(spellName) and spell.StacksPet() then
             --all_tellf("ERROR cannot buff pet with %s (dont stack with current buffs)", spellName)
             return false
         end
@@ -96,7 +96,7 @@ function refreshBuff(buffItem, spawn)
         return
     end
 
-    if not is_spell_ability_ready(spellName) and is_spell_in_book(spellName) and not is_memorized(spellName) then
+    if not is_spell_ability_ready(spellName) and have_spell(spellName) and not is_memorized(spellName) then
         local gem = 5
         if spellConfig.Gem ~= nil then
             gem = spellConfig.Gem
@@ -260,7 +260,7 @@ function castSpellAbility(spawn, row, callback)
         return false
     end
 
-    if not is_spell_in_book(spell.Name) and have_item(spell.Name) and not is_item_clicky_ready(spell.Name) then
+    if not have_spell(spell.Name) and have_item(spell.Name) and not is_item_clicky_ready(spell.Name) then
         -- Item and spell examples: Molten Orb (MAG)
         log.Debug("SKIP cast, item clicky not ready: %s", spell.Name)
         return false
@@ -306,7 +306,7 @@ function castSpell(name, spawnId)
             delay(100)
         end
 
-        if not is_spell_in_book(name) and have_item(name) then
+        if not have_spell(name) and have_item(name) then
             -- Item and spell examples: Molten Orb (MAG)
             if not is_item_clicky_ready(name) then
                 all_tellf("ERROR: castSpell was called with item clicky not ready to cast (unlikely): %s", name)
@@ -367,7 +367,7 @@ end
 function getSpellFromBuff(name)
     if have_item(name) then
         return mq.TLO.FindItem(name).Clicky.Spell
-    elseif is_spell_in_book(name) then
+    elseif have_spell(name) then
         return get_spell(name)
     elseif have_alt_ability(name) then
         return mq.TLO.Me.AltAbility(name).Spell
@@ -407,7 +407,7 @@ end
 function memorize_spell(spellRow, defaultGem)
     local o = parseSpellLine(spellRow) -- XXX parse this once on script startup. dont evaluate all the time !!!
 
-    if not is_spell_in_book(o.Name) then
+    if not have_spell(o.Name) then
         all_tellf("ERROR don't know spell/song %s", o.Name)
         cmd("/beep 1")
         return nil
@@ -445,7 +445,7 @@ function cast_mgb_spell(spellName)
         return
     end
 
-    if not have_alt_ability(spellName) and not is_spell_in_book(spellName) then
+    if not have_alt_ability(spellName) and not have_spell(spellName) then
         all_tellf("\ar%s is not available...", spellName)
         return
     end
@@ -532,26 +532,26 @@ function cast_evac_spell()
 
     if class_shortname() == "DRU" then
         -- L57 Succor (9s cast, cost 100 mana)
-        if is_spell_in_book("Succor") then
+        if have_spell("Succor") then
             castSpellRaw("Succor", nil, "gem5 -maxtries|3")
             return
         end
 
         -- L18 Lesser Succor (10.5s cast, cost 150 mana)
-        if is_spell_in_book("Lesser Succor") then
+        if have_spell("Lesser Succor") then
             castSpellRaw("Lesser Succor", nil, "gem5 -maxtries|3")
             return
         end
         log.Error("I have no evac spell!")
     elseif class_shortname() == "WIZ" then
         -- L57 Evacuate (9s cast, cost 100 mana)
-        if is_spell_in_book("Evacuate") then
+        if have_spell("Evacuate") then
             castSpellRaw("Evacuate", nil, "gem5 -maxtries|3")
             return
         end
 
         -- L18 Lesser Evacuate (10.5s cast, cost 150 mana)
-        if is_spell_in_book("Lesser Evacuate") then
+        if have_spell("Lesser Evacuate") then
             castSpellRaw("Lesser Evacuate", nil, "gem5 -maxtries|3")
             return
         end
@@ -657,6 +657,10 @@ end
 
 ---@param spawnID integer
 function rez_it(spawnID)
+    local rez = get_rez_spell_item_aa()
+    if rez == nil then
+        return
+    end
     local spawn = spawn_from_id(spawnID)
     if spawn == nil then
         -- unlikely
@@ -664,11 +668,14 @@ function rez_it(spawnID)
         return
     end
     log.Info("Performing rez on %s, %d %s", spawn.Name(), spawnID, type(spawnID))
+    if have_spell(rez) and not is_memorized(rez) then
+        mq.cmdf('/memorize "%s" %d', rez, 5)
+        mq.delay(2000)
+    end
 
     -- try 3 times to get a rez spell before giving up (to wait for ability to become ready...)
     for i = 1, 3 do
-        local rez = get_rez_spell_item_aa()
-        if rez ~= nil then
+        if is_alt_ability_ready(rez) or is_spell_ready(rez) or is_item_clicky_ready(rez) then
             all_tellf("Rezzing \ag%s\ax with \ay%s\ax. %d/3", spawn.Name(), rez, i)
             castSpellAbility(spawn, rez)
             break
@@ -680,12 +687,23 @@ function rez_it(spawnID)
     end
 end
 
+
 function ae_rez()
+    local rez = get_rez_spell_item_aa()
+    if rez == nil then
+        return
+    end
+
     local spawnQuery = 'pccorpse radius 100'
     local corpses = spawn_count(spawnQuery)
 
     all_tellf("\amAERez started in %s\ax (%d corpses) ...", zone_shortname(), corpses)
     wait_until_not_casting()
+
+    if have_spell(rez) and not is_memorized(rez) then
+        mq.cmdf('/memorize "%s" %d', rez, 5)
+        mq.delay(2000)
+    end
 
     for i = 1, corpses do
         ---@type spawn
@@ -694,14 +712,11 @@ function ae_rez()
             log.Info("Trying to rez %s", spawn.Name())
             target_id(spawn.ID())
 
-            local rez = get_rez_spell_item_aa()
-            if rez ~= nil then
-                if spawn ~= nil then
-                    all_tellf("\amRezzing %s\ax with %s", spawn.Name(), rez)
-                    castSpellRaw(rez, spawn.ID())
-                    delay(3000)
-                    wait_until_not_casting()
-                end
+            if is_alt_ability_ready(rez) or is_spell_ready(rez) or is_item_clicky_ready(rez) then
+                all_tellf("\amRezzing %s\ax with %s", spawn.Name(), rez)
+                castSpellRaw(rez, spawn.ID())
+                delay(3000)
+                wait_until_not_casting()
             else
                 all_tellf("\arWARN\ax: Not ready to rez \ag%s\ax.", spawn.Name())
             end

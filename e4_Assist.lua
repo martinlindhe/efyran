@@ -88,7 +88,7 @@ end
 -- Summons missing component for nukes. Only for magicians
 -- eg: "Molten Orb/NoAggro/Summon|Summon: Molten Orb" (MAG)
 function Assist.summonNukeComponents()
-    if botSettings.settings.assist == nil or botSettings.settings.assist.nukes == nil or not is_mag() then
+    if botSettings.settings.assist == nil or botSettings.settings.assist.nukes == nil or not is_mag() or is_naked() then
         return
     end
 

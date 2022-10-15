@@ -136,7 +136,7 @@ function CommandQueue.Process()
     elseif v.Name == "aerez" then
         ae_rez()
     elseif v.Name == "mgb" then
-        if not is_spell_in_book(v.Arg) and not have_alt_ability(v.Arg) then
+        if not have_spell(v.Arg) and not have_alt_ability(v.Arg) then
             all_tellf("FATAL: I cannot mgb this, dont have it: %s", v.Arg)
             return
         end

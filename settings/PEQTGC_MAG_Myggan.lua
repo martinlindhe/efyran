@@ -152,7 +152,7 @@ settings.assist = {
             "Raging Servant/GoM",
 
             -- L69 Summon: Molten Orb (10 charge 700 hp fire nuke, -10 fire adj, instant cast, 12s recast)
-            "Molten Orb/NoAggro/Summon|Summon: Molten Orb/Reagent|Bag of the Tinkerers", -- Reagent check in order to not create Molten Orb while waiting for rez
+            "Molten Orb/NoAggro/Summon|Summon: Molten Orb",
 
             "Burning Earth/NoAggro/MinMana|10",
             "Ancient: Nova Strike/GoM/NoAggro",

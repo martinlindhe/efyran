@@ -54,7 +54,7 @@ function buffs.Init()
     bard.resumeMelody()
 end
 
-local announceBuffsTimer = timer.new_expires_in(2 * 60, 3) -- announce buffs 3 sec after script start, then every 2 minutes
+local announceBuffsTimer = timer.new_expires_in(5 * 60, 3) -- announce buffs 3 sec after script start, then every 5 minutes
 
 local refreshBuffsTimer = timer.new_random(10 * 1) -- 10s
 
@@ -84,7 +84,7 @@ function buffs.AnnounceAvailablity()
         -- see if we have any rank of this buff
         for rowIdx, checkRow in pairs(buffGroup) do
             local spellConfig = parseSpellLine(checkRow)
-            if is_spell_in_book(spellConfig.Name) then
+            if have_spell(spellConfig.Name) then
                 availableBuffGroups = availableBuffGroups .. " " .. groupIdx
                 break
             end
@@ -105,6 +105,10 @@ end
 -- announce buff availability, handle debuffs, refresh buffs/auras/pets/pet buffs, request buffs and handle buff requests
 function buffs.Tick()
     if not is_brd() and is_casting() then
+        return
+    end
+
+    if is_naked() then
         return
     end
 
@@ -293,7 +297,7 @@ function handleBuffRequest(req)
                 all_tellf("FATAL ERROR cant lookup %s", spellName)
                 return
             end
-            if is_spell_in_book(spellName) then
+            if have_spell(spellName) then
                 spellName = spell.RankName()
                 --if spell.StacksTarget() then
                     minLevel = n

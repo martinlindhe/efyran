@@ -302,7 +302,7 @@ function Heal.performLifeSupport()
         elseif have_item(spellConfig.Name) and not is_item_clicky_ready(spellConfig.Name) then
             --cmd("/dgtell all performLifeSupport skip ", spellConfig.Name, ", item clicky is not ready")
             skip = true
-        elseif is_spell_in_book(spellConfig.Name) then
+        elseif have_spell(spellConfig.Name) then
             if not is_memorized(spellConfig.Name) then
                 all_tellf("performLifeSupport skip %s, spell is not memorized (fix: list it in settings.gems so it can be used)", spellConfig.Name)
                 skip = true
@@ -353,10 +353,10 @@ function healPeer(spell_list, peer, pct)
             -- remove, dont meet heal criteria
             -- DONT RETURN HERE because specific spell does not meet criteria!
             log.Debug("Skip using of heal, heal pct for %s is %d. dont need heal at %d for %s", spellConfig.Name, spellConfig.HealPct, pct, peer)
-        elseif not is_spell_in_book(spellConfig.Name) and not have_item(spellConfig.Name) then
+        elseif not have_spell(spellConfig.Name) and not have_item(spellConfig.Name) then
             -- SKIP clickes that is not on me
             log.Warn("Skip using of heal to heal %s at %d, I do not have item on me: %s", peer, pct, spellConfig.Name)
-        elseif not is_spell_in_book(spellConfig.Name) and have_item(spellConfig.Name) and not is_item_clicky_ready(spellConfig.Name) then
+        elseif not have_spell(spellConfig.Name) and have_item(spellConfig.Name) and not is_item_clicky_ready(spellConfig.Name) then
             -- SKIP clickies that is not ready
             log.Info("Skip using of heal to heal %s at %d, clicky %s is not ready", peer, pct, spellConfig.Name)
         else

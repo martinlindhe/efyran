@@ -134,7 +134,7 @@ function spawn_from_peer_name(name)
     return spawn_from_query("pc =".. name)
 end
 
--- returns true if `name` is an item i have
+-- returns true if `name` is an item i have  ( XXX in inventory! not in bank. separate checks for banked items / banked+inventory)
 ---@return boolean
 function have_item(name)
     return mq.TLO.FindItemCount("=" .. name)() > 0
@@ -215,7 +215,7 @@ end
 -- Is spell in my spellbook?
 ---@param name string
 ---@return boolean
-function is_spell_in_book(name)
+function have_spell(name)
     if have_alt_ability(name) then
         -- NOTE: some AA's overlap with spell names. Examples:
         -- CLR/06 Sanctuary / CLR Sanctuary AA
@@ -432,6 +432,12 @@ end
 ---@return boolean
 function is_brd()
     return mq.TLO.Me.Class.ShortName() == "BRD"
+end
+
+-- Am I a Paladin?
+---@return boolean
+function is_pal()
+    return mq.TLO.Me.Class.ShortName() == "PAL"
 end
 
 -- Am I a Magician?
@@ -710,6 +716,15 @@ function use_veteran_aa(name)
         return
     end
     use_alt_ability(name, mq.TLO.Me.ID())
+end
+
+-- Guestimates if you are naked/waiting for rez (being "naked" will block buffing)
+---@return boolean
+function is_naked()
+    if mq.TLO.Me.Inventory("arms").ID() == nil and mq.TLO.Me.Inventory("legs").ID() == nil and mq.TLO.Me.Inventory("head").ID() == nil and mq.TLO.Me.Inventory("mainhand").ID() == nil then
+        return true
+    end
+    return false
 end
 
 ---@return boolean
@@ -1121,37 +1136,36 @@ function split_str(s, sSeparator)
         table.insert(aRecord, string.sub(s, nStart))
     end
     return aRecord
- end
+end
 
--- Returns the name of rez spell/aa/item ready to be used, or nil
+local rezSpells = {
+    -- order: falling priority
+    "Water Sprinkler of Nem Ankh",          -- CLR/65 Epic1.0: 96% exp, 10s cast
+    "Blessing of Resurrection",             -- CLR/65 sof AA : 96% exp, 3s cast, 12s recast
+    "Reviviscence",                         -- CLR/56        : 96% exp, 7s cast, 600 mana
+    "Resurrection",                         -- CLR/47, PAL/59: 90% exp, 6s cast, 20s recast, 700 mana
+    "Restoration",                          -- CLR/42, PAL/55: 75% exp, 6s cast, 20s recast
+    "Resuscitate",                          -- CLR/37        : 60% exp, 6s cast, 20s recast
+    "Renewal",                              -- CLR/32, PAL/49: 50% exp, 6s cast, 20s recast
+    "Revive",                               -- CLR/27, PAL/39: 35% exp, 6s cast, 20s recast
+    "Reparation",                           -- CLR/22, PAL/31: 20% exp, 6s cast, 20s recast
+    "Reconstitution",                       -- CLR/18, PAL/30: 10% exp, 6s cast, 20s recast
+    "Reanimation",                          -- CLR/12, PAL/22:  0% exp, 6s cast, 20s recast
+
+    "Incarnate Anew",                       -- DRU/59, SHM/59 Incarnate Anew (90% exp, 20s cast, 700 mana)
+    --"Call of the Wild",                     -- DRU/XX, SHM/xx AA, 0% exp, corpse can be properly rezzed later)
+
+    --"Convergence/Reagent|Essence Emerald",  -- NEC/53 (93% exp)
+}
+
+-- Returns the name of the best >= 90% rez for DRU/SHM, or any best available rez for CLR/PAL, or nil if none
 ---@ return string|nil
 function get_rez_spell_item_aa()
-    local rezzes = { -- in falling priority
-        "Blessing of Resurrection",             -- CLR/65 (sof) AA. 96% exp, 3s cast, 12s recast
-        "Water Sprinkler of Nem Ankh",          -- CLR/65 Epic 1.0. 96% exp, 10s cast
-        "Reviviscence",                         -- CLR/56. 96% exp, 7s cast, 600 mana
-        "Resurrection",                         -- CLR/47, PAL/59: 90% exp, 6s cast, 20s recast, 700 mana
-        "Restoration",                          -- CLR/42, PAL/55: 75% exp, 6s cast, 20s recast
-        "Resuscitate",                          -- CLR/37: 60% exp, 6s cast, 20s recast
-        "Renewal",                              -- CLR/32, PAL/49: 50% exp, 6s cast, 20s recast
-        "Revive",                               -- CLR/27, PAL/39: 35% exp, 6s cast, 20s recast
-        "Reparation",                           -- CLR/22, PAL/31: 20% exp, 6s cast, 20s recast
-        "Reconstitution",                       -- CLR/18, PAL/30: 10% exp, 6s cast, 20s recast
-        "Reanimation",                          -- CLR/12, PAL/22: 0% exp, 6s cast, 20s recast
-
-        "Incarnate Anew",                       -- DRU/59, SHM/59 Incarnate Anew (90% exp, 20s cast, 700 mana)
-        --"Call of the Wild",                     -- DRU/XX, SHM/xx AA, 0% exp, corpse can be properly rezzed later)
-
-        --"Convergence/Reagent|Essence Emerald",  -- NEC/53 (93% exp)
-    }
-
-    -- find first rez that is ready to use
-    for k, rez in pairs(rezzes) do
-        if is_alt_ability_ready(rez) or is_spell_ready(rez) or is_item_clicky_ready(rez) then
+    for k, rez in pairs(rezSpells) do
+        if have_alt_ability(rez) or have_spell(rez) or have_item(rez) then
             return rez
         end
     end
-
     return nil
 end
 
@@ -1191,7 +1205,7 @@ local auraNames = {
 function find_best_aura()
     local aura = nil
     for k, name in pairs(auraNames) do
-        if have_combat_ability(name) or is_spell_in_book(name) then
+        if have_combat_ability(name) or have_spell(name) then
             aura = name
         end
     end
@@ -1256,7 +1270,7 @@ function known_spell_ability(name)
         --print("known_spell_ability aa TRUE", name)
         return true
     end
-    if is_spell_in_book(name) then
+    if have_spell(name) then
         --print("known_spell_ability spell TRUE", name)
         return true
     end

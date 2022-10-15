@@ -264,7 +264,7 @@ function QoL.Init()
         end
     end)
 
-    -- Perform rez on target or delegate it to nearby cleric
+    -- Perform rez on target (CLR,DRU,SHM,PAL will auto use >= 90% rez spells) or delegate it to nearby cleric
     ---@param spawnID string
     mq.bind("/rezit", function(spawnID)
         if is_orchestrator() then
@@ -278,13 +278,14 @@ function QoL.Init()
                 return
             end
 
-            spawnID = spawn.ID()
+            spawnID = tostring(spawn.ID())
             if spawn.Type() ~= "Corpse" then
                 log.Error("/rezit: Target is not a corpse. Type %s",  spawn.Type())
                 return
             end
 
-            if not is_clr() then
+            -- non-cleric orchestrator asks nearby CLR to rez spawnID
+            if not me_priest() and not is_pal() then
                 local clrName = nearest_peer_by_class("CLR")
                 if clrName == nil then
                     all_tellf("\arERROR\ax: Cannot request rez, no cleric nearby.")
@@ -296,7 +297,7 @@ function QoL.Init()
             end
         end
 
-        commandQueue.Add("rezit", tostring(spawnID))
+        commandQueue.Add("rezit", spawnID)
     end)
 
     mq.bind("/mounton", function()
