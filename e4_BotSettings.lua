@@ -1,7 +1,7 @@
 local log = require("knightlinc/Write")
 
--- FIXME: relative path...
-local settingsRoot = "D:/dev-mq/mqnext-e4-lua/settings"
+local mq = require("mq")
+local settingsRoot = mq.TLO.Lua.Dir() .. "/settings"
 
 ---@class PeerSettings
 ---@field public assist PeerSettingsAssist

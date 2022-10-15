@@ -13,8 +13,8 @@ groups.team12 = {
 return groups
 ]]
 
--- FIXME: relative path...
-local settingsRoot = 'D:/dev-mq/mqnext-e4-lua/settings'
+local mq = require("mq")
+local settingsRoot = mq.TLO.Lua.Dir() .. "/settings"
 
 function Group.Init()
 
