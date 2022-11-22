@@ -254,7 +254,7 @@ GroupBuffs.CLR = {
     -- L76 Symbol of Kaerra Rk. II (1847 hp, cost 1190 mana)
     -- L80 Kaerra's Mark (1563 hp, cost 3130 mana)
     -- NOTE: stacks with DRU Skin and AC
-    ["clr_symbol"] = {
+    clr_symbol = {
         "Symbol of Naltron/MinLevel|1", -- single
         "Symbol of Marzin/MinLevel|42", -- single
         "Naltron's Mark/MinLevel|44",

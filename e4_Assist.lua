@@ -151,7 +151,10 @@ function Assist.beginKillSpawnID(spawnID)
         mq.cmdf("/pet attack %d", spawnID)
     end
 
-    Assist.lastFollowID = follow.spawn.ID()
+    Assist.lastFollowID = 0
+    if follow.spawn ~= nil then
+        Assist.lastFollowID = follow.spawn.ID()
+    end
     follow.Stop()
 
     mq.cmdf("/target id %d", spawnID)
@@ -226,15 +229,16 @@ function Assist.EndFight()
 end
 
 -- Returns true if spell/ability was used
+---@param targetID integer
 ---@param abilityRows string[]
 ---@param category string purely descriptive in log messages
 ---@param used? array optionally keep track of used abilites
 ---@return boolean
-function Assist.performSpellAbility(abilityRows, category, used)
+function performSpellAbility(targetID, abilityRows, category, used)
     if abilityRows == nil then
         return false
     end
-    if Assist.targetID == 0 then
+    if targetID == 0 then
         -- signal ability was used, in order to leave Assist.Tick() quickly when target is nil
         return true
     end
@@ -244,7 +248,7 @@ function Assist.performSpellAbility(abilityRows, category, used)
         if (used == nil or used[row] == nil)
         and is_spell_ability_ready(spellConfig.Name)
         and (is_brd() or not is_casting()) then
-            local spawn = spawn_from_id(Assist.targetID)
+            local spawn = spawn_from_id(targetID)
             if not spawn then
                 -- signal ability was used, in order to leave Assist.Tick() quickly when target is nil
                 return true
@@ -301,34 +305,34 @@ function Assist.Tick()
         cmdf("/target id %d", spawn.ID())
     end
 
-    if Assist.quickburns and Assist.performSpellAbility(botSettings.settings.assist.quickburns, "quickburn") then
+    if Assist.quickburns and performSpellAbility(Assist.target.ID(), botSettings.settings.assist.quickburns, "quickburn") then
         return
     end
 
-    if Assist.longburns and Assist.performSpellAbility(botSettings.settings.assist.longburns, "longburn") then
+    if Assist.longburns and performSpellAbility(Assist.target.ID(), botSettings.settings.assist.longburns, "longburn") then
         return
     end
 
-    if Assist.fullburns and Assist.performSpellAbility(botSettings.settings.assist.fullburns, "fullburn") then
+    if Assist.fullburns and performSpellAbility(Assist.target.ID(), botSettings.settings.assist.fullburns, "fullburn") then
         return
     end
 
     -- perform debuffs ONE TIME EACH on assist before starting nukes
     if botSettings.settings.assist.debuffs ~= nil and not is_casting() and spawn ~= nil
-    and Assist.performSpellAbility(botSettings.settings.assist.debuffs, "debuff", Assist.debuffsUsed) then
+    and performSpellAbility(Assist.target.ID(), botSettings.settings.assist.debuffs, "debuff", Assist.debuffsUsed) then
         return
     end
 
     -- perform dots ONE TIME EACH on assist before staring nukes
     if botSettings.settings.assist.dots ~= nil and not is_casting() and spawn ~= nil
-    and Assist.performSpellAbility(botSettings.settings.assist.dots, "dot", Assist.dotsUsed) then
+    and performSpellAbility(Assist.target.ID(), botSettings.settings.assist.dots, "dot", Assist.dotsUsed) then
         return
     end
 
     -- use melee abilities
     if melee and botSettings.settings.assist.abilities ~= nil
     and spawn ~= nil and spawn.Distance() < Assist.meleeDistance and spawn.LineOfSight()
-    and Assist.performSpellAbility(botSettings.settings.assist.abilities, "ability") then
+    and performSpellAbility(Assist.target.ID(), botSettings.settings.assist.abilities, "ability") then
         return
     end
 
@@ -339,7 +343,7 @@ function Assist.Tick()
             Assist.spellSet = "main"
         end
         if botSettings.settings.assist.nukes[Assist.spellSet] ~= nil then
-            if Assist.performSpellAbility(botSettings.settings.assist.nukes[Assist.spellSet], "nuke") then
+            if performSpellAbility(Assist.target.ID(), botSettings.settings.assist.nukes[Assist.spellSet], "nuke") then
                 return
             end
         else

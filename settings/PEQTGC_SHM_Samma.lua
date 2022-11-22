@@ -14,9 +14,10 @@ settings.gems = {
     ["Spirit of the Panther"] = 2,
     ["Balance of Discord"] = 3,
     ["Spiritual Serenity"] = 4,
+
     ["Curse of Sisslak"] = 6,
     ["Talisman of Wunshi"] = 7,
-    ["Blood of Nadox"] = 8,
+    ["Lingering Sloth"] = 8,
     ["Remove Greater Curse"] = 9,
 }
 
@@ -43,19 +44,22 @@ settings.self_buffs = {
     --"Rage/MinMana|40",
 }
 
+-- L60 Avatar (100 atk, 100 agi, 100 str, 100 dex, 6.0 min, cost 325 mana) - DOES NOT stack with Night's Dark Terror
+-- L60 Primal Avatar (100 atk, 100 agi, 100 str, 100 dex, 6.4 min, cost 325 mana)
+-- L65 Ferine Avatar (140 atk, 140 agi, 140 str, 140 dex, 6.5 min, cost 350 mana)
+-- L70 Champion (140 atk, 140 agi, 140 str, 140 dex, 10% all skills dmg mod, aerange 60 all nearby, cost 1500 mana)
+
+-- L68 Lingering Sloth (add a pet proc that can slow mobs that hit it)
+
 settings.combat_buffs = { -- XXX impl
+    -- NOTE: SHM Erland does ae Champion
+    -- NOTE: Sloth done by me
+    ["Lingering Sloth"] = {
+        "Bandy",
+    },
+}
+
 --[[
-; combat buffs:
-; L60 Avatar (100 atk, 100 agi, 100 str, 100 dex, 6.0 min, cost 325 mana) - DOES NOT stack with Night's Dark Terror
-; L60 Primal Avatar (100 atk, 100 agi, 100 str, 100 dex, 6.4 min, cost 325 mana)
-; L65 Ferine Avatar (140 atk, 140 agi, 140 str, 140 dex, 6.5 min, cost 350 mana)
-; L70 Champion (140 atk, 140 agi, 140 str, 140 dex, 10% all skills dmg mod, aerange 60 all nearby, cost 1500 mana)
-; NOTE: SHM Erland does ae Champion
-;Combat Buff=Champion/Bandy/Gem|8
-
-; L68 Lingering Sloth (add a pet proc that can slow mobs that hit it)
-; NOTE: Sloth done by Erland
-
 Proc Buff (On/Off)=On
 ; proc buffs:
 ; L50 Spirit of the Puma (add proc Puma Maw, rate mod 400, 1 min)
@@ -67,7 +71,7 @@ Proc Buff Class=BRD/ROG/MNK/BER
 Instant Buff=
 Combat Buff=
 ]]--
-}
+
 
 
 settings.pet = {

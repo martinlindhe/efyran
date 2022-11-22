@@ -37,33 +37,17 @@ settings.self_buffs = {
     "Talisman of the Tribunal/MinMana|50",
 }
 
+-- L70 Champion (140 atk, 140 agi, 140 str, 140 dex, 10% all skills dmg mod, aerange 60 all nearby, cost 1500 mana)
 settings.combat_buffs = { -- XXX impl
+    -- NOTE: SHM Erland does ae Champion
+    ["Champion"] = {
+        "Azoth", "Yelwen", "Laser", "Knuck",
+        "Blod", "Urinfact",
+        "Kniven", "Strupen",
+    },
+}
+
 --[[
-; combat buffs:
-; L60 Avatar (100 atk, 100 agi, 100 str, 100 dex, 6.0 min, cost 325 mana) - DOES NOT stack with Night's Dark Terror
-; L60 Primal Avatar (100 atk, 100 agi, 100 str, 100 dex, 6.4 min, cost 325 mana)
-; L65 Ferine Avatar (140 atk, 140 agi, 140 str, 140 dex, 6.5 min, cost 350 mana)
-; L70 Champion (140 atk, 140 agi, 140 str, 140 dex, 10% all skills dmg mod, aerange 60 all nearby, cost 1500 mana)
-; NOTE: SHM Erland does ae Champion
-Combat Buff=Champion/Azoth/Gem|4
-Combat Buff=Champion/Yelwen
-Combat Buff=Champion/Laser
-Combat Buff=Champion/Knuck
-
-Combat Buff=Champion/Blod
-Combat Buff=Champion/Urinfact
-
-Combat Buff=Champion/Kniven
-Combat Buff=Champion/Strupen
-
-; L68 Lingering Sloth (add a pet proc that can slow mobs that hit it)
-; NOTE: Sloth done by me
-Combat Buff=Lingering Sloth/Bandy/MinMana|20/Gem|6
-;;Combat Buff=Lingering Sloth/Manu/MinMana|25
-;;Combat Buff=Lingering Sloth/Nullius/MinMana|25
-;;Combat Buff=Lingering Sloth/Spela/MinMana|30
-
-
 Proc Buff (On/Off)=On
 ; proc buffs:
 ; L50 Spirit of the Puma (add proc Puma Maw, rate mod 400, 1 min)
@@ -75,7 +59,6 @@ Proc Buff Class=BRD/ROG/MNK/BER
 Instant Buff=
 Combat Buff=
 ]]--
-}
 
 
 settings.pet = {
