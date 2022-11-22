@@ -1,3 +1,4 @@
+local mq = require("mq")
 local log = require("knightlinc/Write")
 
 local Hail = {}
@@ -99,6 +100,7 @@ local hailTargets = {
 
     ["crescent"] = { -- Crescent Reach
         ["Vladnelg Galvern"] = "interesting ore", -- LDoN flag to get Adventurer's Stone (1/2)
+        ["Priestess Aelea"] = "bind", -- soulbinder
     },
     ["Butcher"] = {
         ["Vual Stoutest"] = "farstone", -- LDoN flag to get Adventurer's Stone (2/2)    . XXX sro one is faster to port to. add sro one
