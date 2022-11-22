@@ -9,6 +9,18 @@ It was created after playing with and modding the older [E3 macro](https://githu
 Some concepts are borrowed from E3, while others are new. No code has been reused from E3.
 
 
+## Moving around
+
+Add some socials to simplify control:
+
+| Social                    |  Command
+|---------------------------|-------------
+| /hotbutton FOLLOW         | /followon
+| /hotbutton STOP           | /followoff
+| /hotbutton KILL           | /assiston
+
+
+
 ## How auto healing works
 
 Instead of all healers constantly monitoring everyone, the peers instead report when they need healing.
@@ -123,6 +135,9 @@ Buff Spell Level   Minimum Target Level
 
 /rezit                      - rez target
 /aerez                      - perform ae rez
+
+/e4                         - restart e4 on current peer
+/e4all                      - restart e4 on all peers
 ```
 
 xxx document rest
@@ -137,7 +152,7 @@ mag: in e3 you could list Molten Orb as a nuke and it will auto summon,
 in e4 it was changed to work with any spells, so you need to be explicit with the Summon filter.
 Example: "Molten Orb/NoAggro/Summon|Summon: Molten Orb"
 
-
+Also, efyran is written for modern Macroquest.
 
 
 

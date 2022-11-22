@@ -6,6 +6,12 @@ local Group = { settings = nil }
 -- FIXME: add /savegroup command to fill this data automatically
 local savedGroupsTemplate = [[
 local groups = { }
+
+-- load this group with "/recall team6"
+groups.team6 = {
+    {"One", "Two", "Three", "Four", "Five", "Six"},
+}
+
 groups.team12 = {
     {"One", "Two", "Three", "Four", "Five", "Six"},
     {"Second", "Group", "Toons", "Here", "They", "Are"},

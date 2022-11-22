@@ -22,11 +22,21 @@ local peerTemplate = [[
 ---@type PeerSettings
 local settings = { }
 
+settings.gems = {
+    --["Minor Healing"] = 1,
+}
+
 settings.swap = {
     main = "",
 }
 
 settings.self_buffs = {
+}
+
+settings.healing = {
+    life_support = {
+        "Distillate of Divine Healing XI/HealPct|10",
+    },
 }
 
 settings.assist = {

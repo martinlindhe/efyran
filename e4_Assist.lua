@@ -7,7 +7,7 @@ local botSettings = require("e4_BotSettings")
 local heal    = require("e4_Heal")
 
 local Assist = {
-    target = nil, -- the current spawn I am attacking
+    targetID = 0, -- the current spawn I am attacking
 
     -- the current spell set
     spellSet = "main",
@@ -244,7 +244,7 @@ function performSpellAbility(targetID, abilityRows, category, used)
     end
     for v, row in ipairs(abilityRows) do
         local spellConfig = parseSpellLine(row)
-        log.Info("Evaluating %s %s", category, spellConfig.Name)
+        -- log.Debug("Evaluating %s %s", category, spellConfig.Name)
         if (used == nil or used[row] == nil)
         and is_spell_ability_ready(spellConfig.Name)
         and (is_brd() or not is_casting()) then
@@ -282,7 +282,7 @@ function Assist.Tick()
         return
     end
 
-    log.Info("Assist.Tick()")
+    --log.Debug("Assist.Tick()")
 
     if melee and spawn.MaxRangeTo() > Assist.meleeDistance and assistStickTimer:expired() then
         log.Info("stick update meleeDistance %f!", Assist.meleeDistance)
@@ -305,34 +305,34 @@ function Assist.Tick()
         cmdf("/target id %d", spawn.ID())
     end
 
-    if Assist.quickburns and performSpellAbility(Assist.target.ID(), botSettings.settings.assist.quickburns, "quickburn") then
+    if Assist.quickburns and performSpellAbility(Assist.targetID, botSettings.settings.assist.quickburns, "quickburn") then
         return
     end
 
-    if Assist.longburns and performSpellAbility(Assist.target.ID(), botSettings.settings.assist.longburns, "longburn") then
+    if Assist.longburns and performSpellAbility(Assist.targetID, botSettings.settings.assist.longburns, "longburn") then
         return
     end
 
-    if Assist.fullburns and performSpellAbility(Assist.target.ID(), botSettings.settings.assist.fullburns, "fullburn") then
+    if Assist.fullburns and performSpellAbility(Assist.targetID, botSettings.settings.assist.fullburns, "fullburn") then
         return
     end
 
     -- perform debuffs ONE TIME EACH on assist before starting nukes
     if botSettings.settings.assist.debuffs ~= nil and not is_casting() and spawn ~= nil
-    and performSpellAbility(Assist.target.ID(), botSettings.settings.assist.debuffs, "debuff", Assist.debuffsUsed) then
+    and performSpellAbility(Assist.targetID, botSettings.settings.assist.debuffs, "debuff", Assist.debuffsUsed) then
         return
     end
 
     -- perform dots ONE TIME EACH on assist before staring nukes
     if botSettings.settings.assist.dots ~= nil and not is_casting() and spawn ~= nil
-    and performSpellAbility(Assist.target.ID(), botSettings.settings.assist.dots, "dot", Assist.dotsUsed) then
+    and performSpellAbility(Assist.targetID, botSettings.settings.assist.dots, "dot", Assist.dotsUsed) then
         return
     end
 
     -- use melee abilities
     if melee and botSettings.settings.assist.abilities ~= nil
     and spawn ~= nil and spawn.Distance() < Assist.meleeDistance and spawn.LineOfSight()
-    and performSpellAbility(Assist.target.ID(), botSettings.settings.assist.abilities, "ability") then
+    and performSpellAbility(Assist.targetID, botSettings.settings.assist.abilities, "ability") then
         return
     end
 
@@ -343,7 +343,7 @@ function Assist.Tick()
             Assist.spellSet = "main"
         end
         if botSettings.settings.assist.nukes[Assist.spellSet] ~= nil then
-            if performSpellAbility(Assist.target.ID(), botSettings.settings.assist.nukes[Assist.spellSet], "nuke") then
+            if performSpellAbility(Assist.targetID, botSettings.settings.assist.nukes[Assist.spellSet], "nuke") then
                 return
             end
         else
