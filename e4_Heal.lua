@@ -230,18 +230,19 @@ function Heal.medCheck()
         return
     end
 
-    if follow.spawn ~= nil or is_brd() or in_combat() or is_hovering() or is_casting() or is_moving() or window_open("SpellBookWnd") or window_open("LootWnd") then
+    if is_sitting() and mq.TLO.Me.PctMana() >= 100 then
+        all_tellf("Ending medbreak, full mana.")
+        cmd("/sit off")
         return
     end
 
-    if mq.TLO.Me.MaxMana() > 0 then
-        if mq.TLO.Me.PctMana() < 70 and mq.TLO.Me.Standing() then
-            all_tellf("Low mana, medding at %d%%", mq.TLO.Me.PctMana())
-            cmd("/sit on")
-        elseif mq.TLO.Me.PctMana() >= 100 and not mq.TLO.Me.Standing() and not mq.TLO.Me.Ducking() then
-            all_tellf("Ending medbreak, full mana.")
-            cmd("/sit off")
-        end
+    if follow.spawn ~= nil or is_brd() or is_sitting() or in_combat() or is_hovering() or is_casting() or is_moving() or window_open("SpellBookWnd") or window_open("LootWnd") then
+        return
+    end
+
+    if mq.TLO.Me.MaxMana() > 0 and mq.TLO.Me.PctMana() < 70 then
+        all_tellf("Low mana, medding at %d%%", mq.TLO.Me.PctMana())
+        cmd("/sit on")
     end
 end
 
@@ -257,7 +258,7 @@ function Heal.performLifeSupport()
 
     if botSettings.settings.healing == nil or botSettings.settings.healing.life_support == nil then
         if mq.TLO.Me.PctHPs() < 70 then
-            all_tellf("performLifeSupport ERROR I dont have healing.life_support configured. Current HP is %d%%", mq.TLO.Me.PctHPs())
+            log.Error("performLifeSupport ERROR I dont have healing.life_support configured. Current HP is %d%%", mq.TLO.Me.PctHPs())
         end
         return
     end

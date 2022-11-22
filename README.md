@@ -41,7 +41,7 @@ When picking from the queue:
 
 # How auto buffing works
 
-e3 had a concept of Bot Buffs and Group Buffs. We chose to instead implement a beg-for-buff system,
+e3 had a concept of Bot Buffs and Group Buffs. Efyran chose to instead implement a beg-for-buff system,
 which makes use of "buff groups" (tags mapping to multiple buffs). This setup allows for a zero-configuration
 buff bot with default settings, while still allowing fine grained control where you need to.
 

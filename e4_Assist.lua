@@ -247,6 +247,7 @@ function performSpellAbility(targetID, abilityRows, category, used)
         -- log.Debug("Evaluating %s %s", category, spellConfig.Name)
         if (used == nil or used[row] == nil)
         and is_spell_ability_ready(spellConfig.Name)
+        and not is_moving()
         and (is_brd() or not is_casting()) then
             local spawn = spawn_from_id(targetID)
             if not spawn then
@@ -300,8 +301,8 @@ function Assist.Tick()
     end
 
     if not is_casting() and (not has_target() or mq.TLO.Target.ID() ~= spawn.ID()) then
-        -- XXX
-        all_tellf("killSpawn WARN: i lost target, restoring to %s (%s). Previous target was %s", spawn.Name(), spawn.Type(), mq.TLO.Target.Name())
+        -- normal when you are a healer
+        log.Debug("killSpawn: i lost target, restoring to %s (%s). Previous target was %s", spawn.Name(), spawn.Type(), mq.TLO.Target.Name())
         cmdf("/target id %d", spawn.ID())
     end
 

@@ -309,7 +309,7 @@ function castSpell(name, spawnId)
         if not have_spell(name) and have_item(name) then
             -- Item and spell examples: Molten Orb (MAG)
             if not is_item_clicky_ready(name) then
-                all_tellf("ERROR: castSpell was called with item clicky not ready to cast (unlikely): %s", name)
+                -- eg Worn Totem, with 4 min buff duration and 10 min recast
                 return
             end
             name = name.."|item"
