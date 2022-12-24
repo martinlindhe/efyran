@@ -1,7 +1,6 @@
 local log = require("knightlinc/Write")
 
 local mq = require("mq")
-local settingsRoot = mq.TLO.Lua.Dir() .. "/settings"
 
 ---@class PeerSettings
 ---@field public assist PeerSettingsAssist
@@ -35,7 +34,7 @@ settings.self_buffs = {
 
 settings.healing = {
     life_support = {
-        "Distillate of Divine Healing XI/HealPct|10",
+        --"Distillate of Divine Healing XI/HealPct|10",
     },
 }
 
@@ -60,7 +59,7 @@ function botSettings.Init()
         return
     end
 
-    local settingsFile = settingsRoot .. "/" .. peer_settings_file()
+    local settingsFile = getEfyranRoot() .. "/settings/" .. peer_settings_file()
     local settings = read_settings(settingsFile)
     if settings ~= nil then
         botSettings.settings = settings()

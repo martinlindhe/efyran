@@ -22,6 +22,8 @@ function QoL.Init()
         log.loglevel = "debug"
     end
 
+    cmdf("/setwintitle %s", mq.TLO.Me.Name())
+
     if is_rof2() then
         cmd("/consent raid") -- XXX persistent raid consent setting on in INI
 
@@ -44,10 +46,6 @@ function QoL.Init()
     if is_orchestrator() then
         cmd("/djoin skillup")
         cmd("/djoin xp")
-    end
-
-    if not is_script_running("agents/healme") then
-        cmd("/lua run agents/healme")
     end
 
     pet.ConfigureTaunt()
@@ -684,7 +682,7 @@ function QoL.loadRequiredPlugins()
     if is_rof2() then
         local requiredEmuPlugins = {
             "MQ2ConstantAffinity",
-            "MQMountClassicModels", -- XXX make use of
+            --"MQMountClassicModels", -- TODO make use of
         }
         for k, v in pairs(requiredEmuPlugins) do
             if not is_plugin_loaded(v) then

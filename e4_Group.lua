@@ -5,27 +5,26 @@ local Group = { settings = nil }
 
 -- FIXME: add /savegroup command to fill this data automatically
 local savedGroupsTemplate = [[
-local groups = { }
-
--- load this group with "/recall team6"
-groups.team6 = {
-    {"One", "Two", "Three", "Four", "Five", "Six"},
+local groups = {
+    -- load this group with "/recall team6"
+    team6 = {
+        {"One", "Two", "Three", "Four", "Five", "Six"},
+    },
+    team12 = {
+        {"One", "Two", "Three", "Four", "Five", "Six"},
+        {"Second", "Group", "Toons", "Here", "They", "Are"},
+    }
 }
 
-groups.team12 = {
-    {"One", "Two", "Three", "Four", "Five", "Six"},
-    {"Second", "Group", "Toons", "Here", "They", "Are"},
-}
 return groups
 ]]
 
 local mq = require("mq")
-local settingsRoot = mq.TLO.Lua.Dir() .. "/settings"
 
 function Group.Init()
 
     if Group.settings == nil then
-        local settingsFile = settingsRoot .. '/' .. current_server() .. '__Saved Groups.lua'
+        local settingsFile = getEfyranRoot() .. '/settings/' .. current_server() .. '__Saved Groups.lua'
 
         local settings = loadfile(settingsFile)
         if settings ~= nil then

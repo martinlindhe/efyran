@@ -2,9 +2,7 @@ local log = require("knightlinc/Write")
 
 require("persistence")
 
-local settingsRoot = "D:/dev-mq/mqnext-e4-lua/settings"
-
-local lootFile = settingsRoot .. "/" .. current_server() .. "__Loot Settings.lua"
+local lootFile = getEfyranRoot() .. "/settings/" .. current_server() .. "__Loot Settings.lua"
 
 -- reads the loot settings from disk
 function ReadLootSettings()

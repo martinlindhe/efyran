@@ -1319,7 +1319,8 @@ end
 -- The name of the heal channel for the current zone.
 ---@return string
 function heal_channel()
-    return string.lower(current_server() .. "_" .. zone_shortname() .. "_healme")
+    local s = string.lower(current_server():gsub("%s+", "-") .. "_" .. zone_shortname() .. "_healme")
+    return s
 end
 
 -- Returns the current zone short name.
@@ -1488,4 +1489,9 @@ end
 ---@param condition? function An optional condition that can end the delay early with a return of true.
 function delay(delayValue, condition)
     mq.delay(delayValue, condition)
+end
+
+---@return string
+function getEfyranRoot()
+    return mq.TLO.Lua.Dir() .. "/efyran"
 end

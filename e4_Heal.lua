@@ -9,6 +9,9 @@ local timer = require("Timer")
 local follow  = require("e4_Follow")
 local buffs   = require("e4_Buffs")
 
+local askForHealTimer = timer.new_expired(5 * 1) -- 5s
+local askForHealPct = 88 -- at what % HP to start begging for heals
+
 local Heal = {
     queue = queue.new(), -- holds toons that requested a heal
 
@@ -121,6 +124,18 @@ function Heal.Tick()
     Heal.acceptRez()
 
     Heal.medCheck()
+
+    Heal.askForHeal()
+end
+
+function Heal.askForHeal()
+    if not is_hovering() and mq.TLO.Me.PctHPs() <= askForHealPct and askForHealTimer:expired() then
+        -- ask for heals if i take damage
+        local s = mq.TLO.Me.Name().." "..mq.TLO.Me.PctHPs() -- "Avicii 82"
+        --print(mq.TLO.Time, "HELP HEAL ME, ", s)
+        cmd("/dgtell "..heal_channel().." "..s)
+        askForHealTimer:restart()
+    end
 end
 
 function Heal.processQueue()

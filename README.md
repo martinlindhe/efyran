@@ -9,6 +9,29 @@ It was created after playing with and modding the older [E3 macro](https://githu
 Some concepts are borrowed from E3, while others are new. No code has been reused from E3.
 
 
+## Getting started
+
+Put this repository under your Lua folder,
+so it lives in `Macroqest\lua\efyran`.
+
+Then start it with `/lua run efyran/e4`
+
+You can auto start efyran with this `Macroquest\config\zoned.cfg`:
+
+```
+/if (!${Bool[${Lua.PIDs}]}) /lua run efyran/e4
+```
+
+For ease of starting / stopping / re-launching efyran, you can also put the following in your `Macroquest\config\MacroQuest.ini`:
+
+```ini
+[Aliases]
+/e4=/multiline ; /lua stop efyran/e4 ; /timed 5 /lua run efyran/e4
+/e4all=/dgaexecute /multiline ; /lua stop efyran/e4 ; /timed 5 /lua run efyran/e4
+/stope4=/lua stop efyran/e4
+/stopall=/dgaexecute /lua stop efyran/e4
+```
+
 ## Moving around
 
 Add some socials to simplify control:
