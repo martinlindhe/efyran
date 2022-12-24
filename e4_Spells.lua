@@ -788,6 +788,7 @@ end
 function loot_my_corpse()
     -- target my corpse
     cmdf("/target %s's corpse", mq.TLO.Me.Name())
+    move_to(mq.TLO.Target.ID())
     delay(1000)
 
     -- open loot window

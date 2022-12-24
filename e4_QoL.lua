@@ -557,8 +557,16 @@ function QoL.Init()
     -- summon nearby corpses into a pile
     mq.bind("/gathercorpses", function() commandQueue.Add("gathercorpses") end)
 
-    -- tell peers to attempt to loot their corpses
+    -- loot all my nearby corpses
     mq.bind("/lootcorpses", function() commandQueue.Add("lootcorpse") end)
+
+    -- tell peers to attempt to loot their corpses
+    mq.bind("/lootallcorpses", function()
+        if is_orchestrator() then
+            cmd("/dgzexecute /lootcorpses")
+        end
+        commandQueue.Add("lootcorpse")
+    end)
 
     -- make all peer quit expedition
     mq.bind("/quitexp", function()

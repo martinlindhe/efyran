@@ -169,7 +169,7 @@ function buffs.HandleSelfDebuffs()
     --log.Debug("buffs.HandleSelfDebuffs")
 
     if mq.TLO.Debuff.Count() > 0 then
-        all_tellf("Debuffed: %d poison, %d disease, %d curse, %d corruption. hp drain %d, mana drain %d, end drain %s, slowed %s, spell slowed %s, snared %s, casting level %s, healing eff %s, spell dmg eff %s",
+        log.Info("Debuffed: %d poison, %d disease, %d curse, %d corruption. hp drain %d, mana drain %d, end drain %s, slowed %s, spell slowed %s, snared %s, casting level %s, healing eff %s, spell dmg eff %s",
             mq.TLO.Debuff.Poisons(), mq.TLO.Debuff.Diseases(), mq.TLO.Debuff.Curses(), mq.TLO.Debuff.Corruptions(),
             mq.TLO.Debuff.HPDrain(), mq.TLO.Debuff.ManaDrain(), mq.TLO.Debuff.EnduranceDrain(),
             tostring(mq.TLO.Debuff.Slowed()), tostring(mq.TLO.Debuff.SpellSlowed()), tostring(mq.TLO.Debuff.Snared()),
