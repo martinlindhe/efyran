@@ -41,6 +41,10 @@ function move_to(spawnID)
     log.Debug("move_to %d", spawnID)
 
     local spawn = spawn_from_id(spawnID)
+    if spawn == nil then
+        all_tellf("move_to: lost target spawn %d", spawnID)
+        return
+    end
 
     if not line_of_sight_to(spawn) then
         all_tellf("move_to ERROR: cannot see %s", spawn.Name())
