@@ -114,7 +114,7 @@ function buffs.Tick()
 
     -- XXX combat buffs should be done here (TODO implement combat buffs)
 
-    if in_combat() then
+    if in_combat() or nearby_npc_count(75) > 0 then
         return
     end
 

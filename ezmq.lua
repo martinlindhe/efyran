@@ -932,7 +932,11 @@ end
 ---@param name string Kick, Taunt etc.
 ---@return integer|nil
 function skill_cap(name)
-    return mq.TLO.Skill(name).SkillCap()
+    local value = mq.TLO.Skill(name).SkillCap()
+    if value == nil then
+        return 0
+    end
+    return value
 end
 
 ---@param name string

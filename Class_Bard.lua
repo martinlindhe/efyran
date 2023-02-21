@@ -21,7 +21,6 @@ function Bard.PlayMelody(name)
 
     if botSettings.settings.songs == nil then
         all_tellf("ERROR no bard songs declared")
-        delay(50000)
         return
     end
 

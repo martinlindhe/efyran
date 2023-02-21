@@ -239,9 +239,17 @@ function Heal.acceptRez()
     end
 end
 
+function nearby_npc_count(radius)
+    return spawn_count(string.format("npc radius %d zradius 75", radius))
+end
+
 function Heal.medCheck()
 
     if botSettings.settings.healing ~= nil and botSettings.settings.healing.automed ~= nil and not botSettings.settings.healing.automed then
+        return
+    end
+
+    if nearby_npc_count(75) > 0 then
         return
     end
 
@@ -261,7 +269,7 @@ function Heal.medCheck()
     end
 end
 
-local nearbyNPCFilter = "npc radius 75 zradius 75"
+
 
 -- tries to defend myself using settings.healing.life_support
 function Heal.performLifeSupport()
@@ -297,11 +305,11 @@ function Heal.performLifeSupport()
             -- if we got this buff/song on, then skip.
             --cmd("/dgtell all performLifeSupport skip ", spellConfig.Name, ", I have buff ", spellConfig.CheckFor, " on me")
             skip = true
-        elseif spellConfig.MinMobs ~= nil and spawn_count(nearbyNPCFilter) < spellConfig.MinMobs then
+        elseif spellConfig.MinMobs ~= nil and nearby_npc_count(75) < spellConfig.MinMobs then
             -- only cast if at least this many NPC:s is nearby
             --cmd("/dgtell all performLifeSupport skip ", spellConfig.Name, ", Not enought nearby mobs. Have ", spawn_count(nearbyNPCFilter), ", need ", spellConfig.MinMobs)
             skip = true
-        elseif spellConfig.MaxMobs ~= nil and spawn_count(nearbyNPCFilter) > spellConfig.MaxMobs then
+        elseif spellConfig.MaxMobs ~= nil and nearby_npc_count(75) > spellConfig.MaxMobs then
             -- only cast if at most this many NPC:s is nearby
             --cmd("/dgtell all performLifeSupport skip ", spellConfig.Name, ", Too many nearby mobs. Have ", spawn_count(nearbyNPCFilter), ", need ", spellConfig.MaxMobs)
             skip = true
@@ -360,8 +368,8 @@ function healPeer(spell_list, peer, pct)
     for k, heal in ipairs(spell_list) do
         local spawn = spawn_from_peer_name(peer)
         local spellConfig = parseSpellLine(heal)
-        if spawn == nil then
-            -- peer died
+        if spawn == nil or spawn.Distance() > 200 then
+            -- peer died or is out of range
             return false
         elseif spellConfig.MinMana ~= nil and mq.TLO.Me.PctMana() < spellConfig.MinMana then
             log.Info("SKIP HEALING, my mana %d vs required %d", mq.TLO.Me.PctMana(), spellConfig.MinMana)

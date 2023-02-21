@@ -122,7 +122,7 @@ function CommandQueue.Process()
             click_nearby_door()
         end
     elseif v.Name == "portto" then
-        cast_port_to(v.Name)
+        cast_port_to(v.Arg)
     elseif v.Name == "movetoid" then
         move_to(toint(v.Arg))
     elseif v.Name == "rtz" then

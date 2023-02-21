@@ -63,7 +63,7 @@ end
 
 
 function Assist.backoff()
-    if Assist.targetID ~= nil then
+    if Assist.targetID ~= 0 then
         log.Info("Backing off target %d", Assist.targetID)
         Assist.EndFight()
     end
@@ -185,16 +185,15 @@ end
 
 function Assist.meleeStick()
     local stickArg
-
     if botSettings.settings.assist.stick_point == "Front" then
         stickArg = "hold front " .. Assist.meleeDistance .. " uw"
         log.Debug("STICKING IN FRONT TO %d: %s", Assist.targetID, stickArg)
         mq.cmdf("/stick %s", stickArg)
     else
-        mq.cmd("/stick snaproll uw")
-        mq.delay(200, function()
-            return mq.TLO.Stick.Behind() and mq.TLO.Stick.Stopped()
-        end)
+        --mq.cmd("/stick snaproll uw")
+        --mq.delay(200, function()
+        --    return mq.TLO.Stick.Behind() and mq.TLO.Stick.Stopped()
+        --end)
         stickArg = "hold moveback behind " .. Assist.meleeDistance .. " uw"
         log.Debug("STICKING IN BACK TO %d: %s", Assist.targetID, stickArg)
         mq.cmdf("/stick %s", stickArg)

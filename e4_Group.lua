@@ -13,7 +13,7 @@ local groups = {
     team12 = {
         {"One", "Two", "Three", "Four", "Five", "Six"},
         {"Second", "Group", "Toons", "Here", "They", "Are"},
-    }
+    },
 }
 
 return groups

@@ -14,6 +14,8 @@ local QoL = {}
 
 local maxFactionLoyalists = false
 
+local currentXP = mq.TLO.Me.Exp()
+
 function QoL.Init()
 
     QoL.loadRequiredPlugins()
@@ -95,11 +97,8 @@ function QoL.Init()
     end)
 
     mq.event("skillup", "You have become better at #1#! (#2#)", function(text, name, num)
+        --log.Info("skill name %s, num %d", name, num)
         cmdf("/dgtell skillup %s (%d/%d)", name, num, skill_cap(name))
-    end)
-
-    mq.event("xp", "You gain experience!", function()
-        cmd("/dgtell xp Gained xp")
     end)
 
     mq.event("faction_maxed", "Your faction standing with #1# could not possibly get any better.", function(text, faction)
@@ -620,6 +619,17 @@ function QoL.Init()
         end
     end)
 
+    -- track XP
+    --mq.event("xp", "You gain experience!", function()
+    mq.event('gainedxp', 'You gain party experience!!', function(text)
+        local diff = mq.TLO.Me.Exp() - currentXP
+        log.Info("Gained XP. %d", diff)
+        currentXP = mq.TLO.Me.Exp()
+    end)
+
+
+
+
     -- toggles debug output on/off
     mq.bind("/debug", function()
         if log.loglevel == "debug" then
@@ -782,6 +792,13 @@ function QoL.Tick()
             all_tellf("\arWARN\ax Ignoring trade from non-peer %s", mq.TLO.Target.Name())
             cmd("/beep 1")
         end
+    end
+
+    -- auto skill-up Sense Heading
+    if skill_value("Sense Heading") < skill_cap("Sense Heading") and is_ability_ready("Sense Heading") then
+        --log.Info("Training Sense Heading")
+        cmd('/doability "Sense Heading"')
+        delay(100)
     end
 
     if class_shortname() == "WIZ" and have_pet() then
