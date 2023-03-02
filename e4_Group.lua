@@ -98,7 +98,7 @@ function Group.RecallGroup(name, groupNumber)
             local groupLeader = group[1]
             if is_peer(groupLeader) then
                 if mq.TLO.Me.Name() == raidLeader and mq.TLO.Me.Name() ~= groupLeader then
-                    log.Info("Inviting group leader %s to raid", raidLeader, groupLeader)
+                    log.Info("Inviting group leader %s to raid", groupLeader)
                     cmdf("/raidinvite %s", groupLeader)
                 elseif raidLeader ~= groupLeader then
                     log.Info("Telling raid leader %s to invite group leader %s to raid", raidLeader, groupLeader)
