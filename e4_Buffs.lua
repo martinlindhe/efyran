@@ -1,15 +1,15 @@
 local mq = require("mq")
-local log = require("knightlinc/Write")
+local log = require("efyran/knightlinc/Write")
 
-require("e4_Spells")
-local follow  = require("e4_Follow")
-local pet     = require("e4_Pet")
-local cure    = require("e4_Cure")
-local botSettings = require("e4_BotSettings")
-local groupBuffs = require("e4_GroupBuffs")
-local bard = require("Class_Bard")
+require("efyran/e4_Spells")
+local follow  = require("efyran/e4_Follow")
+local pet     = require("efyran/e4_Pet")
+local cure    = require("efyran/e4_Cure")
+local botSettings = require("efyran/e4_BotSettings")
+local groupBuffs  = require("efyran/e4_GroupBuffs")
+local bard        = require("efyran/Class_Bard")
 
-local timer = require("Timer")
+local timer = require("efyran/Timer")
 
 local MIN_BUFF_DURATION = 6 * 6000 -- 6 ticks, each tick is 6s
 

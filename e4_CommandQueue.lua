@@ -1,14 +1,14 @@
 local mq = require("mq")
-local log = require("knightlinc/Write")
+local log = require("efyran/knightlinc/Write")
 
-local botSettings = require("e4_BotSettings")
-local hail = require("e4_Hail")
-local buffs   = require("e4_Buffs")
-local bard = require("Class_Bard")
-local follow  = require("e4_Follow")
-local assist  = require("e4_Assist")
-local pet     = require("e4_Pet")
-local group   = require("e4_Group")
+local botSettings = require("efyran/e4_BotSettings")
+local hail = require("efyran/e4_Hail")
+local buffs   = require("efyran/e4_Buffs")
+local bard = require("efyran/Class_Bard")
+local follow  = require("efyran/e4_Follow")
+local assist  = require("efyran/e4_Assist")
+local pet     = require("efyran/e4_Pet")
+local group   = require("efyran/e4_Group")
 
 ---@class CommandQueueValue
 ---@field public Name string Name

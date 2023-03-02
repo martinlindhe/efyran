@@ -1,14 +1,14 @@
 -- quality of life tweaks
 
 local mq = require("mq")
-local log = require("knightlinc/Write")
+local log = require("efyran/knightlinc/Write")
 
-local assist  = require("e4_Assist")
-local follow  = require("e4_Follow")
-local commandQueue = require("e4_CommandQueue")
-local botSettings = require("e4_BotSettings")
-local pet     = require("e4_Pet")
-local buffs   = require("e4_Buffs")
+local assist  = require("efyran/e4_Assist")
+local follow  = require("efyran/e4_Follow")
+local commandQueue = require("efyran/e4_CommandQueue")
+local botSettings = require("efyran/e4_BotSettings")
+local pet     = require("efyran/e4_Pet")
+local buffs   = require("efyran/e4_Buffs")
 
 local QoL = {}
 

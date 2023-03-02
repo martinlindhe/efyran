@@ -1,19 +1,19 @@
-require("ezmq")
+require("efyran/ezmq")
 
-local log = require("knightlinc/Write")
+local log = require("efyran/knightlinc/Write")
 
-require("e4_Loot")
-require("e4_Hail")
+require("efyran/e4_Loot")
+require("efyran/e4_Hail")
 
-local commandQueue = require("e4_CommandQueue")
-local botSettings  = require("e4_BotSettings")
+local commandQueue = require("efyran/e4_CommandQueue")
+local botSettings  = require("efyran/e4_BotSettings")
 
-local assist  = require("e4_Assist")
-local buffs   = require("e4_Buffs")
-local group   = require("e4_Group")
-local follow  = require("e4_Follow")
-local heal    = require("e4_Heal")
-local qol     = require("e4_QoL")
+local assist  = require("efyran/e4_Assist")
+local buffs   = require("efyran/e4_Buffs")
+local group   = require("efyran/e4_Group")
+local follow  = require("efyran/e4_Follow")
+local heal    = require("efyran/e4_Heal")
+local qol     = require("efyran/e4_QoL")
 
 seed_process()
 

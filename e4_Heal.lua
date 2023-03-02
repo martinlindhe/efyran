@@ -1,13 +1,13 @@
 local mq = require("mq")
-local log = require("knightlinc/Write")
+local log = require("efyran/knightlinc/Write")
 
-require("e4_Spells")
+require("efyran/e4_Spells")
 
-local botSettings = require("e4_BotSettings")
-local queue = require("Queue")
-local timer = require("Timer")
-local follow  = require("e4_Follow")
-local buffs   = require("e4_Buffs")
+local botSettings = require("efyran/e4_BotSettings")
+local queue = require("efyran/Queue")
+local timer = require("efyran/Timer")
+local follow  = require("efyran/e4_Follow")
+local buffs   = require("efyran/e4_Buffs")
 
 local askForHealTimer = timer.new_expired(5 * 1) -- 5s
 local askForHealPct = 88 -- at what % HP to start begging for heals

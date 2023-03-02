@@ -3,7 +3,7 @@
 -- @type mq
 local mq = require("mq")
 
-local log = require("knightlinc/Write")
+local log = require("efyran/knightlinc/Write")
 
 -- returns true if `spawn` is within maxDistance
 ---@param spawn spawn
@@ -33,7 +33,7 @@ function line_of_sight_to(spawn)
     return mq.TLO.LineOfSight(q)()
 end
 
-local globalSettings = require("e4_Settings")
+local globalSettings = require("efyran/e4_Settings")
 
 -- Move to the location of `spawn` using MQ2Nav.
 ---@param spawnID integer
