@@ -1,8 +1,8 @@
 local mq = require("mq")
-local log = require("knightlinc/Write")
-local timer = require("Timer")
+local log = require("efyran/knightlinc/Write")
+local timer = require("efyran/Timer")
 
-local globalSettings = require("e4_Settings")
+local globalSettings = require("efyran/e4_Settings")
 
 local Follow = {
     spawn = nil, -- the current spawn I am following
@@ -29,7 +29,7 @@ function Follow.Start(spawnID)
 end
 
 function Follow.Pause()
-    if globalSettings.followMode:lower() == "mq2nav" and mq.TLO.Navigation.Active() then
+    if globalSettings.followMode:lower() == "mq2nav" then
         cmd("/nav stop")
     elseif globalSettings.followMode:lower() == "mq2advpath" then
         cmd("/afollow off")
@@ -100,12 +100,14 @@ function Follow.RunToZone(startingPeer)
     local oldZone = zone_shortname()
     log.Info("MOVING THRU ZONE FROM %s", oldZone)
 
-    cmd("/stick off")
+    Follow.Stop()
 
     -- move to initial position
     move_to(spawn.ID())
 
-    if not is_within_distance(spawn, 15) then
+    Follow.Stop()
+
+    if not is_within_distance(spawn, 16) then
         -- unlikely
         all_tellf("/rtz ERROR: failed to move near %s, my distance is %f", spawn.Name(), spawn.Distance())
         return
