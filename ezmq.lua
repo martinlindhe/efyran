@@ -175,11 +175,22 @@ function target_id(id)
     end
 end
 
--- Partial search by name
+-- Partial search by name (inventory, bags)
 ---@param name string
 ---@return item|nil
 function find_item(name)
     local item = mq.TLO.FindItem(name)
+    if item() ~= nil then
+        return item
+    end
+    return nil
+end
+
+-- Partial search by name (banked items)
+---@param name string
+---@return item|nil
+function find_item_bank(name)
+    local item = mq.TLO.FindItemBank(name)
     if item() ~= nil then
         return item
     end

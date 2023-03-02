@@ -583,7 +583,7 @@ end
 -- Perform the "/portto <name>" command
 ---@param name string
 function cast_port_to(name)
-    local spellName
+    local spellName = nil --- @type string|nil
     if class_shortname() == "WIZ" then
         spellName = aliases.WIZ["port " .. name]
     elseif class_shortname() == "DRU" then
@@ -598,6 +598,8 @@ function cast_port_to(name)
     if spellName == nil then
         all_tellf("ERROR: no such port %s", name)
     end
+
+    memorize_spell(spellName, 5)
 
     wait_until_not_casting()
     castSpellRaw(spellName, mq.TLO.Me.ID(), "gem5 -maxtries|3")
@@ -817,8 +819,10 @@ function report_find_item(name)
 
     local item = find_item(name)
     if item == nil then
-        --all_tellf("%s not found", name)
-        return
+        item = find_item_bank(name)
+        if item == nil then
+            return
+        end
     end
 
     local cnt = getItemCountExact(item.Name())
@@ -835,10 +839,15 @@ function report_find_missing_item(name)
     end
 
     local item = find_item(name)
-    if item == nil then
-        all_tellf("I miss %s", name)
+    if item ~= nil then
         return
     end
+
+    local item = find_item_bank(name)
+    if item ~= nil then
+        return
+    end
+    all_tellf("I miss %s", name)
 end
 
 function report_clickies()
