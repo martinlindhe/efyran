@@ -22,7 +22,7 @@ end
 -- returns true if location is within maxDistance from you
 ---@return boolean
 function is_within_distance_to_loc(y, x, z, maxDistance)
-    return mq.TLO.Math.Distance(string.format("%f,%f,%f", y, x, z)) <= maxDistance
+    return mq.TLO.Math.Distance(string.format("%f,%f,%f", y, x, z))() <= maxDistance
 end
 
 -- returns true if there is line of sight between you and `spawn`
@@ -1141,6 +1141,9 @@ function split_str(s, sSeparator)
     assert(sSeparator ~= '')
     local nMax = 10
     local aRecord = {}
+    if s == nil then
+        return aRecord
+    end
     if string.len(s) > 0 then
         nMax = nMax or -1
         local nField, nStart = 1, 1
@@ -1243,11 +1246,11 @@ function strip_link(s)
     return s
 end
 
--- Delays a random amount of seconds in order not to flood the connection. 0.5s delay for each connected peer.
+-- Delays a random amount of seconds in order not to flood the connection. 0.4s delay for each connected peer.
 --
 -- Used to reduce CPU load while zoning many peers at once.
 function unflood_delay()
-    mq.delay(math.random(0, mq.TLO.DanNet.PeerCount() * 500))
+    mq.delay(math.random(0, mq.TLO.DanNet.PeerCount() * 400))
 end
 
 -- Returns true if `name` is ready to use.
@@ -1474,6 +1477,9 @@ end
 
 -- Creates a integer from a string with a decimal number.
 function toint(s)
+    if s == nil then
+        return 0
+    end
     return s + 0
 end
 

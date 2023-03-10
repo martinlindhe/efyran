@@ -253,8 +253,11 @@ function Heal.medCheck()
         return
     end
 
-    if is_sitting() and mq.TLO.Me.PctMana() >= 100 then
-        all_tellf("Ending medbreak, full mana.")
+    if is_sitting() and mq.TLO.Me.PctMana() >= 100 and not window_open("SpellBookWnd") then
+        -- make sure to proecss events in order to not stand up in case of "/camp" command, which would end the macro
+        doevents()
+
+        log.Info("Ending medbreak, full mana.")
         cmd("/sit off")
         return
     end

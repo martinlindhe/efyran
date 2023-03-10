@@ -1,19 +1,14 @@
 -- Tell mage to summon their group with Call of the Hero
 
 local mq = require("mq")
-local log = require("knightlinc/Write")
-require("ezmq")
+local log = require("efyran/knightlinc/Write")
+require("efyran/ezmq")
 
 local cothMinDistance = 50
 
 if mq.TLO.Me.Class.Name() ~= "Magician" then
     all_tellf("ERROR: I am not a Magician, so I cannot Call of the Hero")
     return
-end
-
-if not is_memorized("Call of the Hero") then
-    log.Info("Memorizing Call of the Hero")
-    cmd("/memorize 1771 5")
 end
 
 if not in_group() then
@@ -25,9 +20,19 @@ while true do
 
     local done = true
 
+    if mq.TLO.Me.PctMana() < 25 and not is_casting() then
+        log.Info("Medding ...")
+        cmd("/sit on")
+    end
+
+    if not is_memorized("Call of the Hero") then
+        log.Info("Memorizing Call of the Hero")
+        cmd("/memorize 1771 5")
+    end
+
     for n = 1, 5 do
         local spawn = mq.TLO.Group.Member(n)
-        if spawn() ~= nil and not spawn.OtherZone() and spawn.Distance() > cothMinDistance then
+        if spawn() ~= nil and not spawn.OtherZone() and spawn.Distance() > cothMinDistance and mq.TLO.Me.PctMana() >= 25 then
             done = false
 
             if getItemCountExact("Pearl") == 0 then

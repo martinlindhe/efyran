@@ -114,7 +114,8 @@ function buffs.Tick()
 
     -- XXX combat buffs should be done here (TODO implement combat buffs)
 
-    if in_combat() or nearby_npc_count(75) > 0 then
+    if in_combat() then
+        --  or nearby_npc_count(75) >= 3
         return
     end
 
@@ -128,7 +129,7 @@ function buffs.Tick()
         checkDebuffsTimer:restart()
     end
 
-    if follow.spawn ~= nil or is_gm() or is_invisible() or is_hovering() or in_combat() or is_moving() or in_neutral_zone()
+    if is_gm() or is_invisible() or is_hovering() or in_combat() or is_moving() or in_neutral_zone()
     or window_open("MerchantWnd") or window_open("GiveWnd") or window_open("BigBankWnd") or window_open("SpellBookWnd")
     or window_open("LootWnd") then
         return
@@ -156,6 +157,7 @@ function buffs.Tick()
 
     if #buffs.queue > 0 and handleBuffsTimer:expired() then
         local req = table.remove(buffs.queue, 1)
+        log.Info("attempt to handle buff request %s", req)
         if req ~= nil then
             if handleBuffRequest(req) then
                 handleBuffsTimer:restart()
@@ -282,13 +284,13 @@ function handleBuffRequest(req)
         end
         -- XXX debug source of nil
         if type(n) ~= "number" then
-            all_tellf("FATAL n is not a number")
+            all_tellf("FATAL n is not a number, from peer %s, buff %s", req.Peer, req.Buff)
         end
         if type(minLevel) ~= "number" then
-            all_tellf("FATAL minLevel is not a number")
+            all_tellf("FATAL minLevel is not a number, from peer %s, buff %s", req.Peer, req.Buff)
         end
         if type(level) ~= "number" then
-            all_tellf("FATAL level is not a number: %s: %s", type(level), tostring(level))
+            all_tellf("FATAL level is not a number: %s: %s, from peer %s, buff %s", type(level), tostring(level), req.Peer, req.Buff)
         end
         if n > minLevel and level >= n then
             spellName = spellConfig.Name
@@ -342,7 +344,7 @@ end
 
 -- returns true if a buff was casted
 function buffs.RefreshSelfBuffs()
-    if botSettings.settings.self_buffs == nil or is_sitting() then
+    if botSettings.settings.self_buffs == nil or is_sitting() or is_moving() then
         return false
     end
     --log.Debug("Buffs.RefreshSelfBuffs()")
@@ -467,7 +469,7 @@ end
 
 -- returns true if a buff was casted
 function buffs.RefreshAura()
-    if buffs.aura == nil or mq.TLO.Me.Aura(1)() ~= nil or is_sitting() then
+    if buffs.aura == nil or mq.TLO.Me.Aura(1)() ~= nil or is_sitting() or is_moving() then
         return false
     end
     if have_combat_ability(buffs.aura) then

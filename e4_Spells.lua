@@ -72,7 +72,11 @@ function refreshBuff(buffItem, spawn)
         end
 
         if have_spell(spellName) and not spell.Stacks() then
-            all_tellf("ERROR cannot selfbuff with %s (dont stack with current buffs)", spellName)
+            if free_buff_slots() <= 0 then
+                all_tellf("\arWARN\ax: Cannot selfbuff with %s (only have %d free buff slots)", spellName, free_buff_slots())
+            else
+                all_tellf("ERROR cannot selfbuff with %s (dont stack with current buffs)", spellName)
+            end
             return false
         end
     elseif spawn.Type() == "Pet" and spawn.ID() == mq.TLO.Me.Pet.ID() then
@@ -125,9 +129,9 @@ function refreshBuff(buffItem, spawn)
     end
 
     if spawn.Type() == "Pet" then
-        log.Debug("Buffing \agmy pet %s\ax with \ay%s\ax.", spawn.CleanName(), pretty)
+        log.Info("Buffing \agmy pet %s\ax with \ay%s\ax.", spawn.CleanName(), pretty)
     else
-        log.Debug("Buffing \agmyself\ax with \ay%s\ax.", pretty)
+        log.Info("Buffing \agmyself\ax with \ay%s\ax.", pretty)
         if spell.TargetType() == "Self" then
             -- don't target myself on self-buffs
             spawnID = nil
@@ -163,12 +167,12 @@ function spellConfigAllowsCasting(buffItem, spawn)
     -- AERange is used for group spells
     if spell.TargetType() == "Group v2" then
         if spawn.Distance() >= spell.AERange() then
-            print("cant rebuff (",spell.TargetType(),"), toon too far away: ", buffItem, " ", spawn.CleanName(), " spell range = ", spell.Range(), ", spawn distance = ", spawn.Distance())
+            log.Error("cant rebuff (%s), toon too far away: %s %s spell range = %d, spawn distance = %d", spell.TargetType(), buffItem, spawn.CleanName(), spell.Range(), spawn.Distance())
             return false
         end
     else
         if spell.TargetType() ~= "Self" and spawn.Distance() >= spell.Range() then
-            print("cant rebuff (",spell.TargetType(),"), toon too far away: ", buffItem, " ", spawn.CleanName(), " spell range = ", spell.Range(), ", spawn distance = ", spawn.Distance())
+            log.Error("cant rebuff (%s), toon too far away: %s %s spell range = %d, spawn distance = %d", spell.TargetType(), buffItem, spawn.CleanName(), spell.Range(), spawn.Distance())
             return false
         end
     end
@@ -295,58 +299,60 @@ function castSpell(name, spawnId)
 
     if have_combat_ability(name) then
         use_combat_ability(name)
+        return
     elseif have_ability(name) then
         log.Debug("calling use_ability %s", name)
         use_ability(name)
-    else
-        --log.Debug("castSpell ITEM/SPELL/AA: %s", name)
-
-        if is_brd() and is_casting() then
-            cmd("/twist stop")
-            delay(100)
-        end
-
-        if not have_spell(name) and have_item(name) then
-            -- Item and spell examples: Molten Orb (MAG)
-            if not is_item_clicky_ready(name) then
-                -- eg Worn Totem, with 4 min buff duration and 10 min recast
-                return
-            end
-            name = name.."|item"
-        end
-
-        castSpellRaw(name, spawnId, "-maxtries|3")
-
-        if is_brd() then
-            if have_item(name) then
-                -- item click
-                local item = find_item(name)
-                if item ~= nil then
-                    log.Info("Item click sleep, %d + %d", item.Clicky.CastTime(), item.Clicky.Spell.RecastTime())
-                    delay(item.Clicky.CastTime() + item.Clicky.Spell.RecastTime() + 1500)
-                end
-            else
-                -- spell / AA
-                local spell = get_spell(name)
-                if spell ~= nil and spell.Name() ~= nil then
-                    local mycast = 0
-                    if spell.MyCastTime() ~= nil then
-                        mycast = spell.MyCastTime()
-                    end
-                    local recast = 0
-                    if spell.RecastTime() ~= nil then
-                        recast = spell.RecastTime()
-                    end
-                    log.Info("Spell sleep for '%s', my cast time: %d, recast time %d", spell.Name(), mycast, recast)
-                    local sleepTime = mycast + recast
-                    delay(sleepTime)
-                end
-            end
-            log.Debug("BARD in castSpell %s .- SO I RESUME TWIST!", name)
-            cmd("/twist start")
-        end
-
+        return
     end
+
+    --log.Debug("castSpell ITEM/SPELL/AA: %s", name)
+
+    if is_brd() and is_casting() then
+        cmd("/twist stop")
+        delay(100)
+    end
+
+    if not is_brd() and not have_spell(name) and have_item(name) then
+        -- Item and spell examples: Molten Orb (MAG)
+        if not is_item_clicky_ready(name) then
+            -- eg Worn Totem, with 4 min buff duration and 10 min recast
+            return
+        end
+        name = name.."|item"
+    end
+
+    castSpellRaw(name, spawnId, "-maxtries|3")
+
+    if is_brd() then
+        if have_item(name) then
+            -- item click
+            local item = find_item(name)
+            if item ~= nil then
+                log.Info("Item click sleep, %d + %d", item.Clicky.CastTime(), item.Clicky.Spell.RecastTime())
+                delay(item.Clicky.CastTime() + item.Clicky.Spell.RecastTime() + 1500)
+            end
+        else
+            -- spell / AA
+            local spell = get_spell(name)
+            if spell ~= nil and spell.Name() ~= nil then
+                local mycast = 0
+                if spell.MyCastTime() ~= nil then
+                    mycast = spell.MyCastTime()
+                end
+                local recast = 0
+                if spell.RecastTime() ~= nil then
+                    recast = spell.RecastTime()
+                end
+                log.Info("Spell sleep for '%s', my cast time: %d, recast time %d", spell.Name(), mycast, recast)
+                local sleepTime = mycast + recast
+                delay(sleepTime)
+            end
+        end
+        log.Info("BARD in castSpell %s - SO I RESUME TWIST!", name)
+        cmd("/twist start")
+    end
+
 end
 
 ---@param name string spell name
@@ -449,6 +455,8 @@ function cast_mgb_spell(spellName)
         all_tellf("\ar%s is not available...", spellName)
         return
     end
+
+    memorize_spell(spellName, 5)
 
     use_alt_ability("Mass Group Buff", nil)
     delay(1000)
@@ -560,9 +568,18 @@ function cast_evac_spell()
 end
 
 function click_nearby_door()
-    -- XXX check if door within X radius
-    cmd("/doortarget")
-    log.Info("CLICKING NEARBY DOOR %s, id %d", mq.TLO.DoorTarget.Name(), mq.TLO.DoorTarget.ID())
+    -- TODO: dont know how to access /doors list from lua/macroquest
+
+    -- WORK-AROUND: in sro, "HUT1" is in the way for a correct doortarget
+    if zone_shortname() == "sro" and is_within_distance_to_loc(-2114, 1348, -81, 50) then
+        log.Info("sro special")
+        cmd("/doortarget RUJPORTAL701")
+    else
+        -- XXX check if door within X radius
+        cmd("/doortarget")
+    end
+
+    log.Info("CLICKING NEARBY DOOR %s, id %d, distance %d", mq.TLO.DoorTarget.Name(), mq.TLO.DoorTarget.ID(), mq.TLO.DoorTarget.Distance())
 
     unflood_delay()
     cmd("/click left door")
@@ -826,7 +843,11 @@ function report_find_item(name)
     end
 
     local cnt = getItemCountExact(item.Name())
-    all_tellf("%s in %s (count: %d)", item.ItemLink("CLICKABLE")(), inventory_slot_name(item.ItemSlot()), cnt)
+    if cnt == 1 then
+        all_tellf("%s in %s", item.ItemLink("CLICKABLE")(), inventory_slot_name(item.ItemSlot()))
+    else
+        all_tellf("%s in %s (count: %d)", item.ItemLink("CLICKABLE")(), inventory_slot_name(item.ItemSlot()), cnt)
+    end
 end
 
 -- used by /fmi

@@ -352,9 +352,9 @@ aliases.WIZ  = {
     ["port bloodfields"] = "Bloodfields Portal",
 
     -- Wizard TL:s
-    ["tl"] = "Translocate",
-    ["grouptl"] = "Translocate: Group",
-    ["aetl"] = "Teleport",
+    ["tl"] = "Translocate",             -- single TL to bind
+    ["grouptl"] = "Translocate: Group", -- TL group to bind
+    ["aetl"] = "Teleport",              -- AE TL to bind
     ["tl bind"] = "Translocate",
     ["tl nexus"] = "Translocate: Nexus",
     ["tl grimling"] = "Translocate: Grimling",

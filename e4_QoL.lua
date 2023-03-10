@@ -2,6 +2,7 @@
 
 local mq = require("mq")
 local log = require("efyran/knightlinc/Write")
+local timer = require("efyran/Timer")
 
 local assist  = require("efyran/e4_Assist")
 local follow  = require("efyran/e4_Follow")
@@ -65,6 +66,13 @@ function QoL.Init()
         end
         commandQueue.Clear()
         commandQueue.Add("zoned")
+    end)
+
+    mq.event("camping", "It will take you about 30 seconds to prepare your camp.", function(text, name)
+        -- "It will take about 25 more seconds to prepare your camp."
+        all_tellf("I am camping. Ending all macros.")
+        cmd("/lua stop")
+        os.exit()
     end)
 
     mq.event("missing_component", "You are missing #1#.", function(text, name)
@@ -401,6 +409,12 @@ function QoL.Init()
         commandQueue.Add("rtz", startingPeerName)
     end)
 
+    -- pick up ground spawn
+    mq.bind("/pickup", function()
+        mq.cmd("/itemtarget")
+        mq.cmd("/click left item")
+    end)
+
     -- hail or talk to nearby recognized NPC
     mq.bind("/hailit", function()
         commandQueue.Add("hailit")
@@ -487,6 +501,33 @@ function QoL.Init()
     mq.bind("/notinvis", function() mq.cmd("/noparse /dgaexecute all /if (!${Me.Invis}) /dgtell all NOT INVIS") end)
 
     mq.bind("/invis", function() mq.cmd("/noparse /dgaexecute all /if (${Me.Invis}) /dgtell all INVIS") end)
+
+    -- report special stats
+    mq.bind("/combateffects", function() mq.cmd("/noparse /dgaexecute all /if (${Select[${Me.Class.ShortName},ROG,BER,MNK]}) /dgtell all COMBAT EFFECT ${Me.CombatEffectsBonus}") end)
+    mq.bind("/accuracy", function() mq.cmd("/noparse /dgaexecute all /if (${Select[${Me.Class.ShortName},WAR,PAL,RNG,SHD,MNK,BRD,ROG,BST,BER]}) /dgtell all ACCURACY ${Me.AccuracyBonus}/150") end)
+    mq.bind("/strikethru", function() mq.cmd("/noparse /dgaexecute all /if (${Select[${Me.Class.ShortName},RNG,MNK,BRD,ROG,BST,BER]}) /dgtell all STRIKE THRU ${Me.StrikeThroughBonus}/35") end)
+    mq.bind("/shielding", function() mq.cmd("/noparse /dgaexecute all /dgtell all SHIELDING ${Me.ShieldingBonus}") end)
+
+    mq.bind("/dotshield", function() mq.cmd("/noparse /dgaexecute all /dgtell all DoT SHIELD ${Me.DoTShieldBonus}") end)
+    mq.bind("/spellshield", function() mq.cmd("/noparse /dgaexecute all /dgtell all SPELL SHIELD ${Me.SpellShieldBonus}") end)
+    mq.bind("/avoidance", function() mq.cmd("/noparse /dgaexecute all /dgtell all AVOIDANCE ${Me.AvoidanceBonus}/100") end)
+    mq.bind("/stunresist", function() mq.cmd("/noparse /dgaexecute all /dgtell all STUN RESIST ${Me.StunResistBonus}") end)
+
+    -- "free inventory slots": only lists melees as looter classes for minimal disruption
+    mq.bind("/fis", function()
+        mq.cmd("/noparse /dgaexecute all /if (${Select[${Me.Class.ShortName},MNK,ROG,BER,RNG]} && ${Me.FreeInventory} > 20) /dgtell all FREE INVENTORY SLOTS: ${Me.FreeInventory}")
+    end)
+
+    -- "free inventory slots all"
+    mq.bind("/fisa", function()
+        mq.cmd("/noparse /dgaexecute all /if (${Me.FreeInventory} > 20) /dgtell all FREE INVENTORY SLOTS: ${Me.FreeInventory}")
+    end)
+
+    -- report all with few free inventory slots
+    mq.bind("/fewinventoryslots", function()
+        mq.cmd("/noparse /dgaexecute all /if (${Me.FreeInventory} <= 20) /dgtell all FULL INVENTORY, ${Me.FreeInventory} FREE SLOTS")
+    end)
+
 
     -- make peers in zone face my target
     mq.bind("/facetarget", function() mq.cmdf("/dgaexecute %s /face fast id %d", dannet_zone_channel(), mq.TLO.Target.ID()) end)
@@ -676,8 +717,6 @@ function QoL.Init()
     -- MGB BER Bloodthirst
     mq.bind("/aebloodthirst", function() commandQueue.Add("aebloodthirst") end)
 
-    clear_cursor()
-
     QoL.verifySpellLines()
 end
 
@@ -685,10 +724,12 @@ function QoL.loadRequiredPlugins()
     local requiredPlugins = {
         "MQ2DanNet",
         "MQ2Debuffs", -- XXX not used yet. to be used for auto-cure feature
-        "MQ2AdvPath", -- XXX /afollow or /stick ?
         "MQ2MoveUtils",
-        --"MQ2Nav",
         "MQ2Cast",
+
+        "MQ2AdvPath", -- XXX /afollow or /stick ?
+        -- XXX which follow mode to use?
+        --"MQ2Nav", -- TODO requires mesh files etc
     }
     for k, v in pairs(requiredPlugins) do
         if not is_plugin_loaded(v) then
@@ -773,6 +814,8 @@ function verifySpellLines(label, lines)
     end
 end
 
+local qolClearCursorTimer = timer.new_expired(60 * 1) -- 60s
+
 -- Runs every second.
 function QoL.Tick()
     -- close f2p nag screen
@@ -804,6 +847,12 @@ function QoL.Tick()
     if class_shortname() == "WIZ" and have_pet() then
         cmd("/pet get lost")
     end
+
+    if qolClearCursorTimer:expired() then
+        clear_cursor()
+        qolClearCursorTimer:restart()
+    end
+
 end
 
 return QoL

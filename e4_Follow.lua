@@ -43,21 +43,27 @@ function Follow.Stop()
     Follow.spawn = nil
 end
 
-local followUpdateTimer = timer.new_expired(5 * 1) -- 5s
+local followUpdateTimer = timer.new_expired(15 * 1) -- 15s
 
 function Follow.Tick()
     if followUpdateTimer:expired() then
-        Follow.Update()
+        if globalSettings.followMode:lower() == "mq2moveutils" then
+            -- don't update for mq2advpath / mq2nav as they will get confused
+            Follow.Update()
+        end
         followUpdateTimer:restart()
     end
 end
 
 local lastHeading = ""
 
--- called from QoL.Tick() on every tick
+-- called from Follow.Tick() in main loop
 function Follow.Update()
     local exe = ""
-    if Follow.spawn ~= nil and Follow.spawn.Distance3D() > Follow.spawn.MaxRangeTo() then
+    local maxRange = 10 -- Follow.spawn.MaxRangeTo()
+
+    -- XXX Follow.spawn is invalid after zoning.
+    if Follow.spawn ~= nil and Follow.spawn.Distance3D() > maxRange then
         log.Debug("Follow.Update, mode %s, distance %f", globalSettings.followMode, Follow.spawn.Distance3D())
         if globalSettings.followMode:lower() == "mq2nav" then
             if not mq.TLO.Navigation.MeshLoaded() then
@@ -65,7 +71,7 @@ function Follow.Update()
                 return
             end
             if not mq.TLO.Navigation.Active() or lastHeading ~= Follow.spawn.HeadingTo() then
-                exe = string.format("/nav id %d | dist=15 log=critical", Follow.spawn.ID())
+                exe = string.format("/nav id %d | dist=%d log=critical", Follow.spawn.ID(), maxRange)
                 lastHeading = Follow.spawn.HeadingTo()
             end
         elseif globalSettings.followMode:lower() == "mq2advpath" then
@@ -75,7 +81,7 @@ function Follow.Update()
         elseif globalSettings.followMode:lower() == "mq2moveutils" then
             --if not mq.TLO.Stick.Active() or lastHeading ~= Follow.spawn.HeadingTo() then
                 mq.cmdf("/target id %d", Follow.spawn.ID())
-                exe = string.format("/stick hold 15 uw") -- face upwards to better run over obstacles
+                exe = string.format("/stick hold %d uw", maxRange) -- face upwards to better run over obstacles
                 --exe = string.format("/moveto id %d", Follow.spawn.ID())
             --end
         end
