@@ -47,7 +47,7 @@ function refreshBuff(buffItem, spawn)
 
     local spellConfig = parseSpellLine(buffItem) -- XXX parse this once on script startup. dont evaluate all the time !!!
 
-    local spell = getSpellFromBuff(spellConfig.Name) -- XXX parse this once on script startup too, dont evaluate all the time !
+    local spell = getSpellFromBuff(spellConfig.Name)
     if spell == nil then
         all_tellf("refreshBuff: getSpellFromBuff %s FAILED", buffItem)
         cmd("/beep 1")
@@ -77,6 +77,10 @@ function refreshBuff(buffItem, spawn)
             else
                 all_tellf("ERROR cannot selfbuff with %s (dont stack with current buffs)", spellName)
             end
+            return false
+        end
+        if free_buff_slots() == 0 then
+            log.Debug("refreshBuff. SKIP SELF BUFF (out of slots): %s", spellName)
             return false
         end
     elseif spawn.Type() == "Pet" and spawn.ID() == mq.TLO.Me.Pet.ID() then
@@ -329,7 +333,7 @@ function castSpell(name, spawnId)
             -- item click
             local item = find_item(name)
             if item ~= nil then
-                log.Info("Item click sleep, %d + %d", item.Clicky.CastTime(), item.Clicky.Spell.RecastTime())
+                log.Debug("BRD clicky: Item click sleep, %d + %d", item.Clicky.CastTime(), item.Clicky.Spell.RecastTime())
                 delay(item.Clicky.CastTime() + item.Clicky.Spell.RecastTime() + 1500)
             end
         else
@@ -349,7 +353,7 @@ function castSpell(name, spawnId)
                 delay(sleepTime)
             end
         end
-        log.Info("BARD in castSpell %s - SO I RESUME TWIST!", name)
+        log.Debug("BRD in castSpell %s - SO I RESUME TWIST!", name)
         cmd("/twist start")
     end
 

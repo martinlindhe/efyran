@@ -284,7 +284,7 @@ function handleBuffRequest(req)
         end
         -- XXX debug source of nil
         if type(n) ~= "number" then
-            all_tellf("FATAL n is not a number, from peer %s, buff %s", req.Peer, req.Buff)
+            log.Error("DEBUG: n is not a number, from peer %s, buff %s", req.Peer, req.Buff)
         end
         if type(minLevel) ~= "number" then
             all_tellf("FATAL minLevel is not a number, from peer %s, buff %s", req.Peer, req.Buff)
@@ -292,7 +292,7 @@ function handleBuffRequest(req)
         if type(level) ~= "number" then
             all_tellf("FATAL level is not a number: %s: %s, from peer %s, buff %s", type(level), tostring(level), req.Peer, req.Buff)
         end
-        if n > minLevel and level >= n then
+        if type(n) == "number" and n > minLevel and level >= n then
             spellName = spellConfig.Name
             local spell = get_spell(spellName)
             if spell == nil then

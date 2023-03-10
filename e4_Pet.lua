@@ -102,6 +102,8 @@ function find_pet_spell()
     return name..reagent
 end
 
+local MIN_PET_BUFF_DURATION = 5 * 6000 -- 5 ticks, each tick is 6s, so 30s
+
 -- returns true if spell was cast
 function Pet.BuffMyPet()
     if botSettings.settings.pet == nil or botSettings.settings.pet.buffs == nil or not have_pet() or is_sitting() or is_moving() then
@@ -114,7 +116,7 @@ function Pet.BuffMyPet()
         doevents()
 
         local spellConfig = parseSpellLine(buff)  -- XXX do not parse here, cache and reuse
-        local spell = getSpellFromBuff(spellConfig.Name) -- XXX parse this once on script startup too, dont evaluate all the time !
+        local spell = getSpellFromBuff(spellConfig.Name)
         if spell == nil then
             all_tellf("Pet.BuffMyPet: getSpellFromBuff %s FAILED", buff)
             cmd("/beep 1")
@@ -126,32 +128,30 @@ function Pet.BuffMyPet()
         if mq.TLO.Me.Pet.Buff(spellConfig.Name)() ~= nil and mq.TLO.Me.Pet.Buff(mq.TLO.Me.Pet.Buff(spellConfig.Name)).Duration.Ticks() > 4 then
             --log.Debug("SKIP PET BUFFING %s, duration is %d ticks", spellConfig.Name, mq.TLO.Me.Pet.Buff(mq.TLO.Me.Pet.Buff(spellConfig.Name)).Duration.Ticks())
             skip = true
-        end
-
-        if spellConfig.MinMana ~= nil and mq.TLO.Me.PctMana() < spellConfig.MinMana then
+        elseif pet_have_buff(spell.RankName()) then -- TODO LATER: is it possible to get the pet buff duration?
+            log.Debug("SKIP PET BUFFING, Pet have ranked buff")
+            skip = true
+        elseif pet_have_buff(spell.Name()) then -- TODO LATER: is it possible to get the pet buff duration?
+            log.Debug("SKIP PET BUFFING, Pet have buff")
+            skip = true
+        elseif spellConfig.MinMana ~= nil and mq.TLO.Me.PctMana() < spellConfig.MinMana then
             log.Debug("SKIP PET BUFFING, my mana %d vs required %d", mq.TLO.Me.PctMana(), spellConfig.MinMana)
             skip = true
-        end
-        if spellConfig.CheckFor ~= nil and mq.TLO.Me.Pet.Buff(spellConfig.CheckFor)() ~= nil then
+        elseif spellConfig.CheckFor ~= nil and mq.TLO.Me.Pet.Buff(spellConfig.CheckFor)() ~= nil then
             -- if we got this buff on, then skip.
-            log.Debug("SKIP PET BUFFING %s, Pet have buff %s on them", spellConfig.Name, spellConfig.CheckFor)
+            --log.Debug("SKIP PET BUFFING %s, Pet have buff %s on them", spellConfig.Name, spellConfig.CheckFor)
             skip = true
-        end
-        if spellConfig.Reagent ~= nil and getItemCountExact(spellConfig.Reagent) == 0 then
+        elseif spellConfig.Reagent ~= nil and getItemCountExact(spellConfig.Reagent) == 0 then
             -- if we lack this item, then skip.
             log.Info("SKIP PET BUFFING %s, out of reagent %s", spellConfig.Name,  spellConfig.Reagent)
             skip = true
-        end
-
-
-        if have_item(spellConfig.Name) and not is_item_clicky_ready(spellConfig.Name) then
+        elseif have_item(spellConfig.Name) and not is_item_clicky_ready(spellConfig.Name) then
+            -- XXX must also skip if pet has said buff ... clicky item is not the spell name !!!
             log.Debug("SKIP PET BUFFING %s, item clicky is not ready", spellConfig.Name)
             skip = true
-        end
-
-        -- XXX on eqemu pet max shrunk is 1.0xxxxxx, on live it is (nec pet) 1.3541...
-        if spellConfig.Shrink ~= nil and spellConfig.Shrink and mq.TLO.Me.Pet.Height() <= 1.36 then
-            log.Debug("will not shrink pet with %s because pet height is already %f", spellConfig.Name, mq.TLO.Me.Pet.Height())
+        elseif spellConfig.Shrink ~= nil and spellConfig.Shrink and mq.TLO.Me.Pet.Height() <= 1.36 then
+            -- NOTE: 1.36 is a guestimate, seems to work on live & emu: on eqemu pet max shrunk is 0.625, on live it is (nec pet) 1.3541...
+            --log.Debug("will not shrink pet with %s because pet height is already %f", spellConfig.Name, mq.TLO.Me.Pet.Height())
             skip = true
         end
 

@@ -389,16 +389,30 @@ end
 ---@param name string
 ---@return boolean
 function have_buff(name)
-    --assert(type(name) == "string")
     local spell = mq.TLO.Spell(name)
     if spell() == nil then
-        all_tellf("have_buff ERROR: asked about odd 1buff %s", name)
+        all_tellf("have_buff ERROR: asked about odd buff %s", name)
         return false
     end
     if mq.TLO.Me.Buff(name)() == name then
         return true
     end
-    return mq.TLO.Me.Buff(spell.RankName)() == name
+    return mq.TLO.Me.Buff(spell.RankName())() == name
+end
+
+-- returns true if my pet have the buff `name` on me
+---@param name string
+---@return boolean
+function pet_have_buff(name)
+    local spell = mq.TLO.Spell(name)
+    if spell() == nil then
+        all_tellf("ERROR pet_have_buff odd buff %s", name)
+        return false
+    end
+    if mq.TLO.Me.Pet.Buff(name)() ~= nil then
+        return true
+    end
+    return mq.TLO.Me.Pet.Buff(spell.RankName())() == name
 end
 
 -- returns true if I have the song `name` on me
@@ -411,7 +425,7 @@ function have_song(name)
         mq.cmd("/beep 1")
         return false
     end
-    return mq.TLO.Me.Song(name)() ~= nil or mq.TLO.Me.Song(spell.RankName)() ~= nil
+    return mq.TLO.Me.Song(name)() ~= nil or mq.TLO.Me.Song(spell.RankName())() ~= nil
 end
 
 -- Am I casting a spell/song?
@@ -1326,7 +1340,7 @@ end
 function drop_all_buffs()
     for i = 1, mq.TLO.Me.MaxBuffSlots() do
         if mq.TLO.Me.Buff(i).ID() ~= nil then
-            log.Debug("Removing buff %d, id: %d, name: %s", i, mq.TLO.Me.Buff(i).ID(), mq.TLO.Me.Buff(i).Name())
+            log.Debug("Removing buff %s", mq.TLO.Me.Buff(i).Name())
             mq.cmdf("/removebuff %s", mq.TLO.Me.Buff(i).Name())
         end
     end

@@ -1,4 +1,5 @@
-require("ezmq")
+local mq = require("mq")
+require("efyran/ezmq")
 
 local destroyItemIDs = {
     8238,9674,10281,14091,16598,16915,16925,16929,16933,19198,21612,21614,9686,10269,3053,3056,3061,3066,28799,21615,25653,77817,77818,72615,
@@ -22,10 +23,8 @@ function combine_clear_cursor()
             delay(1)
         else
             print("Putting cursor item ", mq.TLO.Cursor(), " in inventory.")
-            delay(5000, function()
-                cmd("/autoinventory")
-                return mq.TLO.Cursor.ID() == nil
-            end)
+            cmd("/autoinventory")
+            delay(500)
         end
         delay(1)
         doevents()
