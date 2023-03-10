@@ -129,7 +129,7 @@ function buffs.Tick()
         checkDebuffsTimer:restart()
     end
 
-    if is_gm() or is_invisible() or is_hovering() or in_combat() or is_moving() or in_neutral_zone()
+    if is_gm() or is_invisible() or is_hovering() or in_combat() or is_moving() or not allow_buff_in_zone()
     or window_open("MerchantWnd") or window_open("GiveWnd") or window_open("BigBankWnd") or window_open("SpellBookWnd")
     or window_open("LootWnd") then
         return

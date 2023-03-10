@@ -80,12 +80,18 @@ function in_array(t, v)
     return false
 end
 
+-- returns true if we are running the Emu build of MacroQuest (rof2)
 ---@return boolean
 function is_rof2()
     if mq.TLO.MacroQuest.BuildName() == "Emu" then
         return true
     end
     return false
+end
+
+---@return boolean
+function is_emu()
+    return is_rof2()
 end
 
 -- returns true if peerName is another peer
@@ -592,21 +598,26 @@ function close_merchant_window()
     mq.cmd("/notify MerchantWnd MW_Done_Button leftmouseup")
 end
 
-local neutralZones = { "guildlobby", "guildhall", "bazaar", "poknowledge", "potranquility", "nexus" }
+local neutralZones = { "guildlobby", "guildhall", "bazaar", "poknowledge", "potranquility", "nexus", "shadowrest" }
 
--- returns true if we are in a neutral zone (be less obvious on live)
+-- returns true if we are in a neutral zone
 ---@return boolean
 function in_neutral_zone()
-    if is_rof2() then
-        -- ignore neutral zone check on emu.
-        return false
-    end
     for k, v in pairs(neutralZones) do
         if zone_shortname():lower() == v:lower() then
             return true
         end
     end
     return false
+end
+
+-- returns true if we allow to cast buffs in neutral zones (allowed on emu, disallowed on live)
+---@return boolean
+function allow_buff_in_zone()
+    if is_emu() then
+        return true
+    end
+    return not in_neutral_zone()
 end
 
 -- opens all inventory bags
