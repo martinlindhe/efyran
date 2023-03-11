@@ -394,12 +394,19 @@ function QoL.Init()
         commandQueue.Add("use-veteran-aa", "Throne of Heroes")
     end)
 
-    -- tell group to use Lesson of the Devoted (XXX filter!!!)
+    -- tell group to use Lesson of the Devoted
     mq.bind("/lesson", function()
         if is_orchestrator() then
-            mq.cmd("/dggexecute /lesson")
+            mq.cmd("/dggexecute /lesson") -- XXX filter!!!
         end
         commandQueue.Add("use-veteran-aa", "Lesson of the Devoted")
+    end)
+
+    mq.bind("/intensity", function()
+        if is_orchestrator() then
+            mq.cmd("/dgaexecute all /intensity") -- XXX filter
+        end
+        commandQueue.Add("use-veteran-aa", "Intensity of the Resolute")
     end)
 
     mq.bind("/movetome", function() mq.cmdf("/dgzexecute /movetoid %d", mq.TLO.Me.ID()) end)
