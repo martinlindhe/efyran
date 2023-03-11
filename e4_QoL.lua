@@ -386,6 +386,22 @@ function QoL.Init()
         commandQueue.Add("use-veteran-aa", "Throne of Heroes")
     end)
 
+    -- tell all peers to use Throne of Heroes
+    mq.bind("/throneall", function()
+        if is_orchestrator() then
+            mq.cmd("/dgaexecute all /throne")
+        end
+        commandQueue.Add("use-veteran-aa", "Throne of Heroes")
+    end)
+
+    -- tell group to use Lesson of the Devoted (XXX filter!!!)
+    mq.bind("/lesson", function()
+        if is_orchestrator() then
+            mq.cmd("/dggexecute /lesson")
+        end
+        commandQueue.Add("use-veteran-aa", "Lesson of the Devoted")
+    end)
+
     mq.bind("/movetome", function() mq.cmdf("/dgzexecute /movetoid %d", mq.TLO.Me.ID()) end)
     mq.bind("/mtm", function()  mq.cmd("/movetome") end)
 
@@ -589,7 +605,7 @@ function QoL.Init()
     mq.bind("/banker", function() commandQueue.Add("summonbanker") end)
 
     -- MAG: use Call of the Hero to summon the group to you
-    mq.bind("/cohgroup", function() mq.cmd("/lua run cohgroup") end)
+    mq.bind("/cohgroup", function() mq.cmd("/lua run efyran/cohgroup") end)
 
     -- Ask peer owners of nearby corpses to consent me
     mq.bind("/consentme", function() commandQueue.Add("consentme") end)

@@ -63,7 +63,7 @@ function Follow.Update()
     local maxRange = 10 -- Follow.spawn.MaxRangeTo()
 
     -- XXX Follow.spawn is invalid after zoning.
-    if Follow.spawn ~= nil and Follow.spawn.Distance3D() > maxRange then
+    if Follow.spawn ~= nil then
         log.Debug("Follow.Update, mode %s, distance %f", globalSettings.followMode, Follow.spawn.Distance3D())
         if globalSettings.followMode:lower() == "mq2nav" then
             if not mq.TLO.Navigation.MeshLoaded() then

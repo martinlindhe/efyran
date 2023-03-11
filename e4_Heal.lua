@@ -352,6 +352,11 @@ function Heal.performLifeSupport()
                     if have_item(spellConfig.Name) or have_alt_ability(spellConfig.Name) then
                         spellName = spellConfig.Name
                     end
+
+                    if spell.TargetType() ~= "Self" then
+                        cmd("/target myself")
+                    end
+
                     all_tellf("USING LIFE SUPPORT %s at %d%%", spellName, mq.TLO.Me.PctHPs())
                     castSpellAbility(nil, spellName)
                     return
