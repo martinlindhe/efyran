@@ -91,7 +91,7 @@ function Group.RecallGroup(name, groupNumber)
 
     if orchestrator then
         all_tellf("Recalling raid %s with leader %s", name, raidLeader)
---            delay(2000)
+        delay(1000)
 
         -- The raid leader invites the other groups to raid
         for idx, group in pairs(Group.settings[name]) do

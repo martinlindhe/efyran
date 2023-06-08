@@ -80,7 +80,7 @@ function CommandQueue.Process()
         cmd("/notify ConfirmationDialogBox Yes_Button leftmouseup")
         cmd("/squelch /raidaccept")
     elseif v.Name == "zoned" then
-        log.Debug("I zoned into ", zone_shortname())
+        log.Debug("I zoned into %s", zone_shortname())
         pet.ConfigureTaunt()
 
         joinCurrentHealChannel()

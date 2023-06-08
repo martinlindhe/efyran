@@ -369,18 +369,19 @@ function use_alt_ability(name, spawnID)
         local item = find_item(name)
         if item ~= nil then
             -- item click
+            local sleepTime = item.Clicky.CastTime() + item.Clicky.Spell.RecastTime() + 1500 -- XXX recast time is 0
             log.Debug("use_alt_ability item click sleep, %f + %f", item.Clicky.CastTime(), item.Clicky.Spell.RecastTime() )
-            mq.delay(item.Clicky.CastTime() + item.Clicky.Spell.RecastTime() + 1500) -- XXX recast time is 0
+            mq.delay(sleepTime)
         else
             -- spell / AA
             local spell = get_spell(name)
             if spell ~= nil then
-                local sleepTime = spell.MyCastTime() + spell.RecastTime()
+                local sleepTime = spell.MyCastTime() + spell.RecastTime() + 1500
                 --print("spell sleep for '", spell.Name(), "', my cast time:", spell.MyCastTime(), ", recast time", spell.RecastTime(), " = ", sleepTime)
                 mq.delay(sleepTime)
             end
         end
-        log.Debug("BARD use_alt_ability ", name, " -- SO I RESUME TWIST!")
+        log.Debug("BARD use_alt_ability %s -- SO I RESUME TWIST!", name)
         mq.cmd("/twist start")
     end
 end
