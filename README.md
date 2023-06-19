@@ -19,6 +19,7 @@ Then start it with `/lua run efyran/e4`
 You can auto start efyran with this `Macroquest\config\zoned.cfg`:
 
 ```
+/setwintitle ${Me.Name}
 /if (!${Bool[${Lua.PIDs}]}) /lua run efyran/e4
 ```
 
