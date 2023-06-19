@@ -1417,7 +1417,7 @@ function matches_filter_line(line)
     local class = class_shortname()
     local tokens = split_str(line, " ")
     for k, v in pairs(tokens) do
-        if class == v:upper() or (is_orchestrator() and v == "me") then
+        if class == v:upper() or v == mq.TLO.Me.Name() or (v == "me" and is_orchestrator()) then
             return true
         end
         if v == "priests" and is_priest(class) then
