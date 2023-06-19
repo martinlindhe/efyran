@@ -409,6 +409,13 @@ function QoL.Init()
         commandQueue.Add("use-veteran-aa", "Intensity of the Resolute")
     end)
 
+    mq.bind("/expedient", function()
+        if is_orchestrator() then
+            mq.cmd("/dgaexecute all /expedient") -- XXX filter
+        end
+        commandQueue.Add("use-veteran-aa", "Expedient Recovery")
+    end)
+
     mq.bind("/movetome", function() mq.cmdf("/dgzexecute /movetoid %d", mq.TLO.Me.ID()) end)
     mq.bind("/mtm", function()  mq.cmd("/movetome") end)
 
