@@ -84,7 +84,12 @@ function CommandQueue.Process()
         pet.ConfigureTaunt()
 
         joinCurrentHealChannel()
-        memorizeListedSpells()
+
+        if is_brd() then
+            bard.resumeMelody()
+        else
+            memorizeListedSpells()
+        end
     elseif v.Name == "dropinvis" then
         drop_invis()
     elseif v.Name == "playmelody" then
