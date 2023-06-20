@@ -72,6 +72,10 @@ function buffs.AnnounceAvailablity()
         return
     end
 
+    if mq.TLO.DanNet.PeerCount() <= 1 then
+        return
+    end
+
     -- only announce if number of players in zone changes (less spam)
     local playerCount = spawn_count("pc")
     if playerCount == buffs.lastPlayerCount then
