@@ -509,7 +509,7 @@ end
 -- Am I group leader?
 ---@return boolean
 function is_group_leader()
-    return mq.TLO.Group.Members() > 1 and mq.TLO.Me.Name() == mq.TLO.Group.Leader()
+    return mq.TLO.Group.Members() > 1 and mq.TLO.Me.Name() == mq.TLO.Group.Leader.Name()
 end
 
 -- Am I hovering? (just died, waiting for rez in the same zone)
@@ -744,7 +744,11 @@ function clear_cursor()
             mq.cmd("/beep 1")
             return false
         end
-        all_tellf("Putting cursor item %s in inventory.", mq.TLO.Cursor())
+
+        -- 77678 Molten Orb
+        if mq.TLO.Cursor.ID() ~= 77678 then
+            all_tellf("Putting cursor item %s in inventory.", mq.TLO.Cursor())
+        end
         mq.cmd("/autoinventory")
         mq.delay(2000, function() return mq.TLO.Cursor.ID() == nil end)
         mq.delay(100)

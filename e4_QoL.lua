@@ -692,9 +692,9 @@ function QoL.Init()
 
     -- track XP
     local xpGain = function(text)
-        --local diff = mq.TLO.Me.Exp() - currentXP
-        --log.Info("Gained XP. %d", diff)
-        --currentXP = mq.TLO.Me.Exp()
+        local diff = mq.TLO.Me.Exp() - currentXP
+        log.Info("Gained XP. %d", diff)
+        currentXP = mq.TLO.Me.Exp()
 
         if in_raid() then
             return

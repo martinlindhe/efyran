@@ -22,7 +22,7 @@ function combine_clear_cursor()
             cmd("/destroy")
             delay(1)
         else
-            print("Putting cursor item ", mq.TLO.Cursor(), " in inventory.")
+            all_tellf("Putting cursor item %s in inventory.", mq.TLO.Cursor())
             cmd("/autoinventory")
             delay(500)
         end
