@@ -114,8 +114,7 @@ function buffs.Tick()
 
     -- XXX combat buffs should be done here (TODO implement combat buffs)
 
-    if in_combat() then
-        --  or nearby_npc_count(75) >= 3
+    if is_gm() or is_invisible() or is_hovering() or in_combat() or not allow_buff_in_zone() then
         return
     end
 
@@ -129,9 +128,8 @@ function buffs.Tick()
         checkDebuffsTimer:restart()
     end
 
-    if is_gm() or is_invisible() or is_hovering() or in_combat() or is_moving() or not allow_buff_in_zone()
-    or window_open("MerchantWnd") or window_open("GiveWnd") or window_open("BigBankWnd") or window_open("SpellBookWnd")
-    or window_open("LootWnd") then
+    if is_moving() or window_open("MerchantWnd") or window_open("GiveWnd") or window_open("BigBankWnd")
+    or window_open("SpellBookWnd") or window_open("LootWnd") then
         return
     end
 
