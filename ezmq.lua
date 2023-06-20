@@ -506,6 +506,12 @@ function in_group()
     return mq.TLO.Group.Members() > 0
 end
 
+-- Am I group leader?
+---@return boolean
+function is_group_leader()
+    return mq.TLO.Group.Members() > 1 and mq.TLO.Me.Name() == mq.TLO.Group.Leader()
+end
+
 -- Am I hovering? (just died, waiting for rez in the same zone)
 ---@return boolean
 function is_hovering()
