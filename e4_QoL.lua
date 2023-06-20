@@ -700,8 +700,6 @@ function QoL.Init()
             return
         end
 
-        all_tellf("gained xp")
-
         if not in_group() then
             all_tellf("I got solo Exp")
         elseif is_group_leader() then

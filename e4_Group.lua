@@ -89,7 +89,8 @@ function Group.RecallGroup(name, groupNumber)
         end
     end
 
-    if orchestrator then
+    -- the "xp" group is never a raid
+    if orchestrator and name ~= "xp" then
         all_tellf("Recalling raid %s with leader %s", name, raidLeader)
         delay(1000)
 
