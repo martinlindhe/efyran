@@ -701,10 +701,10 @@ function QoL.Init()
         end
 
         if not in_group() then
-            all_tellf("I got solo Exp")
+            all_tellf("\agI got solo Exp")
         elseif is_group_leader() then
 
-            all_tellf("My group got Exp")
+            all_tellf("\agMy group got Exp")
         end
     end
 
@@ -713,14 +713,14 @@ function QoL.Init()
     mq.event("xp3", "You gained raid experience!", xpGain)
 
     mq.event("ding", "You have gained a level! Welcome to level #1#!", function(text, level)
-        all_tellf("[+g+]Ding L%d", level)
+        all_tellf("\agDing L%d", level)
     end)
 
     mq.event("dingAA", "You have gained an ability point#*#", function(text)
         if mq.TLO.Me.AAPoints() <= 1 or mq.TLO.Me.AAPoints() >= 100 then
             return
         end
-        all_tellf("[+g+] Ding AA - %d unspent", mq.TLO.Me.AAPoints())
+        all_tellf("\agDing AA - %d unspent", mq.TLO.Me.AAPoints())
     end)
 
     -- toggles debug output on/off

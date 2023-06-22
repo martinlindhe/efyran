@@ -1,5 +1,14 @@
 # TODO
 
+jun 2023:
+- /backoff
+- add filter to /fmi, /fdi
+- enc auto mez
+- clr group heal
+- auto cure
+
+
+
 misc:
 -- BUG: mq.TLO.NearestSpawn() results should be fetched directly and then looped over the results, as they can change
     in the middle of iteration otherwise.
