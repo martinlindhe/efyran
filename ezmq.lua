@@ -1286,7 +1286,7 @@ end
 --
 -- Used to reduce CPU load while zoning many peers at once.
 function unflood_delay()
-    mq.delay(math.random(0, mq.TLO.DanNet.PeerCount() * 400))
+    mq.delay(math.random(0, mq.TLO.DanNet.PeerCount() * 200))
 end
 
 -- Returns true if `name` is ready to use.

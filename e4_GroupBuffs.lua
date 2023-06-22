@@ -16,6 +16,7 @@ GroupBuffs.Lookup = {
     ["clr_aegolism"] = "CLR",
     ["clr_vie"] = "CLR",
     ["clr_spellhaste"] = "CLR",
+    ["di"] = "CLR",
 
     ["dru_skin"] = "DRU",
     ["dru_fire_resist"] = "DRU",
@@ -264,13 +265,19 @@ GroupBuffs.CLR = {
         "Kaerra's Mark/MinLevel|76", -- XXX unsure of minlevel
     },
 
+    -- slot 1: Death Save:
+    -- L60 Divine Intervention
+    di = {
+        "Divine Intervention/MinLevel|45", -- single
+    },
+
     -- L61 Ward of Gallantry (slot 4: 54 ac)
     -- L66 Ward of Valiance (slot 4: 72 ac)
     -- L71 Ward of the Dauntless (slot 4: 86 ac)
     -- L76 Ward of the Resolute Rk. II (solt 4: 109 ac)
     -- L80 Order of the Resolute Rk. II (slot 4: 109 ac, group)
     -- NOTE: stacks with Symbol + DRU Skin + Focus
-    ["clr_ac"] = {
+    clr_ac = {
         "Ward of Gallantry/MinLevel|45/CheckFor|Hand of Virtue",
         "Ward of Valiance/MinLevel|62/CheckFor|Hand of Conviction",
         "Ward of the Dauntless/MinLevel|71/CheckFor|Hand of Tenacity", -- XXX unsure of minlevel
@@ -291,7 +298,7 @@ GroupBuffs.CLR = {
     -- L75 Hand of Tenacity Rk. II (2234 hp, 118 ac, group)
     -- L7x Temerity ??? XXX
     -- L80 Hand of Temerity (2457 hp, 126 ac, group)
-    ["clr_aegolism"] = {
+    clr_aegolism = {
         "Blessing of Temperance/MinLevel|1",
         "Blessing of Aegolism/MinLevel|45",
         "Hand of Virtue/MinLevel|47",
@@ -310,7 +317,7 @@ GroupBuffs.CLR = {
     -- L75 Rallied Aegis of Vie Rk. II (absorb 10% of melee dmg to 2600, 36 min, group)
     -- L78 Shield of Vie Rk. II (absorb 10% of melee dmg to 3380, 36 min)
     -- L80 Rallied Shield of Vie Rk. II (slot 1: absorb 10% of melee dmg to 3380, 36 min, group)
-    ["clr_vie"] = {
+    clr_vie = {
         "Guard of Vie/MinLevel|1",
         "Protection of Vie/MinLevel|42",
         "Bulwark of Vie/MinLevel|46",
@@ -330,7 +337,7 @@ GroupBuffs.CLR = {
     -- L72 Aura of Purpose Rk. II (10% spell haste to L75, 45 min, group, 1125 mana)
     -- L76 Blessing of Resolve Rk. II (10% spell haste to L80, 40 min, 390 mana)
     -- L77 Aura of Resolve Rk. II (10% spell haste to L80, 45 min, group, 1125 mana)
-    ["clr_spellhaste"] = {
+    clr_spellhaste = {
         "Blessing of Faith/MinLevel|1",
         "Aura of Devotion/MinLevel|62",
         "Aura of Purpose/MinLevel|71", -- XXX unsure of minlevel
@@ -347,7 +354,7 @@ GroupBuffs.CLR = {
     -- L75 Armor of the Sacred Rk. II (704 hp, 58 ac, 10 mana/tick)
     -- L80 Armor of the Solemn Rk. II (915 hp, 71 ac, 12 mana/tick)
     -- NOTE: does not stack with DRU Skin
-    ["clr_self_shielding"] = {
+    clr_self_shielding = {
         -- XXX
     }
 }

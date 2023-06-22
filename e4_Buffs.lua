@@ -289,10 +289,12 @@ function handleBuffRequest(req)
             log.Error("DEBUG: n is not a number, from peer %s, buff %s", req.Peer, req.Buff)
         end
         if type(minLevel) ~= "number" then
-            all_tellf("FATAL minLevel is not a number, from peer %s, buff %s", req.Peer, req.Buff)
+            all_tellf("\arFATAL minLevel is not a number, from peer %s, buff %s, input %s", req.Peer, req.Buff, checkRow)
+            return
         end
         if type(level) ~= "number" then
-            all_tellf("FATAL level is not a number: %s: %s, from peer %s, buff %s", type(level), tostring(level), req.Peer, req.Buff)
+            all_tellf("\arFATAL level is not a number: %s: %s, from peer %s, buff %s, input %s", type(level), tostring(level), req.Peer, req.Buff, checkRow)
+            return
         end
         if type(n) == "number" and n > minLevel and level >= n then
             spellName = spellConfig.Name

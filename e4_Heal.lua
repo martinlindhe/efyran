@@ -396,7 +396,7 @@ function healPeer(spell_list, peer, pct)
 
             local check = castSpellAbility(spawn, heal, function() -- XXX castSpellAbility should take spellConfig obj directly
                 if not is_casting() then
-                    all_tellf("done casting heal, breaking")
+                    log.Info("Done casting heal, breaking")
                     return true
                 end
                 if mq.TLO.Target.ID() ~= spawn.ID() then
@@ -404,7 +404,7 @@ function healPeer(spell_list, peer, pct)
                     return true
                 end
                 if mq.TLO.Target() ~= nil and mq.TLO.Target.PctHPs() >= 98 then
-                    all_tellf("Ducking heal! Target was %d %%, is now %d %%", pct, mq.TLO.Target.PctHPs())
+                    all_tellf("Ducking heal! Target %s was %d %%, is now %d %%", pct, mq.TLO.Target.Name(), mq.TLO.Target.PctHPs())
                     cmd("/interrupt")
                     return true
                 end
