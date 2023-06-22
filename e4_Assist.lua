@@ -234,6 +234,7 @@ end
 ---@param used? array optionally keep track of used abilites
 ---@return boolean
 function performSpellAbility(targetID, abilityRows, category, used)
+    follow.Pause()
     if abilityRows == nil then
         return false
     end
