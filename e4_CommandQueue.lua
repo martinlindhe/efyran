@@ -31,6 +31,7 @@ function CommandQueue.Add(name, arg, arg2)
     })
 end
 
+-- remove by name
 function CommandQueue.Remove(name)
     local idx = -1
 
@@ -110,6 +111,21 @@ function CommandQueue.Process()
         if spawn == nil or (spawn.Type() ~= "NPC" and spawn.Type() ~= "Pet") then
             return
         end
+        -- if already killing something, enqueue order
+        if assist.IsAssisting() then
+            if toint(v.Arg) == assist.targetID then
+                return
+            end
+
+            log.Info("got told to kill but already on target, so putting order back in queue")
+            if mq.TLO.Me.Name() == "Kniven" then
+                all_tellf("is already assisting on %d, queueing %d", assist.targetID, v.Arg)
+            end
+            -- optimization: skips filtering again
+            CommandQueue.Add(v.Name, v.Arg)
+            return
+        end
+
         log.Debug("Killing %s, type %s", spawn.DisplayName(), spawn.Type())
         assist.handleAssistCall(spawn)
 
