@@ -59,6 +59,13 @@ function CommandQueue.Clear()
     CommandQueue.queue = {}
 end
 
+-- Is called when peer has zoned
+function CommandQueue.ZoneEvent()
+    CommandQueue.Clear()
+    CommandQueue.Add("zoned")
+    buffs.timeZoned = os.time()
+end
+
 function CommandQueue.Process()
     --log.Debug("CommandQueue.Process()")
 
@@ -118,9 +125,6 @@ function CommandQueue.Process()
             end
 
             log.Info("got told to kill but already on target, so putting order back in queue")
-            if mq.TLO.Me.Name() == "Kniven" then
-                all_tellf("is already assisting on %d, queueing %d", assist.targetID, v.Arg)
-            end
             -- optimization: skips filtering again
             CommandQueue.Add(v.Name, v.Arg)
             return
@@ -217,7 +221,7 @@ function CommandQueue.Process()
             log.Error("Unknown burns set '%s'", v.Arg)
         end
     elseif v.Name == "ward" then
-        use_ward(v.Arg)
+        UseWard(v.Arg)
     else
         all_tellf("ERROR unknown command in queue: %s", v.Name)
     end
@@ -225,7 +229,7 @@ end
 
 -- Use a ward AA (priests)
 ---@param kind string kind of ward ("heal", "cure")
-function use_ward(kind)
+function UseWard(kind)
     if kind == "cure" then
         local aaName = "Ward of Purity"
         if have_alt_ability(aaName) then

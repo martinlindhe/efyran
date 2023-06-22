@@ -37,6 +37,9 @@ local buffs = {
 
     ---@type integer
     lastPlayerCount = 0,
+
+    ---@type integer in seconds
+    timeZoned = os.time(),
 }
 
 function buffs.Init()
@@ -62,7 +65,7 @@ local requestBuffsTimer = timer.new_random(60 * 1) -- 60s
 
 local handleBuffsTimer = timer.new_random(2 * 1) -- 2s
 
-local checkDebuffsTimer = timer.new_random(1) -- XXX
+local checkDebuffsTimer = timer.new_random(20 * 1) -- 20s
 
 -- broadcasts what buff groups we can cast
 function buffs.AnnounceAvailablity()

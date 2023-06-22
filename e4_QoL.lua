@@ -64,8 +64,7 @@ function QoL.Init()
         if zone == "an area where levitation effects do not function" then
             return
         end
-        commandQueue.Clear()
-        commandQueue.Add("zoned")
+        commandQueue.ZoneEvent()
     end)
 
     mq.event("camping", "It will take you about 30 seconds to prepare your camp.", function(text, name)

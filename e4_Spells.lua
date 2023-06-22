@@ -745,7 +745,7 @@ function ae_rez()
             end
         end
         doevents()
-        delay(12000)
+        delay(13000)
     end
     all_tellf("\amAEREZ DONE\ax")
 end
@@ -788,7 +788,6 @@ function consent_me()
     local spawnQuery = 'pccorpse radius 500'
     for i = 1, spawn_count(spawnQuery) do
         local spawn = mq.TLO.NearestSpawn(i, spawnQuery)
-        log.Info("Asking %s for consent ...", spawn.DisplayName())
         cmdf("/dexecute %s /consent %s", spawn.DisplayName(), mq.TLO.Me.Name())
     end
 end

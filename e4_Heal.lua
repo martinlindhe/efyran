@@ -12,6 +12,8 @@ local buffs   = require("efyran/e4_Buffs")
 local askForHealTimer = timer.new_expired(5 * 1) -- 5s
 local askForHealPct = 88 -- at what % HP to start begging for heals
 
+local timeZonedDelay = 5 -- seconds
+
 local Heal = {
     queue = queue.new(), -- holds toons that requested a heal
 
@@ -58,7 +60,7 @@ function joinCurrentHealChannel()
     end
 end
 
-local healQueueMaxLength = 25
+local healQueueMaxLength = 40
 
 ---@param s string
 ---@return string, integer
@@ -129,6 +131,12 @@ function Heal.Tick()
 end
 
 function Heal.askForHeal()
+
+    if os.time() - timeZonedDelay <= buffs.timeZoned then
+        -- ignore first few seconds after zoning, to avoid spamming heals before health data has been synced from server
+        return
+    end
+
     if not is_hovering() and mq.TLO.Me.PctHPs() <= askForHealPct and askForHealTimer:expired() then
         -- ask for heals if i take damage
         local s = mq.TLO.Me.Name().." "..mq.TLO.Me.PctHPs() -- "Avicii 82"
@@ -244,6 +252,11 @@ function nearby_npc_count(radius)
 end
 
 function Heal.medCheck()
+
+    if os.time() - timeZonedDelay <= buffs.timeZoned then
+        -- ignore first few seconds after zoning, to avoid sitting after zoning, before health data has been synced from server
+        return
+    end
 
     if botSettings.settings.healing ~= nil and botSettings.settings.healing.automed ~= nil and not botSettings.settings.healing.automed then
         return
@@ -404,7 +417,7 @@ function healPeer(spell_list, peer, pct)
                     return true
                 end
                 if mq.TLO.Target() ~= nil and mq.TLO.Target.PctHPs() >= 98 then
-                    all_tellf("Ducking heal! Target %s was %d %%, is now %d %%", pct, mq.TLO.Target.Name(), mq.TLO.Target.PctHPs())
+                    all_tellf("Ducking heal! \ag%s\ax was %d %%, is now %d %%", mq.TLO.Target.Name(), pct, mq.TLO.Target.PctHPs())
                     cmd("/interrupt")
                     return true
                 end
