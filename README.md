@@ -155,6 +155,7 @@ Buff Spell Level   Minimum Target Level
 /shrinkall                  - tell all to shrink their groups
 
 /wornaugs                   - reports all worn augs and total hp/mana/endurance/ac
+/tongues                    - reports quest status for GoD Discord Skin Samples
 
 /handin                     - performs NPC hand-ins, see handin.lua
 

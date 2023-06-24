@@ -145,7 +145,7 @@ function Pet.BuffMyPet()
             -- if we lack this item, then skip.
             log.Info("SKIP PET BUFFING %s, out of reagent %s", spellConfig.Name,  spellConfig.Reagent)
             skip = true
-        elseif have_item(spellConfig.Name) and not is_item_clicky_ready(spellConfig.Name) then
+        elseif have_item_inventory(spellConfig.Name) and not is_item_clicky_ready(spellConfig.Name) then
             -- XXX must also skip if pet has said buff ... clicky item is not the spell name !!!
             log.Debug("SKIP PET BUFFING %s, item clicky is not ready", spellConfig.Name)
             skip = true

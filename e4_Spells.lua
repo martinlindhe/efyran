@@ -114,7 +114,7 @@ function refreshBuff(buffItem, spawn)
         delay(3000) -- XXX 3s
     end
 
-    if not have_item(spellConfig.Name) and mq.TLO.Me.CurrentMana() < spell.Mana() then
+    if not have_item_inventory(spellConfig.Name) and mq.TLO.Me.CurrentMana() < spell.Mana() then
         log.Info("SKIPPING BUFF, not enough mana. Have %d, need %d", mq.TLO.Me.CurrentMana(), spell.Mana())
         return false
     end
@@ -125,7 +125,7 @@ function refreshBuff(buffItem, spawn)
     end
 
     local pretty = spellName
-    if have_item(spellConfig.Name) then
+    if have_item_inventory(spellConfig.Name) then
         local item = find_item(spellConfig.Name)
         if item ~= nil then
             pretty = item.ItemLink("CLICKABLE")()
@@ -268,7 +268,7 @@ function castSpellAbility(spawn, row, callback)
         return false
     end
 
-    if not have_spell(spell.Name) and have_item(spell.Name) and not is_item_clicky_ready(spell.Name) then
+    if not have_spell(spell.Name) and have_item_inventory(spell.Name) and not is_item_clicky_ready(spell.Name) then
         -- Item and spell examples: Molten Orb (MAG)
         log.Debug("SKIP cast, item clicky not ready: %s", spell.Name)
         return false
@@ -317,7 +317,7 @@ function castSpell(name, spawnId)
         delay(100)
     end
 
-    if not is_brd() and not have_spell(name) and have_item(name) then
+    if not is_brd() and not have_spell(name) and have_item_inventory(name) then
         -- Item and spell examples: Molten Orb (MAG)
         if not is_item_clicky_ready(name) then
             -- eg Worn Totem, with 4 min buff duration and 10 min recast
@@ -329,7 +329,7 @@ function castSpell(name, spawnId)
     castSpellRaw(name, spawnId, "-maxtries|3")
 
     if is_brd() then
-        if have_item(name) then
+        if have_item_inventory(name) then
             -- item click
             local item = find_item(name)
             if item ~= nil then
@@ -375,7 +375,7 @@ end
 
 -- returns datatype spell or nil if not found
 function getSpellFromBuff(name)
-    if have_item(name) then
+    if have_item_inventory(name) then
         return mq.TLO.FindItem(name).Clicky.Spell
     elseif have_spell(name) then
         return get_spell(name)

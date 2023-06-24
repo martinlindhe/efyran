@@ -622,6 +622,27 @@ function QoL.Init()
     -- auto banks items from tradeskills.ini
     mq.bind("/autobank", function() commandQueue.Add("autobank") end)
 
+    -- report your GoD tongue quest status
+    mq.bind("/tongues", function()
+        if have_item("Assistant Researcher's Symbol") then
+            all_tellf("tongues: DONE")
+            -- TODO check if we have any tongues that is wasting bag space if we got the reward
+            return
+        end
+        local s = "tongues: NEED "
+        if not have_item("Ikaav Tongue") then s = s .. "Ikaav " end
+        if not have_item("Mastruq Tongue") then s = s .. "Mastruq " end
+        if not have_item("Aneuk Tongue") then s = s .. "Aneuk " end
+        if not have_item("Ra'Tuk Tongue") then s = s .. "Ra'Tuk " end
+        if not have_item("Noc Tongue") then s = s .. "Noc " end
+        if not have_item("Kyv Tongue") then s = s .. "Kyv " end
+        if not have_item("Ukun Tongue") then s = s .. "Ukun " end
+        if not have_item("Ixt Tongue") then s = s .. "Ixt " end
+        if not have_item("Tongue of the Zun'muram") then s = s .. "Zun " end
+        if not have_item("Tongue of the Tunat'muram") then s = s .. "Tunat " end
+        all_tellf(s)
+    end)
+
     -- MAG: use Call of the Hero to summon the group to you
     mq.bind("/cohgroup", function() mq.cmd("/lua run efyran/cohgroup") end)
 

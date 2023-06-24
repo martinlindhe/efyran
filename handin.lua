@@ -184,7 +184,7 @@ for npcRow, t in pairs(handinRules) do
                         end
                         log.Info("Looking for component %s", component)
 
-                        if have_item(component) then
+                        if have_item_inventory(component) then
                             haveParts = true
                             local haveCount = getItemCountExact(component)
                             log.Info("I have component %s x %d", component, haveCount)

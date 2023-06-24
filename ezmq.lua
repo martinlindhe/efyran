@@ -144,10 +144,22 @@ function spawn_from_peer_name(name)
     return spawn_from_query("pc =".. name)
 end
 
--- returns true if `name` is an item i have  ( XXX in inventory! not in bank. separate checks for banked items / banked+inventory)
+--- returns true if `name` is an item I have in inventory or in bank.
 ---@return boolean
 function have_item(name)
+    return have_item_inventory(name) or have_item_banked(name)
+end
+
+-- returns true if `name` is an item i have in inventory.
+---@return boolean
+function have_item_inventory(name)
     return mq.TLO.FindItemCount("=" .. name)() > 0
+end
+
+-- returns true if `name` is an item i have in bank.
+---@return boolean
+function have_item_banked(name)
+    return mq.TLO.FindItemBankCount("=" .. name)() > 0
 end
 
 -- return true if peer has a target
@@ -1233,7 +1245,7 @@ local rezSpells = {
 ---@ return string|nil
 function get_rez_spell_item_aa()
     for k, rez in pairs(rezSpells) do
-        if have_alt_ability(rez) or have_spell(rez) or have_item(rez) then
+        if have_alt_ability(rez) or have_spell(rez) or have_item_inventory(rez) then
             return rez
         end
     end

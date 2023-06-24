@@ -12,7 +12,7 @@ local buffs   = require("efyran/e4_Buffs")
 local askForHealTimer = timer.new_expired(5 * 1) -- 5s
 local askForHealPct = 88 -- at what % HP to start begging for heals
 
-local timeZonedDelay = 5 -- seconds
+local timeZonedDelay = 10 -- seconds
 
 local Heal = {
     queue = queue.new(), -- holds toons that requested a heal
@@ -339,7 +339,7 @@ function Heal.performLifeSupport()
         elseif have_ability(spellConfig.Name) and not is_ability_ready(spellConfig.Name) then
             --cmd("/dgtell all performLifeSupport skip ", spellConfig.Name, ", Ability is not ready")
             skip = true
-        elseif have_item(spellConfig.Name) and not is_item_clicky_ready(spellConfig.Name) then
+        elseif have_item_inventory(spellConfig.Name) and not is_item_clicky_ready(spellConfig.Name) then
             --cmd("/dgtell all performLifeSupport skip ", spellConfig.Name, ", item clicky is not ready")
             skip = true
         elseif have_spell(spellConfig.Name) then
@@ -362,7 +362,7 @@ function Heal.performLifeSupport()
                 local spell = getSpellFromBuff(spellConfig.Name)
                 if spell ~= nil then
                     local spellName = spell.RankName()
-                    if have_item(spellConfig.Name) or have_alt_ability(spellConfig.Name) then
+                    if have_item_inventory(spellConfig.Name) or have_alt_ability(spellConfig.Name) then
                         spellName = spellConfig.Name
                     end
 
@@ -398,10 +398,10 @@ function healPeer(spell_list, peer, pct)
             -- remove, dont meet heal criteria
             -- DONT RETURN HERE because specific spell does not meet criteria!
             log.Debug("Skip using of heal, heal pct for %s is %d. dont need heal at %d for %s", spellConfig.Name, spellConfig.HealPct, pct, peer)
-        elseif not have_spell(spellConfig.Name) and not have_item(spellConfig.Name) then
+        elseif not have_spell(spellConfig.Name) and not have_item_inventory(spellConfig.Name) then
             -- SKIP clickes that is not on me
             log.Warn("Skip using of heal to heal %s at %d, I do not have item on me: %s", peer, pct, spellConfig.Name)
-        elseif not have_spell(spellConfig.Name) and have_item(spellConfig.Name) and not is_item_clicky_ready(spellConfig.Name) then
+        elseif not have_spell(spellConfig.Name) and have_item_inventory(spellConfig.Name) and not is_item_clicky_ready(spellConfig.Name) then
             -- SKIP clickies that is not ready
             log.Info("Skip using of heal to heal %s at %d, clicky %s is not ready", peer, pct, spellConfig.Name)
         else
@@ -421,6 +421,7 @@ function healPeer(spell_list, peer, pct)
                     cmd("/interrupt")
                     return true
                 end
+                return false
             end)
             return true
         end
