@@ -110,10 +110,17 @@ end
 
 local lifeSupportTimer = timer.new_expired(5 * 1) -- 5s
 
+local groupBalanceTimer = timer.new_expired(1 * 1) -- 1s
+
 function Heal.Tick()
 
     if is_hovering() then
         return
+    end
+
+    if groupBalanceTimer:expired() then
+        groupBalanceTimer:restart()
+        Heal.performGroupBalanceHeal()
     end
 
     if lifeSupportTimer:expired() then
@@ -285,7 +292,44 @@ function Heal.medCheck()
     end
 end
 
+-- uses cleric Epic 1.5/2.0 clicky or Divine Arb AA to heal group if avg < 95%
+---@return bool true if performed action
+function Heal.performGroupBalanceHeal()
+    if not is_clr() or is_casting() then
+        return
+    end
 
+    local sum = mq.TLO.Me.PctHPs()
+    local members = 1
+    for i=1,mq.TLO.Group.Members() do
+        local pct = mq.TLO.Group.Member(i).PctHPs()
+        if pct ~= nil then
+            sum = sum + pct
+            members = members + 1
+        end
+    end
+
+    local avg = sum / members
+    if avg >= 95 then
+        return false
+    end
+
+    if is_alt_ability_ready("Divine Arbitration") then
+        all_tellf("\ayHeal balance (AA) at %d %%", avg)
+        use_alt_ability("Divine Arbitration", mq.TLO.Me.ID())
+        return true
+    end
+
+    if is_item_clicky_ready("Aegis of Superior Divinity") then
+        all_tellf("\ayHeal balance (EPIC) at %d %%", avg)
+        return castSpellAbility(nil, "Aegis of Superior Divinity")
+    end
+
+    if is_item_clicky_ready("Harmony of the Soul") then
+        all_tellf("\ayHeal balance (EPIC) at %d %%", avg)
+        return castSpellAbility(nil, "Harmony of the Soul")
+    end
+end
 
 -- tries to defend myself using settings.healing.life_support
 function Heal.performLifeSupport()
