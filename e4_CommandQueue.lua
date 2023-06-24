@@ -195,6 +195,8 @@ function CommandQueue.Process()
         end
 
         ask_nearby_peer_to_activate_aa(aaName)
+    elseif v.Name == "autobank" then
+        autobank()
     elseif v.Name == "reportwornaugs" then
         report_worn_augs()
     elseif v.Name == "open-nearby-corpse" then

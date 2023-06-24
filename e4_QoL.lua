@@ -11,6 +11,8 @@ local botSettings = require("efyran/e4_BotSettings")
 local pet     = require("efyran/e4_Pet")
 local buffs   = require("efyran/e4_Buffs")
 
+require("efyran/autobank")
+
 local QoL = {}
 
 local maxFactionLoyalists = false
@@ -616,6 +618,9 @@ function QoL.Init()
 
     -- cast Summon Clockwork Banker veteran AA yourself, or the first available nearby peer
     mq.bind("/banker", function() commandQueue.Add("summonbanker") end)
+
+    -- auto banks items from tradeskills.ini
+    mq.bind("/autobank", function() commandQueue.Add("autobank") end)
 
     -- MAG: use Call of the Hero to summon the group to you
     mq.bind("/cohgroup", function() mq.cmd("/lua run efyran/cohgroup") end)

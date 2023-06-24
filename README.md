@@ -147,6 +147,7 @@ Buff Spell Level   Minimum Target Level
 /fmi                        - find missing item. report peers who lack an item
 /clickies                   - lists all clickies on current toon
 /banker                     - summons a banker
+/autobank                   - autobanks loot listed in tradeskills.ini
 
 /recallgroup <name>         - recalls a group/raid formation
 

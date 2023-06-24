@@ -488,6 +488,12 @@ function is_clr()
     return mq.TLO.Me.Class.ShortName() == "CLR"
 end
 
+-- Am I a Enchanter?
+---@return boolean
+function is_enc()
+    return mq.TLO.Me.Class.ShortName() == "ENC"
+end
+
 -- Am I in a guild?
 ---@return boolean
 function in_guild()
@@ -533,6 +539,16 @@ end
 ---@return boolean
 function window_open(name)
     return mq.TLO.Window(name).Open() == true
+end
+
+-- Close window by clicking on a button
+---@param name string
+---@param button string
+function close_window(name, button)
+    if not window_open(name) then
+        return
+    end
+    mq.cmdf("/notify %s %s leftmouseup", name, button)
 end
 
 -- Opens merchant window with `spawn`.
@@ -613,10 +629,7 @@ end
 
 -- Close currently open merchant window.
 function close_merchant_window()
-    if not window_open("MerchantWnd") then
-        return
-    end
-    mq.cmd("/notify MerchantWnd MW_Done_Button leftmouseup")
+    close_window("MerchantWnd", "MW_Done_Button")
 end
 
 local neutralZones = { "guildlobby", "guildhall", "bazaar", "poknowledge", "potranquility", "nexus", "shadowrest" }
