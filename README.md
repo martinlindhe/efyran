@@ -158,6 +158,7 @@ Buff Spell Level   Minimum Target Level
 /tongues                    - reports quest status for GoD Discord Skin Samples
 
 /handin                     - performs NPC hand-ins, see handin.lua
+/wordheal                   - clerics: cast word heal (group heal with cure effect)
 
 /rezit                      - rez target
 /aerez                      - perform ae rez

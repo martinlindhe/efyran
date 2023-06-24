@@ -663,6 +663,17 @@ function QoL.Init()
         commandQueue.Add("lootcorpse")
     end)
 
+    -- tell clerics to use word heals
+    mq.bind("/wordheal", function()
+        if is_orchestrator() then
+            cmd("/dgzexecute /wordheal")
+        end
+        if not is_clr() then
+            return
+        end
+        commandQueue.Add("wordheal")
+    end)
+
     -- make all peer quit expedition
     mq.bind("/quitexp", function()
         all_tellf("Instructing peers to leave expedition ...")
