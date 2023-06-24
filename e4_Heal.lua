@@ -405,6 +405,11 @@ function healPeer(spell_list, peer, pct)
             -- SKIP clickies that is not ready
             log.Info("Skip using of heal to heal %s at %d, clicky %s is not ready", peer, pct, spellConfig.Name)
         else
+            target_id(spawn.ID())
+            if mq.TLO.Target() ~= nil and mq.TLO.Target.PctHPs() >= 98 then
+                log.Info("Skipping heal! \ag%s\ax was %d %%, is now %d %%", mq.TLO.Target.Name(), pct, mq.TLO.Target.PctHPs())
+                return true
+            end
             all_tellf("Healing \ag%s\ax at %d%% with %s", peer, pct, spellConfig.Name)
 
             local check = castSpellAbility(spawn, heal, function() -- XXX castSpellAbility should take spellConfig obj directly
