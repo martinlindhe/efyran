@@ -153,6 +153,8 @@ function CommandQueue.Process()
         follow.RunToZone(v.Arg)
     elseif v.Name == "hailit" then
         hail.PerformHail()
+    elseif v.Name == "aetl" then
+        castSpellAbility(nil, "Teleport")
     elseif v.Name == "recallgroup" then
         group.RecallGroup(v.Arg, v.Arg2)
     elseif v.Name == "rezit" then

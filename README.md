@@ -159,6 +159,7 @@ Buff Spell Level   Minimum Target Level
 
 /handin                     - performs NPC hand-ins, see handin.lua
 /wordheal                   - clerics: cast word heal (group heal with cure effect)
+/aetl                       - wizard: cast AE TL spell
 
 /rezit                      - rez target
 /aerez                      - perform ae rez

@@ -500,6 +500,12 @@ function is_clr()
     return mq.TLO.Me.Class.ShortName() == "CLR"
 end
 
+-- Am I a Wizard?
+---@return boolean
+function is_wiz()
+    return mq.TLO.Me.Class.ShortName() == "WIZ"
+end
+
 -- Am I a Enchanter?
 ---@return boolean
 function is_enc()
@@ -1380,6 +1386,19 @@ function drop_all_buffs()
             mq.cmdf("/removebuff %s", mq.TLO.Me.Buff(i).Name())
         end
     end
+end
+
+-- disables tribute
+function disable_tribute()
+
+    if not window_open("TributeBenefitWnd") then
+        cmd("/keypress TOGGLE_TRIBUTEBENEFITWIN")
+    end
+    delay(2)
+
+    cmd("/notify TBW_PersonalPage TBWP_ActivateButton leftmouseup")
+    delay(2)
+    cmd("/keypress TOGGLE_TRIBUTEBENEFITWIN")
 end
 
 -- returns a table with class shortname booleans wether nearby peers are of desired classes.

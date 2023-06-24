@@ -390,7 +390,7 @@ function QoL.Init()
     -- tell all peers to use Throne of Heroes
     mq.bind("/throneall", function()
         if is_orchestrator() then
-            mq.cmd("/dgaexecute all /throne")
+            mq.cmd("/dgaexecute /throne")
         end
         commandQueue.Add("use-veteran-aa", "Throne of Heroes")
     end)
@@ -405,14 +405,14 @@ function QoL.Init()
 
     mq.bind("/intensity", function()
         if is_orchestrator() then
-            mq.cmd("/dgaexecute all /intensity") -- XXX filter
+            mq.cmd("/dgaexecute /intensity") -- XXX filter
         end
         commandQueue.Add("use-veteran-aa", "Intensity of the Resolute")
     end)
 
     mq.bind("/expedient", function()
         if is_orchestrator() then
-            mq.cmd("/dgaexecute all /expedient") -- XXX filter
+            mq.cmd("/dgaexecute /expedient") -- XXX filter
         end
         commandQueue.Add("use-veteran-aa", "Expedient Recovery")
     end)
@@ -459,6 +459,13 @@ function QoL.Init()
         commandQueue.Add("hailit")
     end)
 
+    -- wiz: cast AE TL spell
+    mq.bind("/aetl", function()
+        if not is_wiz() then
+            return
+        end
+        commandQueue.Add("aetl")
+    end)
     -- reports faction status
     mq.bind("/factions", function()
         if maxFactionLoyalists then
@@ -934,6 +941,11 @@ function QoL.Tick()
 
     if class_shortname() == "WIZ" and have_pet() then
         cmd("/pet get lost")
+    end
+
+    if mq.TLO.Me.TributeActive() and not (zone_shortname() == "anguish" or zone_shortname() == "tacvi") then
+        all_tellf("\arTRIBUTE WAS ACTIVE IN %s, TURNING OFF!", zone_shortname())
+        disable_tribute()
     end
 
     if qolClearCursorTimer:expired() then

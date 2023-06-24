@@ -118,6 +118,11 @@ function Heal.Tick()
         return
     end
 
+    if os.time() - timeZonedDelay <= buffs.timeZoned then
+        -- ignore first few seconds after zoning, to avoid spamming heals before health data has been synced from server
+        return
+    end
+
     if groupBalanceTimer:expired() then
         groupBalanceTimer:restart()
         Heal.performGroupBalanceHeal()
@@ -138,11 +143,6 @@ function Heal.Tick()
 end
 
 function Heal.askForHeal()
-
-    if os.time() - timeZonedDelay <= buffs.timeZoned then
-        -- ignore first few seconds after zoning, to avoid spamming heals before health data has been synced from server
-        return
-    end
 
     if not is_hovering() and mq.TLO.Me.PctHPs() <= askForHealPct and askForHealTimer:expired() then
         -- ask for heals if i take damage
@@ -235,7 +235,7 @@ function Heal.acceptRez()
             delay(10000) -- 10s
             return
         end
-        all_tellf("Accepting rez from %s", peer)
+        all_tellf("\agAccepting rez from \ag%s", peer)
         cmd("/notify ConfirmationDialogBox Yes_Button leftmouseup")
 
         -- click in the RespawnWnd if open (live)
@@ -293,10 +293,10 @@ function Heal.medCheck()
 end
 
 -- uses cleric Epic 1.5/2.0 clicky or Divine Arb AA to heal group if avg < 95%
----@return bool true if performed action
+---@return boolean true if performed action
 function Heal.performGroupBalanceHeal()
-    if not is_clr() or is_casting() then
-        return
+    if not is_clr() or is_casting() or is_moving() then
+        return false
     end
 
     local sum = mq.TLO.Me.PctHPs()
@@ -329,6 +329,8 @@ function Heal.performGroupBalanceHeal()
         all_tellf("\ayHeal balance (EPIC) at %d %%", avg)
         return castSpellAbility(nil, "Harmony of the Soul")
     end
+
+    return false
 end
 
 -- tries to defend myself using settings.healing.life_support
