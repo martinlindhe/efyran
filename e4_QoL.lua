@@ -21,6 +21,11 @@ local currentXP = mq.TLO.Me.Exp()
 
 function QoL.Init()
 
+    if mq.TLO.FrameLimiter() ~= "TRUE" then
+        all_tellf("Enabling framelimiter (was %s) ...", mq.TLO.FrameLimiter())
+        cmd("/framelimiter enable")
+    end
+
     QoL.loadRequiredPlugins()
 
     if botSettings.settings.debug ~= nil and botSettings.settings.debug then
