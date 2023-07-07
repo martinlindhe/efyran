@@ -60,7 +60,7 @@ function joinCurrentHealChannel()
     end
 end
 
-local healQueueMaxLength = 40
+local healQueueMaxLength = 50
 
 ---@param s string
 ---@return string, integer
@@ -155,9 +155,6 @@ end
 
 function Heal.processQueue()
     -- check if heals need to be casted
-    if is_clr() then
-        --all_tellf("processQueue: queue is %d: %s", Heal.queue:size(), Heal.queue:describe())
-    end
     if Heal.queue:size() == 0 or botSettings.settings.healing == nil then
         return
     end
@@ -310,24 +307,29 @@ function Heal.performGroupBalanceHeal()
     end
 
     local avg = sum / members
-    if avg >= 95 then
+    if avg >= 90 then
         return false
     end
 
     if is_alt_ability_ready("Divine Arbitration") then
         all_tellf("\ayHeal balance (AA) at %d %%", avg)
         use_alt_ability("Divine Arbitration", mq.TLO.Me.ID())
+        delay(800)
         return true
     end
 
     if is_item_clicky_ready("Aegis of Superior Divinity") then
         all_tellf("\ayHeal balance (EPIC) at %d %%", avg)
-        return castSpellAbility(nil, "Aegis of Superior Divinity")
+        local res = castSpellAbility(nil, "Aegis of Superior Divinity")
+        delay(800)
+        return res
     end
 
     if is_item_clicky_ready("Harmony of the Soul") then
         all_tellf("\ayHeal balance (EPIC) at %d %%", avg)
-        return castSpellAbility(nil, "Harmony of the Soul")
+        local res = castSpellAbility(nil, "Harmony of the Soul")
+        delay(800)
+        return res
     end
 
     return false

@@ -254,7 +254,7 @@ function performSpellAbility(targetID, abilityRows, category, used)
                 -- signal ability was used, in order to leave Assist.Tick() quickly when target is nil
                 return true
             end
-            log.Info("Trying to %s on %s with %s", category, spawn.Name(), spellConfig.Name)
+            log.Debug("Trying to %s on %s with %s", category, spawn.Name(), spellConfig.Name)
             if castSpellAbility(spawn, row) then
                 log.Info("Did \ay%s\ax on %s with %s", category, spawn.Name(), spellConfig.Name)
                 if used ~= nil then

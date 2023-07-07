@@ -1313,11 +1313,17 @@ function strip_link(s)
     return s
 end
 
+-- Delay between 0 and `ms` milliseconds (random)
+---@param ms integer milliseconds
+function random_delay(ms)
+    mq.delay(math.random(0, ms))
+end
+
 -- Delays a random amount of seconds in order not to flood the connection. 0.4s delay for each connected peer.
 --
 -- Used to reduce CPU load while zoning many peers at once.
 function unflood_delay()
-    mq.delay(math.random(0, mq.TLO.DanNet.PeerCount() * 300))
+    random_delay(mq.TLO.DanNet.PeerCount() * 300)
 end
 
 -- Returns true if `name` is ready to use.

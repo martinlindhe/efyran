@@ -371,6 +371,9 @@ function castSpellRaw(name, spawnId, extraArgs)
     end
     --log.Debug("-- castSpellRaw: %s", exe)
     cmdf(exe)
+
+    -- a small delay so spell starts to be cast
+    delay(50)
 end
 
 -- returns datatype spell or nil if not found
@@ -736,7 +739,7 @@ function ae_rez()
             target_id(spawn.ID())
 
             if is_alt_ability_ready(rez) or is_spell_ready(rez) or is_item_clicky_ready(rez) then
-                all_tellf("\amRezzing %s\ax with %s", spawn.Name(), rez)
+                all_tellf("Rezzing \ag%s\ax with \ay%s\ax", spawn.Name(), rez)
                 castSpellRaw(rez, spawn.ID())
                 delay(3000)
                 wait_until_not_casting()
@@ -803,7 +806,7 @@ function gather_corpses()
         target_id(spawn.ID())
         delay(2)
         cmd("/corpse")
-        delay(1000, function() return spawn.Distance() < 20 end)
+        delay(1000, function() return spawn() ~= nil and spawn.Distance() < 20 end)
     end
 end
 

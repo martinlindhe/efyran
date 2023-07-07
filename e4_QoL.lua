@@ -143,6 +143,18 @@ function QoL.Init()
         assist.spellSet = name
     end)
 
+
+    -- mana check
+    mq.bind("/mana", function()
+        if is_orchestrator() then
+            cmdf("/dgzexecute /mana")
+        end
+        if mq.TLO.Me.MaxMana() == 0 or mq.TLO.Me.PctMana() == 100 then
+            return
+        end
+        all_tellf("MANA %d %%", mq.TLO.Me.PctMana())
+    end)
+
     -- tell peers to kill target until dead
     ---@param ... string|nil such as "/only|ROG"
     mq.bind("/assiston", function(...)
@@ -408,16 +420,23 @@ function QoL.Init()
         commandQueue.Add("use-veteran-aa", "Lesson of the Devoted")
     end)
 
+    mq.bind("/infusion", function()
+        if is_orchestrator() then
+            mq.cmd("/dgzexecute /infusion") -- XXX filter
+        end
+        commandQueue.Add("use-veteran-aa", "Infusion of the Faithful")
+    end)
+
     mq.bind("/intensity", function()
         if is_orchestrator() then
-            mq.cmd("/dgaexecute /intensity") -- XXX filter
+            mq.cmd("/dgzexecute /intensity") -- XXX filter
         end
         commandQueue.Add("use-veteran-aa", "Intensity of the Resolute")
     end)
 
     mq.bind("/expedient", function()
         if is_orchestrator() then
-            mq.cmd("/dgaexecute /expedient") -- XXX filter
+            mq.cmd("/dgzexecute /expedient") -- XXX filter
         end
         commandQueue.Add("use-veteran-aa", "Expedient Recovery")
     end)

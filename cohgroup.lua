@@ -27,7 +27,8 @@ while true do
 
     if not is_memorized("Call of the Hero") then
         log.Info("Memorizing Call of the Hero")
-        cmd("/memorize 1771 5")
+        -- NOTE: we avoid using temporary gem "5" on purpose, so autobuff won't unmemorize CoTH and cause another cooldown
+        cmd("/memorize 1771 8")
     end
 
     for n = 1, 5 do

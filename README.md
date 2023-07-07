@@ -124,6 +124,7 @@ Buff Spell Level   Minimum Target Level
 /longburns
 /fullburns
 
+/mana                       - tell peers to report mana %
 
 /followon					- tell peers to follow you
 /followoff					- tell peers to stop
