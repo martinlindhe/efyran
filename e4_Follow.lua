@@ -35,12 +35,14 @@ function Follow.Pause()
         cmd("/afollow off")
     elseif globalSettings.followMode:lower() == "mq2moveutils" then
         cmd("/stick off")
+    else
+        all_tellf("FATAL followMode unhandled '%s'", globalSettings.followMode:lower())
     end
 end
 
 function Follow.Stop()
-    Follow.Pause()
     Follow.spawn = nil
+    Follow.Pause()
 end
 
 local followUpdateTimer = timer.new_expired(15 * 1) -- 15s

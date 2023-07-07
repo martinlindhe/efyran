@@ -713,17 +713,33 @@ function rez_it(spawnID)
     end
 end
 
-
+-- Cleric: performs an AE rez
 function ae_rez()
     local rez = get_rez_spell_item_aa()
     if rez == nil then
         return
     end
 
-    local spawnQuery = 'pccorpse radius 100'
-    local corpses = spawn_count(spawnQuery)
-
+    local corpses = spawn_count('pccorpse radius 100')
     all_tellf("\amAERez started in %s\ax (%d corpses) ...", zone_shortname(), corpses)
+
+    local spawnQuery = 'pccorpse radius 100'
+    local classOrder = {'CLR', 'DRU', 'EMC', 'RNG', 'BST', 'PAL', 'BRD', 'SHD', 'WAR', 'MNK', 'ROG', 'BER', 'WIZ', 'NEC', 'MAG'}
+    for i=1, 15 do
+        ae_rez_query(rez, 'pccorpse radius 100 '..classOrder[i])
+    end
+
+    all_tellf("\amAEREZ DONE\ax")
+end
+
+---@param rez string rez spell/item name
+---@param spawnQuery string
+function ae_rez_query(rez, spawnQuery)
+
+    local corpses = spawn_count(spawnQuery)
+    if corpses == 0 then
+        return
+    end
     wait_until_not_casting()
 
     if have_spell(rez) and not is_memorized(rez) then
@@ -731,8 +747,9 @@ function ae_rez()
         mq.delay(2000)
     end
 
+    log.Info("Rezzing %s", spawnQuery)
+
     for i = 1, corpses do
-        ---@type spawn
         local spawn = mq.TLO.NearestSpawn(i, spawnQuery)
         if spawn ~= nil and spawn.ID() ~= nil then
             log.Info("Trying to rez %s", spawn.Name())
@@ -750,7 +767,6 @@ function ae_rez()
         doevents()
         delay(13000)
     end
-    all_tellf("\amAEREZ DONE\ax")
 end
 
 function pbae_loop()

@@ -549,7 +549,7 @@ end
 -- Am I in combat?
 ---@return boolean
 function in_combat()
-    return mq.TLO.Me.CombatState() == "COMBAT"
+    return mq.TLO.Me.CombatState() == "COMBAT" or mq.TLO.Me.PctAggro() > 0
 end
 
 -- Is window `name` open?

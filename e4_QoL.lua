@@ -777,7 +777,7 @@ function QoL.Init()
 
     mq.event("xp1", "You gain experience!", xpGain)
     mq.event('xp2', 'You gain party experience!!', xpGain)
-    mq.event("xp3", "You gained raid experience!", xpGain)
+    --mq.event("xp3", "You gained raid experience!", xpGain)
 
     mq.event("ding", "You have gained a level! Welcome to level #1#!", function(text, level)
         all_tellf("\agDing L%d", level)
