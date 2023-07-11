@@ -212,7 +212,7 @@ function CommandQueue.Process()
     elseif v.Name == "mount-on" then
         mount_on()
     elseif v.Name == "burns" then
-        if not assist.IsAssisting() then
+        if not in_combat() then
             log.Info("Ignoring \ay%s\ax burns request (not in combat)", v.Arg)
             return
         end
