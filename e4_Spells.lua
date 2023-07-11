@@ -211,7 +211,7 @@ function spellConfigAllowsCasting(buffItem, spawn)
     end
     if spellConfig.Reagent ~= nil then
         -- if we lack this item, then skip.
-        if getItemCountExact(spellConfig.Reagent) == 0 then
+        if inventory_item_count(spellConfig.Reagent) == 0 then
             all_tellf("SKIP BUFFING %s , out of reagent %s", spellConfig.Name, spellConfig.Reagent)
             return false
         end
@@ -258,7 +258,7 @@ function castSpellAbility(spawn, row, callback)
         return false
     end
 
-    if spell.Summon ~= nil and getItemCountExact(spell.Name) == 0 then
+    if spell.Summon ~= nil and inventory_item_count(spell.Name) == 0 then
         log.Info("SKIP Summon %s, missing summoned item mid-fight", spell.Name)
         return false
     end
@@ -373,7 +373,7 @@ function castSpellRaw(name, spawnId, extraArgs)
     cmdf(exe)
 
     -- a small delay so spell starts to be cast
-    delay(50)
+    delay(100)
 end
 
 -- returns datatype spell or nil if not found
@@ -857,18 +857,23 @@ function report_find_item(name)
     end
 
     local item = find_item(name)
-    if item == nil then
-        item = find_item_bank(name)
-        if item == nil then
-            return
+    if item ~= nil then
+        local inv_cnt = inventory_item_count(item.Name())
+        if inv_cnt == 1 then
+            all_tellf("%s in %s", item.ItemLink("CLICKABLE")(), inventory_slot_name(item.ItemSlot()))
+        else
+            all_tellf("%s in %s (count: %d)", item.ItemLink("CLICKABLE")(), inventory_slot_name(item.ItemSlot()), inv_cnt)
         end
     end
 
-    local cnt = getItemCountExact(item.Name())
-    if cnt == 1 then
-        all_tellf("%s in %s", item.ItemLink("CLICKABLE")(), inventory_slot_name(item.ItemSlot()))
-    else
-        all_tellf("%s in %s (count: %d)", item.ItemLink("CLICKABLE")(), inventory_slot_name(item.ItemSlot()), cnt)
+    item = find_item_bank(name)
+    if item == nil then
+        return
+    end
+
+    local in_bank = banked_item_count(item.Name())
+    if in_bank > 0 then
+        all_tellf("%s in bank (count: %d)", item.ItemLink("CLICKABLE")(), in_bank)
     end
 end
 

@@ -36,7 +36,7 @@ while true do
         if spawn() ~= nil and not spawn.OtherZone() and spawn.Distance() > cothMinDistance and mq.TLO.Me.PctMana() >= 25 then
             done = false
 
-            if getItemCountExact("Pearl") == 0 then
+            if inventory_item_count("Pearl") == 0 then
                 all_tellf("I am out of Pearls! I need to be re-stocked before I can cast Call of the Hero.")
                 return
             end

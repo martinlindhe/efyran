@@ -46,7 +46,7 @@ function Pet.Summon()
 
     if spellConfig.Reagent ~= nil then
         -- if we lack this item, then skip.
-        if getItemCountExact(spellConfig.Reagent) == 0 then
+        if inventory_item_count(spellConfig.Reagent) == 0 then
             all_tellf("SKIP PET SUMMON "..spellConfig.Name..", out of reagent "..spellConfig.Reagent)
             return false
         end
@@ -141,7 +141,7 @@ function Pet.BuffMyPet()
             -- if we got this buff on, then skip.
             --log.Debug("SKIP PET BUFFING %s, Pet have buff %s on them", spellConfig.Name, spellConfig.CheckFor)
             skip = true
-        elseif spellConfig.Reagent ~= nil and getItemCountExact(spellConfig.Reagent) == 0 then
+        elseif spellConfig.Reagent ~= nil and inventory_item_count(spellConfig.Reagent) == 0 then
             -- if we lack this item, then skip.
             log.Info("SKIP PET BUFFING %s, out of reagent %s", spellConfig.Name,  spellConfig.Reagent)
             skip = true

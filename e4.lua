@@ -22,7 +22,9 @@ buffs.Init()
 group.Init()
 heal.Init()
 assist.Init()
-qol.Init() -- NOTE: qol.Init() also verifies spell lines, so it should be called last
+
+-- NOTE: qol.Init() also verifies spell lines, so it must be called last
+qol.Init()
 
 log.Info("E4 started")
 

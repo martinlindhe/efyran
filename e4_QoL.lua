@@ -626,9 +626,9 @@ function QoL.Init()
     -- runs combine.lua tradeskill script. NOTE: /combine is reserved for MacroQuest.
     mq.bind("/combineit", function()
         if is_script_running("combine") then
-            cmd("/lua stop combine")
+            cmd("/lua stop efyran/combine")
         end
-        cmd("/lua run combine")
+        cmd("/lua run efyran/combine")
     end)
 
     mq.bind("/handin", function()

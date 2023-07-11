@@ -6,6 +6,7 @@ local globalSettings = require("efyran/e4_Settings")
 
 local Follow = {
     spawn = nil, -- the current spawn I am following
+    lastFollowID = 0, -- the spawn I was following, auto resume follow this after a fight
 }
 
 -- Starts to follow spawn ID (usually the orchestrator)
@@ -28,6 +29,23 @@ function Follow.Start(spawnID)
     Follow.Update()
 end
 
+function Follow.PauseForKill()
+    Follow.lastFollowID = 0
+    if Follow.spawn ~= nil then
+        Follow.lastFollowID = Follow.spawn.ID()
+        Follow.spawn = nil
+        Follow.Pause()
+    end
+end
+
+function Follow.ResumeAfterKill()
+    if Follow.lastFollowID ~= 0 then
+        Follow.Start(Follow.lastFollowID)
+        Follow.lastFollowID = 0
+    end
+end
+
+-- pause follow for the moment
 function Follow.Pause()
     if globalSettings.followMode:lower() == "mq2nav" then
         cmd("/nav stop")
@@ -40,8 +58,10 @@ function Follow.Pause()
     end
 end
 
+-- stops following completely
 function Follow.Stop()
     Follow.spawn = nil
+    Follow.lastFollowID = 0
     Follow.Pause()
 end
 
@@ -59,35 +79,38 @@ end
 
 local lastHeading = ""
 
--- called from Follow.Tick() in main loop
+-- called from Follow.Tick() in main loop, restores auto follow after a Follow.Pause() call
 function Follow.Update()
+    -- XXX fixme Follow.spawn is invalid after zoning, use PC name instead
+    if Follow.spawn == nil then
+        return
+    end
+
     local exe = ""
     local maxRange = 10 -- Follow.spawn.MaxRangeTo()
 
-    -- XXX Follow.spawn is invalid after zoning.
-    if Follow.spawn ~= nil then
-        log.Debug("Follow.Update, mode %s, distance %f", globalSettings.followMode, Follow.spawn.Distance3D())
-        if globalSettings.followMode:lower() == "mq2nav" then
-            if not mq.TLO.Navigation.MeshLoaded() then
-                all_tellf("MISSING NAVMESH FOR %s", zone_shortname())
-                return
-            end
-            if not mq.TLO.Navigation.Active() or lastHeading ~= Follow.spawn.HeadingTo() then
-                exe = string.format("/nav id %d | dist=%d log=critical", Follow.spawn.ID(), maxRange)
-                lastHeading = Follow.spawn.HeadingTo()
-            end
-        elseif globalSettings.followMode:lower() == "mq2advpath" then
-            if not mq.TLO.AdvPath.Following() or lastHeading ~= Follow.spawn.HeadingTo() then
-                exe = string.format("/afollow spawn %d", Follow.spawn.ID())
-            end
-        elseif globalSettings.followMode:lower() == "mq2moveutils" then
-            --if not mq.TLO.Stick.Active() or lastHeading ~= Follow.spawn.HeadingTo() then
-                mq.cmdf("/target id %d", Follow.spawn.ID())
-                exe = string.format("/stick hold %d uw", maxRange) -- face upwards to better run over obstacles
-                --exe = string.format("/moveto id %d", Follow.spawn.ID())
-            --end
+    log.Debug("Follow.Update, mode %s, distance %f", globalSettings.followMode, Follow.spawn.Distance3D())
+    if globalSettings.followMode:lower() == "mq2nav" then
+        if not mq.TLO.Navigation.MeshLoaded() then
+            all_tellf("MISSING NAVMESH FOR %s", zone_shortname())
+            return
         end
+        if not mq.TLO.Navigation.Active() or lastHeading ~= Follow.spawn.HeadingTo() then
+            exe = string.format("/nav id %d | dist=%d log=critical", Follow.spawn.ID(), maxRange)
+            lastHeading = Follow.spawn.HeadingTo()
+        end
+    elseif globalSettings.followMode:lower() == "mq2advpath" then
+        if not mq.TLO.AdvPath.Following() or lastHeading ~= Follow.spawn.HeadingTo() then
+            exe = string.format("/afollow spawn %d", Follow.spawn.ID())
+        end
+    elseif globalSettings.followMode:lower() == "mq2moveutils" then
+        --if not mq.TLO.Stick.Active() or lastHeading ~= Follow.spawn.HeadingTo() then
+            mq.cmdf("/target id %d", Follow.spawn.ID())
+            exe = string.format("/stick hold %d uw", maxRange) -- face upwards to better run over obstacles
+            --exe = string.format("/moveto id %d", Follow.spawn.ID())
+        --end
     end
+
     if exe ~= "" then
         log.Info("Follow.Update: %s", exe)
         mq.cmd(exe)
@@ -113,9 +136,7 @@ function Follow.RunToZone(startingPeer)
     -- move to initial position
     move_to(spawn.ID())
 
-    Follow.Stop()
-
-    if not is_within_distance(spawn, 16) then
+     if not is_within_distance(spawn, 16) then
         -- unlikely
         all_tellf("/rtz ERROR: failed to move near %s, my distance is %f", spawn.Name(), spawn.Distance())
         return

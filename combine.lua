@@ -1,8 +1,11 @@
 local mq = require("mq")
-require("efyran/ezmq")
+require("ezmq")
 
 local destroyItemIDs = {
     8238,9674,10281,14091,16598,16915,16925,16929,16933,19198,21612,21614,9686,10269,3053,3056,3061,3066,28799,21615,25653,77817,77818,72615,
+    25655, -- Crystalline Silk Mantle
+    25659, -- Crystalline Silk Wristbands
+    25660, -- Crystalline Silk Gloves
 }
 
 -- autoinventories all items on cursor. returns false on failure
@@ -46,7 +49,7 @@ end
 while true do
 
     if not window_open("TradeskillWnd") then
-        print("Error: tradeskill window is not open. Open it and select a recipe, then re-run the script.")
+        print("combine.lua: tradeskill window is not open. Ending combine.")
         return
     end
 

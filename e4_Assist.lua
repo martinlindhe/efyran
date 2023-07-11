@@ -22,9 +22,6 @@ local Assist = {
     quickburns = false,
     longburns = false,
     fullburns = false,
-
-    ---@type integer
-    lastFollowID = 0,
 }
 
 function Assist.Init()
@@ -114,7 +111,7 @@ function Assist.summonNukeComponents()
 
                 log.Debug("Checking summon components for %s", spellConfig.Summon)
 
-                if getItemCountExact(spellConfig.Name) == 0 then
+                if inventory_item_count(spellConfig.Name) == 0 then
                     log.Info("Summoning %s", spellConfig.Name)
                     castSpellRaw(spellConfig.Summon, nil)
 
@@ -151,11 +148,7 @@ function Assist.beginKillSpawnID(spawnID)
         mq.cmdf("/pet attack %d", spawnID)
     end
 
-    Assist.lastFollowID = 0
-    if follow.spawn ~= nil then
-        Assist.lastFollowID = follow.spawn.ID()
-    end
-    follow.Stop()
+    follow.PauseForKill()
 
     mq.cmdf("/target id %d", spawnID)
 
@@ -222,9 +215,7 @@ function Assist.EndFight()
 
     Assist.prepareForNextFight()
 
-    if Assist.lastFollowID ~= 0 then
-        follow.Start(Assist.lastFollowID)
-    end
+    follow.ResumeAfterKill()
 end
 
 -- Returns true if spell/ability was used
@@ -234,7 +225,6 @@ end
 ---@param used? array optionally keep track of used abilites
 ---@return boolean
 function performSpellAbility(targetID, abilityRows, category, used)
-    follow.Pause()
     if abilityRows == nil then
         return false
     end
@@ -242,6 +232,10 @@ function performSpellAbility(targetID, abilityRows, category, used)
         -- signal ability was used, in order to leave Assist.Tick() quickly when target is nil
         return true
     end
+
+    follow.Pause()
+    delay(50)
+
     for v, row in ipairs(abilityRows) do
         local spellConfig = parseSpellLine(row)
         -- log.Debug("Evaluating %s %s", category, spellConfig.Name)

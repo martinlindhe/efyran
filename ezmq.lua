@@ -51,6 +51,11 @@ function move_to(spawnID)
         return
     end
 
+    if spawn.Distance() < 5 then
+        all_tellf("move_to SKIP MOVE, distance %d", spawn.Distance())
+        return
+    end
+
     if globalSettings.followMode:lower() == "mq2nav" then
         mq.cmdf("/nav id %d", spawnID)
     elseif globalSettings.followMode:lower() == "mq2advpath" then
@@ -58,6 +63,12 @@ function move_to(spawnID)
     elseif globalSettings.followMode:lower() == "mq2moveutils" then
         mq.cmdf("/moveto id %d", spawnID)
     end
+end
+
+-- Returns true if low on mana
+---@return bool
+function low_mana()
+    return mq.TLO.Me.PctMana() < 70
 end
 
 ---@param y number
@@ -184,6 +195,20 @@ end
 ---@return boolean
 function have_item_banked_id(id)
     return mq.TLO.FindItemBankCount(id)() > 0
+end
+
+-- returns number of items by name in bank
+---@param name string
+---@return integer
+function banked_item_count(name)
+    return mq.TLO.FindItemBankCount("=" .. name)()
+end
+
+-- returns number of items by name in inventory
+---@param name string
+---@return integer
+function inventory_item_count(name)
+    return mq.TLO.FindItemCount("=" .. name)()
 end
 
 -- return true if peer has a target
@@ -326,16 +351,6 @@ function is_spell_ready(name)
     return mq.TLO.Me.SpellReady(spell.RankName())()
 end
 
--- exact search by name
----@param name string
----@return integer
-function getItemCountExact(name)
-    if mq.TLO.FindItem("="..name).ID() ~= nil then
-        return mq.TLO.FindItemCount("="..name)()
-    end
-    return 0
-end
-
 -- Returns true if `name` is an AA that you have purchased.
 ---@param name string
 ---@return boolean
@@ -441,6 +456,12 @@ end
 ---@param name string
 ---@return boolean
 function pet_have_buff(name)
+    if name == nil then
+        -- XXX backtrace and debug, should not happen!
+        -- FIXME: sometimes trigger on MAG, don't know why yet
+        all_tellf("pet_have_buff: ERROR input is nil, should not happen!")
+        return false
+    end
     local spell = mq.TLO.Spell(name)
     if spell() == nil then
         all_tellf("ERROR pet_have_buff odd buff %s", name)

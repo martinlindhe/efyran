@@ -283,7 +283,7 @@ function Heal.medCheck()
         return
     end
 
-    if mq.TLO.Me.MaxMana() > 0 and mq.TLO.Me.PctMana() < 70 then
+    if mq.TLO.Me.MaxMana() > 0 and low_mana() then
         all_tellf("Low mana, medding at %d%%", mq.TLO.Me.PctMana())
         cmd("/sit on")
     end
