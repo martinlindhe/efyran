@@ -144,22 +144,46 @@ function spawn_from_peer_name(name)
     return spawn_from_query("pc =".. name)
 end
 
---- returns true if `name` is an item I have in inventory or in bank.
+--- returns true if `id` is an item I have in inventory or in bank.
+---@param id integer
+---@return boolean
+function have_item_id(id)
+    return have_item_inventory_id(id) or have_item_banked_id(id)
+end
+
+--- returns true if `name` is an item name I have in inventory or in bank.
+---@param name string
 ---@return boolean
 function have_item(name)
     return have_item_inventory(name) or have_item_banked(name)
 end
 
 -- returns true if `name` is an item i have in inventory.
+---@param name string
 ---@return boolean
 function have_item_inventory(name)
     return mq.TLO.FindItemCount("=" .. name)() > 0
 end
 
+-- returns true if `id` is an item i have in inventory.
+---@param id integer
+---@return boolean
+function have_item_inventory_id(id)
+    return mq.TLO.FindItemCount(id)() > 0
+end
+
 -- returns true if `name` is an item i have in bank.
+---@param name string
 ---@return boolean
 function have_item_banked(name)
     return mq.TLO.FindItemBankCount("=" .. name)() > 0
+end
+
+-- returns true if `id` is an item i have in bank.
+---@param id integer
+---@return boolean
+function have_item_banked_id(id)
+    return mq.TLO.FindItemBankCount(id)() > 0
 end
 
 -- return true if peer has a target

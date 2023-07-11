@@ -158,6 +158,7 @@ Buff Spell Level   Minimum Target Level
 /wornaugs                   - reports all worn augs and total hp/mana/endurance/ac
 /tongues                    - reports quest status for GoD Discord Skin Samples
 /coaaugs                    - reports missing CoA auguments
+/lucidshards                - reports missing Lucid shards
 
 /handin                     - performs NPC hand-ins, see handin.lua
 /wordheal                   - clerics: cast word heal (group heal with cure effect)

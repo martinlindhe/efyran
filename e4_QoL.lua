@@ -673,7 +673,6 @@ function QoL.Init()
             "Tongue of the Tunat'muram",
         }
 
-
         local s = ""
         local missing = 0
         for k, name in pairs(tongues) do
@@ -720,6 +719,38 @@ function QoL.Init()
             s = "coaaugs: OK"
         else
             s = string.format("coaaugs NEED %d: %s", missing, s)
+        end
+
+        all_tellf(s)
+    end)
+
+    -- report your Lucid Shards
+    mq.bind("/lucidshards", function()
+        local shards = {
+            [22185] = "The Grey",
+            [22186] = "Fungus Grove",
+            [22187] = "Scarlet Desert",
+            [22188] = "The Deep",
+            [22189] = "Ssraeshza Temple",
+            [22190] = "Akheva Ruins",
+            [22191] = "Dawnshroud Peaks",
+            [22192] = "Maiden's Eye",
+            [22193] = "Acrylia Caverns",
+            [22194] = "Sanctus Seru / Katta",
+        }
+        local s = ""
+        local missing = 0
+        for id, name in pairs(shards) do
+            if not have_item_id(id) then
+                missing = missing + 1
+                s = s .. name .. ", "
+            end
+        end
+
+        if s == "" then
+            s = "lucidshards: OK"
+        else
+            s = string.format("lucidshards NEED %d: %s", missing, s)
         end
 
         all_tellf(s)
