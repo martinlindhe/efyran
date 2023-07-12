@@ -364,8 +364,14 @@ function QoL.Init()
         commandQueue.Add("portto", name)
     end)
 
-    mq.bind("/followon", function()
-        mq.cmdf("/dgzexecute /followid %d", mq.TLO.Me.ID())
+    ---@param ... string|nil filter, such as "/only|ROG"
+    mq.bind("/followon", function(...)
+        local exe = string.format("/dgzexecute /followid %d", mq.TLO.Me.ID())
+        local filter = trim(args_string(...))
+        if filter ~= nil then
+            exe = exe .. " " .. filter
+        end
+        mq.cmdf(exe)
     end)
 
     mq.bind("/followoff", function(s)
@@ -377,7 +383,15 @@ function QoL.Init()
 
     -- follows another peer in LoS
     ---@param spawnID string
-    mq.bind("/followid", function(spawnID) follow.Start(toint(spawnID)) end)
+    ---@param ... string|nil filter, such as "/only|ROG"
+    mq.bind("/followid", function(spawnID, ...)
+        local filter = trim(args_string(...))
+        if filter ~= nil and not matches_filter(filter) then
+            log.Info("followid: Not matching filter, giving up: %s", filter)
+            return
+        end
+        follow.Start(toint(spawnID))
+    end)
 
     mq.bind("/evac", function(name)
         if is_orchestrator() then
@@ -453,7 +467,6 @@ function QoL.Init()
         if filter ~= nil then
             exe = exe .. " " .. filter
         end
-        log.Info("Calling movetopc: %s", exe)
         mq.cmdf(exe)
     end
 
@@ -462,7 +475,7 @@ function QoL.Init()
 
     -- move to spawn ID
     ---@param spawnID string
-        ---@param ... string|nil filter, such as "/only|ROG"
+    ---@param ... string|nil filter, such as "/only|ROG"
     mq.bind("/movetoid", function(spawnID, ...)
         if is_orchestrator() then
             cmdf("/dgzexecute /movetoid %d", spawnID)

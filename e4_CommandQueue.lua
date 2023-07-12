@@ -108,11 +108,9 @@ function CommandQueue.Process()
         buffs.BuffIt(toint(v.Arg))
     elseif v.Name == "killit" then
         local filter = v.Arg2
-        if filter ~= nil then
-            if not matches_filter(filter) then
-                log.Info("Not matching filter, giving up: %s", filter)
-                return
-            end
+        if filter ~= nil and not matches_filter(filter) then
+            log.Info("Not matching filter, giving up: %s", filter)
+            return
         end
         local spawn = spawn_from_id(toint(v.Arg))
         if spawn == nil or (spawn.Type() ~= "NPC" and spawn.Type() ~= "Pet") then
@@ -149,11 +147,9 @@ function CommandQueue.Process()
         cast_port_to(v.Arg)
     elseif v.Name == "movetoid" then
         local filter = v.Arg2
-        if filter ~= nil then
-            if not matches_filter(filter) then
-                log.Info("movetoid: Not matching filter, giving up: %s", filter)
-                return
-            end
+        if filter ~= nil and not matches_filter(filter) then
+            log.Info("movetoid: Not matching filter, giving up: %s", filter)
+            return
         end
         move_to(toint(v.Arg))
     elseif v.Name == "rtz" then
