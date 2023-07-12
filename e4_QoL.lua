@@ -17,7 +17,7 @@ local QoL = {}
 
 local maxFactionLoyalists = false
 
-local currentXP = mq.TLO.Me.Exp()
+local currentAAXP = mq.TLO.Me.PctAAExp()
 
 function QoL.Init()
 
@@ -156,7 +156,7 @@ function QoL.Init()
     end)
 
     -- tell peers to kill target until dead
-    ---@param ... string|nil such as "/only|ROG"
+    ---@param ... string|nil filter, such as "/only|ROG"
     mq.bind("/assiston", function(...)
         local spawn = mq.TLO.Target
         if spawn() == nil or spawn.Type() == "PC" then
@@ -420,6 +420,11 @@ function QoL.Init()
         commandQueue.Add("use-veteran-aa", "Lesson of the Devoted")
     end)
 
+    -- XXX filter argument!!!
+    mq.bind("/lessonsactive", function()
+        mq.cmd("/noparse /dgzexecute /if (${Me.Buff[Lesson of the Devoted].ID}) /dgtell all LESSON ACTIVE: ${Me.Buff[Lesson of the Devoted].Duration.TimeHMS}")
+    end)
+
     mq.bind("/infusion", function()
         if is_orchestrator() then
             mq.cmd("/dgzexecute /infusion") -- XXX filter
@@ -441,16 +446,29 @@ function QoL.Init()
         commandQueue.Add("use-veteran-aa", "Expedient Recovery")
     end)
 
-    mq.bind("/movetome", function() mq.cmdf("/dgzexecute /movetoid %d", mq.TLO.Me.ID()) end)
-    mq.bind("/mtm", function()  mq.cmd("/movetome") end)
+    ---@param ... string|nil filter, such as "/only|ROG"
+    local movetome = function(...)
+        local exe = string.format("/dgzexecute /movetoid %d", mq.TLO.Me.ID())
+        local filter = trim(args_string(...))
+        if filter ~= nil then
+            exe = exe .. " " .. filter
+        end
+        log.Info("Calling movetopc: %s", exe)
+        mq.cmdf(exe)
+    end
+
+    mq.bind("/movetome", movetome)
+    mq.bind("/mtm", movetome)
 
     -- move to spawn ID
     ---@param spawnID string
-    mq.bind("/movetoid", function(spawnID)
+        ---@param ... string|nil filter, such as "/only|ROG"
+    mq.bind("/movetoid", function(spawnID, ...)
         if is_orchestrator() then
             cmdf("/dgzexecute /movetoid %d", spawnID)
         end
-        commandQueue.Add("movetoid", spawnID)
+        local filter = trim(args_string(...))
+        commandQueue.Add("movetoid", spawnID, filter)
     end)
 
     -- run through zone based on the position of startingPeer
@@ -841,19 +859,19 @@ function QoL.Init()
 
     -- track XP
     local xpGain = function(text)
-        local diff = mq.TLO.Me.Exp() - currentXP
-        log.Info("Gained XP. %d", diff)
-        currentXP = mq.TLO.Me.Exp()
+        local aaDiff = mq.TLO.Me.PctAAExp() - currentAAXP
+        log.Info("Gained XP. AA %d %%", aaDiff)
+        currentAAXP = mq.TLO.Me.PctAAExp()
 
         if in_raid() then
             return
         end
 
         if not in_group() then
-            all_tellf("\agI got solo Exp")
+            all_tellf("\agI got solo Exp (%d %% AA)", aaDiff)
         elseif is_group_leader() then
 
-            all_tellf("\agMy group got Exp")
+            all_tellf("\agMy group got Exp (%d %% AA)", aaDiff)
         end
     end
 

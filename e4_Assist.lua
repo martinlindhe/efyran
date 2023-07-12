@@ -176,9 +176,15 @@ function Assist.beginKillSpawnID(spawnID)
     end
 end
 
+-- Returns true if I am tanking (sticking to the front)
+---@return boolean
+function Assist.IsTanking()
+    return botSettings.settings.assist.stick_point == "Front"
+end
+
 function Assist.meleeStick()
     local stickArg
-    if botSettings.settings.assist.stick_point == "Front" then
+    if Assist.IsTanking() then
         stickArg = "hold front " .. Assist.meleeDistance .. " uw"
         log.Debug("STICKING IN FRONT TO %d: %s", Assist.targetID, stickArg)
         mq.cmdf("/stick %s", stickArg)
@@ -300,6 +306,8 @@ function Assist.Tick()
         cmdf("/target id %d", spawn.ID())
     end
 
+    Assist.TankTick()
+
     if Assist.quickburns and performSpellAbility(Assist.targetID, botSettings.settings.assist.quickburns, "quickburn") then
         return
     end
@@ -326,7 +334,7 @@ function Assist.Tick()
 
     -- use melee abilities
     if melee and botSettings.settings.assist.abilities ~= nil
-    and spawn ~= nil and spawn.Distance() < Assist.meleeDistance and spawn.LineOfSight()
+    and spawn ~= nil and spawn.Distance() and spawn.Distance() ~= nil and spawn.Distance() < Assist.meleeDistance and spawn.LineOfSight()
     and performSpellAbility(Assist.targetID, botSettings.settings.assist.abilities, "ability") then
         return
     end
@@ -345,7 +353,30 @@ function Assist.Tick()
             all_tellf("ERROR cannot nuke, have no spell set %s", Assist.spellSet)
         end
     end
+end
 
+local assistTauntTimer = timer.new_expired(2 * 1) -- 2s
+
+function Assist.TankTick()
+    if not Assist.IsTanking() then
+        return
+    end
+
+    local n = mq.TLO.Me.TargetOfTarget.Class.ShortName()
+    if n ~= "WAR" and n ~= "PAL" and n ~= "SHD" then
+        log.Info("tanking and my target's target class is %s, need to grab aggro!", n)
+        if assistTauntTimer:expired() then
+            if is_ability_ready("Taunt") then
+                all_tellf("Taunting %s", mq.TLO.Target.CleanName())
+                use_ability("Taunt")
+                assistTauntTimer:restart()
+            elseif is_war() and not low_endurance() and is_combat_ability_ready("Bazu Bellow") then
+                all_tellf("Taunting %s (bellow)", mq.TLO.Target.CleanName())
+                use_combat_ability("Bazu Bellow")
+                assistTauntTimer:restart()
+            end
+        end
+    end
 end
 
 return Assist

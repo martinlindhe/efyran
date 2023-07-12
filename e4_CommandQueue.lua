@@ -148,6 +148,13 @@ function CommandQueue.Process()
     elseif v.Name == "portto" then
         cast_port_to(v.Arg)
     elseif v.Name == "movetoid" then
+        local filter = v.Arg2
+        if filter ~= nil then
+            if not matches_filter(filter) then
+                log.Info("movetoid: Not matching filter, giving up: %s", filter)
+                return
+            end
+        end
         move_to(toint(v.Arg))
     elseif v.Name == "rtz" then
         follow.RunToZone(v.Arg)

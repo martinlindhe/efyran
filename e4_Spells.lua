@@ -724,7 +724,7 @@ function ae_rez()
     all_tellf("\amAERez started in %s\ax (%d corpses) ...", zone_shortname(), corpses)
 
     local spawnQuery = 'pccorpse radius 100'
-    local classOrder = {'CLR', 'DRU', 'EMC', 'RNG', 'BST', 'PAL', 'BRD', 'SHD', 'WAR', 'MNK', 'ROG', 'BER', 'WIZ', 'NEC', 'MAG'}
+    local classOrder = {'CLR', 'DRU', 'EMC', 'RNG', 'BST', 'PAL', 'SHD', 'WAR', 'BRD', 'MNK', 'ROG', 'BER', 'WIZ', 'NEC', 'MAG'}
     for i=1, 15 do
         ae_rez_query(rez, 'pccorpse radius 100 '..classOrder[i])
     end
@@ -819,10 +819,12 @@ function gather_corpses()
     local spawnQuery = 'pccorpse radius 100'
     for i = 1, spawn_count(spawnQuery) do
         local spawn = mq.TLO.NearestSpawn(i, spawnQuery)
-        target_id(spawn.ID())
-        delay(2)
-        cmd("/corpse")
-        delay(1000, function() return spawn() ~= nil and spawn.Distance() < 20 end)
+        if spawn.Distance() > 5 then
+            target_id(spawn.ID())
+            delay(2)
+            cmd("/corpse")
+            delay(1000, function() return spawn() ~= nil and spawn.Distance() < 20 end)
+        end
     end
 end
 

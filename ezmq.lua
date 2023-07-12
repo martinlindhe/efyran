@@ -52,7 +52,7 @@ function move_to(spawnID)
     end
 
     if spawn.Distance() < 5 then
-        all_tellf("move_to SKIP MOVE, distance %d", spawn.Distance())
+        log.Debug("move_to SKIP MOVE, distance %d", spawn.Distance())
         return
     end
 
@@ -66,9 +66,14 @@ function move_to(spawnID)
 end
 
 -- Returns true if low on mana
----@return bool
+---@return boolean
 function low_mana()
     return mq.TLO.Me.PctMana() < 70
+end
+-- Returns true if low on endurance
+---@return boolean
+function low_endurance()
+    return mq.TLO.Me.PctEndurance() < 70
 end
 
 ---@param y number
@@ -527,10 +532,22 @@ function is_brd()
     return mq.TLO.Me.Class.ShortName() == "BRD"
 end
 
+-- Am I a Warrior?
+---@return boolean
+function is_war()
+    return mq.TLO.Me.Class.ShortName() == "WAR"
+end
+
 -- Am I a Paladin?
 ---@return boolean
 function is_pal()
     return mq.TLO.Me.Class.ShortName() == "PAL"
+end
+
+-- Am I a Shadowknight?
+---@return boolean
+function is_shd()
+    return mq.TLO.Me.Class.ShortName() == "SHD"
 end
 
 -- Am I a Magician?
@@ -811,6 +828,11 @@ end
 -- autoinventories all items on cursor. returns false on failure
 function clear_cursor()
     while true do
+        if window_open("BigBankWnd") or window_open("ConfirmationDialogBox") then
+            -- abort if bank or confirmation dialog is open
+            return false
+        end
+
         if mq.TLO.Cursor.ID() == nil then
             --log.Debug("cursor clear. ending")
             return true
