@@ -1217,8 +1217,9 @@ end
 ---@field public MaxTries integer Max number of casts.
 ---@field public Cure string Type of cure (poison,disease,curse,any), for auto cures.
 ---@field public Group boolean This is a group spell (used for group cures for auto cure).
+---@field public Self boolean This is a self spell (used for auto cure).
 
-local shortProperties = { "Shrink", "GoM", "NoAggro", "NoPet", "Group" } -- is turned into bools
+local shortProperties = { "Shrink", "GoM", "NoAggro", "NoPet", "Group", "Self" } -- is turned into bools
 local intProperties = { "PctAggro", "MinMana", "HealPct", "MinMobs", "MaxMobs", "MaxTries" } -- is turned into integers
 -- parses a spell/ability etc line with properties, returns a object
 -- example in: "Ward of Valiance/MinMana|50/CheckFor|Hand of Conviction"
@@ -1317,8 +1318,8 @@ end
 
 local rezSpells = {
     -- order: falling priority
-    "Water Sprinkler of Nem Ankh",          -- CLR/65 Epic1.0: 96% exp, 10s cast
     "Blessing of Resurrection",             -- CLR/65 sof AA : 96% exp, 3s cast, 12s recast
+    "Water Sprinkler of Nem Ankh",          -- CLR/65 Epic1.0: 96% exp, 10s cast
     "Reviviscence",                         -- CLR/56        : 96% exp, 7s cast, 600 mana
     "Resurrection",                         -- CLR/47, PAL/59: 90% exp, 6s cast, 20s recast, 700 mana
     "Restoration",                          -- CLR/42, PAL/55: 75% exp, 6s cast, 20s recast

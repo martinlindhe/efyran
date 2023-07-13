@@ -5,11 +5,11 @@ local cures = {}
 
 -- List of "disease" cures, order: most powerful first
 cures.disease = {
-    "Radiant Cure/Group",                               -- XXX Group filter ?!
+    "Radiant Cure/Group",
     --"Word of Vivification/Group",                       -- CLR/69: 3417-3427 hp, -21 dr, -21 pr, -14 curse, cost 1357 mana
     --"Word of Replenishment/Group",                      -- CLR/64: 2500 hp, -14 dr, -14 pr, -7 curse, cost 1100 mana
     "Blood of Nadox/Group",                             -- SHM/52: -9 poison x2, -9 disease x2 (group)
-    "Difinecting Aura",                                 -- SHM/52: -10 poison x2, -10 disease x2
+    --"Difinecting Aura",                                 -- SHM/52: -10 poison x2, -10 disease x2
     "Abolish Disease",                                  -- SHM/48, BST/63: -36 disease
     "Crusader's Purity",                                -- PAL/67: -32 disease, -32 poison, -16 curse
     "Crusader's Touch",                                 -- PAL/62: -20 disease, -20 poison, -5 curse
@@ -25,7 +25,8 @@ cures.poison = {
     --"Word of Replenishment/Group",                      -- CLR/64: 2500 hp, -14 dr, -14 pr, -7 curse, cost 1100 mana
     "Purge Posion/Self",                                -- ROG/59: -99 poison x12 (AA)   TODO "Self" flag
     "Antidote",                                         -- CLR/58: -16 poison x4
-    "Difinecting Aura",                                 -- SHM/52: -10 poison x2, -10 disease x2
+    "Blood of Nadox/Group",                             -- SHM/52: -9 poison x2, -9 disease x2 (group)
+    --"Difinecting Aura",                                 -- SHM/52: -10 poison x2, -10 disease x2
     "Pure Blood",                                       -- CLR/51, DRU/52: -9 poison x4
     "Abolish Poison",                                   -- CLR/48: -36 posion
     "Crusader's Purity",                                -- PAL/67: -32 disease, -32 poison, -16 curse
@@ -43,19 +44,24 @@ cures.curse = {
     "Remove Minor Curse",                               -- CLR/08, DRU/08, SHM/09, PAL/19: -2 curse
 }
 
+cures.radiant = {
+    "Radiant Cure/Group",
+}
+
 -- List of the "any" cures, order: most powerful first
 cures.any = {
-    "Pure Spirit",                                      -- SHM/69: 95% chance to remove detrimental effect from target, 12s recast
+    "Radiant Cure/Group",
 
-    "Blessing of Purification",                         -- PAL/80: remove all negative effects (AA), xxx reuse
+    "Pure Spirit",                                      -- SHM/69: 95% chance to remove detrimental effect from target, 12s recast
 
     --"Desperate Renewal",                                -- CLR/70: heal 4935 hp, -18 pr, -18 dr, -18 curse, cost 1375 mana
 
     "Purify Body/Self",                                 -- MNK/59: remove all negative effects, 30 min reuse (21 min reuse with Hastened Purification of the Body Rank 3)
 
-    "Purification/Self",                                -- PAL/65: remove all negative effects, 1h12 min reuse (14m24s reuse with Hastened Purification Rank 8)
+    "Purify Soul/Self",                                 -- CLR/59: remove all negative effects, 30 min reuse (15 min reuse with Hastened Purification of the Soul Rank 5)
 
-    "Radiant Cure/Group",                               -- XXX Group filter ?!, xxx reuse
+    "Blessing of Purification",                         -- PAL/80: remove all negative effects, xxx reuse
+    "Purification/Self",                                -- PAL/65: remove all negative effects, 1h12 min reuse (14m24s reuse with Hastened Purification Rank 8)
 }
 
 -- List of debuffs and the strategy to cure them
@@ -66,7 +72,7 @@ cures.debuffs = {
     "Chailak Venom/Cure|poison",                        -- 9 poison counters, riftseekers
     "Chaotica/Cure|curse",                              -- 18 curse counters, multiple zones
     "Infected Bite/Cure|disease",                       -- 36 disease counters, multiple zones
-    "Freezing Touch/Cure|any",                          -- mesmerize, riftseekers basement
+    "Freezing Touch/Cure|radiant",                      -- mesmerize, riftseekers basement
     "Whipping Dust/Cure|curse",                         -- 72 curse counters, causeway
     "Deathly Chants/Cure|curse",                        -- 9 curse counters, CLR 1.5 + 2.0 fights + SHM 2.0
     "Plague of Hulcror/Cure|disease",                   -- 36 disease counters, wallofslaughter
@@ -142,32 +148,39 @@ local MAX_BUFF_SLOTS = 20 -- 20 for OOW with AA:s
 
 ---@param name string
 ---@param kind string
+---@return boolean true if spell cast
 function cure_player(name, kind)
     local spawn = spawn_from_query("pc "..name)
     if spawn == nil then
         log.Info("Failed to cure %s, not in zone!", name)
-        return
+        return false
     end
-    target_id(spawn.ID())
 
+    target_id(spawn.ID())
 
     local valid_cures = cures[kind]
     if valid_cures == nil then
         -- unlikely
         all_tellf("FATAL unknown cure kind %s", kind)
-        return
+        return false
     end
 
     for cidx, cureRow in pairs(valid_cures) do
         local cureConfig = parseSpellLine(cureRow)
-        all_tellf("Curing \ag%s\ax with \ay%s\ax (\ar%s\ax)", name, cureConfig.Name, kind)
 
-        if castSpellAbility(spawn, cureRow) then
-            return
+        if known_spell_ability(cureConfig.Name) then
+            if have_spell(cureConfig.Name) or is_alt_ability_ready(cureConfig.Name) then
+                all_tellf("Curing \ag%s\ax with \ay%s\ax (\ar%s\ax)", name, cureConfig.Name, kind)
+
+                if castSpellAbility(spawn, cureRow) then
+                    return true
+                end
+            else
+                log.Info("Cure \ar%s\ax is not ready!", cureConfig.Name)
+            end
         end
     end
-
-
+    return false
 end
 
 return cures

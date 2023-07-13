@@ -45,8 +45,7 @@ local buffs = {
 function buffs.Init()
     -- enqueues a buff to be cast on a peer
     -- is normally called from another peer, to request a buff
-    mq.bind("/queuebuff", function(buff, peer, force)
-        --print("queuebuff buff=", buff, ", peer=", peer)
+    mq.bind("/buff", function(peer, buff, force)
         table.insert(buffs.queue, {
             Peer = peer,
             Buff = buff,
@@ -65,7 +64,7 @@ local requestBuffsTimer = timer.new_random(60 * 1) -- 60s
 
 local handleBuffsTimer = timer.new_random(2 * 1) -- 2s
 
-local checkDebuffsTimer = timer.new_random(20 * 1) -- 20s   -- interval for auto cure requests
+local checkDebuffsTimer = timer.new_random(15 * 1) -- 15s   -- interval for auto cure requests
 
 -- broadcasts what buff groups we can cast
 function buffs.AnnounceAvailablity()
@@ -155,6 +154,10 @@ function buffs.Tick()
         refreshBuffsTimer:restart()
     end
 
+    if follow.IsFollowing() then
+        return
+    end
+
     if requestBuffsTimer:expired() then
         buffs.RequestBuffs()
         requestBuffsTimer:restart()
@@ -186,23 +189,25 @@ function buffs.HandleDebuffs()
             tostring(mq.TLO.Debuff.CastingLevel()), tostring(mq.TLO.Debuff.HealingEff()), tostring(mq.TLO.Debuff.SpellDmgEff()))
     end
 
-    log.Info("buffs.HandleDebuffs()")
+    --log.Debug("buffs.HandleDebuffs()")
 
     -- see if we have a recognized debuff
     for idx, row in pairs(cure.debuffs) do
         local spellConfig = parseSpellLine(row)
         if mq.TLO.Me.Buff(spellConfig.Name).ID() ~= nil then
             log.Info("I have debuff \ar%s\ax, need \ay%s\ax cure.", spellConfig.Name, spellConfig.Cure)
-            -- XXX TODO later: try to cure self !!!
 
-            -- if we cannot cure, ask a group memebr who can cure
-            local curer = get_group_curer()
-            if curer == nil then
-                all_tellf("FATAL: cant find a curer in my group!") -- TODO: in this case, just ask any curer nearby
-                return
+            if not cure_player(mq.TLO.Me.Name(), spellConfig.Cure) then
+                -- if we cannot cure, ask a group memebr who can cure
+                local curer = get_group_curer()
+                if curer == nil then
+                    -- TODO: in this case, just ask any curer nearby
+                    all_tellf("FATAL: cant find a curer in my group: \ar%s\ax.", spellConfig.Name)
+                    return
+                end
+                all_tellf("Asking \ag%s\ax to cure \ar%s\ax (\ay%s\ax)", curer, spellConfig.Name, spellConfig.Cure)
+                cmdf("/dex %s /cure %s %s", curer, mq.TLO.Me.Name(), spellConfig.Cure)
             end
-            all_tellf("Asking \ag%s\ax to cure \ar%s\ax (\ay%s\ax)", curer, spellConfig.Name, spellConfig.Cure)
-            cmdf("/dex %s /cure %s %s", curer, mq.TLO.Me.Name(), spellConfig.Cure)
         end
     end
 
@@ -249,11 +254,11 @@ function buffs.BuffIt(spawnID)
         return false
     end
 
-    -- get the buffs for my class from spawn class default buffs.
+    -- get the buffs for my class from the class defaults for `spawn`.
     for idx, key in pairs(groupBuffs.Default[spawn.Class.ShortName()]) do
         local spellConfig = parseSpellLine(key)
         if spellConfig.Class == class_shortname() then
-            cmdf("/queuebuff %s %s force", spellConfig.Name, spawn.Name())
+            cmdf("/buff %s %s force", spawn.Name(), spellConfig.Name)
         end
     end
 end
@@ -261,7 +266,7 @@ end
 function getClassBuffGroup(classShort, buffGroup)
     local buffRows = groupBuffs[classShort][buffGroup]
     if buffRows == nil then
-        all_tellf("FATAL ERROR: /queuebuff did not find groupBuffs.%s entry %s", classShort, buffGroup)
+        all_tellf("FATAL ERROR: did not find groupBuffs.%s entry %s", classShort, buffGroup)
         return false
     end
 end
@@ -466,7 +471,7 @@ function buffs.RequestBuffs()
                         return true
                     else
                         log.Info("Requesting buff \ax%s\ay from \ag%s %s\ax ...", spellConfig.Name, askClass, peer)
-                        cmdf("/dexecute %s /queuebuff %s %s", peer, spellConfig.Name, mq.TLO.Me.Name())
+                        cmdf("/dexecute %s /buff %s %s", peer, mq.TLO.Me.Name(), spellConfig.Name)
                     end
                 else
                     log.Debug("No peer of required class for buff %s found nearby: %s", spellConfig.Name, askClass)

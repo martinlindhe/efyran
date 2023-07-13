@@ -30,6 +30,12 @@ function Follow.Start(spawnID, force)
     Follow.Update()
 end
 
+--- Returns true if I am in follow mode
+---@return boolean
+function Follow.IsFollowing()
+    return Follow.spawn ~= nil or Follow.lastFollowID ~= 0
+end
+
 function Follow.PauseForKill()
     Follow.lastFollowID = 0
     if Follow.spawn ~= nil then

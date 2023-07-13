@@ -1099,7 +1099,7 @@ function QoL.Tick()
     end
 
     if mq.TLO.Me.Ducking() then
-        all_tellf("Standing up. Was ducking")
+        log.Info("Standing up. Was ducking")
         cmd("/stand")
         delay(20)
     end

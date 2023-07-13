@@ -273,6 +273,11 @@ function castSpellAbility(spawn, row, callback)
         return false
     end
 
+    if spell.Self and spawn ~= nil and spawn.Name() ~= mq.TLO.Me.Name() then
+        all_tellf("SKIP Self, cant cast on %s", spawn.Name())
+        return false
+    end
+
     if not have_spell(spell.Name) and have_item_inventory(spell.Name) and not is_item_clicky_ready(spell.Name) then
         -- Item and spell examples: Molten Orb (MAG)
         log.Debug("SKIP cast, item clicky not ready: %s", spell.Name)

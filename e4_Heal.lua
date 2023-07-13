@@ -283,7 +283,7 @@ function Heal.medCheck()
         return
     end
 
-    if mq.TLO.Me.MaxMana() > 0 and low_mana() then
+    if mq.TLO.Me.MaxMana() > 0 and low_mana() and not follow.IsFollowing() then
         all_tellf("Low mana, medding at %d%%", mq.TLO.Me.PctMana())
         cmd("/sit on")
     end
@@ -452,7 +452,7 @@ function healPeer(spell_list, peer, pct)
                 log.Info("Skipping heal! \ag%s\ax was %d %%, is now %d %%", mq.TLO.Target.Name(), pct, mq.TLO.Target.PctHPs())
                 return true
             end
-            all_tellf("Healing \ag%s\ax at %d%% with %s", peer, pct, spellConfig.Name)
+            all_tellf("Healing \ag%s\ax at %d%% with \ay%s\ax", peer, pct, spellConfig.Name)
 
             local check = castSpellAbility(spawn, heal, function() -- XXX castSpellAbility should take spellConfig obj directly
                 if not is_casting() then

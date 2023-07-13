@@ -4,7 +4,8 @@
 
 local globalSettings = {
     ---@type string valid options are MQ2Nav, MQ2AdvPath, MQ2MoveUtils
-    followMode = "MQ2AdvPath", -- "MQ2MoveUtils",
+    --followMode = "MQ2AdvPath", -- "MQ2MoveUtils",
+    followMode = "MQ2MoveUtils",
 }
 
 return globalSettings
