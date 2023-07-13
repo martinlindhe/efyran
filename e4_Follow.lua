@@ -11,7 +11,8 @@ local Follow = {
 
 -- Starts to follow spawn ID (usually the orchestrator)
 ---@param spawnID integer
-function Follow.Start(spawnID)
+---@param force boolean
+function Follow.Start(spawnID, force)
     if not is_peer_id(spawnID) then
         all_tellf("ERROR: /followid called on invalid spawn ID %d", spawnID)
         return
@@ -20,7 +21,7 @@ function Follow.Start(spawnID)
     if spawn == nil then
         return
     end
-    if not spawn.LineOfSight() then
+    if not force and not spawn.LineOfSight() then
         all_tellf("I cannot see %s", spawn.Name())
         return
     end
@@ -40,7 +41,7 @@ end
 
 function Follow.ResumeAfterKill()
     if Follow.lastFollowID ~= 0 then
-        Follow.Start(Follow.lastFollowID)
+        Follow.Start(Follow.lastFollowID, true)
         Follow.lastFollowID = 0
     end
 end
@@ -136,15 +137,17 @@ function Follow.RunToZone(startingPeer)
     -- move to initial position
     move_to(spawn.ID())
 
-     if not is_within_distance(spawn, 16) then
+    if not is_within_distance(spawn, 16) then
         -- unlikely
         all_tellf("/rtz ERROR: failed to move near %s, my distance is %f", spawn.Name(), spawn.Distance())
         return
     end
 
+    Follow.Pause()
+
     -- face the same direction the orchestrator is facing
     cmdf("/face fast heading %f", spawn.Heading.Degrees() * -1)
-    delay(5)
+    delay(20)
 
     -- move forward
     cmd("/keypress forward hold")

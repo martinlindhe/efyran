@@ -268,6 +268,11 @@ function castSpellAbility(spawn, row, callback)
         return false
     end
 
+    if spell.Group and spawn ~= nil and not is_grouped_with(spawn.Name()) then
+        all_tellf("SKIP Group, i am not grouped with %s", spawn.Name())
+        return false
+    end
+
     if not have_spell(spell.Name) and have_item_inventory(spell.Name) and not is_item_clicky_ready(spell.Name) then
         -- Item and spell examples: Molten Orb (MAG)
         log.Debug("SKIP cast, item clicky not ready: %s", spell.Name)
@@ -279,14 +284,13 @@ function castSpellAbility(spawn, row, callback)
     if spawn ~= nil then
         spawnID = spawn.ID()
     end
+
     castSpell(spell.Name, spawnID)
 
     -- delay until done casting
     if callback == nil then
         callback = function()
-            if not is_casting() then
-                return true
-            end
+            return not is_casting()
         end
     end
 
@@ -813,15 +817,14 @@ end
 
 -- ask for consent, then gathers corpses
 function gather_corpses()
-    consent_me()
-    delay(1000)
-
     local spawnQuery = 'pccorpse radius 100'
     for i = 1, spawn_count(spawnQuery) do
         local spawn = mq.TLO.NearestSpawn(i, spawnQuery)
         if spawn.Distance() > 5 then
+            log.Info("Gathering corpse %s", spawn.Name())
+            cmdf("/dexecute %s /consent %s", spawn.DisplayName(), mq.TLO.Me.Name())
             target_id(spawn.ID())
-            delay(2)
+            delay(50)
             cmd("/corpse")
             delay(1000, function() return spawn() ~= nil and spawn.Distance() < 20 end)
         end

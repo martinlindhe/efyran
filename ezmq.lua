@@ -46,10 +46,10 @@ function move_to(spawnID)
         return
     end
 
-    if not line_of_sight_to(spawn) then
-        all_tellf("move_to ERROR: cannot see %s", spawn.Name())
-        return
-    end
+    --if not line_of_sight_to(spawn) then
+    --    all_tellf("move_to ERROR: cannot see %s", spawn.Name())
+    --    return
+    --end
 
     if spawn.Distance() < 5 then
         log.Debug("move_to SKIP MOVE, distance %d", spawn.Distance())
@@ -244,6 +244,14 @@ function target_id(id)
         mq.cmdf("/target id %d", id)
         mq.delay(10)
         mq.delay(1000, function() return mq.TLO.Target.ID() == id end)
+    end
+end
+
+function wait_for_buffs_populated()
+    while not mq.TLO.Target.BuffsPopulated()
+    do
+        log.Debug("buffs not finished populating")
+        delay(50)
     end
 end
 
@@ -596,6 +604,17 @@ end
 ---@return boolean
 function is_group_leader()
     return mq.TLO.Group.Members() > 1 and mq.TLO.Me.Name() == mq.TLO.Group.Leader.Name()
+end
+
+--- Am I grouped with PC `name`?
+---@return boolean
+function is_grouped_with(name)
+    for i=1,mq.TLO.Group.Members() do
+        if mq.TLO.Group.Member(i).Name() == name then
+            return true
+        end
+    end
+    return false
 end
 
 -- Am I hovering? (just died, waiting for rez in the same zone)
@@ -1194,10 +1213,12 @@ end
 ---@field public Zone integer Comma-separated list of zone short names where spell is allowed to cast.
 ---@field public MinLevel integer Minimum level.
 ---@field public PctAggro integer Skips cast if your aggro % is above threshold.
----@field public Summon string Name for summoning spell component, eg "Molten Orb/NoAggro/Summon|Summon: Molten Orb" (MAG)
----@field public MaxTries integer Max number of casts
+---@field public Summon string Name for summoning spell component, eg "Molten Orb/NoAggro/Summon|Summon: Molten Orb" (MAG).
+---@field public MaxTries integer Max number of casts.
+---@field public Cure string Type of cure (poison,disease,curse,any), for auto cures.
+---@field public Group boolean This is a group spell (used for group cures for auto cure).
 
-local shortProperties = { "Shrink", "GoM", "NoAggro", "NoPet" } -- is turned into bools
+local shortProperties = { "Shrink", "GoM", "NoAggro", "NoPet", "Group" } -- is turned into bools
 local intProperties = { "PctAggro", "MinMana", "HealPct", "MinMobs", "MaxMobs", "MaxTries" } -- is turned into integers
 -- parses a spell/ability etc line with properties, returns a object
 -- example in: "Ward of Valiance/MinMana|50/CheckFor|Hand of Conviction"

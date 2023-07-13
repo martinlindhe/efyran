@@ -186,6 +186,8 @@ Example: "Molten Orb/NoAggro/Summon|Summon: Molten Orb"
 
 Also, efyran is written for modern Macroquest.
 
+Auto cure: each group needs a curer, and toons will auto beg for cures. This allows for zero-setup auto curing.
+Assumes that each group has at least 1 curer (shm/dru/pal/clr)
 
 
 ## Special channels

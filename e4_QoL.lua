@@ -22,7 +22,7 @@ local currentAAXP = mq.TLO.Me.PctAAExp()
 function QoL.Init()
 
     if mq.TLO.FrameLimiter() ~= "TRUE" then
-        all_tellf("Enabling framelimiter (was %s) ...", mq.TLO.FrameLimiter())
+        log.Info("Enabling framelimiter (was %s) ...", mq.TLO.FrameLimiter())
         cmd("/framelimiter enable")
     end
 
@@ -58,11 +58,16 @@ function QoL.Init()
         cmd("/djoin xp")
     end
 
-    pet.ConfigureTaunt()
+    pet.ConfigureAfterZone()
 
     local dead = function(text, killer)
         all_tellf("I died. Killed by %s", killer)
         mq.cmd("/beep") -- the beep of death
+        if in_raid() then
+            mq.cmdf("/consent %s", mq.TLO.Raid.Leader())
+        elseif in_group() then
+            mq.cmdf("/consent %s", mq.TLO.Group.Leader())
+        end
     end
     mq.event("died1", "You have been slain by #*#", dead)
     mq.event("died2", "You died.", dead)
@@ -204,6 +209,9 @@ function QoL.Init()
 
     -- Use cure ward AA "Ward of Purity" (CLR)
     mq.bind("/cureward", function() commandQueue.Add("ward", "cure") end)
+
+    -- Summon all available cure wards
+    mq.bind("/curewards", function() cmdf("/dgzexecute /cureward") end)
 
     -- Use heal ward AA (CLR/DRU/SHM)
     mq.bind("/healward", function() commandQueue.Add("ward", "heal") end)
@@ -410,6 +418,11 @@ function QoL.Init()
         commandQueue.Add("radiantcure")
     end)
 
+    -- auto cure target (usage: is requested by another toon)
+    mq.bind("/cure", function(name, kind)
+        commandQueue.Add("cure", name, kind)
+    end)
+
     -- tell peers in zone to use Throne of Heroes
     mq.bind("/throne", function()
         if is_orchestrator() then
@@ -434,7 +447,6 @@ function QoL.Init()
         commandQueue.Add("use-veteran-aa", "Lesson of the Devoted")
     end)
 
-    -- XXX filter argument!!!
     mq.bind("/lessonsactive", function()
         mq.cmd("/noparse /dgzexecute /if (${Me.Buff[Lesson of the Devoted].ID}) /dgtell all LESSON ACTIVE: ${Me.Buff[Lesson of the Devoted].Duration.TimeHMS}")
     end)
@@ -477,9 +489,6 @@ function QoL.Init()
     ---@param spawnID string
     ---@param ... string|nil filter, such as "/only|ROG"
     mq.bind("/movetoid", function(spawnID, ...)
-        if is_orchestrator() then
-            cmdf("/dgzexecute /movetoid %d", spawnID)
-        end
         local filter = trim(args_string(...))
         commandQueue.Add("movetoid", spawnID, filter)
     end)
@@ -827,8 +836,8 @@ function QoL.Init()
     -- hide all dz windows
     mq.bind("/dzhide", function() mq.cmd("/noparse /dgaexecute /if (${Window[dynamiczonewnd]}) /windowstate dynamiczonewnd close") end)
 
-    -- report peers with at least 10 unspent AA:s
-    mq.bind("/unspentaa", function() mq.cmd("/noparse /dgaexecute /if (${Me.AAPoints} >= 10 && ${Me.AAPoints} < 100) /dgtell all UNSPENT AA: ${Me.AAPoints}") end)
+    -- report peers with at least 5 unspent AA:s
+    mq.bind("/unspentaa", function() mq.cmd("/noparse /dgaexecute /if (${Me.AAPoints} >= 5 && ${Me.AAPoints} < 100) /dgtell all UNSPENT AA: ${Me.AAPoints}") end)
 
     -- report peers with less than 10 unspent AA:s
     mq.bind("/lowunspentaa", function() mq.cmd("/noparse /dgaexecute /if (${Me.AAPoints} > 1 && ${Me.AAPoints} < 10) /dgtell all UNSPENT AA: ${Me.AAPoints}") end)
@@ -873,6 +882,11 @@ function QoL.Init()
     -- track XP
     local xpGain = function(text)
         local aaDiff = mq.TLO.Me.PctAAExp() - currentAAXP
+        if aaDiff < 0 then
+            -- we dinged AA
+            aaDiff = 100 + mq.TLO.Me.PctAAExp() - currentAAXP
+        end
+
         log.Info("Gained XP. AA %d %%", aaDiff)
         currentAAXP = mq.TLO.Me.PctAAExp()
 
@@ -883,7 +897,6 @@ function QoL.Init()
         if not in_group() then
             all_tellf("\agI got solo Exp (%d %% AA)", aaDiff)
         elseif is_group_leader() then
-
             all_tellf("\agMy group got Exp (%d %% AA)", aaDiff)
         end
     end
@@ -1083,6 +1096,12 @@ function QoL.Tick()
     if mq.TLO.Me.TributeActive() and not (zone_shortname() == "anguish" or zone_shortname() == "tacvi") then
         all_tellf("\arTRIBUTE WAS ACTIVE IN %s, TURNING OFF!", zone_shortname())
         disable_tribute()
+    end
+
+    if mq.TLO.Me.Ducking() then
+        all_tellf("Standing up. Was ducking")
+        cmd("/stand")
+        delay(20)
     end
 
     if qolClearCursorTimer:expired() then

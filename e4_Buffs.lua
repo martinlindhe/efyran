@@ -65,7 +65,7 @@ local requestBuffsTimer = timer.new_random(60 * 1) -- 60s
 
 local handleBuffsTimer = timer.new_random(2 * 1) -- 2s
 
-local checkDebuffsTimer = timer.new_random(20 * 1) -- 20s
+local checkDebuffsTimer = timer.new_random(20 * 1) -- 20s   -- interval for auto cure requests
 
 -- broadcasts what buff groups we can cast
 function buffs.AnnounceAvailablity()
@@ -121,18 +121,22 @@ function buffs.Tick()
 
     -- XXX combat buffs should be done here (TODO implement combat buffs)
 
-    if is_gm() or is_invisible() or is_hovering() or in_combat() or not allow_buff_in_zone() then
+    if is_gm() or is_invisible() or is_hovering() then
+        return
+    end
+
+    if checkDebuffsTimer:expired() then
+        buffs.HandleDebuffs()
+        checkDebuffsTimer:restart()
+    end
+
+    if in_combat() or not allow_buff_in_zone() then
         return
     end
 
     if announceBuffsTimer:expired() then
         buffs.AnnounceAvailablity()
         announceBuffsTimer:restart()
-    end
-
-    if checkDebuffsTimer:expired() then
-        buffs.HandleSelfDebuffs()
-        checkDebuffsTimer:restart()
     end
 
     if is_moving() or window_open("MerchantWnd") or window_open("GiveWnd") or window_open("BigBankWnd")
@@ -171,9 +175,8 @@ function buffs.Tick()
     end
 end
 
---- Find debuffs to handle
-function buffs.HandleSelfDebuffs()
-    --log.Debug("buffs.HandleSelfDebuffs")
+--- Find debuffs to handle, in order to cure myself
+function buffs.HandleDebuffs()
 
     if mq.TLO.Debuff.Count() > 0 then
         log.Info("Debuffed: %d poison, %d disease, %d curse, %d corruption. hp drain %d, mana drain %d, end drain %s, slowed %s, spell slowed %s, snared %s, casting level %s, healing eff %s, spell dmg eff %s",
@@ -181,18 +184,42 @@ function buffs.HandleSelfDebuffs()
             mq.TLO.Debuff.HPDrain(), mq.TLO.Debuff.ManaDrain(), mq.TLO.Debuff.EnduranceDrain(),
             tostring(mq.TLO.Debuff.Slowed()), tostring(mq.TLO.Debuff.SpellSlowed()), tostring(mq.TLO.Debuff.Snared()),
             tostring(mq.TLO.Debuff.CastingLevel()), tostring(mq.TLO.Debuff.HealingEff()), tostring(mq.TLO.Debuff.SpellDmgEff()))
-
-        -- XXX see if we have a recognized debuff
-
-        for idx, row in pairs(cure.detrimental) do
-            local spellConfig = parseSpellLine(row)
-            if mq.TLO.Me.Buff(spellConfig.Name).ID() ~= nil then
-                log.Info("I have debuff \ar%s\ax, need \ay%s\ax cure.", spellConfig.Name, spellConfig.Cure)
-                -- XXX use a cure ability, or beg for a cure
-            end
-        end
-
     end
+
+    log.Info("buffs.HandleDebuffs()")
+
+    -- see if we have a recognized debuff
+    for idx, row in pairs(cure.debuffs) do
+        local spellConfig = parseSpellLine(row)
+        if mq.TLO.Me.Buff(spellConfig.Name).ID() ~= nil then
+            log.Info("I have debuff \ar%s\ax, need \ay%s\ax cure.", spellConfig.Name, spellConfig.Cure)
+            -- XXX TODO later: try to cure self !!!
+
+            -- if we cannot cure, ask a group memebr who can cure
+            local curer = get_group_curer()
+            if curer == nil then
+                all_tellf("FATAL: cant find a curer in my group!") -- TODO: in this case, just ask any curer nearby
+                return
+            end
+            all_tellf("Asking \ag%s\ax to cure \ar%s\ax (\ay%s\ax)", curer, spellConfig.Name, spellConfig.Cure)
+            cmdf("/dex %s /cure %s %s", curer, mq.TLO.Me.Name(), spellConfig.Cure)
+        end
+    end
+
+end
+
+--- Returns the name of the group priest curer, with a preference for SHM or DRU
+---@return string|nil
+function get_group_curer()
+    local name = nil
+    for i=1,mq.TLO.Group.Members() do
+        local class = mq.TLO.Group.Member(i).Class.ShortName()
+        if (name == nil and class == "CLR") or
+            (name ~= nil and (class == "SHM" or class == "DRU")) then
+            name = mq.TLO.Group.Member(i).Name()
+        end
+    end
+    return name
 end
 
 ---@param spawnID integer
@@ -259,15 +286,7 @@ function handleBuffRequest(req)
     end
 
     target_id(spawn.ID())
-
-    -- wait for buff populared
-    delay(3000, function()
-        if spawn.BuffsPopulated() then
-            log.Debug("Buffs populated for %s (%s)", spawn.Name(), req.Buff)
-            return true
-        end
-    end)
-    delay(100)
+    wait_for_buffs_populated()
 
     -- find the one with highest MinLevel
     local minLevel = 0
@@ -326,8 +345,7 @@ function handleBuffRequest(req)
             return false
         end
 
-        -- XXX is being cast even tho target has the buff... should duck in callback
-        all_tellf("Buffing \ag%s\ax with \ay%s\ax (\ay%s\ax).", spawn.Name(), spellName, req.Buff)
+        log.Info("Buffing \ag%s\ax with \ay%s\ax (\ay%s\ax).", spawn.Name(), spellName, req.Buff)
         castSpellRaw(spellName, spawn.ID(), "-maxtries|3")
         delay(100)
         doevents()

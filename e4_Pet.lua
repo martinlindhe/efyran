@@ -61,7 +61,7 @@ function Pet.Summon()
         return false
     end
 
-    Pet.ConfigureTaunt()
+    Pet.ConfigureAfterZone()
     return true
 end
 
@@ -164,17 +164,18 @@ function Pet.BuffMyPet()
     return false
 end
 
-function Pet.ConfigureTaunt()
+function Pet.ConfigureAfterZone()
     if not have_pet() or botSettings.settings.pet == nil then
         return
     end
-    --print("Configuring pet")
     if botSettings.settings.pet.taunt ~= nil and botSettings.settings.pet.taunt then
-        cmd("/pet taunt on")
+        cmd("/squelch /pet taunt on")
     else
-        cmd("/pet taunt off")
+        cmd("/squelch /pet taunt off")
     end
-    cmd("/pet ghold on")
+    cmd("/squelch /pet ghold on")
+
+    cmd("/squelch /pet follow")
 end
 
 return Pet

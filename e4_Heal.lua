@@ -114,7 +114,7 @@ local groupBalanceTimer = timer.new_expired(1 * 1) -- 1s
 
 function Heal.Tick()
 
-    if is_hovering() then
+    if is_hovering() or is_moving() then
         return
     end
 
@@ -292,7 +292,7 @@ end
 -- uses cleric Epic 1.5/2.0 clicky or Divine Arb AA to heal group if avg < 95%
 ---@return boolean true if performed action
 function Heal.performGroupBalanceHeal()
-    if not is_clr() or is_casting() or is_moving() then
+    if not is_clr() or is_casting() or is_moving() or not in_group() then
         return false
     end
 
@@ -348,12 +348,6 @@ function Heal.performLifeSupport()
             log.Error("performLifeSupport ERROR I dont have healing.life_support configured. Current HP is %d%%", mq.TLO.Me.PctHPs())
         end
         return
-    end
-
-    if mq.TLO.Me.Ducking() then
-        all_tellf("performLifeSupport WARNING: Standing up. Was ducking")
-        cmd("/stand")
-        delay(20)
     end
 
     for k, row in ipairs(botSettings.settings.healing.life_support) do

@@ -89,7 +89,7 @@ function CommandQueue.Process()
         cmd("/squelch /raidaccept")
     elseif v.Name == "zoned" then
         log.Debug("I zoned into %s", zone_shortname())
-        pet.ConfigureTaunt()
+        pet.ConfigureAfterZone()
 
         joinCurrentHealChannel()
 
@@ -102,6 +102,8 @@ function CommandQueue.Process()
         drop_invis()
     elseif v.Name == "playmelody" then
         bard.PlayMelody(v.Arg)
+    elseif v.Name == "cure" then
+        cure_player(v.Arg, v.Arg2)
     elseif v.Name == "radiantcure" then
         cast_radiant_cure()
     elseif v.Name == "buffit" then
