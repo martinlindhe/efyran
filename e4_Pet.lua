@@ -53,6 +53,7 @@ function Pet.Summon()
     end
 
     castSpellRaw(spell.RankName(), mq.TLO.Me.ID(), "-maxtries|3")
+    delay(500)
     delay(spell.MyCastTime(), function() return have_pet() end)
     delay(500)
 

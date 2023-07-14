@@ -195,18 +195,24 @@ function buffs.HandleDebuffs()
     for idx, row in pairs(cure.debuffs) do
         local spellConfig = parseSpellLine(row)
         if mq.TLO.Me.Buff(spellConfig.Name).ID() ~= nil then
-            log.Info("I have debuff \ar%s\ax, need \ay%s\ax cure.", spellConfig.Name, spellConfig.Cure)
 
-            if not cure_player(mq.TLO.Me.Name(), spellConfig.Cure) then
-                -- if we cannot cure, ask a group memebr who can cure
-                local curer = get_group_curer()
-                if curer == nil then
-                    -- TODO: in this case, just ask any curer nearby
-                    all_tellf("FATAL: cant find a curer in my group: \ar%s\ax.", spellConfig.Name)
-                    return
+            if matches_filter(spellConfig.Class) then
+
+                log.Info("I have debuff \ar%s\ax, need \ay%s\ax cure.", spellConfig.Name, spellConfig.Cure)
+
+                if not cure_player(mq.TLO.Me.Name(), spellConfig.Cure) then
+                    -- if we cannot cure, ask a group memebr who can cure
+                    local curer = get_group_curer()
+                    if curer == nil then
+                        -- TODO: in this case, just ask any curer nearby
+                        all_tellf("FATAL: cant find a curer in my group: \ar%s\ax.", spellConfig.Name)
+                        return
+                    end
+                    all_tellf("Asking \ag%s\ax to cure \ar%s\ax (\ay%s\ax)", curer, spellConfig.Name, spellConfig.Cure)
+                    cmdf("/dex %s /cure %s %s", curer, mq.TLO.Me.Name(), spellConfig.Cure)
                 end
-                all_tellf("Asking \ag%s\ax to cure \ar%s\ax (\ay%s\ax)", curer, spellConfig.Name, spellConfig.Cure)
-                cmdf("/dex %s /cure %s %s", curer, mq.TLO.Me.Name(), spellConfig.Cure)
+            else
+                all_tellf("I have \ar%s\ax but not asking for cure (not %s)", spellConfig.Name, spellConfig.Class)
             end
         end
     end

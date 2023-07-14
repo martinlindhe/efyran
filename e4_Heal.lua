@@ -232,7 +232,7 @@ function Heal.acceptRez()
             delay(10000) -- 10s
             return
         end
-        all_tellf("\agAccepting rez from \ag%s", peer)
+        all_tellf("Accepting rez from \ag%s\ax ...", peer)
         cmd("/notify ConfirmationDialogBox Yes_Button leftmouseup")
 
         -- click in the RespawnWnd if open (live)
@@ -292,7 +292,7 @@ end
 -- uses cleric Epic 1.5/2.0 clicky or Divine Arb AA to heal group if avg < 95%
 ---@return boolean true if performed action
 function Heal.performGroupBalanceHeal()
-    if not is_clr() or is_casting() or is_moving() or not in_group() then
+    if not is_clr() or is_casting() or is_moving() or not in_group() or have_buff("Resurrection Sickness") then
         return false
     end
 

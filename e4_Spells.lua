@@ -269,12 +269,12 @@ function castSpellAbility(spawn, row, callback)
     end
 
     if spell.Group and spawn ~= nil and not is_grouped_with(spawn.Name()) then
-        all_tellf("SKIP Group, i am not grouped with %s", spawn.Name())
+        all_tellf("SKIP Group, i am not grouped with %s (spell %s)", spawn.Name(), spell.Name)
         return false
     end
 
     if spell.Self and spawn ~= nil and spawn.Name() ~= mq.TLO.Me.Name() then
-        all_tellf("SKIP Self, cant cast on %s", spawn.Name())
+        all_tellf("SKIP Self, cant cast on %s (spell %s)", spawn.Name(), spell.Name)
         return false
     end
 
@@ -733,7 +733,7 @@ function ae_rez()
     all_tellf("\amAERez started in %s\ax (%d corpses) ...", zone_shortname(), corpses)
 
     local spawnQuery = 'pccorpse radius 100'
-    local classOrder = {'CLR', 'DRU', 'EMC', 'RNG', 'BST', 'PAL', 'SHD', 'WAR', 'BRD', 'MNK', 'ROG', 'BER', 'WIZ', 'NEC', 'MAG'}
+    local classOrder = {'CLR', 'DRU', 'SHM', 'ENC', 'RNG', 'BST', 'PAL', 'SHD', 'WAR', 'BRD', 'MNK', 'ROG', 'BER', 'WIZ', 'NEC', 'MAG'}
     for i=1, 15 do
         ae_rez_query(rez, 'pccorpse radius 100 '..classOrder[i])
     end
@@ -746,6 +746,7 @@ end
 function ae_rez_query(rez, spawnQuery)
 
     local corpses = spawn_count(spawnQuery)
+    log.Info("ae_rez_query %s: %d", spawnQuery, corpses)
     if corpses == 0 then
         return
     end
@@ -827,9 +828,9 @@ function gather_corpses()
         local spawn = mq.TLO.NearestSpawn(i, spawnQuery)
         if spawn.Distance() > 5 then
             log.Info("Gathering corpse %s", spawn.Name())
-            cmdf("/dexecute %s /consent %s", spawn.DisplayName(), mq.TLO.Me.Name())
             target_id(spawn.ID())
-            delay(50)
+            cmdf("/dexecute %s /consent %s", spawn.DisplayName(), mq.TLO.Me.Name())
+            delay(100)
             cmd("/corpse")
             delay(1000, function() return spawn() ~= nil and spawn.Distance() < 20 end)
         end
@@ -854,6 +855,7 @@ function loot_my_corpse()
     -- click loot all button
     cmd("/notify LootWnd LootAllButton leftmouseup")
     delay(30000, function() return not window_open("LootWnd") end)
+    all_tellf("Ready to die again!")
 end
 
 -- used by /fdi

@@ -23,7 +23,7 @@ cures.poison = {
     --"Puratus",                                          -- CLR/70: cure all poisons from target + block next posion spell from affecting them, 15s recast
     --"Word of Vivification/Group",                       -- CLR/69: 3417-3427 hp, -21 dr, -21 pr, -14 curse, cost 1357 mana
     --"Word of Replenishment/Group",                      -- CLR/64: 2500 hp, -14 dr, -14 pr, -7 curse, cost 1100 mana
-    "Purge Posion/Self",                                -- ROG/59: -99 poison x12 (AA)   TODO "Self" flag
+    "Purge Posion/Self",                                -- ROG/59: -99 poison x12 (AA)
     "Antidote",                                         -- CLR/58: -16 poison x4
     "Blood of Nadox/Group",                             -- SHM/52: -9 poison x2, -9 disease x2 (group)
     --"Difinecting Aura",                                 -- SHM/52: -10 poison x2, -10 disease x2

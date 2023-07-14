@@ -126,8 +126,6 @@ end
 
 ---@param startingPeer string peer name
 function Follow.RunToZone(startingPeer)
-    unflood_delay()
-
     -- run across (need pos + heading from orchestrator)
     local spawn = spawn_from_peer_name(startingPeer)
     if spawn == nil then
@@ -153,7 +151,8 @@ function Follow.RunToZone(startingPeer)
 
     -- face the same direction the orchestrator is facing
     cmdf("/face fast heading %f", spawn.Heading.Degrees() * -1)
-    delay(20)
+
+    unflood_delay()
 
     -- move forward
     cmd("/keypress forward hold")
