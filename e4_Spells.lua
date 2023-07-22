@@ -625,12 +625,12 @@ function cast_port_to(name)
         return
     end
 
-    all_tellf("Porting to %s (%s)", name, spellName)
-    unflood_delay()
-
     if spellName == nil then
-        all_tellf("ERROR: no such port %s", name)
+        all_tellf("\arERROR\ax: Unknown port alias \ag%s\ax", name)
     end
+
+    all_tellf("Porting to \ag%s\ax (\ay%s\ax) ...", name, spellName)
+    unflood_delay()
 
     memorize_spell(spellName, 5)
 
@@ -734,7 +734,7 @@ function ae_rez()
 
     local spawnQuery = 'pccorpse radius 100'
     local classOrder = {'CLR', 'DRU', 'SHM', 'ENC', 'RNG', 'BST', 'PAL', 'SHD', 'WAR', 'BRD', 'MNK', 'ROG', 'BER', 'WIZ', 'NEC', 'MAG'}
-    for i=1, 15 do
+    for i=1, #classOrder do
         ae_rez_query(rez, 'pccorpse radius 100 '..classOrder[i])
     end
 

@@ -452,7 +452,7 @@ function healPeer(spell_list, peer, pct)
                 log.Info("Skipping heal! \ag%s\ax was %d %%, is now %d %%", mq.TLO.Target.Name(), pct, mq.TLO.Target.PctHPs())
                 return true
             end
-            all_tellf("Healing \ag%s\ax at %d%% with \ay%s\ax", peer, pct, spellConfig.Name)
+            log.Info("Healing \ag%s\ax at %d%% with \ay%s\ax", peer, pct, spellConfig.Name)
 
             local check = castSpellAbility(spawn, heal, function() -- XXX castSpellAbility should take spellConfig obj directly
                 if not is_casting() then

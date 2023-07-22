@@ -3,9 +3,11 @@ require("ezmq")
 
 local destroyItemIDs = {
     8238,9674,10281,14091,16598,16915,16925,16929,16933,19198,21612,21614,9686,10269,3053,3056,3061,3066,28799,21615,25653,77817,77818,72615,
+    2776,  -- Reinforced Hopperhide Gorget
     25655, -- Crystalline Silk Mantle
     25659, -- Crystalline Silk Wristbands
     25660, -- Crystalline Silk Gloves
+    25654, -- Crystalline Silk Shirt
 }
 
 -- autoinventories all items on cursor. returns false on failure

@@ -160,6 +160,26 @@ function spawn_from_peer_name(name)
     return spawn_from_query("pc =".. name)
 end
 
+--- Returns the name of the group priest curer, with a preference for SHM or DRU
+---@return string|nil
+function get_group_curer()
+    local name = nil
+    for i=1,mq.TLO.Group.Members() do
+        local class = mq.TLO.Group.Member(i).Class.ShortName()
+        if (class == "CLR") then
+            name = mq.TLO.Group.Member(i).Name()
+        end
+    end
+
+    for i=1,mq.TLO.Group.Members() do
+        local class = mq.TLO.Group.Member(i).Class.ShortName()
+        if class == "SHM" or class == "DRU" then
+            name = mq.TLO.Group.Member(i).Name()
+        end
+    end
+    return name
+end
+
 --- returns true if `id` is an item I have in inventory or in bank.
 ---@param id integer
 ---@return boolean
@@ -526,6 +546,12 @@ end
 ---@return boolean
 function is_sitting()
     return mq.TLO.Me.Sitting()
+end
+
+-- Am I stunned?
+---@return boolean
+function is_stunned()
+    return mq.TLO.Me.Stunned()
 end
 
 -- Returns my class shortname, eg "WAR".

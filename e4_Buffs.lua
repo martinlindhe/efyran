@@ -169,7 +169,6 @@ function buffs.Tick()
 
     if #buffs.queue > 0 and handleBuffsTimer:expired() then
         local req = table.remove(buffs.queue, 1)
-        log.Info("attempt to handle buff request %s", req)
         if req ~= nil then
             if handleBuffRequest(req) then
                 handleBuffsTimer:restart()
@@ -217,20 +216,6 @@ function buffs.HandleDebuffs()
         end
     end
 
-end
-
---- Returns the name of the group priest curer, with a preference for SHM or DRU
----@return string|nil
-function get_group_curer()
-    local name = nil
-    for i=1,mq.TLO.Group.Members() do
-        local class = mq.TLO.Group.Member(i).Class.ShortName()
-        if (name == nil and class == "CLR") or
-            (name ~= nil and (class == "SHM" or class == "DRU")) then
-            name = mq.TLO.Group.Member(i).Name()
-        end
-    end
-    return name
 end
 
 ---@param spawnID integer
@@ -281,7 +266,7 @@ end
 ---@param req buffQueueValue
 function handleBuffRequest(req)
 
-    log.Debug("handleBuffRequest: Peer %s, buff %s, queue len %d, force = %s", req.Peer, req.Buff, #buffs.queue, tostring(req.Force))
+    log.Info("handleBuffRequest: Peer %s, buff %s, queue len %d, force = %s", req.Peer, req.Buff, #buffs.queue, tostring(req.Force))
 
     local buffRows = groupBuffs[class_shortname()][req.Buff]
     if buffRows == nil then

@@ -355,7 +355,7 @@ function Assist.Tick()
     end
 end
 
-local assistTauntTimer = timer.new_expired(2 * 1) -- 2s
+local assistTauntTimer = timer.new_expired(3 * 1) -- 3s
 
 function Assist.TankTick()
     if not Assist.IsTanking() then
@@ -371,9 +371,13 @@ function Assist.TankTick()
                 all_tellf("Taunting \ar%s\ax (\ag%s\ax has aggro)", mq.TLO.Target.CleanName(), tot)
                 use_ability("Taunt")
                 assistTauntTimer:restart()
-            elseif is_war() and not low_endurance() and is_combat_ability_ready("Bazu Bellow") then
+            elseif is_war() and not low_endurance() and is_combat_ability_ready("Bazu Bellow") then -- Timer 7, 30s reuse
                 all_tellf("Taunting \ar%s\ax [bellow] (\ag%s\ax has aggro)", mq.TLO.Target.CleanName(), tot)
                 use_combat_ability("Bazu Bellow")
+                assistTauntTimer:restart()
+            elseif is_war() and not low_endurance() and is_combat_ability_ready("Mock") then -- Timer 8, 30s reuse
+                all_tellf("Taunting \ar%s\ax [mock] (\ag%s\ax has aggro)", mq.TLO.Target.CleanName(), tot)
+                use_combat_ability("Mock")
                 assistTauntTimer:restart()
             end
         end

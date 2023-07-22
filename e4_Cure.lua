@@ -6,8 +6,6 @@ local cures = {}
 -- List of "disease" cures, order: most powerful first
 cures.disease = {
     "Radiant Cure/Group",
-    --"Word of Vivification/Group",                       -- CLR/69: 3417-3427 hp, -21 dr, -21 pr, -14 curse, cost 1357 mana
-    --"Word of Replenishment/Group",                      -- CLR/64: 2500 hp, -14 dr, -14 pr, -7 curse, cost 1100 mana
     "Blood of Nadox/Group",                             -- SHM/52: -9 poison x2, -9 disease x2 (group)
     --"Difinecting Aura",                                 -- SHM/52: -10 poison x2, -10 disease x2
     "Abolish Disease",                                  -- SHM/48, BST/63: -36 disease
@@ -21,8 +19,6 @@ cures.disease = {
 cures.poison = {
     "Radiant Cure/Group",
     --"Puratus",                                          -- CLR/70: cure all poisons from target + block next posion spell from affecting them, 15s recast
-    --"Word of Vivification/Group",                       -- CLR/69: 3417-3427 hp, -21 dr, -21 pr, -14 curse, cost 1357 mana
-    --"Word of Replenishment/Group",                      -- CLR/64: 2500 hp, -14 dr, -14 pr, -7 curse, cost 1100 mana
     "Purge Posion/Self",                                -- ROG/59: -99 poison x12 (AA)
     "Antidote",                                         -- CLR/58: -16 poison x4
     "Blood of Nadox/Group",                             -- SHM/52: -9 poison x2, -9 disease x2 (group)
@@ -170,7 +166,7 @@ function cure_player(name, kind)
 
         if known_spell_ability(cureConfig.Name) then
             if have_spell(cureConfig.Name) or is_alt_ability_ready(cureConfig.Name) then
-                all_tellf("Curing \ag%s\ax with \ay%s\ax (\ar%s\ax)", name, cureConfig.Name, kind)
+                all_tellf("Curing \ag%s\ax from \ay%s\ax (\ay%s\ax)", name, cureConfig.Name, kind)
 
                 if castSpellAbility(spawn, cureRow) then
                     return true
