@@ -398,7 +398,7 @@ function QoL.Init()
             log.Info("followid: Not matching filter, giving up: %s", filter)
             return
         end
-        follow.Start(toint(spawnID))
+        follow.Start(toint(spawnID), true)
     end)
 
     mq.bind("/evac", function(name)
@@ -929,6 +929,12 @@ function QoL.Init()
 
     -- Rezzes nearby player corpses
     mq.bind("/aerez", function() commandQueue.Add("aerez") end)
+
+    -- api: used by one peer to tell other peers about what corpses are already rezzed
+    mq.bind("/ae_rezzed", function(...)
+        local name = trim(args_string(...))
+        mark_ae_rezzed(name)
+    end)
 
     -- MGB CLR Celestial Regeneration
     mq.bind("/aecr", function() commandQueue.Add("mgb", "Celestial Regeneration") end)

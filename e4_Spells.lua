@@ -741,6 +741,19 @@ function ae_rez()
     all_tellf("\amAEREZ DONE\ax")
 end
 
+-- holds names of those already being rezzed
+---@type string[]
+local aeRezzedNames = {}
+
+---@param name string
+function mark_ae_rezzed(name)
+    table.insert(aeRezzedNames, name)
+end
+
+function clear_ae_rezzed()
+    aeRezzedNames = {}
+end
+
 ---@param rez string rez spell/item name
 ---@param spawnQuery string
 function ae_rez_query(rez, spawnQuery)
@@ -757,28 +770,44 @@ function ae_rez_query(rez, spawnQuery)
         mq.delay(2000)
     end
 
-    log.Info("Rezzing %s", spawnQuery)
+    --log.Info("Rezzing %s", spawnQuery)
 
     for i = 1, corpses do
         local spawn = mq.TLO.NearestSpawn(i, spawnQuery)
         if spawn ~= nil and spawn.ID() ~= nil then
-            log.Info("Trying to rez %s", spawn.Name())
-            target_id(spawn.ID())
+            local skip = false
 
-            if is_alt_ability_ready(rez) or is_spell_ready(rez) or is_item_clicky_ready(rez) then
-                all_tellf("Rezzing \ag%s\ax with \ay%s\ax", spawn.Name(), rez)
-                castSpellRaw(rez, spawn.ID())
-                delay(3000)
-                wait_until_not_casting()
-            else
-                all_tellf("\arWARN\ax: Not ready to rez \ag%s\ax.", spawn.Name())
+            -- XXX fix, access aeRezzedNames without recurisive includes
+            for _, rezzedName in ipairs(aeRezzedNames) do
+                log.Info("rezzedname check: %s vs %s", rezzedName, spawn.Name())
+                if rezzedName == spawn.Name() then
+                    log.Info("already being rezzed, should skip !!!")
+                    all_tellf("aerez: skipping marked corpse %s", rezzedName)
+                    skip = true
+                end
+            end
+            if not skip then
+                log.Info("Trying to rez %s", spawn.Name())
+
+                -- tell bots this corpse is rezzed
+                cmdf("/dgzexecute /ae_rezzed %s", spawn.Name())
+
+                target_id(spawn.ID())
+
+                if is_alt_ability_ready(rez) or is_spell_ready(rez) or is_item_clicky_ready(rez) then
+                    all_tellf("Rezzing \ag%s\ax with \ay%s\ax", spawn.Name(), rez)
+                    castSpellRaw(rez, spawn.ID())
+                    delay(3000)
+                    wait_until_not_casting()
+                else
+                    all_tellf("\arWARN\ax: Not ready to rez \ag%s\ax.", spawn.Name())
+                end
             end
         end
         doevents()
-        delay(13000)
+        delay(13000) -- XXX TODO: instead wait until given rez spell is ready before cast
     end
 end
-
 function pbae_loop()
 
     local nearbyPBAEilter = "npc radius 50 zradius 50 los"
@@ -838,8 +867,16 @@ function gather_corpses()
 end
 
 function loot_my_corpse()
+
+    cmd("/squelch /target clear")
     -- target my corpse
     cmdf("/target %s's corpse", mq.TLO.Me.Name())
+    mq.delay(100)
+    if mq.TLO.Target.ID() == nil then
+        all_tellf("No corpse around, giving up!")
+        return
+    end
+
     move_to(mq.TLO.Target.ID())
     delay(1000)
 

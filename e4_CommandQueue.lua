@@ -1,10 +1,9 @@
 local mq = require("mq")
 local log = require("efyran/knightlinc/Write")
 
-local botSettings = require("efyran/e4_BotSettings")
-local hail = require("efyran/e4_Hail")
+local hail    = require("efyran/e4_Hail")
 local buffs   = require("efyran/e4_Buffs")
-local bard = require("efyran/Class_Bard")
+local bard    = require("efyran/Class_Bard")
 local follow  = require("efyran/e4_Follow")
 local assist  = require("efyran/e4_Assist")
 local pet     = require("efyran/e4_Pet")
@@ -90,7 +89,7 @@ function CommandQueue.Process()
     elseif v.Name == "zoned" then
         log.Debug("I zoned into %s", zone_shortname())
         pet.ConfigureAfterZone()
-
+        clear_ae_rezzed()
         joinCurrentHealChannel()
 
         if is_brd() then
