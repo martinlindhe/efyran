@@ -135,8 +135,8 @@ Buff Spell Level   Minimum Target Level
 /hailall                    - have all peers hail/talk to nearby NPC
 /cohgroup                   - let current mage summon their group with Call of the Hero
 
-/buffon                     - auto buffs
-/buffoff
+/buffon, /buffoff           - toggle auto buffing
+/medon, /medoff             - toggle auto med
 /buffit						- buff target
 /dropbuff <name>            - drop buff from all peers in zone, partial buff name match. "all" to drop all buffs
 /dropinvis                  - drop invisibility on all peers in zone

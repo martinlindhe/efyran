@@ -1,6 +1,7 @@
 local mq = require("mq")
 local log = require("efyran/knightlinc/Write")
 
+local heal    = require("efyran/e4_Heal")
 local hail    = require("efyran/e4_Hail")
 local buffs   = require("efyran/e4_Buffs")
 local bard    = require("efyran/Class_Bard")
@@ -87,16 +88,7 @@ function CommandQueue.Process()
         cmd("/notify ConfirmationDialogBox Yes_Button leftmouseup")
         cmd("/squelch /raidaccept")
     elseif v.Name == "zoned" then
-        log.Debug("I zoned into %s", zone_shortname())
-        pet.ConfigureAfterZone()
-        clear_ae_rezzed()
-        joinCurrentHealChannel()
-
-        if is_brd() then
-            bard.resumeMelody()
-        else
-            memorizeListedSpells()
-        end
+        perform_zoned_event()
     elseif v.Name == "dropinvis" then
         drop_invis()
     elseif v.Name == "playmelody" then
@@ -347,6 +339,22 @@ function cast_word_heal()
         return
     end
     castSpellAbility(nil, name)
+end
+
+-- performs various tasks when toon has finished zoning
+function perform_zoned_event()
+    log.Debug("I zoned into %s", zone_shortname())
+    pet.ConfigureAfterZone()
+    clear_ae_rezzed()
+    joinCurrentHealChannel()
+
+    if is_brd() then
+        bard.resumeMelody()
+    else
+        memorizeListedSpells()
+    end
+    buffs.refreshBuffs = true
+    heal.autoMed = true
 end
 
 return CommandQueue

@@ -58,7 +58,7 @@ end
 
 local announceBuffsTimer = timer.new_expires_in(2 * 60, 3) -- announce buffs 3 sec after script start, then every 2 minutes
 
-local refreshBuffsTimer = timer.new_random(10 * 1) -- 10s
+local refreshBuffsTimer = timer.new_expired(10) -- 10s
 
 local requestBuffsTimer = timer.new_random(60 * 1) -- 60s
 
@@ -133,7 +133,7 @@ function buffs.Tick()
         return
     end
 
-    if announceBuffsTimer:expired() then
+    if buffs.refreshBuffs and announceBuffsTimer:expired() then
         buffs.AnnounceAvailablity()
         announceBuffsTimer:restart()
     end
@@ -158,7 +158,7 @@ function buffs.Tick()
         return
     end
 
-    if requestBuffsTimer:expired() then
+    if buffs.refreshBuffs and requestBuffsTimer:expired() then
         buffs.RequestBuffs()
         requestBuffsTimer:restart()
     end
@@ -289,6 +289,14 @@ function handleBuffRequest(req)
     local spellName = ""
 
     local level = spawn.Level()
+    if level == nil then
+        all_tellf("\arFATAL level is nil, from peer %s, buff %s", req.Peer, req.Buff)
+    end
+
+    if type(level) ~= "number" then
+        all_tellf("\arFATAL level is not a number: %s: %s, from peer %s, buff %s, input %s", type(level), tostring(level), req.Peer, req.Buff, checkRow)
+        return
+    end
 
     -- see if we have any rank of this buff
     for idx, checkRow in pairs(buffRows) do
@@ -305,14 +313,6 @@ function handleBuffRequest(req)
         -- XXX debug source of nil
         if type(n) ~= "number" then
             log.Error("DEBUG: n is not a number, from peer %s, buff %s", req.Peer, req.Buff)
-        end
-        if type(minLevel) ~= "number" then
-            all_tellf("\arFATAL minLevel is not a number, from peer %s, buff %s, input %s", req.Peer, req.Buff, checkRow)
-            return
-        end
-        if type(level) ~= "number" then
-            all_tellf("\arFATAL level is not a number: %s: %s, from peer %s, buff %s, input %s", type(level), tostring(level), req.Peer, req.Buff, checkRow)
-            return
         end
         if type(n) == "number" and n > minLevel and level >= n then
             spellName = spellConfig.Name

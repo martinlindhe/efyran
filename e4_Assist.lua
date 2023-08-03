@@ -364,7 +364,7 @@ function Assist.TankTick()
 
     local n = mq.TLO.Me.TargetOfTarget.Class.ShortName()
     local tot = mq.TLO.Me.TargetOfTarget.Name()
-    if n ~= "WAR" and n ~= "PAL" and n ~= "SHD" then
+    if tot ~= nil and  n ~= "WAR" and n ~= "PAL" and n ~= "SHD" then
         log.Info("tanking and my target's target class is %s, need to grab aggro!", n)
         if assistTauntTimer:expired() then
             if is_ability_ready("Taunt") then

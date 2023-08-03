@@ -837,13 +837,13 @@ function QoL.Init()
     mq.bind("/dzhide", function() mq.cmd("/noparse /dgaexecute /if (${Window[dynamiczonewnd]}) /windowstate dynamiczonewnd close") end)
 
     -- report peers with at least 5 unspent AA:s
-    mq.bind("/unspentaa", function() mq.cmd("/noparse /dgaexecute /if (${Me.AAPoints} >= 5 && ${Me.AAPoints} < 100) /dgtell all UNSPENT AA: ${Me.AAPoints}") end)
+    mq.bind("/unspentaa", function() mq.cmd("/noparse /dgaexecute /if (${Me.AAPoints} >= 5 && ${Me.AAPoints} < 30) /dgtell all UNSPENT AA: ${Me.AAPoints}") end)
 
     -- report peers with less than 10 unspent AA:s
-    mq.bind("/lowunspentaa", function() mq.cmd("/noparse /dgaexecute /if (${Me.AAPoints} > 1 && ${Me.AAPoints} < 10) /dgtell all UNSPENT AA: ${Me.AAPoints}") end)
+    mq.bind("/lowunspentaa", function() mq.cmd("/noparse /dgaexecute /if (${Me.AAPoints} >= 1 && ${Me.AAPoints} < 30) /dgtell all UNSPENT AA: ${Me.AAPoints}") end)
 
     -- report peers with any unspent AA:s
-    mq.bind("/allunspentaa", function() mq.cmd("/noparse /dgaexecute /if (${Me.AAPoints} > 0) /dgtell all UNSPENT AA: ${Me.AAPoints}") end)
+    mq.bind("/allunspentaa", function() mq.cmd("/noparse /dgaexecute /if (${Me.AAPoints} >= 1) /dgtell all UNSPENT AA: ${Me.AAPoints}") end)
 
     -- report all peer total AA:s
     mq.bind("/totalaa", function() mq.cmd("/noparse /dgaexecute /dgtell all TOTAL AA: ${Me.AAPointsTotal}") end)

@@ -138,6 +138,8 @@ cures.debuffs = {
     "Curse of Rhag`Zadune/Cure|curse",                  -- 9 curse counters, 200 mana/tick
 
     "Rabies/Cure|disease",                              -- 1 disease counter, chardok
+
+    "Tashania/Cure|radiant",
 }
 
 local MAX_BUFF_SLOTS = 20 -- 20 for OOW with AA:s
@@ -166,7 +168,7 @@ function cure_player(name, kind)
 
         if known_spell_ability(cureConfig.Name) then
             if have_spell(cureConfig.Name) or is_alt_ability_ready(cureConfig.Name) then
-                all_tellf("Curing \ag%s\ax from \ay%s\ax (\ay%s\ax)", name, cureConfig.Name, kind)
+                all_tellf("Curing \ag%s\ax with \ay%s\ax (\ay%s\ax)", name, cureConfig.Name, kind)
 
                 if castSpellAbility(spawn, cureRow) then
                     return true

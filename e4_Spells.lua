@@ -878,7 +878,6 @@ function loot_my_corpse()
     end
 
     move_to(mq.TLO.Target.ID())
-    delay(1000)
 
     -- open loot window
     cmd("/loot")

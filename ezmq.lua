@@ -51,7 +51,7 @@ function move_to(spawnID)
     --    return
     --end
 
-    if spawn.Distance() < 5 then
+    if spawn.Distance() < 4 then
         log.Debug("move_to SKIP MOVE, distance %d", spawn.Distance())
         return
     end
@@ -536,16 +536,22 @@ function is_moving()
     return mq.TLO.Me.Moving()
 end
 
--- Am I invisible?
+-- Am I standing?
 ---@return boolean
-function is_invisible()
-    return mq.TLO.Me.Invis()
+function is_standing()
+    return mq.TLO.Me.Standing()
 end
 
 -- Am I sitting?
 ---@return boolean
 function is_sitting()
     return mq.TLO.Me.Sitting()
+end
+
+-- Am I invisible?
+---@return boolean
+function is_invisible()
+    return mq.TLO.Me.Invis()
 end
 
 -- Am I stunned?
@@ -635,6 +641,9 @@ end
 --- Am I grouped with PC `name`?
 ---@return boolean
 function is_grouped_with(name)
+    if name == mq.TLO.Me.Name() then
+        return true
+    end
     for i=1,mq.TLO.Group.Members() do
         if mq.TLO.Group.Member(i).Name() == name then
             return true
@@ -1438,7 +1447,7 @@ end
 --
 -- Used to reduce CPU load while zoning many peers at once.
 function unflood_delay()
-    random_delay(mq.TLO.DanNet.PeerCount() * 300)
+    random_delay(mq.TLO.DanNet.PeerCount() * 200)
 end
 
 -- Returns true if `name` is ready to use.

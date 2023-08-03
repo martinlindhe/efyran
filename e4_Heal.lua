@@ -19,6 +19,9 @@ local Heal = {
 
     ---@type string
     healme_channel = "", -- healme channel for current zone
+
+    ---@type boolean
+    autoMed = true,
 }
 
 function Heal.Init()
@@ -37,6 +40,20 @@ function Heal.Init()
                 enqueueHealmeRequest(msg)
             end
         end
+    end)
+
+    mq.bind("/medon", function()
+        if is_orchestrator() then
+            cmd("/dgzexecute /medon")
+        end
+        Heal.autoMed = true
+    end)
+
+    mq.bind("/medoff", function()
+        if is_orchestrator() then
+            cmd("/dgzexecute /medoff")
+        end
+        Heal.autoMed = false
     end)
 
     joinCurrentHealChannel()
@@ -140,7 +157,9 @@ function Heal.Tick()
     Heal.medCheck()
 
     Heal.askForHeal()
+
 end
+
 
 function Heal.askForHeal()
 
@@ -279,11 +298,11 @@ function Heal.medCheck()
         return
     end
 
-    if follow.spawn ~= nil or is_brd() or is_sitting() or in_combat() or is_hovering() or is_casting() or is_moving() or window_open("SpellBookWnd") or window_open("LootWnd") then
+    if follow.spawn ~= nil or is_brd() or is_sitting() or in_combat() or is_hovering() or is_casting() or window_open("SpellBookWnd") or window_open("LootWnd") then
         return
     end
 
-    if mq.TLO.Me.MaxMana() > 0 and low_mana() and not follow.IsFollowing() then
+    if Heal.autoMed and mq.TLO.Me.MaxMana() > 0 and low_mana() and is_standing() and not is_moving() and not follow.IsFollowing() then
         all_tellf("Low mana, medding at %d%%", mq.TLO.Me.PctMana())
         cmd("/sit on")
     end
