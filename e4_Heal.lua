@@ -298,7 +298,7 @@ function Heal.medCheck()
         return
     end
 
-    if follow.spawn ~= nil or is_brd() or is_sitting() or in_combat() or is_hovering() or is_casting() or window_open("SpellBookWnd") or window_open("LootWnd") then
+    if follow.IsFollowing() or is_brd() or is_sitting() or in_combat() or is_hovering() or is_casting() or window_open("SpellBookWnd") or window_open("LootWnd") then
         return
     end
 

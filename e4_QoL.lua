@@ -374,7 +374,7 @@ function QoL.Init()
 
     ---@param ... string|nil filter, such as "/only|ROG"
     mq.bind("/followon", function(...)
-        local exe = string.format("/dgzexecute /followid %d", mq.TLO.Me.ID())
+        local exe = string.format("/dgzexecute /followplayer %s", mq.TLO.Me.Name())
         local filter = trim(args_string(...))
         if filter ~= nil then
             exe = exe .. " " .. filter
@@ -389,16 +389,16 @@ function QoL.Init()
         follow.Stop()
     end)
 
-    -- follows another peer in LoS
-    ---@param spawnID string
+    -- follows another peer
+    ---@param spawnName string
     ---@param ... string|nil filter, such as "/only|ROG"
-    mq.bind("/followid", function(spawnID, ...)
+    mq.bind("/followplayer", function(spawnName, ...)
         local filter = trim(args_string(...))
         if filter ~= nil and not matches_filter(filter) then
             log.Info("followid: Not matching filter, giving up: %s", filter)
             return
         end
-        follow.Start(toint(spawnID), true)
+        follow.Start(spawnName, true)
     end)
 
     mq.bind("/evac", function(name)

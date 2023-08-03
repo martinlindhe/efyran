@@ -138,6 +138,12 @@ function spawn_from_id(spawnID)
     return spawn_from_query("id "..tostring(spawnID))
 end
 
+---@param name string
+---@return spawn|nil
+function spawn_from_peer_name(name)
+    return spawn_from_query("pc =".. name)
+end
+
 -- Get the number of spawns matching `query`
 ---@return integer
 function spawn_count(query)
@@ -152,12 +158,6 @@ function spawn_from_query(query)
         return nil
     end
     return o
-end
-
----@param name string
----@return spawn|nil
-function spawn_from_peer_name(name)
-    return spawn_from_query("pc =".. name)
 end
 
 --- Returns the name of the group priest curer, with a preference for SHM or DRU

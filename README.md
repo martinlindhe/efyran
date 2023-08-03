@@ -6,7 +6,7 @@ The road to massive everquest botting.
 
 It was created after playing with and modding the older [E3 macro](https://github.com/cream24/Macros) over a number of years.
 
-Some concepts are borrowed from E3, while others are new. No code has been reused from E3.
+Some concepts are borrowed from E3, while others are new.
 
 
 ## Getting started
@@ -115,10 +115,11 @@ Buff Spell Level   Minimum Target Level
 ## Command reference
 
 ```
-/assiston ${Target.ID}      - run from main driver, tell peers to kill spawn by ID
-/backoff                    - call of assist
+/assiston <filter>          - tell peers to kill current target
+/assiston ${Target.ID} <filter> - tell peers to kill spawn by ID
+/backoff <filter>           - call off assist
 /pbaeon                     - start PBAE
-/spellset <name>            - switch currently used spell set. defaults to "main"
+/spellset <name>            - switch currently used spell set. default set is called "main"
 
 /quickburns
 /longburns
@@ -126,25 +127,25 @@ Buff Spell Level   Minimum Target Level
 
 /mana                       - tell peers to report mana %
 
-/followon					- tell peers to follow you
-/followoff					- tell peers to stop
+/followon <filter>          - tell peers to follow you
+/followoff                  - tell peers to stop
 /movetome                   - tell peers to move to your location
-/clickit					- click a "door" object to zone
-/rtz                        - face zoneline and run it to instruct bots to cross the zoneline
+/clickit                    - click a "door" object to zone
+/rtz                        - run to zone. face zoneline and run /rtz to instruct bots to run forward in your direction
 /hailit                     - hail/talk to nearby NPC
 /hailall                    - have all peers hail/talk to nearby NPC
 /cohgroup                   - let current mage summon their group with Call of the Hero
 
 /buffon, /buffoff           - toggle auto buffing
 /medon, /medoff             - toggle auto med
-/buffit						- buff target
+/buffit                     - buff target
 /dropbuff <name>            - drop buff from all peers in zone, partial buff name match. "all" to drop all buffs
 /dropinvis                  - drop invisibility on all peers in zone
 /gathercorpses              - summon nearby corpses into a pile
 /factions                   - report faction status. currently only tracks Dranik Loyalists max ally (oow t2 armor)
-/factionsall             	- tell all peers to report faction
+/factionsall                - tell all peers to report faction
 
-/fdi             			- find item by partial name
+/fdi                        - find item by partial name
 /fmi                        - find missing item. report peers who lack an item
 /clickies                   - lists all clickies on current toon
 /banker                     - summons a banker
@@ -169,10 +170,9 @@ Buff Spell Level   Minimum Target Level
 
 /lootcorpses                - loot your corpses
 /lootallcorpses             - tell peers to loot all
-
 ```
 
-xxx document rest
+TODO document the remaining commands
 
 
 

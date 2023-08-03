@@ -5,19 +5,24 @@ local timer = require("efyran/Timer")
 local globalSettings = require("efyran/e4_Settings")
 
 local Follow = {
-    spawn = nil, -- the current spawn I am following
-    lastFollowID = 0, -- the spawn I was following, auto resume follow this after a fight
+    -- the current spawn I am following
+    ---@type string
+    spawnName = "",
+
+    -- the spawn I was following, auto resume follow this after a fight
+    ---@type string
+    lastFollowName = "",
 }
 
--- Starts to follow spawn ID (usually the orchestrator)
----@param spawnID integer
+-- Starts to follow another player (usually the orchestrator)
+---@param spawnName string
 ---@param force boolean
-function Follow.Start(spawnID, force)
-    if not is_peer_id(spawnID) then
-        all_tellf("ERROR: /followid called on invalid spawn ID %d", spawnID)
+function Follow.Start(spawnName, force)
+    if not is_peer(spawnName) then
+        all_tellf("ERROR: /folloplayer called on invalid spawn %s", spawnName)
         return
     end
-    local spawn = spawn_from_id(spawnID)
+    local spawn = spawn_from_peer_name(spawnName)
     if spawn == nil then
         return
     end
@@ -25,30 +30,30 @@ function Follow.Start(spawnID, force)
         all_tellf("I cannot see %s", spawn.Name())
         return
     end
-    log.Debug("Follow start on %d %s", spawnID, spawn.Name())
-    Follow.spawn = spawn
+    log.Debug("Follow start on %s", spawn.Name())
+    Follow.spawnName = spawn.Name()
     Follow.Update()
 end
 
 --- Returns true if I am in follow mode
 ---@return boolean
 function Follow.IsFollowing()
-    return Follow.spawn ~= nil or Follow.lastFollowID ~= 0
+    return Follow.spawnName ~= "" or Follow.lastFollowName ~= ""
 end
 
 function Follow.PauseForKill()
-    Follow.lastFollowID = 0
-    if Follow.spawn ~= nil then
-        Follow.lastFollowID = Follow.spawn.ID()
-        Follow.spawn = nil
+    Follow.lastFollowName = ""
+    if Follow.spawnName ~= "" then
+        Follow.lastFollowName = Follow.spawnName
+        Follow.spawnName = ""
         Follow.Pause()
     end
 end
 
 function Follow.ResumeAfterKill()
-    if Follow.lastFollowID ~= 0 then
-        Follow.Start(Follow.lastFollowID, true)
-        Follow.lastFollowID = 0
+    if Follow.lastFollowName ~= "" then
+        Follow.Start(Follow.lastFollowName, true)
+        Follow.lastFollowName = ""
     end
 end
 
@@ -67,8 +72,8 @@ end
 
 -- stops following completely
 function Follow.Stop()
-    Follow.spawn = nil
-    Follow.lastFollowID = 0
+    Follow.spawnName = ""
+    Follow.lastFollowName = ""
     Follow.Pause()
 end
 
@@ -88,33 +93,38 @@ local lastHeading = ""
 
 -- called from Follow.Tick() in main loop, restores auto follow after a Follow.Pause() call
 function Follow.Update()
-    -- XXX fixme Follow.spawn is invalid after zoning, use PC name instead
-    if Follow.spawn == nil then
+    if Follow.spawnName == "" then
+        return
+    end
+
+    local spawn = spawn_from_peer_name(Follow.spawnName)
+    if spawn == nil then
+        all_tellf("ERROR: follow update fail on %s", Follow.spawnName)
         return
     end
 
     local exe = ""
-    local maxRange = 10 -- Follow.spawn.MaxRangeTo()
+    local maxRange = 10 -- spawn.MaxRangeTo()
 
-    log.Debug("Follow.Update, mode %s, distance %f", globalSettings.followMode, Follow.spawn.Distance3D())
+    log.Debug("Follow.Update, mode %s, distance %f", globalSettings.followMode, spawn.Distance3D())
     if globalSettings.followMode:lower() == "mq2nav" then
         if not mq.TLO.Navigation.MeshLoaded() then
             all_tellf("MISSING NAVMESH FOR %s", zone_shortname())
             return
         end
-        if not mq.TLO.Navigation.Active() or lastHeading ~= Follow.spawn.HeadingTo() then
-            exe = string.format("/nav id %d | dist=%d log=critical", Follow.spawn.ID(), maxRange)
-            lastHeading = Follow.spawn.HeadingTo()
+        if not mq.TLO.Navigation.Active() or lastHeading ~= spawn.HeadingTo() then
+            exe = string.format("/nav id %d | dist=%d log=critical", spawn.ID(), maxRange)
+            lastHeading = spawn.HeadingTo()
         end
     elseif globalSettings.followMode:lower() == "mq2advpath" then
-        if not mq.TLO.AdvPath.Following() or lastHeading ~= Follow.spawn.HeadingTo() then
-            exe = string.format("/afollow spawn %d", Follow.spawn.ID())
+        if not mq.TLO.AdvPath.Following() or lastHeading ~= spawn.HeadingTo() then
+            exe = string.format("/afollow spawn %d", spawn.ID())
         end
     elseif globalSettings.followMode:lower() == "mq2moveutils" then
-        --if not mq.TLO.Stick.Active() or lastHeading ~= Follow.spawn.HeadingTo() then
-            mq.cmdf("/target id %d", Follow.spawn.ID())
+        --if not mq.TLO.Stick.Active() or lastHeading ~= spawn.HeadingTo() then
+            mq.cmdf("/target id %d", spawn.ID())
             exe = string.format("/stick hold %d uw", maxRange) -- face upwards to better run over obstacles
-            --exe = string.format("/moveto id %d", Follow.spawn.ID())
+            --exe = string.format("/moveto id %d", spawn.ID())
         --end
     end
 
@@ -141,13 +151,11 @@ function Follow.RunToZone(startingPeer)
     -- move to initial position
     move_to(spawn.ID())
 
-    if not is_within_distance(spawn, 16) then
+    if not is_within_distance(spawn, 18) then
         -- unlikely
         all_tellf("/rtz ERROR: failed to move near %s, my distance is %f", spawn.Name(), spawn.Distance())
         return
     end
-
-    Follow.Pause()
 
     -- face the same direction the orchestrator is facing
     cmdf("/face fast heading %f", spawn.Heading.Degrees() * -1)
