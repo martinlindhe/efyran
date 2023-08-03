@@ -4,21 +4,42 @@ require("efyran/ezmq")
 
 local inventorySlots = 10
 local bankerQuery = "npc radius 100 banker"
+local bankerPetQuery = "pet radius 100 banker" -- summoned banker is a pet
 
 local tradeskillsIni = mq.TLO.Lua.Dir() .. "/efyran/settings/tradeskills.ini"
 
--- reads tradeskills.ini and auto banks all the stuff you should have
-function autobank()
+local bankFull = false
 
+mq.event("bank-full", "You have no room left in the bank.", function()
+    bankFull = true
+end)
+
+-- Opens bank window, by summoning a clockwork banker if needed
+-- Returns true on success
+---@return boolean
+function open_banker()
     if not window_open("BigBankWnd") then
-        if spawn_count(bankerQuery) == 0 then
-            -- TODO 2: request random bot to spawn a banker, using efyran "summonbanker"
-            log.Error("no banker nearby! Giving up!")
+        if spawn_count(bankerQuery) == 0 and spawn_count(bankerPetQuery) == 0 then
+            log.Info("Summoning a banker ...")
+            cmd("/banker")
+            delay(500)
+
+            if spawn_count(bankerQuery) == 0 and spawn_count(bankerPetQuery) == 0 then
+                log.Error("No banker nearby! Giving up!")
+                return false
+            end
         end
         log.Info("Opening nearby banker ...")
 
-        cmdf("/target id %d", mq.TLO.Spawn(bankerQuery).ID())
-        move_to(mq.TLO.Spawn(bankerQuery).ID())
+        local bankerID = 0
+        if spawn_count(bankerQuery) > 0 then
+            bankerID = mq.TLO.Spawn(bankerQuery).ID()
+        elseif spawn_count(bankerPetQuery) > 0 then
+            bankerID = mq.TLO.Spawn(bankerPetQuery).ID()
+        end
+
+        cmdf("/target id %d", bankerID)
+        move_to(bankerID)
         delay(250)
 
         cmd("/click right target")
@@ -26,18 +47,26 @@ function autobank()
     end
 
     if not window_open("BigBankWnd") then
-        log.Error("Banker not open! Giving up!")
+        log.Error("Bank window not open! Giving up!")
+        return false
+    end
+    return true
+end
+
+-- reads settings/tradeskills.ini and auto banks all the stuff you should have
+function autobank()
+    bankFull = false
+    if not open_banker() then
         return
     end
 
-
     clear_cursor()
-
 
     local depositCount = 0
 
     --- loop thru inventory items, see if item is listed in tradeskills.ini
     for i = 23, 32 do -- equipment: 23-32 is inventory top level (10 slots)
+
         if mq.TLO.Me.Inventory(i).ID() then
             local inv = mq.TLO.Me.Inventory(i)
             if inv.Container() > 0 then
@@ -78,6 +107,14 @@ function autobank()
                                     repeat
                                         cmd("/notify BigBankWnd BIGB_AutoButton leftmouseup")
                                         delay(1)
+
+                                        doevents()
+                                        if bankFull then
+                                            all_tellf("/autobank: Bank is full, aborting !")
+                                            close_window("BigBankWnd", "DoneButton")
+                                            return
+                                        end
+
                                         if has_cursor_item() then
                                             all_tellf("Failed to auto bank %s, retrying ...", item.Name())
                                             delay("1s")

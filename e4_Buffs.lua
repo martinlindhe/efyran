@@ -462,7 +462,7 @@ function buffs.RequestBuffs()
                         return true
                     else
                         log.Info("Requesting buff \ax%s\ay from \ag%s %s\ax ...", spellConfig.Name, askClass, peer)
-                        cmdf("/dexecute %s /buff %s %s", peer, mq.TLO.Me.Name(), spellConfig.Name)
+                        cmdf("/squelch /dexecute %s /buff %s %s", peer, mq.TLO.Me.Name(), spellConfig.Name)
                     end
                 else
                     log.Debug("No peer of required class for buff %s found nearby: %s", spellConfig.Name, askClass)

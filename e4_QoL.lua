@@ -102,7 +102,7 @@ function QoL.Init()
             -- excludes tells from "Player`s pet" (Permutation Peddler, NPC), "Player`s familiar" (Summoned Banker, Pet)
             local spawn = spawn_from_query('="'..name..'"')
             if spawn ~= nil and (spawn.Type() == "NPC" or spawn.Type() == "Pet") then
-                log.Debug("Ignoring tell from "..spawn.Type().." '".. name.. "': "..msg)
+                --log.Debug("Ignoring tell from "..spawn.Type().." '".. name.. "': "..msg)
                 return
             end
             if spawn ~= nil then
@@ -540,13 +540,13 @@ function QoL.Init()
     end)
 
     -- tell all peers to report faction status
-    mq.bind("/factionsall", function() mq.cmd("/dgaexecute all /factions") end)
+    mq.bind("/factionsall", function() mq.cmd("/squelch /dgzexecute /factions") end)
 
     -- clear all chat windows on current peer
     mq.bind("/clr", function() mq.cmd("/clear") end)
 
     -- clear all chat windows on all peers
-    mq.bind("/cls", function() mq.cmd("/dgaexecute /clear") end)
+    mq.bind("/cls", function() mq.cmd("/squelch /dgaexecute /clear") end)
 
     mq.bind("/self", function() mq.cmd("/target myself") end)
 
@@ -560,7 +560,7 @@ function QoL.Init()
     mq.bind("/hcn", function() mq.cmd("/hidec none") end)
 
     -- report toons with few free buff slots
-    mq.bind("/freebuffslots", function(name) mq.cmd("/noparse /dgaexecute all /if (${Me.FreeBuffSlots} <= 1) /dgtell all FREE BUFF SLOTS: ${Me.FreeBuffSlots}") end)
+    mq.bind("/freebuffslots", function(name) mq.cmd("/squelch /noparse /dgaexecute all /if (${Me.FreeBuffSlots} <= 1) /dgtell all FREE BUFF SLOTS: ${Me.FreeBuffSlots}") end)
     mq.bind("/fbs", function(name) mq.cmd("/freebuffslots") end)
 
     -- /raidinvite shorthand
@@ -568,89 +568,89 @@ function QoL.Init()
 
     -- quickly exits all eqgame.exe instances using task manager
     mq.bind("/exitall", function()
-        mq.cmd('/exec TASKKILL "/F /IM eqgame.exe" bg')
+        mq.cmd('/squelch /exec TASKKILL "/F /IM eqgame.exe" bg')
     end)
 
     -- quickly exits my eqgame.exe instance using task manager
     mq.bind("/exitme", function()
         all_tellf("Exiting")
-        mq.cmd('/exec TASKKILL "/F /PID '..tostring(mq.TLO.EverQuest.PID())..'" bg')
+        mq.cmd('/squelch /exec TASKKILL "/F /PID '..tostring(mq.TLO.EverQuest.PID())..'" bg')
     end)
 
-    mq.bind("/exitnotinzone", function() mq.cmdf("/noparse /dgaexecute all /if (!${SpawnCount[pc =%s]}) /exitme", mq.TLO.Me.Name()) end)
+    mq.bind("/exitnotinzone", function() mq.cmdf("/squelch /noparse /dgaexecute all /if (!${SpawnCount[pc =%s]}) /exitme", mq.TLO.Me.Name()) end)
 
-    mq.bind("/exitnotingroup", function() mq.cmd("/noparse /dgaexecute all /if (!${Group.Members}) /exitme") end)
+    mq.bind("/exitnotingroup", function() mq.cmd("/squelch /noparse /dgaexecute all /if (!${Group.Members}) /exitme") end)
 
-    mq.bind("/exitnotinraid", function() mq.cmd("/noparse /dgaexecute all /if (!${Raid.Members}) /exitme") end)
+    mq.bind("/exitnotinraid", function() mq.cmd("/squelch /noparse /dgaexecute all /if (!${Raid.Members}) /exitme") end)
 
     -- report all peers who are not in current zone
-    mq.bind("/notinzone", function() mq.cmdf("/noparse /dgaexecute all /if (!${SpawnCount[pc =%s]}) /dgtell all I'm in ${Zone.ShortName}", mq.TLO.Me.Name()) end)
+    mq.bind("/notinzone", function() mq.cmdf("/squelch /noparse /dgaexecute all /if (!${SpawnCount[pc =%s]}) /dgtell all I'm in ${Zone.ShortName}", mq.TLO.Me.Name()) end)
 
-    mq.bind("/notingroup", function() mq.cmd("/noparse /dgaexecute all /if (!${Me.Grouped}) /dgtell all NOT IN GROUP") end)
+    mq.bind("/notingroup", function() mq.cmd("/squelch /noparse /dgaexecute all /if (!${Me.Grouped}) /dgtell all NOT IN GROUP") end)
 
-    mq.bind("/ingroup", function() mq.cmd("/noparse /dgaexecute all /if (${Me.Grouped}) /dgtell all IN GROUP") end)
+    mq.bind("/ingroup", function() mq.cmd("/squelch /noparse /dgaexecute all /if (${Me.Grouped}) /dgtell all IN GROUP") end)
 
-    mq.bind("/notinraid", function() mq.cmd("/noparse /dgaexecute all /if (!${Raid.Members}) /dgtell all NOT IN RAID") end)
+    mq.bind("/notinraid", function() mq.cmd("/squelch /noparse /dgaexecute all /if (!${Raid.Members}) /dgtell all NOT IN RAID") end)
 
-    mq.bind("/inraid", function() mq.cmd("/noparse /dgaexecute all /if (${Raid.Members}) /dgtell all IN RAID") end)
+    mq.bind("/inraid", function() mq.cmd("/squelch /noparse /dgaexecute all /if (${Raid.Members}) /dgtell all IN RAID") end)
 
     -- report all peers who are not levitating
-    mq.bind("/notlevi", function() mq.cmd("/noparse /dgaexecute all /if (!${Me.Levitating}) /dgtell all NOT LEVI") end)
+    mq.bind("/notlevi", function() mq.cmd("/squelch /noparse /dgaexecute all /if (!${Me.Levitating}) /dgtell all NOT LEVI") end)
 
-    mq.bind("/notitu", function() mq.cmd("/noparse /dgaexecute all (!${Me.Buff[Sunskin].ID}) /dgtell all NOT ITU") end)
+    mq.bind("/notitu", function() mq.cmd("/squelch /noparse /dgaexecute all (!${Me.Buff[Sunskin].ID}) /dgtell all NOT ITU") end)
 
     -- report all peers who are not invisible
-    mq.bind("/notinvis", function() mq.cmd("/noparse /dgaexecute all /if (!${Me.Invis}) /dgtell all NOT INVIS") end)
+    mq.bind("/notinvis", function() mq.cmd("/squelch /noparse /dgaexecute all /if (!${Me.Invis}) /dgtell all NOT INVIS") end)
 
-    mq.bind("/invis", function() mq.cmd("/noparse /dgaexecute all /if (${Me.Invis}) /dgtell all INVIS") end)
+    mq.bind("/invis", function() mq.cmd("/squelch /noparse /dgaexecute all /if (${Me.Invis}) /dgtell all INVIS") end)
 
     -- report special stats
-    mq.bind("/combateffects", function() mq.cmd("/noparse /dgaexecute all /if (${Select[${Me.Class.ShortName},ROG,BER,MNK]}) /dgtell all COMBAT EFFECT ${Me.CombatEffectsBonus}") end)
-    mq.bind("/accuracy", function() mq.cmd("/noparse /dgaexecute all /if (${Select[${Me.Class.ShortName},WAR,PAL,RNG,SHD,MNK,BRD,ROG,BST,BER]}) /dgtell all ACCURACY ${Me.AccuracyBonus}/150") end)
-    mq.bind("/strikethru", function() mq.cmd("/noparse /dgaexecute all /if (${Select[${Me.Class.ShortName},RNG,MNK,BRD,ROG,BST,BER]}) /dgtell all STRIKE THRU ${Me.StrikeThroughBonus}/35") end)
-    mq.bind("/shielding", function() mq.cmd("/noparse /dgaexecute all /dgtell all SHIELDING ${Me.ShieldingBonus}") end)
+    mq.bind("/combateffects", function() mq.cmd("/squelch /noparse /dgaexecute all /if (${Select[${Me.Class.ShortName},ROG,BER,MNK]}) /dgtell all COMBAT EFFECT ${Me.CombatEffectsBonus}") end)
+    mq.bind("/accuracy", function() mq.cmd("/squelch /noparse /dgaexecute all /if (${Select[${Me.Class.ShortName},WAR,PAL,RNG,SHD,MNK,BRD,ROG,BST,BER]}) /dgtell all ACCURACY ${Me.AccuracyBonus}/150") end)
+    mq.bind("/strikethru", function() mq.cmd("/squelch /noparse /dgaexecute all /if (${Select[${Me.Class.ShortName},RNG,MNK,BRD,ROG,BST,BER]}) /dgtell all STRIKE THRU ${Me.StrikeThroughBonus}/35") end)
+    mq.bind("/shielding", function() mq.cmd("/squelch /noparse /dgaexecute all /dgtell all SHIELDING ${Me.ShieldingBonus}") end)
 
-    mq.bind("/dotshield", function() mq.cmd("/noparse /dgaexecute all /dgtell all DoT SHIELD ${Me.DoTShieldBonus}") end)
-    mq.bind("/spellshield", function() mq.cmd("/noparse /dgaexecute all /dgtell all SPELL SHIELD ${Me.SpellShieldBonus}") end)
-    mq.bind("/avoidance", function() mq.cmd("/noparse /dgaexecute all /dgtell all AVOIDANCE ${Me.AvoidanceBonus}/100") end)
-    mq.bind("/stunresist", function() mq.cmd("/noparse /dgaexecute all /dgtell all STUN RESIST ${Me.StunResistBonus}") end)
+    mq.bind("/dotshield", function() mq.cmd("/squelch /noparse /dgaexecute all /dgtell all DoT SHIELD ${Me.DoTShieldBonus}") end)
+    mq.bind("/spellshield", function() mq.cmd("/squelch /noparse /dgaexecute all /dgtell all SPELL SHIELD ${Me.SpellShieldBonus}") end)
+    mq.bind("/avoidance", function() mq.cmd("/squelch /noparse /dgaexecute all /dgtell all AVOIDANCE ${Me.AvoidanceBonus}/100") end)
+    mq.bind("/stunresist", function() mq.cmd("/squelch /noparse /dgaexecute all /dgtell all STUN RESIST ${Me.StunResistBonus}") end)
 
     -- "free inventory slots": only lists melees as looter classes for minimal disruption
     mq.bind("/fis", function()
-        mq.cmd("/noparse /dgaexecute all /if (${Select[${Me.Class.ShortName},MNK,ROG,BER,RNG]} && ${Me.FreeInventory} > 20) /dgtell all FREE INVENTORY SLOTS: ${Me.FreeInventory}")
+        mq.cmd("/squelch /noparse /dgaexecute all /if (${Select[${Me.Class.ShortName},MNK,ROG,BER,RNG]} && ${Me.FreeInventory} > 20) /dgtell all FREE INVENTORY SLOTS: ${Me.FreeInventory}")
     end)
 
     -- "free inventory slots all"
     mq.bind("/fisa", function()
-        mq.cmd("/noparse /dgaexecute all /if (${Me.FreeInventory} > 20) /dgtell all FREE INVENTORY SLOTS: ${Me.FreeInventory}")
+        mq.cmd("/squelch /noparse /dgaexecute all /if (${Me.FreeInventory} > 20) /dgtell all FREE INVENTORY SLOTS: ${Me.FreeInventory}")
     end)
 
     -- report all with few free inventory slots
     mq.bind("/fewinventoryslots", function()
-        mq.cmd("/noparse /dgaexecute all /if (${Me.FreeInventory} <= 20) /dgtell all FULL INVENTORY, ${Me.FreeInventory} FREE SLOTS")
+        mq.cmd("/squelch /noparse /dgaexecute all /if (${Me.FreeInventory} <= 20) /dgtell all FULL INVENTORY, ${Me.FreeInventory} FREE SLOTS")
     end)
 
 
     -- make peers in zone face my target
-    mq.bind("/facetarget", function() mq.cmdf("/dgaexecute %s /face fast id %d", dannet_zone_channel(), mq.TLO.Target.ID()) end)
+    mq.bind("/facetarget", function() mq.cmdf("/squelch /dgzexecute /face fast id %d", mq.TLO.Target.ID()) end)
     mq.bind("/facetgt", function() mq.cmd("/facetarget") end)
 
     -- make peers in zone face me
-    mq.bind("/faceme", function() mq.cmdf("/dgzexecute /face fast id %d", mq.TLO.Me.ID()) end)
+    mq.bind("/faceme", function() mq.cmdf("/squelch /dgzexecute /face fast id %d", mq.TLO.Me.ID()) end)
 
     -- useful when AE FD is cast (oow, wos Shadowhunter, Cleric 1.5 fight in lfay and so on)
     mq.bind("/standall", function()
         log.Info("Requested ALL peers to /stand")
-        mq.cmd("/noparse /dgaexecute all /if (${Me.Feigning} || ${Me.Ducking} || ${Me.Sitting}) /stand")
+        mq.cmd("/squelch /noparse /dgaexecute all /if (${Me.Feigning} || ${Me.Ducking} || ${Me.Sitting}) /stand")
     end)
 
     mq.bind("/sitall", function()
         log.Info("Requested ALL peers to /sit")
-        mq.cmd("/noparse /dgaexecute all /if (${Me.Standing}) /sit")
+        mq.cmd("/squelch /noparse /dgaexecute all /if (${Me.Standing}) /sit")
     end)
 
     -- report all peers who are not standing
-    mq.bind("/notstanding", function() mq.cmd("/noparse /dgaexecute all /if (${Me.Feigning} || ${Me.Ducking} || ${Me.Sitting}) /bc NOT STANDING") end)
+    mq.bind("/notstanding", function() mq.cmd("/squelch /noparse /dgaexecute all /if (${Me.Feigning} || ${Me.Ducking} || ${Me.Sitting}) /bc NOT STANDING") end)
 
     -- open loot window on closest corpse
     mq.bind("/lcorpse", function() commandQueue.Add("open-nearby-corpse") end)

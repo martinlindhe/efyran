@@ -26,6 +26,8 @@ assist.Init()
 -- NOTE: qol.Init() also verifies spell lines, so it must be called last
 qol.Init()
 
+follow.Stop()
+
 log.Info("E4 started")
 
 

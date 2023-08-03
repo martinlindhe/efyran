@@ -52,7 +52,7 @@ function move_to(spawnID)
     --end
 
     if spawn.Distance() < 4 then
-        log.Debug("move_to SKIP MOVE, distance %d", spawn.Distance())
+        --log.Debug("move_to SKIP MOVE, distance %d", spawn.Distance())
         return
     end
 
