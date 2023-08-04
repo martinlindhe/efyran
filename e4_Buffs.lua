@@ -98,7 +98,7 @@ function buffs.AnnounceAvailablity()
     end
     buffs.available = trim(availableBuffGroups)
     if string.len(buffs.available) > 0 then
-        log.Info("My available buff groups: %s", buffs.available)
+        -- log.Info("My available buff groups: %s", buffs.available)
         cmdf("/dgtell %s #available-buffs %s", dannet_zone_channel(), buffs.available)
     end
 end
@@ -461,7 +461,7 @@ function buffs.RequestBuffs()
                         all_tellf("\arWARN\ax: Won't ask for \ay%s\ax as I only have %d free buff slots", spellConfig.Name, free_buff_slots())
                         return true
                     else
-                        log.Info("Requesting buff \ax%s\ay from \ag%s %s\ax ...", spellConfig.Name, askClass, peer)
+                        log.Info("Requesting buff \ay%s\ax from \ag%s %s\ax ...", spellConfig.Name, askClass, peer)
                         cmdf("/squelch /dexecute %s /buff %s %s", peer, mq.TLO.Me.Name(), spellConfig.Name)
                     end
                 else

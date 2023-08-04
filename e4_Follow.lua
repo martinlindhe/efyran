@@ -70,6 +70,19 @@ function Follow.Pause()
     end
 end
 
+-- stop follow in all possible ways
+function Follow.StopFully()
+    if is_plugin_loaded("MQ2Nav") then
+        cmd("/nav stop")
+    end
+    if is_plugin_loaded("MQ2AdvPath") then
+        cmd("/afollow off")
+    end
+    if is_plugin_loaded("MQ2MoveUtils") then
+        cmd("/stick off")
+    end
+end
+
 -- stops following completely
 function Follow.Stop()
     Follow.spawnName = ""

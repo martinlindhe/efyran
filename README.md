@@ -145,6 +145,8 @@ Buff Spell Level   Minimum Target Level
 /factions                   - report faction status. currently only tracks Dranik Loyalists max ally (oow t2 armor)
 /factionsall                - tell all peers to report faction
 
+/playmelody <name>          - bards: play specific song set. default name is "general"
+
 /fdi                        - find item by partial name
 /fmi                        - find missing item. report peers who lack an item
 /clickies                   - lists all clickies on current toon

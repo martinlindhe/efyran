@@ -1,11 +1,8 @@
 # TODO
 
-jun 2023:
-- /backoff
+aug 2023:
 - add filter to /fmi, /fdi
 - enc auto mez
-- clr group heal
-- auto cure
 
 
 

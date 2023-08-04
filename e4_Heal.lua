@@ -55,9 +55,6 @@ function Heal.Init()
         end
         Heal.autoMed = false
     end)
-
-    joinCurrentHealChannel()
-    memorizeListedSpells()
 end
 
 -- joins/changes to the heal channel for current zone

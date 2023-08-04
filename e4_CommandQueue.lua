@@ -341,7 +341,7 @@ function cast_word_heal()
     castSpellAbility(nil, name)
 end
 
--- performs various tasks when toon has finished zoning
+-- performs various tasks when toon has finished starting up / zoning
 function perform_zoned_event()
     log.Debug("I zoned into %s", zone_shortname())
     pet.ConfigureAfterZone()
@@ -355,6 +355,42 @@ function perform_zoned_event()
     end
     buffs.refreshBuffs = true
     heal.autoMed = true
+
+    autoMapHeightFilter()
+end
+
+-- auto adjusts map height filter in some zones
+function autoMapHeightFilter()
+
+    local heights = {
+        -- luclin
+        fungusgrove = {min = 80, max = 80},     -- for lucid shard camp
+
+        -- omens
+        riftseekers = {min = 120, max = 120},   -- XXX
+    }
+
+    local data = heights[zone_shortname()]
+    if data == nil then
+        data = {min = 20, max = 20}
+    end
+
+    local currentMin = mq.TLO.Window("MVW_MapToolBar/MVW_MinZEditBox").Text()
+    local currentMax = mq.TLO.Window("MVW_MapToolBar/MVW_MaxZEditBox").Text()
+
+    log.Info("autoMapHeightFilter setting min %d, max %d (war min %s, max %s)", data.min, data.max, currentMin, currentMax)
+
+    -- NOTE: this need recent macroquest, past july 25 2023 for the SetText.
+    --mq.TLO.Window("MVW_MapToolBar/MVW_MinZEditBox").SetText(string.format("%d", data.min))
+    --mq.TLO.Window("MVW_MapToolBar/MVW_MinZEditBox").SetText(string.format("%d", data.min))
+
+    -- TODO, if Height Filter button is not enabled, then enable it !
+    if not mq.TLO.Window("MVW_MapToolBar/MVW_ZFilterButton").Checked() then
+        log.Info("autoMapHeightFilter height filter was off, enabling now!")
+        cmd("/notify MVW_MapToolBar MVW_ZFilterButton leftmouseup")
+    end
+
+    return true
 end
 
 return CommandQueue

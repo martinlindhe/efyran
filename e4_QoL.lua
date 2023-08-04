@@ -58,7 +58,7 @@ function QoL.Init()
         cmd("/djoin xp")
     end
 
-    pet.ConfigureAfterZone()
+    perform_zoned_event()
 
     local dead = function(text, killer)
         all_tellf("I died. Killed by %s", killer)
@@ -1110,7 +1110,7 @@ function QoL.Tick()
         delay(20)
     end
 
-    if qolClearCursorTimer:expired() then
+    if qolClearCursorTimer:expired() and not window_open("LootWnd") then
         clear_cursor()
         qolClearCursorTimer:restart()
     end
