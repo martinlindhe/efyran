@@ -1084,7 +1084,7 @@ function QoL.Tick()
             end
         else
             all_tellf("\arWARN\ax Ignoring trade from non-peer %s", mq.TLO.Target.Name())
-            cmd("/beep 1")
+            delay(5000)
         end
     end
 

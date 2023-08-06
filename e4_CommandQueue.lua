@@ -371,23 +371,32 @@ function autoMapHeightFilter()
     }
 
     local data = heights[zone_shortname()]
+    local unknown = false
     if data == nil then
         data = {min = 20, max = 20}
+        unknown = true
     end
 
     local currentMin = mq.TLO.Window("MVW_MapToolBar/MVW_MinZEditBox").Text()
     local currentMax = mq.TLO.Window("MVW_MapToolBar/MVW_MaxZEditBox").Text()
 
-    log.Info("autoMapHeightFilter setting min %d, max %d (war min %s, max %s)", data.min, data.max, currentMin, currentMax)
+    log.Info("autoMapHeightFilter setting min %d, max %d (was min %s, max %s)", data.min, data.max, currentMin, currentMax)
 
     -- NOTE: this need recent macroquest, past july 25 2023 for the SetText.
     --mq.TLO.Window("MVW_MapToolBar/MVW_MinZEditBox").SetText(string.format("%d", data.min))
     --mq.TLO.Window("MVW_MapToolBar/MVW_MinZEditBox").SetText(string.format("%d", data.min))
 
     -- TODO, if Height Filter button is not enabled, then enable it !
-    if not mq.TLO.Window("MVW_MapToolBar/MVW_ZFilterButton").Checked() then
-        log.Info("autoMapHeightFilter height filter was off, enabling now!")
-        cmd("/notify MVW_MapToolBar MVW_ZFilterButton leftmouseup")
+    if not unknown then
+        if not mq.TLO.Window("MVW_MapToolBar/MVW_ZFilterButton").Checked() then
+            log.Info("autoMapHeightFilter height filter was off, enabling now!")
+            cmd("/notify MVW_MapToolBar MVW_ZFilterButton leftmouseup")
+        end
+    else
+        if mq.TLO.Window("MVW_MapToolBar/MVW_ZFilterButton").Checked() then
+            log.Info("autoMapHeightFilter height filter was on, disabling for unknown zone!")
+            cmd("/notify MVW_MapToolBar MVW_ZFilterButton leftmouseup")
+        end
     end
 
     return true

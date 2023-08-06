@@ -62,6 +62,8 @@ function move_to(spawnID)
         mq.cmdf("/afollow spawn %d", spawnID)
     elseif globalSettings.followMode:lower() == "mq2moveutils" then
         mq.cmdf("/moveto id %d", spawnID)
+    else
+        all_tellf("ERROR unhandled follow mode %s", globalSettings.followMode)
     end
 end
 

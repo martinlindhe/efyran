@@ -142,8 +142,7 @@ function refreshBuff(buffItem, spawn)
         end
     end
 
-    castSpell(spellName, spawnID)
-    return true
+    return castSpell(spellName, spawnID)
 end
 
 -- XXX refactor more. need to be usable with pet buffs too (should take a spawn id instead of bot name, and then derive if its a bot in zone or a pet)
@@ -304,68 +303,92 @@ function castSpellAbility(spawn, row, callback)
     return true
 end
 
+-- DO NOT use directly, use castSpellAbility() instead !!!
+--
 -- helper for casting spell, clicky, AA, combat ability
--- XXX dont use directly, use castSpellAbility() instead.
+-- returns true if spell was cast (special case 'false' on instant-cast clickies)
 ---@param name string spell name
 ---@param spawnId integer|nil
+---@return boolean
 function castSpell(name, spawnId)
 
     if have_combat_ability(name) then
         use_combat_ability(name)
-        return
+        return true
     elseif have_ability(name) then
         log.Debug("calling use_ability %s", name)
         use_ability(name)
-        return
+        return true
     end
 
-    --log.Debug("castSpell ITEM/SPELL/AA: %s", name)
+    log.Debug("castSpell ITEM/SPELL/AA: %s", name)
 
     if is_brd() and is_casting() then
         cmd("/twist stop")
         delay(100)
     end
 
+    local extra = ""
     if not is_brd() and not have_spell(name) and have_item_inventory(name) then
         -- Item and spell examples: Molten Orb (MAG)
         if not is_item_clicky_ready(name) then
             -- eg Worn Totem, with 4 min buff duration and 10 min recast
-            return
+            return false
         end
-        name = name.."|item"
+        extra = "|item"
     end
 
-    castSpellRaw(name, spawnId, "-maxtries|3")
+    castSpellRaw(name..extra, spawnId, "-maxtries|3")
 
-    if is_brd() then
-        if have_item_inventory(name) then
-            -- item click
-            local item = find_item(name)
-            if item ~= nil then
+    local instant = false
+
+    if have_item_inventory(name) then
+        -- item click
+        local item = find_item(name)
+        if item ~= nil then
+            if is_brd() then
                 log.Debug("BRD clicky: Item click sleep, %d + %d", item.Clicky.CastTime(), item.Clicky.Spell.RecastTime())
                 delay(item.Clicky.CastTime() + item.Clicky.Spell.RecastTime() + 1500)
             end
-        else
-            -- spell / AA
-            local spell = get_spell(name)
-            if spell ~= nil and spell.Name() ~= nil then
-                local mycast = 0
-                if spell.MyCastTime() ~= nil then
-                    mycast = spell.MyCastTime()
-                end
-                local recast = 0
-                if spell.RecastTime() ~= nil then
-                    recast = spell.RecastTime()
-                end
-                log.Info("Spell sleep for '%s', my cast time: %d, recast time %d", spell.Name(), mycast, recast)
+            log.Debug("item clicky %s cast time %d", name, item.CastTime())
+            if item.CastTime() <= 100 then -- 0.1s
+                instant = true
+            end
+        end
+    else
+        -- spell / AA
+        local spell = get_spell(name)
+        if spell ~= nil and spell.Name() ~= nil then
+            local mycast = 0
+            if spell.MyCastTime() ~= nil then
+                mycast = spell.MyCastTime()
+            end
+            local recast = 0
+            if spell.RecastTime() ~= nil then
+                recast = spell.RecastTime()
+            end
+            if is_brd() then
+                log.Debug("Spell sleep for '%s', my cast time: %d, recast time %d", spell.Name(), mycast, recast)
                 local sleepTime = mycast + recast
                 delay(sleepTime)
             end
+            if spell.MyCastTime() <= 100 then -- 0.1s
+                instant = true
+            end
         end
+    end
+
+    if is_brd() then
         log.Debug("BRD in castSpell %s - SO I RESUME TWIST!", name)
         cmd("/twist start")
     end
 
+    if instant then
+        -- don't signal cast delays for instant clickies
+        return false
+    end
+
+    return true
 end
 
 ---@param name string spell name
@@ -382,7 +405,7 @@ function castSpellRaw(name, spawnId, extraArgs)
     cmdf(exe)
 
     -- a small delay so spell starts to be cast
-    delay(100)
+    delay(400)
 end
 
 -- returns datatype spell or nil if not found
@@ -949,9 +972,9 @@ end
 function report_clickies()
     log.Info("My clickies:")
 
-    -- XXX TODO skip expendables
+    -- XXX TODO skip Expendable
 
-    -- XXX 15 sep 2022: item.Expendables() seem to be broken, always returns false ? https://discord.com/channels/511690098136580097/840375268685119499/1019900421248126996
+    -- XXX 15 sep 2022: item.Expendable() seem to be broken, always returns false ? https://discord.com/channels/511690098136580097/840375268685119499/1019900421248126996
 
     for i = 0, 32 do -- equipment: 0-22 is worn gear, 23-32 is inventory top level
         if mq.TLO.Me.Inventory(i).ID() then
@@ -959,13 +982,13 @@ function report_clickies()
             if inv.Container() > 0 then
                 for c = 1, inv.Container() do
                     local item = inv.Item(c)
-                    if item.Clicky() ~= nil and (not item.Expendable()) then
+                    if item.Clicky() ~= nil and not item.Expendable() then
                         --print ( "one ", item.Name(), " ", item.Charges() , " ", item.Expendable())
                         log.Info(inventory_slot_name(i).." # "..c.." "..item.ItemLink("CLICKABLE")().." effect: "..item.Clicky.Spell.Name())
                     end
                 end
             else
-                if inv.Clicky() ~= nil and (not inv.Expendable()) then
+                if inv.Clicky() ~= nil and not inv.Expendable() then
                     --print ( "two ", inv.Name(), " ", inv.Charges(), " ", inv.Expendable())
                     log.Info(inventory_slot_name(i).." "..inv.ItemLink("CLICKABLE")().." effect: "..inv.Clicky.Spell.Name())
                 end
@@ -980,13 +1003,13 @@ function report_clickies()
             if inv.Container() > 0 then
                 for c = 1, inv.Container() do
                     local item = inv.Item(c)
-                    if item.Clicky() ~= nil and (not item.Expendable()) then
-                        --print ( "three ", item.Name(), " ", item.Charges(), " ", item.Expendable())
+                    if item.Clicky() ~= nil and not item.Expendable() then
+                        print ( "three ", item.Name(), " ", item.Charges(), " ", item.Expendable())
                         log.Info(key.." # "..c.." "..item.ItemLink("CLICKABLE")().." effect: "..item.Clicky.Spell.Name())
                     end
                 end
             else
-                if inv.Clicky() ~= nil and (not inv.Expendable()) then
+                if inv.Clicky() ~= nil and not inv.Expendable() then
                     --print ( "four ", inv.Name(), " ", inv.Charges(), " ", inv.Expendable())
                     log.Info(key.." "..inv.ItemLink("CLICKABLE")().." effect: "..inv.Clicky.Spell.Name())
                 end

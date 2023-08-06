@@ -23,6 +23,8 @@ settings.gems = {
 }
 
 settings.self_buffs = {
+    "Fuzzy Foothairs",
+
     "Earring of Dragonkin", -- Chaotic Enlightenment (slot 8: 10 mana regen, slot 10: 6 hp regen)
     "Xxeric's Matted-Fur Mask", -- Reyfin's Racing Thoughts (slot 4: 450 mana pool)
 
@@ -38,7 +40,8 @@ settings.self_buffs = {
     -- L59 Elemental Form: Fire Rank 1 AA (10 ds, 10 int, casting level +1)
     -- L59 Elemental Form: Fire Rank 2 AA (20 ds, 15 int, casting level +3)
     -- L59 Elemental Form: Fire Rank 3 AA (30 ds, 20 int, casting level +5)
-    "Elemental Form: Fire",
+    -- NOTE: cannot use with Heart of Flames AA
+    --"Elemental Form: Fire",
 
     "Shimmering Bauble of Trickery/Shrink",
 }
@@ -200,7 +203,7 @@ settings.assist = {
         -- L68 Heart of Vapor (id:5913, decrease spell hate by 50%)
         -- L69 Heart of Stone (id:xxx)
         -- L70 Heart of Flames (id:5915, increase fire dd dmg by 1-50% for 1.5 min, 22 min reuse)
-        -- XXX: if using this burn, can i also Self Buff Elemental Form ??? (both is illusions, how will they overwrite?)
+        -- NOTE: if using this burn, cannot also use Elemental Form
         "Heart of Flames",
 
         -- oow t1 bp: Runemaster's Robe (pet buff: +50% skill dmg mod, -15% skill dmg taken for 0.3 min)

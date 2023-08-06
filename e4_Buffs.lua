@@ -365,18 +365,43 @@ end
 
 -- returns true if a buff was casted
 function buffs.RefreshSelfBuffs()
+    if buffs.RefreshIllusion() then
+        return true
+    end
+
     if botSettings.settings.self_buffs == nil or is_sitting() or is_moving() then
         return false
     end
     --log.Debug("Buffs.RefreshSelfBuffs()")
     for k, buffItem in pairs(botSettings.settings.self_buffs) do
-        doevents()
         if refreshBuff(buffItem, mq.TLO.Me) then
             -- end after first successful buff
             return true
         end
     end
     return false
+end
+
+-- returns true if a buff *with cast time* was casted
+function buffs.RefreshIllusion()
+    if botSettings.settings.illusions == nil then
+        return false
+    end
+
+    local key = botSettings.settings.illusions.default
+    if key == nil then
+        log.Info("RefreshIllusion: no default configured")
+        return false
+    end
+
+    -- A: "default" illusion refers to another key
+    local illusion = botSettings.settings.illusions[key]
+    if illusion ~= nil then
+        return refreshBuff(illusion, mq.TLO.Me)
+    end
+
+    -- B: "default" illusion refers to a specific clicky/spell
+    return refreshBuff(key, mq.TLO.Me)
 end
 
 -- returns true if buff was requested

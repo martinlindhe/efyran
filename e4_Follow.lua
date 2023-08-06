@@ -72,7 +72,7 @@ end
 
 -- stop follow in all possible ways
 function Follow.StopFully()
-    if is_plugin_loaded("MQ2Nav") then
+    if is_plugin_loaded("MQ2Nav") and mq.TLO.Navigation.Active() then
         cmd("/nav stop")
     end
     if is_plugin_loaded("MQ2AdvPath") then
@@ -170,10 +170,12 @@ function Follow.RunToZone(startingPeer)
         return
     end
 
+    unflood_delay()
+
+    Follow.StopFully()
+
     -- face the same direction the orchestrator is facing
     cmdf("/face fast heading %f", spawn.Heading.Degrees() * -1)
-
-    unflood_delay()
 
     -- move forward
     cmd("/keypress forward hold")
