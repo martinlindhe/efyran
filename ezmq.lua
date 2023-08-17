@@ -334,7 +334,9 @@ end
 ---@return boolean
 function have_spell(name)
     if have_alt_ability(name) then
-        -- NOTE: some AA's overlap with spell names. Examples:
+        -- NOTE: some AA's overlap with spell names.
+        -- We work around this by pretending to lack those spells if we have the AA.
+        -- Examples:
         -- CLR/06 Sanctuary / CLR Sanctuary AA
         -- SHM/62 Ancestral Guard / SHM Ancestral Guard AA
         return false
@@ -687,6 +689,14 @@ function close_window(name, button)
     mq.cmdf("/notify %s %s leftmouseup", name, button)
 end
 
+-- Returns true if any obstructive window is open (loot, trade, bank, merchant, spell book)
+---@return boolean
+function obstructive_window_open()
+    return window_open("MerchantWnd") or window_open("GiveWnd") or window_open("BigBankWnd")
+        or window_open("SpellBookWnd") or window_open("LootWnd") or window_open("tradewnd")
+        or window_open("ConfirmationDialogBox")
+end
+
 -- Opens merchant window with `spawn`.
 ---@param spawn spawn
 function open_merchant_window(spawn)
@@ -884,8 +894,7 @@ end
 -- autoinventories all items on cursor. returns false on failure
 function clear_cursor()
     while true do
-        if window_open("BigBankWnd") or window_open("ConfirmationDialogBox") then
-            -- abort if bank or confirmation dialog is open
+        if obstructive_window_open() then
             return false
         end
 
@@ -1705,6 +1714,7 @@ end
 ---Performs an ingame slash action provided as a string.
 ---@param command string An in-game slash command (including the slash) (e.g. '/keypress DUCK').
 function cmd(command)
+    --log.Debug("/cmd %s", command)
     mq.cmd(command)
 end
 
@@ -1712,6 +1722,7 @@ end
 ---@param command string An in-game slash command (including the slash) (e.g. '/keypress %s').
 ---@param ...? any Variables that provide input the formated string.
 function cmdf(command, ...)
+    --log.Debug("/cmdf %s", command)
     mq.cmdf(command, ...)
 end
 

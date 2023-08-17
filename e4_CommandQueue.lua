@@ -363,6 +363,9 @@ end
 function autoMapHeightFilter()
 
     local heights = {
+        -- old
+        guktop = {min = 30, max = 30},
+
         -- luclin
         fungusgrove = {min = 80, max = 80},     -- for lucid shard camp
 

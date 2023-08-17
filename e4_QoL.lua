@@ -88,7 +88,7 @@ function QoL.Init()
 
     mq.event("missing_component", "You are missing #1#.", function(text, name)
         if name ~= "some required components" then
-            all_tellf("Missing component %s", name)
+            all_tellf("Missing component \ar%s\ax.", name)
         end
     end)
 
@@ -560,7 +560,7 @@ function QoL.Init()
     mq.bind("/hcn", function() mq.cmd("/hidec none") end)
 
     -- report toons with few free buff slots
-    mq.bind("/freebuffslots", function(name) mq.cmd("/squelch /noparse /dgaexecute all /if (${Me.FreeBuffSlots} <= 1) /dgtell all FREE BUFF SLOTS: ${Me.FreeBuffSlots}") end)
+    mq.bind("/freebuffslots", function(name) mq.cmd("/noparse /dgaexecute all /if (${Me.FreeBuffSlots} <= 1) /dgtell all FREE BUFF SLOTS: ${Me.FreeBuffSlots}") end)
     mq.bind("/fbs", function(name) mq.cmd("/freebuffslots") end)
 
     -- /raidinvite shorthand
@@ -577,57 +577,57 @@ function QoL.Init()
         mq.cmd('/squelch /exec TASKKILL "/F /PID '..tostring(mq.TLO.EverQuest.PID())..'" bg')
     end)
 
-    mq.bind("/exitnotinzone", function() mq.cmdf("/squelch /noparse /dgaexecute all /if (!${SpawnCount[pc =%s]}) /exitme", mq.TLO.Me.Name()) end)
+    mq.bind("/exitnotinzone", function() mq.cmdf("/noparse /dgaexecute all /if (!${SpawnCount[pc =%s]}) /exitme", mq.TLO.Me.Name()) end)
 
-    mq.bind("/exitnotingroup", function() mq.cmd("/squelch /noparse /dgaexecute all /if (!${Group.Members}) /exitme") end)
+    mq.bind("/exitnotingroup", function() mq.cmd("/noparse /dgaexecute all /if (!${Group.Members}) /exitme") end)
 
-    mq.bind("/exitnotinraid", function() mq.cmd("/squelch /noparse /dgaexecute all /if (!${Raid.Members}) /exitme") end)
+    mq.bind("/exitnotinraid", function() mq.cmd("/noparse /dgaexecute all /if (!${Raid.Members}) /exitme") end)
 
     -- report all peers who are not in current zone
-    mq.bind("/notinzone", function() mq.cmdf("/squelch /noparse /dgaexecute all /if (!${SpawnCount[pc =%s]}) /dgtell all I'm in ${Zone.ShortName}", mq.TLO.Me.Name()) end)
+    mq.bind("/notinzone", function() mq.cmdf("/noparse /dgaexecute all /if (!${SpawnCount[pc =%s]}) /dgtell all I'm in ${Zone.ShortName}", mq.TLO.Me.Name()) end)
 
-    mq.bind("/notingroup", function() mq.cmd("/squelch /noparse /dgaexecute all /if (!${Me.Grouped}) /dgtell all NOT IN GROUP") end)
+    mq.bind("/notingroup", function() mq.cmd("/noparse /dgaexecute all /if (!${Me.Grouped}) /dgtell all NOT IN GROUP") end)
 
-    mq.bind("/ingroup", function() mq.cmd("/squelch /noparse /dgaexecute all /if (${Me.Grouped}) /dgtell all IN GROUP") end)
+    mq.bind("/ingroup", function() mq.cmd("/noparse /dgaexecute all /if (${Me.Grouped}) /dgtell all IN GROUP") end)
 
-    mq.bind("/notinraid", function() mq.cmd("/squelch /noparse /dgaexecute all /if (!${Raid.Members}) /dgtell all NOT IN RAID") end)
+    mq.bind("/notinraid", function() mq.cmd("/noparse /dgaexecute all /if (!${Raid.Members}) /dgtell all NOT IN RAID") end)
 
-    mq.bind("/inraid", function() mq.cmd("/squelch /noparse /dgaexecute all /if (${Raid.Members}) /dgtell all IN RAID") end)
+    mq.bind("/inraid", function() mq.cmd("/noparse /dgaexecute all /if (${Raid.Members}) /dgtell all IN RAID") end)
 
     -- report all peers who are not levitating
-    mq.bind("/notlevi", function() mq.cmd("/squelch /noparse /dgaexecute all /if (!${Me.Levitating}) /dgtell all NOT LEVI") end)
+    mq.bind("/notlevi", function() mq.cmd("/noparse /dgaexecute all /if (!${Me.Levitating}) /dgtell all NOT LEVI") end)
 
-    mq.bind("/notitu", function() mq.cmd("/squelch /noparse /dgaexecute all (!${Me.Buff[Sunskin].ID}) /dgtell all NOT ITU") end)
+    mq.bind("/notitu", function() mq.cmd("/noparse /dgaexecute all (!${Me.Buff[Sunskin].ID}) /dgtell all NOT ITU") end)
 
     -- report all peers who are not invisible
-    mq.bind("/notinvis", function() mq.cmd("/squelch /noparse /dgaexecute all /if (!${Me.Invis}) /dgtell all NOT INVIS") end)
+    mq.bind("/notinvis", function() mq.cmd("/noparse /dgaexecute all /if (!${Me.Invis}) /dgtell all NOT INVIS") end)
 
-    mq.bind("/invis", function() mq.cmd("/squelch /noparse /dgaexecute all /if (${Me.Invis}) /dgtell all INVIS") end)
+    mq.bind("/invis", function() mq.cmd("/noparse /dgaexecute all /if (${Me.Invis}) /dgtell all INVIS") end)
 
     -- report special stats
-    mq.bind("/combateffects", function() mq.cmd("/squelch /noparse /dgaexecute all /if (${Select[${Me.Class.ShortName},ROG,BER,MNK]}) /dgtell all COMBAT EFFECT ${Me.CombatEffectsBonus}") end)
-    mq.bind("/accuracy", function() mq.cmd("/squelch /noparse /dgaexecute all /if (${Select[${Me.Class.ShortName},WAR,PAL,RNG,SHD,MNK,BRD,ROG,BST,BER]}) /dgtell all ACCURACY ${Me.AccuracyBonus}/150") end)
-    mq.bind("/strikethru", function() mq.cmd("/squelch /noparse /dgaexecute all /if (${Select[${Me.Class.ShortName},RNG,MNK,BRD,ROG,BST,BER]}) /dgtell all STRIKE THRU ${Me.StrikeThroughBonus}/35") end)
-    mq.bind("/shielding", function() mq.cmd("/squelch /noparse /dgaexecute all /dgtell all SHIELDING ${Me.ShieldingBonus}") end)
+    mq.bind("/combateffects", function() mq.cmd("/noparse /dgaexecute all /if (${Select[${Me.Class.ShortName},ROG,BER,MNK]}) /dgtell all COMBAT EFFECT ${Me.CombatEffectsBonus}") end)
+    mq.bind("/accuracy", function() mq.cmd("/noparse /dgaexecute all /if (${Select[${Me.Class.ShortName},WAR,PAL,RNG,SHD,MNK,BRD,ROG,BST,BER]}) /dgtell all ACCURACY ${Me.AccuracyBonus}/150") end)
+    mq.bind("/strikethru", function() mq.cmd("/noparse /dgaexecute all /if (${Select[${Me.Class.ShortName},RNG,MNK,BRD,ROG,BST,BER]}) /dgtell all STRIKE THRU ${Me.StrikeThroughBonus}/35") end)
+    mq.bind("/shielding", function() mq.cmd("/noparse /dgaexecute all /dgtell all SHIELDING ${Me.ShieldingBonus}") end)
 
-    mq.bind("/dotshield", function() mq.cmd("/squelch /noparse /dgaexecute all /dgtell all DoT SHIELD ${Me.DoTShieldBonus}") end)
-    mq.bind("/spellshield", function() mq.cmd("/squelch /noparse /dgaexecute all /dgtell all SPELL SHIELD ${Me.SpellShieldBonus}") end)
-    mq.bind("/avoidance", function() mq.cmd("/squelch /noparse /dgaexecute all /dgtell all AVOIDANCE ${Me.AvoidanceBonus}/100") end)
-    mq.bind("/stunresist", function() mq.cmd("/squelch /noparse /dgaexecute all /dgtell all STUN RESIST ${Me.StunResistBonus}") end)
+    mq.bind("/dotshield", function() mq.cmd("/noparse /dgaexecute all /dgtell all DoT SHIELD ${Me.DoTShieldBonus}") end)
+    mq.bind("/spellshield", function() mq.cmd("/noparse /dgaexecute all /dgtell all SPELL SHIELD ${Me.SpellShieldBonus}") end)
+    mq.bind("/avoidance", function() mq.cmd("/noparse /dgaexecute all /dgtell all AVOIDANCE ${Me.AvoidanceBonus}/100") end)
+    mq.bind("/stunresist", function() mq.cmd("/noparse /dgaexecute all /dgtell all STUN RESIST ${Me.StunResistBonus}") end)
 
     -- "free inventory slots": only lists melees as looter classes for minimal disruption
     mq.bind("/fis", function()
-        mq.cmd("/squelch /noparse /dgaexecute all /if (${Select[${Me.Class.ShortName},MNK,ROG,BER,RNG]} && ${Me.FreeInventory} > 20) /dgtell all FREE INVENTORY SLOTS: ${Me.FreeInventory}")
+        mq.cmd("/noparse /dgaexecute all /if (${Select[${Me.Class.ShortName},MNK,ROG,BER,RNG]} && ${Me.FreeInventory} > 20) /dgtell all FREE INVENTORY SLOTS: ${Me.FreeInventory}")
     end)
 
     -- "free inventory slots all"
     mq.bind("/fisa", function()
-        mq.cmd("/squelch /noparse /dgaexecute all /if (${Me.FreeInventory} > 20) /dgtell all FREE INVENTORY SLOTS: ${Me.FreeInventory}")
+        mq.cmd("/noparse /dgaexecute all /if (${Me.FreeInventory} > 20) /dgtell all FREE INVENTORY SLOTS: ${Me.FreeInventory}")
     end)
 
     -- report all with few free inventory slots
     mq.bind("/fewinventoryslots", function()
-        mq.cmd("/squelch /noparse /dgaexecute all /if (${Me.FreeInventory} <= 20) /dgtell all FULL INVENTORY, ${Me.FreeInventory} FREE SLOTS")
+        mq.cmd("/noparse /dgaexecute all /if (${Me.FreeInventory} <= 20) /dgtell all FULL INVENTORY, ${Me.FreeInventory} FREE SLOTS")
     end)
 
 
@@ -650,7 +650,7 @@ function QoL.Init()
     end)
 
     -- report all peers who are not standing
-    mq.bind("/notstanding", function() mq.cmd("/squelch /noparse /dgaexecute all /if (${Me.Feigning} || ${Me.Ducking} || ${Me.Sitting}) /bc NOT STANDING") end)
+    mq.bind("/notstanding", function() mq.cmd("/noparse /dgaexecute all /if (${Me.Feigning} || ${Me.Ducking} || ${Me.Sitting}) /bc NOT STANDING") end)
 
     -- open loot window on closest corpse
     mq.bind("/lcorpse", function() commandQueue.Add("open-nearby-corpse") end)
@@ -766,6 +766,19 @@ function QoL.Init()
 
     -- report your Lucid Shards
     mq.bind("/lucidshards", function()
+
+        -- 22198 The Scepter of Shadows
+        if have_item_id(22198) then
+            all_tellf("lucidshards: OK (KEYED)")
+            return
+        end
+
+        -- 17324 Unadorned Scepter of Shadows
+        if have_item_id(17324) then
+            all_tellf("lucidshards: OK")
+            return
+        end
+
         local shards = {
             [22185] = "The Grey",
             [22186] = "Fungus Grove",
@@ -777,6 +790,7 @@ function QoL.Init()
             [22192] = "Maiden's Eye",
             [22193] = "Acrylia Caverns",
             [22194] = "Sanctus Seru / Katta",
+            [17323] = "Akheva Ruins Container", -- Shadowed Scepter Frame
         }
         local s = ""
         local missing = 0
@@ -1071,16 +1085,16 @@ local qolClearCursorTimer = timer.new_expired(60 * 1) -- 60s
 function QoL.Tick()
     -- close f2p nag screen
     if window_open("AlertWnd") then
-        cmd("/notify AlertWnd ALW_Dismiss_Button leftmouseup")
+        cmd("/squelch /notify AlertWnd ALW_Dismiss_Button leftmouseup")
     end
 
     -- auto accept trades
     if window_open("tradewnd") and not has_cursor_item() then
         if has_target() and is_peer(mq.TLO.Target.Name()) then
             all_tellf("Accepting trade in 5s with %s", mq.TLO.Target.Name())
-            delay(5000, function() return has_cursor_item() end)
+            delay(5000, function() return not window_open("tradewnd") or has_cursor_item() end)
             if not has_cursor_item() then
-                cmd("/notify tradewnd TRDW_Trade_Button leftmouseup")
+                cmd("/squelch /notify tradewnd TRDW_Trade_Button leftmouseup")
             end
         else
             all_tellf("\arWARN\ax Ignoring trade from non-peer %s", mq.TLO.Target.Name())

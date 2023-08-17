@@ -29,9 +29,9 @@ function combine_clear_cursor()
         else
             all_tellf("Putting cursor item %s in inventory.", mq.TLO.Cursor())
             cmd("/autoinventory")
-            delay(500)
+            delay(250)
         end
-        delay(1)
+        delay(250)
         doevents()
     end
 end
@@ -57,7 +57,7 @@ while true do
 
     if mq.TLO.Window("TradeskillWnd").Child("CombineButton").Enabled() then
         cmd("/notify TradeskillWnd CombineButton leftmouseup")
-        delay(5000, function() return mq.TLO.Cursor.ID() ~= nil end)
+        delay(1000, function() return mq.TLO.Cursor.ID() ~= nil end)
         if not combine_clear_cursor() then
             print("Failed to clear cursor, giving up.")
             return

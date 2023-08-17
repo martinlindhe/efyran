@@ -130,10 +130,7 @@ function Pet.BuffMyPet()
             --log.Debug("SKIP PET BUFFING %s, duration is %d ticks", spellConfig.Name, mq.TLO.Me.Pet.Buff(mq.TLO.Me.Pet.Buff(spellConfig.Name)).Duration.Ticks())
             skip = true
         elseif pet_have_buff(spell.RankName()) then -- TODO LATER: is it possible to get the pet buff duration?
-            log.Debug("SKIP PET BUFFING, Pet have ranked buff")
-            skip = true
-        elseif pet_have_buff(spell.Name()) then -- TODO LATER: is it possible to get the pet buff duration?
-            log.Debug("SKIP PET BUFFING, Pet have buff")
+            --log.Debug("SKIP PET BUFFING, Pet have ranked buff")
             skip = true
         elseif spellConfig.MinMana ~= nil and mq.TLO.Me.PctMana() < spellConfig.MinMana then
             log.Debug("SKIP PET BUFFING, my mana %d vs required %d", mq.TLO.Me.PctMana(), spellConfig.MinMana)

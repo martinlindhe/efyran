@@ -18,8 +18,15 @@ local Follow = {
 ---@param spawnName string
 ---@param force boolean
 function Follow.Start(spawnName, force)
+    if not mq.TLO.Navigation.MeshLoaded() then
+        all_tellf("MQ2Nav: MISSING NAVMESH FOR %s. Rebuild with MeshGenerator.exe and reload MQ2Nav plugin", zone_shortname())
+        return
+    end
+
     if not is_peer(spawnName) then
-        all_tellf("ERROR: /folloplayer called on invalid spawn %s", spawnName)
+        all_tellf("ERROR: /folloplayer failed: %s is not a peer", spawnName)
+        cmd("/beep")
+        -- fixed by unload+reload mq2dannet, or zone, or relog
         return
     end
     local spawn = spawn_from_peer_name(spawnName)
@@ -32,7 +39,7 @@ function Follow.Start(spawnName, force)
     end
     log.Debug("Follow start on %s", spawn.Name())
     Follow.spawnName = spawn.Name()
-    Follow.Update()
+    Follow.Update(true)
 end
 
 --- Returns true if I am in follow mode
@@ -59,14 +66,12 @@ end
 
 -- pause follow for the moment
 function Follow.Pause()
-    if globalSettings.followMode:lower() == "mq2nav" then
+    if globalSettings.followMode:lower() == "mq2nav" and mq.TLO.Navigation.Active() then
         cmd("/nav stop")
     elseif globalSettings.followMode:lower() == "mq2advpath" then
         cmd("/afollow off")
     elseif globalSettings.followMode:lower() == "mq2moveutils" then
         cmd("/stick off")
-    else
-        all_tellf("FATAL followMode unhandled '%s'", globalSettings.followMode:lower())
     end
 end
 
@@ -90,13 +95,13 @@ function Follow.Stop()
     Follow.Pause()
 end
 
-local followUpdateTimer = timer.new_expired(15 * 1) -- 15s
+local followUpdateTimer = timer.new_expired(1 * 1) -- 1s
 
 function Follow.Tick()
     if followUpdateTimer:expired() then
-        if globalSettings.followMode:lower() == "mq2moveutils" then
-            -- don't update for mq2advpath / mq2nav as they will get confused
-            Follow.Update()
+        if globalSettings.followMode:lower() == "mq2nav" or globalSettings.followMode:lower() == "mq2moveutils" then
+            -- don't update for mq2advpath as they will get confused
+            Follow.Update(false)
         end
         followUpdateTimer:restart()
     end
@@ -105,7 +110,8 @@ end
 local lastHeading = ""
 
 -- called from Follow.Tick() in main loop, restores auto follow after a Follow.Pause() call
-function Follow.Update()
+---@param force boolean
+function Follow.Update(force)
     if Follow.spawnName == "" then
         return
     end
@@ -117,18 +123,15 @@ function Follow.Update()
     end
 
     local exe = ""
-    local maxRange = 10 -- spawn.MaxRangeTo()
+    local maxRange = 5 -- spawn.MaxRangeTo()
 
-    log.Debug("Follow.Update, mode %s, distance %f", globalSettings.followMode, spawn.Distance3D())
+    log.Info("Follow.Update, mode %s, distance %f", globalSettings.followMode, spawn.Distance3D())
     if globalSettings.followMode:lower() == "mq2nav" then
-        if not mq.TLO.Navigation.MeshLoaded() then
-            all_tellf("MISSING NAVMESH FOR %s", zone_shortname())
-            return
+        if mq.TLO.Navigation.Active() then
+            mq.cmd("/nav stop")
+            delay(10)
         end
-        if not mq.TLO.Navigation.Active() or lastHeading ~= spawn.HeadingTo() then
-            exe = string.format("/nav id %d | dist=%d log=critical", spawn.ID(), maxRange)
-            lastHeading = spawn.HeadingTo()
-        end
+        exe = string.format("/nav spawn PC =%s | distance=%d log=trace", spawn.Name(), maxRange)
     elseif globalSettings.followMode:lower() == "mq2advpath" then
         if not mq.TLO.AdvPath.Following() or lastHeading ~= spawn.HeadingTo() then
             exe = string.format("/afollow spawn %d", spawn.ID())
@@ -142,7 +145,10 @@ function Follow.Update()
     end
 
     if exe ~= "" then
-        log.Info("Follow.Update: %s", exe)
+        if not force and spawn.Distance() < 10 then
+            log.Info("XXX skip follow update, we are nearby!")
+            return
+        end
         mq.cmd(exe)
     end
 end

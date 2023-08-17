@@ -25,6 +25,7 @@ function queryBot(peer, q)
 end
 
 -- refreshes buff on self or another bot, returns true if buff was cast
+-- only refreshes fading & missing buffs
 function refreshBuff(buffItem, spawn)
 
     --print("refreshBuff ", buffItem, ", target Name:", spawn.CleanName())
@@ -59,7 +60,6 @@ function refreshBuff(buffItem, spawn)
         spellName = spell.RankName()
     end
 
-    -- only refresh fading & missing buffs
     if mq.TLO.Me.ID() == spawn.ID() then
         -- IMPORTANT: on live, f2p restricts all spells to rank 1, so we need to look for both forms
         if have_buff(spell.RankName()) and mq.TLO.Me.Buff(spell.RankName()).Duration() >= MIN_BUFF_DURATION then
@@ -187,7 +187,7 @@ function spellConfigAllowsCasting(buffItem, spawn)
 
     if spellConfig.MinMana ~= nil then
         if mq.TLO.Me.PctMana() < spellConfig.MinMana then
-            print("SKIP BUFFING, my mana ", mq.TLO.Me.PctMana, " vs required ", spellConfig.MinMana)
+            log.Info("SKIP BUFFING, my mana is %d %% vs required %d %%",  mq.TLO.Me.PctMana(), spellConfig.MinMana)
             return false
         end
     end
@@ -321,7 +321,7 @@ function castSpell(name, spawnId)
         return true
     end
 
-    log.Debug("castSpell ITEM/SPELL/AA: %s", name)
+    --log.Debug("castSpell ITEM/SPELL/AA: %s", name)
 
     if is_brd() and is_casting() then
         cmd("/twist stop")
@@ -350,7 +350,7 @@ function castSpell(name, spawnId)
                 log.Debug("BRD clicky: Item click sleep, %d + %d", item.Clicky.CastTime(), item.Clicky.Spell.RecastTime())
                 delay(item.Clicky.CastTime() + item.Clicky.Spell.RecastTime() + 1500)
             end
-            log.Debug("item clicky %s cast time %d", name, item.CastTime())
+            --log.Debug("item clicky %s cast time %d", name, item.CastTime())
             if item.CastTime() <= 100 then -- 0.1s
                 instant = true
             end
@@ -441,7 +441,10 @@ function memorizePBAESpells()
         return
     end
     for k, spellRow in pairs(botSettings.settings.assist.pbae) do
-        memorize_spell(spellRow)
+        local spell = parseSpellLine(spellRow)
+        if have_spell(spell.Name) then
+            memorize_spell(spellRow)
+        end
     end
 end
 
@@ -652,7 +655,7 @@ function cast_port_to(name)
         all_tellf("\arERROR\ax: Unknown port alias \ag%s\ax", name)
     end
 
-    all_tellf("Porting to \ag%s\ax (\ay%s\ax) ...", name, spellName)
+    all_tellf("Porting group to \ag%s\ax (\ay%s\ax) ...", name, spellName)
     unflood_delay()
 
     memorize_spell(spellName, 5)
@@ -831,7 +834,8 @@ function ae_rez_query(rez, spawnQuery)
         delay(13000) -- XXX TODO: instead wait until given rez spell is ready before cast
     end
 end
-function pbae_loop()
+
+function pbae_loop() -- XXX TODO rework into a "tick" so we can process other events (loot corpse)
 
     local nearbyPBAEilter = "npc radius 50 zradius 50 los"
 
@@ -853,11 +857,10 @@ function pbae_loop()
         if not is_casting() then
             for k, spellRow in pairs(botSettings.settings.assist.pbae) do
                 local spellConfig = parseSpellLine(spellRow)
-                if is_spell_ready(spellConfig.Name) then
+                if is_spell_ready(spellConfig.Name) or is_combat_ability_ready(spellConfig.Name) then
                     log.Info("Casting PBAE spell %s", spellConfig.Name)
                     castSpellAbility(mq.TLO.Me, spellRow)
                 end
-
                 doevents()
                 delay(50)
             end
@@ -943,7 +946,9 @@ function report_find_item(name)
     end
 
     local in_bank = banked_item_count(item.Name())
-    if in_bank > 0 then
+    if in_bank == 1 then
+        all_tellf("%s in bank slot %d", item.ItemLink("CLICKABLE")(), item.ItemSlot())
+    elseif in_bank > 0 then
         all_tellf("%s in bank (count: %d)", item.ItemLink("CLICKABLE")(), in_bank)
     end
 end

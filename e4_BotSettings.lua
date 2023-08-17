@@ -52,6 +52,17 @@ local function read_settings(settingsFile)
     return loadfile(settingsFile)
 end
 
+function file_exists(name)
+    local f = io.open(name, "r")
+    if f ~= nil then
+        io.close(f)
+        return true
+    else
+        return false
+    end
+end
+
+
 function botSettings.Init()
     if is_hovering() then
         all_tellf("ERROR: cannot start e4 successfully while in HOVERING mode")
@@ -63,8 +74,7 @@ function botSettings.Init()
     local settings = read_settings(settingsFile)
     if settings ~= nil then
         botSettings.settings = settings()
-    else
-        -- no settings file found
+    elseif not file_exists(settingsFile) then
         all_tellf("PEER INI NOT FOUND, CREATING EMPTY ONE. PLEASE EDIT %s", settingsFile)
         cmd("/beep 1")
 
@@ -74,6 +84,9 @@ function botSettings.Init()
 
         settings = read_settings(settingsFile)
         botSettings.settings = settings()
+    else
+        all_tellf("FAILED TO PARSE SETTINGS FROM %s", settingsFile)
+        cmd("/beep")
     end
 end
 

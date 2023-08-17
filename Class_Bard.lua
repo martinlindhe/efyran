@@ -7,16 +7,18 @@ local defaultMelody = "general"
 local Bard = { currentMelody = "" }
 
 function Bard.resumeMelody()
-    if is_brd() then
-        if Bard.currentMelody == "" then
-            Bard.PlayMelody(defaultMelody)
-        elseif Bard.currentMelody ~= "" and not is_casting() then
-            Bard.PlayMelody(Bard.currentMelody)
-        end
+    if not is_brd() then
+        return
+    end
+    if Bard.currentMelody == "" then
+        Bard.PlayMelody(defaultMelody)
+    elseif Bard.currentMelody ~= "" and not is_casting() then
+        Bard.PlayMelody(Bard.currentMelody)
     end
 end
 
 -- memorizes and sings a set of songs defined in peer settings.songs
+---@param name string name of song set
 function Bard.PlayMelody(name)
 
     if botSettings.settings.songs == nil then
@@ -28,14 +30,16 @@ function Bard.PlayMelody(name)
         return
     end
 
-    local songSet = botSettings.settings.songs[name:lower()]
+    name = name:lower()
+
+    local songSet = botSettings.settings.songs[name]
     if songSet == nil then
         all_tellf("ERROR no such song set %s", name)
         cmd("/beep 1")
         return
     end
 
-    log.Info("Scribing bard song set %s", name)
+    log.Info("Scribing bard song set \ag%s\ax ...", name)
 
     local gemSet = ""
     for v, songRow in pairs(songSet) do

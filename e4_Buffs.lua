@@ -138,12 +138,15 @@ function buffs.Tick()
         announceBuffsTimer:restart()
     end
 
-    if is_moving() or window_open("MerchantWnd") or window_open("GiveWnd") or window_open("BigBankWnd")
-    or window_open("SpellBookWnd") or window_open("LootWnd") then
+    if obstructive_window_open() then
         return
     end
 
-    if buffs.refreshBuffs and refreshBuffsTimer:expired() then
+    if buffs.RefreshIllusion() then
+        return
+    end
+
+    if not is_moving() and buffs.refreshBuffs and refreshBuffsTimer:expired() then
         if not buffs.RefreshSelfBuffs() then
             if not buffs.RefreshAura() then
                 if not pet.Summon() then
@@ -163,7 +166,12 @@ function buffs.Tick()
         requestBuffsTimer:restart()
     end
 
-    if is_casting() or is_hovering() or is_sitting() or is_moving() or mq.TLO.Me.SpellInCooldown() or window_open("SpellBookWnd") then
+    if is_brd() and bard.currentMelody ~= "" and not mq.TLO.Twist.Twisting() then
+        all_tellf("WARN: Should be playing %s but am not", bard.currentMelody)
+        bard.PlayMelody(bard.currentMelody)
+    end
+
+    if is_casting() or is_hovering() or is_sitting() or is_moving() or mq.TLO.Me.SpellInCooldown() or obstructive_window_open() then
         return
     end
 
@@ -199,17 +207,20 @@ function buffs.HandleDebuffs()
 
                 log.Info("I have debuff \ar%s\ax, need \ay%s\ax cure.", spellConfig.Name, spellConfig.Cure)
 
-                if not cure_player(mq.TLO.Me.Name(), spellConfig.Cure) then
-                    -- if we cannot cure, ask a group memebr who can cure
-                    local curer = get_group_curer()
-                    if curer == nil then
-                        -- TODO: in this case, just ask any curer nearby
-                        all_tellf("FATAL: cant find a curer in my group: \ar%s\ax.", spellConfig.Name)
-                        return
-                    end
-                    all_tellf("Asking \ag%s\ax to cure \ar%s\ax (\ay%s\ax)", curer, spellConfig.Name, spellConfig.Cure)
-                    cmdf("/dex %s /cure %s %s", curer, mq.TLO.Me.Name(), spellConfig.Cure)
+                if me_priest() and  cure_player(mq.TLO.Me.Name(), spellConfig.Cure) then
+                    return
                 end
+
+                -- if we cannot cure, ask a group memebr who can cure
+                local curer = get_group_curer()
+                if curer == nil then
+                    -- TODO: in this case, just ask any curer nearby
+                    all_tellf("FATAL: cant find a curer in my group: \ar%s\ax.", spellConfig.Name)
+                    return
+                end
+                all_tellf("Asking \ag%s\ax to cure \ar%s\ax (\ay%s\ax)", curer, spellConfig.Name, spellConfig.Cure)
+                cmdf("/dex %s /cure %s %s", curer, mq.TLO.Me.Name(), spellConfig.Cure)
+
             else
                 all_tellf("I have \ar%s\ax but not asking for cure (not %s)", spellConfig.Name, spellConfig.Class)
             end
@@ -365,10 +376,6 @@ end
 
 -- returns true if a buff was casted
 function buffs.RefreshSelfBuffs()
-    if buffs.RefreshIllusion() then
-        return true
-    end
-
     if botSettings.settings.self_buffs == nil or is_sitting() or is_moving() then
         return false
     end
@@ -390,17 +397,16 @@ function buffs.RefreshIllusion()
 
     local key = botSettings.settings.illusions.default
     if key == nil then
-        log.Info("RefreshIllusion: no default configured")
         return false
     end
 
-    -- A: "default" illusion refers to another key
+    -- A: The default illusion refers to another key
     local illusion = botSettings.settings.illusions[key]
     if illusion ~= nil then
         return refreshBuff(illusion, mq.TLO.Me)
     end
 
-    -- B: "default" illusion refers to a specific clicky/spell
+    -- B: The default illusion refers to a specific clicky/spell
     return refreshBuff(key, mq.TLO.Me)
 end
 
