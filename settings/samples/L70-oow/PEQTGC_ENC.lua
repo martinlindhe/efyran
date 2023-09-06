@@ -15,7 +15,7 @@ settings.gems = {
     ["Ancient: Voice of Muram"] = 4,
     ["Ancient: Neurosis"] = 6,
     ["Mana Flare"] = 7,
-    ["Rune of Rikkukin"] = 8,
+    ["Rune of Salik"] = 8,
     ["Hastening of Salik"] = 9, -- group haste
 }
 
@@ -43,7 +43,7 @@ settings.self_buffs = {
     -- L61 Rune of Zebuxoruk (absorb 850 dmg)
     -- L67 Rune of Salik (slot 1: absorb 1105 dmg)
     -- L69 Rune of Rikkukin (slot 1: absorb 1500 dmg, group)
-    "Rune of Rikkukin/Reagent|Peridot",
+    "Rune of Salik/Reagent|Peridot",
 
     -- epic 1.5: slot 5: absorb 1500 dmg. Oculus of Persuasion (Protection of the Eye)
     -- epic 2.0: slot 5: absorb 1800 dmg. Staff of Eternal Eloquence (Aegis of Abstraction)
@@ -69,7 +69,7 @@ Combat Buff=Mana Flare/Myggan
 
 settings.healing = {
     ["life_support"] = {
-        "Self Stasis/HealPct|55",
+        --"Self Stasis/HealPct|55", -- SoD
 
         -- L70 Color Shock AA
         "Color Shock/HealPct|50",

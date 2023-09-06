@@ -581,7 +581,7 @@ GroupBuffs.ENC = {
     -- L69 Rune of Rikkukin (absorb 1500 dmg, group)
     -- L79 Rune of the Deep Rk. II (absorb 4118 dmg, slot 2: defensive proc Blurred Shadows Rk. II)
     ["enc_group_rune"] = {
-        "Rune of Rikkukin/MinLevel|62",
+        "Rune of Rikkukin/MinLevel|62", -- DoN progression reward
         "Rune of the Deep/MinLevel|76", -- XXX unsure of minlevel
     },
 

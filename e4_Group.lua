@@ -46,7 +46,7 @@ end
 function Group.RecallGroup(name, groupNumber)
 
     if Group.settings[name] == nil then
-        log.Error("/recallgroup: no such group %s", name)
+        log.Error("/recallgroup: no such group \ar%s\ax.", name)
         cmd("/beep 1")
         return
     end

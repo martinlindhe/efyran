@@ -6,7 +6,6 @@ require("efyran/e4_Loot")
 require("efyran/e4_Hail")
 
 local commandQueue = require("efyran/e4_CommandQueue")
-local botSettings  = require("efyran/e4_BotSettings")
 
 local assist  = require("efyran/e4_Assist")
 local buffs   = require("efyran/e4_Buffs")
@@ -17,7 +16,6 @@ local qol     = require("efyran/e4_QoL")
 
 seed_process()
 
-botSettings.Init()
 buffs.Init()
 group.Init()
 heal.Init()

@@ -21,6 +21,12 @@ local currentAAXP = mq.TLO.Me.PctAAExp()
 
 function QoL.Init()
 
+    if is_hovering() then
+        all_tellf("ERROR: cannot start e4 successfully while in HOVERING mode")
+        cmd("/beep 1")
+        return
+    end
+
     if mq.TLO.FrameLimiter() ~= "TRUE" then
         log.Info("Enabling framelimiter (was %s) ...", mq.TLO.FrameLimiter())
         cmd("/framelimiter enable")
@@ -57,8 +63,6 @@ function QoL.Init()
         cmd("/djoin skillup")
         cmd("/djoin xp")
     end
-
-    perform_zoned_event()
 
     local dead = function(text, killer)
         all_tellf("I died. Killed by %s", killer)
@@ -423,6 +427,14 @@ function QoL.Init()
         commandQueue.Add("cure", name, kind)
     end)
 
+    -- tell peers in zone to use Origin
+    mq.bind("/origin", function()
+        if is_orchestrator() then
+            mq.cmd("/dgzexecute /origin")
+        end
+        commandQueue.Add("origin")
+    end)
+
     -- tell peers in zone to use Throne of Heroes
     mq.bind("/throne", function()
         if is_orchestrator() then
@@ -584,7 +596,7 @@ function QoL.Init()
     mq.bind("/exitnotinraid", function() mq.cmd("/noparse /dgaexecute all /if (!${Raid.Members}) /exitme") end)
 
     -- report all peers who are not in current zone
-    mq.bind("/notinzone", function() mq.cmdf("/noparse /dgaexecute all /if (!${SpawnCount[pc =%s]}) /dgtell all I'm in ${Zone.ShortName}", mq.TLO.Me.Name()) end)
+    mq.bind("/notinzone", function() mq.cmdf("/noparse /dgaexecute all /if (!${SpawnCount[pc =%s]}) /dgtell all I'm in \ar${Zone.ShortName}\ax", mq.TLO.Me.Name()) end)
 
     mq.bind("/notingroup", function() mq.cmd("/noparse /dgaexecute all /if (!${Me.Grouped}) /dgtell all NOT IN GROUP") end)
 
@@ -602,7 +614,6 @@ function QoL.Init()
     -- report all peers who are not invisible
     mq.bind("/notinvis", function() mq.cmd("/noparse /dgaexecute all /if (!${Me.Invis}) /dgtell all NOT INVIS") end)
 
-    mq.bind("/invis", function() mq.cmd("/noparse /dgaexecute all /if (${Me.Invis}) /dgtell all INVIS") end)
 
     -- report special stats
     mq.bind("/combateffects", function() mq.cmd("/noparse /dgaexecute all /if (${Select[${Me.Class.ShortName},ROG,BER,MNK]}) /dgtell all COMBAT EFFECT ${Me.CombatEffectsBonus}") end)
@@ -983,6 +994,7 @@ function QoL.Init()
     mq.bind("/aebloodthirst", function() commandQueue.Add("aebloodthirst") end)
 
     QoL.verifySpellLines()
+    perform_zoned_event()
 end
 
 function QoL.loadRequiredPlugins()

@@ -54,11 +54,9 @@ settings.assist = {
         -- Lxx Dance of Blades AA
         "Dance of Blades",
 
-        -- Lxx Cacophony AA
-        "Cacophony",
+        --"Cacophony",         -- Lxx Cacophony AA (DODH)
 
-        -- Lxx Song of Stone AA
-        "Song of Stone",
+        --"Song of Stone",         -- Lxx Song of Stone AA (DODH)
 
         -- L70 Dance of a Thousand Blades (dodh quest, 33 min reuse)
         "Thousand Blades",

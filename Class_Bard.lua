@@ -6,6 +6,12 @@ local defaultMelody = "general"
 
 local Bard = { currentMelody = "" }
 
+mq.event("missed_note", "You miss a note, bringing your song to a close!", function(line)
+    log.Info("Missed a note, restarting melody!")
+    delay(2000)
+    Bard.PlayMelody(Bard.currentMelody)
+end)
+
 function Bard.resumeMelody()
     if not is_brd() then
         return

@@ -46,7 +46,7 @@ function refreshBuff(buffItem, spawn)
         return false
     end
 
-    local spellConfig = parseSpellLine(buffItem) -- XXX parse this once on script startup. dont evaluate all the time !!!
+    local spellConfig = parseSpellLine(buffItem)
 
     local spell = getSpellFromBuff(spellConfig.Name)
     if spell == nil then
@@ -58,6 +58,12 @@ function refreshBuff(buffItem, spawn)
     local spellName = spellConfig.Name
     if have_spell(spellConfig.Name) then
         spellName = spell.RankName()
+    end
+
+    if spellConfig.Zone ~= nil and zone_shortname() ~= spellConfig.Zone then
+        -- TODO: allow multiple zones listed as comma separated shortnames
+        all_tellf("XXX refreshBuff skip. we are in zone %s, vs required %s", zone_shortname(), spellConfig.Zone)
+        return false
     end
 
     if mq.TLO.Me.ID() == spawn.ID() then
@@ -79,7 +85,7 @@ function refreshBuff(buffItem, spawn)
             end
             return false
         end
-        if free_buff_slots() == 0 then
+        if free_buff_slots() == 0 and not (spellConfig.Shrink ~= nil and spellConfig.Shrink) then
             log.Debug("refreshBuff. SKIP SELF BUFF (out of slots): %s", spellName)
             return false
         end
@@ -219,195 +225,6 @@ function spellConfigAllowsCasting(buffItem, spawn)
     return true
 end
 
----@param spawn spawn|nil
----@param row string
----@param callback? fun(): boolean
----@return boolean true if spell/ability was cast
-function castSpellAbility(spawn, row, callback)
-
-    local spell = parseSpellLine(row)
-
-    log.Debug("castSpellAbility %s, row = %s", spell.Name, row)
-
-    if have_ability(spell.Name) and not is_ability_ready(spell.Name) then
-        log.Debug("castSpellAbility ABILITY %s, not ready!", spell.Name)
-        return false
-    end
-
-    if spell.PctAggro ~= nil and mq.TLO.Me.PctAggro() < spell.PctAggro then
-        -- PctAggro skips cast if your aggro % is above threshold
-        log.Debug("SKIP PctAggro %s aggro %d vs required %d", spell.Name, mq.TLO.Me.PctAggro(), spell.PctAggro)
-        return false
-    end
-    if spell.PctAggro ~= nil and mq.TLO.Me.PctAggro() >= spell.PctAggro then
-        log.Debug("WILL USE %s, PctAggro is %d vs required %d", spell.Name, mq.TLO.Me.PctAggro(), spell.PctAggro)
-    end
-    if spell.NoAggro ~= nil and spell.NoAggro and mq.TLO.Me.TargetOfTarget.ID() == mq.TLO.Me.ID() then
-        -- NoAggro skips cast if you are on top of aggro
-        --print("SKIP NoAggro ", spell.Name, " i have aggro")
-        return false
-    end
-
-    if spell.GoM ~= nil and spell.GoM and not have_song("Gift of Mana") then
-        return false
-    end
-
-    if spell.MinMana ~= nil and mq.TLO.Me.PctMana() < spell.MinMana then
-        log.Info("SKIP MinMana %s, %d vs required %d", spell.Name,  mq.TLO.Me.PctMana(), spell.MinMana)
-        return false
-    end
-
-    if spell.Summon ~= nil and inventory_item_count(spell.Name) == 0 then
-        log.Info("SKIP Summon %s, missing summoned item mid-fight", spell.Name)
-        return false
-    end
-
-    if spell.NoPet ~= nil and spell.NoPet and have_pet() then
-        all_tellf("SKIP NoPet, i have a pet up")
-        return false
-    end
-
-    if spell.Group and spawn ~= nil and not is_grouped_with(spawn.Name()) then
-        all_tellf("SKIP Group, i am not grouped with %s (spell %s)", spawn.Name(), spell.Name)
-        return false
-    end
-
-    if spell.Self and spawn ~= nil and spawn.Name() ~= mq.TLO.Me.Name() then
-        all_tellf("SKIP Self, cant cast on %s (spell %s)", spawn.Name(), spell.Name)
-        return false
-    end
-
-    if not have_spell(spell.Name) and have_item_inventory(spell.Name) and not is_item_clicky_ready(spell.Name) then
-        -- Item and spell examples: Molten Orb (MAG)
-        log.Debug("SKIP cast, item clicky not ready: %s", spell.Name)
-        return false
-    end
-
-    log.Debug("castSpellAbility START CAST %s", spell.Name)
-    local spawnID = nil
-    if spawn ~= nil then
-        spawnID = spawn.ID()
-    end
-
-    castSpell(spell.Name, spawnID)
-
-    -- delay until done casting
-    if callback == nil then
-        callback = function()
-            return not is_casting()
-        end
-    end
-
-    delay(10000, callback)
-    log.Debug("castSpellAbility: Done waiting after cast.")
-    return true
-end
-
--- DO NOT use directly, use castSpellAbility() instead !!!
---
--- helper for casting spell, clicky, AA, combat ability
--- returns true if spell was cast (special case 'false' on instant-cast clickies)
----@param name string spell name
----@param spawnId integer|nil
----@return boolean
-function castSpell(name, spawnId)
-
-    if have_combat_ability(name) then
-        use_combat_ability(name)
-        return true
-    elseif have_ability(name) then
-        log.Debug("calling use_ability %s", name)
-        use_ability(name)
-        return true
-    end
-
-    --log.Debug("castSpell ITEM/SPELL/AA: %s", name)
-
-    if is_brd() and is_casting() then
-        cmd("/twist stop")
-        delay(100)
-    end
-
-    local extra = ""
-    if not is_brd() and not have_spell(name) and have_item_inventory(name) then
-        -- Item and spell examples: Molten Orb (MAG)
-        if not is_item_clicky_ready(name) then
-            -- eg Worn Totem, with 4 min buff duration and 10 min recast
-            return false
-        end
-        extra = "|item"
-    end
-
-    castSpellRaw(name..extra, spawnId, "-maxtries|3")
-
-    local instant = false
-
-    if have_item_inventory(name) then
-        -- item click
-        local item = find_item(name)
-        if item ~= nil then
-            if is_brd() then
-                log.Debug("BRD clicky: Item click sleep, %d + %d", item.Clicky.CastTime(), item.Clicky.Spell.RecastTime())
-                delay(item.Clicky.CastTime() + item.Clicky.Spell.RecastTime() + 1500)
-            end
-            --log.Debug("item clicky %s cast time %d", name, item.CastTime())
-            if item.CastTime() <= 100 then -- 0.1s
-                instant = true
-            end
-        end
-    else
-        -- spell / AA
-        local spell = get_spell(name)
-        if spell ~= nil and spell.Name() ~= nil then
-            local mycast = 0
-            if spell.MyCastTime() ~= nil then
-                mycast = spell.MyCastTime()
-            end
-            local recast = 0
-            if spell.RecastTime() ~= nil then
-                recast = spell.RecastTime()
-            end
-            if is_brd() then
-                log.Debug("Spell sleep for '%s', my cast time: %d, recast time %d", spell.Name(), mycast, recast)
-                local sleepTime = mycast + recast
-                delay(sleepTime)
-            end
-            if spell.MyCastTime() <= 100 then -- 0.1s
-                instant = true
-            end
-        end
-    end
-
-    if is_brd() then
-        log.Debug("BRD in castSpell %s - SO I RESUME TWIST!", name)
-        cmd("/twist start")
-    end
-
-    if instant then
-        -- don't signal cast delays for instant clickies
-        return false
-    end
-
-    return true
-end
-
----@param name string spell name
----@param spawnId integer|nil
-function castSpellRaw(name, spawnId, extraArgs)
-    local exe = string.format('/casting "%s"', name)
-    if spawnId ~= nil then
-        exe = exe .. string.format(" -targetid|%d", spawnId)
-    end
-    if extraArgs ~= nil then
-        exe = exe .. " " .. extraArgs
-    end
-    --log.Debug("-- castSpellRaw: %s", exe)
-    cmdf(exe)
-
-    -- a small delay so spell starts to be cast
-    delay(400)
-end
-
 -- returns datatype spell or nil if not found
 function getSpellFromBuff(name)
     if have_item_inventory(name) then
@@ -429,9 +246,16 @@ function memorizeListedSpells()
     if botSettings.settings.gems == nil then
         return
     end
+
+    if not is_sitting() then
+        cmd("/sit")
+        delay(200)
+    end
+
     for spellRow, gem in pairs(botSettings.settings.gems) do
         memorize_spell(spellRow, gem)
     end
+
 end
 
 -- Memorizes all spells listed in character settings.assist.pbae in their correct position.
@@ -446,44 +270,6 @@ function memorizePBAESpells()
             memorize_spell(spellRow)
         end
     end
-end
-
--- Returns nil on error
----@param spellRow string Example: "War March of Muram/Gem|4"
----@param defaultGem integer|nil Use nil for the default gem 5
---@return integer|nil
-function memorize_spell(spellRow, defaultGem)
-    local o = parseSpellLine(spellRow) -- XXX parse this once on script startup. dont evaluate all the time !!!
-
-    if not have_spell(o.Name) then
-        all_tellf("ERROR don't know spell/song %s", o.Name)
-        cmd("/beep 1")
-        return nil
-    end
-
-    local gem = defaultGem
-    if o["Gem"] ~= nil then
-        gem = o["Gem"]
-    elseif botSettings.settings.gems[o.Name] ~= nil then
-        gem = botSettings.settings.gems[o.Name]
-    elseif gem == nil then
-        all_tellf("\arWARN\ax: Spell/song lacks gems default slot or Gem|n argument: %s", spellRow)
-        gem = 5
-    end
-
-    -- make sure that spell is memorized the required gem, else scribe it
-    local nameWithRank = mq.TLO.Spell(o.Name).RankName()
-    if mq.TLO.Me.Gem(gem).Name() ~= nameWithRank then
-        log.Info("Memorizing spell/song in gem %d. Want %s, have %s", gem, nameWithRank, mq.TLO.Me.Gem(gem).Name())
-        mq.cmdf('/memorize "%s" %d', nameWithRank, gem)
-        mq.delay(200)
-        mq.delay(20000, function()
-            return not window_open("SpellBookWnd")
-        end)
-        mq.delay(200)
-    end
-
-    return gem
 end
 
 ---@param spellName string
@@ -614,8 +400,11 @@ function click_nearby_door()
 
     -- WORK-AROUND: in sro, "HUT1" is in the way for a correct doortarget
     if zone_shortname() == "sro" and is_within_distance_to_loc(-2114, 1348, -81, 50) then
-        log.Info("sro special")
+        log.Info("sro ldon raid instance special")
         cmd("/doortarget RUJPORTAL701")
+    elseif zone_shortname() == "poknowledge" and is_within_distance_to_loc(-760, 1226, -151, 50) then
+        log.Info("pok gunthak stone special")
+        -- XXX no door nearby !?!? except "PORTBASE", the foundation which is unclickable !?
     else
         -- XXX check if door within X radius
         cmd("/doortarget")

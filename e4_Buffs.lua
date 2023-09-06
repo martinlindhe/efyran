@@ -129,7 +129,7 @@ function buffs.Tick()
         checkDebuffsTimer:restart()
     end
 
-    if in_combat() or not allow_buff_in_zone() then
+    if in_combat() or not is_standing() or not allow_buff_in_zone() then
         return
     end
 
@@ -167,7 +167,7 @@ function buffs.Tick()
     end
 
     if is_brd() and bard.currentMelody ~= "" and not mq.TLO.Twist.Twisting() then
-        all_tellf("WARN: Should be playing %s but am not", bard.currentMelody)
+        all_tellf("WARN: Should be playing %s but am not (should not happen)", bard.currentMelody)
         bard.PlayMelody(bard.currentMelody)
     end
 
@@ -341,7 +341,7 @@ function handleBuffRequest(req)
                     -- XXX look into: seems spell.StacksTarget() checks vs myself instead of my target... is it a mq2-lua bug ????  cant cast Symbol of Naltron from CLR with higher sytmbol on a naked WAR.
                 --    cmd("/dgtell all ERROR cannot buff ", spawn.Name(), " with ", spellName, ", MinLevel ", n, " (dont stack with current buffs)")
                 --end
-                log.Debug("Best %s buff so far is MinLevel %d, Name %s, target L%d %s", req.Peer, spellConfig.MinLevel, spellConfig.Name, level, spawn.Name())
+                --log.Debug("Best %s buff so far is MinLevel %d, Name %s, target L%d %s", req.Peer, spellConfig.MinLevel, spellConfig.Name, level, spawn.Name())
             end
         end
     end

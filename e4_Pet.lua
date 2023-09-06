@@ -53,9 +53,7 @@ function Pet.Summon()
     end
 
     castSpellRaw(spell.RankName(), mq.TLO.Me.ID(), "-maxtries|3")
-    delay(500)
-    delay(spell.MyCastTime(), function() return have_pet() end)
-    delay(500)
+    delay(spell.CastTime(), function() return have_pet() end)
 
     if not have_pet() then
         all_tellf("ERROR: Failed to summon pet.")
@@ -126,11 +124,14 @@ function Pet.BuffMyPet()
 
         local skip = false
 
-        if mq.TLO.Me.Pet.Buff(spellConfig.Name)() ~= nil and mq.TLO.Me.Pet.Buff(mq.TLO.Me.Pet.Buff(spellConfig.Name)).Duration.Ticks() > 4 then
+        local spellName = spell.RankName()
+        if spellName == nil then
+            -- This is true for AA buffs, example MAG "Elemental Fury" AA
+            spellName = spellConfig.Name
+        end
+
+        if mq.TLO.Me.Pet.Buff(spellName)() ~= nil and mq.TLO.Me.Pet.Buff(mq.TLO.Me.Pet.Buff(spellName)).Duration.Ticks() > 4 then
             --log.Debug("SKIP PET BUFFING %s, duration is %d ticks", spellConfig.Name, mq.TLO.Me.Pet.Buff(mq.TLO.Me.Pet.Buff(spellConfig.Name)).Duration.Ticks())
-            skip = true
-        elseif pet_have_buff(spell.RankName()) then -- TODO LATER: is it possible to get the pet buff duration?
-            --log.Debug("SKIP PET BUFFING, Pet have ranked buff")
             skip = true
         elseif spellConfig.MinMana ~= nil and mq.TLO.Me.PctMana() < spellConfig.MinMana then
             log.Debug("SKIP PET BUFFING, my mana %d vs required %d", mq.TLO.Me.PctMana(), spellConfig.MinMana)

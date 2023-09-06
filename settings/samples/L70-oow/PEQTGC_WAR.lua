@@ -105,7 +105,7 @@ settings.assist = {
     },
 
     abilities = {
-        "Knee Strike",
+        --"Knee Strike", -- SoD
         "Bash",
         "Kick",
         --"Slam",

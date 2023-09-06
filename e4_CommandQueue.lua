@@ -201,8 +201,10 @@ function CommandQueue.Process()
         report_worn_augs()
     elseif v.Name == "open-nearby-corpse" then
         open_nearby_corpse()
+    elseif v.Name == "origin" then
+        use_alt_ability("Origin")
     elseif v.Name == "use-veteran-aa" then
-        use_veteran_aa(v.Arg)
+        use_alt_ability(v.Arg)
     elseif v.Name == "dropbuff" then
         drop_buff(v.Arg)
     elseif v.Name == "mount-on" then
@@ -365,9 +367,13 @@ function autoMapHeightFilter()
     local heights = {
         -- old
         guktop = {min = 30, max = 30},
+        soltemple = {min = 10, max = 10},
+
+        -- kunark?
+        chardok = {min = 60, max = 60},
 
         -- luclin
-        fungusgrove = {min = 80, max = 80},     -- for lucid shard camp
+        fungusgrove = {min = 80, max = 80},     -- lucid shard camp
 
         -- omens
         riftseekers = {min = 120, max = 120},   -- XXX

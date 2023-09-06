@@ -260,8 +260,8 @@ settings.assist = {
         -- Lxx Spirit Call Rank 5 AA
         "Spirit Call",
 
-        -- L65 Dampen Resistance AA (reduce resist chance, 10 min reuse / X min with Hastened Dampen Resistance)
-        "Dampen Resistance",
+        -- L65 Dampen Resistance AA (reduce resist chance, 10 min reuse / X min with Hastened Dampen Resistance)  (SoD)
+        --"Dampen Resistance",
     },
 
     longburns = {

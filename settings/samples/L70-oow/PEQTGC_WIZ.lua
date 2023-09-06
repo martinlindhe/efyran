@@ -20,7 +20,7 @@ settings.gems = {
 
 settings.self_buffs = {
     "Fuzzy Foothairs",
-    "Pyromancy/CheckFor|Mana Flare",     -- Lxx Pyromancy AA Rank 3 (id:8408, 15% chance proc spell id:8164, -500 hate, -500 hp/tick, -50 fr)
+    --"Pyromancy/CheckFor|Mana Flare",     -- (DODH) L70 Pyromancy AA Rank 3 (id:8408, 15% chance proc spell id:8164, -500 hate, -500 hp/tick, -50 fr)
     "Earring of Dragonkin", -- Chaotic Enlightenment (slot 8: 10 mana regen, slot 10: 6 hp regen)
     --"Xxeric's Matted-Fur Mask", -- Reyfin's Racing Thoughts (slot 4: 450 mana pool)
 
@@ -147,7 +147,7 @@ settings.assist = {
         "Ward of Destruction",
         "Call of Xuzl",
 
-        "Silent Casting",
+        -- "Silent Casting",  -- DODH
 
         -- oow T2 bp: Academic's Robe of the Arcanists (Academic's Intellect, -25% cast time for 0.7 min, 5 min reuse)
         "Academic's Robe of the Arcanists",

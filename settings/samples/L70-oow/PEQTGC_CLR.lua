@@ -16,7 +16,7 @@ settings.gems = {
     ["Puratus"] = 5, -- XXX also temp gem
     ["Word of Vivification"] = 6,
     ["Balikor's Mark"] = 7,
-    ["Ward of Retribution"] = 8,
+    --["Ward of Retribution"] = 8,
     ["Divine Intervention"] = 9,
 }
 
@@ -41,8 +41,8 @@ settings.healing = {
         -- L70 Sanctuary AA (id:5912, removes you from combat), 1h12 min reuse
         "Sanctuary/HealPct|13",
 
-        -- L69 Ward of Retribution (add defenstive proc: Ward of Retribution Parry, 2 min)
-        "Ward of Retribution/HealPct|50/CheckFor|Ward of Retribution",
+        -- L69 Ward of Retribution (add defenstive proc: Ward of Retribution Parry)   DoN
+        --"Ward of Retribution/HealPct|50/CheckFor|Ward of Retribution",
 
         "Distillate of Divine Healing XI/HealPct|12",
 

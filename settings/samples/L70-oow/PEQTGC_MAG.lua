@@ -19,7 +19,7 @@ settings.gems = {
     ["Malosinia"] = 6,
     ["Fireskin"] = 7,
     ["Raging Servant"] = 8,
-    ["Summon: Molten Orb"] = 9,
+    --["Summon: Molten Orb"] = 9,
 }
 
 settings.self_buffs = {
@@ -155,7 +155,7 @@ settings.assist = {
             "Raging Servant/GoM",
 
             -- L69 Summon: Molten Orb (10 charge 700 hp fire nuke, -10 fire adj, instant cast, 12s recast)
-            "Molten Orb/NoAggro/Summon|Summon: Molten Orb",
+            --"Molten Orb/NoAggro/Summon|Summon: Molten Orb", -- DoN
 
             "Burning Earth/NoAggro/MinMana|10",
             "Ancient: Nova Strike/GoM/NoAggro",
@@ -194,7 +194,7 @@ settings.assist = {
     },
 
     quickburns = {
-        "Silent Casting",
+        -- "Silent Casting",  -- DODH
         "Frenzied Burnout",
         "Host of the Elements",
         "Servant of Ro",

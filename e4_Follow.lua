@@ -99,10 +99,7 @@ local followUpdateTimer = timer.new_expired(1 * 1) -- 1s
 
 function Follow.Tick()
     if followUpdateTimer:expired() then
-        if globalSettings.followMode:lower() == "mq2nav" or globalSettings.followMode:lower() == "mq2moveutils" then
-            -- don't update for mq2advpath as they will get confused
-            Follow.Update(false)
-        end
+        Follow.Update(false)
         followUpdateTimer:restart()
     end
 end
@@ -118,7 +115,8 @@ function Follow.Update(force)
 
     local spawn = spawn_from_peer_name(Follow.spawnName)
     if spawn == nil then
-        all_tellf("ERROR: follow update fail on %s", Follow.spawnName)
+        -- happens when following a toon across zoneline and the toon has yet to zone
+        log.Warn("Follow update fail on %s", Follow.spawnName)
         return
     end
 
@@ -133,7 +131,11 @@ function Follow.Update(force)
         end
         exe = string.format("/nav spawn PC =%s | distance=%d log=trace", spawn.Name(), maxRange)
     elseif globalSettings.followMode:lower() == "mq2advpath" then
-        if not mq.TLO.AdvPath.Following() or lastHeading ~= spawn.HeadingTo() then
+        if mq.TLO.AdvPath.WaitingWarp() or not mq.TLO.AdvPath.Following() then
+            if mq.TLO.AdvPath.WaitingWarp() then
+                force = true
+                all_tellf("AdvPath: WaitingWarp - force follow")
+            end
             exe = string.format("/afollow spawn %d", spawn.ID())
         end
     elseif globalSettings.followMode:lower() == "mq2moveutils" then

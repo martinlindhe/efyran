@@ -263,6 +263,7 @@ aliases.SHM = {
     ["levi"] = "Levitate",
     ["rgc"] = "Remove Greater Curse",
     ["billy"] = "Spirit of Bih`Li",
+    ["leopard"] = "Spirit of the Leopard",
     ["panther"] = "Spirit of the Panther",
     ["proc"] = "Spirit of the Panther",
     ["jag"] = "Spirit of the Jaguar",

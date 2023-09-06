@@ -53,8 +53,7 @@ settings.healing = {
 
         "Distillate of Divine Healing XI/HealPct|10",
 
-        -- L70 Stealthy Getaway AA
-        "Stealthy Getaway/HealPct|12",
+        --"Stealthy Getaway/HealPct|10",         -- L70 Stealthy Getaway AA  (DoDH)
 
         --"Mind Shock/HealPct|20", -- potion, 15 min, add proc: Mind Shock
 

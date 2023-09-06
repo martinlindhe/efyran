@@ -4,6 +4,7 @@ local mq = require("mq")
 
 ---@class PeerSettings
 ---@field public assist PeerSettingsAssist
+---@field public gems string[]|nil XXX key is string, val is integer
 ---@field public self_buffs string[]|nil spellRows of self buffs
 ---@field public request_buffs string[]|nil spellRows of buff groups to request
 
@@ -64,12 +65,6 @@ end
 
 
 function botSettings.Init()
-    if is_hovering() then
-        all_tellf("ERROR: cannot start e4 successfully while in HOVERING mode")
-        cmd("/beep 1")
-        return
-    end
-
     local settingsFile = getEfyranRoot() .. "/settings/" .. peer_settings_file()
     local settings = read_settings(settingsFile)
     if settings ~= nil then
@@ -89,5 +84,7 @@ function botSettings.Init()
         cmd("/beep")
     end
 end
+
+botSettings.Init()
 
 return botSettings

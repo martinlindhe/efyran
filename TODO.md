@@ -31,10 +31,6 @@ item swap:
 buffs:
     - /dson mode = clicky ds buffs + auto ask for MAG & RNG ds (for power leveling)
 
-curing:
-    https://gitlab.com/redguides/plugins/MQ2Debuffs
-
-
 
 moving:
     - check out https://gitlab.com/redguides/plugins/mq2portalsetter
@@ -72,6 +68,12 @@ loot:
 
 xp tracking:
     https://www.mmobugs.com/wiki/index.php?title=MQ2XPTracker
+
+auto aa:
+    MQ2AAspend is buggy / dont work on emu sep 2023
+
+        xxxx look att MQ2AAPurchase, from old emu build ... ?
+
 
 stat food:
     auto forage + mq2feedme maybe perfect (auto save pod of water, roots etc and auto eat those-all classes have Forage AA)

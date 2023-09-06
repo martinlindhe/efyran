@@ -156,8 +156,7 @@ settings.assist = {
         -- epic 2.0: Aurora, the Heartwood Blade (critical melee chance 170%, accuracy 170%, 1 min duration, 5 min recast)
         "Aurora, the Heartwood Blade",
 
-        -- L70 - 20 min reuse:
-        "Outrider's Attack",
+        --"Outrider's Attack",         -- L70 - 20 min reuse (SoD)
 
         -- L6x Guardian of the Forest Rank 1 (song id: 30741, 15m reuse, -30% with 3/? rank aa: 10m30s)
         "Guardian of the Forest",
