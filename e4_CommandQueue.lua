@@ -226,6 +226,10 @@ function CommandQueue.Process()
         end
     elseif v.Name == "ward" then
         UseWard(v.Arg)
+    elseif v.Name == "teleportbind" then
+        if is_alt_ability_ready("Teleport Bind") then
+            use_alt_ability("Teleport Bind")
+        end
     else
         all_tellf("ERROR unknown command in queue: %s", v.Name)
     end

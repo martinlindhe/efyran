@@ -148,6 +148,8 @@ Buff Spell Level   Minimum Target Level
 /playmelody <name>          - bards: play specific song set. default name is "general"
 /playmelody off             - stop melodies
 
+/teleportbind               - WIZ: port group to bind point using "Teleport Bind" AA
+
 /fdi                        - find item by partial name
 /fmi                        - find missing item. report peers who lack an item
 /clickies                   - lists all clickies on current toon

@@ -216,6 +216,14 @@ function QoL.Init()
         commandQueue.Add("burns", "fullburns")
     end)
 
+    -- teleport bind for all wizards (port groups to bind point)
+    mq.bind("/teleportbind", function()
+        if is_orchestrator() then
+            cmdf("/dgzexecute /teleportbind")
+        end
+        commandQueue.Add("teleportbind")
+    end)
+
     -- Use cure ward AA "Ward of Purity" (CLR)
     mq.bind("/cureward", function() commandQueue.Add("ward", "cure") end)
 
