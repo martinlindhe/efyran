@@ -150,6 +150,10 @@ local hailTargets = {
     ["qrg"] = {
         ["Buff Bot"] = true, -- EZ, hail only
     },
+
+    ["lavastorm"] = {
+        ["Wayfarers Mercenary Bitral"] = "task|Population Control", -- DoN tier 0 faction solo task
+    }
 }
 
 function Hail.PerformHail()
@@ -172,7 +176,8 @@ function Hail.PerformHail()
         local spawn = mq.TLO.NearestSpawn(i, spawnQuery)
         local spawnName = spawn.CleanName()
         if zoneTargets[spawnName] ~= nil then
-            cmdf("/target npc %s", spawnName)
+            log.Debug("Attempting to hail %s ...", spawnName)
+            cmdf('/target npc "%s"', spawnName)
             move_to(spawn.ID())
             delay(200)
             if zoneTargets[spawnName] == true then
@@ -180,7 +185,46 @@ function Hail.PerformHail()
                 cmd("/hail")
             else
                 -- speak
-                cmdf("/say %s", zoneTargets[spawnName])
+
+                local s = split_str(zoneTargets[spawnName], "|")
+                if #s == 1 then
+                    -- normal Speak
+                    cmdf("/say %s", zoneTargets[spawnName])
+                else
+                    -- auto pick task ...
+                    if s[1] == "task" then
+                        -- Open the "Task select" window
+                        cmd("/hail")
+                        delay(1000, function()
+                            return window_open("TaskSelectWnd")
+                        end)
+                        delay(200)
+
+                        -- select the proper list item
+                        local len = mq.TLO.Window("TaskSelectWnd/TSEL_TaskList").Items()
+                        local index = mq.TLO.Window("TaskSelectWnd/TSEL_TaskList").List("="..s[2])()
+                        log.Info("Selecting task \ag%s\ax, index %d, out of %d items", s[2], index, len)
+
+                        if index <= 0 then
+                            all_tellf("ERROR: couldnt select task '%s', not in task list!", s[2])
+                            return
+                        end
+
+
+
+                        -- mark task
+                        cmdf("/notify TaskSelectWnd TSEL_TaskList listselect %d", index)
+                        delay(200)
+
+                        -- Accept task
+                        cmd("/notify TaskSelectWnd TSEL_AcceptButton leftmouseup")
+
+                    else
+                        all_tellf("NO IDEA WTF %s  (%s)", s[1], zoneTargets[spawnName])
+                    end
+
+                end
+
             end
         end
     end

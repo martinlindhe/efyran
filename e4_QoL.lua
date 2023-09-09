@@ -83,6 +83,11 @@ function QoL.Init()
         commandQueue.ZoneEvent()
     end)
 
+    -- for DoN solo tasks
+    mq.event("replay-timer", "You have received a replay timer for '#1#': #2 remaining.", function(text, task, time)
+        all_tellf("Got replay timer for \ag%s\ax: %s", task, time)
+    end)
+
     mq.event("camping", "It will take you about 30 seconds to prepare your camp.", function(text, name)
         -- "It will take about 25 more seconds to prepare your camp."
         all_tellf("I am camping. Ending all macros.")
@@ -641,7 +646,6 @@ function QoL.Init()
         mq.cmd("/noparse /dgaexecute all /if (${Me.FreeInventory} <= 20) /dgtell all FULL INVENTORY, ${Me.FreeInventory} FREE SLOTS")
     end)
 
-
     -- make peers in zone face my target
     mq.bind("/facetarget", function() mq.cmdf("/squelch /dgzexecute /face fast id %d", mq.TLO.Target.ID()) end)
     mq.bind("/facetgt", function() mq.cmd("/facetarget") end)
@@ -661,7 +665,7 @@ function QoL.Init()
     end)
 
     -- report all peers who are not standing
-    mq.bind("/notstanding", function() mq.cmd("/noparse /dgaexecute all /if (${Me.Feigning} || ${Me.Ducking} || ${Me.Sitting}) /bc NOT STANDING") end)
+    mq.bind("/notstanding", function() mq.cmd("/noparse /dgaexecute all /if (${Me.Feigning} || ${Me.Ducking} || ${Me.Sitting}) /dgtell all NOT STANDING") end)
 
     -- open loot window on closest corpse
     mq.bind("/lcorpse", function() commandQueue.Add("open-nearby-corpse") end)
@@ -703,6 +707,17 @@ function QoL.Init()
 
     -- auto banks items from tradeskills.ini
     mq.bind("/autobank", function() commandQueue.Add("autobank") end)
+
+    -- report if tribute is too low (under 140k)
+    mq.bind("/lowtribute", function()
+        mq.cmd("/noparse /dgaexecute all /if (${Me.CurrentFavor} < 140000) /dgtell all LOW TRIBUTE ${Me.CurrentFavor}")
+    end)
+
+    -- report active tribute
+    -- /tributeactive=/noparse /bcaa //if (${Me.TributeActive}) /bc TRIBUTE ACTIVE, COST ${Me.ActiveFavorCost}
+
+    -- report tank tribute
+    -- /tanktribute=/noparse /bcaa //if (${Select[${Me.Class.ShortName},WAR,PAL,SHD]}) /bc TRIBUTE ${If[${Me.TributeActive},[+g+]ON,[+r+]OFF]}[+w+], SAVED ${Me.CurrentFavor}
 
     -- report your GoD tongue quest status
     mq.bind("/tongues", function()

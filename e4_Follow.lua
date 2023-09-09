@@ -37,6 +37,11 @@ function Follow.Start(spawnName, force)
         all_tellf("I cannot see %s", spawn.Name())
         return
     end
+
+    if Follow.IsFollowing() then
+        Follow.StopFully()
+    end
+
     log.Debug("Follow start on %s", spawn.Name())
     Follow.spawnName = spawn.Name()
     Follow.Update(true)
@@ -171,6 +176,7 @@ function Follow.RunToZone(startingPeer)
 
     -- move to initial position
     move_to(spawn.ID())
+    delay(500)
 
     if not is_within_distance(spawn, 18) then
         -- unlikely

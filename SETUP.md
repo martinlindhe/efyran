@@ -25,16 +25,12 @@ now just running straight /melody for the moment
 
 # MQ2LinkDB
 
-Download items.txt from https://www.redguides.com/redbot/items.txt, or http://items.sodeq.org/
+Download items.txt from https://www.redguides.com/redbot/items.txt
+
+Place items.txt in folder .\build\bin\release\resources
 
 /plugin MQ2LinkDB
-
-put Items.txt in folder .\build\bin\release\resources
 
 /link /import
 
 Done.
-
-XXX, /link item doesn't work on emu... 31 aug 2022?
-
-

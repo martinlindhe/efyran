@@ -368,6 +368,7 @@ function autoMapHeightFilter()
         -- old
         guktop = {min = 30, max = 30},
         soltemple = {min = 10, max = 10},
+        soldunga = { min = 15, max= 15},
 
         -- kunark?
         chardok = {min = 60, max = 60},

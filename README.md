@@ -146,6 +146,7 @@ Buff Spell Level   Minimum Target Level
 /factionsall                - tell all peers to report faction
 
 /playmelody <name>          - bards: play specific song set. default name is "general"
+/playmelody off             - stop melodies
 
 /fdi                        - find item by partial name
 /fmi                        - find missing item. report peers who lack an item

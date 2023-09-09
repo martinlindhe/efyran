@@ -34,10 +34,10 @@ settings.self_buffs = {
 
 settings.healing = {
     life_support = {
-        -- L70 Convergence of Spirits I AA (1000 hp instant, 500 hp/tick, 60 ds, 54 ac)
-        -- L70 Convergence of Spirits II AA (1500 hp instant, 750 hp/tick, 65 ds, 60 ac)
-        -- L70 Convergence of Spirits III AA (2000 hp instant, 1000 hp/tick, 70 ds, 66 ac)
-        "Convergence of Spirits/CheckFor|Spirit of the Wood/HealPct|50/MinMobs|10",
+        -- L70 Convergence of Spirits I AA (1000 hp instant, 500 hp/tick, 60 ds, 54 ac) DoDH
+        -- L70 Convergence of Spirits II AA (1500 hp instant, 750 hp/tick, 65 ds, 60 ac) DoDH
+        -- L70 Convergence of Spirits III AA (2000 hp instant, 1000 hp/tick, 70 ds, 66 ac) DoDH
+        --"Convergence of Spirits/CheckFor|Spirit of the Wood/HealPct|50/MinMobs|10",
 
         "Skin of the Reptile/HealPct|50/MinMobs|10",
 
@@ -212,7 +212,10 @@ settings.assist = {
         -- epic 2.0: Staff of Everliving Brambles
         "Staff of Everliving Brambles",
 
-        "Nature's Guardian",
+        -- L70 Nature's Guardian I, DoDH
+        -- L70 Nature's Guardian II, DoDH
+        -- L70 Nature's Guardian III, DoDH
+        --"Nature's Guardian",
 
         --"Silent Casting",
 

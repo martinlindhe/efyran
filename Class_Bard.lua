@@ -38,6 +38,11 @@ function Bard.PlayMelody(name)
 
     name = name:lower()
 
+    if name == "off" or name == "stop" then
+        Bard.StopMelody()
+        return
+    end
+
     local songSet = botSettings.settings.songs[name]
     if songSet == nil then
         all_tellf("ERROR no such song set %s", name)
@@ -59,6 +64,11 @@ function Bard.PlayMelody(name)
     all_tellf("Playing melody \ay%s\ax.", name)
 
     Bard.currentMelody = name
+end
+
+function Bard.StopMelody()
+    Bard.currentMelody = ""
+    cmd("/twist off")
 end
 
 return Bard

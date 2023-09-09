@@ -247,11 +247,6 @@ function memorizeListedSpells()
         return
     end
 
-    if not is_sitting() then
-        cmd("/sit")
-        delay(200)
-    end
-
     for spellRow, gem in pairs(botSettings.settings.gems) do
         memorize_spell(spellRow, gem)
     end

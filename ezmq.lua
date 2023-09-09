@@ -388,6 +388,13 @@ function is_spell_ready(name)
     return mq.TLO.Me.SpellReady(spell.RankName())()
 end
 
+-- Returns true if `name` is an AA that exists.
+---@param name string
+---@return boolean
+function is_alt_ability(name)
+    return mq.TLO.AltAbility(name)() ~= nil
+end
+
 -- Returns true if `name` is an AA that you have purchased.
 ---@param name string
 ---@return boolean

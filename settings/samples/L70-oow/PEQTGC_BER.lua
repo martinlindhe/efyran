@@ -80,9 +80,9 @@ settings.assist = {
     },
 
     ["longburns"] = {
-        -- L6x Untamed Rage AA, 36 min reuse
-        -- L70 Cascading Rage AA, 36 min reuse
-        "Cascading Rage",
+        -- L65 Untamed Rage AA, 36 min reuse (GoD)
+        -- L70 Cascading Rage AA, 36 min reuse (DoDH)
+        "Untamed Rage",
 
         -- L65 Cleaving Anger Discipline (timer 2)
         "Cleaving Anger Discipline",
