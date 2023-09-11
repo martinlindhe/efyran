@@ -1221,19 +1221,19 @@ local aaPrioList = {
         ["Innate Metabolism"] = 3,
 
         -- lowest prio / leftovers
-        ["Body and Mind Rejuvenation"] = 1,
-        ["Packrat"] = 5,
-        ["Foraging"] = 1,
-        ["Thief's Intuition"] = 1, -- detect traps
-        ["Tune of Pursuance"] = 5, -- tracking cap
-        ["Innate Charisma"] = 15,
-        ["Innate Agility"] = 15,
-        ["Innate Dexterity"] = 15,
-        ["Innate Stamina"] = 15,
-        ["Innate Strength"] = 15,
-        ["Innate Intelligence"] = 15,
-        ["Innate Wisdom"] = 15,
-        ["First Aid"] = 3,
+        --["Body and Mind Rejuvenation"] = 1,
+        --["Packrat"] = 5,
+        --["Foraging"] = 1,
+        --["Thief's Intuition"] = 1, -- detect traps
+        --["Tune of Pursuance"] = 5, -- tracking cap
+        --["Innate Charisma"] = 15,
+        --["Innate Agility"] = 15,
+        --["Innate Dexterity"] = 15,
+        --["Innate Stamina"] = 15,
+        --["Innate Strength"] = 15,
+        --["Innate Intelligence"] = 15,
+        --["Innate Wisdom"] = 15,
+        --["First Aid"] = 3,
 
         -- Expendables
         ["Glyph of Stored Life"] = 1, -- heal

@@ -1036,7 +1036,7 @@ GroupBuffs.Default.WAR = {
     --"pal_hp/Class|PAL/CheckFor|Spiritual Vitality,Strength of Tunare",                 -- 1st
     --"bst_hp/Class|BST/NotClass|PAL/CheckFor|Brell's Brawny Bulwark,Strength of Tunare",    -- 2nd
     --"rng_hp/Class|RNG/NotClass|PAL,BST/CheckFor|Brell's Brawny Bulwark,Spiritual Vitality",-- 3rd
-    "rng_hp/Class|RNG",
+    "rng_hp/Class|RNG/CheckFor|Brell's Brawny Bulwark,Spiritual Vitality",
 
     "rng_atk/Class|RNG",
     "enc_haste/Class|ENC",
@@ -1058,7 +1058,7 @@ GroupBuffs.Default.SHD = {
     --"pal_hp/Class|PAL",                 -- 1st
     --"bst_hp/Class|BST/NotClass|PAL",    -- 2nd
     --"rng_hp/Class|RNG/NotClass|PAL,BST",-- 3rd
-    "rng_hp/Class|RNG",
+    "rng_hp/Class|RNG/CheckFor|Brell's Brawny Bulwark,Spiritual Vitality",
 
     "rng_atk/Class|RNG",
     "enc_haste/Class|ENC",
@@ -1092,7 +1092,7 @@ GroupBuffs.Default.BRD = {
     "dru_skin/Class|DRU",
     "shm_focus/Class|SHM",
 
-    "rng_hp/Class|RNG",                 -- 1st
+    "rng_hp/Class|RNG/CheckFor|Brell's Brawny Bulwark,Spiritual Vitality",            -- 1st
     --"bst_hp/Class|BST/NotClass|RNG",    -- 2nd
     --"pal_hp/Class|PAL/NotClass|RNG,BST",-- 3rd
 
@@ -1114,7 +1114,7 @@ GroupBuffs.Default.CLR = {
     --"pal_hp/Class|PAL",                 -- 1st
     --"bst_hp/Class|BST/NotClass|PAL",    -- 2nd
     --"rng_hp/Class|RNG/NotClass|PAL,BST",-- 3rd
-    "rng_hp/Class|RNG",
+    "rng_hp/Class|RNG/CheckFor|Brell's Brawny Bulwark,Spiritual Vitality",
 
     "enc_manaregen/Class|ENC",
     "bst_manaregen/Class|BST",
@@ -1131,7 +1131,7 @@ GroupBuffs.Default.DRU = {
     --"pal_hp/Class|PAL",                 -- 1st
     --"bst_hp/Class|BST/NotClass|PAL",    -- 2nd
     --"rng_hp/Class|RNG/NotClass|PAL,BST",-- 3rd
-    "rng_hp/Class|RNG",
+    "rng_hp/Class|RNG/CheckFor|Brell's Brawny Bulwark,Spiritual Vitality",
 
     "enc_manaregen/Class|ENC",
     "bst_manaregen/Class|BST",
@@ -1150,7 +1150,7 @@ GroupBuffs.Default.SHM = {
     --"pal_hp/Class|PAL",                 -- 1st
     --"bst_hp/Class|BST/NotClass|PAL",    -- 2nd
     --"rng_hp/Class|RNG/NotClass|PAL,BST",-- 3rd
-    "rng_hp/Class|RNG",
+    "rng_hp/Class|RNG/CheckFor|Brell's Brawny Bulwark,Spiritual Vitality",
 
     "enc_manaregen/Class|ENC",
     "bst_manaregen/Class|BST",
@@ -1171,7 +1171,7 @@ GroupBuffs.Default.ENC = {
     --"pal_hp/Class|PAL",                 -- 1st
     --"bst_hp/Class|BST/NotClass|PAL",    -- 2nd
     --"rng_hp/Class|RNG/NotClass|PAL,BST",-- 3rd
-    "rng_hp/Class|RNG",
+    "rng_hp/Class|RNG/CheckFor|Brell's Brawny Bulwark,Spiritual Vitality",
 
     "clr_spellhaste/Class|CLR",
     "bst_manaregen/Class|BST",
@@ -1190,7 +1190,7 @@ GroupBuffs.Default.WIZ = {
     --"pal_hp/Class|PAL",                 -- 1st
     --"bst_hp/Class|BST/NotClass|PAL",    -- 2nd
     --"rng_hp/Class|RNG/NotClass|PAL,BST",-- 3rd
-    "rng_hp/Class|RNG",
+    "rng_hp/Class|RNG/CheckFor|Brell's Brawny Bulwark,Spiritual Vitality",
 
     "clr_spellhaste/Class|CLR",
     "enc_manaregen/Class|ENC",
@@ -1211,7 +1211,7 @@ GroupBuffs.Default.MAG = {
     --"pal_hp/Class|PAL",                 -- 1st
     --"bst_hp/Class|BST/NotClass|PAL",    -- 2nd
     --"rng_hp/Class|RNG/NotClass|PAL,BST",-- 3rd
-    "rng_hp/Class|RNG",
+    "rng_hp/Class|RNG/CheckFor|Brell's Brawny Bulwark,Spiritual Vitality",
 
     "clr_spellhaste/Class|CLR",
     "enc_manaregen/Class|ENC",
@@ -1232,7 +1232,7 @@ GroupBuffs.Default.NEC = {
     --"pal_hp/Class|PAL",                 -- 1st
     --"bst_hp/Class|BST/NotClass|PAL",    -- 2nd
     --"rng_hp/Class|RNG/NotClass|PAL,BST",-- 3rd
-    "rng_hp/Class|RNG",
+    "rng_hp/Class|RNG/CheckFor|Brell's Brawny Bulwark,Spiritual Vitality",
 
     "clr_spellhaste/Class|CLR",
     "bst_manaregen/Class|BST",
@@ -1268,7 +1268,7 @@ GroupBuffs.Default.BST = {
     "dru_skin/Class|DRU",
     "shm_focus/Class|SHM",
 
-    "rng_hp/Class|RNG",                 -- 1st
+    "rng_hp/Class|RNG/CheckFor|Brell's Brawny Bulwark,Spiritual Vitality",                 -- 1st
 
     "shm_str/Class|SHM",
     "rng_atk/Class|RNG",
@@ -1290,7 +1290,7 @@ GroupBuffs.Default.ROG = {
     "dru_skin/Class|DRU",
     "shm_focus/Class|SHM",
 
-    "rng_hp/Class|RNG",                 -- 1st
+    "rng_hp/Class|RNG/CheckFor|Brell's Brawny Bulwark,Spiritual Vitality",                 -- 1st
     --"bst_hp/Class|BST/NotClass|RNG",    -- 2nd
     --"pal_hp/Class|PAL/NotClass|RNG,BST",-- 3rd
 
@@ -1310,7 +1310,7 @@ GroupBuffs.Default.MNK = {
     "dru_skin/Class|DRU",
     "shm_focus/Class|SHM",
 
-    "rng_hp/Class|RNG",                 -- 1st
+    "rng_hp/Class|RNG/CheckFor|Brell's Brawny Bulwark,Spiritual Vitality",                 -- 1st
     --"bst_hp/Class|BST/NotClass|RNG",    -- 2nd
     --"pal_hp/Class|PAL/NotClass|RNG,BST",-- 3rd
 
@@ -1330,7 +1330,7 @@ GroupBuffs.Default.BER = {
     "dru_skin/Class|DRU",
     "shm_focus/Class|SHM",
 
-    "rng_hp/Class|RNG",                 -- 1st
+    "rng_hp/Class|RNG/CheckFor|Brell's Brawny Bulwark,Spiritual Vitality",                 -- 1st
     --"bst_hp/Class|BST/NotClass|RNG",    -- 2nd
     --"pal_hp/Class|PAL/NotClass|RNG,BST",-- 3rd
 

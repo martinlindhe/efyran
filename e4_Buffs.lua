@@ -129,7 +129,7 @@ function buffs.Tick()
         checkDebuffsTimer:restart()
     end
 
-    if in_combat() or not is_standing() or not allow_buff_in_zone() then
+    if not is_standing() or not allow_buff_in_zone() then
         return
     end
 
@@ -143,6 +143,10 @@ function buffs.Tick()
     end
 
     if buffs.RefreshIllusion() then
+        return
+    end
+
+    if in_combat() then
         return
     end
 
@@ -440,6 +444,16 @@ function buffs.RequestBuffs()
             for classIdx, class in pairs(notClasses) do
                 --log.Debug("- NotClass: do we have class \ax%s\ay available? %s", class, tostring(availableClasses[class] == true))
                 if availableClasses[class] == true then
+                    skip = true
+                end
+            end
+        end
+
+        if spellConfig.CheckFor ~= nil then
+            local tokens = split_str(spellConfig.CheckFor, ",")
+            for key, value in pairs(tokens) do
+                if have_buff(value) then
+                    log.Info("RequestBuffs CheckFor \ag%s\ax found, skipping", value)
                     skip = true
                 end
             end
