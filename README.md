@@ -158,6 +158,9 @@ Buff Spell Level   Minimum Target Level
 
 /recallgroup <name>         - recalls a group/raid formation
 
+/listtasks                  - lists all active tasks
+/hastask <name>
+
 /shrinkgroup                - shrink group members shrink spells/clickies
 /shrinkall                  - tell all to shrink their groups
 

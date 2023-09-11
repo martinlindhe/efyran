@@ -177,54 +177,48 @@ function Hail.PerformHail()
         local spawnName = spawn.CleanName()
         if zoneTargets[spawnName] ~= nil then
             log.Debug("Attempting to hail %s ...", spawnName)
-            cmdf('/target npc "%s"', spawnName)
             move_to(spawn.ID())
-            delay(200)
+
+            cmdf('/target npc "%s"', spawnName)
+
             if zoneTargets[spawnName] == true then
                 -- hail only
                 cmd("/hail")
             else
                 -- speak
-
                 local s = split_str(zoneTargets[spawnName], "|")
                 if #s == 1 then
                     -- normal Speak
                     cmdf("/say %s", zoneTargets[spawnName])
                 else
-                    -- auto pick task ...
+                    -- select and accept named task by hailing NPC (DoN tier 0)
                     if s[1] == "task" then
-                        -- Open the "Task select" window
+                        -- Open the "task select" window from NPC
+                        delay(200)
                         cmd("/hail")
                         delay(1000, function()
                             return window_open("TaskSelectWnd")
                         end)
-                        delay(200)
+                        delay(500)
 
                         -- select the proper list item
-                        local len = mq.TLO.Window("TaskSelectWnd/TSEL_TaskList").Items()
                         local index = mq.TLO.Window("TaskSelectWnd/TSEL_TaskList").List("="..s[2])()
-                        log.Info("Selecting task \ag%s\ax, index %d, out of %d items", s[2], index, len)
-
-                        if index <= 0 then
-                            all_tellf("ERROR: couldnt select task '%s', not in task list!", s[2])
+                        if index == nil or index <= 0 then
+                            all_tellf("ERROR: cant select task '%s', not in task list!", s[2])
                             return
                         end
 
-
-
-                        -- mark task
+                        -- select task
+                        log.Info("Selecting task \ag%s\ax, index %d", s[2], index)
                         cmdf("/notify TaskSelectWnd TSEL_TaskList listselect %d", index)
-                        delay(200)
+                        delay(500)
 
                         -- Accept task
                         cmd("/notify TaskSelectWnd TSEL_AcceptButton leftmouseup")
-
                     else
-                        all_tellf("NO IDEA WTF %s  (%s)", s[1], zoneTargets[spawnName])
+                        all_tellf("PerformHail: ERROR unknown '%s' (%s)", s[1], zoneTargets[spawnName])
                     end
-
                 end
-
             end
         end
     end

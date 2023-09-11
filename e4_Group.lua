@@ -53,7 +53,17 @@ function Group.RecallGroup(name, groupNumber)
 
     local orchestrator = false
     local raidLeader = ""
+
     if groupNumber == nil then
+        if mq.TLO.Raid.Members() > 0 then
+            cmd("/raiddisband")
+            delay(100)
+        end
+        if mq.TLO.Group.Members() > 0 then
+            cmd("/disband")
+            delay(100)
+        end
+
         orchestrator = true -- the instance doing /recallgroup
         cmd("/noparse /dgaexecute /if (${Raid.Members} > 0) /raiddisband")
         delay(1000)

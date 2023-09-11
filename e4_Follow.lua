@@ -174,9 +174,11 @@ function Follow.RunToZone(startingPeer)
 
     Follow.Stop()
 
-    -- move to initial position
-    move_to(spawn.ID())
-    delay(500)
+    if not is_within_distance(spawn, 10) then
+        -- move to initial position
+        move_to(spawn.ID())
+        delay(600)
+    end
 
     if not is_within_distance(spawn, 18) then
         -- unlikely

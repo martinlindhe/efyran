@@ -101,12 +101,31 @@ function QoL.Init()
         end
     end)
 
+    local gotFlag = false
+    local charFlag = function(text)
+        all_tellf("I recieved char flag!")
+        gotFlag = true
+    end
+
+    mq.event("char_flag-pop", "You receive a character flag#*#", charFlag) -- PoP / GoD
+    mq.event("char_flag-don", "You have received a character flag!", charFlag) -- DoN
+
     mq.event("tell", "#1# tells you, #2#", function(text, name, msg)
         local s = msg:lower()
+        if s == "incoming pet weapons, hold still!" then
+            return
+        end
         if s == "buff me" or s == "buffme" then
             -- XXX commandeer all to buff this one. how to specify orchestrator if buff is in background? we enqueue it to a zone channel !!!
-            all_tellf("FIXME handle 'buffme' tell from %s", name)
+            local spawn = spawn_from_query("PC "..name)
+            if spawn == nil then
+                all_tellf("BUFFIT FAIL, cannot find spawn %s in %s", name, zone_shortname())
+                return
+            end
+
+            all_tellf("Delegating buff request from \ag%s\ax ...", name)
             cmd("/beep 1")
+            buffs.BuffIt(spawn.ID())
         else
             -- excludes tells from "Player`s pet" (Permutation Peddler, NPC), "Player`s familiar" (Summoned Banker, Pet)
             local spawn = spawn_from_query('="'..name..'"')
@@ -217,11 +236,31 @@ function QoL.Init()
     end)
 
     -- teleport bind for all wizards (port groups to bind point)
-    mq.bind("/teleportbind", function()
+    local tlBind = function()
         if is_orchestrator() then
             cmdf("/dgzexecute /teleportbind")
         end
         commandQueue.Add("teleportbind")
+    end
+    mq.bind("/teleportbind", tlBind)
+    mq.bind("/tlbind", tlBind)
+
+    -- list all active tasks
+    mq.bind("/listtasks", function(...)
+        local name = trim(args_string(...))
+        if is_orchestrator() then
+            mq.cmdf("/dgzexecute /listtasks %s", name)
+        end
+        commandQueue.Add("listtasks", name)
+    end)
+
+    -- report all toons that have task `name` active
+    mq.bind("/hastask", function(...)
+        local name = trim(args_string(...))
+        if is_orchestrator() then
+            mq.cmdf("/dgzexecute /hastask %s", name)
+        end
+        commandQueue.Add("hastask", name)
     end)
 
     -- Use cure ward AA "Ward of Purity" (CLR)
@@ -1156,7 +1195,7 @@ function QoL.Tick()
     if mq.TLO.Me.Ducking() then
         log.Info("Standing up. Was ducking")
         cmd("/stand")
-        delay(20)
+        delay(200)
     end
 
     if qolClearCursorTimer:expired() and not window_open("LootWnd") then

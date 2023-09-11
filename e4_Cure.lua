@@ -139,7 +139,7 @@ cures.debuffs = {
 
     "Rabies/Cure|disease",                              -- 1 disease counter, chardok
 
-    "Tashania/Cure|radiant",
+    --"Tashania/Cure|radiant",
 }
 
 local MAX_BUFF_SLOTS = 20 -- 20 for OOW with AA:s

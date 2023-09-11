@@ -52,18 +52,28 @@ function move_to(spawnID)
     --end
 
     if spawn.Distance() < 4 then
-        --log.Debug("move_to SKIP MOVE, distance %d", spawn.Distance())
         return
     end
 
     if globalSettings.followMode:lower() == "mq2nav" then
         mq.cmdf("/nav id %d", spawnID)
-    elseif globalSettings.followMode:lower() == "mq2advpath" then
-        mq.cmdf("/afollow spawn %d", spawnID)
-    elseif globalSettings.followMode:lower() == "mq2moveutils" then
+    elseif globalSettings.followMode:lower() == "mq2advpath" or globalSettings.followMode:lower() == "mq2moveutils" then
+        -- NOTE: mq2advpath don't have a "move to" command
         mq.cmdf("/moveto id %d", spawnID)
     else
         all_tellf("ERROR unhandled follow mode %s", globalSettings.followMode)
+    end
+
+    delay(2000, function()
+        return spawn.Distance() < 4
+    end)
+
+    if globalSettings.followMode:lower() == "mq2nav" then
+        mq.cmd("/nav stop")
+    elseif globalSettings.followMode:lower() == "mq2advpath" then
+        mq.cmd("/afollow off")
+    elseif globalSettings.followMode:lower() == "mq2moveutils" then
+        mq.cmd("/stick off")
     end
 end
 
@@ -200,7 +210,7 @@ end
 ---@param name string
 ---@return boolean
 function have_item_inventory(name)
-    return mq.TLO.FindItemCount("=" .. name)() > 0
+    return name == nil or mq.TLO.FindItemCount("=" .. name)() > 0
 end
 
 -- returns true if `id` is an item i have in inventory.
@@ -1755,7 +1765,7 @@ function castSpellAbility(spawn, row, callback)
 
     local spell = parseSpellLine(row)
 
-    log.Debug("castSpellAbility %s, row = %s", spell.Name, row)
+    --log.Debug("castSpellAbility %s, row = %s", spell.Name, row)
 
     if have_ability(spell.Name) and not is_ability_ready(spell.Name) then
         log.Debug("castSpellAbility ABILITY %s, not ready!", spell.Name)
@@ -1811,7 +1821,7 @@ function castSpellAbility(spawn, row, callback)
         return false
     end
 
-    log.Debug("castSpellAbility START CAST %s", spell.Name)
+    --log.Debug("castSpellAbility START CAST %s", spell.Name)
     local spawnID = nil
     if spawn ~= nil then
         spawnID = spawn.ID()
@@ -1964,7 +1974,7 @@ function memorize_spell(spellRow, defaultGem)
     -- make sure that spell is memorized the required gem, else scribe it
     local nameWithRank = mq.TLO.Spell(o.Name).RankName()
     if mq.TLO.Me.Gem(gem).Name() ~= nameWithRank then
-        log.Info("Memorizing spell/song in gem %d. Want \ag%s\ax, have \ay%s\ax", gem, nameWithRank, mq.TLO.Me.Gem(gem).Name())
+        log.Info("Memorizing \ag%s\ax in gem %d (had \ay%s\ax)", nameWithRank, gem, mq.TLO.Me.Gem(gem).Name())
         mq.cmdf('/memorize "%s" %d', nameWithRank, gem)
         mq.delay(200)
         mq.delay(20000, function()

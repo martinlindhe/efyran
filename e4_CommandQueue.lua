@@ -230,8 +230,31 @@ function CommandQueue.Process()
         if is_alt_ability_ready("Teleport Bind") then
             use_alt_ability("Teleport Bind")
         end
+    elseif v.Name == "hastask" then
+        if mq.TLO.Task(v.Arg).Index() ~= nil then
+            all_tellf("Has task \ag%s\ax", v.Arg)
+        else
+            all_tellf("Dont have task \ar%s\ax", v.Arg)
+        end
+    elseif v.Name == "listtasks" then
+        report_active_tasks()
     else
         all_tellf("ERROR unknown command in queue: %s", v.Name)
+    end
+end
+
+-- Report all active tasks
+function report_active_tasks()
+    local s = ""
+    for i = 1, 29 do
+        if mq.TLO.Task(i).Title() ~= "" then
+            s = s .. string.format("%d:%s,", i, mq.TLO.Task(i).Title())
+        end
+    end
+    if s ~= "" then
+        all_tellf("Tasks: %s", s)
+    else
+        all_tellf("Tasks: None")
     end
 end
 

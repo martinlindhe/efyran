@@ -238,23 +238,16 @@ function buffs.BuffIt(spawnID)
     end
 
     if not is_peer_id(spawnID) then
-        all_tellf("ERROR got a BuffIt request from unknown spawn %s", spawnID)
-        return
+        log.Info("WARNING got a BuffIt request from unknown spawn %s", spawnID)
     end
 
     local spawn = spawn_from_id(spawnID)
     if spawn == nil then
-        all_tellf("ERROR BuffIt: spawn_from_id() failed for %s", spawnID)
+        all_tellf("BUFFIT FAIL, cannot find spawn ID %d in %s", spawnID, zone_shortname())
         return
     end
 
     log.Debug("Handling /buffit request for spawn %s", spawnID)
-
-    local spawn = spawn_from_query("id "..spawnID)
-    if spawn == nil then
-        all_tellf("BUFFIT FAIL, cannot find spawn ID %d in %s", spawnID, zone_shortname())
-        return false
-    end
 
     -- get the buffs for my class from the class defaults for `spawn`.
     for idx, key in pairs(groupBuffs.Default[spawn.Class.ShortName()]) do
@@ -396,7 +389,7 @@ function buffs.RefreshIllusion()
     end
 
     local key = botSettings.settings.illusions.default
-    if key == nil then
+    if key == nil or key == "" then
         return false
     end
 
