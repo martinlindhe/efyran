@@ -60,7 +60,7 @@ local announceBuffsTimer = timer.new_expires_in(2 * 60, 3) -- announce buffs 3 s
 
 local refreshBuffsTimer = timer.new_expired(10) -- 10s
 
-local requestBuffsTimer = timer.new_random(60 * 1) -- 60s
+local requestBuffsTimer = timer.new_random(20 * 1) -- 20s
 
 local handleBuffsTimer = timer.new_random(2 * 1) -- 2s
 
@@ -453,7 +453,7 @@ function buffs.RequestBuffs()
             local tokens = split_str(spellConfig.CheckFor, ",")
             for key, value in pairs(tokens) do
                 if have_buff(value) then
-                    log.Info("RequestBuffs CheckFor \ag%s\ax found, skipping", value)
+                    log.Debug("RequestBuffs CheckFor \ag%s\ax found, skipping", value)
                     skip = true
                 end
             end

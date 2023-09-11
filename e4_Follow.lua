@@ -206,6 +206,8 @@ function Follow.RunToZone(startingPeer)
     if zone_shortname() == oldZone then
         all_tellf("ERROR failed to run across zone line in %s", oldZone)
         cmd("/beep 1")
+        -- return to starting peer
+        move_to(spawn.ID())
     end
 end
 

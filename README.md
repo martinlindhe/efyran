@@ -132,8 +132,12 @@ Buff Spell Level   Minimum Target Level
 /movetome                   - tell peers to move to your location
 /clickit                    - click a "door" object to zone
 /rtz                        - run to zone. face zoneline and run /rtz to instruct bots to run forward in your direction
+
 /hailit                     - hail/talk to nearby NPC
 /hailall                    - have all peers hail/talk to nearby NPC
+/gotflag                    - reports peers who got character flag
+/noflag                     - reports peers who did not get character flag
+
 /cohgroup                   - let current mage summon their group with Call of the Hero
 
 /buffon, /buffoff           - toggle auto buffing

@@ -101,15 +101,6 @@ function QoL.Init()
         end
     end)
 
-    local gotFlag = false
-    local charFlag = function(text)
-        all_tellf("I recieved char flag!")
-        gotFlag = true
-    end
-
-    mq.event("char_flag-pop", "You receive a character flag#*#", charFlag) -- PoP / GoD
-    mq.event("char_flag-don", "You have received a character flag!", charFlag) -- DoN
-
     mq.event("tell", "#1# tells you, #2#", function(text, name, msg)
         local s = msg:lower()
         if s == "incoming pet weapons, hold still!" then
@@ -154,6 +145,34 @@ function QoL.Init()
                 log.Info("Maxed loyalist faction")
                 maxFactionLoyalists = true
             end
+        end
+    end)
+
+    local gotFlag = false
+    local charFlag = function(text)
+        all_tellf("I recieved char flag!")
+        gotFlag = true
+    end
+    mq.event("char_flag-pop", "You receive a character flag#*#", charFlag) -- PoP / GoD
+    mq.event("char_flag-don", "You have received a character flag!", charFlag) -- DoN
+
+    -- report who got the flag
+    mq.bind("/gotflag", function()
+        if is_orchestrator() then
+            cmdf("/dgexecute /gotflag")
+        end
+        if gotFlag then
+            all_tellf("\agGOT FLAG\ax")
+        end
+    end)
+
+    -- report who did not get a flag
+    mq.bind("/noflag", function()
+        if is_orchestrator() then
+            cmdf("/dgexecute /noflag")
+        end
+        if not gotFlag then
+            all_tellf("\arNO FLAG\ax")
         end
     end)
 
