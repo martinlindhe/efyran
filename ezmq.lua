@@ -1266,6 +1266,7 @@ end
 ---@field public Reagent string Required component in order to cast this spell.
 ---@field public CheckFor string Comma-separated list of effects on target. A match will block the spell from being cast.
 ---@field public MinMana integer % of minimum mana required to cast this spell.
+---@field public MinEnd integer % of minimum endurance required to cast this ability.
 ---@field public HealPct integer % of health threshold before heal is cast.
 ---@field public MinMobs integer Minimum number of mobs nearby required to cast this spell.
 ---@field public MaxMobs integer Maximum number of mobs nearby allowed to cast this spell.
@@ -1279,7 +1280,7 @@ end
 ---@field public Self boolean This is a self spell (used for auto cure).
 
 local shortProperties = { "Shrink", "GoM", "NoAggro", "NoPet", "Group", "Self" } -- is turned into bools
-local intProperties = { "PctAggro", "MinMana", "HealPct", "MinMobs", "MaxMobs", "MaxTries" } -- is turned into integers
+local intProperties = { "PctAggro", "MinMana", "MinEnd", "HealPct", "MinMobs", "MaxMobs", "MaxTries" } -- is turned into integers
 -- parses a spell/ability etc line with properties, returns a object
 -- example in: "Ward of Valiance/MinMana|50/CheckFor|Hand of Conviction"
 ---@param s string
@@ -1795,6 +1796,11 @@ function castSpellAbility(spawn, row, callback)
 
     if spell.MinMana ~= nil and mq.TLO.Me.PctMana() < spell.MinMana then
         log.Info("SKIP MinMana %s, %d vs required %d", spell.Name,  mq.TLO.Me.PctMana(), spell.MinMana)
+        return false
+    end
+
+    if spell.MinEnd ~= nil and mq.TLO.Me.PctEndurance() < spell.MinEnd then
+        log.Info("SKIP MinEnd %s, %d vs required %d", spell.Name,  mq.TLO.Me.PctEndurance(), spell.MinEnd)
         return false
     end
 

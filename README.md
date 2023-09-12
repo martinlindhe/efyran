@@ -219,6 +219,8 @@ Many are borrowed from e3, some are new.
 
 for heals.life_support (Heal.performLifeSupport)
 - HealPct = when to start using this ability (number)
+- MinMana = minimum % mana required to use ability
+- MinEnd = minimum % endurance required to use ability
 - CheckFor = only cast if I don't have this in buffs/songs
 - MinMobs = only cast if at least many mobs nearby (number)
 - MaxMobs = only cast if at most this many mobs nearby (number)
@@ -249,3 +251,8 @@ for assist.abilities and assist.nukes (castSpellAbility)
 for heals and life support (healPeer)
 - MinMana|50
 - HealPct|80
+
+for taunts (Assist.TankTick)
+- MinMana
+- MinEnd
+- CheckFor
