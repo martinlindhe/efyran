@@ -254,9 +254,9 @@ function performSpellAbility(targetID, abilityRows, category, used)
                 -- signal ability was used, in order to leave Assist.Tick() quickly when target is nil
                 return true
             end
-            log.Debug("Trying to %s on %s with %s", category, spawn.Name(), spellConfig.Name)
+            --log.Debug("Trying to %s on %s with %s", category, spawn.Name(), spellConfig.Name)
             if castSpellAbility(spawn, row) then
-                log.Info("Did \ay%s\ax on %s with %s", category, spawn.Name(), spellConfig.Name)
+                log.Debug("Did \ay%s\ax on %s with %s", category, spawn.Name(), spellConfig.Name)
                 if used ~= nil then
                     used[row] = true
                 end
@@ -358,27 +358,27 @@ end
 local assistTauntTimer = timer.new_expired(3 * 1) -- 3s
 
 function Assist.TankTick()
-    if not Assist.IsTanking() then
+    if not Assist.IsTanking() or is_stunned() then
         return
     end
 
     local n = mq.TLO.Me.TargetOfTarget.Class.ShortName()
     local tot = mq.TLO.Me.TargetOfTarget.Name()
     if tot ~= nil and  n ~= "WAR" and n ~= "PAL" and n ~= "SHD" then
-        log.Info("tanking and my target's target class is %s, need to grab aggro!", n)
         if assistTauntTimer:expired() then
             if is_ability_ready("Taunt") then
                 all_tellf("Taunting \ar%s\ax (\ag%s\ax has aggro)", mq.TLO.Target.CleanName(), tot)
                 use_ability("Taunt")
                 assistTauntTimer:restart()
-            elseif is_war() and not low_endurance() and is_combat_ability_ready("Bazu Bellow") then -- Timer 7, 30s reuse
-                all_tellf("Taunting \ar%s\ax [bellow] (\ag%s\ax has aggro)", mq.TLO.Target.CleanName(), tot)
-                use_combat_ability("Bazu Bellow")
-                assistTauntTimer:restart()
-            elseif is_war() and not low_endurance() and is_combat_ability_ready("Mock") then -- Timer 8, 30s reuse
-                all_tellf("Taunting \ar%s\ax [mock] (\ag%s\ax has aggro)", mq.TLO.Target.CleanName(), tot)
-                use_combat_ability("Mock")
-                assistTauntTimer:restart()
+            else
+                -- look for "taunt" abilities, like PAL stuns
+                for idx, tauntRow in pairs(botSettings.settings.assist.taunts) do
+                    local taunt = parseSpellLine(tauntRow)
+                    if is_spell_ability_ready(taunt.Name) then
+                        all_tellf("Taunting \ar%s\ax [%s] (\ag%s\ax has aggro)", mq.TLO.Target.CleanName(), taunt.Name, tot)
+                        castSpellAbility(nil, tauntRow)
+                    end
+                end
             end
         end
     end

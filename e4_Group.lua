@@ -90,7 +90,7 @@ function Group.RecallGroup(name, groupNumber)
                     log.Info("Inviting %s to group", groupMember)
                     cmdf("/invite %s", groupMember)
                 else
-                    all_tellf("ERROR: %s not connected. Can not invite to group.", groupMember)
+                    all_tellf("ERROR: \ar%s\ax not connected. Can not invite to group.", groupMember)
                 end
             end
         elseif orchestrator and groupLeader ~= 'NULL' then
@@ -101,7 +101,11 @@ function Group.RecallGroup(name, groupNumber)
 
     -- the "xp" group is never a raid
     if orchestrator and name ~= "xp" then
-        all_tellf("Recalling raid %s with leader %s", name, raidLeader)
+        if #Group.settings[name] == 1 then
+            log.Info("Recalling group \ay%s\ax with leader \ag%s\ax", name, raidLeader)
+        else
+            log.Info("Recalling raid \ay%s\ax with leader \ag%s\ax", name, raidLeader)
+        end
         delay(1000)
 
         -- The raid leader invites the other groups to raid

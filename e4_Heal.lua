@@ -376,8 +376,12 @@ function Heal.performLifeSupport()
             --print("performLifeSupport skip use of ", spellConfig.Name, ", my hp ", mq.TLO.Me.PctHPs, " vs required ", spellConfig.HealPct)
             skip = true
         elseif spellConfig.CheckFor ~= nil and (have_buff(spellConfig.CheckFor) or have_song(spellConfig.CheckFor)) then
-            -- if we got this buff/song on, then skip.
+            -- if we got the buff/song listed in CheckFor on, then skip.
             --cmd("/dgtell all performLifeSupport skip ", spellConfig.Name, ", I have buff ", spellConfig.CheckFor, " on me")
+            skip = true
+        elseif have_buff(spellConfig.Name) or have_song(spellConfig.Name) then
+            -- if we got the buff/song named on, then skip (eg. HoT heals)
+            cmdf("performLifeSupport skip %s, I have it on me", spellConfig.Name)
             skip = true
         elseif spellConfig.MinMobs ~= nil and nearby_npc_count(75) < spellConfig.MinMobs then
             -- only cast if at least this many NPC:s is nearby
@@ -442,17 +446,31 @@ end
 ---@param peer string Name of peer to heal.
 ---@param pct integer Health % of peer.
 function healPeer(spell_list, peer, pct)
+
+    local spawn = spawn_from_peer_name(peer)
+    if spawn == nil then
+        all_tellf("ERROR cant heel peer %s, no such spawn", peer)
+        return false
+    end
+
+    target_id(spawn.ID())
+    wait_for_buffs_populated()
+    if mq.TLO.Target() ~= nil and mq.TLO.Target.PctHPs() >= 98 then
+        log.Info("Skipping heal! \ag%s\ax was %d %%, is now %d %%", mq.TLO.Target.Name(), pct, mq.TLO.Target.PctHPs())
+        return true
+    end
+
     log.Debug("healPeer: %s at %d %%", peer, pct)
 
     for k, heal in ipairs(spell_list) do
-        local spawn = spawn_from_peer_name(peer)
+
         local spellConfig = parseSpellLine(heal)
         if spawn == nil or spawn.Distance() > 200 then
             -- peer died or is out of range
             return false
         elseif spellConfig.MinMana ~= nil and mq.TLO.Me.PctMana() < spellConfig.MinMana then
             log.Info("SKIP HEALING, my mana %d vs required %d", mq.TLO.Me.PctMana(), spellConfig.MinMana)
-        elseif spellConfig.HealPct ~= nil and spellConfig.HealPct < pct then
+        elseif spellConfig.HealPct ~= nil and spellConfig.HealPct < pct and in_combat() then
             -- remove, dont meet heal criteria
             -- DONT RETURN HERE because specific spell does not meet criteria!
             log.Debug("Skip using of heal, heal pct for %s is %d. dont need heal at %d for %s", spellConfig.Name, spellConfig.HealPct, pct, peer)
@@ -462,12 +480,11 @@ function healPeer(spell_list, peer, pct)
         elseif not have_spell(spellConfig.Name) and have_item_inventory(spellConfig.Name) and not is_item_clicky_ready(spellConfig.Name) then
             -- SKIP clickies that is not ready
             log.Info("Skip using of heal to heal %s at %d, clicky %s is not ready", peer, pct, spellConfig.Name)
+
+        elseif mq.TLO.Target.Buff(spellConfig.Name).ID() ~= nil then
+            -- if target got the buff/song named on, then skip (eg. HoT heals)
+            cmdf("healPeer skip %s, peer spell on them %s", spellConfig.Name, mq.TLO.Target.Buff(spellConfig.Name).Duration())
         else
-            target_id(spawn.ID())
-            if mq.TLO.Target() ~= nil and mq.TLO.Target.PctHPs() >= 98 then
-                log.Info("Skipping heal! \ag%s\ax was %d %%, is now %d %%", mq.TLO.Target.Name(), pct, mq.TLO.Target.PctHPs())
-                return true
-            end
             log.Info("Healing \ag%s\ax at %d%% with \ay%s\ax", peer, pct, spellConfig.Name)
 
             local check = castSpellAbility(spawn, heal, function() -- XXX castSpellAbility should take spellConfig obj directly

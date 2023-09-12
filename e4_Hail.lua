@@ -153,6 +153,7 @@ local hailTargets = {
 
     ["lavastorm"] = {
         ["Wayfarers Mercenary Bitral"] = "task|Population Control", -- DoN tier 0 faction solo task
+        ["Chieftain Relae Aderi"] = true, -- DoN tier 0, tier 1, tier 2, tier 3 flag
     }
 }
 
@@ -170,12 +171,16 @@ function Hail.PerformHail()
         return
     end
 
+
+    local found = false
+
     -- loop thru nearby NPC and see if they are in the zoneTargets...
     local spawnQuery = "npc radius 50"
     for i = 1, mq.TLO.SpawnCount(spawnQuery)() do
         local spawn = mq.TLO.NearestSpawn(i, spawnQuery)
         local spawnName = spawn.CleanName()
         if zoneTargets[spawnName] ~= nil then
+            found = true
             log.Debug("Attempting to hail %s ...", spawnName)
             move_to(spawn.ID())
 
@@ -225,6 +230,10 @@ function Hail.PerformHail()
 
     -- some hails result in rewards
     clear_cursor()
+
+    if not found then
+        log.Info("PerformHail WARNING: Found no recognized NPC nearby")
+    end
 end
 
 return Hail

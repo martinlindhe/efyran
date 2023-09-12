@@ -140,11 +140,17 @@ function QoL.Init()
     end)
 
     mq.event("faction_maxed", "Your faction standing with #1# could not possibly get any better.", function(text, faction)
-        if faction == "Dranik Loyalists" then
+        if faction == "Dranik Loyalists" then -- OOW armor faction
             if not maxFactionLoyalists then
                 log.Info("Maxed loyalist faction")
                 maxFactionLoyalists = true
             end
+        end
+    end)
+
+    mq.event("faction_adjusted", "Your faction standing with #1# has been adjusted by #2#.", function(text, faction, value)
+        if faction == "Norrath's Keepers" then -- DoN good side
+            all_tellf("Faction: \ay%s\ax adjusted %s", faction, value)
         end
     end)
 
@@ -753,7 +759,7 @@ function QoL.Init()
     end)
 
     mq.bind("/handin", function()
-        cmd("/lua run handin")
+        cmd("/lua run efyran/handin")
     end)
 
     local mmrl = function()

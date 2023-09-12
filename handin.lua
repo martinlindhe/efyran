@@ -132,6 +132,10 @@ local handinRules = {
         ["Shadowed Scepter Frame"]          = {"Essence Emerald"},
     },
 
+    ["Tatsujiro the Serene/Zone|lavastorm"] = {
+        [""] = {"Norrath's Keepers Token"}, -- XXX get crystals as reward
+    }
+
 }
 
 local zone = zone_shortname():lower()
@@ -254,8 +258,9 @@ for npcRow, t in pairs(handinRules) do
 
                         end
 
-                        -- PRESS GIVE BUTTON. XXX left for the caller to do manually for now.
-                        -- /nomodkey /notify GiveWnd GVW_Give_Button leftmouseup
+                        -- PRESS GIVE BUTTON
+                        delay(500)
+                        cmd("/nomodkey /notify GiveWnd GVW_Give_Button leftmouseup")
 
                         return
 

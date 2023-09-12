@@ -1317,6 +1317,9 @@ function parseSpellLine(s)
         end
     end
 
+    if s == "" then
+        o.Name = ""
+    end
     return o
 end
 
@@ -1836,6 +1839,7 @@ function castSpellAbility(spawn, row, callback)
         end
     end
 
+    delay(100)
     delay(10000, callback)
     log.Debug("castSpellAbility: Done waiting after cast.")
     return true
