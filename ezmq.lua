@@ -1995,3 +1995,8 @@ function memorize_spell(spellRow, defaultGem)
 
     return gem
 end
+
+-- returns true if shield is equipped
+function has_shield_equipped()
+    return mq.TLO.Me.Inventory("offhand").Type() == "Shield"
+end

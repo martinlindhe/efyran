@@ -243,9 +243,14 @@ function performSpellAbility(targetID, abilityRows, category, used)
     delay(50)
 
     for v, row in ipairs(abilityRows) do
+        local skip = false
         local spellConfig = parseSpellLine(row)
+        if spellConfig.Name == "Bash" and not has_shield_equipped() then
+            skip = true
+        end
         -- log.Debug("Evaluating %s %s", category, spellConfig.Name)
-        if (used == nil or used[row] == nil)
+        if not skip
+        and (used == nil or used[row] == nil)
         and is_spell_ability_ready(spellConfig.Name)
         and not is_moving()
         and (is_brd() or not is_casting()) then
@@ -370,13 +375,16 @@ function Assist.TankTick()
                 all_tellf("Taunting \ar%s\ax (\ag%s\ax has aggro)", mq.TLO.Target.CleanName(), tot)
                 use_ability("Taunt")
                 assistTauntTimer:restart()
-            else
-                -- look for "taunt" abilities, like PAL stuns
-                for idx, tauntRow in pairs(botSettings.settings.assist.taunts) do
-                    local taunt = parseSpellLine(tauntRow)
-                    if is_spell_ability_ready(taunt.Name) then
-                        all_tellf("Taunting \ar%s\ax [%s] (\ag%s\ax has aggro)", mq.TLO.Target.CleanName(), taunt.Name, tot)
-                        castSpellAbility(nil, tauntRow)
+                return
+            end
+            -- look for "taunt" abilities, like PAL stuns
+            for idx, tauntRow in pairs(botSettings.settings.assist.taunts) do
+                local taunt = parseSpellLine(tauntRow)
+                if is_spell_ability_ready(taunt.Name) then
+                    if castSpellAbility(nil, tauntRow) then
+                        all_tellf("Taunted \ar%s\ax [%s] (\ag%s\ax has aggro)", mq.TLO.Target.CleanName(), taunt.Name, tot)
+                        assistTauntTimer:restart()
+                        return
                     end
                 end
             end
