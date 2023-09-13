@@ -86,6 +86,8 @@ settings.healing = {
         -- Rank 5 - 50 hits
         -- Rank 6 - 60 hits
         "Mind Over Matter/HealPct|30",
+
+        "Gather Mana/MaxMana|50",
     }
 }
 
@@ -177,7 +179,6 @@ settings.assist = {
 }
 
 settings.enchanter = { -- XXX impl / rearrange settings
-    ["gather_mana_pct"] = 30, -- XXX impl. was GatherMana Pct in e3
     ["auto_mez"] = false, -- XXX impl + impl toggle /mezon, /mezoff
 
     -- XXX impl: will allow enc to chain rune tanks during fight etc (when /buffoff)

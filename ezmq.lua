@@ -550,7 +550,7 @@ end
 function have_song(name)
     local spell = mq.TLO.Spell(name)
     if spell() == nil then
-        all_tellf("BEEP error, asked about odd 2buff %s", name)
+        all_tellf("have_song BEEP error, asked about odd 2buff %s", name)
         mq.cmd("/beep 1")
         return false
     end
@@ -1274,7 +1274,9 @@ end
 ---@field public Reagent string Required component in order to cast this spell.
 ---@field public CheckFor string Comma-separated list of effects on target. A match will block the spell from being cast.
 ---@field public MinMana integer % of minimum mana required to cast this spell.
+---@field public MaxMana integer % of maximum mana required to cast this spell (eg. Cannibalization).
 ---@field public MinEnd integer % of minimum endurance required to cast this ability.
+---@field public MinHP integer % of minimum HP required to cast this ability (eg. Cannibalization).
 ---@field public HealPct integer % of health threshold before heal is cast.
 ---@field public MinMobs integer Minimum number of mobs nearby required to cast this spell.
 ---@field public MaxMobs integer Maximum number of mobs nearby allowed to cast this spell.
@@ -1288,7 +1290,7 @@ end
 ---@field public Self boolean This is a self spell (used for auto cure).
 
 local shortProperties = { "Shrink", "GoM", "NoAggro", "NoPet", "Group", "Self" } -- is turned into bools
-local intProperties = { "PctAggro", "MinMana", "MinEnd", "HealPct", "MinMobs", "MaxMobs", "MaxTries" } -- is turned into integers
+local intProperties = { "PctAggro", "MinMana", "MaxMana", "MinEnd", "MinHP", "HealPct", "MinMobs", "MaxMobs", "MaxTries" } -- is turned into integers
 -- parses a spell/ability etc line with properties, returns a object
 -- example in: "Ward of Valiance/MinMana|50/CheckFor|Hand of Conviction"
 ---@param s string
@@ -1807,8 +1809,18 @@ function castSpellAbility(spawn, row, callback)
         return false
     end
 
+    if spell.MaxMana ~= nil and mq.TLO.Me.PctMana() > spell.MaxMana then
+        log.Info("SKIP MaxMana %s, %d vs required %d", spell.Name,  mq.TLO.Me.PctMana(), spell.MaxMana)
+        return false
+    end
+
     if spell.MinEnd ~= nil and mq.TLO.Me.PctEndurance() < spell.MinEnd then
         log.Info("SKIP MinEnd %s, %d vs required %d", spell.Name,  mq.TLO.Me.PctEndurance(), spell.MinEnd)
+        return false
+    end
+
+    if spell.MinHP ~= nil and mq.TLO.Me.PctHPs() < spell.MinHP then
+        all_tellf("SKIP MinHP %s, %d vs required %d", spell.Name,  mq.TLO.Me.PctHPs(), spell.MinHP)
         return false
     end
 
@@ -1861,7 +1873,7 @@ function castSpellAbility(spawn, row, callback)
 
     delay(100)
     delay(10000, callback)
-    log.Debug("castSpellAbility: Done waiting after cast.")
+    --log.Debug("castSpellAbility: Done waiting after cast.")
     return true
 end
 
@@ -1878,7 +1890,7 @@ function castSpell(name, spawnId)
         use_combat_ability(name)
         return true
     elseif have_ability(name) then
-        log.Debug("calling use_ability %s", name)
+        --log.Debug("calling use_ability \ay%s\ax", name)
         use_ability(name)
         return true
     end

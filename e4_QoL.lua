@@ -13,11 +13,13 @@ local buffs   = require("efyran/e4_Buffs")
 
 require("efyran/autobank")
 
-local QoL = {}
+local QoL = {
+    currentAAXP = mq.TLO.Me.PctAAExp(),
+
+    currentGroupLeaderXP =  mq.TLO.Me.PctGroupLeaderExp(),
+}
 
 local maxFactionLoyalists = false
-
-local currentAAXP = mq.TLO.Me.PctAAExp()
 
 function QoL.Init()
 
@@ -997,29 +999,47 @@ function QoL.Init()
 
     -- track XP
     local xpGain = function(text)
-        local aaDiff = mq.TLO.Me.PctAAExp() - currentAAXP
+        local aaDiff = mq.TLO.Me.PctAAExp() - QoL.currentAAXP
         if aaDiff < 0 then
             -- we dinged AA
-            aaDiff = 100 + mq.TLO.Me.PctAAExp() - currentAAXP
+            aaDiff = 100 + mq.TLO.Me.PctAAExp() - QoL.currentAAXP
         end
 
-        log.Info("Gained XP. AA %d %%", aaDiff)
-        currentAAXP = mq.TLO.Me.PctAAExp()
+        --log.Info("Gained XP. AA %.2f %%", aaDiff)
+        QoL.currentAAXP = mq.TLO.Me.PctAAExp()
 
         if in_raid() then
             return
         end
 
         if not in_group() then
-            all_tellf("\agI got solo Exp (%d %% AA)", aaDiff)
+            all_tellf("\agI got solo Exp (%.2f %% AA)", aaDiff)
         elseif is_group_leader() then
-            all_tellf("\agMy group got Exp (%d %% AA)", aaDiff)
+            all_tellf("\agMy group got Exp (%.2f %% AA)", aaDiff)
         end
     end
 
     mq.event("xp1", "You gain experience!", xpGain)
     mq.event('xp2', 'You gain party experience!!', xpGain)
     --mq.event("xp3", "You gained raid experience!", xpGain)
+
+    mq.event("leader_xp", "You gain group leadership experience!", function(text)
+        local aaDiff = mq.TLO.Me.PctGroupLeaderExp() - QoL.currentGroupLeaderXP
+        if aaDiff < 0 then
+            -- we dinged AA
+            aaDiff = 100 + mq.TLO.Me.PctGroupLeaderExp() - QoL.currentGroupLeaderXP
+        end
+
+        QoL.currentGroupLeaderXP = mq.TLO.Me.PctGroupLeaderExp()
+
+        if in_raid() then
+            return
+        end
+
+        if aaDiff > 0 then
+            all_tellf("\agGained Group leader XP (%.2f %%)", aaDiff)
+        end
+    end)
 
     mq.event("ding", "You have gained a level! Welcome to level #1#!", function(text, level)
         all_tellf("\agDing L%d", level)

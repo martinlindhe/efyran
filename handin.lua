@@ -263,9 +263,9 @@ for npcRow, t in pairs(handinRules) do
 
                         end
 
-                        -- PRESS GIVE BUTTON
-                        delay(500)
+                        unflood_delay()
                         if window_open("GiveWnd") then
+                            -- PRESS GIVE BUTTON
                             cmd("/nomodkey /notify GiveWnd GVW_Give_Button leftmouseup")
                         else
                             all_tellf("handin ERROR: GiveWnd not open")

@@ -220,7 +220,9 @@ Many are borrowed from e3, some are new.
 for heals.life_support (Heal.performLifeSupport)
 - HealPct = when to start using this ability (number)
 - MinMana = minimum % mana required to use ability
+- MaxMana = maximum % mana required to use ability (eg. Cannibalization)
 - MinEnd = minimum % endurance required to use ability
+- MinHP = minimum % HP required to use ability (eg. Cannibalization)
 - CheckFor = only cast if I don't have this in buffs/songs
 - MinMobs = only cast if at least many mobs nearby (number)
 - MaxMobs = only cast if at most this many mobs nearby (number)

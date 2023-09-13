@@ -128,7 +128,7 @@ local groupBalanceTimer = timer.new_expired(1 * 1) -- 1s
 
 function Heal.Tick()
 
-    if is_hovering() or is_moving() then
+    if is_hovering() or is_moving() or is_invisible() then
         return
     end
 
@@ -154,7 +154,6 @@ function Heal.Tick()
     Heal.medCheck()
 
     Heal.askForHeal()
-
 end
 
 
@@ -355,7 +354,11 @@ end
 function Heal.performLifeSupport()
     --log.Debug("Heal.performLifeSupport")
 
-    if have_buff("Resurrection Sickness") or mq.TLO.Me.PctHPs() >= 98 then
+    if have_buff("Resurrection Sickness") then
+        return
+    end
+
+    if mq.TLO.Me.PctHPs() >= 98 and mq.TLO.Me.PctMana() >= 98 then
         return
     end
 
@@ -399,7 +402,7 @@ function Heal.performLifeSupport()
             --cmd("/dgtell all performLifeSupport skip ", spellConfig.Name, ", AA is not ready")
             skip = true
         elseif have_ability(spellConfig.Name) and not is_ability_ready(spellConfig.Name) then
-            --cmd("/dgtell all performLifeSupport skip ", spellConfig.Name, ", Ability is not ready")
+            all_tellf("performLifeSupport skip %s, Ability is not ready", spellConfig.Name)
             skip = true
         elseif have_item_inventory(spellConfig.Name) and not is_item_clicky_ready(spellConfig.Name) then
             --cmd("/dgtell all performLifeSupport skip ", spellConfig.Name, ", item clicky is not ready")
@@ -420,7 +423,7 @@ function Heal.performLifeSupport()
             if is_ability_ready(spellConfig.Name) then
                 all_tellf("USING LIFE SUPPORT ability %s at %d%%", spellConfig.Name, mq.TLO.Me.PctHPs())
                 cmdf("/doability %s", spellConfig.Name)
-            else
+            elseif not have_ability(spellConfig.Name) then
                 local spell = getSpellFromBuff(spellConfig.Name)
                 if spell ~= nil then
                     local spellName = spell.RankName()
@@ -432,7 +435,11 @@ function Heal.performLifeSupport()
                         cmd("/target myself")
                     end
 
-                    all_tellf("USING LIFE SUPPORT %s at %d%%", spellName, mq.TLO.Me.PctHPs())
+                    if spellConfig.MaxMana ~= nil then
+                        all_tellf("USING LIFE SUPPORT %s at %d%% Mana", spellName, mq.TLO.Me.PctMana())
+                    else
+                        all_tellf("USING LIFE SUPPORT %s at %d%% HP", spellName, mq.TLO.Me.PctHPs())
+                    end
                     castSpellAbility(nil, spellName)
                     return
                 end

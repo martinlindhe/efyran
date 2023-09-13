@@ -291,7 +291,7 @@ function Assist.Tick()
     --log.Debug("Assist.Tick()")
 
     if melee and spawn.MaxRangeTo() > Assist.meleeDistance and assistStickTimer:expired() then
-        log.Info("stick update. meleeDistance = %f!", Assist.meleeDistance)
+        log.Debug("stick update. meleeDistance = %f!", Assist.meleeDistance)
         Assist.meleeStick()
         assistStickTimer:restart()
     end
