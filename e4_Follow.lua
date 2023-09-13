@@ -128,7 +128,7 @@ function Follow.Update(force)
     local exe = ""
     local maxRange = 5 -- spawn.MaxRangeTo()
 
-    log.Info("Follow.Update, mode %s, distance %f", globalSettings.followMode, spawn.Distance3D())
+    --log.Debug("Follow.Update, mode %s, distance %f", globalSettings.followMode, spawn.Distance3D())
     if globalSettings.followMode:lower() == "mq2nav" then
         if mq.TLO.Navigation.Active() then
             mq.cmd("/nav stop")

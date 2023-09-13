@@ -401,6 +401,8 @@ function autoMapHeightFilter()
 
         -- kunark?
         chardok = {min = 60, max = 60},
+        sirens = {min = 50, max = 50},
+        necropolis = {min = 80, max = 80},
 
         -- luclin
         fungusgrove = {min = 80, max = 80},     -- lucid shard camp

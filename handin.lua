@@ -1,5 +1,8 @@
 -- xxx later: can also be used for L65/l70 spell hand ins ? (if "item reward" is in spell book ?)
 
+-- @type mq
+local mq = require("mq")
+
 require("ezmq")
 local log = require("knightlinc/Write")
 
@@ -247,27 +250,26 @@ for npcRow, t in pairs(handinRules) do
                                 end
 
                                 cmdf("/nomodkey /ctrl /itemnotify in Pack%d %d leftmouseup", item.ItemSlot() - 22, item.ItemSlot2() + 1)
-                                delay(1000, function() return has_cursor_item() end)
                                 delay(200)
+                                delay(1000, function() return has_cursor_item() end)
 
+                                log.Info("Handing in %s", component)
                                 cmd("/click left target")
                                 delay(200)
 
-                                if not window_open("GiveWnd") then
-                                    -- extra delay for server roundtrip
-                                    delay(5000, function() return window_open("GiveWnd") end)
-                                end
                                 delay(1000, function() return not has_cursor_item() end)
                                 delay(200)
                             end
 
                         end
 
-                        unflood_delay()
+                        random_delay(mq.TLO.DanNet.PeerCount() * 10)
+                        delay(200)
                         if window_open("GiveWnd") then
                             -- PRESS GIVE BUTTON
                             cmd("/nomodkey /notify GiveWnd GVW_Give_Button leftmouseup")
                         else
+                            log.Error("handin ERROR: GiveWnd not open")
                             all_tellf("handin ERROR: GiveWnd not open")
                         end
 

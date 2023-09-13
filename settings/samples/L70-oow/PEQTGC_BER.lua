@@ -44,7 +44,7 @@ settings.assist = {
         "Baffling Strike/PctAggro|90",
     },
 
-    ["quickburns"] = {-- XXX implememt !!!
+    ["quickburns"] = {
         -- EPIC 1.5: Raging Taelosian Alloy Axe (+75 str, +75 str cap, +200% melee crit chance, +75 hot heal)
         -- EPIC 2.0: Vengeful Taelosian Blood Axe (+100 str, +100 str cap, 300% melee crit chance, 100 hot heal)
         "Vengeful Taelosian Blood Axe",

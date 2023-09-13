@@ -87,7 +87,7 @@ settings.healing = {
         -- Rank 6 - 60 hits
         "Mind Over Matter/HealPct|30",
 
-        "Gather Mana/MaxMana|50",
+        "Gather Mana/MaxMana|30", -- 2h24m reuse
     }
 }
 

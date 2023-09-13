@@ -384,7 +384,7 @@ function Heal.performLifeSupport()
             skip = true
         elseif have_buff(spellConfig.Name) or have_song(spellConfig.Name) then
             -- if we got the buff/song named on, then skip (eg. HoT heals)
-            cmdf("performLifeSupport skip %s, I have it on me", spellConfig.Name)
+            log.Info("performLifeSupport skip %s, I have it on me", spellConfig.Name)
             skip = true
         elseif spellConfig.MinMobs ~= nil and nearby_npc_count(75) < spellConfig.MinMobs then
             -- only cast if at least this many NPC:s is nearby
@@ -435,12 +435,14 @@ function Heal.performLifeSupport()
                         cmd("/target myself")
                     end
 
-                    if spellConfig.MaxMana ~= nil then
-                        all_tellf("USING LIFE SUPPORT %s at %d%% Mana", spellName, mq.TLO.Me.PctMana())
-                    else
-                        all_tellf("USING LIFE SUPPORT %s at %d%% HP", spellName, mq.TLO.Me.PctHPs())
+                    if castSpellAbility(nil, spellName) then
+                        if spellConfig.MaxMana ~= nil then
+                            all_tellf("USED LIFE SUPPORT %s at %d%% Mana", spellName, mq.TLO.Me.PctMana())
+                        else
+                            all_tellf("USED LIFE SUPPORT %s at %d%% HP", spellName, mq.TLO.Me.PctHPs())
+                        end
                     end
-                    castSpellAbility(nil, spellName)
+
                     return
                 end
             end

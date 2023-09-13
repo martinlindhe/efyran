@@ -465,11 +465,11 @@ end
 function use_alt_ability(name, spawnID)
 
     if not have_alt_ability(name) then
-        all_tellf("ERROR: I do not have AA %s", name)
+        all_tellf("\arERROR\ax: I do not have AA \ay%s\ax", name)
         return
     end
     if not is_alt_ability_ready(name) then
-        all_tellf("ERROR: %s is not ready, ready in %s", name, mq.TLO.Me.AltAbilityTimer(name).TimeHMS())
+        all_tellf("\arERROR\ax: %s is not ready, ready in \ay%s\ax", name, mq.TLO.Me.AltAbilityTimer(name).TimeHMS())
         return
     end
 
@@ -1788,7 +1788,7 @@ function castSpellAbility(spawn, row, callback)
 
     if spell.PctAggro ~= nil and mq.TLO.Me.PctAggro() < spell.PctAggro then
         -- PctAggro skips cast if your aggro % is above threshold
-        log.Debug("SKIP PctAggro %s aggro %d vs required %d", spell.Name, mq.TLO.Me.PctAggro(), spell.PctAggro)
+        --log.Debug("SKIP PctAggro %s aggro %d vs required %d", spell.Name, mq.TLO.Me.PctAggro(), spell.PctAggro)
         return false
     end
     if spell.PctAggro ~= nil and mq.TLO.Me.PctAggro() >= spell.PctAggro then
@@ -1805,12 +1805,12 @@ function castSpellAbility(spawn, row, callback)
     end
 
     if spell.MinMana ~= nil and mq.TLO.Me.PctMana() < spell.MinMana then
-        log.Info("SKIP MinMana %s, %d vs required %d", spell.Name,  mq.TLO.Me.PctMana(), spell.MinMana)
+        --log.Debug("SKIP MinMana %s, %d vs required %d", spell.Name,  mq.TLO.Me.PctMana(), spell.MinMana)
         return false
     end
 
     if spell.MaxMana ~= nil and mq.TLO.Me.PctMana() > spell.MaxMana then
-        log.Info("SKIP MaxMana %s, %d vs required %d", spell.Name,  mq.TLO.Me.PctMana(), spell.MaxMana)
+        all_tellf("SKIP MaxMana %s, %d vs required %d", spell.Name,  mq.TLO.Me.PctMana(), spell.MaxMana)
         return false
     end
 
@@ -1846,7 +1846,7 @@ function castSpellAbility(spawn, row, callback)
 
     if spell.MinMobs ~= nil and nearby_npc_count(75) < spell.MinMobs then
         -- only cast if at least this many NPC:s is nearby
-        all_tellf("SKIP MinMobs, need %d (has %d)", spell.MinMobs, nearby_npc_count(75))
+        log.Debug("SKIP MinMobs, need %d (has %d)", spell.MinMobs, nearby_npc_count(75))
         return false
     end
 

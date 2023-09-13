@@ -62,7 +62,7 @@ function refreshBuff(buffItem, spawn)
 
     if spellConfig.Zone ~= nil and zone_shortname() ~= spellConfig.Zone then
         -- TODO: allow multiple zones listed as comma separated shortnames
-        all_tellf("XXX refreshBuff skip. we are in zone %s, vs required %s", zone_shortname(), spellConfig.Zone)
+        log.Info("refreshBuff skip. we are in zone %s, vs required %s", zone_shortname(), spellConfig.Zone)
         return false
     end
 
