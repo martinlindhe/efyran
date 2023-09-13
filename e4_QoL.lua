@@ -15,8 +15,8 @@ require("efyran/autobank")
 
 local QoL = {
     currentAAXP = mq.TLO.Me.PctAAExp(),
-
     currentGroupLeaderXP =  mq.TLO.Me.PctGroupLeaderExp(),
+    currentRaidLeaderXP = mq.TLO.Me.PctRaidLeaderExp(),
 }
 
 local maxFactionLoyalists = false
@@ -272,6 +272,14 @@ function QoL.Init()
     mq.bind("/teleportbind", tlBind)
     mq.bind("/tlbind", tlBind)
 
+    local secondaryRecall = function()
+        if is_orchestrator() then
+            cmdf("/dgzexecute /secondaryrecall")
+        end
+        commandQueue.Add("secondaryrecall")
+    end
+    mq.bind("/secondaryrecall", secondaryRecall)
+
     -- list all active tasks
     mq.bind("/listtasks", function(...)
         local name = trim(args_string(...))
@@ -481,7 +489,7 @@ function QoL.Init()
             log.Info("followid: Not matching filter, giving up: %s", filter)
             return
         end
-        follow.Start(spawnName, true)
+        follow.Start(spawnName, false)
     end)
 
     mq.bind("/evac", function(name)
@@ -612,6 +620,28 @@ function QoL.Init()
             cmd("/dgzexecute /hailit")
         end
         commandQueue.Add("hailit")
+    end)
+
+    mq.bind("/bark", function(...)
+        local arg = trim(args_string(...))
+        local spawnID = mq.TLO.Target.ID()
+        if spawnID == nil then
+            log.Error("No target to bark at!")
+            return
+        end
+        if is_orchestrator() then
+            cmdf("/dgzexecute /barkit %d %s", spawnID, arg)
+        end
+        cmdf("/barkit %d %s", spawnID, arg)
+    end)
+
+    mq.bind("/barkit", function(spawnID, ...)
+        local arg = trim(args_string(...))
+
+        local id = toint(spawnID)
+        target_id(id)
+        unflood_delay()
+        cmdf("/say %s", arg)
     end)
 
     -- wiz: cast AE TL spell
@@ -947,8 +977,9 @@ function QoL.Init()
 
     -- make all peer quit expedition
     mq.bind("/quitexp", function()
-        all_tellf("Instructing peers to leave expedition ...")
-        cmd("/dgaexecute /dzquit")
+        all_tellf("Instructing peers to leave expedition / shared task ...")
+        cmd("/dgaexecute /dzquit")   -- Expedition (PoP, LDoN, GoD, OOW)
+        cmd("/dgaexecute /taskquit") -- Shared task (DoN)
     end)
 
     -- hide all dz windows
@@ -992,9 +1023,13 @@ function QoL.Init()
     end)
 
     mq.event('joinraid', '#1# invites you to join a raid.#*#', function(text, sender)
-        if is_peer(sender) then
-            commandQueue.Add("joinraid")
+        if not is_peer(sender) then
+            if not botSettings.allowStrangers then
+                all_tellf("ERROR: Ignoring Raid invite from unknown player %s", sender)
+                return
+            end
         end
+        commandQueue.Add("joinraid")
     end)
 
     -- track XP
@@ -1038,6 +1073,20 @@ function QoL.Init()
 
         if aaDiff > 0 then
             all_tellf("\agGained Group leader XP (%.2f %%)", aaDiff)
+        end
+    end)
+
+    mq.event("raid_leader_xp", "You gain raid leadership experience!", function(text)
+        local aaDiff = mq.TLO.Me.PctRaidLeaderExp() - QoL.currentRaidLeaderXP
+        if aaDiff < 0 then
+            -- we dinged AA
+            aaDiff = 100 + mq.TLO.Me.PctRaidLeaderExp() - QoL.currentRaidLeaderXP
+        end
+
+        QoL.currentRaidLeaderXP = mq.TLO.Me.PctRaidLeaderExp()
+
+        if aaDiff > 0 then
+            log.Info("\agGained Raid leader XP (%.2f %%)", aaDiff)
         end
     end)
 

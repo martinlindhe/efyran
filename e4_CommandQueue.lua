@@ -109,6 +109,10 @@ function CommandQueue.Process()
         if spawn == nil or (spawn.Type() ~= "NPC" and spawn.Type() ~= "Pet") then
             return
         end
+        if spawn.Distance() > 400 then
+            log.Error("Wont attack, too far away %f", spawn.Distance())
+            return
+        end
         -- if already killing something, enqueue order
         if assist.IsAssisting() then
             if toint(v.Arg) == assist.targetID then
@@ -231,6 +235,12 @@ function CommandQueue.Process()
             use_alt_ability("Teleport Bind")
         elseif have_alt_ability("Teleport Bind") then
             all_tellf("ERROR: Teleport Bind not ready (in %s)", mq.TLO.Me.AltAbilityTimer("Teleport Bind").TimeHMS())
+        end
+    elseif v.Name == "secondaryrecall" then
+        if is_alt_ability_ready("Secondary Recall") then
+            use_alt_ability("Secondary Recall")
+        elseif have_alt_ability("Secondary Recall") then
+            all_tellf("ERROR: Secondary Recall not ready (in %s)", mq.TLO.Me.AltAbilityTimer("Secondary Recall").TimeHMS())
         end
     elseif v.Name == "hastask" then
         if mq.TLO.Task(v.Arg).Index() ~= nil then

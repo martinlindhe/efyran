@@ -153,6 +153,7 @@ Buff Spell Level   Minimum Target Level
 /playmelody off             - stop melodies
 
 /teleportbind               - WIZ: port group to bind point using "Teleport Bind" AA
+/secondaryrecall            - WIZ/DRU: port to secondary bind
 
 /fdi                        - find item by partial name
 /fmi                        - find missing item. report peers who lack an item

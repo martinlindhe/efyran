@@ -288,10 +288,16 @@ function target_id(id)
 end
 
 function wait_for_buffs_populated()
+    local count = 0
     while not mq.TLO.Target.BuffsPopulated()
     do
         log.Debug("buffs not finished populating")
         delay(50)
+        count = count + 1
+        if count > 100 then -- 50 * 100 = 500ms
+            all_tellf("WARN: broke wait_for_buffs_populated after 500ms")
+            return
+        end
     end
 end
 
@@ -1641,6 +1647,9 @@ function matches_filter_line(line)
     for k, v in pairs(tokens) do
         if class == v:upper() or v == mq.TLO.Me.Name() or (v == "me" and is_orchestrator()) then
             return true
+        end
+        if v == "group" then
+            -- XX if only group and sender is in my group ?? TODO need sender name
         end
         if v == "priests" and is_priest(class) then
             return true
