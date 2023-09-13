@@ -256,3 +256,4 @@ for taunts (Assist.TankTick)
 - MinMana
 - MinEnd
 - CheckFor
+- MinMobs

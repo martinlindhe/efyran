@@ -129,6 +129,14 @@ function is_peer(peerName)
     return mq.TLO.DanNet(peerName)() ~= nil
 end
 
+-- returns true if peerName is in the same zone
+---@param peerName string
+---@return boolean
+function is_peer_in_zone(peerName)
+    local spawn = spawn_from_peer_name(peerName)
+    return spawn ~= nil and is_peer(spawn.Name())
+end
+
 -- returns true if spawnID is another peer
 ---@param spawnID integer
 ---@return boolean
@@ -1821,6 +1829,12 @@ function castSpellAbility(spawn, row, callback)
 
     if spell.Self and spawn ~= nil and spawn.Name() ~= mq.TLO.Me.Name() then
         all_tellf("SKIP Self, cant cast on %s (spell %s)", spawn.Name(), spell.Name)
+        return false
+    end
+
+    if spell.MinMobs ~= nil and nearby_npc_count(75) < spell.MinMobs then
+        -- only cast if at least this many NPC:s is nearby
+        all_tellf("SKIP MinMobs, need %d (has %d)", spell.MinMobs, nearby_npc_count(75))
         return false
     end
 

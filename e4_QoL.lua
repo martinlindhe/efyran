@@ -762,6 +762,10 @@ function QoL.Init()
         cmd("/lua run efyran/handin")
     end)
 
+    mq.bind("/handinall", function()
+        cmd("/dgae /handin")
+    end)
+
     local mmrl = function()
         cmdf("/dex %s /makeraidleader %s", mq.TLO.Raid.Leader(), mq.TLO.Me.Name())
     end

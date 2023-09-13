@@ -9,7 +9,7 @@ local timer = require("efyran/Timer")
 local follow  = require("efyran/e4_Follow")
 local buffs   = require("efyran/e4_Buffs")
 
-local askForHealTimer = timer.new_expired(3 * 1) -- 3s
+local askForHealTimer = timer.new_expired(4 * 1) -- 4s
 local askForHealPct = 88 -- at what % HP to start begging for heals
 
 local timeZonedDelay = 10 -- seconds

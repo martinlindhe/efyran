@@ -518,7 +518,7 @@ end
 ---@return string|nil
 function buffs.findAvailableBuffer(buffGroup)
     for peer, availableGroups in pairs(buffs.otherAvailable) do
-        if availableGroups:find(buffGroup) then
+        if availableGroups:find(buffGroup) and is_peer_in_zone(peer) then
             --log.Debug("peer %s, buff groups: %s", peer, buffGroups)
             return peer
         end

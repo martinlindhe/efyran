@@ -108,7 +108,6 @@ settings.assist = {
         --"Knee Strike", -- SoD
         "Bash",
         "Kick",
-        --"Slam",
         --"Disarm",
     },
 

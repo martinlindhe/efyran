@@ -229,6 +229,8 @@ function CommandQueue.Process()
     elseif v.Name == "teleportbind" then
         if is_alt_ability_ready("Teleport Bind") then
             use_alt_ability("Teleport Bind")
+        elseif have_alt_ability("Teleport Bind") then
+            all_tellf("ERROR: Teleport Bind not ready (in %s)", mq.TLO.Me.AltAbilityTimer("Teleport Bind").TimeHMS())
         end
     elseif v.Name == "hastask" then
         if mq.TLO.Task(v.Arg).Index() ~= nil then
@@ -405,6 +407,9 @@ function autoMapHeightFilter()
 
         -- omens
         riftseekers = {min = 120, max = 120},   -- XXX
+
+        -- DoN
+        stillmoona = {min = 50, max = 20}, -- XXX
     }
 
     local data = heights[zone_shortname()]

@@ -185,7 +185,7 @@ end
 function Assist.meleeStick()
     local stickArg
     if Assist.IsTanking() then
-        stickArg = "hold front " .. Assist.meleeDistance .. " uw"
+        stickArg = "hold " .. Assist.meleeDistance .. " uw"
         log.Debug("STICKING IN FRONT TO %d: %s", Assist.targetID, stickArg)
         mq.cmdf("/stick %s", stickArg)
     else
@@ -291,7 +291,7 @@ function Assist.Tick()
     --log.Debug("Assist.Tick()")
 
     if melee and spawn.MaxRangeTo() > Assist.meleeDistance and assistStickTimer:expired() then
-        log.Info("stick update meleeDistance %f!", Assist.meleeDistance)
+        log.Info("stick update. meleeDistance = %f!", Assist.meleeDistance)
         Assist.meleeStick()
         assistStickTimer:restart()
     end

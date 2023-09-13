@@ -125,16 +125,19 @@ local handinRules = {
         ["Class|BST/Savagesoul Wristband of the Wilds"]          = {"Riftseeker Heart",                 "2|Quality Feran Hide"},
     },
 
-    ["A shimmering presence/Zone|akheva"] = {
+    ["A shimmering presence/Zone|akheva"] = { -- VT key
         ["Shadowed Scepter Frame"]          = {"Summoned: Wisp Stone"},
     },
-    ["The Spirit of Akelha`Ra/Zone|akheva"] = {
+    ["The Spirit of Akelha`Ra/Zone|akheva"] = { -- VT key
         ["Shadowed Scepter Frame"]          = {"Essence Emerald"},
     },
 
-    ["Tatsujiro the Serene/Zone|lavastorm"] = {
-        [""] = {"Norrath's Keepers Token"}, -- XXX get crystals as reward
-    }
+    ["Tatsujiro the Serene/Zone|lavastorm"] = { -- DoN good
+        [""] = {"Norrath's Keepers Token"},
+    },
+    ["Xeib Darkskies/Zone|lavastorm"] = { -- DoN evil
+        [""] = {"Dark Reign Token"},
+    },
 
 }
 
@@ -149,11 +152,6 @@ for npcRow, t in pairs(handinRules) do
 
         local spawn = spawn_from_query('npc "'..o.Name..'"')
         if spawn ~= nil then
-
-            if spawn.Distance() > 50 then
-                log.Error("%s is too far away for hand-in.", o.Name)
-                return
-            end
 
             -- see if we have any of the items
             for rewardRow, components in pairs(t) do
@@ -209,6 +207,11 @@ for npcRow, t in pairs(handinRules) do
                     elseif not needParts and haveParts then
                         log.Info("I HAVE ALL NEEDED PIECES, DOING HAND IN")
 
+                        if spawn.Distance() > 50 then
+                            log.Error("%s is too far away for hand-in.", o.Name)
+                            return
+                        end
+
                         target_npc_name(o.Name)
                         move_to(spawn.ID())
 
@@ -248,6 +251,8 @@ for npcRow, t in pairs(handinRules) do
                                 delay(200)
 
                                 cmd("/click left target")
+                                delay(200)
+
                                 if not window_open("GiveWnd") then
                                     -- extra delay for server roundtrip
                                     delay(5000, function() return window_open("GiveWnd") end)
@@ -260,7 +265,11 @@ for npcRow, t in pairs(handinRules) do
 
                         -- PRESS GIVE BUTTON
                         delay(500)
-                        cmd("/nomodkey /notify GiveWnd GVW_Give_Button leftmouseup")
+                        if window_open("GiveWnd") then
+                            cmd("/nomodkey /notify GiveWnd GVW_Give_Button leftmouseup")
+                        else
+                            all_tellf("handin ERROR: GiveWnd not open")
+                        end
 
                         return
 

@@ -10,6 +10,7 @@ local hailTargets = {
         ["Herald of Druzzil Ro"] = "time", -- TL to Plane of Time
         ["Priest of Discord"] = "wish to go", -- OOW - TL to Dranik's Scar
         ["Devin Traical"] = "ready", -- TL to Shadowrest
+        ["Vivian the True"] = true, -- New Beginnings starter quest
     },
     ["shadowrest"] = {
         ["Keeper of Lost Things"] = "bodies", -- summon corpses
@@ -154,6 +155,8 @@ local hailTargets = {
     ["lavastorm"] = {
         ["Wayfarers Mercenary Bitral"] = "task|Population Control", -- DoN tier 0 faction solo task
         ["Chieftain Relae Aderi"] = true, -- DoN tier 0, tier 1, tier 2, tier 3 flag
+
+        ["Private Nylaen Kel`Ther"] = true, -- DoN tier 2 flag hail
     }
 }
 
@@ -175,7 +178,7 @@ function Hail.PerformHail()
     local found = false
 
     -- loop thru nearby NPC and see if they are in the zoneTargets...
-    local spawnQuery = "npc radius 50"
+    local spawnQuery = "npc radius 20"
     for i = 1, mq.TLO.SpawnCount(spawnQuery)() do
         local spawn = mq.TLO.NearestSpawn(i, spawnQuery)
         local spawnName = spawn.CleanName()
