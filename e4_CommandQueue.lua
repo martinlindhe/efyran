@@ -166,6 +166,8 @@ function CommandQueue.Process()
 
     elseif v.Name == "pbaeon" then
         pbae_loop()
+    elseif v.Name == "disbandall" then
+        disband_all_peers()
     elseif v.Name == "usecorpsesummoner" then
         use_corpse_summoner()
     elseif v.Name == "evacuate" then

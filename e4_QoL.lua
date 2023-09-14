@@ -590,6 +590,11 @@ function QoL.Init()
         commandQueue.Add("pbaeon")
     end)
 
+    -- disband all peers from raid/group
+    mq.bind("/disbandall", function()
+        commandQueue.Add("disbandall")
+    end)
+
     -- if filter == "all", drop all. else drop partially matched buffs
     mq.bind("/dropbuff", function(filter)
         commandQueue.Add("dropbuff", filter)

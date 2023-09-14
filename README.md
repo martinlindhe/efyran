@@ -163,6 +163,7 @@ Buff Spell Level   Minimum Target Level
 /autobank                   - autobanks loot listed in tradeskills.ini
 
 /recallgroup <name>         - recalls a group/raid formation
+/disbandall                 - disband all peers from group/raids
 
 /listtasks                  - lists all active tasks
 /hastask <name>

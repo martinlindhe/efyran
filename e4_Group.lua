@@ -41,6 +41,23 @@ function Group.Init()
 
 end
 
+-- disband all peers from all raids/groups
+function disband_all_peers()
+    if mq.TLO.Raid.Members() > 0 then
+        cmd("/raiddisband")
+        delay(100)
+    end
+    if mq.TLO.Group.Members() > 0 then
+        cmd("/disband")
+        delay(100)
+    end
+
+    cmd("/noparse /dgaexecute /if (${Raid.Members} > 0) /raiddisband")
+    delay(1000)
+    cmd("/noparse /dgaexecute /if (${Group.Members} > 0) /disband")
+    delay(1000)
+end
+
 ---@param name string
 ---@param groupNumber string|nil
 function Group.RecallGroup(name, groupNumber)
@@ -55,20 +72,8 @@ function Group.RecallGroup(name, groupNumber)
     local raidLeader = ""
 
     if groupNumber == nil then
-        if mq.TLO.Raid.Members() > 0 then
-            cmd("/raiddisband")
-            delay(100)
-        end
-        if mq.TLO.Group.Members() > 0 then
-            cmd("/disband")
-            delay(100)
-        end
-
         orchestrator = true -- the instance doing /recallgroup
-        cmd("/noparse /dgaexecute /if (${Raid.Members} > 0) /raiddisband")
-        delay(1000)
-        cmd("/noparse /dgaexecute /if (${Group.Members} > 0) /disband")
-        delay(1000)
+        disband_all_peers()
     else
         log.Info("Recalling group %s %d", name, groupNumber)
     end
