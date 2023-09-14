@@ -38,6 +38,12 @@ function Follow.Start(spawnName, force)
         return
     end
 
+    if spawn.Distance() > 500 then
+        all_tellf("Too far away to \ar%s\ax: %d", spawn.Name(), spawn.Distance())
+        return
+    end
+
+
     if Follow.IsFollowing() then
         Follow.StopFully()
     end
@@ -195,19 +201,22 @@ function Follow.RunToZone(startingPeer)
 
     -- move forward
     cmd("/keypress forward hold")
-    delay(6000, function()
-        local zoned = zone_shortname() ~= oldZone
-        if zoned then
-            log.Info("I ZONED INTO %s", zone_shortname())
-        end
-        return zoned
+    delay(5000, function()
+        return zone_shortname() ~= oldZone
     end)
 
     if zone_shortname() == oldZone then
-        all_tellf("ERROR failed to run across zone line in %s", oldZone)
-        cmd("/beep 1")
         -- return to starting peer
         move_to(spawn.ID())
+        delay(4000)
+
+        if zone_shortname() ~= oldZone then
+            return true
+        end
+
+        all_tellf("ERROR failed to run across zone line in %s", oldZone)
+        cmd("/beep 1")
+
     end
 end
 

@@ -649,7 +649,14 @@ function loot_my_corpse()
 
     cmd("/squelch /target clear")
     -- target my corpse
-    cmdf("/target %s's corpse", mq.TLO.Me.Name())
+
+    local name = string.format("%s's corpse", mq.TLO.Me.Name())
+    if spawn_count(name) == 0 then
+        all_tellf("NO CORPSE HERE !")
+        return
+    end
+
+    cmdf("/target %s", name)
     mq.delay(100)
     if mq.TLO.Target.ID() == nil then
         all_tellf("No corpse around, giving up!")
@@ -663,7 +670,7 @@ function loot_my_corpse()
     delay(5000, function() return window_open("LootWnd") end)
 
     if not window_open("LootWnd") then
-        all_tellf("ERROR FATAL CANNOT OPEN MY LOOT WINDOW.")
+        log.Info("ERROR: CANNOT OPEN MY LOOT WINDOW.")
         return
     end
 

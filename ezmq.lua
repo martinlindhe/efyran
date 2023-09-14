@@ -560,8 +560,7 @@ end
 function have_song(name)
     local spell = mq.TLO.Spell(name)
     if spell() == nil then
-        all_tellf("have_song BEEP error, asked about odd 2buff %s", name)
-        mq.cmd("/beep 1")
+        all_tellf("have_song ERROR, asked about odd buff %s", name)
         return false
     end
     return mq.TLO.Me.Song(name)() ~= nil or mq.TLO.Me.Song(spell.RankName())() ~= nil
@@ -1508,11 +1507,16 @@ function random_delay(ms)
     mq.delay(math.random(0, ms))
 end
 
--- Delays a random amount of seconds in order not to flood the connection. 0.4s delay for each connected peer.
+-- Delays a random amount of seconds in order not to flood the connection. 0.4s delay for each connected nearby peer.
 --
 -- Used to reduce CPU load while zoning many peers at once.
 function unflood_delay()
-    random_delay(mq.TLO.DanNet.PeerCount() * 200)
+    local count = mq.TLO.DanNet.PeerCount()
+    local players = spawn_count("pc radius 100")
+    if players < count then
+        count = players
+    end
+    random_delay(count * 200)
 end
 
 -- Returns true if `name` is ready to use.

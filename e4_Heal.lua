@@ -3,6 +3,8 @@ local log = require("efyran/knightlinc/Write")
 
 require("efyran/e4_Spells")
 
+local globalSettings = require("efyran/e4_Settings")
+
 local botSettings = require("efyran/e4_BotSettings")
 local queue = require("efyran/Queue")
 local timer = require("efyran/Timer")
@@ -124,7 +126,7 @@ end
 
 local lifeSupportTimer = timer.new_expired(5 * 1) -- 5s
 
-local groupBalanceTimer = timer.new_expired(1 * 1) -- 1s
+local groupBalanceTimer = timer.new_expired(5 * 1) -- 5s
 
 function Heal.Tick()
 
@@ -243,8 +245,8 @@ function Heal.acceptRez()
         log.Debug("Got a rez from %s", peer)
         if not is_peer(peer) then
             all_tellf("WARNING: got a rez from (NOT A PEER) %s: %s", peer, s)
-            cmd("/beep 1")
             if not globalSettings.allowStrangers then
+                cmd("/beep 1")
                 delay(10000) -- 10s to not flood chat
                 return
             end

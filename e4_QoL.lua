@@ -350,6 +350,13 @@ function QoL.Init()
         end
     end)
 
+    mq.event("don-kessdona-ae", "Kessdona rears back and fills her lungs, preparing to exhale a cone of disintegrating flame.", function(text)
+        cmd("/popup >>^<< Directional AE in 5s >>^<<")
+        if is_raid_leader() then
+            cmd("/rs >>^<< Directional AE in 5s >>^<<")
+        end
+    end)
+
     -- for DoN solo tasks
     mq.event("replay-timer", "You have received a replay timer for '#1#': #2 remaining.", function(text, task, time)
         all_tellf("Got replay timer for \ag%s\ax: %s", task, time)
@@ -368,7 +375,7 @@ function QoL.Init()
         end
     end)
 
-    mq.event("tell", "#1# tells you, #2#", function(text, name, msg)
+    mq.event("tell", "#1# tells you, '#2#'", function(text, name, msg)
         local s = msg:lower()
         if s == "i'm busy right now." or s == "incoming pet weapons, hold still!" or s == "wait4rez" then
             return
@@ -392,9 +399,9 @@ function QoL.Init()
                 return
             end
             if spawn ~= nil then
-                all_tellf("GOT A IN-ZONE TELL FROM "..name..": "..msg.." type "..spawn.Type())
+                all_tellf("GOT A IN-ZONE TELL FROM %s: %s, spawn type %s", name, msg, spawn.Type())
             else
-                all_tellf("GOT A TELL FROM "..name..": "..msg)
+                all_tellf("GOT A TELL FROM \ay%s\ax: \ap%s\ax", name, msg)
             end
 
             cmd("/beep 1")
@@ -849,6 +856,17 @@ function QoL.Init()
         mq.cmd("/noparse /dgzexecute /if (${Me.Buff[Lesson of the Devoted].ID}) /dgtell all LESSON ACTIVE: ${Me.Buff[Lesson of the Devoted].Duration.TimeHMS}")
     end)
 
+    mq.bind("/staunch", function()
+        commandQueue.Add("use-veteran-aa", "Staunch Recovery")
+    end)
+
+    mq.bind("/armor", function()
+        if is_orchestrator() then
+            mq.cmd("/dgzexecute /armor") -- XXX filter
+        end
+        commandQueue.Add("use-veteran-aa", "Armor of Experience")
+    end)
+
     mq.bind("/infusion", function()
         if is_orchestrator() then
             mq.cmd("/dgzexecute /infusion") -- XXX filter
@@ -868,6 +886,16 @@ function QoL.Init()
             mq.cmd("/dgzexecute /expedient") -- XXX filter
         end
         commandQueue.Add("use-veteran-aa", "Expedient Recovery")
+    end)
+
+    -- report naked toons
+    mq.bind("/naked", function()
+        if is_orchestrator() then
+            mq.cmd("/dgzexecute /naked")
+        end
+        if is_naked() then
+            all_tellf("IM NAKED IN \ay%s\ax", zone_shortname())
+        end
     end)
 
     ---@param ... string|nil filter, such as "/only|ROG"
@@ -1270,6 +1298,14 @@ function QoL.Init()
         commandQueue.Add("lootcorpse")
     end)
 
+    -- tell all peers to click yes on dialog (rez, etc)
+    mq.bind("/yes", function()
+        if is_orchestrator() then
+            cmd("/dgaexecute /yes")
+        end
+        commandQueue.Add("click-yes")
+    end)
+
     -- tell clerics to use word heals
     mq.bind("/wordheal", function()
         if is_orchestrator() then
@@ -1330,6 +1366,7 @@ function QoL.Init()
 
     mq.event('joinraid', '#1# invites you to join a raid.#*#', function(text, sender)
         if not is_peer(sender) then
+            all_tellf("Got raid invite from %s", sender)
             if not globalSettings.allowStrangers then
                 all_tellf("ERROR: Ignoring Raid invite from unknown player %s", sender)
                 return

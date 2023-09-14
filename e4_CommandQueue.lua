@@ -203,6 +203,17 @@ function CommandQueue.Process()
         consent_me()
     elseif v.Name == "gathercorpses" then
         gather_corpses()
+    elseif v.Name == "click-yes" then
+
+        log.Info("click yes")
+
+        unflood_delay()
+        if window_open("ConfirmationDialogBox") then
+            cmd("/notify ConfirmationDialogBox ${buttonToClick}_Button leftmouseup")
+        elseif window_open("LargeDialogWindow") then
+            cmd("/notify LargeDialogWindow LDW_${buttonToClick}Button leftmouseup")
+        end
+
     elseif v.Name == "finditem" then
         report_find_item(v.Arg)
     elseif v.Name == "findmissingitem" then
@@ -235,6 +246,7 @@ function CommandQueue.Process()
         use_alt_ability("Origin")
     elseif v.Name == "use-veteran-aa" then
         use_alt_ability(v.Arg)
+        delay(200)
     elseif v.Name == "dropbuff" then
         drop_buff(v.Arg)
     elseif v.Name == "mount-on" then
