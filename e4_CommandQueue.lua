@@ -1,6 +1,8 @@
 local mq = require("mq")
 local log = require("efyran/knightlinc/Write")
 
+require("efyran/e4_Handin")
+
 local heal    = require("efyran/e4_Heal")
 local hail    = require("efyran/e4_Hail")
 local buffs   = require("efyran/e4_Buffs")
@@ -99,6 +101,8 @@ function CommandQueue.Process()
         cure_player(v.Arg, v.Arg2)
     elseif v.Name == "radiantcure" then
         cast_radiant_cure()
+    elseif v.Name == "handin" then
+        auto_hand_in_items()
     elseif v.Name == "buffit" then
         buffs.BuffIt(toint(v.Arg))
     elseif v.Name == "killit" then
@@ -206,14 +210,21 @@ function CommandQueue.Process()
     elseif v.Name == "click-yes" then
 
         log.Info("click yes")
-
         unflood_delay()
         if window_open("ConfirmationDialogBox") then
-            cmd("/notify ConfirmationDialogBox ${buttonToClick}_Button leftmouseup")
+            cmd("/notify ConfirmationDialogBox Yes_Button leftmouseup")
         elseif window_open("LargeDialogWindow") then
-            cmd("/notify LargeDialogWindow LDW_${buttonToClick}Button leftmouseup")
+            cmd("/notify LargeDialogWindow LDW_YesButton leftmouseup")
         end
+    elseif v.Name == "click-no" then
 
+        log.Info("click no")
+        unflood_delay()
+        if window_open("ConfirmationDialogBox") then
+            cmd("/notify ConfirmationDialogBox No_Button leftmouseup")
+        elseif window_open("LargeDialogWindow") then
+            cmd("/notify LargeDialogWindow LDW_NoButton leftmouseup")
+        end
     elseif v.Name == "finditem" then
         report_find_item(v.Arg)
     elseif v.Name == "findmissingitem" then

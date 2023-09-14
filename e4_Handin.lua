@@ -141,84 +141,34 @@ local handinRules = {
     ["Xeib Darkskies/Zone|lavastorm"] = { -- DoN evil
         [""] = {"Dark Reign Token"},
     },
-
 }
 
-local zone = zone_shortname():lower()
+-- performs item hand ins for quest rewards, etc
+function auto_hand_in_items()
 
-for npcRow, t in pairs(handinRules) do
+    local zone = zone_shortname():lower()
 
-    local o = parseSpellLine(npcRow)
+    for npcRow, t in pairs(handinRules) do
 
-    if zone == o.Zone then
-        log.Info("Zone %s, %s", o.Zone, o.Name)
+        local o = parseSpellLine(npcRow)
 
-        local spawn = spawn_from_query('npc "'..o.Name..'"')
-        if spawn ~= nil then
+        if zone == o.Zone then
+            log.Info("Zone %s, %s", o.Zone, o.Name)
 
-            -- see if we have any of the items
-            for rewardRow, components in pairs(t) do
-                local reward = parseSpellLine(rewardRow)
-                --print("reward ", reward.Name, " .. class ", reward.Class, " class type ", type(reward.Class))
+            local spawn = spawn_from_query('npc "'..o.Name..'"')
+            if spawn ~= nil then
 
-                if reward.Class == nil or class_shortname() == reward.Class then -- TODO more advanced class filter
-                    local haveParts = false
-                    local needParts = false
-                    local needMessage = ""
+                -- see if we have any of the items
+                for rewardRow, components in pairs(t) do
+                    local reward = parseSpellLine(rewardRow)
+                    --print("reward ", reward.Name, " .. class ", reward.Class, " class type ", type(reward.Class))
 
-                    -- See if i have any of the required components
-                    for i, componentRow in pairs(components) do
-                        -- optional syntax: "2|Item name", where 2 is the required item count
-                        local found, _ = string.find(componentRow, "|")
-                        local component = componentRow
-                        local count = 1
-                        if found then
-                            local key = ""
-                            local subIndex = 0
-                            for v in string.gmatch(componentRow, "[^|]+") do
-                                if subIndex == 0 then
-                                    key = v
-                                end
-                                if subIndex == 1 then
-                                    --print(key, " = ", v)
-                                    component = v
-                                    count = toint(key)
-                                end
-                                subIndex = subIndex + 1
-                            end
-                        end
-                        log.Info("Looking for component %s", component)
+                    if reward.Class == nil or class_shortname() == reward.Class then -- TODO more advanced class filter
+                        local haveParts = false
+                        local needParts = false
+                        local needMessage = ""
 
-                        if have_item_inventory(component) then
-                            haveParts = true
-                            local haveCount = inventory_item_count(component)
-                            log.Info("I have component %s x %d", component, haveCount)
-                            if haveCount < count then
-                                needParts = true
-                                needMessage = needMessage.."NEED "..component.." x "..(count-haveCount).." for "..reward.Name
-                            end
-                        else
-                            needParts = true
-                            needMessage = needMessage.."NEED "..component.." x "..count.." for "..reward.Name
-                        end
-
-                    end
-
-                    if haveParts and needParts then
-                        -- asks for the missing items
-                        all_tellf("%s", needMessage)
-                    elseif not needParts and haveParts then
-                        log.Info("I HAVE ALL NEEDED PIECES, DOING HAND IN")
-
-                        if spawn.Distance() > 50 then
-                            log.Error("%s is too far away for hand-in.", o.Name)
-                            return
-                        end
-
-                        target_npc_name(o.Name)
-                        move_to(spawn.ID())
-                        delay(2000)
-
+                        -- See if i have any of the required components
                         for i, componentRow in pairs(components) do
                             -- optional syntax: "2|Item name", where 2 is the required item count
                             local found, _ = string.find(componentRow, "|")
@@ -239,53 +189,106 @@ for npcRow, t in pairs(handinRules) do
                                     subIndex = subIndex + 1
                                 end
                             end
+                            log.Info("Looking for component %s", component)
 
-                            -- pick up and hand over items unstacked
-                            for each = 1, count do
-                                log.Info("Picking up %s", component)
-                                local item = find_item(component)
-                                if item == nil then
-                                    -- unexpected
-                                    all_tellf("ERROR find_item failed on %s", component)
-                                    break
+                            if have_item_inventory(component) then
+                                haveParts = true
+                                local haveCount = inventory_item_count(component)
+                                log.Info("I have component %s x %d", component, haveCount)
+                                if haveCount < count then
+                                    needParts = true
+                                    needMessage = needMessage.."NEED "..component.." x "..(count-haveCount).." for "..reward.Name
                                 end
-
-                                cmdf("/nomodkey /ctrl /itemnotify in Pack%d %d leftmouseup", item.ItemSlot() - 22, item.ItemSlot2() + 1)
-                                delay(200)
-                                delay(1000, function() return has_cursor_item() end)
-
-                                log.Info("Handing in %s", component)
-                                cmd("/click left target")
-                                delay(200)
-
-                                delay(1000, function() return not has_cursor_item() end)
-                                delay(200)
+                            else
+                                needParts = true
+                                needMessage = needMessage.."NEED "..component.." x "..count.." for "..reward.Name
                             end
 
                         end
 
-                        random_delay(mq.TLO.DanNet.PeerCount() * 10)
-                        delay(200)
-                        if window_open("GiveWnd") then
-                            -- PRESS GIVE BUTTON
-                            cmd("/nomodkey /notify GiveWnd GVW_Give_Button leftmouseup")
+                        if haveParts and needParts then
+                            -- asks for the missing items
+                            all_tellf("%s", needMessage)
+                        elseif not needParts and haveParts then
+                            log.Info("I HAVE ALL NEEDED PIECES, DOING HAND IN")
+
+                            if spawn.Distance() > 50 then
+                                log.Error("%s is too far away for hand-in.", o.Name)
+                                return
+                            end
+
+                            target_npc_name(o.Name)
+                            move_to(spawn.ID())
+                            delay(2000)
+
+                            for i, componentRow in pairs(components) do
+                                -- optional syntax: "2|Item name", where 2 is the required item count
+                                local found, _ = string.find(componentRow, "|")
+                                local component = componentRow
+                                local count = 1
+                                if found then
+                                    local key = ""
+                                    local subIndex = 0
+                                    for v in string.gmatch(componentRow, "[^|]+") do
+                                        if subIndex == 0 then
+                                            key = v
+                                        end
+                                        if subIndex == 1 then
+                                            --print(key, " = ", v)
+                                            component = v
+                                            count = toint(key)
+                                        end
+                                        subIndex = subIndex + 1
+                                    end
+                                end
+
+                                -- pick up and hand over items unstacked
+                                for each = 1, count do
+                                    log.Info("Picking up %s", component)
+                                    local item = find_item(component)
+                                    if item == nil then
+                                        -- unexpected
+                                        all_tellf("ERROR find_item failed on %s", component)
+                                        break
+                                    end
+
+                                    cmdf("/nomodkey /ctrl /itemnotify in Pack%d %d leftmouseup", item.ItemSlot() - 22, item.ItemSlot2() + 1)
+                                    delay(200)
+                                    delay(1000, function() return has_cursor_item() end)
+
+                                    log.Info("Handing in %s", component)
+                                    cmd("/click left target")
+                                    delay(200)
+
+                                    delay(1000, function() return not has_cursor_item() end)
+                                    delay(200)
+                                end
+
+                            end
+
+                            random_delay(mq.TLO.DanNet.PeerCount() * 10)
+                            delay(200)
+                            if window_open("GiveWnd") then
+                                -- PRESS GIVE BUTTON
+                                cmd("/nomodkey /notify GiveWnd GVW_Give_Button leftmouseup")
+                            else
+                                log.Error("handin ERROR: GiveWnd not open")
+                                all_tellf("handin ERROR: GiveWnd not open")
+                            end
+
+                            return
+
                         else
-                            log.Error("handin ERROR: GiveWnd not open")
-                            all_tellf("handin ERROR: GiveWnd not open")
+                            log.Warn("XXX ODD: needParts = %s, haveParts = %s", bools(needParts), bools(haveParts))
                         end
 
-                        return
-
-                    else
-                        log.Warn("XXX ODD: needParts = %s, haveParts = %s", bools(needParts), bools(haveParts))
                     end
-
                 end
+
+            else
+                log.Error("Expected spawn not found in zone: %s", o.Name)
             end
 
-        else
-            log.Error("Expected spawn not found in zone: %s", o.Name)
         end
-
     end
 end

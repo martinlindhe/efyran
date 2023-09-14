@@ -648,14 +648,13 @@ end
 function loot_my_corpse()
 
     cmd("/squelch /target clear")
-    -- target my corpse
 
     local name = string.format("%s's corpse", mq.TLO.Me.Name())
     if spawn_count(name) == 0 then
-        all_tellf("NO CORPSE HERE !")
         return
     end
 
+    -- target my corpse
     cmdf("/target %s", name)
     mq.delay(100)
     if mq.TLO.Target.ID() == nil then

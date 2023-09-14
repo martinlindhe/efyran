@@ -244,7 +244,7 @@ function Heal.acceptRez()
 
         log.Debug("Got a rez from %s", peer)
         if not is_peer(peer) then
-            all_tellf("WARNING: got a rez from (NOT A PEER) %s: %s", peer, s)
+            all_tellf("WARNING: got a rez from \ay%s\ax: \ap%s\ax", peer, s)
             if not globalSettings.allowStrangers then
                 cmd("/beep 1")
                 delay(10000) -- 10s to not flood chat
@@ -483,7 +483,7 @@ function healPeer(spell_list, peer, pct)
         if spawn == nil then
             -- peer died
             return false
-        elseif spawn.Distance() > 200 then
+        elseif spawn ~= nil and spawn.Distance() > 200 then
             return false
         elseif spellConfig.MinMana ~= nil and mq.TLO.Me.PctMana() < spellConfig.MinMana then
             log.Info("SKIP HEALING, my mana %d vs required %d", mq.TLO.Me.PctMana(), spellConfig.MinMana)

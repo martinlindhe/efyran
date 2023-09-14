@@ -351,9 +351,51 @@ function QoL.Init()
     end)
 
     mq.event("don-kessdona-ae", "Kessdona rears back and fills her lungs, preparing to exhale a cone of disintegrating flame.", function(text)
-        cmd("/popup >>^<< Directional AE in 5s >>^<<")
+        cmd("/popup >>^<< Directional AE >>^<<")
         if is_raid_leader() then
-            cmd("/rs >>^<< Directional AE in 5s >>^<<")
+            cmd("/rs >>^<< Directional AE >>^<<")
+        end
+    end)
+
+    mq.event("don-rikkukin-ae-right", "Rikkukin pulls his right arm back, preparing to cut a swathe through his opponents with his razor sharp claws.", function(text)
+        cmd("/popup >>^<< AE on right side >>^<<")
+        if is_raid_leader() then
+            cmd("/rs >>^<< AE on right side >>^<<")
+        end
+    end)
+
+    mq.event("don-rikkukin-ae-left", "Rikkukin pulls his left arm back, preparing to cut a swathe through his opponents with his razor sharp claws.", function(text)
+        cmd("/popup >>^<< AE on left side >>^<<")
+        if is_raid_leader() then
+            cmd("/rs >>^<< AE on left side >>^<<")
+        end
+    end)
+
+    mq.event("don-rikkukin-ae-rear", "Rikkukin twirls his tail, preparing to sweat away those foolish enough to take up position behind him.", function(text)
+        cmd("/popup >>^<< AE on rear side >>^<<")
+        if is_raid_leader() then
+            cmd("/rs >>^<< AE on rear side >>^<<")
+        end
+    end)
+
+    mq.event("don-rikkukin-ae-front", "Rikkukin rears backs and fills his lungs, preparing to exhale a cone of ice.", function(text)
+        cmd("/popup >>^<< AE on front side >>^<<")
+        if is_raid_leader() then
+            cmd("/rs >>^<< AE on front side >>^<<")
+        end
+    end)
+
+    mq.event("don-rikkukin-blind", "Rikkukin twists his body so that the ambient light starts to reflect from his silvery scales.", function(text)
+        cmd("/popup >>^<< Immune  Light (TURN AWAY) >>^<<")
+        if is_raid_leader() then
+            cmd("/rs >>^<< Blinding Light (TURN AWAY) >>^<<")
+        end
+    end)
+
+    mq.event("don-rikkukin-immune", "Rikkukin's skin seal over with a caustic sheet of malleable ice. The protection will soon make him impervious to melee and magical attacks.", function(text)
+        cmd("/popup >>^<< IMMUNE (BACK OFF) >>^<<")
+        if is_raid_leader() then
+            cmd("/rs >>^<< IMMUNE (BACK OFF) >>^<<")
         end
     end)
 
@@ -1125,7 +1167,7 @@ function QoL.Init()
     end)
 
     mq.bind("/handin", function()
-        cmd("/lua run efyran/handin")
+        commandQueue.Add("handin")
     end)
 
     mq.bind("/handinall", function()
@@ -1301,9 +1343,17 @@ function QoL.Init()
     -- tell all peers to click yes on dialog (rez, etc)
     mq.bind("/yes", function()
         if is_orchestrator() then
-            cmd("/dgaexecute /yes")
+            cmd("/dgzexecute /yes")
         end
         commandQueue.Add("click-yes")
+    end)
+
+    -- tell all peers to click no on dialog (aetl, rez, etc)
+    mq.bind("/no", function()
+        if is_orchestrator() then
+            cmd("/dgzexecute /no")
+        end
+        commandQueue.Add("click-no")
     end)
 
     -- tell clerics to use word heals
