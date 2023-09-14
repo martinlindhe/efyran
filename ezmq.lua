@@ -1852,6 +1852,9 @@ function castSpellAbility(spawn, row, callback)
     if spell.MaxMana ~= nil and mq.TLO.Me.PctMana() > spell.MaxMana then
         all_tellf("SKIP MaxMana %s, %d vs required %d", spell.Name,  mq.TLO.Me.PctMana(), spell.MaxMana)
         return false
+    elseif spell.MaxMana ~= nil then
+        -- XXX falls thru here
+        all_tellf("CONTINUE MaxMana %s, %d vs required %d", spell.Name,  mq.TLO.Me.PctMana(), spell.MaxMana)
     end
 
     if spell.MinEnd ~= nil and mq.TLO.Me.PctEndurance() < spell.MinEnd then

@@ -370,7 +370,7 @@ function QoL.Init()
 
     mq.event("tell", "#1# tells you, #2#", function(text, name, msg)
         local s = msg:lower()
-        if s == "incoming pet weapons, hold still!" then
+        if s == "i'm busy right now." or s == "incoming pet weapons, hold still!" or s == "wait4rez" then
             return
         end
         if s == "buff me" or s == "buffme" then
@@ -1350,24 +1350,24 @@ function QoL.Init()
         local msg = ""
 
         if not in_group() then
-            msg = string.format("\agSolo XP (%.2f %% AA)", aaDiff)
+            msg = string.format("\agSolo XP (%.1f %% AA)", aaDiff)
         elseif is_group_leader() then
-            msg = string.format("\agGroup XP (%.2f %% AA)", aaDiff)
+            msg = string.format("\agGroup XP (%.1f %% AA)", aaDiff)
         end
-
 
         -- leader xp
-        local groupXpDiff = mq.TLO.Me.PctGroupLeaderExp() - QoL.currentGroupLeaderXP
-        if groupXpDiff < 0 then
-            -- we dinged AA
-            groupXpDiff = 100 + mq.TLO.Me.PctGroupLeaderExp() - QoL.currentGroupLeaderXP
-        end
+        if in_group() then
+            local groupXpDiff = mq.TLO.Me.PctGroupLeaderExp() - QoL.currentGroupLeaderXP
+            if groupXpDiff < 0 then
+                -- we dinged AA
+                groupXpDiff = 100 + mq.TLO.Me.PctGroupLeaderExp() - QoL.currentGroupLeaderXP
+            end
 
+            if groupXpDiff > 0 then
+                msg = msg .. string.format(", group leader XP (%.1f %%)", groupXpDiff)
+            end
+        end
         QoL.currentGroupLeaderXP = mq.TLO.Me.PctGroupLeaderExp()
-
-        if groupXpDiff > 0 then
-            msg = msg .. string.format(", group leader XP (%.2f %%)", groupXpDiff)
-        end
 
         if msg ~= "" then
             all_tell(msg)

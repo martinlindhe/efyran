@@ -437,11 +437,13 @@ function Heal.performLifeSupport()
                         cmd("/target myself")
                     end
 
+                    local mana = mq.TLO.Me.PctMana()
+                    local hp = mq.TLO.Me.PctHPs()
                     if castSpellAbility(nil, spellName) then
                         if spellConfig.MaxMana ~= nil then
-                            all_tellf("USED LIFE SUPPORT %s at %d%% Mana", spellName, mq.TLO.Me.PctMana())
+                            all_tellf("USED LIFE SUPPORT %s at %d%% Mana (was %d%%)", spellName, mq.TLO.Me.PctMana(), mana)
                         else
-                            all_tellf("USED LIFE SUPPORT %s at %d%% HP", spellName, mq.TLO.Me.PctHPs())
+                            all_tellf("USED LIFE SUPPORT %s at %d%% HP (was %d%%)", spellName, mq.TLO.Me.PctHPs(), hp)
                         end
                     end
 
