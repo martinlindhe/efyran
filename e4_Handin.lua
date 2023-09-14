@@ -272,14 +272,11 @@ function auto_hand_in_items()
                                 -- PRESS GIVE BUTTON
                                 cmd("/nomodkey /notify GiveWnd GVW_Give_Button leftmouseup")
                             else
-                                log.Error("handin ERROR: GiveWnd not open")
-                                all_tellf("handin ERROR: GiveWnd not open")
+                                all_tellf("handin UNLIKELY: GiveWnd not open")
                             end
 
                             return
 
-                        else
-                            log.Warn("XXX ODD: needParts = %s, haveParts = %s", bools(needParts), bools(haveParts))
                         end
 
                     end

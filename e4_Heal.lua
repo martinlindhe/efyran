@@ -76,8 +76,6 @@ function joinCurrentHealChannel()
     end
 end
 
-local healQueueMaxLength = 50
-
 ---@param s string
 ---@return string, integer
 function parseHealmeRequest(s)
@@ -110,17 +108,7 @@ function enqueueHealmeRequest(msg)
 
     -- if queue don't already contain this bot
     if not Heal.queue:contains(peer) then
-        -- if queue is less than 10 requests, always add it
-        if Heal.queue:size() >= healQueueMaxLength then
-            -- XXX: if queue is >= 10 long, always add if listed as tank or important bot
-            -- XXX: if queue is >= 10 long, add with 50% chance ... if >= 20 long, beep and ignore.
-
-            all_tellf("queue is full ! len is %d. queue: %s", Heal.queue:size(), Heal.queue:describe())
-            return
-        end
-
         Heal.queue:add(peer, pct)
-        --print("added ", peer, " to heal queue")
     end
 end
 
