@@ -499,13 +499,27 @@ function QoL.Init()
 
     -- auto assist on mob until dead
     ---@param mobID string
-    ---@param ... string|nil
+    ---@param ... string|nil filter
     mq.bind("/killit", function(mobID, ...)
         if is_gm() then
             return
         end
         local filter = trim(args_string(...))
         commandQueue.Add("killit", mobID, filter)
+    end)
+
+    -- ends assist call
+    ---@param ... string|nil filter
+    mq.bind("/backoff", function(...)
+        local filter = trim(args_string(...))
+        if is_orchestrator() then
+            local exe = "/dgzexecute /backoff"
+            if filter ~= nil then
+                exe = exe .. " " .. filter
+            end
+            mq.cmdf(exe)
+        end
+        commandQueue.Add("backoff", filter)
     end)
 
     mq.bind("/quickburns", function()
@@ -574,14 +588,6 @@ function QoL.Init()
 
     -- Summon all available cure wards (CLR, DoDH)
     mq.bind("/curewards", function() cmdf("/dgzexecute /cureward") end)
-
-    -- ends assist call
-    mq.bind("/backoff", function()
-        if is_orchestrator() then
-            cmd("/dgzexecute /backoff")
-        end
-        assist.backoff()
-    end)
 
     mq.bind("/pbaeon", function()
         if is_orchestrator() then

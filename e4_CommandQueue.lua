@@ -129,6 +129,13 @@ function CommandQueue.Process()
 
         log.Debug("Killing %s, type %s", spawn.DisplayName(), spawn.Type())
         assist.handleAssistCall(spawn)
+    elseif v.Name == "backoff" then
+        local filter = v.Arg
+        if filter ~= nil and not matches_filter(filter, mq.TLO.Me.Name()) then
+            log.Info("BACKOFF: Not matching filter, giving up: %s", filter)
+            return
+        end
+        assist.backoff()
 
     elseif v.Name == "pbaeon" then
         -- XXX impl filter
