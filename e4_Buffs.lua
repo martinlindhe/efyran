@@ -60,7 +60,7 @@ local announceBuffsTimer = timer.new_expires_in(2 * 60, 3) -- announce buffs 3 s
 
 local refreshBuffsTimer = timer.new_expired(10) -- 10s
 
-local requestBuffsTimer = timer.new_random(20 * 1) -- 20s
+local requestBuffsTimer = timer.new_random(30 * 1) -- 30s
 
 local handleBuffsTimer = timer.new_random(2 * 1) -- 2s
 

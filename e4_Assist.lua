@@ -167,7 +167,7 @@ function Assist.beginKillSpawnID(spawnID)
         end
 
         if botSettings.settings.assist.melee_distance == "auto" then
-            Assist.meleeDistance = spawn.MaxRangeTo() * 0.50 -- XXX too far in riftseekers with 0.75. XXX cant disarm in riftseekers with 0.60
+            Assist.meleeDistance = spawn.MaxRangeTo() * 0.70 -- XXX too far in riftseekers with 0.75. XXX cant disarm in riftseekers with 0.60
             log.Info("Calculated auto melee distance %f", Assist.meleeDistance)
         else
             Assist.meleeDistance = tonumber(botSettings.settings.assist.melee_distance)

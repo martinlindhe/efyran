@@ -90,7 +90,7 @@ end
 
 ---@param y number
 ---@param x number
----@param z number
+---@param z number|nil
 function move_to_loc(y, x, z)
     mq.cmdf("/moveto loc %f %f %f", y, x, z)
     mq.delay(10000, function() return is_within_distance_to_loc(y, x, z, 15) end)
@@ -289,13 +289,17 @@ end
 
 function wait_for_buffs_populated()
     local count = 0
+
+    local wait = 100
+    local limit = wait * 10 -- 1000ms
+
     while not mq.TLO.Target.BuffsPopulated()
     do
         log.Debug("buffs not finished populating")
-        delay(50)
-        count = count + 1
-        if count > 100 then -- 50 * 100 = 500ms
-            all_tellf("WARN: broke wait_for_buffs_populated after 500ms")
+        delay(wait)
+        count = count + wait
+        if count >= limit then
+            all_tellf("WARN: broke wait_for_buffs_populated after %d ms", limit)
             return
         end
     end
@@ -679,7 +683,13 @@ end
 -- Am I group leader?
 ---@return boolean
 function is_group_leader()
-    return mq.TLO.Group.Members() > 1 and mq.TLO.Me.Name() == mq.TLO.Group.Leader.Name()
+    return mq.TLO.Group.Members() > 1 and mq.TLO.Group.Leader.Name() == mq.TLO.Me.Name()
+end
+
+-- Am I raid leader?
+---@return boolean
+function is_raid_leader()
+    return mq.TLO.Raid.Members() > 1 and mq.TLO.Raid.Leader.Name() == mq.TLO.Me.Name()
 end
 
 --- Am I grouped with PC `name`?

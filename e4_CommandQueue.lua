@@ -66,6 +66,42 @@ function CommandQueue.ZoneEvent()
     buffs.timeZoned = os.time()
 end
 
+
+-- retrurns name and price
+function get_best_soulstone()
+    local level = mq.TLO.Me.Level()
+
+    if level <= 20 then
+        return "Minor Soulstone", 12
+    elseif level <= 30 then
+        return "Lesser Soulstone", 28
+    elseif level <= 40 then
+        return "Soulstone", 55
+    elseif level <= 50 then
+        return "Greater Soulstone", 87
+    elseif level <= 55 then
+        return "Faceted Soulstone", 120
+    elseif level <= 70 then
+        return "Pristine Soulstone", 165
+    elseif level <= 75 then
+        return "Glowing Soulstone", 265
+    elseif level <= 80 then
+        return "Prismatic Soulstone", 425
+    elseif level <= 85 then
+        return "Iridescent Soulstone", 530
+    elseif level <= 90 then
+        return "Phantasmal Soulstone", 635
+    elseif level <= 95 then
+        return "Luminous Soulstone", 750
+    elseif level <= 100 then
+        return "Coalescent Soulstone", 865
+    else
+        -- TODO update with L100 to L130 names
+        all_tellf("get_best_soulstone: FATAL ERROR TOO HIGH LEVEL %d", level)
+    end
+
+end
+
 function CommandQueue.Process()
     --log.Debug("CommandQueue.Process()")
 
@@ -130,14 +166,26 @@ function CommandQueue.Process()
 
     elseif v.Name == "pbaeon" then
         pbae_loop()
+    elseif v.Name == "usecorpsesummoner" then
+        use_corpse_summoner()
     elseif v.Name == "evacuate" then
         cast_evac_spell()
     elseif v.Name == "groupheal" then
         cast_group_heal()
     elseif v.Name == "shrinkgroup" then
         shrink_group()
-    elseif v.Name == "clickit" then
-        if v.Arg ~= nil and matches_filter(v.Arg) then
+    elseif v.Name == "clickdoor" then
+        local sender = spawn_from_peer_name(v.Arg)
+        if sender == nil then
+            all_tellf("NO SENDER SPAWN, IGNORING CLICK FROM %s", v.Arg)
+            return
+        end
+        if not is_within_distance(sender, 60) then
+            all_tellf("TOO FAR AWAY FROM %s (%.2f), CANT CLICK", v.Arg, sender.Distance())
+            return
+        end
+
+        if v.Arg2 ~= nil and matches_filter(v.Arg2) then
             click_nearby_door()
         end
     elseif v.Name == "portto" then

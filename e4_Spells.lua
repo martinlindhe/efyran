@@ -550,6 +550,7 @@ function ae_rez()
     end
 
     all_tellf("\amAEREZ DONE\ax")
+    clear_ae_rezzed()
 end
 
 -- holds names of those already being rezzed
@@ -666,7 +667,7 @@ function gather_corpses()
     local spawnQuery = 'pccorpse radius 100'
     for i = 1, spawn_count(spawnQuery) do
         local spawn = mq.TLO.NearestSpawn(i, spawnQuery)
-        if spawn.Distance() > 5 then
+        if spawn.Distance() > 20 then
             log.Info("Gathering corpse %s", spawn.Name())
             target_id(spawn.ID())
             cmdf("/dexecute %s /consent %s", spawn.DisplayName(), mq.TLO.Me.Name())

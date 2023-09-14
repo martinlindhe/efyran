@@ -244,7 +244,7 @@ function Heal.acceptRez()
         if not is_peer(peer) then
             all_tellf("WARNING: got a rez from (NOT A PEER) %s: %s", peer, s)
             cmd("/beep 1")
-            if not botSettings.allowStrangers then
+            if not globalSettings.allowStrangers then
                 delay(10000) -- 10s to not flood chat
                 return
             end

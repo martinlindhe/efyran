@@ -10,6 +10,7 @@ local commandQueue = require("efyran/e4_CommandQueue")
 local botSettings = require("efyran/e4_BotSettings")
 local pet     = require("efyran/e4_Pet")
 local buffs   = require("efyran/e4_Buffs")
+local globalSettings = require("efyran/e4_Settings")
 
 require("efyran/autobank")
 
@@ -83,6 +84,270 @@ function QoL.Init()
             return
         end
         commandQueue.ZoneEvent()
+    end)
+
+    -- MPG raids
+    mq.event("mpg-foresight-duck", "#*#From the corner of your eye, you notice a Kyv taking aim at your head. You should duck.", function(text)
+        log.Info("mpg-foresight DUCK")
+        if zone_shortname() ~= "chambersc" then
+            return
+        end
+
+        assist.backoff()
+
+        local hp = mq.TLO.Me.PctHPs()
+
+        for i = 1, 10 do
+            if not mq.TLO.Me.Ducking() then
+                cmd("/keypress duck")
+            end
+            delay(200)
+        end
+
+        if mq.TLO.Me.Ducking() then
+            cmd("/keypress duck")
+        end
+
+        if mq.TLO.Me.PctHPs() < hp then
+           all_tellf("foresight1: failed DUCK origHP %d, currHP %d", hp, mq.TLO.Me.PctHPs())
+        end
+    end)
+
+    mq.event("mpg-foresight-pbae", "#*#You notice that the Dragorn before you is preparing to cast a devastating close-range spell.", function(text)
+        cmd("/popup Dragorn PBAE Inc")
+        if is_raid_leader() then
+            cmd("/rs @@@ PBAE INC @@@")
+        end
+    end)
+
+    mq.event("mpg-foresight-blast", "You notice that the Dragorn before you is making preparations to cast a devastating spell.  Doing enough damage to him might interrupt the process.", function(text)
+        cmd("/popup Dragorn Blast Inc")
+        if is_raid_leader() then
+            cmd("/rs @@@ BLAST INC @@@")
+        end
+    end)
+
+    mq.event("mpg-foresight-thorn", "#*#The Dragorn before you is sprouting sharp spikes.", function(text)
+        cmd("/popup Dragorn Thorns Inc")
+        if is_raid_leader() then
+            cmd("/rs ^^^ Thorns ON ^^^")
+        end
+    end)
+
+    mq.event("mpg-foresight-reflect", "#*#The Dragorn before you is developing an anti-magic aura.", function(text)
+        cmd("/popup Dragorn Reflect Inc")
+        if is_raid_leader() then
+            cmd("/rs ~~~ Reflect ON ~~~")
+        end
+    end)
+
+    mq.event("bloodfields-gazz-ramp", "#*#Gazz the Gargantuan slows its gait and begins flailing muscular arms in all directions#*#", function(text)
+        cmd("/popup >>^<< Gazz begins to ramp - MELEE OFF and CASTER ON >>^<<")
+        if is_raid_leader() then
+            cmd("/rs >>^<< Gazz begins to ramp - MELEE OFF and CASTER ON >>^<<")
+        end
+    end)
+
+    mq.event("inktuta-deathtouch", "#*#thoughts of a cursed trusik invade your mind#*#", function(text)
+        if zone_shortname() == "inktuta" then
+            cmdf("/rs I, >>^<< %s >>^<<, who am about to die, salute you!!", mq.TLO.Me.Name())
+        end
+    end)
+
+    mq.event("uqua-key", "#*#The #1# must unlock the door to the next room.#*#", function(text, key)
+        if zone_shortname() == "uqua" then
+            cmdf("/rs >>^<< The %s unlocks the door >>^<<", key)
+            cmdf("/popup >>^<< The %s unlocks the door >>^<<", key)
+        end
+    end)
+
+    mq.event("tactics-stampede", "#*#You hear the pounding of hooves#*#", function(text, key)
+        if zone_shortname() == "potactics" then
+            cmdf("/gsay STAMPEDE!")
+        end
+    end)
+
+    mq.event("anguish-ture", "#*#Ture roars with fury as it surveys its attackers#*#", function(text, key)
+        if zone_shortname() == "anguish" then
+            cmd("/popup Ture roars >> MOVE AWAY MELEE <<")
+            if is_raid_leader() then
+                cmdf("/rs Ture roars >> MOVE AWAY MELEE <<")
+            end
+        end
+    end)
+
+    mq.event("anguish-mask", "#*#You feel a gaze of deadly power focusing on you#*#", function(text, key)
+        if zone_shortname() == "anguish" then
+            cmdf("/rs ~~~Mask on Me~~~ Ready: %s", mq.TLO.Me.ItemReady("Mirrored Mask")())
+
+            --            /if (!${Bool[${FindItem[=Mirrored Mask]}]}) {
+            --                /bc [+r+] I dont have a Mirrored Mask
+            --                /return
+            --              } else /if (${FindItem[=Mirrored Mask].ItemSlot} >=23 ) {
+            --                /if (${Me.Casting.ID}) /call interrupt
+            --                /delay 3s !${Me.Casting.ID}
+            --                /declare OMM_Mask string local ${Me.Inventory[face].Name}
+            --                /call WriteToIni "${MacroData_Ini},${Me.CleanName}-${MacroQuest.Server},Pending Exchange" "${OMM_Mask}/face" 1
+            --                /delay 3
+            --                /echo calling swapitem
+            --                /call SwapItem "Mirrored Mask" "face"
+            --                /delay 5 ${Me.Inventory[face].Name.Equal[Mirrored Mask]}
+            --                /call SwapItem "Mirrored Mask" "face"
+            --                /delay 5 ${Me.Inventory[face].Name.Equal[Mirrored Mask]}
+            --                /call SwapItem "Mirrored Mask" "face"
+            --                /delay 5 ${Me.Inventory[face].Name.Equal[Mirrored Mask]}
+            --              }
+            --              /if (${Me.Inventory[face].Name.Equal[Mirrored Mask]}) {
+            --                /declare numtries int local=0
+            --                /if (${Me.Casting.ID}) /call interrupt
+            --                /delay 3s !${Me.Casting.ID}
+            --                :retry
+            --                /varcalc numtries ${numtries}+1
+            --                /casting "Mirrored Mask" -maxtries|3
+            --                /delay 1s
+            --                /if (!${Bool[${Me.Song[Reflective Skin]}]} && ${numtries} < 8) /goto :retry
+            --              }
+            --              |/if (${OMM_Mask.Length}) /call SwapItem "${OMM_Mask}" "face"
+            --cmdf("/rs ~~~Mask on Me~~~ Ready: %s", mq.TLO.Me.ItemReady("Mirrored Mask")())
+
+        end
+    end)
+
+
+    mq.event("ikkinz-priest", "#*#The creature cannot stand up to the power of healers#*#", function(text)
+        if is_raid_leader() then
+            cmd("/rs Spawn must be killed by a >>^<< PRIEST >>^<<")
+        end
+    end)
+
+    mq.event("ikkinz-hybrid", "#*#The creature appears weak to the combined effort of might and magic#*#", function(text)
+        if is_raid_leader() then
+            cmd("/rs Spawn must be killed by a >>^<< HYBRID >>^<<")
+        end
+    end)
+
+    mq.event("ikkinz-caster", "#*#The creature will perish under the strength of intelligent magic#*#", function(text)
+        if is_raid_leader() then
+            cmd("/rs Spawn must be killed by a >>^<< CASTER >>^<<")
+        end
+    end)
+
+    mq.event("ikkinz-melee", "#*#The creature appears weak to the combined effort of strength and cunning#*#", function(text)
+        if is_raid_leader() then
+            cmd("/rs Spawn must be killed by a >>^<< MELEE >>^<<")
+        end
+    end)
+
+    mq.event("ikkinz-class-war", "#*#Brute force and brawn#*#", function(text)
+        cmd("/popup Spawn must be killed by a >>^<< WARRIOR >>^<<")
+        if is_raid_leader() then
+            cmd("/rs Spawn must be killed by a >>^<< WARRIOR >>^<<")
+        end
+    end)
+
+    mq.event("ikkinz-class-shm", "#*#Cringes at the appearance of talismans#*#", function(text)
+        cmd("/popup Spawn must be killed by a >>^<< SHAMAN >>^<<")
+        if is_raid_leader() then
+            cmd("/rs Spawn must be killed by a >>^<< SHAMAN >>^<<")
+        end
+    end)
+
+    mq.event("ikkinz-class-bst", "#*#Deep gashes of feral savagery#*#", function(text)
+        cmd("/popup Spawn must be killed by a >>^<< BEASTLORD >>^<<")
+        if is_raid_leader() then
+            cmd("/rs Spawn must be killed by a >>^<< BEASTLORD >>^<<")
+        end
+    end)
+
+    mq.event("ikkinz-class-nec", "#*#Doom of death#*#", function(text)
+        cmd("/popup Spawn must be killed by a >>^<< NECROMANCER >>^<<")
+        if is_raid_leader() then
+            cmd("/rs Spawn must be killed by a >>^<< NECROMANCER >>^<<")
+        end
+    end)
+
+    mq.event("ikkinz-class-clr", "#*#Dread of celestial spirit#*#", function(text)
+        cmd("/popup Spawn must be killed by a >>^<< CLERIC >>^<<")
+        if is_raid_leader() then
+            cmd("/rs Spawn must be killed by a >>^<< CLERIC >>^<<")
+        end
+    end)
+
+    mq.event("ikkinz-class-shd", "#*#It appears that this creature dreads the strike of death#*#", function(text)
+        cmd("/popup Spawn must be killed by a >>^<< SHADOWKNIGHT >>^<<")
+        if is_raid_leader() then
+            cmd("/rs Spawn must be killed by a >>^<< SHADOWKNIGHT >>^<<")
+        end
+    end)
+
+    mq.event("ikkinz-class-mnk", "#*#Focused tranquility#*#", function(text)
+        cmd("/popup Spawn must be killed by a >>^<< MONK >>^<<")
+        if is_raid_leader() then
+            cmd("/rs Spawn must be killed by a >>^<< MONK >>^<<")
+        end
+    end)
+
+    mq.event("ikkinz-class-brd", "#*#Foreboding melody#*#", function(text)
+        cmd("/popup Spawn must be killed by a >>^<< BARD >>^<<")
+        if is_raid_leader() then
+            cmd("/rs Spawn must be killed by a >>^<< BARD >>^<<")
+        end
+    end)
+
+    mq.event("ikkinz-class-pal", "#*#fears a holy blade#*#", function(text)
+        cmd("/popup Spawn must be killed by a >>^<< PALADIN >>^<<")
+        if is_raid_leader() then
+            cmd("/rs Spawn must be killed by a >>^<< PALADIN >>^<<")
+        end
+    end)
+
+    mq.event("ikkinz-class-rog", "#*#Ignores anything behind it#*#", function(text)
+        cmd("/popup Spawn must be killed by a >>^<< ROGUE >>^<<")
+        if is_raid_leader() then
+            cmd("/rs Spawn must be killed by a >>^<< ROGUE >>^<<")
+        end
+    end)
+
+    mq.event("ikkinz-class-enc", "#*#Mind and body are vulnerable#*#", function(text)
+        cmd("/popup Spawn must be killed by a >>^<< ENCHANTER >>^<<")
+        if is_raid_leader() then
+            cmd("/rs Spawn must be killed by a >>^<< ENCHANTER >>^<<")
+        end
+    end)
+
+    mq.event("ikkinz-class-wiz", "#*#Falters when struck with the power of the elements#*#", function(text)
+        cmd("/popup Spawn must be killed by a >>^<< WIZARD >>^<<")
+        if is_raid_leader() then
+            cmd("/rs Spawn must be killed by a >>^<< WIZARD >>^<<")
+        end
+    end)
+
+    mq.event("ikkinz-class-ber", "#*#Shies from heavy blades#*#", function(text)
+        cmd("/popup Spawn must be killed by a >>^<< BERSERKER >>^<<")
+        if is_raid_leader() then
+            cmd("/rs Spawn must be killed by a >>^<< BERSERKER >>^<<")
+        end
+    end)
+
+    mq.event("ikkinz-class-mag", "#*#Summoned elements#*#", function(text)
+        cmd("/popup Spawn must be killed by a >>^<< MAGICIAN >>^<<")
+        if is_raid_leader() then
+            cmd("/rs Spawn must be killed by a >>^<< MAGICIAN >>^<<")
+        end
+    end)
+
+    mq.event("ikkinz-class-dru", "#*#The creature seems weak in the face of the power of nature#*#", function(text)
+        cmd("/popup Spawn must be killed by a >>^<< DRUID >>^<<")
+        if is_raid_leader() then
+            cmd("/rs Spawn must be killed by a >>^<< DRUID >>^<<")
+        end
+    end)
+
+    mq.event("ikkinz-class-rng", "#*#True shots and fast blades#*#", function(text)
+        cmd("/popup Spawn must be killed by a >>^<< RANGER >>^<<")
+        if is_raid_leader() then
+            cmd("/rs Spawn must be killed by a >>^<< RANGER >>^<<")
+        end
     end)
 
     -- for DoN solo tasks
@@ -445,15 +710,21 @@ function QoL.Init()
         commandQueue.Add("shrinkgroup")
     end)
 
-    -- tell everyone else to click nearby door/object (pok stones, etc)
+    -- tell everyone else to click door/object (pok stones, etc) near the sender
     mq.bind("/clickit", function(...)
         local filter = trim(args_string(...))
 
         if is_orchestrator() then
-            mq.cmdf("/dgzexecute /clickit %s", filter)
+            mq.cmdf("/dgzexecute /clickdoor %s %s", mq.TLO.Me.Name(), filter)
         end
-        commandQueue.Add("clickit", filter)
+        commandQueue.Add("clickdoor", mq.TLO.Me.Name(), filter)
     end)
+
+    mq.bind("/clickdoor", function(sender, ...)
+        local filter = trim(args_string(...))
+        commandQueue.Add("clickdoor", sender, filter)
+    end)
+
 
     mq.bind("/portto", function(name)
         name = name:lower()
@@ -490,6 +761,10 @@ function QoL.Init()
             return
         end
         follow.Start(spawnName, false)
+    end)
+
+    mq.bind("/usecorpsesummoner", function()
+        commandQueue.Add("usecorpsesummoner")
     end)
 
     mq.bind("/evac", function(name)
@@ -1024,7 +1299,7 @@ function QoL.Init()
 
     mq.event('joinraid', '#1# invites you to join a raid.#*#', function(text, sender)
         if not is_peer(sender) then
-            if not botSettings.allowStrangers then
+            if not globalSettings.allowStrangers then
                 all_tellf("ERROR: Ignoring Raid invite from unknown player %s", sender)
                 return
             end
@@ -1191,6 +1466,9 @@ end
 
 -- make sure I know all listed abilities
 function QoL.verifySpellLines()
+    if is_naked() then
+        return
+    end
 
     verifySpellLines("self_buffs", botSettings.settings.self_buffs)
 
@@ -1300,7 +1578,144 @@ function QoL.Tick()
         clear_cursor()
         qolClearCursorTimer:restart()
     end
+end
+
+-- summon corpse using the corpse summoner in guild lobby
+function use_corpse_summoner()
+    if zone_shortname() ~= "guildlobby" then
+        log.Error("Must be in guild lobby, west wing opening to use corpse summoner script")
+        return
+    end
+
+    if not is_naked() then
+        log.Info("Not naked, ignoring corpse summoner")
+        return
+    end
+
+    if not is_within_distance_to_loc(412, 180, 2, 25) then
+        all_tellf("ERROR: Not at correct spot in guild lobby. Go to west wing opening and try again!")
+        return
+    end
+
+    log.Info("yo")
+
+    local soulstone, price = get_best_soulstone()
+    log.Info("Best soulstone %s, price %d", soulstone, price)
+
+    if not have_item(soulstone) and mq.TLO.Me.Platinum() < price then
+        -- pick up plat from banker
+        if mq.TLO.Me.PlatinumBank() < price then
+            all_tellf("ERROR: Not enough plat in bank for corpse summoner. Need %d, have %d", price, mq.TLO.Me.PlatinumBank())
+            cmd("/beep 1")
+            return
+        end
+
+        log.Info("Not enough cash, need to pick up from bank ...")
+
+        move_to_loc(415, 250, 2)    -- middle point
+        delay(1000)
+
+        move_to_loc(477, 190, 2)    -- banker
+        delay(1000)
+
+        open_banker()
+
+        if not window_open("BigBankWnd") then
+            all_tellf("ERROR failed to open bank")
+            return
+        end
+
+        -- withdraw plat
+        --:ammountofplat
+        if not window_open("QuantityWnd") then
+            cmd("/notify BigBankWnd BIGB_Money0 leftmouseup")
+        end
+
+        delay(100)
+
+        delay(5, function() window_open("QuantityWnd") end)
+
+        for i = 1, 9 do
+            cmd("/keypress backspace chat")
+            delay(20)
+        end
+
+        local costString = string.format("%d", price)
+
+        for c in costString:gmatch"." do
+            log.Info("Entering %s", c)
+            cmdf("/keypress %s chat", c)
+            delay(30)
+        end
+
+        cmd("/notify QuantityWnd QTYW_Accept_Button leftmouseup")
+        delay(20)
+        cmd("/autoinventory")
+
+        close_window("BigBankWnd", "DoneButton")
+
+        move_to_loc(415, 250, 2)    -- middle point
+
+    end
+
+    if not have_item(soulstone) then
+        -- purchase soulstone
+        move_to_loc(350, 191, 2)    -- A Disciple of Luclin
+        target_npc_name("A Disciple of Luclin")
+        delay(1000)
+
+        cmd("/click right target")
+        delay(500)
+        if not window_open("MerchantWnd") then
+            all_tellf("ERROR corpse summoning: Fail to open MerchantWnd")
+            return
+        end
+
+        cmdf("/nomodkey /notify MerchantWnd ItemList listselect %d", mq.TLO.Window("MerchantWnd").Child("ItemList").List("="..soulstone, 2)())
+        delay(60)
+        cmd("/notify MerchantWnd MW_Buy_Button leftmouseup")
+        delay(1000, function() return have_item(soulstone) end)
+
+        if have_item(soulstone) then
+            cmd("/nomodkey /notify MerchantWnd MW_Done_Button leftmouseup")
+        else
+            all_tellf("ERROR failed to purchase soulstone !")
+            return
+        end
+        move_to_loc(415, 250, 2)    -- middle point
+    end
+
+
+    local item = find_item(soulstone)
+    if item == nil then
+        all_tellf("ERROR: cant find soulstone %s", soulstone)
+        return
+    end
+
+    -- move to summoner
+    move_to_loc(321, 270, 2) -- corpse summoner
+    delay(1000)
+
+    target_npc_name("A Priest of Luclin")
+
+    -- pick up soulstone
+    cmdf("/nomodkey /ctrl /itemnotify in Pack%d %d leftmouseup", item.ItemSlot() - 22, item.ItemSlot2() + 1)
+    delay(200)
+    delay(1000, function() return has_cursor_item() end)
+
+    -- give it
+    cmd("/click left target")
+    delay(200)
+
+    delay(1000, function() return not has_cursor_item() end)
+    cmd("/notify GiveWnd GVW_Give_Button leftmouseup")
+
+    delay(1000)
+
+    move_to_loc(320, 300, 2)    -- sw corner
 
 end
+
+
 
 return QoL

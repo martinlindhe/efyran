@@ -137,6 +137,7 @@ Buff Spell Level   Minimum Target Level
 /hailall                    - have all peers hail/talk to nearby NPC
 /gotflag                    - reports peers who got character flag
 /noflag                     - reports peers who did not get character flag
+/bark <text>                - have all peers say <text> to targeted NPC
 
 /cohgroup                   - let current mage summon their group with Call of the Hero
 
@@ -183,6 +184,7 @@ Buff Spell Level   Minimum Target Level
 
 /lootcorpses                - loot your corpses
 /lootallcorpses             - tell peers to loot all
+/usecorpsesummoner          - summon corpse in guild lobby
 ```
 
 TODO document the remaining commands
