@@ -103,7 +103,7 @@ function CommandQueue.Process()
         buffs.BuffIt(toint(v.Arg))
     elseif v.Name == "killit" then
         local filter = v.Arg2
-        if filter ~= nil and not matches_filter(filter) then
+        if filter ~= nil and not matches_filter(filter, mq.TLO.Me.Name()) then
             log.Info("Not matching filter, giving up: %s", filter)
             return
         end
@@ -153,14 +153,14 @@ function CommandQueue.Process()
             return
         end
 
-        if v.Arg2 ~= nil and matches_filter(v.Arg2) then
+        if v.Arg2 ~= nil and matches_filter(v.Arg2, mq.TLO.Me.Name()) then
             click_nearby_door()
         end
     elseif v.Name == "portto" then
         cast_port_to(v.Arg)
     elseif v.Name == "movetoid" then
         local filter = v.Arg2
-        if filter ~= nil and not matches_filter(filter) then
+        if filter ~= nil and not matches_filter(filter, mq.TLO.Me.Name()) then
             log.Info("movetoid: Not matching filter, giving up: %s", filter)
             return
         end

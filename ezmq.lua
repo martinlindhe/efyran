@@ -1641,14 +1641,15 @@ end
 
 -- Check wether our class/name matches the given filter
 ---@param filter string A filter, such as "/only|WAR", or "/not|casters"
+---@param sender string Peer name of sender
 ---@return boolean true if we match filter
-function matches_filter(filter)
+function matches_filter(filter, sender)
     local filterConfig = parseFilterLine(filter)
-    if filterConfig.Only ~= nil and not matches_filter_line(filterConfig.Only) then
+    if filterConfig.Only ~= nil and not matches_filter_line(filterConfig.Only, sender) then
         log.Debug("I am not matching this ONLY line: %s", filterConfig.Only)
         return false
     end
-    if filterConfig.Not ~= nil and matches_filter_line(filterConfig.Not) then
+    if filterConfig.Not ~= nil and matches_filter_line(filterConfig.Not, sender) then
         log.Debug("I am matching this NOT line: %s", filterConfig.Not)
         return false
     end
@@ -1657,15 +1658,16 @@ end
 
 ---@return boolean true if we match
 ---@param line string
-function matches_filter_line(line)
+---@param sender string Peer name of sender
+function matches_filter_line(line, sender)
     local class = class_shortname()
     local tokens = split_str(line, " ")
     for k, v in pairs(tokens) do
         if class == v:upper() or v == mq.TLO.Me.Name() or (v == "me" and is_orchestrator()) then
             return true
         end
-        if v == "group" then
-            -- XX if only group and sender is in my group ?? TODO need sender name
+        if v == "group" and  is_grouped_with(sender) then
+            return true
         end
         if v == "priests" and is_priest(class) then
             return true

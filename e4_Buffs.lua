@@ -207,7 +207,7 @@ function buffs.HandleDebuffs()
         local spellConfig = parseSpellLine(row)
         if mq.TLO.Me.Buff(spellConfig.Name).ID() ~= nil then
 
-            if matches_filter(spellConfig.Class) then
+            if matches_filter(spellConfig.Class, mq.TLO.Me.Name()) then
 
                 log.Info("I have debuff \ar%s\ax, need \ay%s\ax cure.", spellConfig.Name, spellConfig.Cure)
 

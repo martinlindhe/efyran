@@ -764,8 +764,8 @@ function QoL.Init()
     ---@param ... string|nil filter, such as "/only|ROG"
     mq.bind("/followplayer", function(spawnName, ...)
         local filter = trim(args_string(...))
-        if filter ~= nil and not matches_filter(filter) then
-            log.Info("followid: Not matching filter, giving up: %s", filter)
+        if filter ~= nil and not matches_filter(filter, spawnName) then
+            log.Info("followid: Not matching filter \ay%s\ax", filter)
             return
         end
         follow.Start(spawnName, false)
