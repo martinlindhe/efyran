@@ -44,7 +44,7 @@ function Assist.Init()
 
     -- Adjust Melee distance if too far away msg, because spawn.MaxDistanceTo() is not exact
     mq.event("melee-out-of-range", "Your target is too far away, get closer!", function()
-        local t = Assist.meleeDistance - 1
+        local t = Assist.meleeDistance - 3
         if t >= 9 then
             log.Info("Reducing max distance from %f to %f", Assist.meleeDistance, t)
             Assist.meleeDistance = t
@@ -169,7 +169,7 @@ function Assist.beginKillSpawnID(spawnID)
         end
 
         if botSettings.settings.assist.melee_distance == "auto" then
-            Assist.meleeDistance = spawn.MaxRangeTo() * 0.70 -- XXX too far in riftseekers with 0.75. XXX cant disarm in riftseekers with 0.60
+            Assist.meleeDistance = spawn.MaxRangeTo() * 0.50 -- XXX too far in riftseekers with 0.75. XXX cant disarm in riftseekers with 0.60
             log.Info("Calculated auto melee distance %f", Assist.meleeDistance)
         else
             Assist.meleeDistance = tonumber(botSettings.settings.assist.melee_distance)
@@ -187,7 +187,7 @@ end
 function Assist.meleeStick()
     local stickArg
     if Assist.IsTanking() then
-        stickArg = "hold " .. Assist.meleeDistance .. " uw"
+        stickArg = string.format("hold %.0f uw", Assist.meleeDistance)
         log.Debug("STICKING IN FRONT TO %d: %s", Assist.targetID, stickArg)
         mq.cmdf("/stick %s", stickArg)
     else
@@ -195,7 +195,7 @@ function Assist.meleeStick()
         --mq.delay(200, function()
         --    return mq.TLO.Stick.Behind() and mq.TLO.Stick.Stopped()
         --end)
-        stickArg = "hold moveback behind " .. Assist.meleeDistance .. " uw"
+        stickArg = string.format("hold moveback behind %.0f uw", Assist.meleeDistance)
         log.Debug("STICKING IN BACK TO %d: %s", Assist.targetID, stickArg)
         mq.cmdf("/stick %s", stickArg)
     end

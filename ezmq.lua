@@ -1303,6 +1303,7 @@ end
 ---@field public MaxMana integer % of maximum mana required to cast this spell (eg. Cannibalization).
 ---@field public MinEnd integer % of minimum endurance required to cast this ability.
 ---@field public MinHP integer % of minimum HP required to cast this ability (eg. Cannibalization).
+---@field public MaxHP integer % of maximum HP required to cast this ability (eg. Snare).
 ---@field public HealPct integer % of health threshold before heal is cast.
 ---@field public MinMobs integer Minimum number of mobs nearby required to cast this spell.
 ---@field public MaxMobs integer Maximum number of mobs nearby allowed to cast this spell.
@@ -1316,7 +1317,7 @@ end
 ---@field public Self boolean This is a self spell (used for auto cure).
 
 local shortProperties = { "Shrink", "GoM", "NoAggro", "NoPet", "Group", "Self" } -- is turned into bools
-local intProperties = { "PctAggro", "MinMana", "MaxMana", "MinEnd", "MinHP", "HealPct", "MinMobs", "MaxMobs", "MaxTries" } -- is turned into integers
+local intProperties = { "PctAggro", "MinMana", "MaxMana", "MinEnd", "MinHP", "MaxHP", "HealPct", "MinMobs", "MaxMobs", "MaxTries" } -- is turned into integers
 -- parses a spell/ability etc line with properties, returns a object
 -- example in: "Ward of Valiance/MinMana|50/CheckFor|Hand of Conviction"
 ---@param s string
@@ -1630,6 +1631,11 @@ function trim(s)
 end
 
 -- Send a text to all peers thru MQ2DanNet
+function all_tell(msg)
+    cmdf("/dgtell all [%s] %s", time(), msg)
+end
+
+-- Send a text to all peers thru MQ2DanNet
 function all_tellf(...)
     cmdf("/dgtell all [%s] %s", time(), string.format(...))
 end
@@ -1853,8 +1859,15 @@ function castSpellAbility(spawn, row, callback)
         return false
     end
 
-    if spell.MinHP ~= nil and mq.TLO.Me.PctHPs() < spell.MinHP then
+    if spell.MinHP ~= nil and mq.TLO.Me.PctHPs() > spell.MinHP then
+        -- eg. Cannibalize if we have enough HP %
         all_tellf("SKIP MinHP %s, %d vs required %d", spell.Name,  mq.TLO.Me.PctHPs(), spell.MinHP)
+        return false
+    end
+
+    if spawn ~= nil and spell.MaxHP ~= nil and spawn.PctHPs() < spell.MaxHP then
+        -- eg. Snare mob at low health
+        all_tellf("SKIP MaxHP %s, %d vs required %d", spell.Name, spawn.PctHPs(), spell.MaxHP)
         return false
     end
 

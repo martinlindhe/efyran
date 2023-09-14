@@ -254,6 +254,7 @@ for assist.abilities and assist.nukes (castSpellAbility)
 - GoM
 - Summon
 - NoPet
+- MaxHP   = only use if mob is below this HP %
 
 for heals and life support (healPeer)
 - MinMana|50

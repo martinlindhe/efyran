@@ -1347,34 +1347,36 @@ function QoL.Init()
             return
         end
 
+        local msg = ""
+
         if not in_group() then
-            all_tellf("\agI got solo Exp (%.2f %% AA)", aaDiff)
+            msg = string.format("\agSolo XP (%.2f %% AA)", aaDiff)
         elseif is_group_leader() then
-            all_tellf("\agMy group got Exp (%.2f %% AA)", aaDiff)
+            msg = string.format("\agGroup XP (%.2f %% AA)", aaDiff)
+        end
+
+
+        -- leader xp
+        local groupXpDiff = mq.TLO.Me.PctGroupLeaderExp() - QoL.currentGroupLeaderXP
+        if groupXpDiff < 0 then
+            -- we dinged AA
+            groupXpDiff = 100 + mq.TLO.Me.PctGroupLeaderExp() - QoL.currentGroupLeaderXP
+        end
+
+        QoL.currentGroupLeaderXP = mq.TLO.Me.PctGroupLeaderExp()
+
+        if groupXpDiff > 0 then
+            msg = msg .. string.format(", group leader XP (%.2f %%)", groupXpDiff)
+        end
+
+        if msg ~= "" then
+            all_tell(msg)
         end
     end
 
     mq.event("xp1", "You gain experience!", xpGain)
     mq.event('xp2', 'You gain party experience!!', xpGain)
     --mq.event("xp3", "You gained raid experience!", xpGain)
-
-    mq.event("leader_xp", "You gain group leadership experience!", function(text)
-        local aaDiff = mq.TLO.Me.PctGroupLeaderExp() - QoL.currentGroupLeaderXP
-        if aaDiff < 0 then
-            -- we dinged AA
-            aaDiff = 100 + mq.TLO.Me.PctGroupLeaderExp() - QoL.currentGroupLeaderXP
-        end
-
-        QoL.currentGroupLeaderXP = mq.TLO.Me.PctGroupLeaderExp()
-
-        if in_raid() then
-            return
-        end
-
-        if aaDiff > 0 then
-            all_tellf("\agGained Group leader XP (%.2f %%)", aaDiff)
-        end
-    end)
 
     mq.event("raid_leader_xp", "You gain raid leadership experience!", function(text)
         local aaDiff = mq.TLO.Me.PctRaidLeaderExp() - QoL.currentRaidLeaderXP
