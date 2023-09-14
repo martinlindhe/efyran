@@ -701,15 +701,19 @@ end
 --- Am I grouped with PC `name`?
 ---@return boolean
 function is_grouped_with(name)
-    if name == mq.TLO.Me.Name() then
-        return true
+    if not in_group() then
+        return false
     end
-    for i=1,mq.TLO.Group.Members() do
-        if mq.TLO.Group.Member(i).Name() == name then
-            return true
-        end
+    return name == mq.TLO.Me.Name() or mq.TLO.Group.Member(name).ID() ~= nil
+end
+
+--- Am I in raid with PC `name`?
+---@return boolean
+function is_raided_with(name)
+    if not in_raid() then
+        return false
     end
-    return false
+    return name == mq.TLO.Me.Name() or mq.TLO.Raid.Member(name).ID() ~= nil
 end
 
 -- Am I hovering? (just died, waiting for rez in the same zone)
@@ -1666,7 +1670,10 @@ function matches_filter_line(line, sender)
         if class == v:upper() or v == mq.TLO.Me.Name() or (v == "me" and is_orchestrator()) then
             return true
         end
-        if v == "group" and  is_grouped_with(sender) then
+        if v == "group" and is_grouped_with(sender) then
+            return true
+        end
+        if v == "raid" and is_raided_with(sender) then
             return true
         end
         if v == "priests" and is_priest(class) then
