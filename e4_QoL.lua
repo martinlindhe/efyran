@@ -593,6 +593,16 @@ function QoL.Init()
         commandQueue.Add("pbaeon")
     end)
 
+    mq.bind("/pbaeoff", function()
+        if is_orchestrator() then
+            cmd("/dgzexecute /pbaeoff")
+        end
+        if assist.PBAE == true then
+            assist.PBAE = false
+            all_tellf("PBAE OFF")
+        end
+    end)
+
     -- disband all peers from raid/group
     mq.bind("/disbandall", function()
         commandQueue.Add("disbandall")

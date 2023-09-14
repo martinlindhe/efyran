@@ -131,7 +131,10 @@ function CommandQueue.Process()
         assist.handleAssistCall(spawn)
 
     elseif v.Name == "pbaeon" then
-        pbae_loop()
+        -- XXX impl filter
+        memorizePBAESpells()
+        all_tellf("PBAE ON")
+        assist.PBAE = true
     elseif v.Name == "disbandall" then
         disband_all_peers()
     elseif v.Name == "usecorpsesummoner" then
@@ -446,6 +449,7 @@ function autoMapHeightFilter()
 
         -- DoN
         stillmoona = {min = 50, max = 20}, -- XXX
+        thundercrest = {min = 70, max = 70},
     }
 
     local data = heights[zone_shortname()]

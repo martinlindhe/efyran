@@ -621,39 +621,6 @@ function ae_rez_query(rez, spawnQuery)
     end
 end
 
-function pbae_loop() -- XXX TODO rework into a "tick" so we can process other events (loot corpse)
-
-    local nearbyPBAEilter = "npc radius 50 zradius 50 los"
-
-    if spawn_count(nearbyPBAEilter) == 0 then
-        all_tellf("Ending PBAE. No nearby mobs.")
-        return
-    end
-
-    memorizePBAESpells()
-
-    all_tellf("PBAE ON")
-    while true do
-        -- TODO: break this loop with /pbaeoff
-        if spawn_count(nearbyPBAEilter) == 0 then
-            all_tellf("Ending PBAE. No nearby mobs.")
-            break
-        end
-
-        if not is_casting() then
-            for k, spellRow in pairs(botSettings.settings.assist.pbae) do
-                local spellConfig = parseSpellLine(spellRow)
-                if is_spell_ready(spellConfig.Name) or is_combat_ability_ready(spellConfig.Name) then
-                    log.Info("Casting PBAE spell %s", spellConfig.Name)
-                    castSpellAbility(mq.TLO.Me, spellRow)
-                end
-                doevents()
-                delay(50)
-            end
-        end
-    end
-end
-
 function consent_me()
     local spawnQuery = 'pccorpse radius 500'
     for i = 1, spawn_count(spawnQuery) do

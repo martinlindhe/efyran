@@ -119,6 +119,7 @@ Buff Spell Level   Minimum Target Level
 /assiston ${Target.ID} <filter> - tell peers to kill spawn by ID
 /backoff <filter>           - call off assist
 /pbaeon                     - start PBAE
+/pbaeoff                    - stop PBAE
 /spellset <name>            - switch currently used spell set. default set is called "main"
 
 /quickburns

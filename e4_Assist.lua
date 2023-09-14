@@ -22,6 +22,8 @@ local Assist = {
     quickburns = false,
     longburns = false,
     fullburns = false,
+
+    PBAE = false, -- is PBAE active?
 }
 
 function Assist.Init()
@@ -276,6 +278,31 @@ local assistStickTimer = timer.new_expired(3 * 1) -- 3s
 
 -- updates current fight progress
 function Assist.Tick()
+
+    -- progress PBAE
+    if Assist.PBAE then
+        local nearbyPBAEilter = "npc radius 50 zradius 50 los"
+        if spawn_count(nearbyPBAEilter) == 0 then
+            all_tellf("Ending PBAE. No nearby mobs.")
+            Assist.PBAE = false
+            return
+        end
+
+        if not is_casting() then
+            for k, spellRow in pairs(botSettings.settings.assist.pbae) do
+                local spellConfig = parseSpellLine(spellRow)
+                if is_spell_ready(spellConfig.Name) or is_combat_ability_ready(spellConfig.Name) then
+                    log.Info("Casting PBAE spell %s", spellConfig.Name)
+                    if castSpellAbility(mq.TLO.Me, spellRow) then
+                        return
+                    end
+                end
+                doevents()
+                delay(50)
+            end
+        end
+    end
+
     if Assist.targetID == 0 then
         return
     end
