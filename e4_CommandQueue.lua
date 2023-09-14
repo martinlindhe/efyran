@@ -67,40 +67,6 @@ function CommandQueue.ZoneEvent()
 end
 
 
--- retrurns name and price
-function get_best_soulstone()
-    local level = mq.TLO.Me.Level()
-
-    if level <= 20 then
-        return "Minor Soulstone", 12
-    elseif level <= 30 then
-        return "Lesser Soulstone", 28
-    elseif level <= 40 then
-        return "Soulstone", 55
-    elseif level <= 50 then
-        return "Greater Soulstone", 87
-    elseif level <= 55 then
-        return "Faceted Soulstone", 120
-    elseif level <= 70 then
-        return "Pristine Soulstone", 165
-    elseif level <= 75 then
-        return "Glowing Soulstone", 265
-    elseif level <= 80 then
-        return "Prismatic Soulstone", 425
-    elseif level <= 85 then
-        return "Iridescent Soulstone", 530
-    elseif level <= 90 then
-        return "Phantasmal Soulstone", 635
-    elseif level <= 95 then
-        return "Luminous Soulstone", 750
-    elseif level <= 100 then
-        return "Coalescent Soulstone", 865
-    else
-        -- TODO update with L100 to L130 names
-        all_tellf("get_best_soulstone: FATAL ERROR TOO HIGH LEVEL %d", level)
-    end
-
-end
 
 function CommandQueue.Process()
     --log.Debug("CommandQueue.Process()")
@@ -323,16 +289,22 @@ end
 -- Use a ward AA (priests)
 ---@param kind string kind of ward ("heal", "cure")
 function UseWard(kind)
+    if not is_clr() and not is_dru() then
+        return
+    end
     if kind == "cure" then
-        local aaName = "Ward of Purity"
-        if have_alt_ability(aaName) then
-            if is_alt_ability_ready(aaName) then
-                all_tellf("Dropping %s ward '%s' ...", kind, aaName)
-                use_alt_ability(aaName)
-            else
-                all_tellf("\ar%s ward '%s' is not ready\ax. Ready in %s", kind, aaName, mq.TLO.Me.AltAbilityTimer(aaName).TimeHMS())
-            end
+        local aaName = "Ward of Purity" -- DoDH
+        if not have_alt_ability(aaName) then
+            all_tellf("I do not have AA \ar%s\ax", aaName)
+            return
         end
+        if is_alt_ability_ready(aaName) then
+            all_tellf("Dropping %s ward '%s' ...", kind, aaName)
+            use_alt_ability(aaName)
+        else
+            all_tellf("\ar%s ward '%s' is not ready\ax. Ready in %s", kind, aaName, mq.TLO.Me.AltAbilityTimer(aaName).TimeHMS())
+        end
+
     elseif kind == "heal" then
         local healWards = {
             "Exquisite Benediction", -- CLR
@@ -350,6 +322,8 @@ function UseWard(kind)
                 return
             end
         end
+    else
+        all_tellf("UseWard FATAL: unhandled kind %s", kind)
     end
 end
 

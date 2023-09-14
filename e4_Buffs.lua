@@ -222,8 +222,17 @@ function buffs.HandleDebuffs()
                     all_tellf("FATAL: cant find a curer in my group: \ar%s\ax.", spellConfig.Name)
                     return
                 end
-                all_tellf("Asking \ag%s\ax to cure \ar%s\ax (\ay%s\ax)", curer, spellConfig.Name, spellConfig.Cure)
-                cmdf("/dex %s /cure %s %s", curer, mq.TLO.Me.Name(), spellConfig.Cure)
+                local spawn = spawn_from_peer_name(curer)
+                if spawn == nil then
+                    all_tellf("UNLIKELY: failed to look up spawn of curer \ar%s\ax", spellConfig.Name)
+                    return
+                end
+                if spawn.Distance() < 200 then
+                    all_tellf("Asking \ag%s\ax to cure \ar%s\ax (\ay%s\ax)", curer, spellConfig.Name, spellConfig.Cure)
+                    cmdf("/dex %s /cure %s %s", curer, mq.TLO.Me.Name(), spellConfig.Cure)
+                else
+                    all_tellf("ERROR: Want to ask \ag%s\ax to cure \ar%s\ax (\ay%s\ax). Distance %.2f", curer, spellConfig.Name, spellConfig.Cure, spawn.Distance())
+                end
 
             else
                 all_tellf("I have \ar%s\ax but not asking for cure (not %s)", spellConfig.Name, spellConfig.Class)

@@ -650,6 +650,12 @@ function is_clr()
     return mq.TLO.Me.Class.ShortName() == "CLR"
 end
 
+-- Am I a Druid?
+---@return boolean
+function is_dru()
+    return mq.TLO.Me.Class.ShortName() == "DRU"
+end
+
 -- Am I a Wizard?
 ---@return boolean
 function is_wiz()
@@ -2044,4 +2050,38 @@ end
 -- returns true if shield is equipped
 function has_shield_equipped()
     return mq.TLO.Me.Inventory("offhand").Type() == "Shield"
+end
+
+-- retrurns name and price
+function get_best_soulstone()
+    local level = mq.TLO.Me.Level()
+
+    if level <= 20 then
+        return "Minor Soulstone", 12
+    elseif level <= 30 then
+        return "Lesser Soulstone", 28
+    elseif level <= 40 then
+        return "Soulstone", 55
+    elseif level <= 50 then
+        return "Greater Soulstone", 87
+    elseif level <= 55 then
+        return "Faceted Soulstone", 120
+    elseif level <= 70 then
+        return "Pristine Soulstone", 165
+    elseif level <= 75 then
+        return "Glowing Soulstone", 265
+    elseif level <= 80 then
+        return "Prismatic Soulstone", 425
+    elseif level <= 85 then
+        return "Iridescent Soulstone", 530
+    elseif level <= 90 then
+        return "Phantasmal Soulstone", 635
+    elseif level <= 95 then
+        return "Luminous Soulstone", 750
+    elseif level <= 100 then
+        return "Coalescent Soulstone", 865
+    else
+        -- TODO update with L100 to L130 names
+        all_tellf("get_best_soulstone: FATAL ERROR TOO HIGH LEVEL %d", level)
+    end
 end

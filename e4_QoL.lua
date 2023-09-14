@@ -563,14 +563,17 @@ function QoL.Init()
         commandQueue.Add("hastask", name)
     end)
 
-    -- Use cure ward AA "Ward of Purity" (CLR)
+    -- Use heal ward AA (CLR/DRU/SHM, OOW)
+    mq.bind("/healward", function() commandQueue.Add("ward", "heal") end)
+
+    -- Summon all available heal wards (CLR/DRU/SHM, OOW)
+    mq.bind("/healwards", function() cmdf("/dgzexecute /healward") end)
+
+    -- Use cure ward AA "Ward of Purity" (CLR, DoDH)
     mq.bind("/cureward", function() commandQueue.Add("ward", "cure") end)
 
-    -- Summon all available cure wards
+    -- Summon all available cure wards (CLR, DoDH)
     mq.bind("/curewards", function() cmdf("/dgzexecute /cureward") end)
-
-    -- Use heal ward AA (CLR/DRU/SHM)
-    mq.bind("/healward", function() commandQueue.Add("ward", "heal") end)
 
     -- ends assist call
     mq.bind("/backoff", function()

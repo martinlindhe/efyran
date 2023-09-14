@@ -163,7 +163,12 @@ function cure_player(name, kind)
         return false
     end
 
-    for cidx, cureRow in pairs(valid_cures) do
+    if spawn.Distance() > 200 then
+        all_tellf("ERROR cant cure %s, too far away %.2f", name, spawn.Distance())
+        return false
+    end
+
+    for _, cureRow in pairs(valid_cures) do
         local cureConfig = parseSpellLine(cureRow)
 
         if known_spell_ability(cureConfig.Name) then
