@@ -995,7 +995,14 @@ function QoL.Init()
 
     mq.bind("/exitnotingroup", function() mq.cmd("/noparse /dgaexecute all /if (!${Group.Members}) /exitme") end)
 
-    mq.bind("/exitnotinraid", function() mq.cmd("/noparse /dgaexecute all /if (!${Raid.Members}) /exitme") end)
+    mq.bind("/exitnotinraid", function(force)
+        if not in_raid() and force ~= "force" then
+            all_tellf("ERROR: not exiting since you are not raided! Force with /exitnotinraid force")
+            cmd("/beep")
+            return
+        end
+        mq.cmd("/noparse /dgaexecute all /if (!${Raid.Members}) /exitme")
+    end)
 
     -- report all peers who are not in current zone
     mq.bind("/notinzone", function() mq.cmdf("/noparse /dgaexecute all /if (!${SpawnCount[pc =%s]}) /dgtell all I'm in \ar${Zone.ShortName}\ax", mq.TLO.Me.Name()) end)
