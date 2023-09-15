@@ -840,6 +840,14 @@ function QoL.Init()
         commandQueue.Add("usecorpsesummoner")
     end)
 
+    mq.bind("/refreshillusion", function()
+        commandQueue.Add("refreshillusion")
+    end)
+
+    mq.bind("/refreshillusions", function()
+        cmd("/dgae /refreshillusion")
+    end)
+
     mq.bind("/evac", function(name)
         if is_orchestrator() then
             mq.cmd("/dgzexecute /evac")

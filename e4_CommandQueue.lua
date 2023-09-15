@@ -11,6 +11,7 @@ local follow  = require("efyran/e4_Follow")
 local assist  = require("efyran/e4_Assist")
 local pet     = require("efyran/e4_Pet")
 local group   = require("efyran/e4_Group")
+local botSettings = require("efyran/e4_BotSettings")
 
 ---@class CommandQueueValue
 ---@field public Name string Name
@@ -152,6 +153,13 @@ function CommandQueue.Process()
         disband_all_peers()
     elseif v.Name == "usecorpsesummoner" then
         use_corpse_summoner()
+    elseif v.Name == "refreshillusion" then
+        local illusion = botSettings.GetCurrentIllusion()
+        if illusion ~= nil then
+            -- many model changes at once lags the client
+            unflood_delay()
+            castSpell(illusion, mq.TLO.Me.ID())
+        end
     elseif v.Name == "evacuate" then
         cast_evac_spell()
     elseif v.Name == "groupheal" then

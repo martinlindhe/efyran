@@ -395,25 +395,18 @@ function buffs.RefreshSelfBuffs()
     return false
 end
 
+-- Only refresh illusion if fading or missing
 -- returns true if a buff *with cast time* was casted
 function buffs.RefreshIllusion()
     if botSettings.settings.illusions == nil then
         return false
     end
 
-    local key = botSettings.settings.illusions.default
-    if key == nil or key == "" then
+    local illusion = botSettings.GetCurrentIllusion()
+    if illusion == nil then
         return false
     end
-
-    -- A: The default illusion refers to another key
-    local illusion = botSettings.settings.illusions[key]
-    if illusion ~= nil then
-        return refreshBuff(illusion, mq.TLO.Me)
-    end
-
-    -- B: The default illusion refers to a specific clicky/spell
-    return refreshBuff(key, mq.TLO.Me)
+    return refreshBuff(illusion, mq.TLO.Me)
 end
 
 -- returns true if buff was requested

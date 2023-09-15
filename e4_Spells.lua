@@ -28,7 +28,7 @@ end
 -- only refreshes fading & missing buffs
 function refreshBuff(buffItem, spawn)
 
-    --print("refreshBuff ", buffItem, ", target Name:", spawn.CleanName())
+   --print("refreshBuff ", buffItem, ", target Name:", spawn.CleanName())
 
     if spawn.Type() ~= "PC" and spawn.Type() ~= "Pet" then
         log.Info("Will not buff %s %s: %s ", spawn.Type(), spawn.Name(), spawn.CleanName())

@@ -85,6 +85,24 @@ function botSettings.Init()
     end
 end
 
+-- Returns the current illusion
+---@return string|nil
+function botSettings.GetCurrentIllusion()
+    local key = botSettings.settings.illusions.default
+    if key == nil or key == "" then
+        return nil
+    end
+
+    -- A: The default illusion refers to another key
+    local illusion = botSettings.settings.illusions[key]
+    if illusion ~= nil then
+        return illusion
+    end
+
+    -- B: The default illusion refers to a specific clicky/spell
+    return key
+end
+
 botSettings.Init()
 
 return botSettings
