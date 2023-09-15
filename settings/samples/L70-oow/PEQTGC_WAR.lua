@@ -62,7 +62,7 @@ settings.healing = {
         -- L52 Evasive
         -- L55 Defensive
         -- L65 Stonewall
-        "Stonewall Discipline/HealPct|30",
+        "Stonewall Discipline/HealPct|30/MinPlayers|4",
 
         -- timer 2:
         -- L56 Furious (riposte every incoming attack, 12s, 40 min reuse)

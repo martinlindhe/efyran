@@ -1306,6 +1306,7 @@ end
 ---@field public HealPct integer % of health threshold before heal is cast.
 ---@field public MinMobs integer Minimum number of mobs nearby required to cast this spell.
 ---@field public MaxMobs integer Maximum number of mobs nearby allowed to cast this spell.
+---@field public MinPlayers integer Minimum number of players nearby required to cast this spell.
 ---@field public Zone integer Comma-separated list of zone short names where spell is allowed to cast.
 ---@field public MinLevel integer Minimum level.
 ---@field public PctAggro integer Skips cast if your aggro % is above threshold.
@@ -1316,7 +1317,7 @@ end
 ---@field public Self boolean This is a self spell (used for auto cure).
 
 local shortProperties = { "Shrink", "GoM", "NoAggro", "NoPet", "Group", "Self" } -- is turned into bools
-local intProperties = { "PctAggro", "MinMana", "MaxMana", "MinEnd", "MinHP", "MaxHP", "HealPct", "MinMobs", "MaxMobs", "MaxTries" } -- is turned into integers
+local intProperties = { "PctAggro", "MinMana", "MaxMana", "MinEnd", "MinHP", "MaxHP", "HealPct", "MinMobs", "MaxMobs", "MinPlayers", "MaxTries" } -- is turned into integers
 -- parses a spell/ability etc line with properties, returns a object
 -- example in: "Ward of Valiance/MinMana|50/CheckFor|Hand of Conviction"
 ---@param s string
@@ -1904,6 +1905,12 @@ function castSpellAbility(spawn, row, callback)
         return false
     end
 
+    if spell.MinPlayers ~= nil and nearby_player_count(75) < spell.MinPlayers then
+        -- only cast if at least this many players is nearby (eg Stonewall)
+        all_tellf("SKIP MinPlayers, need %d (has %d)", spell.MinPlayers, nearby_player_count(75))
+        return false
+    end
+
     if not have_spell(spell.Name) and have_item_inventory(spell.Name) and not is_item_clicky_ready(spell.Name) then
         -- Item and spell examples: Molten Orb (MAG)
         log.Debug("SKIP cast, item clicky not ready: %s", spell.Name)
@@ -2137,4 +2144,14 @@ end
 
 function ucfirst(s)
     return s:sub(1,1):upper()..s:sub(2)
+end
+
+---@param radius integer
+function nearby_npc_count(radius)
+    return spawn_count(string.format("npc radius %d zradius 75", radius))
+end
+
+---@param radius integer
+function nearby_player_count(radius)
+    return spawn_count(string.format("pc radius %d zradius 75", radius))
 end

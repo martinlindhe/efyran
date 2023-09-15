@@ -894,12 +894,15 @@ function QoL.Init()
         commandQueue.Add("use-veteran-aa", "Throne of Heroes")
     end)
 
+
     -- tell group to use Lesson of the Devoted
-    mq.bind("/lesson", function()
+    ---@param ... string|nil filter, such as "/only|ROG"
+    mq.bind("/lesson", function(...)
+        local filter = trim(args_string(...))
         if is_orchestrator() then
-            mq.cmd("/dggexecute /lesson") -- XXX filter!!!
+            mq.cmd("/dggexecute /lesson %s", filter)
         end
-        commandQueue.Add("use-veteran-aa", "Lesson of the Devoted")
+        commandQueue.Add("use-veteran-aa", "Lesson of the Devoted", filter)
     end)
 
     mq.bind("/lessonsactive", function()

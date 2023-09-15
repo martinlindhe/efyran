@@ -14,7 +14,8 @@ local group   = require("efyran/e4_Group")
 local botSettings = require("efyran/e4_BotSettings")
 
 ---@class CommandQueueValue
----@field public Name string Name
+---@field public Name string Command name
+---@field public Sender string Peer name (TODO unused)
 ---@field public Arg string Argument
 ---@field public Arg2 string Second argument
 
@@ -26,9 +27,14 @@ local CommandQueue = {
 ---@param name string
 ---@param arg? string optional argument
 ---@param arg2? string optional argument
-function CommandQueue.Add(name, arg, arg2)
+---@param sender? string optional argument
+function CommandQueue.Add(name, arg, arg2, sender)
+    if sender == nil then
+        sender = mq.TLO.Me.Name()
+    end
     table.insert(CommandQueue.queue, {
         Name = name,
+        Sender = sender,
         Arg = arg,
         Arg2 = arg2,
     })
@@ -266,8 +272,14 @@ function CommandQueue.Process()
     elseif v.Name == "origin" then
         use_alt_ability("Origin")
     elseif v.Name == "use-veteran-aa" then
+        local filter = v.Arg2
+        if filter ~= nil and not matches_filter(filter, mq.TLO.Me.Name()) then -- XXX sender name for /only|group to work
+            log.Info("use-veteran-aa: Not matching filter, giving up: %s", filter)
+            return
+        end
+
         use_alt_ability(v.Arg)
-        delay(200)
+        delay(500)
     elseif v.Name == "dropbuff" then
         drop_buff(v.Arg)
     elseif v.Name == "mount-on" then
@@ -483,6 +495,9 @@ function autoMapHeightFilter()
 
         -- luclin
         fungusgrove = {min = 80, max = 80},     -- lucid shard camp
+
+        -- pop
+        codecay = {min = 30, max = 30},
 
         -- omens
         riftseekers = {min = 120, max = 120},   -- XXX

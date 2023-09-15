@@ -259,10 +259,6 @@ function Heal.acceptRez()
     end
 end
 
-function nearby_npc_count(radius)
-    return spawn_count(string.format("npc radius %d zradius 75", radius))
-end
-
 function Heal.medCheck()
 
     if os.time() - timeZonedDelay <= buffs.timeZoned then
@@ -307,10 +303,12 @@ function Heal.performGroupBalanceHeal()
     local sum = mq.TLO.Me.PctHPs()
     local members = 1
     for i=1,mq.TLO.Group.Members() do
-        local pct = mq.TLO.Group.Member(i).PctHPs()
-        if pct ~= nil then
-            sum = sum + pct
-            members = members + 1
+        if mq.TLO.Group.Member(i).Distance() < 100 then
+            local pct = mq.TLO.Group.Member(i).PctHPs()
+            if pct ~= nil then
+                sum = sum + pct
+                members = members + 1
+            end
         end
     end
 
@@ -469,10 +467,10 @@ function healPeer(spell_list, peer, pct)
     for k, heal in ipairs(spell_list) do
 
         local spellConfig = parseSpellLine(heal)
-        if spawn == nil then
+        if not spawn() then
             -- peer died
             return false
-        elseif spawn ~= nil and spawn.Distance() > 200 then
+        elseif spawn.Distance() > 200 then
             return false
         elseif spellConfig.MinMana ~= nil and mq.TLO.Me.PctMana() < spellConfig.MinMana then
             log.Info("SKIP HEALING, my mana %d vs required %d", mq.TLO.Me.PctMana(), spellConfig.MinMana)

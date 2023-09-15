@@ -279,7 +279,9 @@ function cast_mgb_spell(spellName)
         return
     end
 
-    memorize_spell(spellName, 5)
+    if not have_alt_ability(spellName) then
+        memorize_spell(spellName, 5)
+    end
 
     use_alt_ability("Mass Group Buff", nil)
     delay(1000)
@@ -300,7 +302,7 @@ local aeWarCryCombatAbilities = {
     "Battle Cry",                   -- L30, slot 2: Hundred Hands Effect, slot 11: 10 atk
 }
 
--- Use the best available AE berserker war cry combat ability
+-- Use the best available AE berserker war cry combat ability (DoDH)
 function cast_ae_cry()
     if not have_alt_ability("Cry of Battle") then
         all_tellf("\arCry of Battle is not available...\ax Need to purchase AA")
@@ -324,7 +326,7 @@ function cast_ae_cry()
     all_tellf("\arNo war cry ability available...\ax Need to purchase discs")
 end
 
--- Use the best available AE berserker war cry combat ability
+-- Use the best available AE berserker war cry combat ability (DoDH)
 function cast_ae_bloodthirst()
     if not have_alt_ability("Cry of Battle") then
         all_tellf("\arCry of Battle is not available...\ax Need to purchase AA")
