@@ -74,7 +74,7 @@ function buffs.AnnounceAvailablity()
         return
     end
 
-    if mq.TLO.DanNet.PeerCount() <= 1 then
+    if peer_count() <= 1 then
         return
     end
 

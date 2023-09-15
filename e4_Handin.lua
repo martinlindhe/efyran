@@ -266,7 +266,7 @@ function auto_hand_in_items()
 
                             end
 
-                            random_delay(mq.TLO.DanNet.PeerCount() * 10)
+                            random_delay(peer_count() * 10)
                             delay(200)
                             if window_open("GiveWnd") then
                                 -- PRESS GIVE BUTTON

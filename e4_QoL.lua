@@ -1174,6 +1174,11 @@ function QoL.Init()
         cmd("/dgae /handin")
     end)
 
+    -- make peers surround you in a circle
+    mq.bind("/circleme", function(dist)
+        commandQueue.Add("circleme", dist)
+    end)
+
     local mmrl = function()
         cmdf("/dex %s /makeraidleader %s", mq.TLO.Raid.Leader(), mq.TLO.Me.Name())
     end
@@ -1717,10 +1722,7 @@ function use_corpse_summoner()
         return
     end
 
-    log.Info("yo")
-
     local soulstone, price = get_best_soulstone()
-    log.Info("Best soulstone %s, price %d", soulstone, price)
 
     if not have_item(soulstone) and mq.TLO.Me.Platinum() < price then
         -- pick up plat from banker
@@ -1763,7 +1765,6 @@ function use_corpse_summoner()
         local costString = string.format("%d", price)
 
         for c in costString:gmatch"." do
-            log.Info("Entering %s", c)
             cmdf("/keypress %s chat", c)
             delay(30)
         end
@@ -1775,13 +1776,16 @@ function use_corpse_summoner()
         close_window("BigBankWnd", "DoneButton")
 
         move_to_loc(415, 250, 2)    -- middle point
+        delay(1000)
 
     end
 
     if not have_item(soulstone) then
-        -- purchase soulstone
-        move_to_loc(350, 191, 2)    -- A Disciple of Luclin
+        log.Info("Purchasing soulstone \ag%s\ax, price %d platinum", soulstone, price)
+
         target_npc_name("A Disciple of Luclin")
+
+        move_to_loc(350, 191, 2)    -- A Disciple of Luclin
         delay(1000)
 
         cmd("/click right target")
@@ -1802,7 +1806,9 @@ function use_corpse_summoner()
             all_tellf("ERROR failed to purchase soulstone !")
             return
         end
+
         move_to_loc(415, 250, 2)    -- middle point
+        delay(1000)
     end
 
 
@@ -1833,9 +1839,29 @@ function use_corpse_summoner()
     delay(1000)
 
     move_to_loc(320, 300, 2)    -- sw corner
-
 end
 
+
+-- form bots in a circle around orchestrator
+---@param dist integer|nil Distance from the center
+function make_peers_circle_me(dist)
+
+	local n = peer_count()
+    if dist == nil then
+        dist = 20
+    end
+
+    cmd("/dgze /followoff")
+
+    for i, peer in pairs(get_peers()) do
+        local angle = (360 / n) * i
+        if is_peer_in_zone(peer) then
+            local y = mq.TLO.Me.Y() + (dist * math.sin(angle))
+            local x = mq.TLO.Me.X() + (dist * math.cos(angle))
+            cmdf("/dex %s /moveto loc %d %d", peer, y, x)
+        end
+    end
+end
 
 
 return QoL

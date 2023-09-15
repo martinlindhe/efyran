@@ -140,6 +140,8 @@ Buff Spell Level   Minimum Target Level
 /noflag                     - reports peers who did not get character flag
 /bark <text>                - have all peers say <text> to targeted NPC
 
+/circleme                   - line up peers in a circle around you
+
 /cohgroup                   - let current mage summon their group with Call of the Hero
 
 /buffon, /buffoff           - toggle auto buffing

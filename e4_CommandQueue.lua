@@ -103,6 +103,8 @@ function CommandQueue.Process()
         cast_radiant_cure()
     elseif v.Name == "handin" then
         auto_hand_in_items()
+    elseif v.Name == "circleme" then
+        make_peers_circle_me(toint(v.Arg))
     elseif v.Name == "buffit" then
         buffs.BuffIt(toint(v.Arg))
     elseif v.Name == "killit" then

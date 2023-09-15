@@ -1511,7 +1511,7 @@ end
 --
 -- Used to reduce CPU load while zoning many peers at once.
 function unflood_delay()
-    local count = mq.TLO.DanNet.PeerCount()
+    local count = peer_count()
     local players = spawn_count("pc radius 100")
     if players < count then
         count = players
@@ -2113,4 +2113,28 @@ function get_best_soulstone()
         -- TODO update with L100 to L130 names
         all_tellf("get_best_soulstone: FATAL ERROR TOO HIGH LEVEL %d", level)
     end
+end
+
+function peer_count()
+    return mq.TLO.DanNet.PeerCount()
+end
+
+-- returns table with peers
+function get_peers()
+    local peers = {}
+    for peer in string.gmatch(mq.TLO.DanNet.Peers(), "([^|]+)") do
+        table.insert(peers, dannet_peer_to_local_peer(peer))
+    end
+    return peers
+end
+
+-- strip "server_" prefix
+function dannet_peer_to_local_peer(name)
+    local t = split_str(name, "_")
+    return ucfirst(t[2])
+    --return t[2]
+end
+
+function ucfirst(s)
+    return s:sub(1,1):upper()..s:sub(2)
 end
