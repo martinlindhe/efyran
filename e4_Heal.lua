@@ -232,7 +232,8 @@ function Heal.acceptRez()
 
         log.Debug("Got a rez from %s", peer)
         if not is_peer(peer) then
-            all_tellf("WARNING: got a rez from \ay%s\ax: \ap%s\ax", peer, s)
+            log.Warn("Got a rez from \ay%s\ax: \ap%s\ax", peer, s)
+            all_tellf("Got a rez from \ay%s\ax: \ap%s\ax", peer, s)
             if not globalSettings.allowStrangers then
                 cmd("/beep 1")
                 delay(10000) -- 10s to not flood chat

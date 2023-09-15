@@ -1717,10 +1717,17 @@ function use_corpse_summoner()
         return
     end
 
+    if have_corpse_in_zone() then
+        log.Info("I have a corpse in zone, not summoning another !")
+        return
+    end
+
     if not is_within_distance_to_loc(412, 180, 2, 25) then
         all_tellf("ERROR: Not at correct spot in guild lobby. Go to west wing opening and try again!")
         return
     end
+
+    unflood_delay()
 
     local soulstone, price = get_best_soulstone()
 
@@ -1789,7 +1796,7 @@ function use_corpse_summoner()
         delay(1000)
 
         cmd("/click right target")
-        delay(500)
+        delay(1000)
         if not window_open("MerchantWnd") then
             all_tellf("ERROR corpse summoning: Fail to open MerchantWnd")
             return

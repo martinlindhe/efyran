@@ -645,16 +645,23 @@ function gather_corpses()
     end
 end
 
+-- returns true if I have a corpse in current zone
+--- @return boolean
+function have_corpse_in_zone()
+    local name = string.format("%s's corpse", mq.TLO.Me.Name())
+    return spawn_count(name) > 0
+end
+
 function loot_my_corpse()
 
     cmd("/squelch /target clear")
 
-    local name = string.format("%s's corpse", mq.TLO.Me.Name())
-    if spawn_count(name) == 0 then
+    if not have_corpse_in_zone() then
         return
     end
 
     -- target my corpse
+    local name = string.format("%s's corpse", mq.TLO.Me.Name())
     cmdf("/target %s", name)
     mq.delay(100)
     if mq.TLO.Target.ID() == nil then
