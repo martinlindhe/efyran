@@ -1306,6 +1306,7 @@ end
 ---@field public HealPct integer % of health threshold before heal is cast.
 ---@field public MinMobs integer Minimum number of mobs nearby required to cast this spell.
 ---@field public MaxMobs integer Maximum number of mobs nearby allowed to cast this spell.
+---@field public MaxLevel integer Maximum level of target allowed to cast this spell.
 ---@field public MinPlayers integer Minimum number of players nearby required to cast this spell.
 ---@field public Zone integer Comma-separated list of zone short names where spell is allowed to cast.
 ---@field public MinLevel integer Minimum level.
@@ -1317,7 +1318,7 @@ end
 ---@field public Self boolean This is a self spell (used for auto cure).
 
 local shortProperties = { "Shrink", "GoM", "NoAggro", "NoPet", "Group", "Self" } -- is turned into bools
-local intProperties = { "PctAggro", "MinMana", "MaxMana", "MinEnd", "MinHP", "MaxHP", "HealPct", "MinMobs", "MaxMobs", "MinPlayers", "MaxTries" } -- is turned into integers
+local intProperties = { "PctAggro", "MinMana", "MaxMana", "MinEnd", "MinHP", "MaxHP", "MaxLevel", "HealPct", "MinMobs", "MaxMobs", "MinPlayers", "MaxTries" } -- is turned into integers
 -- parses a spell/ability etc line with properties, returns a object
 -- example in: "Ward of Valiance/MinMana|50/CheckFor|Hand of Conviction"
 ---@param s string
@@ -1854,17 +1855,9 @@ function castSpellAbility(spawn, row, callback)
         return false
     end
 
-    if spell.MaxMana ~= nil then
-        all_tellf("XXX MAX MANA is %d, my mana is %d", spell.MaxMana, mq.TLO.Me.PctMana())
-        return false -- XXX
-    end
-
     if spell.MaxMana ~= nil and mq.TLO.Me.PctMana() > spell.MaxMana then
-        all_tellf("SKIP MaxMana %s, %d vs required %d", spell.Name,  mq.TLO.Me.PctMana(), spell.MaxMana)
+        log.Debug("SKIP MaxMana %s, %d vs required %d", spell.Name,  mq.TLO.Me.PctMana(), spell.MaxMana)
         return false
-    elseif spell.MaxMana ~= nil then
-        -- XXX falls thru here
-        all_tellf("CONTINUE MaxMana %s, %d vs required %d", spell.Name,  mq.TLO.Me.PctMana(), spell.MaxMana)
     end
 
     if spell.MinEnd ~= nil and mq.TLO.Me.PctEndurance() < spell.MinEnd then
@@ -1878,9 +1871,15 @@ function castSpellAbility(spawn, row, callback)
         return false
     end
 
-    if spawn ~= nil and spell.MaxHP ~= nil and spawn.PctHPs() < spell.MaxHP then
+    if spawn ~= nil and spell.MaxHP ~= nil and spawn.PctHPs() <= spell.MaxHP then
         -- eg. Snare mob at low health
         all_tellf("SKIP MaxHP %s, %d vs required %d", spell.Name, spawn.PctHPs(), spell.MaxHP)
+        return false
+    end
+
+    if spawn ~= nil and spell.MaxLevel ~= nil and spawn.Level() > spell.MaxLevel then
+        -- eg. skip Stun if target is too high level
+        all_tellf("SKIP MaxLevel %s, %d vs required %d", spell.Name, spawn.Level(), spell.MaxLevel)
         return false
     end
 

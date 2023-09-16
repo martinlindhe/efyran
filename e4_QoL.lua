@@ -639,14 +639,29 @@ function QoL.Init()
     -- Summon all available cure wards (CLR, DoDH)
     mq.bind("/curewards", function() cmdf("/dgzexecute /cureward") end)
 
-    mq.bind("/pbaeon", function()
-        if is_orchestrator() then
-            cmd("/dgzexecute /pbaeon")
+    -- Used by orchestrator to start pbae
+    mq.bind("/pbaeon", function(...)
+        local filter = trim(args_string(...))
+
+       if is_orchestrator() then
+            local exe = string.format("/dgzexecute /pbaestart %s", mq.TLO.Me.Name())
+            if filter ~= nil then
+                exe = exe .. " " .. filter
+            end
+            mq.cmdf(exe)
         end
         if botSettings.settings.assist.pbae == nil then
             return
         end
-        commandQueue.Add("pbaeon")
+        commandQueue.Add("pbae-start", mq.TLO.Me.Name(), filter)
+    end)
+
+    mq.bind("/pbaestart", function(peer, ...)
+        local filter = trim(args_string(...))
+        if botSettings.settings.assist.pbae == nil then
+            return
+        end
+        commandQueue.Add("pbae-start", peer, filter)
     end)
 
     mq.bind("/pbaeoff", function()
@@ -798,7 +813,6 @@ function QoL.Init()
         local filter = trim(args_string(...))
         commandQueue.Add("clickdoor", sender, filter)
     end)
-
 
     mq.bind("/portto", function(name)
         name = name:lower()

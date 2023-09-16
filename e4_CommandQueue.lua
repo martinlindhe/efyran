@@ -151,8 +151,15 @@ function CommandQueue.Process()
         end
         assist.backoff()
 
-    elseif v.Name == "pbaeon" then
-        -- XXX impl filter
+    elseif v.Name == "pbae-start" then
+        local peer = v.Arg
+        local filter = v.Arg2
+
+        if filter ~= nil and not matches_filter(filter, peer) then
+            log.Debug("NOT DOING PBAE, NOT MATCHING FILTER %s", filter)
+            return
+        end
+
         memorizePBAESpells()
         all_tellf("PBAE ON")
         assist.PBAE = true
@@ -177,18 +184,15 @@ function CommandQueue.Process()
         local peer = v.Arg
         local filter = v.Arg2
         local sender = spawn_from_peer_name(peer)
-        if sender == nil then
-            all_tellf("NO SENDER SPAWN, IGNORING CLICK FROM %s", peer)
-            return
-        end
-        if not is_within_distance(sender, 60) then
+        if sender ~= nil and not is_within_distance(sender, 60) then
             all_tellf("TOO FAR AWAY FROM %s (%.2f), CANT CLICK", peer, sender.Distance())
             return
         end
 
-        if filter ~= nil and matches_filter(filter, peer) then
-            click_nearby_door()
+        if filter ~= nil and not matches_filter(filter, peer) then
+            return
         end
+        click_nearby_door()
     elseif v.Name == "portto" then
         cast_port_to(v.Arg)
     elseif v.Name == "movetopeer" then
