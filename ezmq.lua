@@ -1418,7 +1418,7 @@ end
 
 local rezSpells = {
     -- order: falling priority
-    "Blessing of Resurrection",             -- CLR/65 sof AA : 96% exp, 3s cast, 12s recast
+    "Blessing of Resurrection",             -- CLR/65 sof AA : 96% exp, 3s cast, 12s recast (SoD)
     "Water Sprinkler of Nem Ankh",          -- CLR/65 Epic1.0: 96% exp, 10s cast
     "Reviviscence",                         -- CLR/56        : 96% exp, 7s cast, 600 mana
     "Resurrection",                         -- CLR/47, PAL/59: 90% exp, 6s cast, 20s recast, 700 mana
@@ -1824,7 +1824,7 @@ function castSpellAbility(spawn, row, callback)
 
     local spell = parseSpellLine(row)
 
-    --log.Debug("castSpellAbility %s, row = %s", spell.Name, row)
+    log.Debug("castSpellAbility %s, row = %s", spell.Name, row)
 
     if have_ability(spell.Name) and not is_ability_ready(spell.Name) then
         log.Debug("castSpellAbility ABILITY %s, not ready!", spell.Name)
@@ -1852,6 +1852,11 @@ function castSpellAbility(spawn, row, callback)
     if spell.MinMana ~= nil and mq.TLO.Me.PctMana() < spell.MinMana then
         --log.Debug("SKIP MinMana %s, %d vs required %d", spell.Name,  mq.TLO.Me.PctMana(), spell.MinMana)
         return false
+    end
+
+    if spell.MaxMana ~= nil then
+        all_tellf("XXX MAX MANA is %d, my mana is %d", spell.MaxMana, mq.TLO.Me.PctMana())
+        return false -- XXX
     end
 
     if spell.MaxMana ~= nil and mq.TLO.Me.PctMana() > spell.MaxMana then

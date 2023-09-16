@@ -72,6 +72,7 @@ end
 function CommandQueue.ZoneEvent()
     CommandQueue.Clear()
     CommandQueue.Add("zoned")
+    assist.backoff()
     buffs.timeZoned = os.time()
 end
 
@@ -173,28 +174,33 @@ function CommandQueue.Process()
     elseif v.Name == "shrinkgroup" then
         shrink_group()
     elseif v.Name == "clickdoor" then
-        local sender = spawn_from_peer_name(v.Arg)
+        local peer = v.Arg
+        local filter = v.Arg2
+        local sender = spawn_from_peer_name(peer)
         if sender == nil then
-            all_tellf("NO SENDER SPAWN, IGNORING CLICK FROM %s", v.Arg)
+            all_tellf("NO SENDER SPAWN, IGNORING CLICK FROM %s", peer)
             return
         end
         if not is_within_distance(sender, 60) then
-            all_tellf("TOO FAR AWAY FROM %s (%.2f), CANT CLICK", v.Arg, sender.Distance())
+            all_tellf("TOO FAR AWAY FROM %s (%.2f), CANT CLICK", peer, sender.Distance())
             return
         end
 
-        if v.Arg2 ~= nil and matches_filter(v.Arg2, mq.TLO.Me.Name()) then
+        if filter ~= nil and matches_filter(filter, peer) then
             click_nearby_door()
         end
     elseif v.Name == "portto" then
         cast_port_to(v.Arg)
-    elseif v.Name == "movetoid" then
+    elseif v.Name == "movetopeer" then
         local filter = v.Arg2
-        if filter ~= nil and not matches_filter(filter, mq.TLO.Me.Name()) then
-            log.Info("movetoid: Not matching filter, giving up: %s", filter)
+        if filter ~= nil and not matches_filter(filter, v.Arg) then
+            log.Info("movetopeer: Not matching filter, giving up: %s", filter)
             return
         end
-        move_to(toint(v.Arg))
+        local spawn = spawn_from_peer_name(v.Arg)
+        if spawn ~= nil then
+            move_to(spawn.ID())
+        end
     elseif v.Name == "rtz" then
         follow.RunToZone(v.Arg)
     elseif v.Name == "hailit" then

@@ -240,6 +240,10 @@ function Heal.acceptRez()
                 return
             end
         end
+
+        -- tell bots this corpse is rezzed
+        cmdf("/dgaexecute /ae_rezzed %s", mq.TLO.Me.Name())
+
         all_tellf("Accepting rez from \ag%s\ax ...", peer)
         cmd("/notify ConfirmationDialogBox Yes_Button leftmouseup")
 
@@ -303,7 +307,8 @@ function Heal.performGroupBalanceHeal()
     local sum = mq.TLO.Me.PctHPs()
     local members = 1
     for i=1,mq.TLO.Group.Members() do
-        if mq.TLO.Group.Member(i).Distance() < 100 then
+        local dist = mq.TLO.Group.Member(i).Distance()
+        if dist ~= nil and dist < 100 then
             local pct = mq.TLO.Group.Member(i).PctHPs()
             if pct ~= nil then
                 sum = sum + pct
@@ -428,7 +433,7 @@ function Heal.performLifeSupport()
 
                     local mana = mq.TLO.Me.PctMana()
                     local hp = mq.TLO.Me.PctHPs()
-                    if castSpellAbility(nil, spellName) then
+                    if castSpellAbility(nil, row) then
                         if spellConfig.MaxMana ~= nil then
                             all_tellf("USED LIFE SUPPORT %s at %d%% Mana (was %d%%)", spellName, mq.TLO.Me.PctMana(), mana)
                         else

@@ -75,6 +75,7 @@ function QoL.Init()
         elseif in_group() then
             mq.cmdf("/consent %s", mq.TLO.Group.Leader())
         end
+        assist.EndFight()
     end
     mq.event("died1", "You have been slain by #*#", dead)
     mq.event("died2", "You died.", dead)
@@ -148,7 +149,7 @@ function QoL.Init()
         end
     end)
 
-    mq.event("inktuta-deathtouch", "#*#thoughts of a cursed trusik invade your mind#*#", function(text)
+    mq.event("inktuta-cursecaller-dt", "#*#thoughts of a cursed trusik invade your mind#*#", function(text)
         if zone_shortname() == "inktuta" then
             cmdf("/rs I, >>^<< %s >>^<<, who am about to die, salute you!!", mq.TLO.Me.Name())
         end
@@ -953,7 +954,7 @@ function QoL.Init()
 
     ---@param ... string|nil filter, such as "/only|ROG"
     local movetome = function(...)
-        local exe = string.format("/dgzexecute /movetoid %d", mq.TLO.Me.ID())
+        local exe = string.format("/dgzexecute /movetopeer %s", mq.TLO.Me.Name())
         local filter = trim(args_string(...))
         if filter ~= nil then
             exe = exe .. " " .. filter
@@ -965,11 +966,11 @@ function QoL.Init()
     mq.bind("/mtm", movetome)
 
     -- move to spawn ID
-    ---@param spawnID string
+    ---@param peer string Peer name
     ---@param ... string|nil filter, such as "/only|ROG"
-    mq.bind("/movetoid", function(spawnID, ...)
+    mq.bind("/movetopeer", function(peer, ...)
         local filter = trim(args_string(...))
-        commandQueue.Add("movetoid", spawnID, filter)
+        commandQueue.Add("movetopeer", peer, filter)
     end)
 
     -- run through zone based on the position of startingPeer
@@ -1506,7 +1507,7 @@ function QoL.Init()
     end)
 
     mq.event("dingAA", "You have gained an ability point#*#", function(text)
-        if mq.TLO.Me.AAPoints() <= 1 or mq.TLO.Me.AAPoints() >= 100 then
+        if mq.TLO.Me.AAPoints() <= 1 or mq.TLO.Me.AAPoints() >= 50 then
             return
         end
         all_tellf("\agDing AA - %d unspent", mq.TLO.Me.AAPoints())

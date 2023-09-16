@@ -542,13 +542,13 @@ function ae_rez()
         return
     end
 
-    local corpses = spawn_count('pccorpse radius 100')
+    local classOrder = {'CLR', 'DRU', 'SHM', 'ENC', 'RNG', 'BST', 'PAL', 'SHD', 'WAR', 'BRD', 'MNK', 'ROG', 'BER', 'WIZ', 'NEC', 'MAG'}
+    local spawnQuery = 'pccorpse radius 100'
+    local corpses = spawn_count(spawnQuery)
     all_tellf("\amAERez started in %s\ax (%d corpses) ...", zone_shortname(), corpses)
 
-    local spawnQuery = 'pccorpse radius 100'
-    local classOrder = {'CLR', 'DRU', 'SHM', 'ENC', 'RNG', 'BST', 'PAL', 'SHD', 'WAR', 'BRD', 'MNK', 'ROG', 'BER', 'WIZ', 'NEC', 'MAG'}
     for i=1, #classOrder do
-        ae_rez_query(rez, 'pccorpse radius 100 '..classOrder[i])
+        ae_rez_query(rez, spawnQuery..' '..classOrder[i])
     end
 
     all_tellf("\amAEREZ DONE\ax")
@@ -573,7 +573,6 @@ end
 function ae_rez_query(rez, spawnQuery)
 
     local corpses = spawn_count(spawnQuery)
-    log.Info("ae_rez_query %s: %d", spawnQuery, corpses)
     if corpses == 0 then
         return
     end
@@ -591,9 +590,9 @@ function ae_rez_query(rez, spawnQuery)
         if spawn ~= nil and spawn.ID() ~= nil then
             local skip = false
 
-            -- XXX fix, access aeRezzedNames without recurisive includes
+            -- XXX fix, access aeRezzedNames without recurisive for loop
             for _, rezzedName in ipairs(aeRezzedNames) do
-                log.Info("rezzedname check: %s vs %s", rezzedName, spawn.Name())
+                --log.Debug("rezzedname check: %s vs %s", rezzedName, spawn.Name())
                 if rezzedName == spawn.Name() then
                     log.Info("already being rezzed, should skip !!!")
                     all_tellf("aerez: skipping marked corpse %s", rezzedName)
@@ -739,7 +738,7 @@ function report_find_missing_item(name)
     if item ~= nil then
         return
     end
-    all_tellf("I miss %s", name)
+    all_tellf("I miss \ay%s\ax", name)
 end
 
 function report_clickies()

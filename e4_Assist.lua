@@ -281,7 +281,7 @@ function Assist.Tick()
 
     -- progress PBAE
     if Assist.PBAE then
-        local nearbyPBAEilter = "npc radius 50 zradius 50 los"
+        local nearbyPBAEilter = "npc radius 60 zradius 50 los"
         if spawn_count(nearbyPBAEilter) == 0 then
             all_tellf("Ending PBAE. No nearby mobs.")
             Assist.PBAE = false
@@ -387,7 +387,7 @@ function Assist.Tick()
     end
 end
 
-local assistTauntTimer = timer.new_expired(3 * 1) -- 3s
+local assistTauntTimer = timer.new_expired(2 * 1) -- 2s
 
 function Assist.TankTick()
     if not Assist.IsTanking() or is_stunned() then
