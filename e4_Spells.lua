@@ -655,22 +655,21 @@ end
 
 function loot_my_corpse()
 
-    cmd("/squelch /target clear")
-
     if not have_corpse_in_zone() then
+        log.Info("loot_my_corpse: I do not have a corpse in zone")
         return
     end
 
     -- target my corpse
     local name = string.format("%s's corpse", mq.TLO.Me.Name())
     cmdf("/target %s", name)
+    move_to(mq.TLO.Target.ID())
     mq.delay(100)
+
     if mq.TLO.Target.ID() == nil then
-        all_tellf("No corpse around, giving up!")
+        all_tellf("UNLIKELY: No corpse around, giving up!")
         return
     end
-
-    move_to(mq.TLO.Target.ID())
 
     -- open loot window
     cmd("/loot")

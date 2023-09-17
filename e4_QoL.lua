@@ -1361,14 +1361,14 @@ function QoL.Init()
     mq.bind("/gathercorpses", function() commandQueue.Add("gathercorpses") end)
 
     -- loot all my nearby corpses
-    mq.bind("/lootcorpses", function() commandQueue.Add("lootcorpse") end)
+    mq.bind("/lootmycorpse", function() commandQueue.Add("lootmycorpse") end)
 
     -- tell peers to attempt to loot their corpses
     mq.bind("/lootallcorpses", function()
         if is_orchestrator() then
-            cmd("/dgzexecute /lootcorpses")
+            cmd("/dgzexecute /lootmycorpse")
         end
-        commandQueue.Add("lootcorpse")
+        commandQueue.Add("lootmycorpse")
     end)
 
     -- tell all peers to click yes on dialog (rez, etc)

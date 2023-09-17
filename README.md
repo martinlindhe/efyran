@@ -188,8 +188,8 @@ Buff Spell Level   Minimum Target Level
 /rezit                      - rez target
 /aerez                      - perform ae rez
 
-/lootcorpses                - loot your corpses
-/lootallcorpses             - tell peers to loot all
+/lootmycorpse               - loot your corpse
+/lootallcorpses             - tell peers to loot their corpse
 /usecorpsesummoner          - summon corpse in guild lobby
 ```
 

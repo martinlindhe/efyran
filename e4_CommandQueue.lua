@@ -230,7 +230,7 @@ function CommandQueue.Process()
         cast_ae_cry()
     elseif v.Name == "aebloodthirst" then
         cast_ae_bloodthirst()
-    elseif v.Name == "lootcorpse" then
+    elseif v.Name == "lootmycorpse" then
         loot_my_corpse()
     elseif v.Name == "consentme" then
         consent_me()
