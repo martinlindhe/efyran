@@ -4,7 +4,7 @@ local mq = require("mq")
 local log = require("efyran/knightlinc/Write")
 require("efyran/ezmq")
 
-local cothMinDistance = 50
+local cothMinDistance = 300
 
 if mq.TLO.Me.Class.Name() ~= "Magician" then
     all_tellf("ERROR: I am not a Magician, so I cannot Call of the Hero")

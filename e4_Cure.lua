@@ -105,7 +105,7 @@ cures.debuffs = {
 
     "Skullpierce/Cure|poison",                          -- 18 poison, qvic,provinggrounds
     "Malicious Decay/Cure|disease",                     -- 9 disease counters
-    "Insidious Decay/Cure|disease",                     -- 9 disease counters
+    "Insidious Decay/Cure|disease/MaxMobs|0",           -- 9 disease counters
     "Chaos Claws/Cure|poison",                          -- 9 poison counters
 
     "Stonemite Acid/Cure|any",                          -- vxed,tipt

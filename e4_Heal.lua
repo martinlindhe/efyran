@@ -419,7 +419,10 @@ function Heal.performLifeSupport()
             if is_ability_ready(spellConfig.Name) then
                 all_tellf("USING LIFE SUPPORT ability %s at %d%%", spellConfig.Name, mq.TLO.Me.PctHPs())
                 cmdf("/doability %s", spellConfig.Name)
-            elseif not have_ability(spellConfig.Name) then
+                return
+            end
+
+            if not have_ability(spellConfig.Name) then
                 local spell = getSpellFromBuff(spellConfig.Name)
                 if spell ~= nil then
                     local spellName = spell.RankName()

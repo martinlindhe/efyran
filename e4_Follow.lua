@@ -84,6 +84,7 @@ function Follow.Pause()
     elseif globalSettings.followMode:lower() == "mq2moveutils" then
         cmd("/stick off")
     end
+    cmd("/moveto off")
 end
 
 -- stop follow in all possible ways
@@ -97,6 +98,7 @@ function Follow.StopFully()
     if is_plugin_loaded("MQ2MoveUtils") then
         cmd("/stick off")
     end
+    cmd("/moveto off")
 end
 
 -- stops following completely

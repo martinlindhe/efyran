@@ -10,6 +10,9 @@ local log = require("efyran/knightlinc/Write")
 ---@param maxDistance number
 ---@return boolean
 function is_within_distance(spawn, maxDistance)
+    if spawn == nil then
+        return false
+    end
     return spawn.Distance() <= maxDistance
 end
 
@@ -1825,7 +1828,7 @@ function castSpellAbility(spawn, row, callback)
 
     local spell = parseSpellLine(row)
 
-    log.Debug("castSpellAbility %s, row = %s", spell.Name, row)
+    --log.Debug("castSpellAbility %s, row = %s", spell.Name, row)
 
     if have_ability(spell.Name) and not is_ability_ready(spell.Name) then
         log.Debug("castSpellAbility ABILITY %s, not ready!", spell.Name)
@@ -1856,7 +1859,7 @@ function castSpellAbility(spawn, row, callback)
     end
 
     if spell.MaxMana ~= nil and mq.TLO.Me.PctMana() > spell.MaxMana then
-        log.Debug("SKIP MaxMana %s, %d vs required %d", spell.Name,  mq.TLO.Me.PctMana(), spell.MaxMana)
+        --log.Debug("SKIP MaxMana %s, %d vs required %d", spell.Name,  mq.TLO.Me.PctMana(), spell.MaxMana)
         return false
     end
 
@@ -1905,9 +1908,16 @@ function castSpellAbility(spawn, row, callback)
 
     if spell.MinMobs ~= nil and nearby_npc_count(75) < spell.MinMobs then
         -- only cast if at least this many NPC:s is nearby
-        log.Debug("SKIP MinMobs, need %d (has %d)", spell.MinMobs, nearby_npc_count(75))
+        --log.Debug("SKIP MinMobs, need %d (has %d)", spell.MinMobs, nearby_npc_count(75))
         return false
     end
+
+    if spell.MaxMobs ~= nil and nearby_npc_count(75) > spellConfig.MaxMobs then
+        -- only cast if at most this many NPC:s is nearby
+        cmd("/dgtell all SKIP MaxMobs ", spellConfig.Name, ", Too many nearby mobs. Have ", spawn_count(nearbyNPCFilter), ", need ", spellConfig.MaxMobs)
+        return false
+    end
+
 
     if spell.MinPlayers ~= nil and nearby_player_count(75) < spell.MinPlayers then
         -- only cast if at least this many players is nearby (eg Stonewall)

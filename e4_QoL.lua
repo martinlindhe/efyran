@@ -1415,10 +1415,10 @@ function QoL.Init()
     mq.bind("/lowunspentaa", function() mq.cmd("/noparse /dgaexecute /if (${Me.AAPoints} >= 1 && ${Me.AAPoints} < 30) /dgtell all UNSPENT AA: ${Me.AAPoints}") end)
 
     -- report peers with any unspent AA:s
-    mq.bind("/allunspentaa", function() mq.cmd("/noparse /dgaexecute /if (${Me.AAPoints} >= 1) /dgtell all UNSPENT AA: ${Me.AAPoints} (SPENT ${Me.AAPointsSpent}") end)
+    mq.bind("/allunspentaa", function() mq.cmd("/noparse /dgaexecute /if (${Me.AAPoints} >= 1) /dgtell all UNSPENT AA: ${Me.AAPoints} (SPENT ${Me.AAPointsSpent})") end)
 
     -- report all peer total AA:s
-    mq.bind("/totalaa", function() mq.cmd("/noparse /dgaexecute /dgtell all TOTAL AA: ${Me.AAPointsTotal}") end)
+    mq.bind("/totalaa", function() mq.cmd("/noparse /dgaexecute /dgtell all ${Me.AAPointsTotal} TOTAL (${Me.AAPoints} unspent, ${Me.AAPointsSpent} spent)") end)
 
     -- finds item by name in inventory/bags. NOTE: "/finditem" is reserved in eq live for "dragon hoard" feature
     mq.bind("/fdi", function(...)
@@ -1497,6 +1497,11 @@ function QoL.Init()
             all_tell(msg)
         end
     end
+
+    mq.event('summoned', '#*#You have been summoned#*#', function(text, sender) -- XXX improve
+        cmdf("/popup SUMMONED")
+        log.Info("You was summoned to %d, %d", mq.TLO.Me.Y(), mq.TLO.Me.X())
+    end)
 
     mq.event("xp1", "You gain experience!", xpGain)
     mq.event('xp2', 'You gain party experience!!', xpGain)

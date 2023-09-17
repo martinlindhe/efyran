@@ -233,12 +233,7 @@ settings.assist = {
         --"Malos/Gem|3/MaxTries|2/MinMana|20",
 
         -- decay - stacks with malos:
-        -- L17 Insidious Fever (-18-35 dr)
-        -- L38 Insidious Malady (-48-60 dr) xxx spell data seems switched with Insidious Decay ?
-        -- L52 Insidious Decay (-36-60 dr)
-        -- L63 Malicious Decay (-51-70 dr)
         -- L66 Putrid Decay (slot 2: -55 dr, slot 6: -55 pr)   XXX have some shm cast this
-
         -- L61 Virulent Paralysis Rank 1 AA (id:3274, disease resist adj -10, root 1.2 min)
         -- L63 Virulent Paralysis Rank 2 AA (xxx)
         -- Lxx Virulent Paralysis Rank 3 AA (xxx)

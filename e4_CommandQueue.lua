@@ -74,6 +74,7 @@ function CommandQueue.ZoneEvent()
     CommandQueue.Add("zoned")
     assist.backoff()
     buffs.timeZoned = os.time()
+    cmd("/moveto off")
 end
 
 
@@ -161,8 +162,10 @@ function CommandQueue.Process()
         end
 
         memorizePBAESpells()
-        all_tellf("PBAE ON")
-        assist.PBAE = true
+        if not assist.PBAE then
+            all_tellf("PBAE ON")
+            assist.PBAE = true
+        end
     elseif v.Name == "disbandall" then
         disband_all_peers()
     elseif v.Name == "usecorpsesummoner" then
@@ -325,9 +328,9 @@ function CommandQueue.Process()
         end
     elseif v.Name == "hastask" then
         if mq.TLO.Task(v.Arg).Index() ~= nil then
-            all_tellf("Has task \ag%s\ax", v.Arg)
+            all_tellf("Has task \ag%s\ax", mq.TLO.Task(v.Arg).Title())
         else
-            all_tellf("Dont have task \ar%s\ax", v.Arg)
+            --all_tellf("Dont have task \ar%s\ax", v.Arg)
         end
     elseif v.Name == "listtasks" then
         report_active_tasks()
@@ -346,8 +349,6 @@ function report_active_tasks()
     end
     if s ~= "" then
         all_tellf("Tasks: %s", s)
-    else
-        all_tellf("Tasks: None")
     end
 end
 

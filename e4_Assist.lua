@@ -292,8 +292,8 @@ function Assist.Tick()
             for k, spellRow in pairs(botSettings.settings.assist.pbae) do
                 local spellConfig = parseSpellLine(spellRow)
                 if is_spell_ready(spellConfig.Name) or is_combat_ability_ready(spellConfig.Name) then
-                    log.Info("Casting PBAE spell %s", spellConfig.Name)
                     if castSpellAbility(mq.TLO.Me, spellRow) then
+                        log.Info("Used PBAE \ay%s\ax", spellConfig.Name)
                         return
                     end
                 end
