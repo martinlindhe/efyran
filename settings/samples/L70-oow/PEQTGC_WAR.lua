@@ -46,11 +46,9 @@ settings.self_buffs = {
     --"Shimmering Bauble of Trickery/Shrink",
 }
 
-settings.preferred_buffers = { "Stor", "Samma", "Drutten", "Trams", "Myggan", "Absint", "Arctander", "Besty", "Crusade" } -- XXX TODO impl. when asking for buffs, prefer these bots as they have stronger buffs etc
-
-settings.combat_buffs = { -- XXX implement
-    -- L68 Commanding Voice
-    "Commanding Voice/Bandy/MinEnd|5",
+settings.combat_buffs = {
+    -- L68 Commanding Voice (20% dodge to group, 100 range, disc, 200 endurance, 1 min duration)
+    "Commanding Voice/MinEnd|5",
 }
 
 settings.healing = {

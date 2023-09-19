@@ -6,6 +6,7 @@ local mq = require("mq")
 ---@field public assist PeerSettingsAssist
 ---@field public gems string[]|nil XXX key is string, val is integer
 ---@field public self_buffs string[]|nil spellRows of self buffs
+---@field public combat_buffs string[]| nil spellRows of combat buffs
 ---@field public request_buffs string[]|nil spellRows of buff groups to request
 
 ---@class PeerSettingsAssist

@@ -1170,12 +1170,12 @@ function QoL.Init()
     -- useful when AE FD is cast (oow, wos Shadowhunter, Cleric 1.5 fight in lfay and so on)
     mq.bind("/standall", function()
         log.Info("Requested ALL peers to /stand")
-        mq.cmd("/squelch /noparse /dgaexecute all /if (${Me.Feigning} || ${Me.Ducking} || ${Me.Sitting}) /stand")
+        mq.cmd("/noparse /dgae /if (${Me.Feigning} || ${Me.Ducking} || ${Me.Sitting}) /stand")
     end)
 
     mq.bind("/sitall", function()
         log.Info("Requested ALL peers to /sit")
-        mq.cmd("/squelch /noparse /dgaexecute all /if (${Me.Standing}) /sit")
+        mq.cmd("/noparse /dgae /if (${Me.Standing}) /sit")
     end)
 
     -- report all peers who are not standing
@@ -1602,12 +1602,33 @@ function QoL.Init()
     -- MGB BER Bloodthirst
     mq.bind("/aebloodthirst", function() commandQueue.Add("aebloodthirst") end)
 
+
+    -- XXX
+
+    if not mq.TLO.EQBC.Connected() then
+        log.Info("Connecting to EQBC server ...")
+        cmd("/bccmd connect")
+        delay(15000, function() return mq.TLO.EQBC.Connected() end)
+
+        if not mq.TLO.EQBC.Connected() then
+            cmdf("/beep")
+            log.Fatal("ERROR: Could not connect to EQBCS! Please open EQBCS and try again.")
+            os.exit()
+        end
+    end
+
+    -- enable MQ2NetBots
+    cmd("/netbots on grab=on send=on")
+
     QoL.verifySpellLines()
     perform_zoned_event()
 end
 
 function QoL.loadRequiredPlugins()
     local requiredPlugins = {
+        "MQ2EQBC",
+        "MQ2NetBots", -- XXX drop mq2dannet for MQ2NetBots
+
         "MQ2DanNet",
         "MQ2Debuffs", -- XXX not used yet. to be used for auto-cure feature
         "MQ2MoveUtils",
@@ -1645,6 +1666,7 @@ function QoL.verifySpellLines()
     end
 
     verifySpellLines("self_buffs", botSettings.settings.self_buffs)
+    verifySpellLines("combat_buffs", botSettings.settings.combat_buffs)
 
     if botSettings.settings.assist ~= nil then
         verifySpellLines("taunts", botSettings.settings.assist.taunts)

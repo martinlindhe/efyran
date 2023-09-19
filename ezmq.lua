@@ -142,6 +142,13 @@ function is_peer_in_zone(peerName)
     return spawn ~= nil and is_peer(spawn.Name())
 end
 
+-- Returns peer class shortname, eg "WAR".
+---@param peerName string
+---@return string
+function peer_class_shortname(peerName)
+    return mq.TLO.NetBots(peerName).Class.ShortName()
+end
+
 -- returns true if spawnID is another peer
 ---@param spawnID integer
 ---@return boolean
@@ -529,7 +536,7 @@ end
 function have_buff(name)
     local spell = mq.TLO.Spell(name)
     if spell() == nil then
-        if not have_ability(name) then
+        if not have_ability(name) and not have_item(name) then
             all_tellf("have_buff ERROR: asked about odd buff %s", name)
         end
         return false
@@ -538,6 +545,26 @@ function have_buff(name)
         return true
     end
     return mq.TLO.Me.Buff(spell.RankName())() == name
+end
+
+-- returns true if I have the song `name` on me
+---@param name string
+---@return boolean
+function have_song(name)
+    local spell = mq.TLO.Spell(name)
+    if spell() == nil then
+        if not have_ability(name) and not have_item(name) then
+            all_tellf("have_song ERROR, asked about odd buff %s", name)
+        end
+        return false
+    end
+    return mq.TLO.Me.Song(name)() ~= nil or mq.TLO.Me.Song(spell.RankName())() ~= nil
+end
+
+---@param name string
+---@return boolean
+function have_buff_or_song(name)
+    return have_buff(name) or have_song(name)
 end
 
 -- returns true if my pet have the buff `name` on me
@@ -559,20 +586,6 @@ function pet_have_buff(name)
         return true
     end
     return mq.TLO.Me.Pet.Buff(spell.RankName())() == name
-end
-
--- returns true if I have the song `name` on me
----@param name string
----@return boolean
-function have_song(name)
-    local spell = mq.TLO.Spell(name)
-    if spell() == nil then
-        if not have_ability(name) then
-            all_tellf("have_song ERROR, asked about odd buff %s", name)
-        end
-        return false
-    end
-    return mq.TLO.Me.Song(name)() ~= nil or mq.TLO.Me.Song(spell.RankName())() ~= nil
 end
 
 -- Am I casting a spell/song?
@@ -1325,6 +1338,8 @@ end
 ---@field public Cure string Type of cure (poison,disease,curse,any), for auto cures.
 ---@field public Group boolean This is a group spell (used for group cures for auto cure).
 ---@field public Self boolean This is a self spell (used for auto cure).
+---@field public Only string /only|xxx filter
+---@field public Not string /not|xxx filter
 
 local shortProperties = { "Shrink", "GoM", "NoAggro", "NoPet", "Group", "Self" } -- is turned into bools
 local intProperties = { "PctAggro", "MinMana", "MaxMana", "MinEnd", "MinHP", "MaxHP", "MaxLevel", "HealPct", "MinMobs", "MaxMobs", "MinPlayers", "MaxTries" } -- is turned into integers
@@ -1671,11 +1686,11 @@ end
 function matches_filter(filter, sender)
     local filterConfig = parseFilterLine(filter)
     if filterConfig.Only ~= nil and not matches_filter_line(filterConfig.Only, sender) then
-        log.Debug("I am not matching this ONLY line: %s", filterConfig.Only)
+        --log.Debug("I am not matching this ONLY line: %s", filterConfig.Only)
         return false
     end
     if filterConfig.Not ~= nil and matches_filter_line(filterConfig.Not, sender) then
-        log.Debug("I am matching this NOT line: %s", filterConfig.Not)
+        --log.Debug("I am matching this NOT line: %s", filterConfig.Not)
         return false
     end
     return true
@@ -1685,7 +1700,7 @@ end
 ---@param line string
 ---@param sender string Peer name of sender
 function matches_filter_line(line, sender)
-    local class = class_shortname()
+    local class = peer_class_shortname(sender)
     local tokens = split_str(line, " ")
     for k, v in pairs(tokens) do
         if class == v:upper() or v == mq.TLO.Me.Name() or (v == "me" and is_orchestrator()) then
@@ -1837,7 +1852,12 @@ function castSpellAbility(spawn, row, callback)
     --log.Debug("castSpellAbility %s, row = %s", spell.Name, row)
 
     if have_ability(spell.Name) and not is_ability_ready(spell.Name) then
-        --log.Debug("castSpellAbility ABILITY %s, not ready!", spell.Name)
+        --log.Debug("castSpellAbility skip ABILITY %s, not ready!", spell.Name)
+        return false
+    end
+
+    if have_combat_ability(spell.Name) and have_buff_or_song(spell.Name) then
+        log.Debug("castSpellAbility skip COMBAT-ABILITY %s, have buff!", spell.Name)
         return false
     end
 

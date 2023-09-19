@@ -186,6 +186,18 @@ function spellConfigAllowsCasting(buffItem, spawn)
         end
     end
 
+    if spawn.ID() == mq.TLO.Me.ID() then
+        if not spell.Stacks() then
+            log.Error("cant rebuff %s, dont stack", spellConfig.Name)
+            return false
+        end
+    else
+        if not spell.StacksSpawn(spawn.ID()) then
+            all_tellf("cant rebuff %s on spawn, dont stack", spellConfig.Name)
+            return false
+        end
+    end
+
     if spellConfig.Shrink ~= nil and spellConfig.Shrink and mq.TLO.Me.Height() <= 2.04 then
         --print("will not shrink myself with ", spellConfig.Name, " because my height is already ", mq.TLO.Me.Height())
         return false
@@ -546,6 +558,7 @@ function ae_rez()
     local spawnQuery = 'pccorpse radius 100'
     local corpses = spawn_count(spawnQuery)
     all_tellf("\amAERez started in %s\ax (%d corpses) ...", zone_shortname(), corpses)
+    unflood_delay()
 
     for i=1, #classOrder do
         ae_rez_query(rez, spawnQuery..' '..classOrder[i])
@@ -593,22 +606,23 @@ function ae_rez_query(rez, spawnQuery)
             -- XXX fix, access aeRezzedNames without recurisive for loop
             for _, rezzedName in ipairs(aeRezzedNames) do
                 --log.Debug("rezzedname check: %s vs %s", rezzedName, spawn.Name())
-                if rezzedName == spawn.Name() then
+                if rezzedName == spawn.DisplayName() then
                     log.Info("already being rezzed, should skip !!!")
                     all_tellf("aerez: skipping marked corpse %s", rezzedName)
                     skip = true
                 end
             end
             if not skip then
-                log.Info("Trying to rez %s", spawn.Name())
+                log.Info("Trying to rez \ag%s\ax", spawn.DisplayName())
 
                 -- tell bots this corpse is rezzed
-                cmdf("/dgzexecute /ae_rezzed %s", spawn.Name())
+                cmdf("/dgzexecute /ae_rezzed %s", spawn.DisplayName())
 
                 target_id(spawn.ID())
 
                 if is_alt_ability_ready(rez) or is_spell_ready(rez) or is_item_clicky_ready(rez) then
-                    all_tellf("Rezzing \ag%s\ax with \ay%s\ax", spawn.Name(), rez)
+                    all_tellf("Rezzing %s \ag%s\ax with \ay%s\ax", spawn.Class.ShortName(), spawn.DisplayName(), rez)
+                    cmdf("/tell %s Wait4Rez", spawn.DisplayName())
                     castSpellRaw(rez, spawn.ID())
                     delay(3000)
                     wait_until_not_casting()
@@ -638,8 +652,11 @@ function gather_corpses()
         if spawn.Distance() > 20 then
             log.Info("Gathering corpse %s", spawn.Name())
             target_id(spawn.ID())
-            cmdf("/dexecute %s /consent %s", spawn.DisplayName(), mq.TLO.Me.Name())
-            delay(100)
+            delay(10)
+            if is_peer(spawn.DisplayName()) then
+                cmdf("/dexecute %s /consent %s", spawn.DisplayName(), mq.TLO.Me.Name())
+                delay(100)
+            end
             cmd("/corpse")
             delay(1000, function() return spawn() ~= nil and spawn.Distance() < 20 end)
         end

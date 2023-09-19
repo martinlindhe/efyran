@@ -70,6 +70,8 @@ local handleBuffsTimer = timer.new_random(2 * 1) -- 2s
 
 local checkDebuffsTimer = timer.new_random(15 * 1) -- 15s   -- interval for auto cure requests
 
+local refreshCombatBuffsTimer = timer.new_random(10 * 1) -- 10s
+
 
 -- broadcasts what buff groups we can cast
 function buffs.AnnounceAvailablity()
@@ -128,8 +130,6 @@ function buffs.Tick()
         return
     end
 
-    -- XXX combat buffs should be done here (TODO implement combat buffs)
-
     if is_gm() or is_invisible() or is_hovering() then
         return
     end
@@ -150,6 +150,11 @@ function buffs.Tick()
 
     if obstructive_window_open() then
         return
+    end
+
+    if refreshCombatBuffsTimer:expired() then
+        buffs.RefreshCombatBuffs()
+        refreshCombatBuffsTimer:restart()
     end
 
     if buffs.RefreshIllusion() then
@@ -195,6 +200,53 @@ function buffs.Tick()
             if handleBuffRequest(req) then
                 handleBuffsTimer:restart()
             end
+        end
+    end
+end
+
+function buffs.RefreshCombatBuffs()
+    if botSettings.settings.combat_buffs == nil or not in_combat() then
+        return
+    end
+
+    -- Refresh on me
+    for _, buff in pairs(botSettings.settings.combat_buffs) do
+        spellConfig = parseSpellLine(buff)
+        log.Info("RefreshCombatBuffs \ay%s\ax", buff)
+
+        if not matches_filter(buff, mq.TLO.Me.Name()) then
+            --log.Debug("RefreshCombatBuffs skip %s, not matching filter %s", spellConfig.Name, buff)
+        elseif is_spell_ability_ready(spellConfig.Name) then
+            if castSpellAbility(mq.TLO.Me, buff) then
+                log.Info("Refreshed combat ability")
+            end
+        end
+    end
+
+    -- Refresh on group
+    for i=1,mq.TLO.Group.Members() do
+        local dist = mq.TLO.Group.Member(i).Distance()
+        local name = mq.TLO.Group.Member(i).Name()
+        if dist < 100 then
+
+            for key, buff in pairs(botSettings.settings.combat_buffs) do
+                spellConfig = parseSpellLine(buff)
+
+                if not matches_filter(buff, name) then
+                    --log.Debug("RefreshCombatBuffs on %s skip %s, not matching filter %s", name, spellConfig.Name, buff)
+                elseif is_spell_ability_ready(spellConfig.Name) then
+                    local spawn = spawn_from_peer_name(name)
+                    if spawn ~= nil then
+                        local spell = get_spell(spellConfig.Name)
+                        if spell ~= nil and mq.TLO.NetBots(name).Buff.Find(spell.ID())() then
+                            log.Debug("RefreshCombatBuffs peer %s has combat buff already %s", name, spellConfig.Name)
+                        elseif castSpellAbility(spawn, buff) then
+                            log.Info("Refreshed combat ability on %s", name)
+                        end
+                    end
+                end
+            end
+
         end
     end
 end
@@ -308,9 +360,6 @@ function handleBuffRequest(req)
         return false
     end
 
-    target_id(spawn.ID())
-    wait_for_buffs_populated()
-
     -- find the one with highest MinLevel
     local minLevel = 0
     local spellName = ""
@@ -331,7 +380,7 @@ function handleBuffRequest(req)
 
         -- XXX same logic as /buffit. do refactor
 
-        local spellConfig = parseSpellLine(checkRow)  -- XXX do not parse here, cache and reuse
+        local spellConfig = parseSpellLine(checkRow)
         local n = tonumber(spellConfig.MinLevel)
         if n == nil then
             all_tellf("FATAL ERROR, group buff %s does not have a MinLevel setting", checkRow)
@@ -363,6 +412,10 @@ function handleBuffRequest(req)
     end
 
     if minLevel > 0 and spellConfigAllowsCasting(spellName, spawn) then
+
+        target_id(spawn.ID())
+        wait_for_buffs_populated()
+
         if not req.Force and spawn.Buff(spellName)() ~= nil and spawn.Buff(spellName).Duration() >= MIN_BUFF_DURATION then
             log.Info("handleBuffRequest: Skip \ag%s\ax %s (%s), they have buff already. %d sec", spawn.Name(), spellName, req.Buff, spawn.Buff(spellName).Duration())
             return false

@@ -114,7 +114,7 @@ end
 
 local lifeSupportTimer = timer.new_expired(5 * 1) -- 5s
 
-local groupBalanceTimer = timer.new_expired(5 * 1) -- 5s
+local groupBalanceTimer = timer.new_expired(15 * 1) -- 15s
 
 function Heal.Tick()
 
@@ -241,7 +241,7 @@ function Heal.acceptRez()
             end
         end
 
-        -- tell bots this corpse is rezzed
+        -- tell bots that my corpse is rezzed
         cmdf("/dgaexecute /ae_rezzed %s", mq.TLO.Me.Name())
 
         all_tellf("Accepting rez from \ag%s\ax ...", peer)
@@ -380,7 +380,7 @@ function Heal.performLifeSupport()
             skip = true
         elseif have_buff(spellConfig.Name) or have_song(spellConfig.Name) then
             -- if we got the buff/song named on, then skip (eg. HoT heals)
-            log.Info("performLifeSupport skip %s, I have it on me", spellConfig.Name)
+            --log.Debug("performLifeSupport skip %s, I have it on me", spellConfig.Name)
             skip = true
         elseif spellConfig.MinMobs ~= nil and nearby_npc_count(75) < spellConfig.MinMobs then
             -- only cast if at least this many NPC:s is nearby
@@ -398,7 +398,7 @@ function Heal.performLifeSupport()
             --cmd("/dgtell all performLifeSupport skip ", spellConfig.Name, ", AA is not ready")
             skip = true
         elseif have_ability(spellConfig.Name) and not is_ability_ready(spellConfig.Name) then
-            all_tellf("performLifeSupport skip %s, Ability is not ready", spellConfig.Name)
+            --log.Debug("performLifeSupport skip %s, Ability is not ready", spellConfig.Name)
             skip = true
         elseif have_item_inventory(spellConfig.Name) and not is_item_clicky_ready(spellConfig.Name) then
             --cmd("/dgtell all performLifeSupport skip ", spellConfig.Name, ", item clicky is not ready")
@@ -411,6 +411,9 @@ function Heal.performLifeSupport()
                 --cmd("/dgtell all performLifeSupport skip ", spellConfig.Name, ", spell is not ready")
                 skip = true
             end
+        elseif not matches_filter(row, mq.TLO.Me.Name()) then
+            all_tellf("performLifeSupport skip %s, not matching filter %s", spellConfig.Name, row)
+            skip = true
         end
 
         --print(" skip = ", skip, " spellConfig = ", spellConfig.Name)
@@ -463,13 +466,6 @@ function healPeer(spell_list, peer, pct)
         return false
     end
 
-    target_id(spawn.ID())
-    wait_for_buffs_populated()
-    if mq.TLO.Target() ~= nil and mq.TLO.Target.PctHPs() >= 98 then
-        log.Info("Skipping heal! \ag%s\ax was %d %%, is now %d %%", mq.TLO.Target.Name(), pct, mq.TLO.Target.PctHPs())
-        return true
-    end
-
     log.Debug("healPeer: %s at %d %%", peer, pct)
 
     for k, heal in ipairs(spell_list) do
@@ -496,8 +492,17 @@ function healPeer(spell_list, peer, pct)
         elseif mq.TLO.Target.Buff(spellConfig.Name).ID() ~= nil then
             -- if target got the buff/song named on, then skip (eg. HoT heals)
             cmdf("healPeer skip %s, peer spell on them %s", spellConfig.Name, mq.TLO.Target.Buff(spellConfig.Name).Duration())
+        elseif not matches_filter(heal, mq.TLO.Me.Name()) then
+            log.Info("XXX healPeer skip %s, not matching ONLY filter %s", spellConfig.Name, heal)
         else
             log.Info("Healing \ag%s\ax at %d%% with \ay%s\ax", peer, pct, spellConfig.Name)
+
+            target_id(spawn.ID())
+            wait_for_buffs_populated()
+            if mq.TLO.Target() ~= nil and mq.TLO.Target.PctHPs() >= 98 then
+                log.Info("Skipping heal! \ag%s\ax was %d %%, is now %d %%", mq.TLO.Target.Name(), pct, mq.TLO.Target.PctHPs())
+                return true
+            end
 
             local check = castSpellAbility(spawn, heal, function() -- XXX castSpellAbility should take spellConfig obj directly
                 if not is_casting() then

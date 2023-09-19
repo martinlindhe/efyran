@@ -125,6 +125,7 @@ function CommandQueue.Process()
     elseif v.Name == "buffit" then
         buffs.BuffIt(toint(v.Arg))
     elseif v.Name == "killit" then
+
         local filter = v.Arg2
         if filter ~= nil and not matches_filter(filter, mq.TLO.Me.Name()) then
             log.Info("Not matching filter, giving up: %s", filter)
@@ -138,16 +139,15 @@ function CommandQueue.Process()
             log.Error("Wont attack, too far away %f", spawn.Distance())
             return
         end
-        -- if already killing something, enqueue order
+        -- if already killing something, enqueue existing target and start killing new one
         if assist.IsAssisting() then
             if toint(v.Arg) == assist.targetID then
                 return
             end
 
-            log.Info("got told to kill but already on target, so putting order back in queue")
-            -- optimization: skips filtering again
-            CommandQueue.Add(v.Name, v.Arg)
-            return
+            log.Info("got told to kill but already on target, so putting old target in queue")
+            CommandQueue.Add(v.Name, tostring(assist.targetID))
+            assist.EndFight()
         end
 
         log.Debug("Killing %s, type %s", spawn.DisplayName(), spawn.Type())
@@ -517,6 +517,7 @@ function autoMapHeightFilter()
 
         -- pop
         codecay = {min = 30, max = 30},
+        poair = {min = 160, max = 160},
 
         -- omens
         riftseekers = {min = 120, max = 120},   -- XXX
