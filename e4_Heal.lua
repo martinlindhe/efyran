@@ -497,9 +497,7 @@ function healPeer(spell_list, peer, pct)
         else
             log.Info("Healing \ag%s\ax at %d%% with \ay%s\ax", peer, pct, spellConfig.Name)
 
-            target_id(spawn.ID())
-            wait_for_buffs_populated()
-            if mq.TLO.Target() ~= nil and mq.TLO.Target.PctHPs() >= 98 then
+            if get_peer_hp(peer) >= 98 then
                 log.Info("Skipping heal! \ag%s\ax was %d %%, is now %d %%", mq.TLO.Target.Name(), pct, mq.TLO.Target.PctHPs())
                 return true
             end

@@ -188,7 +188,7 @@ function spellConfigAllowsCasting(buffItem, spawn)
 
     if spawn.ID() == mq.TLO.Me.ID() then
         if not spell.Stacks() then
-            log.Error("cant rebuff %s, dont stack", spellConfig.Name)
+            --log.Debug("cant rebuff %s, dont stack", spellConfig.Name)
             return false
         end
     else

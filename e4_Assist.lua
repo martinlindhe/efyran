@@ -230,7 +230,6 @@ function Assist.EndFight()
     Assist.longburns = false
     Assist.fullburns = false
 
-    -- XXX set buff cooldown timer here 5s before refreshing buffs
     buffs.resumeTimer:restart()
 
     if not is_brd() and is_casting() then

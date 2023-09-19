@@ -160,7 +160,7 @@ function Follow.Update(force)
     end
 
     if exe ~= "" then
-        if not force and spawn.Distance() < 10 then
+        if not force and spawn.Distance() < 8 then
             log.Info("XXX skip follow update, we are nearby!")
             return
         end

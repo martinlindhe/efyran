@@ -237,8 +237,7 @@ function buffs.RefreshCombatBuffs()
                 elseif is_spell_ability_ready(spellConfig.Name) then
                     local spawn = spawn_from_peer_name(name)
                     if spawn ~= nil then
-                        local spell = get_spell(spellConfig.Name)
-                        if spell ~= nil and mq.TLO.NetBots(name).Buff.Find(spell.ID())() then
+                        if peer_has_buff(name, spellConfig.Name) then
                             log.Debug("RefreshCombatBuffs peer %s has combat buff already %s", name, spellConfig.Name)
                         elseif castSpellAbility(spawn, buff) then
                             log.Info("Refreshed combat ability on %s", name)
@@ -413,11 +412,8 @@ function handleBuffRequest(req)
 
     if minLevel > 0 and spellConfigAllowsCasting(spellName, spawn) then
 
-        target_id(spawn.ID())
-        wait_for_buffs_populated()
-
-        if not req.Force and spawn.Buff(spellName)() ~= nil and spawn.Buff(spellName).Duration() >= MIN_BUFF_DURATION then
-            log.Info("handleBuffRequest: Skip \ag%s\ax %s (%s), they have buff already. %d sec", spawn.Name(), spellName, req.Buff, spawn.Buff(spellName).Duration())
+        if not req.Force and peer_has_buff(req.Peer, spellName) then
+            log.Info("handleBuffRequest: Skip \ag%s\ax %s (%s), they have buff already.", spawn.Name(), spellName, req.Buff)
             return false
         end
 
@@ -429,9 +425,8 @@ function handleBuffRequest(req)
             if not is_casting() then
                 return true
             end
-            if not req.Force and spawn.Buff(spellName)() ~= nil and spawn.Buff(spellName).Duration() >= MIN_BUFF_DURATION then
+            if not req.Force and peer_has_buff(req.Peer, spellName) then
                 -- abort if they got the buff while we are casting
-                -- FIXME: this often triggers when spell had completed casting
                 log.Info("handleBuffRequest: My target %s has buff %s for %f sec, ducking.", mq.TLO.Target.Name(), spellName, mq.TLO.Target.Buff(spellName).Duration() / 1000)
                 cmdf("/interrupt")
                 return true

@@ -146,7 +146,11 @@ end
 ---@param peerName string
 ---@return string
 function peer_class_shortname(peerName)
-    return mq.TLO.NetBots(peerName).Class.ShortName()
+    local nb = mq.TLO.NetBots(peerName)
+    if nb() == nil then
+        return ""
+    end
+    return nb.Class.ShortName()
 end
 
 -- returns true if spawnID is another peer
@@ -2164,6 +2168,21 @@ end
 
 function peer_count()
     return mq.TLO.DanNet.PeerCount()
+end
+
+---@param peer string
+---@param spellName string
+---@return boolean
+function peer_has_buff(peer, spellName)
+    local spell = get_spell(spellName)
+    return spell ~= nil and mq.TLO.NetBots(peer).Buff.Find(spell.ID())()
+
+    -- TODO: return true only if buff duration is >= MIN_BUFF_DURATION, how to read it with netbots?
+    -- spawn.Buff(spellName).Duration() >= MIN_BUFF_DURATION
+end
+
+function get_peer_hp(peer)
+    return mq.TLO.NetBots(peer).PctHPs()
 end
 
 -- returns table with peers
