@@ -40,6 +40,10 @@ local buffs = {
 
     ---@type integer in seconds
     timeZoned = os.time(),
+
+
+    -- timers
+    resumeTimer = timer.new_expired(5), -- 5s   - interval after end of fight to resume buffing
 }
 
 function buffs.Init()
@@ -65,6 +69,7 @@ local requestBuffsTimer = timer.new_random(30 * 1) -- 30s
 local handleBuffsTimer = timer.new_random(2 * 1) -- 2s
 
 local checkDebuffsTimer = timer.new_random(15 * 1) -- 15s   -- interval for auto cure requests
+
 
 -- broadcasts what buff groups we can cast
 function buffs.AnnounceAvailablity()
@@ -115,6 +120,11 @@ function buffs.Tick()
     end
 
     if is_naked() then
+        return
+    end
+
+    if not buffs.resumeTimer:expired()  then
+        log.Debug("Buff tick: resumeTimer not ready")
         return
     end
 

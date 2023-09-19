@@ -3,6 +3,7 @@ local log = require("efyran/knightlinc/Write")
 local timer = require("efyran/Timer")
 
 local follow  = require("efyran/e4_Follow")
+local buffs  = require("efyran/e4_Buffs")
 local botSettings = require("efyran/e4_BotSettings")
 local heal    = require("efyran/e4_Heal")
 
@@ -66,7 +67,6 @@ function Assist.Init()
             log.Debug("Cannot see target, moving a little back !")
             cmdf("/stick hold moveback %d", Assist.meleeDistance)
         end
-
     end)
 
     Assist.prepareForNextFight()
@@ -229,6 +229,9 @@ function Assist.EndFight()
     Assist.quickburns = false
     Assist.longburns = false
     Assist.fullburns = false
+
+    -- XXX set buff cooldown timer here 5s before refreshing buffs
+    buffs.resumeTimer:restart()
 
     if not is_brd() and is_casting() then
         cmd("/stopcast")
