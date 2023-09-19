@@ -51,6 +51,24 @@ function Assist.Init()
         end
     end)
 
+    -- Adjust Melee position if we cannot see target
+    mq.event("melee-cannot-see-target", "You cannot see your target.", function()
+        if mq.TLO.Target() == nil then
+            return
+        end
+
+        if mq.TLO.Target.Distance() < 20 then
+            log.Debug("Cannot see target, facing them !")
+            cmdf("/face fast id %d", mq.TLO.Target.ID())
+        end
+
+        if mq.TLO.Target.Distance() < 10 then
+            log.Debug("Cannot see target, moving a little back !")
+            cmdf("/stick hold moveback %d", Assist.meleeDistance)
+        end
+
+    end)
+
     Assist.prepareForNextFight()
 end
 

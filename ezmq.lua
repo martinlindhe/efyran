@@ -54,7 +54,9 @@ function move_to(spawnID)
     --    return
     --end
 
-    if spawn.Distance() < 4 then
+    local dist = 10
+
+    if spawn.Distance() < dist then
         return
     end
 
@@ -62,13 +64,13 @@ function move_to(spawnID)
         mq.cmdf("/nav id %d", spawnID)
     elseif globalSettings.followMode:lower() == "mq2advpath" or globalSettings.followMode:lower() == "mq2moveutils" then
         -- NOTE: mq2advpath don't have a "move to" command
-        mq.cmdf("/moveto id %d", spawnID)
+        mq.cmdf("/moveto id %d dist %d", spawnID, dist)
     else
         all_tellf("ERROR unhandled follow mode %s", globalSettings.followMode)
     end
 
     delay(2000, function()
-        return spawn.Distance() < 4
+        return spawn.Distance() < dist
     end)
 
     if globalSettings.followMode:lower() == "mq2nav" then
