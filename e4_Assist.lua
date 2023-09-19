@@ -44,8 +44,8 @@ function Assist.Init()
 
     -- Adjust Melee distance if too far away msg, because spawn.MaxDistanceTo() is not exact
     mq.event("melee-out-of-range", "Your target is too far away, get closer!", function()
-        local t = Assist.meleeDistance - 3
-        if t >= 9 then
+        local t = Assist.meleeDistance - 2
+        if t >= 9 and mq.TLO.Target() ~= nil and mq.TLO.Target.Distance() > Assist.meleeDistance then
             log.Info("Reducing max distance from %f to %f", Assist.meleeDistance, t)
             Assist.meleeDistance = t
         end
@@ -169,12 +169,15 @@ function Assist.beginKillSpawnID(spawnID)
         end
 
         if botSettings.settings.assist.melee_distance == "auto" then
-            Assist.meleeDistance = spawn.MaxRangeTo() * 0.50 -- XXX too far in riftseekers with 0.75. XXX cant disarm in riftseekers with 0.60
+            local dist = math.ceil(spawn.MaxRangeTo() * 0.50) -- XXX too far in riftseekers with 0.75. XXX cant disarm in riftseekers with 0.60
+
+            Assist.meleeDistance = dist
             log.Info("Calculated auto melee distance %f", Assist.meleeDistance)
         else
             Assist.meleeDistance = tonumber(botSettings.settings.assist.melee_distance)
         end
         move_to(spawnID)
+        Assist.meleeStick()
     end
 end
 
@@ -187,15 +190,15 @@ end
 function Assist.meleeStick()
     local stickArg
     if Assist.IsTanking() then
-        stickArg = string.format("hold %.0f uw", Assist.meleeDistance)
+        stickArg = string.format("hold front %d uw", Assist.meleeDistance)
         log.Debug("STICKING IN FRONT TO %d: %s", Assist.targetID, stickArg)
         mq.cmdf("/stick %s", stickArg)
     else
-        --mq.cmd("/stick snaproll uw")
-        --mq.delay(200, function()
-        --    return mq.TLO.Stick.Behind() and mq.TLO.Stick.Stopped()
-        --end)
-        stickArg = string.format("hold moveback behind %.0f uw", Assist.meleeDistance)
+        mq.cmd("/stick snaproll uw")
+        mq.delay(1000, function()
+            return mq.TLO.Stick.Behind() and mq.TLO.Stick.Stopped()
+        end)
+        stickArg = string.format("hold moveback behind %d uw", Assist.meleeDistance)
         log.Debug("STICKING IN BACK TO %d: %s", Assist.targetID, stickArg)
         mq.cmdf("/stick %s", stickArg)
     end
@@ -255,6 +258,7 @@ function performSpellAbility(targetID, abilityRows, category, used)
         and (used == nil or used[row] == nil)
         and is_spell_ability_ready(spellConfig.Name)
         and not is_moving()
+        and not obstructive_window_open()
         and (is_brd() or not is_casting()) then
             local spawn = spawn_from_id(targetID)
             if not spawn then
@@ -317,10 +321,13 @@ function Assist.Tick()
 
     --log.Debug("Assist.Tick()")
 
-    if melee and spawn.MaxRangeTo() > Assist.meleeDistance and assistStickTimer:expired() then
+    if melee and spawn.Distance() > Assist.meleeDistance and assistStickTimer:expired() then
         log.Debug("stick update. meleeDistance = %f!", Assist.meleeDistance)
         Assist.meleeStick()
         assistStickTimer:restart()
+        if mq.TLO.Target.ID() ~= nil then
+            cmdf("/face fast id %d", mq.TLO.Target.ID())
+        end
     end
 
     if spawn == nil or spawn.ID() == 0 or spawn.Type() == "Corpse" or spawn.Type() == "NULL" then

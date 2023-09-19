@@ -8,7 +8,7 @@ local assist  = require("efyran/e4_Assist")
 local follow  = require("efyran/e4_Follow")
 local commandQueue = require("efyran/e4_CommandQueue")
 local botSettings = require("efyran/e4_BotSettings")
-local pet     = require("efyran/e4_Pet")
+local loot  = require("efyran/e4_Loot")
 local buffs   = require("efyran/e4_Buffs")
 local globalSettings = require("efyran/e4_Settings")
 
@@ -1362,6 +1362,16 @@ function QoL.Init()
 
     -- loot all my nearby corpses
     mq.bind("/lootmycorpse", function() commandQueue.Add("lootmycorpse") end)
+
+    -- turn auto loot on
+    mq.bind("/looton", function()
+        loot.autoloot = true
+    end)
+
+    -- turn auto loot off
+    mq.bind("/lootoff", function()
+        loot.autoloot = false
+    end)
 
     -- tell peers to attempt to loot their corpses
     mq.bind("/lootallcorpses", function()

@@ -2,7 +2,6 @@ require("efyran/ezmq")
 
 local log = require("efyran/knightlinc/Write")
 
-require("efyran/e4_Loot")
 require("efyran/e4_Hail")
 
 local commandQueue = require("efyran/e4_CommandQueue")

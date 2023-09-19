@@ -39,3 +39,10 @@ function SetLootItemSetting(lootSettings, item, value)
     local first = item.Name():sub(1, 1)
     lootSettings[first][item.Name()] = value
 end
+
+
+local Loot = {
+    autoloot = false
+}
+
+return Loot

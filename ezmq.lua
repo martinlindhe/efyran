@@ -298,7 +298,7 @@ function wait_for_buffs_populated()
 
     while not mq.TLO.Target.BuffsPopulated()
     do
-        log.Debug("buffs not finished populating")
+        --log.Debug("buffs not finished populating")
         delay(wait)
         count = count + wait
         if count >= limit then
@@ -497,7 +497,7 @@ function use_alt_ability(name, spawnID)
     end
 
     mq.cmdf("/casting %s", args)
-    mq.delay(50)
+    mq.delay(200)
     mq.delay(20000, function() return not is_casting() end)
 
     if is_brd() then
@@ -1831,7 +1831,7 @@ function castSpellAbility(spawn, row, callback)
     --log.Debug("castSpellAbility %s, row = %s", spell.Name, row)
 
     if have_ability(spell.Name) and not is_ability_ready(spell.Name) then
-        log.Debug("castSpellAbility ABILITY %s, not ready!", spell.Name)
+        --log.Debug("castSpellAbility ABILITY %s, not ready!", spell.Name)
         return false
     end
 
@@ -1864,13 +1864,13 @@ function castSpellAbility(spawn, row, callback)
     end
 
     if spell.MinEnd ~= nil and mq.TLO.Me.PctEndurance() < spell.MinEnd then
-        log.Info("SKIP MinEnd %s, %d vs required %d", spell.Name,  mq.TLO.Me.PctEndurance(), spell.MinEnd)
+        --log.Debug("SKIP MinEnd %s, %d vs required %d", spell.Name,  mq.TLO.Me.PctEndurance(), spell.MinEnd)
         return false
     end
 
     if spell.MinHP ~= nil and mq.TLO.Me.PctHPs() > spell.MinHP then
         -- eg. Cannibalize if we have enough HP %
-        all_tellf("SKIP MinHP %s, %d vs required %d", spell.Name,  mq.TLO.Me.PctHPs(), spell.MinHP)
+        log.Debug("SKIP MinHP %s, %d vs required %d", spell.Name,  mq.TLO.Me.PctHPs(), spell.MinHP)
         return false
     end
 
@@ -1882,7 +1882,7 @@ function castSpellAbility(spawn, row, callback)
 
     if spawn ~= nil and spell.MaxLevel ~= nil and spawn.Level() > spell.MaxLevel then
         -- eg. skip Stun if target is too high level
-        all_tellf("SKIP MaxLevel %s, %d vs required %d", spell.Name, spawn.Level(), spell.MaxLevel)
+        log.Debug("SKIP MaxLevel %s, %d vs required %d", spell.Name, spawn.Level(), spell.MaxLevel)
         return false
     end
 
@@ -1912,9 +1912,9 @@ function castSpellAbility(spawn, row, callback)
         return false
     end
 
-    if spell.MaxMobs ~= nil and nearby_npc_count(75) > spellConfig.MaxMobs then
+    if spell.MaxMobs ~= nil and nearby_npc_count(75) > spell.MaxMobs then
         -- only cast if at most this many NPC:s is nearby
-        cmd("/dgtell all SKIP MaxMobs ", spellConfig.Name, ", Too many nearby mobs. Have ", spawn_count(nearbyNPCFilter), ", need ", spellConfig.MaxMobs)
+        cmdf("/dgtell all SKIP MaxMobs %s, Too many nearby mobs. Have %d, need %d", spell.Name, spawn_count(nearbyNPCFilter),  spell.MaxMobs)
         return false
     end
 
@@ -2162,10 +2162,10 @@ end
 
 ---@param radius integer
 function nearby_npc_count(radius)
-    return spawn_count(string.format("npc radius %d zradius 75", radius))
+    return spawn_count(string.format("npc radius %d zradius 25", radius))
 end
 
 ---@param radius integer
 function nearby_player_count(radius)
-    return spawn_count(string.format("pc radius %d zradius 75", radius))
+    return spawn_count(string.format("pc radius %d zradius 25", radius))
 end
