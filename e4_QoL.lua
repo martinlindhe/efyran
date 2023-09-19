@@ -691,6 +691,14 @@ function QoL.Init()
         commandQueue.Add("dropinvis")
     end)
 
+    -- report if MGB is ready
+    mq.bind("/mgbready", function()
+        if is_orchestrator() then
+            cmd("/dgzexecute /mgbready")
+        end
+        commandQueue.Add("is-mgb-ready")
+    end)
+
     mq.bind("/reportmana", function()
         if is_orchestrator() then
             cmd("/dgzexecute /reportmana")

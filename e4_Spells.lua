@@ -583,7 +583,7 @@ function ae_rez_query(rez, spawnQuery)
         mq.delay(2000)
     end
 
-    --log.Info("Rezzing %s", spawnQuery)
+    log.Info("Rezzing %s", spawnQuery)
 
     for i = 1, corpses do
         local spawn = mq.TLO.NearestSpawn(i, spawnQuery)

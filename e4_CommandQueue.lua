@@ -112,6 +112,14 @@ function CommandQueue.Process()
         cast_radiant_cure()
     elseif v.Name == "handin" then
         auto_hand_in_items()
+    elseif v.Name == "is-mgb-ready" then
+        if have_alt_ability("Mass Group Buff") then
+            if not is_alt_ability_ready("Mass Group Buff") then
+                all_tellf("\arMass Group Buff is not available...\ax Ready in %s", mq.TLO.Me.AltAbilityTimer("Mass Group Buff").TimeHMS())
+            else
+                all_tellf("\agMass Group Buff is ready!\ax")
+            end
+        end
     elseif v.Name == "circleme" then
         make_peers_circle_me(toint(v.Arg))
     elseif v.Name == "buffit" then

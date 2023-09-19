@@ -529,7 +529,9 @@ end
 function have_buff(name)
     local spell = mq.TLO.Spell(name)
     if spell() == nil then
-        all_tellf("have_buff ERROR: asked about odd buff %s", name)
+        if not have_ability(name) then
+            all_tellf("have_buff ERROR: asked about odd buff %s", name)
+        end
         return false
     end
     if mq.TLO.Me.Buff(name)() == name then
@@ -565,7 +567,9 @@ end
 function have_song(name)
     local spell = mq.TLO.Spell(name)
     if spell() == nil then
-        all_tellf("have_song ERROR, asked about odd buff %s", name)
+        if not have_ability(name) then
+            all_tellf("have_song ERROR, asked about odd buff %s", name)
+        end
         return false
     end
     return mq.TLO.Me.Song(name)() ~= nil or mq.TLO.Me.Song(spell.RankName())() ~= nil
@@ -1878,7 +1882,7 @@ function castSpellAbility(spawn, row, callback)
 
     if spawn ~= nil and spell.MaxHP ~= nil and spawn.PctHPs() <= spell.MaxHP then
         -- eg. Snare mob at low health
-        all_tellf("SKIP MaxHP %s, %d vs required %d", spell.Name, spawn.PctHPs(), spell.MaxHP)
+        --log.Debug("SKIP MaxHP %s, %d vs required %d", spell.Name, spawn.PctHPs(), spell.MaxHP)
         return false
     end
 

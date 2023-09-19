@@ -43,7 +43,7 @@ local buffs = {
 
 
     -- timers
-    resumeTimer = timer.new_expired(5), -- 5s   - interval after end of fight to resume buffing
+    resumeTimer = timer.new_expired(4), -- 4s   - interval after end of fight to resume buffing
 }
 
 function buffs.Init()
@@ -124,7 +124,7 @@ function buffs.Tick()
     end
 
     if not buffs.resumeTimer:expired()  then
-        log.Debug("Buff tick: resumeTimer not ready")
+        --log.Debug("Buff tick: resumeTimer not ready")
         return
     end
 
