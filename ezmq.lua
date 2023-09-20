@@ -504,6 +504,8 @@ function use_alt_ability(name, spawnID)
         mq.delay(100)
     end
 
+    wait_until_not_casting()
+
     local args = '"'..name..'|alt -maxtries|3'
     if spawnID ~= nil then
         args = args .. ' -targetid|'.. tostring(spawnID)
@@ -2173,9 +2175,19 @@ function peer_has_buff(peer, spellName)
     -- spawn.Buff(spellName).Duration() >= MIN_BUFF_DURATION
 end
 
+-- Returns the current HP % for given `peer`
+---@param peer string
 ---@return integer
-function get_peer_hp(peer)
+function peer_hp(peer)
     return mq.TLO.NetBots(peer).PctHPs()
+end
+
+-- Returns the short zonename for given `peer`
+---@param peer string
+---@return string
+function peer_zone(peer)
+    local id = mq.TLO.NetBots(peer).Zone()
+    return mq.TLO.Zone(id).ShortName()
 end
 
 -- returns table with peers
@@ -2206,4 +2218,37 @@ end
 ---@param radius integer
 function nearby_player_count(radius)
     return spawn_count(string.format("pc radius %d zradius 25", radius))
+end
+
+-- report peers out of range or in another zone
+function count_peers()
+
+    local min_distance = 100
+    local peers = get_peers()
+    local sum = 0
+
+    for i, peer in pairs(peers) do
+        if is_peer_in_zone(peer) then
+            local spawn = spawn_from_peer_name(peer)
+            if spawn ~= nil then
+                local dist = spawn.Distance()
+                if dist > min_distance then
+                    log.Warn("COUNT: \ay%s\ax at \ay%d\ax distance %s", peer, dist, spawn.HeadingTo.ShortName())
+                else
+                    sum = sum + 1
+                end
+            else
+                log.Error("COUNT UNLIKELY ERROR: failed to resolve peer %s", peer)
+            end
+        else
+            local zone = peer_zone(peer)
+            log.Info("COUNT: \ay%s\ax is in zone \ar%s\ax", peer, zone)
+        end
+    end
+
+    if sum ~= #peers then
+        log.Warn("COUNT SUMMARY: %d of %d peers present", sum, #peers)
+    else
+        log.Info("COUNT SUMMARY: \agAll %d peers present!\ax", sum)
+    end
 end

@@ -185,6 +185,7 @@ Buff Spell Level   Minimum Target Level
 /wordheal                   - clerics: cast word heal (group heal with cure effect)
 /aetl                       - wizard: cast AE TL spell
 /mgbready                   - reports if MGB is ready to use
+/count                      - report peer status (out of range or not in zone)
 
 /rezit                      - rez target
 /aerez                      - perform ae rez

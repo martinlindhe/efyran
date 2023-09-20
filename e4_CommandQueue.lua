@@ -292,6 +292,8 @@ function CommandQueue.Process()
         open_nearby_corpse()
     elseif v.Name == "origin" then
         use_alt_ability("Origin")
+    elseif v.Name == "count-peers" then
+        count_peers()
     elseif v.Name == "use-veteran-aa" then
         local filter = v.Arg2
         if filter ~= nil and not matches_filter(filter, mq.TLO.Me.Name()) then -- XXX sender name for /only|group to work

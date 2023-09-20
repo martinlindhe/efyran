@@ -917,6 +917,10 @@ function QoL.Init()
         commandQueue.Add("use-veteran-aa", "Throne of Heroes")
     end)
 
+    -- Peer proximity count
+    mq.bind("/count", function() commandQueue.Add("count-peers") end)
+    mq.bind("/cnt", function() commandQueue.Add("count-peers") end)
+
 
     -- tell group to use Lesson of the Devoted
     ---@param ... string|nil filter, such as "/only|ROG"
