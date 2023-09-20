@@ -148,10 +148,11 @@ function Follow.Update(force)
     end
 
     if exe ~= "" then
-        if not force and spawn.Distance() < 8 then
-            log.Info("XXX skip follow update, we are nearby!")
-            return
-        end
+        --if not force and spawn.Distance() < 8 then
+        --    log.Info("XXX skip follow update, we are nearby!")
+        --    return
+        --end
+        log.Info("XXX follow update: %s", exe)
         mq.cmd(exe)
     end
 end

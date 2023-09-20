@@ -35,8 +35,6 @@ function QoL.Init()
         cmd("/framelimiter enable")
     end
 
-    QoL.loadRequiredPlugins()
-
     if botSettings.settings.debug ~= nil and botSettings.settings.debug then
         log.loglevel = "debug"
     end
@@ -473,10 +471,11 @@ function QoL.Init()
 
     local gotFlag = false
     local charFlag = function(text)
-        all_tellf("I recieved char flag!")
+        all_tellf("I received char flag!")
         gotFlag = true
     end
     mq.event("char_flag-pop", "You receive a character flag#*#", charFlag) -- PoP / GoD
+    mq.event("char_flag-ldon", "You have completed a step toward becoming a great adventurer. Well done!", charFlag) -- LDoN
     mq.event("char_flag-don", "You have received a character flag!", charFlag) -- DoN
 
     -- report who got the flag
@@ -1631,14 +1630,15 @@ end
 function QoL.loadRequiredPlugins()
     local requiredPlugins = {
         "MQ2EQBC",
-        "MQ2NetBots", -- XXX drop mq2dannet for MQ2NetBots
+        "MQ2NetBots",
 
-        "MQ2DanNet",
-        "MQ2Debuffs", -- XXX not used yet. to be used for auto-cure feature
-        "MQ2MoveUtils",
+        "MQ2DanNet",  -- XXX drop mq2dannet for MQ2NetBots
+        "MQ2Debuffs",
+        "MQ2MoveUtils", -- for /stick
         "MQ2Cast",
+        "MQ2Medley",  -- Bard songs
 
-        "MQ2AdvPath", -- XXX /afollow or /stick ?
+        "MQ2AdvPath",
         -- XXX which follow mode to use?
         --"MQ2Nav", -- TODO requires mesh files etc
     }

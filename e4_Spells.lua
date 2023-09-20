@@ -1,6 +1,7 @@
 local mq = require("mq")
 local log = require("efyran/knightlinc/Write")
 
+local globalSettings = require("efyran/e4_Settings")
 local botSettings = require("efyran/e4_BotSettings")
 local aliases = require("efyran/settings/Spell Aliases")
 local groupBuffs = require("efyran/e4_GroupBuffs")
@@ -557,7 +558,8 @@ function rez_it(spawnID)
     log.Info("Performing rez on %s, %d %s", spawn.Name(), spawnID, type(spawnID))
     if have_spell(rez) and not is_memorized(rez) then
         mq.cmdf('/memorize "%s" %d', rez, 5)
-        mq.delay(2000)
+        mq.delay(3000) -- memorize time
+        mq.delay(15000) -- 15s recast delay on Reviviscence
     end
 
     -- try 3 times to get a rez spell before giving up (to wait for ability to become ready...)
@@ -664,7 +666,9 @@ function ae_rez_query(spawnQuery)
                 if is_spell_ability_ready(rez) then
                     all_tellf("Rezzing %s \ag%s\ax with \ay%s\ax", spawn.Class.ShortName(), spawn.DisplayName(), rez)
                     --target_id(spawn.ID())
-                    cmdf("/tell %s Wait4Rez", spawn.DisplayName())
+                    if globalSettings.allowBotTells then
+                        cmdf("/tell %s Wait4Rez", spawn.DisplayName())
+                    end
                     castSpellRaw(rez, spawn.ID())
                     delay(500)
                     wait_until_not_casting()

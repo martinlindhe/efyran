@@ -80,9 +80,9 @@ function autobank()
                             local itemType = mq.TLO.Ini(tradeskillsIni, "Items", item.Name(), "-")()
                             if itemType ~= "-" then
                                 -- make sure I'm not the toon to handle item type
-                                local reciever = mq.TLO.Ini(tradeskillsIni, "Roles", itemType,"-")()
+                                local receiver = mq.TLO.Ini(tradeskillsIni, "Roles", itemType,"-")()
 
-                                if mq.TLO.Me.Name() == reciever then
+                                if mq.TLO.Me.Name() == receiver then
 
                                     -- TODO: check free bank slots and give up when bank is full
 

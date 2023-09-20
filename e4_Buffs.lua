@@ -57,6 +57,7 @@ function buffs.Init()
         })
     end)
 
+    bard.UpdateMQ2MedleyINI()
     bard.resumeMelody()
 end
 
@@ -183,11 +184,6 @@ function buffs.Tick()
     if buffs.refreshBuffs and requestBuffsTimer:expired() then
         buffs.RequestBuffs()
         requestBuffsTimer:restart()
-    end
-
-    if is_brd() and bard.currentMelody ~= "" and not mq.TLO.Twist.Twisting() then
-        all_tellf("WARN: Should be playing %s but am not (should not happen)", bard.currentMelody)
-        bard.PlayMelody(bard.currentMelody)
     end
 
     if is_casting() or is_hovering() or is_sitting() or is_moving() or mq.TLO.Me.SpellInCooldown() or obstructive_window_open() then

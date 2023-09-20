@@ -242,7 +242,10 @@ function Assist.EndFight()
     end
 
     cmd("/attack off")
-    cmd("/stick off")
+    if is_plugin_loaded("MQ2MoveUtils") then
+        cmd("/stick off")
+    end
+    cmd("/moveto off")
 
     Assist.prepareForNextFight()
 

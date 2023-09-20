@@ -219,7 +219,11 @@ function auto_hand_in_items()
 
                             target_npc_name(o.Name)
                             move_to(spawn.ID())
-                            delay(2000)
+
+                            if is_rof2() then
+                                -- XXX is open bags needed on rof2 with the new macroquest features? worked on live without them.
+                                open_bags()
+                            end
 
                             for i, componentRow in pairs(components) do
                                 -- optional syntax: "2|Item name", where 2 is the required item count
@@ -244,22 +248,26 @@ function auto_hand_in_items()
 
                                 -- pick up and hand over items unstacked
                                 for each = 1, count do
-                                    log.Info("Picking up %s", component)
                                     local item = find_item(component)
                                     if item == nil then
-                                        -- unexpected
-                                        all_tellf("ERROR find_item failed on %s", component)
+                                        all_tellf("UNEXPECTED ERROR find_item failed on %s", component)
                                         break
                                     end
 
-                                    cmdf("/nomodkey /ctrl /itemnotify in Pack%d %d leftmouseup", item.ItemSlot() - 22, item.ItemSlot2() + 1)
-                                    delay(200)
+                                    log.Info("Picking up \ay%s\ax  %d/%d", component, each, count)
+                                    -- XXX fails if bags not open
+                                    local exe = string.format("/nomodkey /ctrl /itemnotify in Pack%d %d leftmouseup", item.ItemSlot() - 22, item.ItemSlot2() + 1)
+                                    log.Info("EXE: %s", exe)
+                                    cmdf(exe)
                                     delay(1000, function() return has_cursor_item() end)
-
-                                    log.Info("Handing in %s", component)
-                                    cmd("/click left target")
                                     delay(200)
+                                    if not has_cursor_item() then
+                                        all_tellf("ERROR failed to pick up item")
+                                        return
+                                    end
 
+                                    log.Info("Handing in \ay%s\ax", component)
+                                    cmd("/click left target")
                                     delay(1000, function() return not has_cursor_item() end)
                                     delay(200)
                                 end

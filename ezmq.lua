@@ -499,9 +499,13 @@ function use_alt_ability(name, spawnID)
         return
     end
 
-    if is_brd() and is_casting() then
-        mq.cmd("/twist stop")
-        mq.delay(100)
+    if is_brd() then
+        if spawnID ~= nil then
+            cmdf("/target id %d", spawnID)
+            delay(20)
+        end
+        mq.cmd('/medley queue "%s"', name)
+        return
     end
 
     wait_until_not_casting()
@@ -514,26 +518,6 @@ function use_alt_ability(name, spawnID)
     mq.cmdf("/casting %s", args)
     mq.delay(200)
     mq.delay(20000, function() return not is_casting() end)
-
-    if is_brd() then
-        local item = find_item(name)
-        if item ~= nil then
-            -- item click
-            local sleepTime = item.Clicky.CastTime() + item.Clicky.Spell.RecastTime() + 1500 -- XXX recast time is 0
-            log.Debug("use_alt_ability item click sleep, %f + %f", item.Clicky.CastTime(), item.Clicky.Spell.RecastTime() )
-            mq.delay(sleepTime)
-        else
-            -- spell / AA
-            local spell = get_spell(name)
-            if spell ~= nil then
-                local sleepTime = spell.MyCastTime() + spell.RecastTime() + 1500
-                --print("spell sleep for '", spell.Name(), "', my cast time:", spell.MyCastTime(), ", recast time", spell.RecastTime(), " = ", sleepTime)
-                mq.delay(sleepTime)
-            end
-        end
-        log.Debug("BARD use_alt_ability %s -- SO I RESUME TWIST!", name)
-        mq.cmd("/twist start")
-    end
 end
 
 -- returns true if I have the buff `name` on me
@@ -1995,13 +1979,17 @@ function castSpell(name, spawnId)
 
     --log.Debug("castSpell ITEM/SPELL/AA: %s", name)
 
-    if is_brd() and is_casting() then
-        cmd("/twist stop")
-        delay(100)
+    if is_brd() then
+        if spawnId ~= nil then
+            cmdf("/target id %d", spawnId)
+            delay(20)
+        end
+        mq.cmd('/medley queue "%s"', name)
+        return true
     end
 
     local extra = ""
-    if not is_brd() and not have_spell(name) and have_item_inventory(name) then
+    if not have_spell(name) and have_item_inventory(name) then
         -- Item and spell examples: Molten Orb (MAG)
         if not is_item_clicky_ready(name) then
             -- eg Worn Totem, with 4 min buff duration and 10 min recast
@@ -2018,10 +2006,6 @@ function castSpell(name, spawnId)
         -- item click
         local item = find_item(name)
         if item ~= nil then
-            if is_brd() then
-                log.Debug("BRD clicky: Item click sleep, %d + %d", item.Clicky.CastTime(), item.Clicky.Spell.RecastTime())
-                delay(item.Clicky.CastTime() + item.Clicky.Spell.RecastTime() + 1500)
-            end
             --log.Debug("item clicky %s cast time %d", name, item.CastTime())
             if item.CastTime() <= 100 then -- 0.1s
                 instant = true
@@ -2039,20 +2023,10 @@ function castSpell(name, spawnId)
             if spell.RecastTime() ~= nil then
                 recast = spell.RecastTime()
             end
-            if is_brd() then
-                log.Debug("Spell sleep for '%s', my cast time: %d, recast time %d", spell.Name(), mycast, recast)
-                local sleepTime = mycast + recast
-                delay(sleepTime)
-            end
             if spell.MyCastTime() <= 100 then -- 0.1s
                 instant = true
             end
         end
-    end
-
-    if is_brd() then
-        log.Debug("BRD in castSpell %s - SO I RESUME TWIST!", name)
-        cmd("/twist start")
     end
 
     if instant then

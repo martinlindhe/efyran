@@ -73,8 +73,6 @@ function CommandQueue.ZoneEvent()
     CommandQueue.Clear()
     CommandQueue.Add("zoned")
     assist.backoff()
-    buffs.timeZoned = os.time()
-    cmd("/moveto off")
 end
 
 
@@ -328,13 +326,13 @@ function CommandQueue.Process()
         if is_alt_ability_ready("Teleport Bind") then
             use_alt_ability("Teleport Bind")
         elseif have_alt_ability("Teleport Bind") then
-            all_tellf("ERROR: Teleport Bind not ready (in %s)", mq.TLO.Me.AltAbilityTimer("Teleport Bind").TimeHMS())
+            all_tellf("ERROR: \arTeleport Bind not ready\ax (in %s)", mq.TLO.Me.AltAbilityTimer("Teleport Bind").TimeHMS())
         end
     elseif v.Name == "secondaryrecall" then
         if is_alt_ability_ready("Secondary Recall") then
             use_alt_ability("Secondary Recall")
         elseif have_alt_ability("Secondary Recall") then
-            all_tellf("ERROR: Secondary Recall not ready (in %s)", mq.TLO.Me.AltAbilityTimer("Secondary Recall").TimeHMS())
+            all_tellf("ERROR: \arSecondary Recall not ready\ax (in %s)", mq.TLO.Me.AltAbilityTimer("Secondary Recall").TimeHMS())
         end
     elseif v.Name == "hastask" then
         if mq.TLO.Task(v.Arg).Index() ~= nil then
@@ -485,16 +483,18 @@ end
 -- performs various tasks when toon has finished starting up / zoning
 function perform_zoned_event()
     log.Debug("I zoned into %s", zone_shortname())
+
+    delay(5000) -- 5s
+
     pet.ConfigureAfterZone()
     clear_ae_rezzed()
     joinCurrentHealChannel()
 
-    if is_brd() then
-        bard.resumeMelody()
-    else
-        memorizeListedSpells()
-    end
+    memorizeListedSpells()
+
+    buffs.timeZoned = os.time()
     buffs.refreshBuffs = true
+
     heal.autoMed = true
 
     autoMapHeightFilter()

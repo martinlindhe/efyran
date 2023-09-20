@@ -15,6 +15,8 @@ local qol     = require("efyran/e4_QoL")
 
 seed_process()
 
+qol.loadRequiredPlugins()
+
 buffs.Init()
 group.Init()
 heal.Init()

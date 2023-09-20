@@ -8,6 +8,8 @@ local globalSettings = {
     followMode = "MQ2AdvPath",
 
     allowStrangers = true, -- auto accept rez & raid invites from non-peers
+
+    allowBotTells = true, -- allow sending & receiing of "bot tells" such as "Wait4Rez"
 }
 
 return globalSettings

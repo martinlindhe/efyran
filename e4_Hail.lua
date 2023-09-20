@@ -31,6 +31,9 @@ local hailTargets = {
     ["oasis"] = { -- Oasis of Marr
         ["Translocator Tradil"] = "travel to timorous deep", -- TL to Timorous Deep
     },
+    ["qey2hh1"] = { -- West Karana
+        ["Melaara Tenwinds"] = "interesting ore", -- LDoN flag to get Adventurer's Stone (1/2)
+    },
 
     ["potranquility"] = {
         ["Adler Fuirstel"] = "ward", -- Grummus pre-flag - outside Plane of Disease
@@ -103,8 +106,11 @@ local hailTargets = {
         ["Vladnelg Galvern"] = "interesting ore", -- LDoN flag to get Adventurer's Stone (1/2)
         ["Priestess Aelea"] = "bind", -- soulbinder
     },
+    ["sro"] = {
+        ["Selephra Giztral"] = "farstone", -- LDoN flag to get Adventurer's Stone (2/2)
+    },
     ["Butcher"] = {
-        ["Vual Stoutest"] = "farstone", -- LDoN flag to get Adventurer's Stone (2/2)    . XXX sro one is faster to port to. add sro one
+        ["Vual Stoutest"] = "farstone", -- LDoN flag to get Adventurer's Stone (2/2)
         ["Translocator Fithop"] = "travel to ocean of tears", -- TL to Ocean of Tears, in docks
         ["Translocator Gethia"] = "travel to timorous deep", -- TL to Timorous Deep, in docks
     },
