@@ -228,7 +228,7 @@ function buffs.RefreshCombatBuffs()
     for i=1,mq.TLO.Group.Members() do
         local dist = mq.TLO.Group.Member(i).Distance()
         local name = mq.TLO.Group.Member(i).Name()
-        if dist < 100 then
+        if dist ~= nil and dist < 100 then
 
             for key, buff in pairs(botSettings.settings.combat_buffs) do
                 spellConfig = parseSpellLine(buff)

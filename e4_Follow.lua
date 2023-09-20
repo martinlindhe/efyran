@@ -45,7 +45,7 @@ function Follow.Start(spawnName, force)
 
 
     if Follow.IsFollowing() then
-        Follow.StopFully()
+        Follow.Pause()
     end
 
     log.Debug("Follow start on %s", spawn.Name())
@@ -77,18 +77,6 @@ end
 
 -- pause follow for the moment
 function Follow.Pause()
-    if globalSettings.followMode:lower() == "mq2nav" and mq.TLO.Navigation.Active() then
-        cmd("/nav stop")
-    elseif globalSettings.followMode:lower() == "mq2advpath" then
-        cmd("/afollow off")
-    elseif globalSettings.followMode:lower() == "mq2moveutils" then
-        cmd("/stick off")
-    end
-    cmd("/moveto off")
-end
-
--- stop follow in all possible ways
-function Follow.StopFully()
     if is_plugin_loaded("MQ2Nav") and mq.TLO.Navigation.Active() then
         cmd("/nav stop")
     end
@@ -196,7 +184,7 @@ function Follow.RunToZone(startingPeer)
 
     unflood_delay()
 
-    Follow.StopFully()
+    Follow.Pause()
 
     -- face the same direction the orchestrator is facing
     cmdf("/face fast heading %f", spawn.Heading.Degrees() * -1)

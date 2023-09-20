@@ -687,6 +687,12 @@ function is_shm()
     return mq.TLO.Me.Class.ShortName() == "SHM"
 end
 
+-- Am I a Ranger?
+---@return boolean
+function is_rng()
+    return mq.TLO.Me.Class.ShortName() == "RNG"
+end
+
 -- Am I a Wizard?
 ---@return boolean
 function is_wiz()
