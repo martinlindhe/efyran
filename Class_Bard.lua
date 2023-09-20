@@ -36,12 +36,15 @@ function Bard.UpdateMQ2MedleyINI()
             local key = string.format("song%d", i)
             local songData = parseSpellLine(songRow)
             local song = get_spell(songData.Name)
+            local duration = song.Duration() * 6 -- ticks to seconds
+            local condition = "1"
 
-            local duration = song.Duration() * 6 -- XXX 25 ticks. = 2.5 min.. need it in seconds ???
-            log.Info("XXXX SONG DURATION %d", duration)
+            if songData.Name == "Selo's Song of Travel" or songData.Name == "Shauri's Sonorous Clouding" then
+                condition = "!${Me.Invis}"
+            end
 
-            local val = songData.Name .. "^" .. string.format("%d", duration) .. "^1"
-            cmdf('/ini "%s" "%s" "%s" "%s"', filename, section, key, val)
+            local val = songData.Name .. "^" .. string.format("%d", duration) .. "^" .. condition
+            cmdf('/noparse /ini "%s" "%s" "%s" "%s"', filename, section, key, val)
         end
     end
 

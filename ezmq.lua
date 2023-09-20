@@ -500,11 +500,11 @@ function use_alt_ability(name, spawnID)
     end
 
     if is_brd() then
+        local exe = string.format('/medley queue "%s"', name)
         if spawnID ~= nil then
-            cmdf("/target id %d", spawnID)
-            delay(20)
+            exe = exe .. string.format(" -targetid|%d", spawnID)
         end
-        mq.cmd('/medley queue "%s"', name)
+        mq.cmd(exe)
         return
     end
 
@@ -1964,9 +1964,9 @@ end
 -- helper for casting spell, clicky, AA, combat ability
 -- returns true if spell was cast (special case 'false' on instant-cast clickies)
 ---@param name string spell name
----@param spawnId integer|nil
+---@param spawnID integer|nil
 ---@return boolean
-function castSpell(name, spawnId)
+function castSpell(name, spawnID)
 
     if have_combat_ability(name) then
         use_combat_ability(name)
@@ -1980,11 +1980,11 @@ function castSpell(name, spawnId)
     --log.Debug("castSpell ITEM/SPELL/AA: %s", name)
 
     if is_brd() then
-        if spawnId ~= nil then
-            cmdf("/target id %d", spawnId)
-            delay(20)
+        local exe = string.format('/medley queue "%s"', name)
+        if spawnID ~= nil then
+            exe = exe .. string.format(" -targetid|%d", spawnID)
         end
-        mq.cmd('/medley queue "%s"', name)
+        mq.cmd(exe)
         return true
     end
 
@@ -1998,7 +1998,7 @@ function castSpell(name, spawnId)
         extra = "|item"
     end
 
-    castSpellRaw(name..extra, spawnId, "-maxtries|3")
+    castSpellRaw(name..extra, spawnID, "-maxtries|3")
 
     local instant = false
 
