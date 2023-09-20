@@ -681,6 +681,12 @@ function is_dru()
     return mq.TLO.Me.Class.ShortName() == "DRU"
 end
 
+-- Am I a Shaman?
+---@return boolean
+function is_shm()
+    return mq.TLO.Me.Class.ShortName() == "SHM"
+end
+
 -- Am I a Wizard?
 ---@return boolean
 function is_wiz()
@@ -1054,9 +1060,6 @@ end
 ---@param class string Class shortname.
 ---@return boolean
 function is_healer(class)
-    if class == nil then
-        all_tellf("ERROR: is_healer called without class. did you mean me_healer() ?")
-    end
     return class == "CLR" or class == "DRU" or class == "SHM" or class == "PAL" or class == "RNG" or class == "BST"
 end
 
@@ -1064,9 +1067,6 @@ end
 ---@param class string Class shortname.
 ---@return boolean
 function is_melee(class)
-    if class == nil then
-        all_tellf("ERROR: is_priest called without class. did you mean me_melee() ?")
-    end
     return class == "BRD" or class == "BER" or class == "BST" or class == "MNK" or class == "PAL" or class == "RNG" or class == "ROG" or class == "SHD" or class == "WAR"
 end
 
@@ -1074,9 +1074,6 @@ end
 ---@param class string Class shortname.
 ---@return boolean
 function is_hybrid(class)
-    if class == nil then
-        all_tellf("ERROR: is_priest called without class. did you mean me_hybrid() ?")
-    end
     return class == "PAL" or class == "SHD" or class == "RNG" or class == "BST"
 end
 
@@ -1084,9 +1081,6 @@ end
 ---@param class string Class shortname.
 ---@return boolean
 function is_priest(class)
-    if class == nil then
-        all_tellf("ERROR: is_priest called without class. did you mean me_priest() ?")
-    end
     return class == "CLR" or class == "DRU" or class == "SHM"
 end
 
@@ -1094,9 +1088,6 @@ end
 ---@param class string Class shortname.
 ---@return boolean
 function is_caster(class)
-    if class == nil then
-        all_tellf("ERROR: is_caster called without class. did you mean me_caster() ?")
-    end
     return class == "WIZ" or class == "MAG" or class == "ENC" or class == "NEC"
 end
 
@@ -1104,9 +1095,6 @@ end
 ---@param class string Class shortname.
 ---@return boolean
 function is_tank(class)
-    if class == nil then
-        all_tellf("ERROR: is_tank called without class. did you mean me_tank() ?")
-    end
     return class == "WAR" or class == "PAL" or class == "SHD"
 end
 
@@ -1447,8 +1435,6 @@ end
 
 local rezSpells = {
     -- order: falling priority
-    "Blessing of Resurrection",             -- CLR/65 sof AA : 96% exp, 3s cast, 12s recast (SoD)
-    "Water Sprinkler of Nem Ankh",          -- CLR/65 Epic1.0: 96% exp, 10s cast
     "Reviviscence",                         -- CLR/56        : 96% exp, 7s cast, 600 mana
     "Resurrection",                         -- CLR/47, PAL/59: 90% exp, 6s cast, 20s recast, 700 mana
     "Restoration",                          -- CLR/42, PAL/55: 75% exp, 6s cast, 20s recast
@@ -1467,7 +1453,7 @@ local rezSpells = {
 
 -- Returns the name of the best >= 90% rez for DRU/SHM, or any best available rez for CLR/PAL, or nil if none
 ---@ return string|nil
-function get_rez_spell_item_aa()
+function get_rez_spell()
     for k, rez in pairs(rezSpells) do
         if have_alt_ability(rez) or have_spell(rez) or have_item_inventory(rez) then
             return rez
@@ -1572,8 +1558,7 @@ function is_spell_ability_ready(name)
         --log.Debug("is_spell_ability_ready ability TRUE", name)
         return true
     end
-    local item = find_item(name)
-    if item ~= nil and item.Clicky() ~= nil and item.Timer.Ticks() == 0 then
+    if is_item_clicky_ready(name) then
         --log.Debug("is_spell_ability_ready item TRUE", name)
         return true
     end
@@ -1861,7 +1846,7 @@ function castSpellAbility(spawn, row, callback)
     end
 
     if have_combat_ability(spell.Name) and have_buff_or_song(spell.Name) then
-        log.Debug("castSpellAbility skip COMBAT-ABILITY %s, have buff!", spell.Name)
+        --log.Debug("castSpellAbility skip COMBAT-ABILITY %s, have buff!", spell.Name)
         return false
     end
 
@@ -1904,13 +1889,13 @@ function castSpellAbility(spawn, row, callback)
         return false
     end
 
-    if spawn ~= nil and spell.MaxHP ~= nil and spawn.PctHPs() <= spell.MaxHP then
+    if spawn ~= nil and spawn() ~=nil and spell.MaxHP ~= nil and spawn.PctHPs() <= spell.MaxHP then
         -- eg. Snare mob at low health
         --log.Debug("SKIP MaxHP %s, %d vs required %d", spell.Name, spawn.PctHPs(), spell.MaxHP)
         return false
     end
 
-    if spawn ~= nil and spell.MaxLevel ~= nil and spawn.Level() > spell.MaxLevel then
+    if spawn ~= nil and spawn() ~=nil and spell.MaxLevel ~= nil and spawn.Level() > spell.MaxLevel then
         -- eg. skip Stun if target is too high level
         log.Debug("SKIP MaxLevel %s, %d vs required %d", spell.Name, spawn.Level(), spell.MaxLevel)
         return false
@@ -1926,12 +1911,12 @@ function castSpellAbility(spawn, row, callback)
         return false
     end
 
-    if spell.Group and spawn ~= nil and not is_grouped_with(spawn.Name()) then
+    if spell.Group and spawn ~= nil and spawn() ~=nil and not is_grouped_with(spawn.Name()) then
         all_tellf("SKIP Group, i am not grouped with %s (spell %s)", spawn.Name(), spell.Name)
         return false
     end
 
-    if spell.Self and spawn ~= nil and spawn.Name() ~= mq.TLO.Me.Name() then
+    if spell.Self and spawn ~= nil and spawn() ~=nil and spawn.Name() ~= mq.TLO.Me.Name() then
         all_tellf("SKIP Self, cant cast on %s (spell %s)", spawn.Name(), spell.Name)
         return false
     end
@@ -1963,7 +1948,7 @@ function castSpellAbility(spawn, row, callback)
 
     --log.Debug("castSpellAbility START CAST %s", spell.Name)
     local spawnID = nil
-    if spawn ~= nil then
+    if spawn ~= nil and spawn() ~=nil then
         spawnID = spawn.ID()
     end
 
@@ -2118,9 +2103,10 @@ function memorize_spell(spellRow, defaultGem)
         log.Info("Memorizing \ag%s\ax in gem %d (had \ay%s\ax)", nameWithRank, gem, mq.TLO.Me.Gem(gem).Name())
         mq.cmdf('/memorize "%s" %d', nameWithRank, gem)
         mq.delay(200)
-        mq.delay(20000, function()
-            return not window_open("SpellBookWnd")
+        mq.delay(3000, function()
+            return mq.TLO.Me.Gem(nameWithRank)() ~= nil
         end)
+
         mq.delay(200)
     end
 
@@ -2181,6 +2167,7 @@ function peer_has_buff(peer, spellName)
     -- spawn.Buff(spellName).Duration() >= MIN_BUFF_DURATION
 end
 
+---@return integer
 function get_peer_hp(peer)
     return mq.TLO.NetBots(peer).PctHPs()
 end

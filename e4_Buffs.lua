@@ -209,21 +209,22 @@ function buffs.RefreshCombatBuffs()
         return
     end
 
-    -- Refresh on me
+    -- Refresh on me (WAR, ROG)
     for _, buff in pairs(botSettings.settings.combat_buffs) do
         spellConfig = parseSpellLine(buff)
-        log.Info("RefreshCombatBuffs \ay%s\ax", buff)
 
-        if not matches_filter(buff, mq.TLO.Me.Name()) then
-            --log.Debug("RefreshCombatBuffs skip %s, not matching filter %s", spellConfig.Name, buff)
-        elseif is_spell_ability_ready(spellConfig.Name) then
+        if matches_filter(buff, mq.TLO.Me.Name()) and is_spell_ability_ready(spellConfig.Name) then
             if castSpellAbility(mq.TLO.Me, buff) then
-                log.Info("Refreshed combat ability")
+                log.Info("RefreshCombatBuffs refreshed \ay%s\ax", buff)
             end
         end
     end
 
-    -- Refresh on group
+    if not is_dru() and not is_shm() and not is_enc() then
+        return
+    end
+
+    -- Refresh on group (DRU, SHM, ENC)
     for i=1,mq.TLO.Group.Members() do
         local dist = mq.TLO.Group.Member(i).Distance()
         local name = mq.TLO.Group.Member(i).Name()
@@ -232,9 +233,7 @@ function buffs.RefreshCombatBuffs()
             for key, buff in pairs(botSettings.settings.combat_buffs) do
                 spellConfig = parseSpellLine(buff)
 
-                if not matches_filter(buff, name) then
-                    --log.Debug("RefreshCombatBuffs on %s skip %s, not matching filter %s", name, spellConfig.Name, buff)
-                elseif is_spell_ability_ready(spellConfig.Name) then
+                if matches_filter(buff, name) and is_spell_ability_ready(spellConfig.Name) then
                     local spawn = spawn_from_peer_name(name)
                     if spawn ~= nil then
                         if peer_has_buff(name, spellConfig.Name) then

@@ -318,7 +318,7 @@ function Heal.performGroupBalanceHeal()
     end
 
     local avg = sum / members
-    if avg >= 90 then
+    if members <= 1 or avg >= 90 then
         return false
     end
 
@@ -329,14 +329,14 @@ function Heal.performGroupBalanceHeal()
         return true
     end
 
-    if is_item_clicky_ready("Aegis of Superior Divinity") then
+    if have_item("Aegis of Superior Divinity") and is_item_clicky_ready("Aegis of Superior Divinity") then
         all_tellf("\ayHeal balance (EPIC) at %d %%", avg)
         local res = castSpellAbility(nil, "Aegis of Superior Divinity")
         delay(800)
         return res
     end
 
-    if is_item_clicky_ready("Harmony of the Soul") then
+    if have_item("Harmony of the Soul") and is_item_clicky_ready("Harmony of the Soul") then
         all_tellf("\ayHeal balance (EPIC) at %d %%", avg)
         local res = castSpellAbility(nil, "Harmony of the Soul")
         delay(800)
@@ -493,12 +493,12 @@ function healPeer(spell_list, peer, pct)
             -- if target got the buff/song named on, then skip (eg. HoT heals)
             cmdf("healPeer skip %s, peer spell on them %s", spellConfig.Name, mq.TLO.Target.Buff(spellConfig.Name).Duration())
         elseif not matches_filter(heal, mq.TLO.Me.Name()) then
-            log.Info("XXX healPeer skip %s, not matching ONLY filter %s", spellConfig.Name, heal)
+            log.Debug("healPeer skip %s, not matching ONLY filter %s", spellConfig.Name, heal)
         else
             log.Info("Healing \ag%s\ax at %d%% with \ay%s\ax", peer, pct, spellConfig.Name)
 
             if get_peer_hp(peer) >= 98 then
-                log.Info("Skipping heal! \ag%s\ax was %d %%, is now %d %%", mq.TLO.Target.Name(), pct, mq.TLO.Target.PctHPs())
+                log.Info("Skipping heal! \ag%s\ax was %d %%, is now %d %%", mq.TLO.Target.Name(), pct, get_peer_hp(peer))
                 return true
             end
 
@@ -511,7 +511,7 @@ function healPeer(spell_list, peer, pct)
                     all_tellf("target changed in heal callback, breaking")
                     return true
                 end
-                if mq.TLO.Target() ~= nil and mq.TLO.Target.PctHPs() >= 98 then
+                if mq.TLO.Target() ~= nil and mq.TLO.Target.PctHPs() >= 98 and not is_tank(mq.TLO.Target.Class.ShortName()) then
                     all_tellf("Ducking heal! \ag%s\ax was %d %%, is now %d %%", mq.TLO.Target.Name(), pct, mq.TLO.Target.PctHPs())
                     cmd("/interrupt")
                     return true

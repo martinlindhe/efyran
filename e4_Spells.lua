@@ -259,10 +259,24 @@ function memorizeListedSpells()
         return
     end
 
+    if not is_sitting() then
+        log.Info("Sitting")
+        cmd("/sit")
+        delay(100)
+    end
+
     for spellRow, gem in pairs(botSettings.settings.gems) do
         memorize_spell(spellRow, gem)
     end
 
+    if window_open("SpellBookWnd") then
+        cmd("/windowstate SpellBookWnd close")
+    end
+
+    if is_sitting() then
+        log.Info("Standing")
+        cmd("/stand")
+    end
 end
 
 -- Memorizes all spells listed in character settings.assist.pbae in their correct position.
@@ -515,17 +529,30 @@ function shrink_group()
     end
 end
 
+
+
+-- Returns true if rez was casted
 ---@param spawnID integer
+---@return boolean
 function rez_it(spawnID)
-    local rez = get_rez_spell_item_aa()
+    local rez = get_rez_spell()
     if rez == nil then
-        return
+        return false
     end
+    if is_alt_ability_ready("Blessing of Resurrection") then
+        -- CLR/65: 96% exp, 3s cast, 12s recast (SoD)
+        rez = "Blessing of Resurrection"
+    end
+    if have_item("Water Sprinkler of Nem Ankh") and is_item_clicky_ready("Water Sprinkler of Nem Ankh") then
+        -- CLR/65 Epic1.0: 96% exp, 10s cast
+        rez = "Water Sprinkler of Nem Ankh"
+    end
+
     local spawn = spawn_from_id(spawnID)
     if spawn == nil then
         -- unlikely
         all_tellf("ERROR: tried to rez spawnid %s which is not in zone %s", spawnID, zone_shortname())
-        return
+        return false
     end
     log.Info("Performing rez on %s, %d %s", spawn.Name(), spawnID, type(spawnID))
     if have_spell(rez) and not is_memorized(rez) then
@@ -535,21 +562,21 @@ function rez_it(spawnID)
 
     -- try 3 times to get a rez spell before giving up (to wait for ability to become ready...)
     for i = 1, 3 do
-        if is_alt_ability_ready(rez) or is_spell_ready(rez) or is_item_clicky_ready(rez) then
+        if is_spell_ability_ready(rez) then
             all_tellf("Rezzing \ag%s\ax with \ay%s\ax. %d/3", spawn.Name(), rez, i)
             castSpellAbility(spawn, rez)
-            break
+            return true
         else
             all_tellf("\arWARN\ax: Not ready to rez \ag%s\ax. %d/3", spawn.Name(), i)
         end
-        doevents()
-        delay(2000) -- 2s delay
     end
+    delay(2000) -- 2s delay
+    return false
 end
 
 -- Cleric: performs an AE rez
 function ae_rez()
-    local rez = get_rez_spell_item_aa()
+    local rez = get_rez_spell()
     if rez == nil then
         return
     end
@@ -561,7 +588,8 @@ function ae_rez()
     unflood_delay()
 
     for i=1, #classOrder do
-        ae_rez_query(rez, spawnQuery..' '..classOrder[i])
+        wait_until_not_casting()
+        ae_rez_query(spawnQuery..' '..classOrder[i])
     end
 
     all_tellf("\amAEREZ DONE\ax")
@@ -581,58 +609,71 @@ function clear_ae_rezzed()
     aeRezzedNames = {}
 end
 
+--- Returns true if `name` is marked as being rezzed
+---@return boolean
+function is_being_rezzed(name)
+    for _, rezzedName in ipairs(aeRezzedNames) do
+        if rezzedName == name then
+            --log.Debug("aerez: skipping marked corpse %s", name)
+            return true
+        end
+    end
+    return false
+end
+
 ---@param rez string rez spell/item name
 ---@param spawnQuery string
-function ae_rez_query(rez, spawnQuery)
+function ae_rez_query(spawnQuery)
+
+    local rez = get_rez_spell()
+    if rez == nil then
+        all_tellf("ae_rez_query ERROR: no rez spell found!")
+        return
+    end
 
     local corpses = spawn_count(spawnQuery)
     if corpses == 0 then
         return
     end
-    wait_until_not_casting()
 
-    if have_spell(rez) and not is_memorized(rez) then
-        mq.cmdf('/memorize "%s" %d', rez, 5)
-        mq.delay(2000)
-    end
-
-    log.Info("Rezzing %s", spawnQuery)
+    log.Debug("ae_rez_query \ay%s\ax", spawnQuery)
 
     for i = 1, corpses do
         local spawn = mq.TLO.NearestSpawn(i, spawnQuery)
         if spawn ~= nil and spawn.ID() ~= nil then
-            local skip = false
-
-            -- XXX fix, access aeRezzedNames without recurisive for loop
-            for _, rezzedName in ipairs(aeRezzedNames) do
-                --log.Debug("rezzedname check: %s vs %s", rezzedName, spawn.Name())
-                if rezzedName == spawn.DisplayName() then
-                    log.Info("already being rezzed, should skip !!!")
-                    all_tellf("aerez: skipping marked corpse %s", rezzedName)
-                    skip = true
-                end
-            end
-            if not skip then
+            if not is_being_rezzed(spawn.DisplayName()) then
                 log.Info("Trying to rez \ag%s\ax", spawn.DisplayName())
 
                 -- tell bots this corpse is rezzed
                 cmdf("/dgzexecute /ae_rezzed %s", spawn.DisplayName())
 
-                target_id(spawn.ID())
+                if is_alt_ability_ready("Blessing of Resurrection") then
+                    -- CLR/65: 96% exp, 3s cast, 12s recast (SoD)
+                    rez = "Blessing of Resurrection"
+                end
+                if have_item("Water Sprinkler of Nem Ankh") and is_item_clicky_ready("Water Sprinkler of Nem Ankh") then
+                    -- CLR/65 Epic1.0: 96% exp, 10s cast
+                    rez = "Water Sprinkler of Nem Ankh"
+                end
 
-                if is_alt_ability_ready(rez) or is_spell_ready(rez) or is_item_clicky_ready(rez) then
+                if have_spell(rez) and not is_memorized(rez) then
+                    mq.cmdf('/memorize "%s" %d', rez, 5)
+                    mq.delay(2000)
+                end
+
+                if is_spell_ability_ready(rez) then
                     all_tellf("Rezzing %s \ag%s\ax with \ay%s\ax", spawn.Class.ShortName(), spawn.DisplayName(), rez)
+                    --target_id(spawn.ID())
                     cmdf("/tell %s Wait4Rez", spawn.DisplayName())
                     castSpellRaw(rez, spawn.ID())
-                    delay(3000)
+                    delay(500)
                     wait_until_not_casting()
+                    delay(1000)
                 else
                     all_tellf("\arWARN\ax: Not ready to rez \ag%s\ax.", spawn.Name())
                 end
             end
         end
-        doevents()
-        delay(13000) -- XXX TODO: instead wait until given rez spell is ready before cast
     end
 end
 
@@ -646,6 +687,8 @@ end
 
 -- ask for consent, then gathers corpses
 function gather_corpses()
+    cmd("/consentme")
+    delay(500)
     local spawnQuery = 'pccorpse radius 100'
     for i = 1, spawn_count(spawnQuery) do
         local spawn = mq.TLO.NearestSpawn(i, spawnQuery)
@@ -653,10 +696,10 @@ function gather_corpses()
             log.Info("Gathering corpse %s", spawn.Name())
             target_id(spawn.ID())
             delay(10)
-            if is_peer(spawn.DisplayName()) then
-                cmdf("/dexecute %s /consent %s", spawn.DisplayName(), mq.TLO.Me.Name())
-                delay(100)
-            end
+            --if is_peer(spawn.DisplayName()) then
+            --    cmdf("/dexecute %s /consent %s", spawn.DisplayName(), mq.TLO.Me.Name())
+            --    delay(100)
+            --end
             cmd("/corpse")
             delay(1000, function() return spawn() ~= nil and spawn.Distance() < 20 end)
         end
