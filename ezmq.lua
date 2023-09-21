@@ -1945,6 +1945,11 @@ function castSpellAbility(spawn, row, callback)
         return false
     end
 
+    if not matches_filter(row, mq.TLO.Me.Name()) then
+        log.Debug("SKIP cast %s, not matching filter %s", spell.Name, row)
+        return false
+    end
+
     --log.Debug("castSpellAbility START CAST %s", spell.Name)
     local spawnID = nil
     if spawn ~= nil and spawn() ~=nil then

@@ -172,8 +172,6 @@ function Assist.beginKillSpawnID(spawnID)
 
     follow.PauseForKill()
 
-    mq.cmdf("/target id %d", spawnID)
-
     local melee = botSettings.settings.assist ~= nil and botSettings.settings.assist.type ~= nil and botSettings.settings.assist.type == "melee"
 
     if botSettings.settings.assist ~= nil and botSettings.settings.assist.type ~= nil and botSettings.settings.assist.type == "ranged" then
@@ -183,6 +181,8 @@ function Assist.beginKillSpawnID(spawnID)
     end
 
     if melee then
+        mq.cmdf("/target id %d", spawnID)
+
         local spawn = spawn_from_id(Assist.targetID)
         if spawn == nil then
             return
@@ -360,12 +360,6 @@ function Assist.Tick()
 
     if melee and not mq.TLO.Me.Combat() then
         cmd("/attack on")
-    end
-
-    if not is_casting() and (not has_target() or mq.TLO.Target.ID() ~= Assist.targetID) then
-        -- normal when you are a healer
-        log.Debug("killSpawn: i lost target, restoring to %s (%s). Previous target was %s", spawn.Name(), spawn.Type(), mq.TLO.Target.Name())
-        cmdf("/target id %d", Assist.targetID)
     end
 
     Assist.TankTick()
