@@ -118,6 +118,11 @@ end
 
 -- announce buff availability, handle debuffs, refresh buffs/auras/pets/pet buffs, request buffs and handle buff requests
 function buffs.Tick()
+
+    if is_hovering() or is_moving() or is_invisible() then
+        return
+    end
+
     if not is_brd() and is_casting() then
         return
     end
@@ -128,10 +133,6 @@ function buffs.Tick()
 
     if not buffs.resumeTimer:expired()  then
         --log.Debug("Buff tick: resumeTimer not ready")
-        return
-    end
-
-    if is_gm() or is_invisible() or is_hovering() then
         return
     end
 

@@ -138,6 +138,10 @@ local handinRules = {
     ["Tatsujiro the Serene/Zone|lavastorm"] = { -- DoN good
         [""] = {"Norrath's Keepers Token"},
     },
+    ["Wayfarers Mercenary Youra/Zone|lavastorm"] = { -- DoN good (low faction)
+        [""] = {"Norrath's Keepers Token"},
+    },
+
     ["Xeib Darkskies/Zone|lavastorm"] = { -- DoN evil
         [""] = {"Dark Reign Token"},
     },
@@ -156,7 +160,7 @@ function auto_hand_in_items()
             log.Info("Zone %s, %s", o.Zone, o.Name)
 
             local spawn = spawn_from_query('npc "'..o.Name..'"')
-            if spawn ~= nil then
+            if spawn ~= nil and spawn.Distance() <= 50 then
 
                 -- see if we have any of the items
                 for rewardRow, components in pairs(t) do
@@ -210,20 +214,16 @@ function auto_hand_in_items()
                             -- asks for the missing items
                             all_tellf("%s", needMessage)
                         elseif not needParts and haveParts then
-                            log.Info("I HAVE ALL NEEDED PIECES, DOING HAND IN")
+                            log.Info("I HAVE ALL NEEDED PIECES, DOING HAND IN TO \ay%s\ax", o.Name)
 
-                            if spawn.Distance() > 50 then
-                                log.Error("%s is too far away for hand-in.", o.Name)
-                                return
-                            end
-
-                            target_npc_name(o.Name)
                             move_to(spawn.ID())
 
                             if is_rof2() then
                                 -- XXX is open bags needed on rof2 with the new macroquest features? worked on live without them.
                                 open_bags()
                             end
+
+                            target_npc_name(o.Name)
 
                             for i, componentRow in pairs(components) do
                                 -- optional syntax: "2|Item name", where 2 is the required item count
@@ -290,8 +290,6 @@ function auto_hand_in_items()
                     end
                 end
 
-            else
-                log.Error("Expected spawn not found in zone: %s", o.Name)
             end
 
         end

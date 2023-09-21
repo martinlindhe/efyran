@@ -407,7 +407,7 @@ function QoL.Init()
         -- "It will take about 25 more seconds to prepare your camp."
         all_tellf("I am camping. Ending all macros.")
         cmd("/lua stop")
-        os.exit()
+        mq.exit()
     end)
 
     mq.event("missing_component", "You are missing #1#.", function(text, name)
@@ -1616,7 +1616,7 @@ function QoL.Init()
         if not mq.TLO.EQBC.Connected() then
             cmdf("/beep")
             log.Fatal("ERROR: Could not connect to EQBCS! Please open EQBCS and try again.")
-            os.exit()
+            all_tellf("ERROR: Could not connect to EQBCS! Please open EQBCS and try again.")
         end
     end
 
@@ -1723,7 +1723,7 @@ function verifySpellLines(label, lines)
     for k, row in pairs(lines) do
         local spellConfig = parseSpellLine(row)
         if not known_spell_ability(spellConfig.Name) then
-            all_tellf("Missing %s: %s (row = %s)", label, spellConfig.Name, row)
+            all_tellf("Missing %s: \ar%s\ax (\ay%s\ax)", label, spellConfig.Name, row)
             cmd("/beep 1")
         end
     end
@@ -1733,6 +1733,7 @@ local qolClearCursorTimer = timer.new_expired(60 * 1) -- 60s
 
 -- Runs every second.
 function QoL.Tick()
+
     -- close f2p nag screen
     if window_open("AlertWnd") then
         cmd("/squelch /notify AlertWnd ALW_Dismiss_Button leftmouseup")
@@ -1759,7 +1760,7 @@ function QoL.Tick()
         delay(100)
     end
 
-    if class_shortname() == "WIZ" and have_pet() then
+    if is_wiz() and have_pet() then
         cmd("/pet get lost")
     end
 

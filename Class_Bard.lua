@@ -11,13 +11,16 @@ function Bard.UpdateMQ2MedleyINI()
     if not is_brd() then
         return
     end
-    --local filename = "D:\dev-mq\macroquest-rof2\build\bin\release\config\server_toon.ini"
     local filename = mq.TLO.MacroQuest.Path("config")() .. "\\".. current_server() .. "_" .. mq.TLO.Me.Name() .. ".ini"
 
     log.Info("UpdateMQ2MedleyINI filename: %s", filename)
 
     -- clear medley queue
     cmd("/medley clear")
+
+    -- make MQ2Medley quiet and disable debug
+    cmdf('/noparse /ini "%s" "MQ2Medley" "Quiet" "1"', filename)
+    cmdf('/noparse /ini "%s" "MQ2Medley" "Debug" "0"', filename)
 
     for songset, tbl in pairs(botSettings.settings.songs) do
         log.Info("UpdateMQ2MedleyINI writing \ay%s\ax ...", songset)
@@ -50,7 +53,6 @@ function Bard.UpdateMQ2MedleyINI()
 
     -- reload MQ2Medley for changes to take effect
     cmd("/medley reload")
-
 end
 
 function Bard.resumeMelody()
@@ -79,15 +81,16 @@ function Bard.PlayMelody(name)
 
     name = name:lower()
 
-    if name == "off" or name == "stop" then
-        Bard.StopMelody()
-        return
-    end
-
     local songSet = botSettings.settings.songs[name]
     if songSet == nil then
         all_tellf("ERROR no such song set %s", name)
         cmd("/beep 1")
+        return
+    end
+
+    Bard.StopMelody()
+
+    if name == "off" or name == "stop" then
         return
     end
 

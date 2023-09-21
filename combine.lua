@@ -38,7 +38,7 @@ end
 
 mq.event("missing_components", "Sorry, but you don't have everything you need for this recipe in your general inventory.", function(text, name)
     all_tellf("Combine ending: out of stuff")
-    os.exit()
+    mq.exit()
 end)
 
 print("combine.lua started")

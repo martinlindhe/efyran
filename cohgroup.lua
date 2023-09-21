@@ -4,7 +4,7 @@ local mq = require("mq")
 local log = require("efyran/knightlinc/Write")
 require("efyran/ezmq")
 
-local cothMinDistance = 300
+local cothMinDistance = 250
 
 if mq.TLO.Me.Class.Name() ~= "Magician" then
     all_tellf("ERROR: I am not a Magician, so I cannot Call of the Hero")
@@ -43,11 +43,11 @@ while true do
 
             log.Info("Want to coh group member %d %s, distance %f", n,  spawn.Name(), spawn.Distance())
             if is_alt_ability_ready("Call of the Hero") then
-                all_tellf("CoTH:ing (AA) \ag%s\ax ...", spawn.Name())
+                all_tellf("CoTH:ing \ag%s\ax (AA) ...", spawn.Name())
                 cmdf('/casting "Call of the Hero|alt" -targetid|%d', spawn.ID())
             elseif is_spell_ready("Call of the Hero") then
-                all_tellf("CoTH:ing (spell) \ag%s\ax ...", spawn.Name())
-                cmdf('/casting "Call of the Hero|gem5" -targetid|%d', spawn.ID())
+                all_tellf("CoTH:ing \ag%s\ax (spell) ...", spawn.Name())
+                cmdf('/casting "Call of the Hero" -targetid|%d', spawn.ID())
             end
 
             doevents()

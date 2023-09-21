@@ -184,56 +184,60 @@ function Hail.PerformHail()
     local found = false
 
     -- loop thru nearby NPC and see if they are in the zoneTargets...
-    local spawnQuery = "npc radius 20"
+    local spawnQuery = "npc radius 25"
     for i = 1, mq.TLO.SpawnCount(spawnQuery)() do
         local spawn = mq.TLO.NearestSpawn(i, spawnQuery)
         local spawnName = spawn.CleanName()
         if zoneTargets[spawnName] ~= nil then
             found = true
-            log.Debug("Attempting to hail %s ...", spawnName)
-            move_to(spawn.ID())
+            target_npc_name(spawnName)
 
-            cmdf('/target npc "%s"', spawnName)
+            log.Debug("Attempting to hail %s ...", spawnName)
+            if spawn.Distance() > 25 then
+                move_to(spawn.ID())
+            end
 
             if zoneTargets[spawnName] == true then
                 -- hail only
                 cmd("/hail")
-            else
-                -- speak
-                local s = split_str(zoneTargets[spawnName], "|")
-                if #s == 1 then
-                    -- normal Speak
-                    cmdf("/say %s", zoneTargets[spawnName])
-                else
-                    -- select and accept named task by hailing NPC (DoN tier 0)
-                    if s[1] == "task" then
-                        -- Open the "task select" window from NPC
-                        delay(200)
-                        cmd("/hail")
-                        delay(1000, function()
-                            return window_open("TaskSelectWnd")
-                        end)
-                        delay(500)
-
-                        -- select the proper list item
-                        local index = mq.TLO.Window("TaskSelectWnd/TSEL_TaskList").List("="..s[2])()
-                        if index == nil or index <= 0 then
-                            all_tellf("ERROR: cant select task '%s', not in task list!", s[2])
-                            return
-                        end
-
-                        -- select task
-                        log.Info("Selecting task \ag%s\ax, index %d", s[2], index)
-                        cmdf("/notify TaskSelectWnd TSEL_TaskList listselect %d", index)
-                        delay(500)
-
-                        -- Accept task
-                        cmd("/notify TaskSelectWnd TSEL_AcceptButton leftmouseup")
-                    else
-                        all_tellf("PerformHail: ERROR unknown '%s' (%s)", s[1], zoneTargets[spawnName])
-                    end
-                end
+                return
             end
+
+            -- speak
+            local s = split_str(zoneTargets[spawnName], "|")
+            if #s == 1 then
+                -- normal Speak
+                cmdf("/say %s", zoneTargets[spawnName])
+                return
+            end
+
+            -- select and accept named task by hailing NPC (DoN tier 0)
+            if s[1] == "task" then
+                -- Open the "task select" window from NPC
+                cmd("/hail")
+                delay(1000, function()
+                    return window_open("TaskSelectWnd")
+                end)
+                delay(500)
+
+                -- select the proper list item
+                local index = mq.TLO.Window("TaskSelectWnd/TSEL_TaskList").List("="..s[2])()
+                if index == nil or index <= 0 then
+                    all_tellf("ERROR: cant select task '%s', not in task list!", s[2])
+                    return
+                end
+
+                -- select task
+                log.Info("Selecting task \ag%s\ax, index %d", s[2], index)
+                cmdf("/notify TaskSelectWnd TSEL_TaskList listselect %d", index)
+                delay(500)
+
+                -- Accept task
+                cmd("/notify TaskSelectWnd TSEL_AcceptButton leftmouseup")
+            else
+                all_tellf("PerformHail: ERROR unknown '%s' (%s)", s[1], zoneTargets[spawnName])
+            end
+
         end
     end
 
@@ -241,7 +245,7 @@ function Hail.PerformHail()
     clear_cursor()
 
     if not found then
-        log.Info("PerformHail WARNING: Found no recognized NPC nearby")
+        all_tellf("PerformHail:: Found no recognized NPC nearby")
     end
 end
 

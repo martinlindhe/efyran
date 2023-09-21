@@ -49,5 +49,5 @@ while true do
 
     follow.Tick()
     doevents()
-    delay(1)
+    delay(10)
 end

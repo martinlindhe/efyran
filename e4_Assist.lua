@@ -54,18 +54,20 @@ function Assist.Init()
 
     -- Adjust Melee position if we cannot see target
     mq.event("melee-cannot-see-target", "You cannot see your target.", function()
-        if mq.TLO.Target() == nil then
+        if mq.TLO.Target() == nil or not Assist.IsAssisting() then
             return
         end
 
         if mq.TLO.Target.Distance() < 20 then
             log.Debug("Cannot see target, facing them !")
             cmdf("/face fast id %d", mq.TLO.Target.ID())
+            delay(100)
         end
 
         if mq.TLO.Target.Distance() < 10 then
             log.Debug("Cannot see target, moving a little back !")
             cmdf("/stick hold moveback %d", Assist.meleeDistance)
+            delay(100)
         end
     end)
 
@@ -284,7 +286,7 @@ function performSpellAbility(targetID, abilityRows, category, used)
         and not obstructive_window_open()
         and (is_brd() or not is_casting()) then
             local spawn = spawn_from_id(targetID)
-            if not spawn then
+            if spawn == nil or spawn() == nil then
                 -- signal ability was used, in order to leave Assist.Tick() quickly when target is nil
                 return true
             end
@@ -348,12 +350,10 @@ function Assist.Tick()
         log.Debug("stick update. meleeDistance = %f!", Assist.meleeDistance)
         Assist.meleeStick()
         assistStickTimer:restart()
-        if mq.TLO.Target.ID() ~= nil then
-            cmdf("/face fast id %d", mq.TLO.Target.ID())
-        end
+        --cmdf("/face fast id %d", Assist.targetID)
     end
 
-    if spawn == nil or spawn.ID() == 0 or spawn.Type() == "Corpse" or spawn.Type() == "NULL" then
+    if spawn == nil or spawn() == nil or spawn.ID() == 0 or spawn.Type() == "Corpse" or spawn.Type() == "NULL" then
         Assist.EndFight()
         return
     end
@@ -362,10 +362,10 @@ function Assist.Tick()
         cmd("/attack on")
     end
 
-    if not is_casting() and (not has_target() or mq.TLO.Target.ID() ~= spawn.ID()) then
+    if not is_casting() and (not has_target() or mq.TLO.Target.ID() ~= Assist.targetID) then
         -- normal when you are a healer
         log.Debug("killSpawn: i lost target, restoring to %s (%s). Previous target was %s", spawn.Name(), spawn.Type(), mq.TLO.Target.Name())
-        cmdf("/target id %d", spawn.ID())
+        cmdf("/target id %d", Assist.targetID)
     end
 
     Assist.TankTick()

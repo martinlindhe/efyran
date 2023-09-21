@@ -27,7 +27,7 @@ settings.self_buffs = {
     -- poisons:
     -- L65 Bite of the Shissar XI (vendor bought in PoK)
     -- L70 Bite of the Shissar XII (vendor bought in PoK)
-    "Bite of the Shissar XII/Reagent|Bite of the Shissar XII",
+    "Bite of the Shissar XII/Zone|anguish",
 
     -- Chaotic Ward (20 all resists, 67 ac) - stacks with all resist buffs. DON'T STACK WITH Form of Defense
     "Necklace of the Steadfast Spirit",

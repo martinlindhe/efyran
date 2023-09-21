@@ -1,4 +1,4 @@
-1. need to compile and load the following plugins:
+1. You need the following plugins, all is included in the MacroQuest releases at https://github.com/macroquest/macroquest/releases
 
 xxxxx
 
@@ -7,6 +7,8 @@ MQ2DanNet   modern replacement for EQBC and MQ2NetBots
 MQ2AdvPath  modern replacement for MQ2MoveUtils
 
 MQ2Medley   modern replacement for MQ2Twist
+
+MQ2Nav      need to disable "Ignore scripted doors" in /mqsettings -> plugins -> Nav
 
 
 MQ2FeedMe   for stat-food

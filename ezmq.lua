@@ -128,26 +128,27 @@ function is_emu()
 end
 
 -- returns true if peerName is another peer
----@param peerName string
+---@param peer string Peer name
 ---@return boolean
-function is_peer(peerName)
-    return mq.TLO.DanNet(peerName)() ~= nil
+function is_peer(peer)
+    return mq.TLO.DanNet(peer)() ~= nil
 end
 
 -- returns true if peerName is in the same zone
----@param peerName string
+---@param peer string
 ---@return boolean
-function is_peer_in_zone(peerName)
-    local spawn = spawn_from_peer_name(peerName)
+function is_peer_in_zone(peer)
+    local spawn = spawn_from_peer_name(peer)
     return spawn ~= nil and is_peer(spawn.Name())
 end
 
 -- Returns peer class shortname, eg "WAR".
----@param peerName string
+---@param peer string
 ---@return string
-function peer_class_shortname(peerName)
-    local nb = mq.TLO.NetBots(peerName)
-    if nb() == nil then
+function peer_class_shortname(peer)
+    local nb = mq.TLO.NetBots(peer)
+    if nb() == nil or nb.Class() == nil then
+        all_tellf("\arERROR failed to look up peer %s", peer)
         return ""
     end
     return nb.Class.ShortName()
@@ -290,7 +291,7 @@ end
 -- Target NPC by name
 ---@param name string
 function target_npc_name(name)
-    mq.cmdf("/target npc %s", name)
+    mq.cmdf('/target npc "%s"', name)
 end
 
 -- Target spawn by id
@@ -647,6 +648,12 @@ end
 ---@return boolean
 function is_shd()
     return mq.TLO.Me.Class.ShortName() == "SHD"
+end
+
+-- Am I a Rogue?
+---@return boolean
+function is_rog()
+    return mq.TLO.Me.Class.ShortName() == "ROG"
 end
 
 -- Am I a Magician?
@@ -1156,7 +1163,7 @@ end
 
 -- Makes character visible and drops sneak/hide.
 function drop_invis()
-    if mq.TLO.Me.Class.ShortName() == "ROG" then
+    if is_rog() then
         if mq.TLO.Me.Sneaking() then
             log.Debug("ROG - Dropping Sneak")
             mq.cmd("/doability Sneak")
@@ -1170,7 +1177,7 @@ function drop_invis()
     end
 
     mq.cmd("/makemevisible")
-    mq.delay(1000, function() return not is_invisible() end)
+    mq.delay(2000, function() return not is_invisible() end)
     if is_invisible() then
         all_tellf("\arERROR\ax Cannot make myself visible.")
     end
@@ -1577,7 +1584,7 @@ function known_spell_ability(name)
         --print("known_spell_ability ability TRUE", name)
         return true
     end
-    if have_item(name) then
+    if have_item_inventory(name) then
         --print("known_spell_ability item TRUE", name)
         return true
     end
@@ -1589,7 +1596,7 @@ function drop_all_buffs()
     for i = 1, mq.TLO.Me.MaxBuffSlots() do
         if mq.TLO.Me.Buff(i).ID() ~= nil then
             log.Debug("Removing buff %s", mq.TLO.Me.Buff(i).Name())
-            mq.cmdf("/removebuff %s", mq.TLO.Me.Buff(i).Name())
+            mq.cmdf('/removebuff "%s"', mq.TLO.Me.Buff(i).Name())
         end
     end
 end
@@ -2039,6 +2046,7 @@ end
 
 ---@param name string spell name
 ---@param spawnId integer|nil
+---@param extraArgs string|nil
 function castSpellRaw(name, spawnId, extraArgs)
     local exe = string.format('/casting "%s"', name)
     if spawnId ~= nil then
@@ -2134,6 +2142,7 @@ function get_best_soulstone()
     end
 end
 
+---@return integer
 function peer_count()
     return mq.TLO.DanNet.PeerCount()
 end
@@ -2207,7 +2216,7 @@ function count_peers()
             if spawn ~= nil then
                 local dist = spawn.Distance()
                 if dist > min_distance then
-                    log.Warn("COUNT: \ay%s\ax at \ay%d\ax distance %s", peer, dist, spawn.HeadingTo.ShortName())
+                    log.Warn("COUNT: \ay%s\ax at \ay%d\ax distance %s, raid group %d", peer, dist, spawn.HeadingTo.ShortName(), mq.TLO.Raid.Member(peer).Group())
                 else
                     sum = sum + 1
                 end

@@ -249,7 +249,8 @@ function getSpellFromBuff(name)
     elseif have_combat_ability(name) then
         return mq.TLO.Me.CombatAbility(mq.TLO.Me.CombatAbility(name))
     else
-        log.Error("getSpellFromBuff: can't find %s", name)
+        --log.Error("getSpellFromBuff: can't find %s", name)
+        all_tellf("ERROR: Missing \ar%s\ax", name)
         return nil
     end
 end
@@ -261,7 +262,6 @@ function memorizeListedSpells()
     end
 
     if not is_sitting() then
-        log.Info("Sitting")
         cmd("/sit")
         delay(100)
     end
@@ -275,7 +275,6 @@ function memorizeListedSpells()
     end
 
     if is_sitting() then
-        log.Info("Standing")
         cmd("/stand")
     end
 end
@@ -474,6 +473,7 @@ function cast_port_to(name)
 
     if memorize_spell(spellName, 5) ~= nil then
         castSpellRaw(spellName, mq.TLO.Me.ID(), "gem5 -maxtries|3")
+        delay(5000) -- 5s to memorize and start casting
         wait_until_not_casting()
     end
 
@@ -570,6 +570,7 @@ function rez_it(spawnID)
             return true
         else
             all_tellf("\arWARN\ax: Not ready to rez \ag%s\ax. %d/3", spawn.Name(), i)
+            delay(3000) -- 3s
         end
     end
     delay(2000) -- 2s delay
@@ -660,7 +661,11 @@ function ae_rez_query(spawnQuery)
 
                 if have_spell(rez) and not is_memorized(rez) then
                     mq.cmdf('/memorize "%s" %d', rez, 5)
-                    mq.delay(2000)
+                    mq.delay(3000)
+                end
+
+                if not is_spell_ability_ready(rez) then
+                    mq.delay(15000) -- 15s .. XXX
                 end
 
                 if is_spell_ability_ready(rez) then
@@ -674,7 +679,7 @@ function ae_rez_query(spawnQuery)
                     wait_until_not_casting()
                     delay(1000)
                 else
-                    all_tellf("\arWARN\ax: Not ready to rez \ag%s\ax.", spawn.Name())
+                    all_tellf("\arWARN\ax: Not ready to rez \ag%s\ax (%s not ready).", spawn.Name(), rez)
                 end
             end
         end
@@ -921,7 +926,7 @@ function drop_buff(filter)
     if filter == "all" then
         drop_all_buffs()
     else
-        cmdf("/removebuff %s", filter)
+        cmdf('/removebuff "%s"', filter)
     end
 end
 

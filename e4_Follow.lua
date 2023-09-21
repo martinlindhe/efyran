@@ -99,10 +99,11 @@ end
 local followUpdateTimer = timer.new_expired(1 * 1) -- 1s
 
 function Follow.Tick()
-    if followUpdateTimer:expired() then
-        Follow.Update(false)
-        followUpdateTimer:restart()
+    if not followUpdateTimer:expired() then
+        return
     end
+    Follow.Update(false)
+    followUpdateTimer:restart()
 end
 
 local lastHeading = ""
@@ -132,19 +133,16 @@ function Follow.Update(force)
         end
         exe = string.format("/nav spawn PC =%s | distance=%d log=trace", spawn.Name(), maxRange)
     elseif globalSettings.followMode:lower() == "mq2advpath" then
-        if mq.TLO.AdvPath.WaitingWarp() or not mq.TLO.AdvPath.Following() then
-            if mq.TLO.AdvPath.WaitingWarp() then
-                force = true
-                all_tellf("AdvPath: WaitingWarp - force follow")
-            end
+        if mq.TLO.AdvPath.WaitingWarp() then
+            force = true
+            all_tellf("AdvPath: WaitingWarp - force follow")
+        end
+
+        if force or not mq.TLO.AdvPath.Following() then
             exe = string.format("/afollow spawn %d", spawn.ID())
         end
     elseif globalSettings.followMode:lower() == "mq2moveutils" then
-        --if not mq.TLO.Stick.Active() or lastHeading ~= spawn.HeadingTo() then
-            mq.cmdf("/target id %d", spawn.ID())
-            exe = string.format("/stick hold %d uw", maxRange) -- face upwards to better run over obstacles
-            --exe = string.format("/moveto id %d", spawn.ID())
-        --end
+        exe = string.format("/stick hold %d uw", maxRange) -- face upwards to better run over obstacles
     end
 
     if exe ~= "" then

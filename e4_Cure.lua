@@ -121,7 +121,7 @@ cures.debuffs = {
     -- Planes of Power  ##
     --####################
 
-    "Gravel Rain/Cure|curse",                           -- 72 curse counters, snare, potactics,poearthb
+    --"Gravel Rain/Cure|curse",                           -- 72 curse counters, snare, potactics,poearthb, Rampaging Monolith DoN
     --"Solar Storm/Cure|curse",                           -- 9 curse counters, poair, NOTE: makes tanks die if all clerics are busy curing this
     "Storm Comet/Cure|curse",                           -- 36 curse counters, snare, poair
     "Curse of the Fiend/Cure|curse",                    -- 9 curse counters, solrotower
