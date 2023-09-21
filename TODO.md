@@ -22,6 +22,8 @@ MQ2Lua gotchas:
     - detect eqgame.exe build date. cant do atm. would want so i can detect rof2 or underfoot
 
 
+pets:
+    - be able to set pet type, eg for mages: water/fire/air/earth pet. https://www.eqprogression.com/magician-pet-stats/
 
 
 

@@ -30,11 +30,6 @@ function QoL.Init()
         return
     end
 
-    if mq.TLO.FrameLimiter() ~= "TRUE" then
-        log.Info("Enabling framelimiter (was %s) ...", mq.TLO.FrameLimiter())
-        cmd("/framelimiter enable")
-    end
-
     if botSettings.settings.debug ~= nil and botSettings.settings.debug then
         log.loglevel = "debug"
     end
@@ -1634,12 +1629,11 @@ function QoL.loadRequiredPlugins()
 
         "MQ2DanNet",  -- XXX drop mq2dannet for MQ2NetBots
         "MQ2Debuffs",
-        "MQ2MoveUtils", -- for /stick
+        "MQ2MoveUtils", -- for /stick, /moveto
         "MQ2Cast",
         "MQ2Medley",  -- Bard songs
 
-        "MQ2AdvPath",
-        -- XXX which follow mode to use?
+        --"MQ2AdvPath",   -- for /afollow, currently unused
         --"MQ2Nav", -- TODO requires mesh files etc
     }
     for k, v in pairs(requiredPlugins) do

@@ -261,6 +261,10 @@ function memorizeListedSpells()
         return
     end
 
+    if haveMemorizedListedSpells() then
+        return
+    end
+
     if not is_sitting() then
         cmd("/sit")
         delay(100)
@@ -277,6 +281,38 @@ function memorizeListedSpells()
     if is_sitting() then
         cmd("/stand")
     end
+end
+
+-- Returns true if I have memorized all current spells in their proper spell gems
+---@return boolean
+function haveMemorizedListedSpells()
+    for spellRow, gem in pairs(botSettings.settings.gems) do
+        local o = parseSpellLine(spellRow)
+
+        if not have_spell(o.Name) then
+            all_tellf("ERROR don't know spell/song %s", o.Name)
+            cmd("/beep 1")
+            return false
+        end
+
+        local gem = defaultGem
+        if o.Gem ~= nil then
+            gem = o.Gem
+        elseif botSettings.settings.gems ~= nil and botSettings.settings.gems[o.Name] ~= nil then
+            gem = botSettings.settings.gems[o.Name]
+        elseif gem == nil then
+            all_tellf("\arWARN\ax: Spell/song lacks gems default slot or Gem|n argument: %s", spellRow)
+            gem = 5
+        end
+
+        local nameWithRank = mq.TLO.Spell(o.Name).RankName()
+        if mq.TLO.Me.Gem(gem).Name() ~= nameWithRank then
+            log.Info("Do not have memorized \ag%s\ax in gem %d (have \ay%s\ax)", nameWithRank, gem, mq.TLO.Me.Gem(gem).Name())
+            return false
+        end
+    end
+
+    return true
 end
 
 -- Memorizes all spells listed in character settings.assist.pbae in their correct position.

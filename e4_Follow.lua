@@ -83,10 +83,12 @@ function Follow.Pause()
     if is_plugin_loaded("MQ2AdvPath") then
         cmd("/afollow off")
     end
-    if is_plugin_loaded("MQ2MoveUtils") then
+    if mq.TLO.Stick.Active() then
         cmd("/stick off")
     end
-    cmd("/moveto off")
+    if mq.TLO.MoveTo.Moving() then
+        cmd("/moveto off")
+    end
 end
 
 -- stops following completely
@@ -121,37 +123,45 @@ function Follow.Update(force)
         log.Warn("Follow update fail on %s", Follow.spawnName)
         return
     end
+    local spawnID = spawn.ID()
+    if spawnID == nil then
+        return
+    end
 
     local exe = ""
     local maxRange = 5 -- spawn.MaxRangeTo()
 
     --log.Debug("Follow.Update, mode %s, distance %f", globalSettings.followMode, spawn.Distance3D())
-    if globalSettings.followMode:lower() == "mq2nav" then
-        if mq.TLO.Navigation.Active() then
-            mq.cmd("/nav stop")
-            delay(10)
-        end
-        exe = string.format("/nav spawn PC =%s | distance=%d log=trace", spawn.Name(), maxRange)
-    elseif globalSettings.followMode:lower() == "mq2advpath" then
-        if mq.TLO.AdvPath.WaitingWarp() then
-            force = true
-            all_tellf("AdvPath: WaitingWarp - force follow")
-        end
 
-        if force or not mq.TLO.AdvPath.Following() then
-            exe = string.format("/afollow spawn %d", spawn.ID())
-        end
-    elseif globalSettings.followMode:lower() == "mq2moveutils" then
-        exe = string.format("/stick hold %d uw", maxRange) -- face upwards to better run over obstacles
-    end
 
-    if exe ~= "" then
+    --if globalSettings.followMode:lower() == "mq2nav" then
+    --    exe = string.format("/nav spawn PC =%s | distance=%d log=trace", spawn.Name(), maxRange)
+    --elseif globalSettings.followMode:lower() == "mq2advpath" then
+    --    if mq.TLO.AdvPath.WaitingWarp() then
+    --        force = true
+    --        all_tellf("AdvPath: WaitingWarp - force follow")
+    --    end
+
+    --    -- XXX AdvPath MaxRange
+
+    --    if force or not mq.TLO.AdvPath.Following() then
+    --        exe = string.format("/afollow spawn %d", spawn.ID())
+    --    end
+    --elseif globalSettings.followMode:lower() == "mq2moveutils" then
+    --    exe = string.format("/stick hold %d uw", maxRange) -- face upwards to better run over obstacles
+    --end
+
+    if force then
         --if not force and spawn.Distance() < 8 then
         --    log.Info("XXX skip follow update, we are nearby!")
         --    return
         --end
-        log.Info("XXX follow update: %s", exe)
-        mq.cmd(exe)
+        mq.cmdf("/stick id %d", spawnID)
+        --delay(10)
+
+        --exe = string.format("/stick hold %d uw", maxRange) -- face upwards to better run over obstacles
+        --log.Info("XXX follow update: %s", exe)
+        --mq.cmd(exe)
     end
 end
 

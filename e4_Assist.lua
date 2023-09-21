@@ -244,10 +244,13 @@ function Assist.EndFight()
     end
 
     cmd("/attack off")
-    if is_plugin_loaded("MQ2MoveUtils") then
+    if mq.TLO.Stick.Active() then
         cmd("/stick off")
     end
-    cmd("/moveto off")
+
+    if mq.TLO.MoveTo.Moving() then
+        cmd("/moveto off")
+    end
 
     Assist.prepareForNextFight()
 

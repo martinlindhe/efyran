@@ -60,24 +60,28 @@ function move_to(spawnID)
         return
     end
 
-    if globalSettings.followMode:lower() == "mq2nav" then
-        mq.cmdf("/nav id %d", spawnID)
-    elseif globalSettings.followMode:lower() == "mq2advpath" or globalSettings.followMode:lower() == "mq2moveutils" then
-        -- NOTE: mq2advpath don't have a "move to" command
-        mq.cmdf("/moveto id %d dist %d", spawnID, dist)
-    else
-        all_tellf("ERROR unhandled follow mode %s", globalSettings.followMode)
+    if mq.TLO.Stick.Active() then
+        mq.cmd("/stick off")
+        mq.delay(50)
     end
 
-    delay(2000, function()
+    -- MQ2Nav XXX
+    -- mq.cmdf("/nav id %d", spawnID)
+
+    -- Uses MQ2MoveUtils, NOTE: mq2advpath don't have a "move to" command
+    mq.cmdf("/moveto id %d dist %d", spawnID, dist)
+
+    mq.delay(30000, function() -- 30s
         return spawn.Distance() < dist
     end)
 
-    if globalSettings.followMode:lower() == "mq2nav" then
-        mq.cmd("/nav stop")
-    elseif globalSettings.followMode:lower() == "mq2advpath" then
-        mq.cmd("/afollow off")
-    elseif globalSettings.followMode:lower() == "mq2moveutils" then
+    -- MQ2Nav XXX
+    -- mq.cmd("/nav stop")
+
+    -- MQ2AdvPath XXX
+    -- mq.cmd("/afollow off")
+
+    if mq.TLO.Stick.Active() then
         mq.cmd("/stick off")
     end
 end
@@ -99,7 +103,9 @@ end
 function move_to_loc(y, x, z)
     mq.cmdf("/moveto loc %f %f %f", y, x, z)
     mq.delay(10000, function() return is_within_distance_to_loc(y, x, z, 15) end)
-    mq.cmd("/moveto off")
+    if mq.TLO.MoveTo.Moving() then
+        mq.cmd("/moveto off")
+    end
 end
 
 -- Does `t` contain `v`?
@@ -2083,8 +2089,8 @@ function memorize_spell(spellRow, defaultGem)
     end
 
     local gem = defaultGem
-    if o["Gem"] ~= nil then
-        gem = o["Gem"]
+    if o.Gem ~= nil then
+        gem = o.Gem
     elseif botSettings.settings.gems ~= nil and botSettings.settings.gems[o.Name] ~= nil then
         gem = botSettings.settings.gems[o.Name]
     elseif gem == nil then
