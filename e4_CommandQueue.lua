@@ -143,8 +143,7 @@ function CommandQueue.Process()
                 return
             end
 
-            log.Info("got told to kill but already on target, so putting old target in queue")
-            CommandQueue.Add(v.Name, tostring(assist.targetID))
+            log.Info("got told to kill but already on target, ending current fight")
             assist.EndFight()
         end
 

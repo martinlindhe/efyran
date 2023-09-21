@@ -1,6 +1,9 @@
 # TODO
 
-aug 2023:
+
+sep 2023:
+mq bug? /handin fails if item is in bag10. bag 1 to 9 seem to work fine (also bags must be open on emu, dont need on live)
+
 - add filter to /fmi, /fdi
 - enc auto mez
 
@@ -42,17 +45,6 @@ tribute:
 
 
 
-dps meter:
-    check out
-    https://gitlab.com/redguides/plugins/mq2dpsadv
-    https://gitlab.com/redguides/plugins/mq2damagemeter
-
-
-DanNet:
-    - channels... can we have one called "debug" and a external listener program for that channel ???
-    - can we log channel text to disk?  use sqlite backend for a logger
-
-
 loot:
     check out
     https://www.mmobugs.com/wiki/index.php?title=MQ2AutoLoot
@@ -66,9 +58,6 @@ loot:
     git submodule add -b master -f https://github.com/jessebevil/MQ2LootManager.git plugins/MQ2LootManager
 
 
-xp tracking:
-    https://www.mmobugs.com/wiki/index.php?title=MQ2XPTracker
-
 auto aa:
     MQ2AAspend is buggy / dont work on emu sep 2023
 
@@ -81,12 +70,4 @@ stat food:
 
 
 QoL:
-    task getter? https://www.mmobugs.com/wiki/index.php?title=MQ2GetMission
-    /link ???  https://www.mmobugs.com/wiki/index.php?title=MQ2LinkDB
-
-    check out more plugins at https://www.mmobugs.com/wiki/index.php?title=Plugin_List
-
     MQ2Discord to post to discord on tells etc...
-
-    /count command - report bots + zones if not nearby
-
