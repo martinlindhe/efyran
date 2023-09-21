@@ -2163,6 +2163,14 @@ function peer_has_buff(peer, spellName)
     -- spawn.Buff(spellName).Duration() >= MIN_BUFF_DURATION
 end
 
+---@param peer string
+---@param spellName string
+---@return boolean
+function peer_has_song(peer, spellName)
+    local spell = get_spell(spellName)
+    return spell ~= nil and mq.TLO.NetBots(peer).ShortBuff.Find(spell.ID())()
+end
+
 -- Returns the current HP % for given `peer`
 ---@param peer string
 ---@return integer

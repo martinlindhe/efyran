@@ -444,10 +444,10 @@ function cast_radiant_cure()
         return
     end
     if is_alt_ability_ready("Radiant Cure") then
-        all_tellf("Radiant Cure inc ...")
+        all_tellf("\agRadiant Cure inc ...\ax")
         use_alt_ability("Radiant Cure")
     else
-        all_tellf("Radiant Cure is ready in %s", mq.TLO.Me.AltAbilityTimer("Radiant Cure").TimeHMS())
+        all_tellf("Radiant Cure is \arready in %s\ax", mq.TLO.Me.AltAbilityTimer("Radiant Cure").TimeHMS())
     end
 end
 

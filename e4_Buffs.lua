@@ -233,7 +233,7 @@ function buffs.RefreshCombatBuffs()
                 if matches_filter(buff, name) and is_spell_ability_ready(spellConfig.Name) then
                     local spawn = spawn_from_peer_name(name)
                     if spawn ~= nil then
-                        if peer_has_buff(name, spellConfig.Name) then
+                        if peer_has_buff(name, spellConfig.Name) or peer_has_song(name, spellConfig.Name) then
                             log.Debug("RefreshCombatBuffs peer %s has combat buff already %s", name, spellConfig.Name)
                         elseif castSpellAbility(spawn, buff) then
                             log.Info("Refreshed combat ability on %s", name)

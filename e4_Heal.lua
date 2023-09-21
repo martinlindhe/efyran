@@ -488,10 +488,9 @@ function healPeer(spell_list, peer, pct)
         elseif not have_spell(spellConfig.Name) and have_item_inventory(spellConfig.Name) and not is_item_clicky_ready(spellConfig.Name) then
             -- SKIP clickies that is not ready
             log.Info("Skip using of heal to heal %s at %d, clicky %s is not ready", peer, pct, spellConfig.Name)
-
-        elseif mq.TLO.Target.Buff(spellConfig.Name).ID() ~= nil then
+        elseif peer_has_buff(peer, spellConfig.Name) or peer_has_song(peer, spellConfig.Name) then
             -- if target got the buff/song named on, then skip (eg. HoT heals)
-            cmdf("healPeer skip %s, peer spell on them %s", spellConfig.Name, mq.TLO.Target.Buff(spellConfig.Name).Duration())
+            log.Debug("healPeer skip %s, spell on them", spellConfig.Name)
         elseif not matches_filter(heal, mq.TLO.Me.Name()) then
             log.Debug("healPeer skip %s, not matching ONLY filter %s", spellConfig.Name, heal)
         else
