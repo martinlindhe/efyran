@@ -2181,7 +2181,7 @@ end
 ---@param peer string
 ---@return integer
 function peer_hp(peer)
-    return mq.TLO.NetBots(peer).PctHPs()
+    return toint(mq.TLO.NetBots(peer).PctHPs())
 end
 
 -- Returns the short zonename for given `peer`

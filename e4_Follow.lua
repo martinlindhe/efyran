@@ -18,10 +18,11 @@ local Follow = {
 ---@param spawnName string
 ---@param force boolean
 function Follow.Start(spawnName, force)
-    if not mq.TLO.Navigation.MeshLoaded() then
-        all_tellf("MQ2Nav: MISSING NAVMESH FOR %s. Rebuild with MeshGenerator.exe and reload MQ2Nav plugin", zone_shortname())
-        return
-    end
+
+    --if not mq.TLO.Navigation.MeshLoaded() then
+    --    all_tellf("MQ2Nav: MISSING NAVMESH FOR %s. Rebuild with MeshGenerator.exe and reload MQ2Nav plugin", zone_shortname())
+    --    return
+    --end
 
     if not is_peer(spawnName) then
         all_tellf("ERROR: /folloplayer failed: %s is not a peer", spawnName)
@@ -80,13 +81,13 @@ function Follow.Pause()
     if is_plugin_loaded("MQ2Nav") and mq.TLO.Navigation.Active() then
         cmd("/nav stop")
     end
-    if is_plugin_loaded("MQ2AdvPath") then
+    if is_plugin_loaded("MQ2AdvPath") and mq.TLO.AdvPath.Active() then
         cmd("/afollow off")
     end
-    if mq.TLO.Stick.Active() then
+    if is_plugin_loaded("MQ2MoveUtils") and mq.TLO.Stick.Active() then
         cmd("/stick off")
     end
-    if mq.TLO.MoveTo.Moving() then
+    if is_plugin_loaded("MQ2MoveUtils") and mq.TLO.MoveTo.Moving() then
         cmd("/moveto off")
     end
 end
@@ -151,17 +152,16 @@ function Follow.Update(force)
     --    exe = string.format("/stick hold %d uw", maxRange) -- face upwards to better run over obstacles
     --end
 
-    if force then
-        --if not force and spawn.Distance() < 8 then
-        --    log.Info("XXX skip follow update, we are nearby!")
-        --    return
-        --end
-        mq.cmdf("/stick id %d", spawnID)
-        --delay(10)
+    if mq.TLO.AdvPath.WaitingWarp() then
+        force = true
+        all_tellf("AdvPath: WaitingWarp - force follow")
+    end
 
-        --exe = string.format("/stick hold %d uw", maxRange) -- face upwards to better run over obstacles
-        --log.Info("XXX follow update: %s", exe)
-        --mq.cmd(exe)
+
+    if force or not mq.TLO.AdvPath.Following() then
+
+        -- XXX AdvPath MaxRange
+        mq.cmdf("/afollow spawn %d", spawn.ID())
     end
 end
 

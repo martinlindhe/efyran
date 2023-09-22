@@ -243,11 +243,12 @@ function Assist.EndFight()
         cmd("/pet back off")
     end
 
-    cmd("/attack off")
+    if mq.TLO.Me.Combat() then
+        cmd("/attack off")
+    end
     if mq.TLO.Stick.Active() then
         cmd("/stick off")
     end
-
     if mq.TLO.MoveTo.Moving() then
         cmd("/moveto off")
     end

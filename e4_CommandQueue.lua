@@ -253,7 +253,6 @@ function CommandQueue.Process()
     elseif v.Name == "click-no" then
 
         log.Info("click no")
-        unflood_delay()
         if window_open("ConfirmationDialogBox") then
             cmd("/notify ConfirmationDialogBox No_Button leftmouseup")
         elseif window_open("LargeDialogWindow") then

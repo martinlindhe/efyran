@@ -18,6 +18,14 @@ local QoL = {
     currentAAXP = mq.TLO.Me.PctAAExp(),
     currentGroupLeaderXP =  mq.TLO.Me.PctGroupLeaderExp(),
     currentRaidLeaderXP = mq.TLO.Me.PctRaidLeaderExp(),
+
+    autoXP = {
+        enabled = true, -- switch to 100% AA when max level, and back to 100% normal XP if needed
+        maxLevel = 70, -- max level to reach before getting AA:s
+        --minTreshold = 50, -- if normal XP is below this %, we disable AA XP 
+        minTreshold = 90, -- XXX
+        maxTreshold = 99, -- if normal XP is above or equal to this %, we enable 100% AA XP
+    }
 }
 
 local maxFactionLoyalists = false
@@ -41,7 +49,7 @@ function QoL.Init()
 
         if in_guild() then
             -- enable auto consent for guild
-            --cmd("/consent guild")
+            cmd("/consent guild")
         end
 
         -- rof2 client has no persistent setting for /tgb on. it has been permanently auto enabled on live
@@ -1472,7 +1480,7 @@ function QoL.Init()
         commandQueue.Add("joinraid")
     end)
 
-    -- track XP
+    -- track xp, auto adjust level / AA xp and auto loot
     local xpGain = function(text)
         local aaDiff = mq.TLO.Me.PctAAExp() - QoL.currentAAXP
         if aaDiff < 0 then
@@ -1483,16 +1491,14 @@ function QoL.Init()
         --log.Info("Gained XP. AA %.2f %%", aaDiff)
         QoL.currentAAXP = mq.TLO.Me.PctAAExp()
 
-        if in_raid() then
-            return
-        end
-
         local msg = ""
 
-        if not in_group() then
-            msg = string.format("\agSolo XP (%.1f %% AA)", aaDiff)
-        elseif is_group_leader() then
-            msg = string.format("\agGroup XP (%.1f %% AA)", aaDiff)
+        if not in_raid() then
+            if not in_group() then
+                msg = string.format("\agSolo XP (%.1f %% AA)", aaDiff)
+            elseif is_group_leader() then
+                msg = string.format("\agGroup XP (%.1f %% AA)", aaDiff)
+            end
         end
 
         -- leader xp
@@ -1502,26 +1508,33 @@ function QoL.Init()
                 -- we dinged AA
                 groupXpDiff = 100 + mq.TLO.Me.PctGroupLeaderExp() - QoL.currentGroupLeaderXP
             end
-
             if groupXpDiff > 0 then
                 msg = msg .. string.format(", group leader XP (%.1f %%)", groupXpDiff)
             end
         end
         QoL.currentGroupLeaderXP = mq.TLO.Me.PctGroupLeaderExp()
 
-        if msg ~= "" then
+        if msg ~= "" and not in_raid() then
             all_tell(msg)
         end
+
+        -- auto adjust xp / AA ratio
+        if QoL.autoXP.enabled then
+            local aaPct = toint(mq.TLO.Window("AAWindow").Child("AAW_PercentCount").Text.Left(-1)())
+            if (mq.TLO.Me.Level() < QoL.autoXP.maxLevel or mq.TLO.Me.PctExp() <= QoL.autoXP.minTreshold) and aaPct > 0 then
+                cmd("/squelch /alternateadv on 0")
+                all_tellf("\ayAuto setting AA Exp to 0%%, at %d%% of Level %d", mq.TLO.Me.PctExp(), mq.TLO.Me.Level())
+            elseif mq.TLO.Me.Level() == QoL.autoXP.maxLevel and mq.TLO.Me.PctExp() >= QoL.autoXP.maxTreshold and aaPct < 100 then
+                cmd("/squelch /alternateadv on 100")
+                all_tellf("\ayAuto setting AA Exp to 100%%, at %d%% of Level %d", mq.TLO.Me.PctExp(), mq.TLO.Me.Level())
+            end
+        end
     end
-
-    mq.event('summoned', '#*#You have been summoned#*#', function(text, sender) -- XXX improve
-        cmdf("/popup SUMMONED")
-        log.Info("You was summoned to %d, %d", mq.TLO.Me.Y(), mq.TLO.Me.X())
-    end)
-
-    mq.event("xp1", "You gain experience!", xpGain)
-    mq.event('xp2', 'You gain party experience!!', xpGain)
-    --mq.event("xp3", "You gained raid experience!", xpGain)
+    
+ 
+    mq.event("xp-solo", "You gain experience!!", xpGain)
+    mq.event('xp-group', 'You gain party experience!!', xpGain)
+    mq.event("xp-raid", "You gained raid experience!", xpGain)
 
     mq.event("raid_leader_xp", "You gain raid leadership experience!", function(text)
         local aaDiff = mq.TLO.Me.PctRaidLeaderExp() - QoL.currentRaidLeaderXP
@@ -1537,15 +1550,20 @@ function QoL.Init()
         end
     end)
 
-    mq.event("ding", "You have gained a level! Welcome to level #1#!", function(text, level)
+    mq.event("ding-level", "You have gained a level! Welcome to level #1#!", function(text, level)
         all_tellf("\agDing L%d", level)
     end)
 
-    mq.event("dingAA", "You have gained an ability point#*#", function(text)
+    mq.event("ding-aa", "You have gained an ability point#*#", function(text)
         if mq.TLO.Me.AAPoints() <= 1 or mq.TLO.Me.AAPoints() >= 50 then
             return
         end
         all_tellf("\agDing AA - %d unspent", mq.TLO.Me.AAPoints())
+    end)
+
+    mq.event('summoned', '#*#You have been summoned#*#', function(text, sender) -- XXX improve
+        cmdf("/popup SUMMONED")
+        log.Info("You was summoned to %d, %d", mq.TLO.Me.Y(), mq.TLO.Me.X())
     end)
 
     -- toggles debug output on/off
