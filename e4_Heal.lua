@@ -108,7 +108,7 @@ function enqueueHealmeRequest(msg)
 
     -- if queue don't already contain this bot
     if not Heal.queue:contains(peer) then
-        Heal.queue:add(peer, pct)
+        Heal.queue:add(peer)
     end
 end
 
@@ -168,9 +168,8 @@ function Heal.processQueue()
     -- first find any TANKS
     if botSettings.settings.healing.tanks ~= nil and botSettings.settings.healing.tank_heal ~= nil then
         for k, peer in pairs(botSettings.settings.healing.tanks) do
-            if Heal.queue:contains(peer) then
-                local pct = toint(Heal.queue:prop(peer))
-                log.Info("Decided to heal TANK %s at %d %%", peer, pct)
+            if is_peer_in_zone(peer) then
+                local pct = peer_hp(peer)
                 Heal.queue:remove(peer)
                 if healPeer(botSettings.settings.healing.tank_heal, peer, pct) then
                     return
@@ -182,9 +181,8 @@ function Heal.processQueue()
     -- then find any IMPORTANT
     if botSettings.settings.healing.important ~= nil and botSettings.settings.healing.important_heal ~= nil then
         for k, peer in pairs(botSettings.settings.healing.important) do
-            if Heal.queue:contains(peer) then
-                local pct = toint(Heal.queue:prop(peer))
-                log.Info("Decided to heal IMPORTANT %s at %d %%", peer, pct)
+            if is_peer_in_zone(peer) then
+                local pct = peer_hp(peer)
                 Heal.queue:remove(peer)
                 if healPeer(botSettings.settings.healing.important_heal, peer, pct) then
                     return
@@ -196,9 +194,8 @@ function Heal.processQueue()
     -- finally care for the rest
     if botSettings.settings.healing.all_heal ~= nil then
         local peer = Heal.queue:peek_first()
-        if peer ~= nil then
-            local pct = toint(Heal.queue:prop(peer))
-            log.Debug("Decided to heal ANY %s at %d %%", peer, pct)
+        if peer ~= nil and is_peer_in_zone(peer) then
+            local pct = peer_hp(peer)
             Heal.queue:remove(peer)
             if healPeer(botSettings.settings.healing.all_heal, peer, pct) then
                 return
@@ -278,13 +275,15 @@ function Heal.medCheck()
         return
     end
 
-    if is_sitting() and mq.TLO.Me.PctMana() >= 100 and not window_open("SpellBookWnd") then
+    if is_sitting() and not window_open("SpellBookWnd") then
         -- make sure to proecss events in order to not stand up in case of "/camp" command, which would end the macro
         doevents()
 
-        log.Info("Ending medbreak, full mana.")
-        cmd("/sit off")
-        return
+        if (mq.TLO.Me.MaxMana() > 1 and mq.TLO.Me.PctMana() >= 100) or (mq.TLO.Me.MaxMana() == 0 and mq.TLO.Me.PctEndurance() >= 100) then
+            all_tellf("Ending medbreak, full mana.")
+            cmd("/sit off")
+            return
+        end
     end
 
     if follow.IsFollowing() or is_brd() or is_sitting() or in_combat() or is_hovering() or is_casting() or window_open("SpellBookWnd") or window_open("LootWnd") then
@@ -493,13 +492,10 @@ function healPeer(spell_list, peer, pct)
             log.Debug("healPeer skip %s, spell on them", spellConfig.Name)
         elseif not matches_filter(heal, mq.TLO.Me.Name()) then
             log.Debug("healPeer skip %s, not matching ONLY filter %s", spellConfig.Name, heal)
+        elseif peer_hp(peer) >= 98 then
+            log.Info("Skipping heal! \ag%s\ax was %d %%, is now %d %%", peer, pct, peer_hp(peer))
         else
             log.Info("Healing \ag%s\ax at %d%% with \ay%s\ax", peer, pct, spellConfig.Name)
-
-            if peer_hp(peer) >= 98 then
-                log.Info("Skipping heal! \ag%s\ax was %d %%, is now %d %%", mq.TLO.Target.Name(), pct, peer_hp(peer))
-                return true
-            end
 
             local check = castSpellAbility(spawn, heal, function() -- XXX castSpellAbility should take spellConfig obj directly
                 if not is_casting() then
@@ -507,7 +503,7 @@ function healPeer(spell_list, peer, pct)
                     return true
                 end
                 if mq.TLO.Target.ID() ~= spawn.ID() then
-                    all_tellf("target changed in heal callback, breaking")
+                    all_tellf("target changed in heal callback from %s to %s, breaking", spawn.Name(), mq.TLO.Target.Name())
                     return true
                 end
                 if mq.TLO.Target() ~= nil and mq.TLO.Target.PctHPs() >= 98 and not is_tank(mq.TLO.Target.Class.ShortName()) then

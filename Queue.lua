@@ -2,7 +2,7 @@
 
 ---@class QueueValue
 ---@field public Name string Name
----@field public Prop string Property
+---@field public Prop string|nil Property
 
 local Queue = {
     ---@type QueueValue[]

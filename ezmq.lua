@@ -367,7 +367,6 @@ end
 function is_item_clicky_ready(name)
     local item = find_item(name)
     if item == nil then
-        log.Warn("is_item_clicky_ready() called with item I do not have: %s", name)
         return false
     end
     return item.Clicky() ~= nil and item.Timer.Ticks() == 0
@@ -1164,7 +1163,9 @@ function inventory_slot_name(n)
     if baseSlots[n] ~= nil then
         return baseSlots[n]
     end
+    -- true if item is on cursor
     all_tellf("ERROR: lookup inventory slot %d failed", n)
+    return "UNKNOWN"
 end
 
 -- Makes character visible and drops sneak/hide.
@@ -1539,7 +1540,10 @@ function unflood_delay()
     if players < count then
         count = players
     end
-    random_delay(count * 200)
+    if count < 30 then
+        count = 30
+    end
+    random_delay(count * 200) -- minimum 30*200 = 6s cap
 end
 
 -- Returns true if `name` is ready to use.
@@ -1697,7 +1701,7 @@ function matches_filter_line(line, sender)
     local class = peer_class_shortname(sender)
     local tokens = split_str(line, " ")
     for k, v in pairs(tokens) do
-        if class == v:upper() or v == mq.TLO.Me.Name() or (v == "me" and is_orchestrator()) then
+        if class == v:upper() or v:lower() == mq.TLO.Me.Name():lower() or (v == "me" and is_orchestrator()) then
             return true
         end
         if v == "group" and is_grouped_with(sender) then
@@ -2181,7 +2185,14 @@ end
 ---@param peer string
 ---@return integer
 function peer_hp(peer)
-    return toint(mq.TLO.NetBots(peer).PctHPs())
+    local pct = mq.TLO.NetBots(peer).PctHPs()
+    if pct == "NULL" then
+        -- XXX should not happen
+        all_tellf("FATAL peer_hp returned NULL for %s", peer)
+        return 100
+    end
+    log.Info("peer_hp %s, pct %s", peer, tostring(pct))
+    return toint(pct)
 end
 
 -- Returns the short zonename for given `peer`

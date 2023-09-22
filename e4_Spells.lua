@@ -6,6 +6,8 @@ local botSettings = require("efyran/e4_BotSettings")
 local aliases = require("efyran/settings/Spell Aliases")
 local groupBuffs = require("efyran/e4_GroupBuffs")
 
+local follow = require("efyran/e4_Follow")
+
 local MIN_BUFF_DURATION = 6 * 6000 -- 6 ticks, each tick is 6s
 
 function queryBot(peer, q)
@@ -503,6 +505,8 @@ function cast_port_to(name)
         all_tellf("\arERROR\ax: Unknown port alias \ag%s\ax", name)
         return
     end
+
+    follow.Stop()
 
     all_tellf("Porting group to \ag%s\ax (\ay%s\ax) ...", name, spellName)
     unflood_delay()
