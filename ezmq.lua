@@ -1386,9 +1386,11 @@ end
 ---@class FilterObject
 ---@field public Only string
 ---@field public Not string
+---@field public Zone string space-separated zone shortnames
+---@field public Instance string name of instance (aka Shared Task)
 
 -- parses a filter line with properties, returns a object
--- example in: "Only/WAR"
+-- example in: "/Only|WAR"
 ---@param s string
 ---@return FilterObject
 function parseFilterLine(s)
@@ -1607,14 +1609,12 @@ function drop_all_buffs()
     end
 end
 
--- disables tribute
-function disable_tribute()
-
+-- for rof2 emu. toggles tribute through the Tribute window
+function toggleTribute()
     if not window_open("TributeBenefitWnd") then
         cmd("/keypress TOGGLE_TRIBUTEBENEFITWIN")
+        delay(2)
     end
-    delay(2)
-
     cmd("/notify TBW_PersonalPage TBWP_ActivateButton leftmouseup")
     delay(2)
     cmd("/keypress TOGGLE_TRIBUTEBENEFITWIN")

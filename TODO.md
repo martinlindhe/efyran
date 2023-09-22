@@ -2,10 +2,12 @@
 
 
 sep 2023:
-mq bug? /handin fails if item is in bag10. bag 1 to 9 seem to work fine (also bags must be open on emu, dont need on live)
+mq bug? /handin fails if item is in bag10 on emu. bag 1 to 9 seem to work fine (also bags must be open on emu, dont need on live)
 
-- add filter to /fmi, /fdi
 - enc auto mez
+
+- allow to override GroupBuffs, PetBuffs, Hails, Handins, AutoTribute with per-server settings that is user supplied
+
 
 
 

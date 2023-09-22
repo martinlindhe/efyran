@@ -11,6 +11,7 @@ local buffs   = require("efyran/e4_Buffs")
 local group   = require("efyran/e4_Group")
 local follow  = require("efyran/e4_Follow")
 local heal    = require("efyran/e4_Heal")
+local tribute = require("efyran/e4_Tribute")
 local qol     = require("efyran/e4_QoL")
 
 seed_process()
@@ -42,6 +43,9 @@ while true do
     doevents()
 
     qol.Tick()
+    doevents()
+
+    tribute.Tick()
     doevents()
 
     assist.Tick()

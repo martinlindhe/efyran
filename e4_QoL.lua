@@ -854,7 +854,7 @@ function QoL.Init()
     ---@param ... string|nil filter, such as "/only|ROG"
     mq.bind("/followplayer", function(spawnName, ...)
         local filter = trim(args_string(...))
-        if filter ~= nil and not matches_filter(filter, spawnName) then
+        if filter ~= nil and not matches_filter(filter, mq.TLO.Me.Name()) then
             log.Info("followid: Not matching filter \ay%s\ax", filter)
             return
         end
@@ -1239,14 +1239,14 @@ function QoL.Init()
 
     -- report if tribute is too low (under 140k)
     mq.bind("/lowtribute", function()
-        mq.cmd("/noparse /dgaexecute all /if (${Me.CurrentFavor} < 140000) /dgtell all LOW TRIBUTE ${Me.CurrentFavor}")
+        mq.cmd("/noparse /dgaexecute /if (${Me.CurrentFavor} < 140000) /dgtell all LOW TRIBUTE ${Me.CurrentFavor}")
     end)
 
-    -- report active tribute
-    -- /tributeactive=/noparse /bcaa //if (${Me.TributeActive}) /bc TRIBUTE ACTIVE, COST ${Me.ActiveFavorCost}
-
-    -- report tank tribute
-    -- /tanktribute=/noparse /bcaa //if (${Select[${Me.Class.ShortName},WAR,PAL,SHD]}) /bc TRIBUTE ${If[${Me.TributeActive},[+g+]ON,[+r+]OFF]}[+w+], SAVED ${Me.CurrentFavor}
+    -- report if tribute is active
+    -- TODO add filter for /tributeactive /only|tanks
+    mq.bind("/tributeactive", function()
+        mq.cmd("/noparse /dgaexecute /if (${Me.TributeActive}) /bc TRIBUTE ACTIVE, COST ${Me.ActiveFavorCost}, STORED ${Me.CurrentFavor}")
+    end)
 
     -- report your GoD tongue quest status
     mq.bind("/tongues", function()
@@ -1671,6 +1671,8 @@ function QoL.loadRequiredPlugins()
         "MQ2Cast",
         "MQ2Medley",  -- Bard songs
 
+        --"MQ2TributeManager", -- adds /tribute command. does not work on emu
+
         --"MQ2AdvPath",   -- for /afollow, currently unused
         --"MQ2Nav", -- TODO requires mesh files etc
     }
@@ -1794,11 +1796,6 @@ function QoL.Tick()
 
     if is_wiz() and have_pet() then
         cmd("/pet get lost")
-    end
-
-    if mq.TLO.Me.TributeActive() and not (zone_shortname() == "anguish" or zone_shortname() == "tacvi") then
-        all_tellf("\arTRIBUTE WAS ACTIVE IN %s, TURNING OFF!", zone_shortname())
-        disable_tribute()
     end
 
     if mq.TLO.Me.Ducking() then
