@@ -49,7 +49,7 @@ function QoL.Init()
 
         if in_guild() then
             -- enable auto consent for guild
-            cmd("/consent guild")
+            --cmd("/consent guild")
         end
 
         -- rof2 client has no persistent setting for /tgb on. it has been permanently auto enabled on live

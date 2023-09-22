@@ -271,10 +271,6 @@ function Heal.medCheck()
         return
     end
 
-    if nearby_npc_count(75) > 0 then
-        return
-    end
-
     if is_sitting() and not window_open("SpellBookWnd") then
         -- make sure to proecss events in order to not stand up in case of "/camp" command, which would end the macro
         doevents()
@@ -286,6 +282,10 @@ function Heal.medCheck()
         end
     end
 
+    if nearby_npc_count(75) > 0 then
+        return
+    end
+    
     if follow.IsFollowing() or is_brd() or is_sitting() or in_combat() or is_hovering() or is_casting() or window_open("SpellBookWnd") or window_open("LootWnd") then
         return
     end
@@ -477,9 +477,8 @@ function healPeer(spell_list, peer, pct)
             return false
         elseif spellConfig.MinMana ~= nil and mq.TLO.Me.PctMana() < spellConfig.MinMana then
             log.Info("SKIP HEALING, my mana %d vs required %d", mq.TLO.Me.PctMana(), spellConfig.MinMana)
-        elseif spellConfig.HealPct ~= nil and spellConfig.HealPct < pct and in_combat() then
+        elseif spellConfig.HealPct ~= nil and pct > spellConfig.HealPct then
             -- remove, dont meet heal criteria
-            -- DONT RETURN HERE because specific spell does not meet criteria!
             log.Debug("Skip using of heal, heal pct for %s is %d. dont need heal at %d for %s", spellConfig.Name, spellConfig.HealPct, pct, peer)
         elseif not have_spell(spellConfig.Name) and not have_item_inventory(spellConfig.Name) then
             -- SKIP clickes that is not on me
