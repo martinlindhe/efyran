@@ -259,9 +259,9 @@ function CommandQueue.Process()
             cmd("/notify LargeDialogWindow LDW_NoButton leftmouseup")
         end
     elseif v.Name == "finditem" then
-        report_find_item(v.Arg)
+        report_find_item(v.Arg, v.Arg2)
     elseif v.Name == "find-missing-item" then
-        report_find_missing_item(v.Arg)
+        report_find_missing_item(v.Arg, v.Arg2)
     elseif v.Name == "find-missing-item-id" then
         report_find_missing_item_by_id(toint(v.Arg))
     elseif v.Name == "reportclickies" then

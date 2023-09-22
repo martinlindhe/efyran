@@ -1444,19 +1444,34 @@ function QoL.Init()
     -- report all peer total AA:s
     mq.bind("/totalaa", function() mq.cmd("/noparse /dgaexecute /dgtell all ${Me.AAPointsTotal} TOTAL (${Me.AAPoints} unspent, ${Me.AAPointsSpent} spent)") end)
 
-    -- finds item by name in inventory/bags. NOTE: "/finditem" is reserved in eq live for "dragon hoard" feature
+    -- finds item by name in inventory/bags
+    -- NOTE: "/finditem" is reserved in eq live for "dragon hoard" feature
+    -- arg: item name + optional /filter arguments as strings
     mq.bind("/fdi", function(...)
         local name = trim(args_string(...))
+        local filter = nil
+        local tokens = split_str(name, "/")
+        if #tokens == 2 then
+            name = trim(tokens[1])
+            filter = "/" .. tokens[2]
+        end
         if name ~= "" then
-            commandQueue.Add("finditem", name)
+            commandQueue.Add("finditem", name, filter)
         end
     end)
 
     -- find missing item
+    -- arg: item name + optional /filter arguments as strings
     mq.bind("/fmi", function(...)
         local name = trim(args_string(...))
+        local filter = nil
+        local tokens = split_str(name, "/")
+        if #tokens == 2 then
+            name = trim(tokens[1])
+            filter = "/" .. tokens[2]
+        end
         if name ~= "" then
-            commandQueue.Add("find-missing-item", name)
+            commandQueue.Add("find-missing-item", name, filter)
         end
     end)
 

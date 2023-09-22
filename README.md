@@ -161,8 +161,8 @@ Buff Spell Level   Minimum Target Level
 /teleportbind               - WIZ: port group to bind point using "Teleport Bind" AA
 /secondaryrecall            - WIZ/DRU: port to secondary bind
 
-/fdi                        - find item by partial name
-/fmi                        - find missing item. report peers who lack an item
+/fdi <name> <filter>        - find item by partial name and optional filter (eg /fdi crystal /only|ROG)
+/fmi <name> <filter>        - find missing item by item name (all peers who lack an item)
 /fmid <id>                  - find missing item by item ID (eg. for 'Shard of Dark Matter')
 /clickies                   - lists all clickies on current toon
 /banker                     - summons a banker

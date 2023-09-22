@@ -793,12 +793,22 @@ end
 
 -- used by /fdi
 ---@param name string
-function report_find_item(name)
+---@param filter string|nil
+function report_find_item(name, filter)
     name = strip_link(name)
     log.Info("Searching for %s", name)
 
     if is_orchestrator() then
-        cmdf("/dgzexecute /fdi %s", name)
+        local exe = string.format("/dgzexecute /fdi %s", name)
+        if filter ~= nil then
+            exe = exe .. " " .. filter
+        end
+        cmd(exe)
+    end
+
+    if filter ~= nil and not matches_filter(filter, mq.TLO.Me.Name()) then
+        log.Info("/fdi: I do not match filter \ay%s\ax", filter)
+        return
     end
 
     local item = find_item(name)
@@ -826,11 +836,21 @@ end
 
 -- used by /fmi
 ---@param name string
-function report_find_missing_item(name)
+---@param filter string|nil
+function report_find_missing_item(name, filter)
     name = strip_link(name)
 
     if is_orchestrator() then
-        cmdf("/dgzexecute /fmi %s", name)
+        local exe = string.format("/dgzexecute /fmi %s", name)
+        if filter ~= nil then
+            exe = exe .. " " .. filter
+        end
+        cmd(exe)
+    end
+
+    if filter ~= nil and not matches_filter(filter, mq.TLO.Me.Name()) then
+        log.Info("/fmi: I do not match filter \ay%s\ax", filter)
+        return
     end
 
     local item = find_item(name)
