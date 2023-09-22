@@ -163,6 +163,7 @@ Buff Spell Level   Minimum Target Level
 
 /fdi                        - find item by partial name
 /fmi                        - find missing item. report peers who lack an item
+/fmid <id>                  - find missing item by item ID (eg. for 'Shard of Dark Matter')
 /clickies                   - lists all clickies on current toon
 /banker                     - summons a banker
 /autobank                   - autobanks loot listed in tradeskills.ini

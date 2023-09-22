@@ -1456,8 +1456,13 @@ function QoL.Init()
     mq.bind("/fmi", function(...)
         local name = trim(args_string(...))
         if name ~= "" then
-            commandQueue.Add("findmissingitem", name)
+            commandQueue.Add("find-missing-item", name)
         end
+    end)
+
+    -- find missing item by id
+    mq.bind("/fmid", function(id)
+        commandQueue.Add("find-missing-item-id", id)
     end)
 
     -- Recalls group setup from settings. The orchestrator (caller) will tell the rest how to form up

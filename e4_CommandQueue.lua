@@ -260,8 +260,10 @@ function CommandQueue.Process()
         end
     elseif v.Name == "finditem" then
         report_find_item(v.Arg)
-    elseif v.Name == "findmissingitem" then
+    elseif v.Name == "find-missing-item" then
         report_find_missing_item(v.Arg)
+    elseif v.Name == "find-missing-item-id" then
+        report_find_missing_item_by_id(toint(v.Arg))
     elseif v.Name == "reportclickies" then
         report_clickies()
     elseif v.Name == "wordheal" then
