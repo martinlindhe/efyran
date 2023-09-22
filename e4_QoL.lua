@@ -22,8 +22,7 @@ local QoL = {
     autoXP = {
         enabled = true, -- switch to 100% AA when max level, and back to 100% normal XP if needed
         maxLevel = 70, -- max level to reach before getting AA:s
-        --minTreshold = 50, -- if normal XP is below this %, we disable AA XP 
-        minTreshold = 90, -- XXX
+        minTreshold = 50, -- if normal XP is below this %, we disable AA XP
         maxTreshold = 99, -- if normal XP is above or equal to this %, we enable 100% AA XP
     }
 }
@@ -1181,7 +1180,7 @@ function QoL.Init()
 
     mq.bind("/sitall", function()
         log.Info("Requested ALL peers to /sit")
-        mq.cmd("/noparse /dgae /if (${Me.Standing}) /sit")
+        mq.cmd("/noparse /dgae /if (${Me.Standing}) /sit on")
     end)
 
     -- report all peers who are not standing

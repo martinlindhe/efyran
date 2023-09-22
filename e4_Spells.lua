@@ -268,7 +268,7 @@ function memorizeListedSpells()
     end
 
     if not is_sitting() then
-        cmd("/sit")
+        cmd("/sit on")
         delay(100)
     end
 
@@ -281,7 +281,7 @@ function memorizeListedSpells()
     end
 
     if is_sitting() then
-        cmd("/stand")
+        cmd("/sit off")
     end
 end
 
@@ -726,18 +726,22 @@ function ae_rez_query(spawnQuery)
     end
 end
 
+-- tell all peers with corpses nearby to consent me
 function consent_me()
     local spawnQuery = 'pccorpse radius 500'
     for i = 1, spawn_count(spawnQuery) do
         local spawn = mq.TLO.NearestSpawn(i, spawnQuery)
-        cmdf("/dexecute %s /consent %s", spawn.DisplayName(), mq.TLO.Me.Name())
+        if is_peer(spawn.DisplayName()) then
+            cmdf("/dexecute %s /consent %s", spawn.DisplayName(), mq.TLO.Me.Name())
+        else
+            all_tellf("Cannot autoconsent corpse \ar%s\ax, not a peer", spawn.DisplayName())
+        end
     end
 end
 
 -- ask for consent, then gathers corpses
 function gather_corpses()
-    cmd("/consentme")
-    delay(500)
+    consent_me()
     local spawnQuery = 'pccorpse radius 100'
     for i = 1, spawn_count(spawnQuery) do
         local spawn = mq.TLO.NearestSpawn(i, spawnQuery)
@@ -1009,7 +1013,7 @@ function ask_nearby_peer_to_activate_aa(aaName)
         if is_peer(peer) then
             local value = query_peer(peer, "Me.AltAbilityReady["..aaName.."]", 0)
             if value == "TRUE" then
-                log.Info("Asking %s to activate banker ...", peer)
+                log.Info("Asking %s to activate \ay%s\ax ...", peer, aaName)
                 cmdf("/dexecute %s /banker", peer)
                 return
             end

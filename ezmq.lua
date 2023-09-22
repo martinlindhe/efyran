@@ -133,11 +133,11 @@ function is_emu()
     return is_rof2()
 end
 
--- returns true if peerName is another peer
+-- returns true if `peer` is a connected client
 ---@param peer string Peer name
 ---@return boolean
 function is_peer(peer)
-    return mq.TLO.DanNet(peer)() ~= nil
+    return mq.TLO.NetBots(peer).ID() ~= "NULL"
 end
 
 -- returns true if peerName is in the same zone
@@ -1238,20 +1238,6 @@ function query_peer(peer, query, timeout)
     return value
 end
 
--- start observing a peer using MQ2DanNet
----@param peer string
----@param query string
-function observe_peer(peer, query)
-    if mq.TLO.DanNet(peer).OSet(query)() then
-        --drop previous observer
-        mq.cmdf('/dobserve %s -q "%s" -drop', peer, query)
-        delay(100)
-    end
-
-    mq.cmdf('/dobserve %s -q "%s"', peer, query)
-    log.Debug("Adding Observer - mq.TLO.DanNet(%s).O(%s)", peer, query)
-end
-
 local shortToLongClass = {
     ["CLR"] = "Cleric",
     ["DRU"] = "Druid",
@@ -1639,13 +1625,6 @@ function find_available_classes()
         end
     end
     return o
-end
-
--- The name of the heal channel for the current zone.
----@return string
-function heal_channel()
-    local s = string.lower(current_server():gsub("%s+", "-") .. "_" .. zone_shortname() .. "_healme")
-    return s
 end
 
 -- Returns the current zone short name.
@@ -2159,7 +2138,7 @@ end
 
 ---@return integer
 function peer_count()
-    return mq.TLO.DanNet.PeerCount()
+    return mq.TLO.NetBots.Counts()
 end
 
 ---@param peer string
@@ -2191,7 +2170,7 @@ function peer_hp(peer)
         all_tellf("FATAL peer_hp returned NULL for %s", peer)
         return 100
     end
-    log.Info("peer_hp %s, pct %s", peer, tostring(pct))
+    log.Debug("peer_hp %s, pct %s", peer, tostring(pct))
     return toint(pct)
 end
 
@@ -2206,17 +2185,11 @@ end
 -- returns table with peers
 function get_peers()
     local peers = {}
-    for peer in string.gmatch(mq.TLO.DanNet.Peers(), "([^|]+)") do
-        table.insert(peers, dannet_peer_to_local_peer(peer))
+    for i = 1, mq.TLO.NetBots.Counts() do
+        local peer = mq.TLO.NetBots.Client(i)()
+        table.insert(peers, peer)
     end
     return peers
-end
-
--- strip "server_" prefix
-function dannet_peer_to_local_peer(name)
-    local t = split_str(name, "_")
-    return ucfirst(t[2])
-    --return t[2]
 end
 
 function ucfirst(s)

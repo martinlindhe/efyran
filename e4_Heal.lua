@@ -6,22 +6,13 @@ require("efyran/e4_Spells")
 local globalSettings = require("efyran/e4_Settings")
 
 local botSettings = require("efyran/e4_BotSettings")
-local queue = require("efyran/Queue")
 local timer = require("efyran/Timer")
 local follow  = require("efyran/e4_Follow")
 local buffs   = require("efyran/e4_Buffs")
 
-local askForHealTimer = timer.new_expired(4 * 1) -- 4s
-local askForHealPct = 88 -- at what % HP to start begging for heals
-
 local timeZonedDelay = 10 -- seconds
 
 local Heal = {
-    queue = queue.new(), -- holds toons that requested a heal
-
-    ---@type string
-    healme_channel = "", -- healme channel for current zone
-
     ---@type boolean
     autoMed = true,
 }
@@ -37,10 +28,6 @@ function Heal.Init()
                 --log.Debug("%s ANNOUNCED AVAILABLE BUFFS: %s", peerName, available)
                 buffs.otherAvailable[peerName] = available
             end
-        elseif me_healer() and channel == heal_channel() and botSettings.settings.healing ~= nil then
-            if string.sub(msg, 1, 1) ~= "/" then -- ignore text starting with a  "/"
-                enqueueHealmeRequest(msg)
-            end
         end
     end)
 
@@ -49,6 +36,7 @@ function Heal.Init()
             cmd("/dgzexecute /medon")
         end
         Heal.autoMed = true
+        Heal.medCheck()
     end)
 
     mq.bind("/medoff", function()
@@ -56,60 +44,8 @@ function Heal.Init()
             cmd("/dgzexecute /medoff")
         end
         Heal.autoMed = false
+        Heal.medCheck()
     end)
-end
-
--- joins/changes to the heal channel for current zone
-function joinCurrentHealChannel()
-    -- orchestrator only joins to watch the numbers
-    if is_orchestrator() or me_healer() then
-        if heal_channel() == Heal.healme_channel then
-            return
-        end
-
-        if Heal.healme_channel ~= "" then
-            cmdf("/dleave %s", Heal.healme_channel)
-        end
-
-        Heal.healme_channel = heal_channel()
-        cmdf("/djoin %s", Heal.healme_channel)
-    end
-end
-
----@param s string
----@return string, integer
-function parseHealmeRequest(s)
-    local name = ""
-    local pct = "0"
-    local i = 1
-    for sub in s:gmatch("%S+") do
-        if i == 1 then
-            name = sub
-        else
-            pct = sub
-        end
-        i = i + 1
-    end
-    return name, toint(pct)
-end
-
----@param msg string Example "Avicii 75" (Name/PctHP)
-function enqueueHealmeRequest(msg)
-
-    local peer, pct = parseHealmeRequest(msg)
-    --print("heal peer ", peer," pct ", pct)
-
-    -- ignore if not in zone
-    local spawn = spawn_from_peer_name(peer)
-    if tostring(spawn) == "NULL" then
-        all_tellf("Peer is not in zone, ignoring heal request from '%s'", peer)
-        return
-    end
-
-    -- if queue don't already contain this bot
-    if not Heal.queue:contains(peer) then
-        Heal.queue:add(peer)
-    end
 end
 
 local lifeSupportTimer = timer.new_expired(5 * 1) -- 5s
@@ -137,30 +73,16 @@ function Heal.Tick()
         Heal.performLifeSupport()
     end
 
-    Heal.processQueue()
+    Heal.performHealDuties()
 
     Heal.acceptRez()
 
     Heal.medCheck()
-
-    Heal.askForHeal()
 end
 
-
-function Heal.askForHeal()
-
-    if not is_hovering() and mq.TLO.Me.PctHPs() <= askForHealPct and askForHealTimer:expired() then
-        -- ask for heals if i take damage
-        local s = mq.TLO.Me.Name().." "..mq.TLO.Me.PctHPs() -- "Avicii 82"
-        --print(mq.TLO.Time, "HELP HEAL ME, ", s)
-        cmd("/dgtell "..heal_channel().." "..s)
-        askForHealTimer:restart()
-    end
-end
-
-function Heal.processQueue()
-    -- check if heals need to be casted
-    if Heal.queue:size() == 0 or botSettings.settings.healing == nil then
+-- check if heals need to be casted
+function Heal.performHealDuties()
+    if botSettings.settings.healing == nil then
         return
     end
 --    log.Debug("Heal.processQueue(): queue is %d: %s", Heal.queue:size(), Heal.queue:describe())
@@ -193,16 +115,15 @@ function Heal.processQueue()
 
     -- finally care for the rest
     if botSettings.settings.healing.all_heal ~= nil then
-        local peer = Heal.queue:peek_first()
-        if peer ~= nil and is_peer_in_zone(peer) then
-            local pct = peer_hp(peer)
-            Heal.queue:remove(peer)
-            if healPeer(botSettings.settings.healing.all_heal, peer, pct) then
-                return
+        for i, peer in pairs(get_peers()) do
+            if is_peer_in_zone(peer) then
+                local pct = peer_hp(peer)
+                if healPeer(botSettings.settings.healing.all_heal, peer, pct) then
+                    return
+                end
             end
         end
     end
-    log.Debug("Heal.processQueue(): Did nothing.")
 end
 
 function Heal.acceptRez()
@@ -285,7 +206,7 @@ function Heal.medCheck()
     if nearby_npc_count(75) > 0 then
         return
     end
-    
+
     if follow.IsFollowing() or is_brd() or is_sitting() or in_combat() or is_hovering() or is_casting() or window_open("SpellBookWnd") or window_open("LootWnd") then
         return
     end

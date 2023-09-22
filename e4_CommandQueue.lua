@@ -488,7 +488,6 @@ function perform_zoned_event()
 
     pet.ConfigureAfterZone()
     clear_ae_rezzed()
-    joinCurrentHealChannel()
 
     memorizeListedSpells()
 
