@@ -1239,22 +1239,22 @@ function query_peer(peer, query, timeout)
 end
 
 local shortToLongClass = {
-    ["CLR"] = "Cleric",
-    ["DRU"] = "Druid",
-    ["SHM"] = "Shaman",
-    ["WAR"] = "Warrior",
-    ["PAL"] = "Paladin",
-    ["SHD"] = "Shadow Knight",
-    ["BRD"] = "Bard",
-    ["ROG"] = "Rogue",
-    ["BER"] = "Berserker",
-    ["MNK"] = "Monk",
-    ["RNG"] = "Ranger",
-    ["BST"] = "Beastlord",
-    ["WIZ"] = "Wizard",
-    ["MAG"] = "Magician",
-    ["ENC"] = "Enchanter",
-    ["NEC"] = "Necromancer",
+    CLR = "Cleric",
+    DRU = "Druid",
+    SHM = "Shaman",
+    WAR = "Warrior",
+    PAL = "Paladin",
+    SHD = "Shadow Knight",
+    BRD = "Bard",
+    ROG = "Rogue",
+    BER = "Berserker",
+    MNK = "Monk",
+    RNG = "Ranger",
+    BST = "Beastlord",
+    WIZ = "Wizard",
+    MAG = "Magician",
+    ENC = "Enchanter",
+    NEC = "Necromancer",
 }
 
 -- returns the nearest peer by class shortname, or nil on failure
@@ -1935,7 +1935,7 @@ function castSpellAbility(spawn, row, callback)
     end
 
     if not matches_filter(row, mq.TLO.Me.Name()) then
-        log.Debug("SKIP cast %s, not matching filter %s", spell.Name, row)
+        --log.Debug("SKIP cast %s, not matching filter %s", spell.Name, row)
         return false
     end
 
@@ -2170,7 +2170,6 @@ function peer_hp(peer)
         all_tellf("FATAL peer_hp returned NULL for %s", peer)
         return 100
     end
-    log.Debug("peer_hp %s, pct %s", peer, tostring(pct))
     return toint(pct)
 end
 

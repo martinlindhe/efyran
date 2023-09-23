@@ -123,6 +123,8 @@ function CommandQueue.Process()
     elseif v.Name == "buffit" then
         buffs.BuffIt(toint(v.Arg))
     elseif v.Name == "killit" then
+        --Arg = spawn id
+        --Arg2 = filter
 
         local filter = v.Arg2
         if filter ~= nil and not matches_filter(filter, mq.TLO.Me.Name()) then

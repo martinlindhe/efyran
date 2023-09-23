@@ -85,14 +85,12 @@ function Heal.performHealDuties()
     if botSettings.settings.healing == nil then
         return
     end
---    log.Debug("Heal.processQueue(): queue is %d: %s", Heal.queue:size(), Heal.queue:describe())
 
     -- first find any TANKS
     if botSettings.settings.healing.tanks ~= nil and botSettings.settings.healing.tank_heal ~= nil then
         for k, peer in pairs(botSettings.settings.healing.tanks) do
             if is_peer_in_zone(peer) then
                 local pct = peer_hp(peer)
-                Heal.queue:remove(peer)
                 if healPeer(botSettings.settings.healing.tank_heal, peer, pct) then
                     return
                 end
@@ -105,7 +103,6 @@ function Heal.performHealDuties()
         for k, peer in pairs(botSettings.settings.healing.important) do
             if is_peer_in_zone(peer) then
                 local pct = peer_hp(peer)
-                Heal.queue:remove(peer)
                 if healPeer(botSettings.settings.healing.important_heal, peer, pct) then
                     return
                 end
@@ -386,8 +383,6 @@ function healPeer(spell_list, peer, pct)
         return false
     end
 
-    log.Debug("healPeer: %s at %d %%", peer, pct)
-
     for k, heal in ipairs(spell_list) do
 
         local spellConfig = parseSpellLine(heal)
@@ -400,7 +395,7 @@ function healPeer(spell_list, peer, pct)
             log.Info("SKIP HEALING, my mana %d vs required %d", mq.TLO.Me.PctMana(), spellConfig.MinMana)
         elseif spellConfig.HealPct ~= nil and pct > spellConfig.HealPct then
             -- remove, dont meet heal criteria
-            log.Debug("Skip using of heal, heal pct for %s is %d. dont need heal at %d for %s", spellConfig.Name, spellConfig.HealPct, pct, peer)
+            --log.Debug("Skip using of heal, heal pct for %s is %d. dont need heal at %d for %s", spellConfig.Name, spellConfig.HealPct, pct, peer)
         elseif not have_spell(spellConfig.Name) and not have_item_inventory(spellConfig.Name) then
             -- SKIP clickes that is not on me
             log.Warn("Skip using of heal to heal %s at %d, I do not have item on me: %s", peer, pct, spellConfig.Name)

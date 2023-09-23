@@ -532,12 +532,26 @@ function QoL.Init()
     end)
 
     -- tell peers to kill target until dead
+    ---@param string|nil spawnID spawn ID
     ---@param ... string|nil filter, such as "/only|ROG"
     mq.bind("/assiston", function(...)
+        local filter = trim(args_string(...))
+        local spawnID = nil
+        local tokens = split_str(filter, "/")
+        if #tokens == 2 then
+            if string.len(tokens[1]) > 0 then
+                spawnID = trim(tokens[1])
+                filter = "/" .. tokens[2]
+            end
+        end
         local spawn = mq.TLO.Target
-        if spawn() == nil or spawn.Type() == "PC" then
+        if spawnID ~= nil then
+            spawn = spawn_from_id(spawnID)
+        end
+        if spawn == nil or spawn() == nil or spawn.Type() == "PC" then
             return
         end
+
         local exe = string.format("/dgzexecute /killit %d", spawn.ID())
         local filter = trim(args_string(...))
         if filter ~= nil then
