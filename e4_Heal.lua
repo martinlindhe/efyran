@@ -18,10 +18,8 @@ local Heal = {
 }
 
 function Heal.Init()
-    mq.event("dannet_chat", "[ #1# (#2#) ] #3#", function(text, dnetPeer, channel, msg)
+    mq.event("eqbc_chat", "<#1#> [#2#] #3#", function(text, peerName, time, msg)
         if string.sub(msg, 1, 16) == "#available-buffs" then
-            local peerName = strip_dannet_peer(dnetPeer)
-
             -- if peer is in my zone, remember their announcement
             if spawn_from_peer_name(peerName) ~= nil then
                 local available = string.sub(msg, 18)
@@ -157,7 +155,7 @@ function Heal.acceptRez()
         end
 
         -- tell bots that my corpse is rezzed
-        cmdf("/dgaexecute /ae_rezzed %s", mq.TLO.Me.Name())
+        cmdf("/bcaa //ae_rezzed %s", mq.TLO.Me.Name())
 
         all_tellf("Accepting rez from \ag%s\ax ...", peer)
         cmd("/notify ConfirmationDialogBox Yes_Button leftmouseup")

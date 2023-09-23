@@ -70,6 +70,9 @@ function move_to(spawnID)
 
     -- Uses MQ2MoveUtils, NOTE: mq2advpath don't have a "move to" command
     mq.cmdf("/moveto id %d dist %d", spawnID, dist)
+    if spawn() == nil then
+        return
+    end
 
     mq.delay(30000, function() -- 30s
         return spawn.Distance() < dist
@@ -1641,12 +1644,13 @@ end
 
 -- Send a text to all peers thru MQ2DanNet
 function all_tell(msg)
-    cmdf("/dgtell all [%s] %s", time(), msg)
+    cmdf("/bc [%s] %s", time(), msg)
 end
 
 -- Send a text to all peers thru MQ2DanNet
 function all_tellf(...)
-    cmdf("/dgtell all [%s] %s", time(), string.format(...))
+    --cmdf("/dgtell all [%s] %s", time(), string.format(...))
+    cmdf("/bc [%s] %s", time(), string.format(...))
 end
 
 --- collect arg into query, needed for /fdi water flask to work without quotes
@@ -1826,6 +1830,10 @@ end
 ---@return boolean true if spell/ability was cast
 function castSpellAbility(spawn, row, callback)
 
+    if spawn == nil or spawn() == nil then
+        return false
+    end
+
     local spell = parseSpellLine(row)
 
     --log.Debug("castSpellAbility %s, row = %s", spell.Name, row)
@@ -1919,10 +1927,9 @@ function castSpellAbility(spawn, row, callback)
 
     if spell.MaxMobs ~= nil and nearby_npc_count(75) > spell.MaxMobs then
         -- only cast if at most this many NPC:s is nearby
-        cmdf("/dgtell all SKIP MaxMobs %s, Too many nearby mobs. Have %d, need %d", spell.Name, spawn_count(nearbyNPCFilter),  spell.MaxMobs)
+        all_tellf("SKIP MaxMobs %s, Too many nearby mobs. Have %d, need %d", spell.Name, spawn_count(nearbyNPCFilter),  spell.MaxMobs)
         return false
     end
-
 
     if spell.MinPlayers ~= nil and nearby_player_count(75) < spell.MinPlayers then
         -- only cast if at least this many players is nearby (eg Stonewall)

@@ -107,7 +107,7 @@ function buffs.AnnounceAvailablity()
     buffs.available = trim(availableBuffGroups)
     if string.len(buffs.available) > 0 then
         -- log.Info("My available buff groups: %s", buffs.available)
-        cmdf("/dgtell %s #available-buffs %s", dannet_zone_channel(), buffs.available)
+        all_tellf("#available-buffs %s", buffs.available)
     end
 end
 
@@ -398,7 +398,7 @@ function handleBuffRequest(req)
                     --print("minLevel = ", n)
                 --else
                     -- XXX look into: seems spell.StacksTarget() checks vs myself instead of my target... is it a mq2-lua bug ????  cant cast Symbol of Naltron from CLR with higher sytmbol on a naked WAR.
-                --    cmd("/dgtell all ERROR cannot buff ", spawn.Name(), " with ", spellName, ", MinLevel ", n, " (dont stack with current buffs)")
+                --    cmd("/bc ERROR cannot buff ", spawn.Name(), " with ", spellName, ", MinLevel ", n, " (dont stack with current buffs)")
                 --end
                 --log.Debug("Best %s buff so far is MinLevel %d, Name %s, target L%d %s", req.Peer, spellConfig.MinLevel, spellConfig.Name, level, spawn.Name())
             end

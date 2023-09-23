@@ -52,9 +52,9 @@ function disband_all_peers()
         delay(100)
     end
 
-    cmd("/noparse /dgaexecute /if (${Raid.Members} > 0) /raiddisband")
+    cmd("/noparse /bcaa //if (${Raid.Members} > 0) /raiddisband")
     delay(1000)
-    cmd("/noparse /dgaexecute /if (${Group.Members} > 0) /disband")
+    cmd("/noparse /bcaa //if (${Group.Members} > 0) /disband")
     delay(1000)
 end
 

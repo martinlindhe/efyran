@@ -53,6 +53,7 @@ function Assist.Init()
     end)
 
     -- Adjust Melee position if we cannot see target
+    --[[
     mq.event("melee-cannot-see-target", "You cannot see your target.", function()
         if mq.TLO.Target() == nil or not Assist.IsAssisting() then
             return
@@ -70,6 +71,7 @@ function Assist.Init()
             delay(100)
         end
     end)
+    ]]--
 
     Assist.prepareForNextFight()
 end
@@ -92,6 +94,9 @@ end
 function Assist.handleAssistCall(spawn)
     if botSettings.settings == nil or botSettings.settings.assist == nil then
         all_tellf("WARNING: I have no assist settings")
+        return
+    end
+    if spawn == nil or spawn() == nil then
         return
     end
 
@@ -183,8 +188,8 @@ function Assist.beginKillSpawnID(spawnID)
     if melee then
         mq.cmdf("/target id %d", spawnID)
 
-        local spawn = spawn_from_id(Assist.targetID)
-        if spawn == nil then
+        local spawn = spawn_from_id(spawnID)
+        if spawn == nil or spawn() == nil then
             return
         end
 
@@ -208,6 +213,9 @@ function Assist.IsTanking()
 end
 
 function Assist.meleeStick()
+    if Assist.targetID == 0 then
+        return
+    end
     local stickArg
     if Assist.IsTanking() then
         stickArg = string.format("hold front %d uw", Assist.meleeDistance)
@@ -295,8 +303,9 @@ function performSpellAbility(targetID, abilityRows, category, used)
                 return true
             end
             --log.Debug("Trying to %s on %s with %s", category, spawn.Name(), spellConfig.Name)
+            local spawnName = spawn.Name()
             if castSpellAbility(spawn, row) then
-                log.Debug("Did \ay%s\ax on %s with %s", category, spawn.Name(), spellConfig.Name)
+                log.Debug("Did \ay%s\ax on %s with %s", category, spawnName, spellConfig.Name)
                 if used ~= nil then
                     used[row] = true
                 end

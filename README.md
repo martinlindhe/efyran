@@ -28,9 +28,9 @@ For ease of starting / stopping / re-launching efyran, you can also put the foll
 ```ini
 [Aliases]
 /e4=/multiline ; /lua stop efyran/e4 ; /timed 5 /lua run efyran/e4
-/e4all=/dgaexecute /multiline ; /lua stop efyran/e4 ; /timed 5 /lua run efyran/e4
+/e4all=/bcaa //multiline ; /lua stop efyran/e4 ; /timed 5 /lua run efyran/e4
 /stope4=/lua stop efyran/e4
-/stopall=/dgaexecute /lua stop efyran/e4
+/stopall=/bcaa //lua stop efyran/e4
 ```
 
 ## Moving around
