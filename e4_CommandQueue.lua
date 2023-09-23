@@ -6,12 +6,14 @@ require("efyran/e4_Handin")
 local heal    = require("efyran/e4_Heal")
 local hail    = require("efyran/e4_Hail")
 local buffs   = require("efyran/e4_Buffs")
-local bard    = require("efyran/Class_Bard")
 local follow  = require("efyran/e4_Follow")
 local assist  = require("efyran/e4_Assist")
 local pet     = require("efyran/e4_Pet")
 local group   = require("efyran/e4_Group")
 local botSettings = require("efyran/e4_BotSettings")
+
+local bard    = require("efyran/Class_Bard")
+local mage    = require("efyran/Class_Magician")
 
 ---@class CommandQueueValue
 ---@field public Name string Command name
@@ -110,6 +112,8 @@ function CommandQueue.Process()
         cast_radiant_cure()
     elseif v.Name == "handin" then
         auto_hand_in_items()
+    elseif v.Name == "coh-group" then
+        cohGroup()
     elseif v.Name == "is-mgb-ready" then
         if have_alt_ability("Mass Group Buff") then
             if not is_alt_ability_ready("Mass Group Buff") then

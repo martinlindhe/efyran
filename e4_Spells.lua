@@ -184,7 +184,7 @@ function spellConfigAllowsCasting(buffItem, spawn)
         end
     else
         if spell.TargetType() ~= "Self" and spawn.Distance() >= spell.Range() then
-            log.Error("cant rebuff (%s), toon too far away: %s %s spell range = %d, spawn distance = %d", spell.TargetType(), buffItem, spawn.CleanName(), spell.Range(), spawn.Distance())
+            --log.Error("cant rebuff (%s), toon too far away: %s %s spell range = %d, spawn distance = %d", spell.TargetType(), buffItem, spawn.CleanName(), spell.Range(), spawn.Distance())
             return false
         end
     end

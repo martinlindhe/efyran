@@ -10,6 +10,8 @@ mq bug? /handin fails if item is in bag10 on emu. bag 1 to 9 seem to work fine (
 
 - mag: auto pet weapons
 
+- pet classes: auto equip pet focus items while summoning pets
+
 - rez: dont try to rez "this corpse cannot be ressurected" corpses, instead force that toon to autoloot their corpse
 
 

@@ -182,7 +182,7 @@ function buffs.Tick()
         return
     end
 
-    if buffs.refreshBuffs and requestBuffsTimer:expired() then
+    if buffs.refreshBuffs and not in_combat() and requestBuffsTimer:expired() then
         buffs.RequestBuffs()
         requestBuffsTimer:restart()
     end
@@ -191,7 +191,7 @@ function buffs.Tick()
         return
     end
 
-    if #buffs.queue > 0 and handleBuffsTimer:expired() then
+    if #buffs.queue > 0 and not in_combat() and handleBuffsTimer:expired() then
         local req = table.remove(buffs.queue, 1)
         if req ~= nil then
             if handleBuffRequest(req) then

@@ -1390,7 +1390,7 @@ function QoL.Init()
     end)
 
     -- MAG: use Call of the Hero to summon the group to you
-    mq.bind("/cohgroup", function() mq.cmd("/lua run efyran/cohgroup") end)
+    mq.bind("/cohgroup", function() commandQueue.Add("coh-group") end)
 
     -- Ask peer owners of nearby corpses to consent me
     mq.bind("/consentme", function() commandQueue.Add("consentme") end)
