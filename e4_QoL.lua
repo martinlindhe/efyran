@@ -528,7 +528,13 @@ function QoL.Init()
         if mq.TLO.Me.MaxMana() == 0 or mq.TLO.Me.PctMana() == 100 then
             return
         end
-        all_tellf("MANA %d %%", mq.TLO.Me.PctMana())
+        if mq.TLO.Me.PctMana() < 50 then
+            all_tellf("MANA \ar%d %%\ax", mq.TLO.Me.PctMana())
+        elseif mq.TLO.Me.PctMana() < 75 then
+            all_tellf("MANA \ay%d %%\ax", mq.TLO.Me.PctMana())
+        else
+            all_tellf("MANA \ag%d %%\ax", mq.TLO.Me.PctMana())
+        end
     end)
 
     -- tell peers to kill target until dead
@@ -539,25 +545,30 @@ function QoL.Init()
         local spawnID = nil
         local tokens = split_str(filter, "/")
         if #tokens == 2 then
+            --log.Info("assiston: splitting filter into two: %s    AND   %s", tokens[1], tokens[2])
             if string.len(tokens[1]) > 0 then
                 spawnID = trim(tokens[1])
                 filter = "/" .. tokens[2]
+                --log.Info("assiston: updating filter to '%s'", filter)
             end
         end
-        local spawn = mq.TLO.Target
-        if spawnID ~= nil then
-            spawn = spawn_from_id(spawnID)
+
+        local spawn = nil
+        if spawnID == nil then
+            spawnID = mq.TLO.Target.ID()
         end
+        spawn = spawn_from_id(spawnID)
+
         if spawn == nil or spawn() == nil or spawn.Type() == "PC" then
+            log.Info("GIVING UP ASSIST CALL ON %s, filter %s", tostring(spawnID), tostring(filter))
             return
         end
 
         local exe = string.format("/dgzexecute /killit %d", spawn.ID())
-        local filter = trim(args_string(...))
         if filter ~= nil then
             exe = exe .. " " .. filter
         end
-        log.Info("Calling assist on %s, type %s", spawn.DisplayName(), spawn.Type())
+        log.Info("Calling assist on %s, type %s (filter %s)", spawn.DisplayName(), spawn.Type(), filter)
         mq.cmdf(exe)
         commandQueue.Add("killit", tostring(spawn.ID()), filter)
     end)
@@ -942,7 +953,7 @@ function QoL.Init()
     mq.bind("/lesson", function(...)
         local filter = trim(args_string(...))
         if is_orchestrator() then
-            mq.cmd("/dggexecute /lesson %s", filter)
+            mq.cmdf("/dggexecute /lesson %s", filter)
         end
         commandQueue.Add("use-veteran-aa", "Lesson of the Devoted", filter)
     end)
@@ -1515,6 +1526,9 @@ function QoL.Init()
 
     -- track xp, auto adjust level / AA xp and auto loot
     local xpGain = function(text)
+
+        buffs.resumeTimer:restart()
+
         local aaDiff = mq.TLO.Me.PctAAExp() - QoL.currentAAXP
         if aaDiff < 0 then
             -- we dinged AA
@@ -1847,6 +1861,8 @@ function use_corpse_summoner()
 
     unflood_delay()
 
+    follow.Stop()
+
     local soulstone, price = get_best_soulstone()
 
     if not have_item(soulstone) and mq.TLO.Me.Platinum() < price then
@@ -1902,7 +1918,6 @@ function use_corpse_summoner()
 
         move_to_loc(415, 250, 2)    -- middle point
         delay(1000)
-
     end
 
     if not have_item(soulstone) then
@@ -1931,9 +1946,6 @@ function use_corpse_summoner()
             all_tellf("ERROR failed to purchase soulstone !")
             return
         end
-
-        move_to_loc(415, 250, 2)    -- middle point
-        delay(1000)
     end
 
 

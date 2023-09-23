@@ -873,13 +873,15 @@ function close_merchant_window()
     close_window("MerchantWnd", "MW_Done_Button")
 end
 
+-- lowercased zone shortnames
 local neutralZones = { "guildlobby", "guildhall", "bazaar", "poknowledge", "potranquility", "nexus", "shadowrest" }
 
 -- returns true if we are in a neutral zone
 ---@return boolean
 function in_neutral_zone()
+    local zone = zone_shortname():lower()
     for k, v in pairs(neutralZones) do
-        if zone_shortname():lower() == v:lower() then
+        if zone == v then
             return true
         end
     end

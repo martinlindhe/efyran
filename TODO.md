@@ -8,6 +8,9 @@ mq bug? /handin fails if item is in bag10 on emu. bag 1 to 9 seem to work fine (
 
 - allow to override GroupBuffs, PetBuffs, Hails, Handins, AutoTribute with per-server settings that is user supplied
 
+- mag: auto pet weapons
+
+- rez: dont try to rez "this corpse cannot be ressurected" corpses, instead force that toon to autoloot their corpse
 
 
 

@@ -193,22 +193,31 @@ function Heal.medCheck()
         -- make sure to proecss events in order to not stand up in case of "/camp" command, which would end the macro
         doevents()
 
-        if (mq.TLO.Me.MaxMana() > 1 and mq.TLO.Me.PctMana() >= 100) or (mq.TLO.Me.MaxMana() == 0 and mq.TLO.Me.PctEndurance() >= 100) then
+        if mq.TLO.Me.MaxMana() > 1 and mq.TLO.Me.PctMana() >= 100 then
             all_tellf("Ending medbreak, full mana.")
+            cmd("/sit off")
+            return
+        end
+        if mq.TLO.Me.MaxMana() == 0 and mq.TLO.Me.PctEndurance() >= 100 then
+            all_tellf("Ending medbreak, full endurance.")
             cmd("/sit off")
             return
         end
     end
 
-    if nearby_npc_count(75) > 0 then
+    if is_moving() or is_sitting() or in_combat() or is_hovering() or is_casting() or window_open("SpellBookWnd") or window_open("LootWnd") then
         return
     end
 
-    if follow.IsFollowing() or is_brd() or is_sitting() or in_combat() or is_hovering() or is_casting() or window_open("SpellBookWnd") or window_open("LootWnd") then
+    local neutral = in_neutral_zone()
+    if nearby_npc_count(50) > 0 and not neutral then
+        return
+    end
+    if not neutral and is_brd() then
         return
     end
 
-    if Heal.autoMed and mq.TLO.Me.MaxMana() > 0 and low_mana() and is_standing() and not is_moving() and not follow.IsFollowing() then
+    if Heal.autoMed and mq.TLO.Me.MaxMana() > 0 and low_mana() and is_standing() and not is_moving() then
         all_tellf("Low mana, medding at %d%%", mq.TLO.Me.PctMana())
         cmd("/sit on")
     end
@@ -217,7 +226,7 @@ end
 -- uses cleric Epic 1.5/2.0 clicky or Divine Arb AA to heal group if avg < 95%
 ---@return boolean true if performed action
 function Heal.performGroupBalanceHeal()
-    if not is_clr() or is_casting() or is_moving() or not in_group() or have_buff("Resurrection Sickness") then
+    if not is_clr() or is_casting() or is_moving() or not in_group() or have_buff("Resurrection Sickness") or in_neutral_zone() then
         return false
     end
 
@@ -392,7 +401,7 @@ function healPeer(spell_list, peer, pct)
         elseif spawn.Distance() > 200 then
             return false
         elseif spellConfig.MinMana ~= nil and mq.TLO.Me.PctMana() < spellConfig.MinMana then
-            log.Info("SKIP HEALING, my mana %d vs required %d", mq.TLO.Me.PctMana(), spellConfig.MinMana)
+            --log.Debug("SKIP HEALING %s, my mana %d vs required %d", peer, mq.TLO.Me.PctMana(), spellConfig.MinMana)
         elseif spellConfig.HealPct ~= nil and pct > spellConfig.HealPct then
             -- remove, dont meet heal criteria
             --log.Debug("Skip using of heal, heal pct for %s is %d. dont need heal at %d for %s", spellConfig.Name, spellConfig.HealPct, pct, peer)

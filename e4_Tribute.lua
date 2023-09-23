@@ -63,7 +63,7 @@ function Tribute.Tick()
         Tribute.Disable()
     end
 
-    log.Debug("Tribute status: %s is tribute zone %s", zone_shortname(), tostring(isTributeZone))
+    --log.Debug("Tribute status: \ay%s\ax is tribute zone \ay%s\ax", zone_shortname(), tostring(isTributeZone))
 end
 
 function Tribute.Disable()

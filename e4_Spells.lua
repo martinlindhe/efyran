@@ -179,7 +179,7 @@ function spellConfigAllowsCasting(buffItem, spawn)
     -- AERange is used for group spells
     if spell.TargetType() == "Group v2" then
         if spawn.Distance() >= spell.AERange() then
-            log.Error("cant rebuff (%s), toon too far away: %s %s spell range = %d, spawn distance = %d", spell.TargetType(), buffItem, spawn.CleanName(), spell.Range(), spawn.Distance())
+            --log.Debug("cant rebuff (%s), toon too far away: %s %s spell range = %d, spawn distance = %d", spell.TargetType(), buffItem, spawn.CleanName(), spell.Range(), spawn.Distance())
             return false
         end
     else
@@ -687,9 +687,6 @@ function ae_rez_query(spawnQuery)
             if not is_being_rezzed(spawn.DisplayName()) then
                 log.Info("Trying to rez \ag%s\ax", spawn.DisplayName())
 
-                -- tell bots this corpse is rezzed
-                cmdf("/dgzexecute /ae_rezzed %s", spawn.DisplayName())
-
                 if is_alt_ability_ready("Blessing of Resurrection") then
                     -- CLR/65: 96% exp, 3s cast, 12s recast (SoD)
                     rez = "Blessing of Resurrection"
@@ -709,15 +706,20 @@ function ae_rez_query(spawnQuery)
                 end
 
                 if is_spell_ability_ready(rez) then
+
+                    -- tell bots this corpse is rezzed
+                    cmdf("/dgzexecute /ae_rezzed %s", spawn.DisplayName())
+
+
                     all_tellf("Rezzing %s \ag%s\ax with \ay%s\ax", spawn.Class.ShortName(), spawn.DisplayName(), rez)
                     --target_id(spawn.ID())
                     if globalSettings.allowBotTells then
-                        cmdf("/tell %s Wait4Rez", spawn.DisplayName())
+                        --cmdf("/tell %s Wait4Rez", spawn.DisplayName())
                     end
                     castSpellRaw(rez, spawn.ID())
                     delay(500)
                     wait_until_not_casting()
-                    delay(1000)
+                    mq.delay(15000) -- 15s .. XXX
                 else
                     all_tellf("\arWARN\ax: Not ready to rez \ag%s\ax (%s not ready).", spawn.Name(), rez)
                 end
@@ -796,7 +798,7 @@ function loot_my_corpse()
     -- click loot all button
     cmd("/notify LootWnd LootAllButton leftmouseup")
     delay(30000, function() return not window_open("LootWnd") end)
-    all_tellf("Ready to die again!")
+    all_tellf("\ayReady to die again!")
 end
 
 -- used by /fdi

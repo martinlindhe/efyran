@@ -508,7 +508,8 @@ function autoMapHeightFilter()
         -- old
         guktop = {min = 30, max = 30},
         soltemple = {min = 10, max = 10},
-        soldunga = { min = 15, max= 15},
+        soldunga = { min = 15, max = 15},
+        lavastorm = { min = 100, max = 100},
 
         -- kunark?
         chardok = {min = 60, max = 60},
@@ -516,17 +517,17 @@ function autoMapHeightFilter()
         necropolis = {min = 80, max = 80},
 
         -- luclin
-        fungusgrove = {min = 80, max = 80},     -- lucid shard camp
+        fungusgrove = {min = 80, max = 80},
 
         -- pop
         codecay = {min = 30, max = 30},
         poair = {min = 160, max = 160},
 
         -- omens
-        riftseekers = {min = 120, max = 120},   -- XXX
+        riftseekers = {min = 120, max = 120},
 
         -- DoN
-        stillmoona = {min = 50, max = 20}, -- XXX
+        stillmoona = {min = 50, max = 50},
         thundercrest = {min = 70, max = 70},
     }
 

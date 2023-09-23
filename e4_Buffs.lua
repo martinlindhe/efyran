@@ -340,7 +340,7 @@ end
 ---@param req buffQueueValue
 function handleBuffRequest(req)
 
-    log.Info("handleBuffRequest: Peer %s, buff %s, queue len %d, force = %s", req.Peer, req.Buff, #buffs.queue, tostring(req.Force))
+    log.Debug("handleBuffRequest: Peer %s, buff %s, queue len %d, force = %s", req.Peer, req.Buff, #buffs.queue, tostring(req.Force))
 
     local buffRows = groupBuffs[class_shortname()][req.Buff]
     if buffRows == nil then
@@ -366,31 +366,30 @@ function handleBuffRequest(req)
 
     if type(level) ~= "number" then
         all_tellf("\arFATAL level is not a number: %s: %s, from peer %s, buff %s, input %s", type(level), tostring(level), req.Peer, req.Buff, checkRow)
-        return
+        return false
     end
 
     -- see if we have any rank of this buff
     for idx, checkRow in pairs(buffRows) do
-        --print(checkRow)
-
         -- XXX same logic as /buffit. do refactor
 
         local spellConfig = parseSpellLine(checkRow)
         local n = tonumber(spellConfig.MinLevel)
         if n == nil then
             all_tellf("FATAL ERROR, group buff %s does not have a MinLevel setting", checkRow)
-            return
+            return false
         end
         -- XXX debug source of nil
         if type(n) ~= "number" then
-            log.Error("DEBUG: n is not a number, from peer %s, buff %s", req.Peer, req.Buff)
+            all_tellf("DEBUG: n is not a number, from peer %s, buff %s", req.Peer, req.Buff)
+            return false
         end
         if type(n) == "number" and n > minLevel and level >= n then
             spellName = spellConfig.Name
             local spell = get_spell(spellName)
             if spell == nil then
                 all_tellf("FATAL ERROR cant lookup %s", spellName)
-                return
+                return false
             end
             if have_spell(spellName) then
                 spellName = spell.RankName()
@@ -407,7 +406,6 @@ function handleBuffRequest(req)
     end
 
     if minLevel > 0 and spellConfigAllowsCasting(spellName, spawn) then
-
         if not req.Force and peer_has_buff(req.Peer, spellName) then
             log.Info("handleBuffRequest: Skip \ag%s\ax %s (%s), they have buff already.", spawn.Name(), spellName, req.Buff)
             return false
@@ -429,9 +427,8 @@ function handleBuffRequest(req)
             end
         end)
         return true
-    else
-        log.Warn("\arERROR: I do not have any buffs matching %s\ax to cast on L%d %s", req.Buff, level, spawn.Name())
     end
+    return false
 end
 
 -- returns true if a buff was casted

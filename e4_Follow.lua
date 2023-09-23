@@ -25,9 +25,8 @@ function Follow.Start(spawnName, force)
     --end
 
     if not is_peer(spawnName) then
-        all_tellf("ERROR: /folloplayer failed: %s is not a peer", spawnName)
-        cmd("/beep")
-        -- fixed by unload+reload mq2dannet, or zone, or relog
+        all_tellf("\arERROR: /followplayer failed: %s is not a peer. Giving up", spawnName)
+        Follow.Stop()
         return
     end
     local spawn = spawn_from_peer_name(spawnName)
