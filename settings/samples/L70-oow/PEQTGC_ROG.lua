@@ -22,8 +22,6 @@ settings.swap = {
 settings.self_buffs = {
     -- "Tiny Bone Bracelet", -- skeleton illusion
 
-    "Veil of Intense Evolution", -- Furious Might (slot 5: 40 atk)
-
     -- poisons:
     -- L65 Bite of the Shissar XI (vendor bought in PoK)
     -- L70 Bite of the Shissar XII (vendor bought in PoK)

@@ -23,8 +23,6 @@ settings.self_buffs = {
 
     --"Chaos-Imbued Leather Leggings", -- Aura of Eternity (+5 mana regen slot 8)
 
-    "Veil of Intense Evolution", -- Furious Might (slot 5: 40 atk)
-
     "Ring of the Beast", -- Form of Endurance III (slot 5: 270 hp)
 
     "Spiritual Ascendance/MinMana|20", -- 10 hp + 10 mana/tick, group, cost 900 mana

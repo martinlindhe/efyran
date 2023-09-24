@@ -9,7 +9,6 @@ settings.swap = { -- XXX impl
 
 settings.self_buffs = {
     "Fuzzy Foothairs",
-    "Veil of Intense Evolution", -- Furious Might (slot 5: 40 atk)
     "Timestone Adorned Ring", -- proc buff: Soul Claw Strike (slot 1: proc)
     --"Symbol of the Planemasters", -- (slot 1: Pestilence Shock buff, potime)
     "Necklace of the Steadfast Spirit", -- Chaotic Ward (20 all resists, 67 ac) - stacks with all resist buffs. DONT STACK WITH Form of Defense

@@ -2263,26 +2263,10 @@ local manaRegenEffects = {
     ["Lunar Whispers"]            = 2,  -- slot 8: 2 mana regen. Items: Earring of Spirited Mind (ldon)
     ["Koadic's Heightened Focus"] = 5,  -- slot 8: 5 mana regen. Items: Koadic's Robe of Heightened Focus (ssra)
     ["Aura of Eternity"]          = 5,  -- slot 8: 5 mana regen, slot 10: 5 hp regen. Items: Celestial Cloak (pop bert)
+    ["Aura of Taelosia"]          = 7,  -- slot 8: 7 mana regen, slot 10: 7 hp regen. Items: Pendant of Discord (tacvi)
     ["Maelin's Methodical Mind"]  = 8,  -- slot 8: 8 mana regen, slot 10: 5 hp regen. Items: Shawl of Eternal Forces (potime)
     ["Reyfin's Random Musings"]   = 9,  -- slot 8: 9 mana regen, slot 10: 6 hp regen. Items: Earring of Pain Deliverance (tacvi)
     ["Chaotic Enlightenment"]     = 10, -- slot 8: 10 mana regen, slot 10: 6 hp regen. Items: Earring of Dragonkin (anguish)
-}
-
-local manaPoolEffects = {
-    ["Koadic's Expansive Mind"]        = 250, -- slot 4: 250 max mana. Items: Shield of Mental Fortitude (ssra)
-    ["Maelin's Meditation"]            = 400, -- slot 4: 400 max mana. Items: Eye of Dreams (potime)
-    ["Reyfin's Racing Thoughts"]       = 450, -- slot 4: 450 max mana. Items: Xxeric's Matted-Fur Mask (tacvi)
-}
-
-local attackEffects = {
-    ["Savage Guard"]  = 25, -- slot 5: 25 attack. Items: Serrated Dart of Energy (potime), Irestone Band of Rage (ikkinz 3 raid)
-    ["Furious Might"] = 40, -- slot 5: 40 attack. Items: Veil of Intense Evolution (mpg raid)
-}
-
--- stacks with all resist buffs. DONT STACK WITH Form of Defense
-local allResistsEffects = {
-    ["Eternal Ward"] = 15, -- slot 1: 15 resist cap, slot 10: 45 ac. Items: Prismatic Ring of Resistance (potime), Lavender Cloak of Destruction (uqua)
-    ["Chaotic Ward"] = 20, -- slot 1: 20 resist cap, slot 10: 67 ac. Items: Necklace of the Steadfast Spirit (anguish)
 }
 
 -- Mana regen (slot 8) or Mana+HP regen (slot 8 and 10) clickies
@@ -2291,18 +2275,30 @@ function FindBestManaRegenClicky()
     if not me_caster() and not me_priest() and not me_hybrid() then
         return nil
     end
-
     return findBestClickyWithEffectGroup("manaregen", manaRegenEffects)
 end
+
+local manaPoolEffects = {
+    ["Koadic's Expansive Mind"]        = 250, -- slot 4: 250 max mana. Items: Shield of Mental Fortitude (ssra)
+    ["Maelin's Meditation"]            = 400, -- slot 4: 400 max mana. Items: Eye of Dreams (potime), Muramite Signet Orb (wos)
+    ["Reyfin's Racing Thoughts"]       = 450, -- slot 4: 450 max mana. Items: Xxeric's Matted-Fur Mask (tacvi)
+}
 
 -- Mana pool (slot 4) clickies
 ---@return string|nil
 function FindBestManaPoolClicky()
-    if not me_caster() and not me_priest() and not me_hybrid() then
+    if not me_caster() and not me_priest() then
         return nil
     end
     return findBestClickyWithEffectGroup("manapool", manaPoolEffects)
 end
+
+-- XXX other attack line: Grim Aura +
+--"Totem of Elitist Rites/CheckFor|Strength of Tunare", -- Aura of Rage - 20 atk (slot 1)
+local attackEffects = {
+    ["Savage Guard"]  = 25, -- slot 5: 25 attack. Items: Serrated Dart of Energy (potime), Irestone Band of Rage (ikkinz 3 raid)
+    ["Furious Might"] = 40, -- slot 5: 40 attack. Items: Veil of Intense Evolution (mpg raid)
+}
 
 --- Attack (slot 5) clickies
 ---@return string|nil
@@ -2313,11 +2309,15 @@ function FindBestAttackClicky()
     return findBestClickyWithEffectGroup("attack", attackEffects)
 end
 
+-- stacks with all resists player buffs. DONT STACK WITH Form of Defense
+local allResistsEffects = {
+    ["Eternal Ward"] = 15, -- slot 1: 15 all resists, slot 10: 45 ac. Items: Prismatic Ring of Resistance (potime), Lavender Cloak of Destruction (uqua)
+    ["Chaotic Ward"] = 20, -- slot 1: 20 all resists, slot 10: 67 ac. Items: Necklace of the Steadfast Spirit (anguish)
+}
+
+-- All resists (slot 1) clickies
 ---@return string|nil
 function FindBestAllResistsClicky()
-    if not me_melee() then
-        return nil
-    end
     return findBestClickyWithEffectGroup("all-resists", allResistsEffects)
 end
 
@@ -2363,4 +2363,48 @@ function findItemWithEffect(effect)
         end
     end
     return nil
+end
+
+-- Returns true if my resists are capped
+---@return boolean
+function capped_resists()
+    -- XXX can we get current resist cap ? 500 + 50 mpg groups + 50 AA:s = 600 resist cap oow/don.
+    return mq.TLO.Me.svPrismatic() == 600
+end
+
+-- Returns true if clicked
+---@return boolean
+function refresh_buff_clicky(itemName)
+    if itemName == nil then
+        return false
+    end
+    local item = find_item("="..itemName)
+    if item == nil then
+        all_tellf("UNLIKELY: refresh_buff_clicky find_item fail %s", itemName)
+        return
+    end
+    if not have_buff(item.Clicky.Spell.Name()) then
+        if free_buff_slots() <= 0 then
+            all_tellf("ERROR: would refresh buff %s (%s) but no buff slots", item.Clicky.Spell.Name(), itemName)
+            return
+        end
+        click_item(itemName)
+        return true
+    end
+    return false
+end
+
+-- Clicks a item
+---@param itemName string
+function click_item(itemName)
+    if not have_item_inventory(itemName) then
+        all_tellf("FATAL: click_item lack %s", itemName)
+        return
+    end
+    if is_brd() then
+        mq.cmdf('/medley queue "%s"', itemName)
+        return true
+    end
+
+    mq.cmdf('/casting "%s" item', itemName)
 end

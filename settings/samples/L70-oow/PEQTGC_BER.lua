@@ -8,7 +8,6 @@ settings.swap = {   -- XXX implement
 
 settings.self_buffs = {
     "Fuzzy Foothairs",
-    "Veil of Intense Evolution", -- Furious Might (slot 5: 40 atk)
     "Symbol of the Planemasters", -- proc buff: Pestilence Shock
 }
 

@@ -21,7 +21,6 @@ settings.gems = {
 
 settings.self_buffs = {
     "Fuzzy Foothairs",
-    "Veil of Intense Evolution", -- Furious Might (slot 5: 40 atk)
     "Ring of the Beast", -- Form of Endurance III (slot 5: 270 hp)
     --"Pendant of Discord", -- Aura of Taelosia (slot 8: 7 mana regen, slot 10: 7 hp regen)
 

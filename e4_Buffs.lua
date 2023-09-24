@@ -166,6 +166,10 @@ function buffs.Tick()
         return
     end
 
+    if buffs.RefreshAutoClickies() then
+        return
+    end
+
     if in_combat() then
         return
     end
@@ -471,6 +475,25 @@ function buffs.RefreshIllusion()
         return false
     end
     return refreshBuff(illusion, mq.TLO.Me)
+end
+
+-- refreshes the auto-detected clickies (mana regen, mana pool, attack, resists)
+function buffs.RefreshAutoClickies()
+    if me_caster() or me_priest() or me_hybrid() then
+        refresh_buff_clicky(buffs.manaRegenClicky)
+    end
+
+    if me_caster() or me_priest() and free_buff_slots() > 1 then
+        refresh_buff_clicky(buffs.manaPoolClicky)
+    end
+
+    if me_melee() then
+        refresh_buff_clicky(buffs.attackClicky)
+    end
+
+    if not capped_resists() then
+        refresh_buff_clicky(buffs.allResistsClicky)
+    end
 end
 
 local shortToLongClass = {
