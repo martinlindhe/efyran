@@ -64,8 +64,8 @@ function Follow.PauseForKill()
     if Follow.spawnName ~= "" then
         Follow.lastFollowName = Follow.spawnName
         Follow.spawnName = ""
-        Follow.Pause()
     end
+    Follow.Pause()
 end
 
 function Follow.ResumeAfterKill()
