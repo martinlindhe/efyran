@@ -89,11 +89,6 @@ function move_to(spawnID)
     end
 end
 
--- Returns true if low on mana
----@return boolean
-function low_mana()
-    return mq.TLO.Me.PctMana() < 70
-end
 -- Returns true if low on endurance
 ---@return boolean
 function low_endurance()
@@ -1622,10 +1617,8 @@ function find_available_classes()
     for i = 1, spawn_count(spawnQuery) do
         local spawn = mq.TLO.NearestSpawn(i, spawnQuery)
         if spawn ~= nil then
-            local shortClass = spawn.Class.ShortName()
-            local peer = spawn.Name()
-            if is_peer(peer) then
-                o[shortClass] = true
+            if is_peer(spawn.Name()) then
+                o[spawn.Class.ShortName()] = true
             end
         end
     end

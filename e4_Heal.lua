@@ -215,10 +215,11 @@ function Heal.medCheck()
         return
     end
 
-    if Heal.autoMed and mq.TLO.Me.MaxMana() > 0 and low_mana() and is_standing() and not is_moving() then
+    if Heal.autoMed and mq.TLO.Me.MaxMana() > 0 and is_standing() and not is_moving() and mq.TLO.Me.PctMana() < 70 then
         all_tellf("Low mana, medding at %d%%", mq.TLO.Me.PctMana())
         cmd("/sit on")
     end
+
 end
 
 -- uses cleric Epic 1.5/2.0 clicky or Divine Arb AA to heal group if avg < 95%

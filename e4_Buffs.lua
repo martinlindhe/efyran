@@ -26,24 +26,22 @@ local buffs = {
     ---@type buffQueueValue[]
     queue = {},
 
-    ---@type string my available buff groups (space separated string)
-    available = "",
+    -- known buffers by class (key = class, val = peer name)
+    buffers = {},
 
-    -- others available buff groups (key = peer, val = space separated string)
+    -- others available buff groups (key = peer, val = space separated string of buff groups)
     otherAvailable = {},
 
     ---@type boolean /buffon, /buffoff
     refreshBuffs = true,
 
-    ---@type integer
-    lastPlayerCount = 0,
-
     ---@type integer in seconds
     timeZoned = os.time(),
 
-
     -- timers
     resumeTimer = timer.new_expired(4), -- 4s   - interval after end of fight to resume buffing
+
+    requestAvailabiliyTimer = timer.new_random(5), -- 5s  - interval after start-up to wait before requesting buff availability
 }
 
 function buffs.Init()
@@ -57,15 +55,26 @@ function buffs.Init()
         })
     end)
 
+    -- for requesting buff state (is sent from `peer`. We will respond with a /set_others_buffs to `peer`
+    mq.bind("/request_buffs", function(peer)
+        cmdf("/squelch /bct %s //set_others_buffs %s %s", peer, mq.TLO.Me.Name(), buffs.getAvailableGroupBuffs())
+        log.Info("Told %s my buffs are %s", peer, buffs.getAvailableGroupBuffs())
+    end)
+    
+    -- for updating buff state (is sent from `peer` to this instance)
+    mq.bind("/set_others_buffs", function(peer, ...)
+        local arg = trim(args_string(...))
+        buffs.otherAvailable[peer] = arg
+        log.Info("%s told me their buffs are: %s", peer, arg)
+    end)
+
     bard.UpdateMQ2MedleyINI()
     bard.resumeMelody()
 end
 
-local announceBuffsTimer = timer.new_expires_in(2 * 60, 3) -- announce buffs 3 sec after script start, then every 2 minutes
-
 local refreshBuffsTimer = timer.new_expired(10) -- 10s
 
-local requestBuffsTimer = timer.new_random(30 * 1) -- 30s
+local requestBuffsTimer = timer.new_random(60 * 1) -- 60s
 
 local handleBuffsTimer = timer.new_random(2 * 1) -- 2s
 
@@ -73,47 +82,24 @@ local checkDebuffsTimer = timer.new_random(15 * 1) -- 15s   -- interval for auto
 
 local refreshCombatBuffsTimer = timer.new_random(10 * 1) -- 10s
 
-
--- broadcasts what buff groups we can cast
-function buffs.AnnounceAvailablity()
-    -- see what class group buffs I have and prepare a list of them so I can announce availability.
+---@return string
+function buffs.getAvailableGroupBuffs()
     local classBuffGroups = groupBuffs[class_shortname()]
     if classBuffGroups == nil then
-        return
+        return ""
     end
 
-    if peer_count() <= 1 then
-        return
-    end
-
-    -- only announce if number of players in zone changes (less spam)
-    local playerCount = spawn_count("pc")
-    if playerCount == buffs.lastPlayerCount then
-        return
-    end
-    buffs.lastPlayerCount = playerCount
-
-    local availableBuffGroups = ""
+    local s = ""
     for groupIdx, buffGroup in pairs(classBuffGroups) do
-        -- see if we have any rank of this buff
-        for rowIdx, checkRow in pairs(buffGroup) do
-            local spellConfig = parseSpellLine(checkRow)
+        for rowIdx, row in pairs(buffGroup) do
+            local spellConfig = parseSpellLine(row)
             if have_spell(spellConfig.Name) then
-                availableBuffGroups = availableBuffGroups .. " " .. groupIdx
+                s = s .. " " .. groupIdx
                 break
             end
         end
     end
-    buffs.available = trim(availableBuffGroups)
-    if string.len(buffs.available) > 0 then
-        -- log.Info("My available buff groups: %s", buffs.available)
-        all_tellf("#available-buffs %s", buffs.available)
-    end
-end
-
-function dannet_zone_channel()
-    local name = "zone_" .. current_server() .. "_" .. zone_shortname()
-    return name:lower()
+    return trim(s)
 end
 
 -- announce buff availability, handle debuffs, refresh buffs/auras/pets/pet buffs, request buffs and handle buff requests
@@ -145,11 +131,6 @@ function buffs.Tick()
         return
     end
 
-    if buffs.refreshBuffs and announceBuffsTimer:expired() then
-        buffs.AnnounceAvailablity()
-        announceBuffsTimer:restart()
-    end
-
     if obstructive_window_open() then
         return
     end
@@ -176,6 +157,11 @@ function buffs.Tick()
             end
         end
         refreshBuffsTimer:restart()
+    end
+
+    if buffs.requestAvailabiliyTimer:expired() then
+        buffs.RequestAvailabiliy()
+        buffs.requestAvailabiliyTimer:restart()
     end
 
     if follow.IsFollowing() then
@@ -302,7 +288,8 @@ end
 ---@param spawnID integer
 function buffs.BuffIt(spawnID)
 
-    if buffs.available == nil then
+    local available = buffs.getAvailableGroupBuffs()
+    if available == nil then
         log.Debug("Stopping /buffit, no group_buffs available!")
         return
     end
@@ -407,7 +394,7 @@ function handleBuffRequest(req)
 
     if minLevel > 0 and spellConfigAllowsCasting(spellName, spawn) then
         if not req.Force and peer_has_buff(req.Peer, spellName) then
-            log.Info("handleBuffRequest: Skip \ag%s\ax %s (%s), they have buff already.", spawn.Name(), spellName, req.Buff)
+            --log.Info("handleBuffRequest: Skip \ag%s\ax %s (%s), they have buff already.", spawn.Name(), spellName, req.Buff)
             return false
         end
 
@@ -460,6 +447,68 @@ function buffs.RefreshIllusion()
     return refreshBuff(illusion, mq.TLO.Me)
 end
 
+local shortToLongClass = {
+    CLR = "Cleric",
+    DRU = "Druid",
+    SHM = "Shaman",
+    WAR = "Warrior",
+    PAL = "Paladin",
+    SHD = "Shadow Knight",
+    BRD = "Bard",
+    ROG = "Rogue",
+    BER = "Berserker",
+    MNK = "Monk",
+    RNG = "Ranger",
+    BST = "Beastlord",
+    WIZ = "Wizard",
+    MAG = "Magician",
+    ENC = "Enchanter",
+    NEC = "Necromancer",
+}
+
+local buffClasses = { "CLR", "DRU", "SHM", "PAL", "RNG", "BST", "MAG", "ENC", "NEC" }
+
+-- queries other peers for their available buffs by class using /request_buffs
+function buffs.RequestAvailabiliy()
+
+    for i = 1, #buffClasses do
+        if buffs.buffers[buffClasses[i]] == nil and class_shortname() ~= buffClasses[i] then
+
+            local found = false
+
+            -- 1. find peer of needed class in my group
+            for j = 1, mq.TLO.Group.Members() do
+                if mq.TLO.Group.Member(j).ID() ~= nil and mq.TLO.Group.Member(j).Class.ShortName() == buffClasses[i] then
+                    if is_peer(mq.TLO.Group.Member(j).Name()) then
+                        buffs.buffers[buffClasses[i]] = mq.TLO.Group.Member(j).Name()
+                        found = true
+                        break
+                    end
+                end
+            end
+
+            -- 2. find any peer
+            if not found then
+                local spawnQuery = "pc notid " .. mq.TLO.Me.ID() .. ' class "'.. shortToLongClass[buffClasses[i]] ..'"'
+                for j = 1, spawn_count(spawnQuery) do
+                    local spawn = mq.TLO.NearestSpawn(j, spawnQuery)
+                    if spawn ~= nil and is_peer(spawn.Name()) then
+                        buffs.buffers[buffClasses[i]] = spawn.Name()
+                        found = true
+                        break
+                    end
+                end
+            end
+
+            if found then
+                -- request available buffs from them
+                log.Info("Found buffer %s: %s", buffClasses[i], buffs.buffers[buffClasses[i]])
+                cmdf("/squelch /bct %s //request_buffs %s", buffs.buffers[buffClasses[i]], mq.TLO.Me.Name())
+            end
+        end
+    end
+end
+
 -- returns true if buff was requested
 function buffs.RequestBuffs()
 
@@ -476,7 +525,7 @@ function buffs.RequestBuffs()
 
     --print("Buffs.RequestBuffs")
 
-    local availableClasses = find_available_classes()
+    local availableClasses = find_available_classes() -- XXX list should be known locally already
 
     for k, row in pairs(req) do
         -- "aegolism/Class|CLR/NotClass|DRU"
@@ -553,7 +602,7 @@ function buffs.RequestBuffs()
                         return true
                     else
                         log.Info("Requesting buff \ay%s\ax from \ag%s %s\ax ...", spellConfig.Name, askClass, peer)
-                        cmdf("/squelch /dexecute %s /buff %s %s", peer, mq.TLO.Me.Name(), spellConfig.Name)
+                        cmdf("/squelch /bct %s //buff %s %s", peer, mq.TLO.Me.Name(), spellConfig.Name)
                     end
                 else
                     log.Debug("No peer of required class for buff %s found nearby: %s", spellConfig.Name, askClass)
