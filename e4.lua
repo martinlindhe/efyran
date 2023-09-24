@@ -31,6 +31,7 @@ follow.Pause()
 log.Info("E4 started")
 
 
+
 -- MAIN LOOP
 while true do
     heal.Tick()

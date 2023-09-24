@@ -271,7 +271,7 @@ function CommandQueue.Process()
     elseif v.Name == "find-missing-item-id" then
         report_find_missing_item_by_id(toint(v.Arg))
     elseif v.Name == "reportclickies" then
-        report_clickies()
+        report_clickies(v.Arg)
     elseif v.Name == "wordheal" then
         cast_word_heal()
     elseif v.Name == "summonbanker" then

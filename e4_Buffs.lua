@@ -42,6 +42,13 @@ local buffs = {
     resumeTimer = timer.new_expired(4), -- 4s   - interval after end of fight to resume buffing
 
     requestAvailabiliyTimer = timer.new_random(5), -- 5s  - interval after start-up to wait before requesting buff availability
+
+    -- clickies
+    manaRegenClicky = FindBestManaRegenClicky(),
+    manaPoolClicky  = FindBestManaPoolClicky(),
+
+    attackClicky = FindBestAttackClicky(),
+    allResistsClicky = FindBestAllResistsClicky(),
 }
 
 function buffs.Init()
@@ -70,6 +77,21 @@ function buffs.Init()
 
     bard.UpdateMQ2MedleyINI()
     bard.resumeMelody()
+
+    if me_caster() or me_priest() then
+        if buffs.manaRegenClicky == nil then
+            all_tellf("MISSING: Mana regen clicky")
+        end
+        if buffs.manaPoolClicky == nil then
+            --all_tellf("MISSING: Mana pool clicky") 
+        end
+    end
+
+    if me_melee() then
+        if buffs.attackClicky == nil then
+            all_tellf("MISSING: Attack clicky")
+        end
+    end
 end
 
 local refreshBuffsTimer = timer.new_expired(10) -- 10s

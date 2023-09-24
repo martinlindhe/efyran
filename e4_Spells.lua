@@ -927,14 +927,20 @@ function report_find_missing_item_by_id(id)
 
 end
 
-function report_clickies()
+
+---@param cat string|nil Category (manaregen, xxx)
+function report_clickies(cat)
+    if cat ~= nil then
+        all_tellf("report_clickies: TODO handle category arg")
+    end
     log.Info("My clickies:")
 
     -- XXX TODO skip Expendable
 
     -- XXX 15 sep 2022: item.Expendable() seem to be broken, always returns false ? https://discord.com/channels/511690098136580097/840375268685119499/1019900421248126996
 
-    for i = 0, 32 do -- equipment: 0-22 is worn gear, 23-32 is inventory top level
+    -- equipment: 0-22 is worn gear, 23-32 is inventory top level
+    for i = 0, 32 do
         if mq.TLO.Me.Inventory(i).ID() then
             local inv = mq.TLO.Me.Inventory(i)
             if inv.Container() > 0 then
@@ -954,7 +960,8 @@ function report_clickies()
         end
     end
 
-    for i = 1, 26 do -- bank top level slots: 1-24 is bank bags, 25-26 is shared bank
+    -- bank top level slots: 1-24 is bank bags, 25-26 is shared bank
+    for i = 1, 26 do 
         if mq.TLO.Me.Bank(i)() ~= nil then
             local key = "bank"..tostring(i)
             local inv = mq.TLO.Me.Bank(i)
@@ -962,7 +969,7 @@ function report_clickies()
                 for c = 1, inv.Container() do
                     local item = inv.Item(c)
                     if item.Clicky() ~= nil and not item.Expendable() then
-                        print ( "three ", item.Name(), " ", item.Charges(), " ", item.Expendable())
+                        --print( "three ", item.Name(), " ", item.Charges(), " ", item.Expendable())
                         log.Info(key.." # "..c.." "..item.ItemLink("CLICKABLE")().." effect: "..item.Clicky.Spell.Name())
                     end
                 end

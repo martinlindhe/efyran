@@ -1023,26 +1023,25 @@ function is_naked()
     return false
 end
 
----@return boolean
-function me_healer()
-    return is_healer(mq.TLO.Me.Class.ShortName())
-end
-
+-- true if CLR,DRU,SHM
 ---@return boolean
 function me_priest()
     return is_priest(mq.TLO.Me.Class.ShortName())
 end
 
+-- true if WIZ,MAG,ENC,NEC
 ---@return boolean
 function me_caster()
     return is_caster(mq.TLO.Me.Class.ShortName())
 end
 
+-- true if BRD,BER,BST,MNK,PAL,RNG,ROG,SHD,WAR
 ---@return boolean
 function me_melee()
     return is_melee(mq.TLO.Me.Class.ShortName())
 end
 
+-- true if PAL,SHD,RNG,BST
 ---@return boolean
 function me_hybrid()
     return is_hybrid(mq.TLO.Me.Class.ShortName())
@@ -1060,12 +1059,6 @@ end
 -- Plate (WAR,BRD,CLR,PAL,SHD)
 -- Knight (PAL,SHD)
 
--- true if CLR,DRU,SHM,PAL,RNG,BST
----@param class string Class shortname.
----@return boolean
-function is_healer(class)
-    return class == "CLR" or class == "DRU" or class == "SHM" or class == "PAL" or class == "RNG" or class == "BST"
-end
 
 -- true if BRD,BER,BST,MNK,PAL,RNG,ROG,SHD,WAR
 ---@param class string Class shortname.
@@ -2238,4 +2231,136 @@ function count_peers()
     else
         log.Info("COUNT SUMMARY: \agAll %d peers present!\ax", sum)
     end
+end
+
+---@param cat string Descriptive category
+function findBestClickyWithEffectGroup(cat, effects)
+    local best = 0
+    local name = nil
+    for effect, power in pairs(effects) do
+        log.Info("Effect %s  ...", effect)
+        local itemName = findItemWithEffect(effect)
+        if itemName ~= nil and power > best then
+            log.Info("Found item \ag%s\ax with effect \ay%s\ax (%d)", itemName, effect, power)
+            best = power
+            name = itemName
+        end
+    end
+
+    if best == 0 then
+        return nil
+    end
+
+    if name ~= nil and not have_item_inventory(name) then
+        all_tellf("FATAL: my best \ar%s\ax clicky is banked. PUT IN INVENTORY! (item %s, power %d)", cat, name, best)
+        cmd("/beep")
+    end
+
+    return name
+end
+
+local manaRegenEffects = {
+    ["Lunar Whispers"]            = 2,  -- slot 8: 2 mana regen. Items: Earring of Spirited Mind (ldon)
+    ["Koadic's Heightened Focus"] = 5,  -- slot 8: 5 mana regen. Items: Koadic's Robe of Heightened Focus (ssra)
+    ["Aura of Eternity"]          = 5,  -- slot 8: 5 mana regen, slot 10: 5 hp regen. Items: Celestial Cloak (pop bert)
+    ["Maelin's Methodical Mind"]  = 8,  -- slot 8: 8 mana regen, slot 10: 5 hp regen. Items: Shawl of Eternal Forces (potime)
+    ["Reyfin's Random Musings"]   = 9,  -- slot 8: 9 mana regen, slot 10: 6 hp regen. Items: Earring of Pain Deliverance (tacvi)
+    ["Chaotic Enlightenment"]     = 10, -- slot 8: 10 mana regen, slot 10: 6 hp regen. Items: Earring of Dragonkin (anguish)
+}
+
+local manaPoolEffects = {
+    ["Koadic's Expansive Mind"]        = 250, -- slot 4: 250 max mana. Items: Shield of Mental Fortitude (ssra)
+    ["Maelin's Meditation"]            = 400, -- slot 4: 400 max mana. Items: Eye of Dreams (potime)
+    ["Reyfin's Racing Thoughts"]       = 450, -- slot 4: 450 max mana. Items: Xxeric's Matted-Fur Mask (tacvi)
+}
+
+local attackEffects = {
+    ["Savage Guard"]  = 25, -- slot 5: 25 attack. Items: Serrated Dart of Energy (potime), Irestone Band of Rage (ikkinz 3 raid)
+    ["Furious Might"] = 40, -- slot 5: 40 attack. Items: Veil of Intense Evolution (mpg raid)
+}
+
+-- stacks with all resist buffs. DONT STACK WITH Form of Defense
+local allResistsEffects = {
+    ["Eternal Ward"] = 15, -- slot 1: 15 resist cap, slot 10: 45 ac. Items: Prismatic Ring of Resistance (potime), Lavender Cloak of Destruction (uqua)
+    ["Chaotic Ward"] = 20, -- slot 1: 20 resist cap, slot 10: 67 ac. Items: Necklace of the Steadfast Spirit (anguish)
+}
+
+-- Mana regen (slot 8) or Mana+HP regen (slot 8 and 10) clickies
+---@return string|nil
+function FindBestManaRegenClicky()
+    if not me_caster() and not me_priest() and not me_hybrid() then
+        return nil
+    end
+
+    return findBestClickyWithEffectGroup("manaregen", manaRegenEffects)
+end
+
+-- Mana pool (slot 4) clickies
+---@return string|nil
+function FindBestManaPoolClicky()
+    if not me_caster() and not me_priest() and not me_hybrid() then
+        return nil
+    end
+    return findBestClickyWithEffectGroup("manapool", manaPoolEffects)
+end
+
+--- Attack (slot 5) clickies
+---@return string|nil
+function FindBestAttackClicky()
+    if not me_melee() then
+        return nil
+    end
+    return findBestClickyWithEffectGroup("attack", attackEffects)
+end
+
+---@return string|nil
+function FindBestAllResistsClicky()
+    if not me_melee() then
+        return nil
+    end
+    return findBestClickyWithEffectGroup("all-resists", allResistsEffects)
+end
+
+-- returns the name of the first item found with listed effect
+---@return string|nil
+function findItemWithEffect(effect)
+    -- equipment: 0-22 is worn gear, 23-32 is inventory top level
+    for i = 0, 32 do
+        if mq.TLO.Me.Inventory(i).ID() then
+            local inv = mq.TLO.Me.Inventory(i)
+            if inv.Container() > 0 then
+                for c = 1, inv.Container() do
+                    local item = inv.Item(c)
+                    if item.Clicky() ~= nil and item.Clicky.Spell.Name() == effect then
+                        return item.Name()
+                    end
+                end
+            else
+                if inv.Clicky() ~= nil and inv.Clicky.Spell.Name() == effect then
+                    return inv.Name()
+                end
+            end
+        end
+    end
+
+    -- bank top level slots: 1-24 is bank bags, 25-26 is shared bank
+    for i = 1, 26 do 
+        if mq.TLO.Me.Bank(i)() ~= nil then
+            local key = "bank"..tostring(i)
+            local inv = mq.TLO.Me.Bank(i)
+            if inv.Container() > 0 then
+                for c = 1, inv.Container() do
+                    local item = inv.Item(c)
+                    if item.Clicky() ~= nil and item.Clicky.Spell.Name() == effect then
+                        return item.Name()
+                    end
+                end
+            else
+                if inv.Clicky() ~= nil and inv.Name() == effect then
+                    return inv.Name()
+                end
+            end
+        end
+    end
+    return nil
 end
