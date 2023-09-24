@@ -292,7 +292,7 @@ function haveMemorizedListedSpells()
         local o = parseSpellLine(spellRow)
 
         if not have_spell(o.Name) then
-            all_tellf("ERROR don't know spell/song %s", o.Name)
+            all_tellf("ERROR don't know spell/song \ar%s\ax", o.Name)
             cmd("/beep 1")
             return false
         end

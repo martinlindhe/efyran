@@ -194,6 +194,11 @@ function Follow.RunToZone(startingPeer)
 
     Follow.Pause()
 
+    if spawn == nil or spawn() == nil then
+        all_tellf("RTZ: lost spawn, giving up")
+        return
+    end
+
     -- face the same direction the orchestrator is facing
     cmdf("/face fast heading %f", spawn.Heading.Degrees() * -1)
 

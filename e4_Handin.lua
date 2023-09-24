@@ -128,10 +128,10 @@ local handinRules = {
         ["Class|BST/Savagesoul Wristband of the Wilds"]          = {"Riftseeker Heart",                 "2|Quality Feran Hide"},
     },
 
-    ["A shimmering presence/Zone|akheva"] = { -- VT key
+    ["A shimmering presence/Zone|akheva"] = { -- Luclin VT key
         ["Shadowed Scepter Frame"]          = {"Summoned: Wisp Stone"},
     },
-    ["The Spirit of Akelha`Ra/Zone|akheva"] = { -- VT key
+    ["The Spirit of Akelha`Ra/Zone|akheva"] = { -- Luclin VT key
         ["Shadowed Scepter Frame"]          = {"Essence Emerald"},
     },
 
@@ -157,8 +157,6 @@ function auto_hand_in_items()
         local o = parseSpellLine(npcRow)
 
         if zone == o.Zone then
-            log.Info("Zone %s, %s", o.Zone, o.Name)
-
             local spawn = spawn_from_query('npc "'..o.Name..'"')
             if spawn ~= nil and spawn.Distance() <= 50 then
 
@@ -214,12 +212,12 @@ function auto_hand_in_items()
                             -- asks for the missing items
                             all_tellf("%s", needMessage)
                         elseif not needParts and haveParts then
-                            log.Info("I HAVE ALL NEEDED PIECES, DOING HAND IN TO \ay%s\ax", o.Name)
+                            log.Info("HANDIN: Giving items to \ay%s\ax in ay%s\ax", o.Name, o.Zone)
 
                             move_to(spawn.ID())
 
                             if is_rof2() then
-                                -- XXX is open bags needed on rof2 with the new macroquest features? worked on live without them.
+                                -- NOTE: open bags is needed on rof2, works on live without them.
                                 open_bags()
                             end
 
@@ -255,9 +253,9 @@ function auto_hand_in_items()
                                     end
 
                                     log.Info("Picking up \ay%s\ax  %d/%d", component, each, count)
-                                    -- XXX fails if bags not open
+                                    -- fails on rof2 if bags not open
                                     local exe = string.format("/nomodkey /ctrl /itemnotify in Pack%d %d leftmouseup", item.ItemSlot() - 22, item.ItemSlot2() + 1)
-                                    log.Info("EXE: %s", exe)
+                                    --log.Debug("EXE: %s", exe)
                                     cmdf(exe)
                                     delay(1000, function() return has_cursor_item() end)
                                     delay(200)

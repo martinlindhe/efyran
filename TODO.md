@@ -14,6 +14,10 @@ mq bug? /handin fails if item is in bag10 on emu. bag 1 to 9 seem to work fine (
 
 - rez: dont try to rez "this corpse cannot be ressurected" corpses, instead force that toon to autoloot their corpse
 
+- qol: auto join shared task: "XXX has asked you to join the shared task 'XXX'. Would you like to join?"
+
+- / slash commands: make sure EVERY COMMAND is put on command queue so they will not interfere.
+    slash commands are async out of efyran main-loop and can change data that is beeing looped over
 
 
 misc:

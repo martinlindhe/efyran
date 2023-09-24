@@ -2068,7 +2068,7 @@ function memorize_spell(spellRow, defaultGem)
     local o = parseSpellLine(spellRow) -- XXX parse this once on script startup. dont evaluate all the time !!!
 
     if not have_spell(o.Name) then
-        all_tellf("ERROR don't know spell/song %s", o.Name)
+        all_tellf("ERROR don't know spell/song \ar%s\ax", o.Name)
         cmd("/beep 1")
         return nil
     end

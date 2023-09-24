@@ -216,7 +216,7 @@ function Assist.meleeStick()
     local stickArg
     if Assist.IsTanking() then
         stickArg = string.format("hold front %d uw", Assist.meleeDistance)
-        log.Debug("STICKING IN FRONT TO %d: %s", Assist.targetID, stickArg)
+        --log.Debug("STICKING IN FRONT TO %d: %s", Assist.targetID, stickArg)
         mq.cmdf("/stick %s", stickArg)
     else
         mq.cmd("/stick snaproll uw")
@@ -224,7 +224,7 @@ function Assist.meleeStick()
             return mq.TLO.Stick.Behind() and mq.TLO.Stick.Stopped()
         end)
         stickArg = string.format("hold moveback behind %d uw", Assist.meleeDistance)
-        log.Debug("STICKING IN BACK TO %d: %s", Assist.targetID, stickArg)
+        --log.Debug("STICKING IN BACK TO %d: %s", Assist.targetID, stickArg)
         mq.cmdf("/stick %s", stickArg)
     end
 end
@@ -357,7 +357,7 @@ function Assist.Tick()
     --log.Debug("Assist.Tick()")
 
     if melee and spawn.Distance() > Assist.meleeDistance and assistStickTimer:expired() then
-        log.Debug("stick update. meleeDistance = %f!", Assist.meleeDistance)
+        --log.Debug("stick update. meleeDistance = %f!", Assist.meleeDistance)
         Assist.meleeStick()
         assistStickTimer:restart()
         --cmdf("/face fast id %d", Assist.targetID)

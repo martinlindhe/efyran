@@ -533,6 +533,7 @@ function autoMapHeightFilter()
         -- DoN
         stillmoona = {min = 50, max = 50},
         thundercrest = {min = 70, max = 70},
+        broodlands = {min = 140, max = 140},
     }
 
     local data = heights[zone_shortname()]

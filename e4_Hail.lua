@@ -163,6 +163,8 @@ local hailTargets = {
         ["Chieftain Relae Aderi"] = true, -- DoN tier 0, tier 1, tier 2, tier 3 flag
 
         ["Private Nylaen Kel`Ther"] = true, -- DoN tier 2 flag hail
+
+        ["Gordish Frozenheart"] = "see those", -- DoN 24-man raids Rampaging Monolith, Circle of Drakes 
     }
 }
 

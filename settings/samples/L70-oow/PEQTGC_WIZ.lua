@@ -63,7 +63,7 @@ settings.assist = {
             -- Lxx Mind Crash AA Rank 1 (id:5943, -2500 hate)
             -- Lxx Mind Crash AA Rank 2 (id:5944, -5000 hate)
             -- Lxx Mind Crash AA Rank 3 (id:5945, -7500 hate)
-            "Ancient: Greater Concussion/PctAggro|98",
+            "Ancient: Greater Concussion/PctAggro|90",
             "Mind Crash/PctAggro|99",
 
             -- fire nukes:
@@ -97,7 +97,7 @@ settings.assist = {
 
         -- fastfire == main
         bigfire = {
-            "Ancient: Greater Concussion/PctAggro|98",
+            "Ancient: Greater Concussion/PctAggro|90",
             "Mind Crash/PctAggro|99",
 
             "Scepter of Incantations",

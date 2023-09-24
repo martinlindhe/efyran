@@ -164,15 +164,6 @@ function buffs.Tick()
         buffs.requestAvailabiliyTimer:restart()
     end
 
-    if follow.IsFollowing() then
-        return
-    end
-
-    if buffs.refreshBuffs and not in_combat() and requestBuffsTimer:expired() then
-        buffs.RequestBuffs()
-        requestBuffsTimer:restart()
-    end
-
     if is_casting() or is_hovering() or is_sitting() or is_moving() or mq.TLO.Me.SpellInCooldown() or obstructive_window_open() then
         return
     end
@@ -189,6 +180,15 @@ function buffs.Tick()
             end
         end
     end
+
+    if follow.IsFollowing() then
+        return
+    end
+
+    if buffs.refreshBuffs and not in_combat() and requestBuffsTimer:expired() then
+        buffs.RequestBuffs()
+        requestBuffsTimer:restart()
+    end
 end
 
 function buffs.RefreshCombatBuffs()
@@ -202,7 +202,7 @@ function buffs.RefreshCombatBuffs()
 
         if matches_filter(buff, mq.TLO.Me.Name()) and is_spell_ability_ready(spellConfig.Name) then
             if castSpellAbility(mq.TLO.Me, buff) then
-                log.Info("RefreshCombatBuffs refreshed \ay%s\ax", buff)
+                log.Info("RefreshCombatBuffs refreshed \ay%s\ax (self)", buff)
             end
         end
     end
@@ -226,7 +226,7 @@ function buffs.RefreshCombatBuffs()
                         if peer_has_buff(name, spellConfig.Name) or peer_has_song(name, spellConfig.Name) then
                             log.Debug("RefreshCombatBuffs peer %s has combat buff already %s", name, spellConfig.Name)
                         elseif castSpellAbility(spawn, buff) then
-                            log.Info("Refreshed combat ability on %s", name)
+                            all_tellf("COMBAT BUFF \ay%s\ax on \ag%s\ax", spellConfig.Name, name)
                         end
                     end
                 end
