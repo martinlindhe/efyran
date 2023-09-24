@@ -58,14 +58,14 @@ function buffs.Init()
     -- for requesting buff state (is sent from `peer`. We will respond with a /set_others_buffs to `peer`
     mq.bind("/request_buffs", function(peer)
         cmdf("/squelch /bct %s //set_others_buffs %s %s", peer, mq.TLO.Me.Name(), buffs.getAvailableGroupBuffs())
-        log.Info("Told %s my buffs are %s", peer, buffs.getAvailableGroupBuffs())
+        --log.Debug("Told %s my buffs are %s", peer, buffs.getAvailableGroupBuffs())
     end)
     
     -- for updating buff state (is sent from `peer` to this instance)
     mq.bind("/set_others_buffs", function(peer, ...)
         local arg = trim(args_string(...))
         buffs.otherAvailable[peer] = arg
-        log.Info("%s told me their buffs are: %s", peer, arg)
+        --log.Debug("%s told me their buffs are: %s", peer, arg)
     end)
 
     bard.UpdateMQ2MedleyINI()
@@ -178,10 +178,14 @@ function buffs.Tick()
     end
 
     if #buffs.queue > 0 and not in_combat() and handleBuffsTimer:expired() then
-        local req = table.remove(buffs.queue, 1)
-        if req ~= nil then
-            if handleBuffRequest(req) then
-                handleBuffsTimer:restart()
+        -- process up  to 10 requests per tick, until at least one is handled.
+        for i = 1, 10 do
+            local req = table.remove(buffs.queue, 1)
+            if req ~= nil then
+                if handleBuffRequest(req) then
+                    handleBuffsTimer:restart()
+                    return
+                end
             end
         end
     end
@@ -338,7 +342,7 @@ function handleBuffRequest(req)
     local spawn = spawn_from_peer_name(req.Peer)
     if spawn == nil then
         -- happens when zoning
-        log.Error("handleBuffRequest: Spawn not found %s", req.Peer)
+        --log.Error("handleBuffRequest: Spawn not found %s", req.Peer)
         return false
     end
 
@@ -480,6 +484,7 @@ function buffs.RequestAvailabiliy()
             for j = 1, mq.TLO.Group.Members() do
                 if mq.TLO.Group.Member(j).ID() ~= nil and mq.TLO.Group.Member(j).Class.ShortName() == buffClasses[i] then
                     if is_peer(mq.TLO.Group.Member(j).Name()) then
+                        --log.Debug("found class buffer in group: %s %s", buffClasses[i], mq.TLO.Group.Member(j).Name())
                         buffs.buffers[buffClasses[i]] = mq.TLO.Group.Member(j).Name()
                         found = true
                         break
@@ -493,6 +498,7 @@ function buffs.RequestAvailabiliy()
                 for j = 1, spawn_count(spawnQuery) do
                     local spawn = mq.TLO.NearestSpawn(j, spawnQuery)
                     if spawn ~= nil and is_peer(spawn.Name()) then
+                        --log.Debug("found class buffer nearby: %s %s, peer id = %s", buffClasses[i], spawn.Name(), tostring(mq.TLO.NetBots(spawn.Name()).ID()))
                         buffs.buffers[buffClasses[i]] = spawn.Name()
                         found = true
                         break

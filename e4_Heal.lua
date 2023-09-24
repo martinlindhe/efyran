@@ -48,7 +48,7 @@ end
 
 local lifeSupportTimer = timer.new_expired(5 * 1) -- 5s
 
-local groupBalanceTimer = timer.new_expired(15 * 1) -- 15s
+local groupBalanceTimer = timer.new_expired(30 * 1) -- 30s
 
 function Heal.Tick()
 

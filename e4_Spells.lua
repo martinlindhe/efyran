@@ -459,16 +459,11 @@ end
 function click_nearby_door()
     -- TODO: dont know how to access /doors list from lua/macroquest
 
-    -- WORK-AROUND: in sro, "HUT1" is in the way for a correct doortarget
-    if zone_shortname() == "sro" and is_within_distance_to_loc(-2114, 1348, -81, 50) then
-        log.Info("sro ldon raid instance special")
-        cmd("/doortarget RUJPORTAL701")
-    elseif zone_shortname() == "poknowledge" and is_within_distance_to_loc(-760, 1226, -151, 50) then
-        log.Info("pok gunthak stone special")
-        -- XXX no door nearby !?!? except "PORTBASE", the foundation which is unclickable !?
-    else
-        -- XXX check if door within X radius
-        cmd("/doortarget")
+    cmd("/doortarget")
+    delay(10)
+    if mq.TLO.DoorTarget.ID() == nil then
+        all_tellf("failed to find a door to click!")
+        return
     end
 
     log.Info("CLICKING NEARBY DOOR %s, id %d, distance %d", mq.TLO.DoorTarget.Name(), mq.TLO.DoorTarget.ID(), mq.TLO.DoorTarget.Distance())

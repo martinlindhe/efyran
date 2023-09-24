@@ -762,7 +762,7 @@ end
 -- Am I in combat?
 ---@return boolean
 function in_combat()
-    return mq.TLO.Me.CombatState() == "COMBAT" or mq.TLO.Me.PctAggro() > 0
+    return mq.TLO.Me.CombatState() == "COMBAT" or mq.TLO.Me.PctAggro() > 0 or mq.TLO.Me.XTarget(1).ID() ~= 0
 end
 
 -- Is window `name` open?
