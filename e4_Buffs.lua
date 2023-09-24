@@ -44,10 +44,9 @@ local buffs = {
     requestAvailabiliyTimer = timer.new_random(5), -- 5s  - interval after start-up to wait before requesting buff availability
 
     -- clickies
-    manaRegenClicky = FindBestManaRegenClicky(),
-    manaPoolClicky  = FindBestManaPoolClicky(),
-
-    attackClicky = FindBestAttackClicky(),
+    manaRegenClicky  = FindBestManaRegenClicky(),
+    manaPoolClicky   = FindBestManaPoolClicky(),
+    attackClicky     = FindBestAttackClicky(),
     allResistsClicky = FindBestAllResistsClicky(),
 }
 
@@ -62,36 +61,52 @@ function buffs.Init()
         })
     end)
 
-    -- for requesting buff state (is sent from `peer`. We will respond with a /set_others_buffs to `peer`
+    -- INTERNAL: for requesting buff state (is sent from `peer`. We will respond with a /set_others_buffs to `peer`
     mq.bind("/request_buffs", function(peer)
         cmdf("/squelch /bct %s //set_others_buffs %s %s", peer, mq.TLO.Me.Name(), buffs.getAvailableGroupBuffs())
         --log.Debug("Told %s my buffs are %s", peer, buffs.getAvailableGroupBuffs())
     end)
     
-    -- for updating buff state (is sent from `peer` to this instance)
+    -- INTERNAL: for updating buff state (is sent from `peer` to this instance)
     mq.bind("/set_others_buffs", function(peer, ...)
         local arg = trim(args_string(...))
         buffs.otherAvailable[peer] = arg
         --log.Debug("%s told me their buffs are: %s", peer, arg)
     end)
 
+    mq.bind("/reportclickies", function()
+        local s = ""
+        if me_caster() or me_priest() then
+            if buffs.manaRegenClicky == nil then
+                s = s .. "\arMISSING: Mana regen clicky\ax, "
+            else
+                s = s .. "ManaRegen:" .. buffs.manaRegenClicky .. ", "
+            end
+            if buffs.manaPoolClicky == nil then
+                s = s .. "\arMISSING: Mana pool clicky\ax, "
+            else
+                s = s .. "ManaPool:" .. buffs.manaPoolClicky .. ", "
+            end
+        end
+        if me_melee() then
+            if buffs.attackClicky == nil then
+                s = s .. "\arMISSING: Attack clicky\ax, "
+            else
+                s = s .. "Attack:" .. buffs.attackClicky .. ", "
+            end
+        end
+        if buffs.allResistsClicky == nil then
+            s = s .. "\arMISSING: AllResists clicky\ax, "
+        else
+            s = s .. "AllResists:" .. buffs.allResistsClicky .. ", "
+        end
+        if s ~= "" then
+            all_tellf("REPORT: %s", s)
+        end
+    end)
+
     bard.UpdateMQ2MedleyINI()
     bard.resumeMelody()
-
-    if me_caster() or me_priest() then
-        if buffs.manaRegenClicky == nil then
-            all_tellf("MISSING: Mana regen clicky")
-        end
-        if buffs.manaPoolClicky == nil then
-            --all_tellf("MISSING: Mana pool clicky") 
-        end
-    end
-
-    if me_melee() then
-        if buffs.attackClicky == nil then
-            all_tellf("MISSING: Attack clicky")
-        end
-    end
 end
 
 local refreshBuffsTimer = timer.new_expired(10) -- 10s

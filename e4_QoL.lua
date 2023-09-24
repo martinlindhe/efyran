@@ -1253,7 +1253,7 @@ function QoL.Init()
     mq.bind("/wornaugs", function() commandQueue.Add("reportwornaugs") end)
 
     -- reports all owned clickies (worn, inventory, bank) worn auguments
-    mq.bind("/clickies", function() commandQueue.Add("reportclickies") end)
+    mq.bind("/listclickies", function() commandQueue.Add("list-clickies") end)
 
     -- cast Summon Clockwork Banker veteran AA yourself, or the first available nearby peer
     mq.bind("/banker", function() commandQueue.Add("summonbanker") end)

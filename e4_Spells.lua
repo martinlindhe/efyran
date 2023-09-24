@@ -65,7 +65,7 @@ function refreshBuff(buffItem, spawn)
 
     if spellConfig.Zone ~= nil and zone_shortname() ~= spellConfig.Zone then
         -- TODO: allow multiple zones listed as comma separated shortnames
-        log.Info("refreshBuff skip. we are in zone %s, vs required %s", zone_shortname(), spellConfig.Zone)
+        log.Debug("refreshBuff skip. we are in zone %s, vs required %s", zone_shortname(), spellConfig.Zone)
         return false
     end
 
@@ -929,14 +929,13 @@ end
 
 
 ---@param cat string|nil Category (manaregen, xxx)
-function report_clickies(cat)
+function list_my_clickies(cat)
     if cat ~= nil then
         all_tellf("report_clickies: TODO handle category arg")
     end
     log.Info("My clickies:")
 
     -- XXX TODO skip Expendable
-
     -- XXX 15 sep 2022: item.Expendable() seem to be broken, always returns false ? https://discord.com/channels/511690098136580097/840375268685119499/1019900421248126996
 
     -- equipment: 0-22 is worn gear, 23-32 is inventory top level

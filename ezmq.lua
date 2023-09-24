@@ -2279,9 +2279,9 @@ function FindBestManaRegenClicky()
 end
 
 local manaPoolEffects = {
-    ["Koadic's Expansive Mind"]        = 250, -- slot 4: 250 max mana. Items: Shield of Mental Fortitude (ssra)
-    ["Maelin's Meditation"]            = 400, -- slot 4: 400 max mana. Items: Eye of Dreams (potime), Muramite Signet Orb (wos)
-    ["Reyfin's Racing Thoughts"]       = 450, -- slot 4: 450 max mana. Items: Xxeric's Matted-Fur Mask (tacvi)
+    ["Koadic's Expansive Mind"]  = 250, -- slot 4: 250 max mana. Items: Shield of Mental Fortitude (ssra)
+    ["Maelin's Meditation"]      = 400, -- slot 4: 400 max mana. Items: Eye of Dreams (potime), Muramite Signet Orb (wos)
+    ["Reyfin's Racing Thoughts"] = 450, -- slot 4: 450 max mana. Items: Xxeric's Matted-Fur Mask (tacvi)
 }
 
 -- Mana pool (slot 4) clickies
@@ -2388,6 +2388,7 @@ function refresh_buff_clicky(itemName)
             all_tellf("ERROR: would refresh buff %s (%s) but no buff slots", item.Clicky.Spell.Name(), itemName)
             return
         end
+        log.Info("Refreshing clicky buff \ag%s\ax (%s) ...", item.Clicky.Spell.Name(), itemName)
         click_item(itemName)
         return true
     end
@@ -2397,14 +2398,19 @@ end
 -- Clicks a item
 ---@param itemName string
 function click_item(itemName)
-    if not have_item_inventory(itemName) then
-        all_tellf("FATAL: click_item lack %s", itemName)
-        return
-    end
     if is_brd() then
         mq.cmdf('/medley queue "%s"', itemName)
         return true
     end
 
+    local item = find_item("="..itemName)
+    if item == nil then
+        all_tellf("FATAL: click_item not found %s", itemName)
+        return
+    end
+
     mq.cmdf('/casting "%s" item', itemName)
+    mq.delay(100)
+
+    mq.delay(item.CastTime())
 end
