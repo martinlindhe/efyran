@@ -19,15 +19,15 @@ settings.gems = {
     ["Malosinia"] = 6,
     ["Fireskin"] = 7,
     ["Raging Servant"] = 8,
-    --["Summon: Molten Orb"] = 9,
+    --["Summon: Molten Orb"] = 9, -- DoN
+}
+
+settings.illusions = {
+    default         = nil, -- using Elemental Form: Fire illusion
+    halfling        = "Fuzzy Foothairs",
 }
 
 settings.self_buffs = {
-    "Fuzzy Foothairs",
-
-    "Earring of Dragonkin", -- Chaotic Enlightenment (slot 8: 10 mana regen, slot 10: 6 hp regen)
-    "Xxeric's Matted-Fur Mask", -- Reyfin's Racing Thoughts (slot 4: 450 mana pool)
-
     -- L59 Elemental Form: Air Rank 1 AA (id:2789, see invis, +10 all resists)
     -- L59 Elemental Form: Air Rank 2 AA (id:2790, see invis, +15 all resists)
     -- L59 Elemental Form: Air Rank 3 AA (id:2791, see invis, +25 all resists)
@@ -40,8 +40,7 @@ settings.self_buffs = {
     -- L59 Elemental Form: Fire Rank 1 AA (10 ds, 10 int, casting level +1)
     -- L59 Elemental Form: Fire Rank 2 AA (20 ds, 15 int, casting level +3)
     -- L59 Elemental Form: Fire Rank 3 AA (30 ds, 20 int, casting level +5)
-    -- NOTE: cannot use with Heart of Flames AA
-    --"Elemental Form: Fire",
+    "Elemental Form: Fire",
 
     "Shimmering Bauble of Trickery/Shrink",
 }
@@ -105,9 +104,9 @@ settings.pet = {
         "Algae Covered Stiletto/Shrink",
     },
 
-    ["auto_weapons"] = false, -- XXX was e3 [Magician].Auto-Pet Weapons (On/Off). XXX IMPL
+    auto_weapons = false, -- XXX was e3 [Magician].Auto-Pet Weapons (On/Off). XXX IMPL
 
-    ["summoned_pet_items"] = { -- for magicians. was e3 [Magician].Summoned Pet Item. XXX IMPL
+    summoned_pet_items = { -- for magicians. was e3 [Magician].Summoned Pet Item. XXX IMPL
         -- pet toys:
         -- L56 Muzzle of Mardu (FACE: 11% haste)
         -- L61 Belt of Magi`Kot (WAIST: 250 hp, 10 str, 10 sta, 10 agi, 10 dex)
@@ -125,9 +124,8 @@ settings.pet = {
         "Blazing Stone of Demise",
     },
 
-    ["taunt"] = false, -- XXX impl
-    ["shrink"] = false, -- XXX impl . was e3 [Pets].Pet Auto-Shrink (On/Off)
-    ["buff_in_combat"] = false, -- XXX impl. was e3 [Pets].Pet Buff Combat (On/Off)=Off
+    taunt = false, -- XXX impl
+    buff_in_combat = false, -- XXX impl. was e3 [Pets].Pet Buff Combat (On/Off)=Off
     --Pet Summon Combat (On/Off)=Off       -- XXX unimplemented e3 pet setting
 }
 
@@ -152,10 +150,10 @@ settings.assist = {
 
         -- L70 Raging Servant (1650 mana, swarm pet)
         main = {
-            "Raging Servant/GoM",
+            "Raging Servant/MinLevel|65/GoM",
 
             -- L69 Summon: Molten Orb (10 charge 700 hp fire nuke, -10 fire adj, instant cast, 12s recast)
-            --"Molten Orb/NoAggro/Summon|Summon: Molten Orb", -- DoN
+            -- "Molten Orb/NoAggro/Summon|Summon: Molten Orb",  -- DoN
 
             "Burning Earth/NoAggro/MinMana|10",
             "Ancient: Nova Strike/GoM/NoAggro",
@@ -203,7 +201,6 @@ settings.assist = {
         -- L68 Heart of Vapor (id:5913, decrease spell hate by 50%)
         -- L69 Heart of Stone (id:xxx)
         -- L70 Heart of Flames (id:5915, increase fire dd dmg by 1-50% for 1.5 min, 22 min reuse)
-        -- NOTE: if using this burn, cannot also use Elemental Form
         "Heart of Flames",
 
         -- oow t1 bp: Runemaster's Robe (pet buff: +50% skill dmg mod, -15% skill dmg taken for 0.3 min)

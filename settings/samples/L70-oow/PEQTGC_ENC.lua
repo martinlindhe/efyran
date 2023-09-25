@@ -1,11 +1,13 @@
 local settings = { }
 
+settings.debug = true
+
 settings.swap = { -- XXX impl
-    ["main"] = "Staff of Eternal Eloquence|Mainhand",
+    main = "Staff of Eternal Eloquence|Mainhand",
 
-    ["fishing"] = "Fishing Pole|Mainhand",
+    fishing = "Fishing Pole|Mainhand",
 
-    ["melee"] = "Staff of Eternal Eloquence|Mainhand", -- 1hb
+    melee = "Staff of Eternal Eloquence|Mainhand", -- 1hb
 }
 
 settings.gems = {
@@ -19,12 +21,12 @@ settings.gems = {
     ["Hastening of Salik"] = 9, -- group haste
 }
 
-settings.self_buffs = {
-    "Fuzzy Foothairs",
-    "Hanvar's Hoop", -- Form of Defense III (slot 6: immunity, slot 10: 81 ac)
-    --"Earring of Pain Deliverance", -- Reyfin's Random Musings (slot 8: 9 mana regen, slot 10: 6 hp regen)
-    --"Muramite Signet Orb", -- Maelin's Meditation (slot 4: 400 mana pool)
+settings.illusions = {
+    default         = "halfling",
+    halfling        = "Fuzzy Foothairs",
+}
 
+settings.self_buffs = {
     -- self rune - slot 3:
     -- L61 Arcane Rune (absorb 1500 dmg)
     -- L6x Eldritch Rune AA Rank 3 (id:3260, absorb 1500 dmg)
@@ -42,7 +44,7 @@ settings.self_buffs = {
     -- L52 Rune V (absorb 620-700 dmg)
     -- L61 Rune of Zebuxoruk (absorb 850 dmg)
     -- L67 Rune of Salik (slot 1: absorb 1105 dmg)
-    -- L69 Rune of Rikkukin (slot 1: absorb 1500 dmg, group)
+    -- L69 Rune of Rikkukin (slot 1: absorb 1500 dmg, group)   DoN reward
     "Rune of Salik/Reagent|Peridot",
 
     -- epic 1.5: slot 5: absorb 1500 dmg. Oculus of Persuasion (Protection of the Eye)
@@ -54,21 +56,14 @@ settings.self_buffs = {
     "Guard of Druzzil/MinMana|80",
 }
 
-settings.combat_buffs = { -- XXX impl
---[[
-; L63 Night's Dark Terror (scarecrow, Lifetap Strike proc, 45 atk, 120 dex) - DOES not stack with Avatar
-; L70 Mana Flare (timer 7, trigger Mana Flare Strike, dmg 700)
-Combat Buff=Mana Flare/Arctander
-Combat Buff=Mana Flare/Blastar
-Combat Buff=Mana Flare/Brann
-Combat Buff=Mana Flare/Fandinu
-Combat Buff=Mana Flare/Redito
-Combat Buff=Mana Flare/Myggan
-]]--
+settings.combat_buffs = {
+    -- L63 Night's Dark Terror (scarecrow, Lifetap Strike proc, 45 atk, 120 dex) - DOES not stack with Avatar
+    -- L70 Mana Flare (timer 7, trigger Mana Flare Strike, dmg 700)
+    "Mana Flare/Only|WIZ MAG",
 }
 
 settings.healing = {
-    ["life_support"] = {
+    life_support = {
         --"Self Stasis/HealPct|55", -- SoD
 
         -- L70 Color Shock AA
@@ -92,16 +87,16 @@ settings.healing = {
 }
 
 settings.pet = {
-    ["auto"] = false,
+    auto = false,
 
-    ["heals"] = {},
-    ["buffs"] = {
+    heals = {},
+    buffs = {
         "Hastening of Salik/MinMana|50",
     },
 }
 
 settings.assist = {
-    ["nukes"] = {
+    nukes = {
         -- lower aggro:
         -- L61 Boggle (decrease hate by 500)
         --"Boggle/PctAggro|99/Gem|2", -- XXX PctAggro
@@ -109,7 +104,7 @@ settings.assist = {
         -- chromatic nukes:
         -- L69 Colored Chaos (CHROMATIC, 1600 hp, cost 425 mana)
 
-        ["main"] = {
+        main = {
             -- magic nukes:
             -- L07 Chaotic Feedback (28-32 hp, 1s stun, 16 mana)
             -- L16 Sanity Warp (81-87 hp, 1s stun, 38 mana)
@@ -123,11 +118,11 @@ settings.assist = {
             -- L65 Ancient: Chaos Madness (1320 hp, cost 360 mana)
             -- L68 Psychosis (1513 hp, cost 375 mana)
             -- L70 Ancient: Neurosis (1634 hp, cost 398 mana)
-            "Ancient: Neurosis/NoAggro/MinMana|30",
+            "Ancient: Neurosis/NoAggro/MinMana|20",
         },
     },
 
-    ["debuffs"] = { -- XXX impl
+    debuffs = {
         -- slow:
         -- L09 Languid Pace (17-30% slow, 2.7 min, 50 mana)
         -- L23 Tepid Deeds (31-50% slow, 2.7 min, 100 mana)
@@ -139,7 +134,7 @@ settings.assist = {
         --"Desolate Deeds/MaxTries|2/Gem|2",
     },
 
-    ["debuffs_on_command"] = { -- XXX impl
+    debuffs_on_command = { -- XXX impl
         -- disempower:
         -- L04 Enfeeblement (-18-20 str, -3 ac, cost 20 mana)
         -- L16 Disempower (-9-12 sta, -13-15 str, -6-9 ac)
@@ -155,13 +150,13 @@ settings.assist = {
         "Howl of Tashan/MaxTries|2",
     },
 
-    ["quickburns"] = {-- XXX implememt !!!
+    quickburns = {
         -- oow T1 bp: 30 sec, -1% spell resist rate, 5 min reuse. Charmweaver's Robe (Bedazzling Eyes)
         -- oow T2 bp: 42 sec, -1% spell resist rate, 5 min reuse. Mindreaver's Vest of Coercion (Bedazzling Aura)
         "Mindreaver's Vest of Coercion",
     },
 
-    ["pbae"] = {
+    pbae = {
         -- ae stun:
         -- L03 Color Flux (4s stun/L55?, aerange 20, recast 12s)
         -- L20 Color Shift (6s stun/L55?, aerange 25, recast 12s)
@@ -179,7 +174,7 @@ settings.assist = {
 }
 
 settings.enchanter = { -- XXX impl / rearrange settings
-    ["auto_mez"] = false, -- XXX impl + impl toggle /mezon, /mezoff
+    auto_mez = false, -- XXX impl + impl toggle /mezon, /mezoff
 
     -- XXX impl: will allow enc to chain rune tanks during fight etc (when /buffoff)
     --[[
@@ -188,7 +183,7 @@ settings.enchanter = { -- XXX impl / rearrange settings
     AutoRune (On/Off)=Off
     ]]--
 
-    ["mez"] = { -- XXX impl, use if auto_mez is true
+    mez = { -- XXX impl, use if auto_mez is true
         -- ae mez:
         -- L16 Mesmerization (0.4 min/L55, cost 70 mana)
         -- L52 Fascination (36 sec/L55, cost 200 mana)
@@ -225,7 +220,7 @@ settings.enchanter = { -- XXX impl / rearrange settings
         "Stasis/MaxLevel|73",
     },
 
-    ["charm"] = { -- XXX impl
+    charm = { -- XXX impl
         -- unresistable charms:
         -- L48 Ordinance (-1000 magic, charm/L52, 0.8 min, 5m recast)
         -- L60 Dictate (-1000 magic, charm/L58, 0.8 min, 5m recast)
@@ -250,6 +245,5 @@ settings.enchanter = { -- XXX impl / rearrange settings
         --"True Name/MaxLevel|69",
     },
 }
-
 
 return settings

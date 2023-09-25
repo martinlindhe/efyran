@@ -13,32 +13,25 @@ settings.gems = {
 }
 
 settings.swap = { -- XXX impl
-    ["main"] = "Morguecaller|Mainhand/Shield of the Lightning Lord|Offhand/Screaming Skull of Discontent|Ranged",
-    ["bfg"] = "Breezeboot's Frigid Gnasher|Mainhand",
-    ["ranged"] = "Plaguebreeze|Ranged",
-    ["noriposte"] = "Aged Left Eye of Xygoz|Mainhand/Shield of the Lightning Lord|Offhand",
-    ["fishing"] = "Fishing Pole|Mainhand",
+    main = "Morguecaller|Mainhand/Shield of the Lightning Lord|Offhand/Screaming Skull of Discontent|Ranged",
+    bfg = "Breezeboot's Frigid Gnasher|Mainhand",
+    ranged = "Plaguebreeze|Ranged",
+    noriposte = "Aged Left Eye of Xygoz|Mainhand/Shield of the Lightning Lord|Offhand",
+    fishing = "Fishing Pole|Mainhand",
 
     -- for mpg trial of weaponry (group):
-    ["slashdmg"] = "Innoruuk's Dark Blessing|Mainhand",
-    ["piercedmg"] = "Warspear of Vexation|Mainhand",
-    ["bluntdmg"] = "Girplan Hammer of Carnage|Mainhand",
+    slashdmg = "Innoruuk's Dark Blessing|Mainhand",
+    piercedmg = "Warspear of Vexation|Mainhand",
+    bluntdmg = "Girplan Hammer of Carnage|Mainhand",
+}
+
+settings.illusions = {
+    default         = "halfling",
+    halfling        = "Fuzzy Foothairs",
 }
 
 settings.self_buffs = {
-    "Fuzzy Foothairs",
-
     "Decrepit Skin", -- shd_combat_innate
-    --Combat Buff=Decrepit Skin
-
-    "Ring of the Beast",     -- Form of Endurance III (slot 5: 270 hp)
-    "Necklace of the Steadfast Spirit", -- Chaotic Ward (20 all resists, 67 ac) - stacks with all resist buffs. DONT STACK WITH Form of Defense
-
-    -- PAL/SHD mana regen clicky:
-    -- Glyphed Greaves of Conflict ALL/ALL: Aura of Eternity (slot 8: 5 mana regen, slot 10: 5 hp regen)
-    -- Pendant of Discord ALL/ALL: Aura of Taelosia (slot 8: 7 mana regen, slot 10: 7 hp regen)
-    -- NOTE: NOT ENOUGH BUFF SLOTS
-    --"Pendant of Discord",
 
     --"Pact of Decay", -- shd_lich
 
@@ -50,7 +43,7 @@ settings.self_buffs = {
 }
 
 settings.healing = {
-    ["life_support"] = {
+    life_support = {
         "Distillate of Divine Healing XI/HealPct|7",
 
         -- oow t1 bp: Heartstiller's Mail Chestguard - Lifetap from Weapon Damage (15) for 2 ticks
@@ -73,16 +66,16 @@ settings.healing = {
 
         "Glyph of Stored Life/HealPct|5|Zone|anguish", -- Expendable AA
     },
-    ["lifetap"] = { -- XXX implement. was [Shadow Knight].LifeTap in e3
+    lifetap = { -- XXX implement. was [Shadow Knight].LifeTap in e3
         -- L70 Touch of the Devourer (-740 hp, -200 magic resist, 448 mana, 10s recast)
         "Touch of the Devourer/HealPct|50|MinMana|10",
     },
 }
 
 settings.pet = {
-    ["auto"] = false,
-    ["heals"] = {},
-    ["buffs"] = {
+    auto = false,
+    heals = {},
+    buffs = {
         -- pet haste
         -- L69 Rune of Decay (65% haste, 85 str, 22 ac)
         "Rune of Decay/MinMana|50",
@@ -90,48 +83,46 @@ settings.pet = {
 }
 
 settings.assist = {
-    ["type"] = "Melee",
-    ["stick_point"] = "Front",
-    --["melee_distance"] = 15,   -- XXX in order to automatically be closer to boss than the rest, allow changing formula "spawn.MaxRangeTo() * 0.75"
-    ["taunts"] = { -- XXX impl. used if set
-        -- L67 Terror of Discord (1800 hate, instant, unresistable, 60 mana, 6s recast)
-        "Terror of Discord",
+    type = "Melee",
+    stick_point = "Front",
+    --melee_distance = 15,   -- XXX in order to automatically be closer to boss than the rest, allow changing formula "spawn.MaxRangeTo() * 0.75"
 
-        -- Lxx Taunt
-        -- Lxx Bash
-        "Taunt",
-        "Bash", -- XXX requires shield equipped.
+    ranged_distance = 60,
+    engage_percent = 100,  -- XXX implement!
 
-        -- XXX add taunt spells
-    },
-    ["ranged_distance"] = 60,
-    ["engage_percent"] = 100,  -- XXX implement!
-
-    ["abilities"] = {
+    abilities = {
+        "Bash",
         "Disarm",
     },
 
-    ["nukes"] = {
+    taunts = {
+        -- L67 Terror of Discord (1800 hate, instant, unresistable, 60 mana, 6s recast)
+        "Terror of Discord",
+
+        -- L70 Theft of Agony (1200 hate, 100 mana, 1.5s cast, 60s recast)
+        "Theft of Agony",
+    },
+
+    nukes = {
         ["main"] = {
-            -- L67 Terror of Discord (1800 hate, 60 mana, instant cast, 6s recast)
+            -- L67 Terror of Discord (1800 hate, instant, unresistable, 60 mana, 6s recast)
             "Terror of Discord",
 
-            -- L70 Theft of Agony (1200 hate, 100 mana, 1.5s cast, 60s recast)
-            "Theft of Agony",
+            -- L70 Theft of Hate (-130 hp, increase atk)
+            "Theft of Hate",
 
             -- duration taps - group heals:
             -- L62 Zevfeer's Bite (-500 disease, 200 hp nuke + group heal)
             -- L65 Ancient: Bite of Chaos (-500 disease, 300 hp nuke + group heal)
-            -- L67 Inruku's Bite (-500 disease, 260 hp nuke + group heal)
-            -- L70 Ancient: Bite of Muram (-500 disease, 375 hp nuke + group heal, 60s recast)
+            -- L67 Inruku's Bite (-500 disease, 260 hp nuke + group heal), Timer 2
+            -- L70 Ancient: Bite of Muram (-500 disease, 375 hp nuke + group heal, 60s recast), Timer 4
             "Ancient: Bite of Muram",
 
-            -- L70 Theft of Hate (-130 hp, increase atk)
-            "Theft of Hate",
+            "Inruku's Bite",
         },
     },
 
-    ["dots"] = { -- XXX implement. was called "DoTs on assist" in e3
+    dots = { -- XXX implement. was called "DoTs on assist" in e3
         --[[
         [DoTs on Assist]
         ; Encroaching Darkness AA (damage free snare)
@@ -157,7 +148,7 @@ settings.assist = {
         ]]--
     },
 
-    ["dots_on_command"] = { -- XXX implement. was called "DoTs on command" in e3
+    dots_on_command = { -- XXX implement. was called "DoTs on command" in e3
         --[[
         [DoTs on Command]
         Main=
@@ -167,7 +158,7 @@ settings.assist = {
         ]]--
     },
 
-    ["quickburns"] = { -- XXX implememt !!!
+    quickburns = {
         -- oow T2 bp: Duskbringer's Plate Chestguard of the Hateful (Leeching Embrace, melee lifetap 15% heal)
         "Duskbringer's Plate Chestguard of the Hateful",
 
@@ -176,14 +167,17 @@ settings.assist = {
         "Innoruuk's Dark Blessing"
     },
 
-    ["longburns"] = { -- XXX implememt !!!
+    longburns = {
         -- timer 1:
         -- L55 Unholy Aura Discipline (cost 900 end, 5m use, 36m reuse) - increase lifetap dmg
         "Unholy Aura Discipline",
     },
 
-    ["pbae"] = {
-        "Dread Gaze",
+    pbae = {
+        -- L45 Word of Spirit (91-104 dd, 20 ae, 9s recast)
+        "Word of Spirit/Gem|9",
+
+        "Dread Gaze/MinMobs|20",
     }
 }
 

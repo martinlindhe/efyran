@@ -3,34 +3,32 @@ local settings = { }
 settings.debug = true
 
 settings.swap = {
-    ["main"] = "Nightshade, Blade of Entropy|Mainhand/Aneuk Dagger of Eye Gouging|Offhand/Sorrowmourn Stone|Ranged",
+    main = "Nightshade, Blade of Entropy|Mainhand/Aneuk Dagger of Eye Gouging|Offhand/Sorrowmourn Stone|Ranged",
 
-    ["bfg"] = "Breezeboot's Frigid Gnasher|Mainhand",
+    bfg = "Breezeboot's Frigid Gnasher|Mainhand",
 
-    ["ranged"] = "Plaguebreeze|Ranged",
+    ranged = "Plaguebreeze|Ranged",
 
-    ["noriposte"] = "Fishing Pole|Mainhand/Muramite Aggressor's Bulwark|Offhand",
+    noriposte = "Fishing Pole|Mainhand/Muramite Aggressor's Bulwark|Offhand",
 
-    ["fishing"] = "Fishing Pole|Mainhand",
+    fishing = "Fishing Pole|Mainhand",
 
     -- for mpg group weaponry:
-    ["slashdmg"] = "Jagged Blade of Ice|Mainhand/Great Blade of Storms|Offhand", -- FIXME need better 1h slashing
-    ["bluntdmg"] = "Mace of Tortured Nightmares|Mainhand/Hammer of Rancorous Thoughts|Offhand",
-    ["piercedmg"] = "Nightshade, Blade of Entropy|Mainhand/Aneuk Dagger of Eye Gouging|Offhand",
+    slashdmg = "Jagged Blade of Ice|Mainhand/Great Blade of Storms|Offhand", -- FIXME need better 1h slashing
+    bluntdmg = "Mace of Tortured Nightmares|Mainhand/Hammer of Rancorous Thoughts|Offhand",
+    piercedmg = "Nightshade, Blade of Entropy|Mainhand/Aneuk Dagger of Eye Gouging|Offhand",
+}
+
+settings.illusions = {
+    default         = nil, -- I am halfling
+    skeleton        = "Tiny Bone Bracelet",
 }
 
 settings.self_buffs = {
-    -- "Tiny Bone Bracelet", -- skeleton illusion
-
     -- poisons:
     -- L65 Bite of the Shissar XI (vendor bought in PoK)
     -- L70 Bite of the Shissar XII (vendor bought in PoK)
     "Bite of the Shissar XII/Zone|anguish",
-
-    -- Chaotic Ward (20 all resists, 67 ac) - stacks with all resist buffs. DON'T STACK WITH Form of Defense
-    "Necklace of the Steadfast Spirit",
-
-    --"Hanvar's Hoop", -- Form of Defense III (slot 6: immunity, slot 10: 81 ac)
 
     -- XXX dont get it to work 22 feb:
     -- 30% haste clicky, 72 min
@@ -39,12 +37,13 @@ settings.self_buffs = {
     "Bracelet of the Shadow Hive/Shrink",
 }
 
-settings.combat_buffs = { -- XXX combat buffs:
-    "Thief's Eyes/Kniven/MinEnd|10",        -- XXX MinEnd
+settings.combat_buffs = {
+    -- L68 Thief's Eyes (+5% hit chance with all skills, 1 min, cost 200 endurance)
+    "Thief's Eyes/MinEnd|10",
 }
 
 settings.healing = {
-    ["life_support"] = {
+    life_support = {
         -- Lxx Counterattack Discipline (ripostes every blow, 40 min reuse) - XXX does not work
         -- L55 Nimble Discipline (avoid most attacks, 21 min reuse)
         "Nimble Discipline/HealPct|45",
@@ -60,14 +59,14 @@ settings.healing = {
 }
 
 settings.assist = {
-    ["type"] = "Melee",
-    ["ranged_distance"] = 80,
-    ["engage_percent"] = 98,
-    ["abilities"] = {
+    type = "Melee",
+    ranged_distance = 80,
+    engage_percent = 98,
+    abilities = {
         "Escape/PctAggro|99", -- L59 Escape AA
         "Backstab",
     },
-    ["quickburns"] = {
+    quickburns = {
         -- oow T1 bp: (increase 1hb dmg   taken by 20% for 12s, 5 min reuse) Darkraider's Vest
         -- oow T2 bp: (increase all melee taken by 20% for 24s, 5 min reuse) Whispering Tunic of Shadows
         "Whispering Tunic of Shadows",
@@ -92,8 +91,8 @@ settings.assist = {
         -- L65 Twisted Chance Discipline (22 min reuse)
         "Twisted Chance Discipline",
     },
-    ["longburns"] = {},
-    ["fullburns"] = {
+    longburns = {},
+    fullburns = {
         "Glyph of Courage", -- Expendable AA (increase dmg)
     },
 }

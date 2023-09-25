@@ -1,21 +1,24 @@
 local settings = { }
 
 settings.swap = { -- XXX impl
-    ["main"] = "Transcended Fistwraps of Immortality|Mainhand/Hammer of Rancorous Thoughts|Offhand/Symbol of the Overlord|Ranged",
-    ["noks"] = "Earthen Fist|Mainhand",
-    ["noriposte"] = "Fishing Pole|Mainhand/Bulwark of Lost Souls|Offhand",
+    main = "Transcended Fistwraps of Immortality|Mainhand/Hammer of Rancorous Thoughts|Offhand/Symbol of the Overlord|Ranged",
+    noks = "Earthen Fist|Mainhand",
+    noriposte = "Fishing Pole|Mainhand/Bulwark of Lost Souls|Offhand",
 }
 
+settings.illusions = {
+    default         = "halfling",
+    halfling        = "Fuzzy Foothairs",
+}
 
 settings.self_buffs = {
-    "Fuzzy Foothairs",
     "Timestone Adorned Ring", -- proc buff: Soul Claw Strike (slot 1: proc)
     --"Symbol of the Planemasters", -- (slot 1: Pestilence Shock buff, potime)
-    "Necklace of the Steadfast Spirit", -- Chaotic Ward (20 all resists, 67 ac) - stacks with all resist buffs. DONT STACK WITH Form of Defense
+    "Shimmering Bauble of Trickery/Shrink", -- 1s cast x 5 times for 0.62 height
 }
 
 settings.healing = {
-    ["life_support"] = {
+    life_support = {
         "Mend/HealPct|50",
         "Distillate of Divine Healing XI/HealPct|10",
         "Imitate Death/HealPct|6",
@@ -25,10 +28,10 @@ settings.healing = {
 
 
 settings.assist = {
-    ["type"] = "Melee",
-    ["engage_percent"] = 98,  -- XXX implement!
+    type = "Melee",
+    engage_percent = 98,  -- XXX implement!
 
-    ["abilities"] = {
+    abilities = {
         -- kicks:
         -- L20 Eagle Strike
         -- L25 Dragon Punch (aka Tail Rake but ability name is still Dragon Punch)
@@ -51,9 +54,11 @@ settings.assist = {
         -- oow bp t2: Fiercehand Shroud of the Focused (cancel beneficial buffs)
         -- NOTE: only Laser+Azoth uses this on each fight
         "Fiercehand Shroud of the Focused",
+
+        "Crippling Strike/MaxHP|15", -- snare
     },
 
-    ["quickburns"] = {-- XXX implememt !!!
+    quickburns = {
         -- epic 2.0: Transcended Fistwraps of Immortality
         "Transcended Fistwraps of Immortality",
 

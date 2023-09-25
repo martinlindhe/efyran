@@ -20,21 +20,12 @@ settings.gems = {
     ["Brell's Brawny Bulwark"] = 9, -- hp buff
 }
 
+settings.illusions = {
+    default         = "halfling",
+    halfling        = "Fuzzy Foothairs",
+}
+
 settings.self_buffs = {
-    "Fuzzy Foothairs",
-
-    -- PAL/SHD mana regen clicky:
-    -- Glyphed Greaves of Conflict ALL/ALL: Aura of Eternity (slot 8: 5 mana regen, slot 10: 5 hp regen)
-    -- Pendant of Discord ALL/ALL: Aura of Taelosia (slot 8: 7 mana regen, slot 10: 7 hp regen)
-    -- NOTE: NOT ENOUGH BUFF SLOTS
-    --"Pendant of Discord",
-
-    -- Form of Endurance III (slot 5: 270 hp) - Ring of the Beast (anguish)
-    "Ring of the Beast",
-
-    --Chaotic Ward (20 all resists, 67 ac) - stacks with all resist buffs. DONT STACK WITH Form of Defense
-    "Necklace of the Steadfast Spirit",
-
     -- proc self buffs:
     -- L26 Instrument of Nife (undead proc Condemnation of Nife)
     -- L45 Divine Might (proc Divine Might Effect)
@@ -111,6 +102,8 @@ settings.healing = {
     tanks = {
         --"Bandy",
         "Manu",
+        "Stor",
+        "Kamaxia",
     },
 
     tank_heal = {
@@ -119,19 +112,9 @@ settings.healing = {
         --"Light of Piety/HealPct|30/MinMana|5",
     },
 
-    important = {
-        "Stor",
-        "Kamaxia",
-        "Maynarrd",
-        "Arriane",
-        "Helge",
-        "Gerrald",
-        "Hankie",
-        "Hybregee",
+    all_heal = {
+        "Light of Piety/HealPct|40/MinMana|15/Not|raid"
     },
-    important_heal = {"Light of Piety/HealPct|40/MinMana|15"},
-
-    who_to_heal = "Tanks/Important", -- XXX impl
 }
 
 settings.assist = {
@@ -139,10 +122,7 @@ settings.assist = {
     stick_point = "Front",
     engage_percent = 100,
 
-    taunts = { -- XXX impl. used if set
-        "Taunt",
-        -- XXX add more + stun taunts
-
+    taunts = {
         -- magic stuns, no timer:
         -- L07 Cease (1s/55, 1.5s cast, 15 mana, 9s recast)
         -- L13 Desist (3s/55, 1.8s cast, 25 mana, 10s recast)
@@ -167,10 +147,18 @@ settings.assist = {
         -- L64 Quellious' Word of Serenity (10s/65, 2.0s cast, 200 mana, 24s recast)
         -- L68 Serene Command (10s/70, 2.0s cast, 250 mana, 24s recast)
 
-        "Divine Stun/MaxLevel|73", -- 8s recast    TODO IMPL MaxLevel filter
+        "Divine Stun/MaxLevel|73", -- 8s recast
         "Ancient: Force of Jeron/MinMana|5/MaxLevel|73", --12s recast
         "Force of Piety/MinMana|5/MaxLevel|70", --12s recast
         "Serene Command/MinMana|5/MaxLevel|70", --24s recast
+    },
+
+    nukes = {
+        main = {
+            "Ancient: Force of Jeron/MinMana|5/MaxLevel|73", --12s recast
+            "Force of Piety/MinMana|5/MaxLevel|70", --12s recast
+            "Serene Command/MinMana|5/MaxLevel|70", --24s recast
+        },
     },
 
     abilities = {

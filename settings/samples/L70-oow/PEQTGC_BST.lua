@@ -1,9 +1,11 @@
 local settings = { }
 
+settings.debug = true
+
 settings.swap = { -- XXX impl
-    ["main"] = "Staff of Phenomenal Power|Mainhand",
-    ["fishing"] = "Fishing Pole|Mainhand",
-    ["melee"] = "Staff of Phenomenal Power|Mainhand", -- 1hb
+    main = "Staff of Phenomenal Power|Mainhand",
+    fishing = "Fishing Pole|Mainhand",
+    melee = "Staff of Phenomenal Power|Mainhand", -- 1hb
 }
 
 settings.gems = {
@@ -14,22 +16,21 @@ settings.gems = {
 
     ["Ferocity of Irionu"] = 6,
     ["Healing of Mikkily"] = 7, -- pet heal
-    ["Growl of the Panther"] = 8, -- pet buff
+    --["Growl of the Panther"] = 8, -- pet buff
     ["Spiritual Ascendance"] = 9, -- bst crack
 }
 
+settings.illusions = {
+    default         = "halfling",
+    halfling        = "Fuzzy Foothairs/CheckFor|Bestial Alignment Effect",
+}
+
 settings.self_buffs = {
-    "Fuzzy Foothairs/CheckFor|Bestial Alignment Effect",
-
-    --"Chaos-Imbued Leather Leggings", -- Aura of Eternity (+5 mana regen slot 8)
-
-    "Ring of the Beast", -- Form of Endurance III (slot 5: 270 hp)
-
     "Spiritual Ascendance/MinMana|20", -- 10 hp + 10 mana/tick, group, cost 900 mana
 }
 
 settings.pet = {
-    ["heals"] = {
+    heals = {
         -- L59 Mend Companion AA (36 min reuse without Hastened Mending AA)
         -- L67 Replenish Companion Rank 1 AA
         "Replenish Companion/HealPct|50",
@@ -46,13 +47,13 @@ settings.pet = {
         "Healing of Mikkily/HealPct|40/MinMana|10",
     },
 
-    ["buffs"] = {
+    buffs = {
         "Spirit of Oroshar/MinMana|50", -- pet proc
 
         "Growl of the Beast/MinMana|40", -- pet haste
 
-        -- L69 Growl of the Panther (1 min, 20% skill dmg mod, +150 hp HoT/tick, inc maxhp 1500)
-        "Growl of the Panther/CheckFor|Empathic Fury",
+        -- L69 Growl of the Panther (1 min, 20% skill dmg mod, +150 hp HoT/tick, inc maxhp 1500, DoN)
+        --"Growl of the Panther/CheckFor|Empathic Fury",
 
         -- Lxx Hobble of Spirits I AA (75 dex, Hobble of Spirits proc, rate mod 150: 40-56% snare, XXX min
         -- L70 Hobble of Spirits II AA (75 dex, Hobble of Spirits proc, rate mod 150: 50% snare, resist adj -50, 0.6 min)
@@ -68,18 +69,17 @@ settings.pet = {
 }
 
 settings.healing = {
-    ["life_support"] = {
+    life_support = {
         "Muada's Mending/HealPct|88/MaxMobs|0", -- heal myself after fight
         "Protective Spirit Discipline/HealPct|40",
         "Distillate of Divine Healing XI/HealPct|8",
     },
 
-    ["important"] = {
-        "Stor", "Kamaxia", "Maynarrd", "Arriane", "Helge", "Gerrald", "Hankie", "Hybregee",
-        "Drutten", "Lofty", "Gimaxx", "Samma", "Erland", "Kesok",
+    important = {
+        "Stor", "Kamaxia", "Samma", "Erland",
     },
 
-    ["important_heal"] = {-- XXX impl
+    important_heal= {
         -- quick heals:
         -- L06 Minor Healing (12-20 hp, cost 10 mana)
         -- L20 Light Healing (47-65 hp, cost 28 mana)
@@ -90,8 +90,6 @@ settings.healing = {
         -- L67 Muada's Mending (1176-1206 hp, cost 376 mana, 3s cast time)
         "Muada's Mending/HealPct|50/MinMana|5",
     },
-
-    ["who_to_heal"] = "ImportantBots", -- XXX impl
 }
 
 --[[
@@ -119,15 +117,15 @@ Combat Buff=Ferocity of Irionu/Rupat/Gem|6/CheckFor|Infusion of the Faithful
 ]]
 
 settings.assist = {
-    ["type"] = "Melee",
-    ["engage_percent"] = 98,
-    ["abilities"] = {
+    type = "Melee",
+    engage_percent = 98,
+    abilities = {
         "Kick",
         "Rake", -- L70 Tome of Rake
         "Feral Swipe", -- Feral Swipe AA (30s reuse)
     },
-    ["nukes"] = {
-        ["main"] = {
+    nukes = {
+        main = {
             "Roar of Thunder/PctAggro|99", -- AA, reduce aggro
 
             -- ice nukes:
@@ -147,20 +145,20 @@ settings.assist = {
             -- L68 Bestial Empathy (swarm pet, 18s recast)
             "Bestial Empathy",
         },
-        ["fastfire"] = {
+        fastfire = {
             "Ancient: Savage Ice/MinMana|60",
         },
-        ["bigfire"] = {
+        bigfire = {
             "Ancient: Savage Ice/MinMana|60"
         },
-        ["fastcold"] = {
+        fastcold = {
             "Ancient: Savage Ice/MinMana|60",
         },
-        ["bigcold"] = {
+        bigcold = {
             "Ancient: Savage Ice/MinMana|60",
         },
     },
-    ["dots_on_command"] = {
+    dots_on_command = {
         -- L14 Sicken (3-5/tick, disease)
         -- L19 Tainted Breath (14-19/tick, poison)
         -- L35 Envenomed Breath (59-71/tick, poison, cost 181 mana)
@@ -170,18 +168,18 @@ settings.assist = {
         -- L65 Turepta Blood (168/tick, poison, cost 377 mana)
         "Turepta Blood/Gem|3/MinMana|70",
     },
-    ["debuffs"] = {
+    debuffs = {
         -- L56 Incapacitate (-45-55 agi, -45-55 str, -21-24 ac)
         -- NOTE ENC disempower debuffs is stronger versions of this
         --"Incapacitate/Gem|3/MinMana|20/MaxTries|2",
     },
-    ["debuffs_on_command"] = {
+    debuffs_on_command = {
         -- slow:
         -- L65 Sha's Revenge (MAGIC, 65% slow, 3m30s duration)
         -- L70 Sha's Legacy (MAGIC -30 adj, 65% slow, 1m30s duration)
         "Sha's Legacy/Gem|3/MinMana|20/CheckFor|Balance of Discord",
     },
-    ["quickburns"] = {
+    quickburns = {
         -- oow T1 bp: Beast Tamer's Jerkin (Wild Spirit Infusion, +50% skill dmg mod, -15% dmg taken for 18s)
         -- oow T2 bp: Savagesoul Jerkin of the Wilds (Savage Spirit Infusion, +50% skill dmg mod, -15% dmg taken for 30s)
         "Savagesoul Jerkin of the Wilds",
@@ -189,7 +187,7 @@ settings.assist = {
         "Frenzy of Spirit",
         "Roar of Thunder",
     },
-    ["longburns"] = {
+    longburns = {
         "Bestial Alignment",
         "Empathic Fury",
         "Bestial Fury Discipline",

@@ -1,11 +1,13 @@
 local settings = { }
 
+settings.debug = true
+
 settings.swap = {
-    ["main"] = "Aurora, the Heartwood Blade|Mainhand/Notched Blade of Bloodletting|Offhand/Symbol of the Overlord|Ranged",
-    ["bfg"] = "Breezeboot's Frigid Gnasher|Mainhand",
-    ["ranged"] = "Plaguebreeze|Ranged",
-    ["noriposte"] = "Fishing Pole|Mainhand/Muramite Aggressor's Bulwark|Offhand",
-    ["fishing"] = "Fishing Pole|Mainhand",
+    main = "Aurora, the Heartwood Blade|Mainhand/Notched Blade of Bloodletting|Offhand/Symbol of the Overlord|Ranged",
+    bfg = "Breezeboot's Frigid Gnasher|Mainhand",
+    ranged = "Plaguebreeze|Ranged",
+    noriposte = "Fishing Pole|Mainhand/Muramite Aggressor's Bulwark|Offhand",
+    fishing = "Fishing Pole|Mainhand",
 }
 
 settings.gems = {
@@ -19,11 +21,12 @@ settings.gems = {
     ["Call of Lightning"] = 9,
 }
 
-settings.self_buffs = {
-    "Fuzzy Foothairs",
-    "Ring of the Beast", -- Form of Endurance III (slot 5: 270 hp)
-    --"Pendant of Discord", -- Aura of Taelosia (slot 8: 7 mana regen, slot 10: 7 hp regen)
+settings.illusions = {
+    default         = "halfling",
+    halfling        = "Fuzzy Foothairs",
+}
 
+settings.self_buffs = {
     -- "Briarcoat/MinMana|70", -- 49 ac, 8 ds
 
     -- SLOT 1 PROC BUFFS:
@@ -49,12 +52,12 @@ settings.self_buffs = {
 }
 
 settings.healing = {
-    ["life_support"] = {
+    life_support = {
         "Weapon Shield Discipline/HealPct|30",
         "Distillate of Divine Healing XI/HealPct|10",
     },
 
-    ["important"] = {
+    important = {
         "Stor",
         "Kamaxia",
         "Maynarrd",
@@ -65,25 +68,23 @@ settings.healing = {
         "Hybregee",
     },
 
-    ["important_heal"] = {
+    important_heal = {
         -- L65 Sylvan Light (850 hp, 3s cast time, cost 370 mana)
         -- L67 Sylvan Water (1135-1165 hp, 3s cast time, cost 456 mana)
         "Sylvan Water/HealPct|45/MinMana|5",
     },
-
-    ["who_to_heal"] = "Important", -- XXX impl. was "ImportantBots" in e3. accept both values
 }
 
 settings.assist = {
-    ["type"] = "Melee",
-    ["ranged_distance"] = 80,
-    ["engage_percent"] = 98,  -- XXX implement!
+    type = "Melee",
+    ranged_distance = 80,
+    engage_percent = 98,  -- XXX implement!
 
-    ["abilities"] = {
+    abilities = {
         "Kick",
     },
 
-    ["nukes"] = {
+    nukes = {
         -- fire nukes - timer 1:
         -- L65 Sylvan Burn (673 hp, 0.5s cast, cost 242 mana)
         -- L69 Hearth Embers (842 hp, 0.5s cast, cost 275 mana, 30s recast)
@@ -92,15 +93,15 @@ settings.assist = {
         -- L65 Ancient: Burning Chaos (734 hp, 0.5s cast, cost 264 mana)
         -- L70 Scorched Earth (1150 hp, 0.5s cast, cost 365 mana, 30s recast)
 
-        ["main"] = {
+        main = {
             "Scorched Earth/NoAggro/MinMana|60",
         },
 
-        ["fastfire"] = {
+        fastfire = {
             "Scorched Earth/NoAggro/MinMana|60",
         },
 
-        ["bigfire"] = {
+        bigfire = {
             "Scorched Earth/NoAggro/MinMana|60"
         },
 
@@ -109,16 +110,16 @@ settings.assist = {
         -- cold nukes - timer 3:
         -- L63 Frozen Wind (695 hp, 0.5s cast, cost 295 mana)
         -- L70 Ancient: North Wind (1032 hp, 0.5s cast, 30s recast, cost 392 mana)
-        ["fastcold"] = {
+        fastcold = {
             "Ancient: North Wind/NoAggro/MinMana|60",
         },
 
-        ["bigcold"] = {
+        bigcold = {
             "Ancient: North Wind/NoAggro/MinMana|60",
         },
     },
 
-    ["dots"] = {
+    dots = {
         -- magic dots:
         -- L67 Locust Swarm (magic -100 adj, 173-179 hp/tick, 1m, cost 406 mana)
         -- NOTE: RNG dot wont stack with DRU dot which is stronger ???
@@ -128,20 +129,20 @@ settings.assist = {
         "Entrap/MaxTries|2",
     },
 
-    ["debuffs"] = {
+    debuffs = {
         -- snare:
         -- L69 Earthen Shackles (chromatic -50 adj, 3.0 min, 55-60% snare)
         --"Earthen Shackles/Gem|3",
     },
 
-    ["debuffs_on_command"] = {
+    debuffs_on_command = {
     },
 
-    ["targetae"] = { -- XXX impl???
+    targetae = { -- XXX impl???
         "Hail of Arrows/MinMana|5",
     },
 
-    ["quickburns"] = {
+    quickburns = {
         -- combat skill - timer 1:
         -- L55 Trueshot Discipline (XXX)
         -- L69 Warder's Wrath (33m45s reuse, increase accuracy and crit rate for 1m)
@@ -166,7 +167,7 @@ settings.assist = {
         "Frost Wind",
     },
 
-    ["longburns"] = {
+    longburns = {
         -- AA 15 min reuse (also MGB:ed, so disabled)
         --"Auspice of the Hunter",      -- XXX condition: only use if MGB AA is down and more than 15 min cooldown.
     },

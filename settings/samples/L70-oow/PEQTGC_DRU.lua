@@ -20,11 +20,12 @@ settings.gems = {
     ["Skin of the Reptile"] = 9, -- defensive proc buff
 }
 
-settings.self_buffs = {
-    "Fuzzy Foothairs",
-    "Earring of Dragonkin", -- Chaotic Enlightenment (slot 8: 10 mana regen, slot 10: 6 hp regen)
-    "Xxeric's Matted-Fur Mask", -- Reyfin's Racing Thoughts (slot 4: 450 mana pool)
+settings.illusions = {
+    default         = "halfling",
+    halfling        = "Fuzzy Foothairs",
+}
 
+settings.self_buffs = {
     "Mask of the Wild/MinMana|10", -- 5 mana/tick
     "Blessing of Steeloak/MinMana|20",  -- L70 Blessing of Steeloak (43 ac, 772 hp, 9 mana/tick, cost 2210 mana, group)
     "Protection of Seasons/MinMana|40",
@@ -49,70 +50,54 @@ settings.healing = {
     },
 
     tanks = {
-        --"Bandy",
-        "Nullius",
-        --"Manu",
+        "Bandy",
         "Crusade",
+        --"Nullius",
+        --"Manu",
     },
+
+    -- fast heal:
+    -- L29 Greater Healing (280-350 hp, cost 115 mana)
+    -- L44 Healing Water (395-425 hp, cost 150 mana)
+    -- L51 Superior Healing (500-600 hp, cost 185 mana)
+    -- L55 Chloroblast (994-1044 hp, cost 331 mana)
+    -- L58 Tunare's Renewal (2925 hp, cost 400 mana - 75% CH)
+    -- L60 Nature's Touch (1491 hp, cost 457 mana)
+    -- L63 Nature's Infusion (2030-2050 hp, cost 560 mana)
+    -- L64 Karana's Renewal (4680 hp, cost 600 mana - 75% CH)
+    -- L65 Sylvan Infusion (2441 hp, cost 607 mana, 3.75s cast)
+    -- L65 Kelp-Covered Hammer (GoD class clicky)
+    -- L68 Chlorotrope (2790-2810 hp, cost 691 mana, 3.75s cast)
+    -- L70 Ancient: Chlorobon (3094 hp, cost 723 mana,3.75s cast)
+
+    -- hot v2 - stacks with CLR/SHM/PAL HoT:
+    -- L60 Nature's Recovery (slot 2: 30 hp/tick, 3.0 min, recast 90s, cost 250 mana)
+    -- L63 Spirit of the Wood AA
 
     tank_heal = {
-        "Ancient: Chlorobon/HealPct|35/MinMana|5",
-    },
-
-    all_heal = {
-        -- fast heal:
-        -- L29 Greater Healing (280-350 hp, cost 115 mana)
-        -- L44 Healing Water (395-425 hp, cost 150 mana)
-        -- L51 Superior Healing (500-600 hp, cost 185 mana)
-        -- L55 Chloroblast (994-1044 hp, cost 331 mana)
-        -- L58 Tunare's Renewal (2925 hp, cost 400 mana - 75% CH)
-        -- L60 Nature's Touch (1491 hp, cost 457 mana)
-        -- L63 Nature's Infusion (2030-2050 hp, cost 560 mana)
-        -- L64 Karana's Renewal (4680 hp, cost 600 mana - 75% CH)
-        -- L65 Sylvan Infusion (2441 hp, cost 607 mana, 3.75s cast)
-        -- L65 Kelp-Covered Hammer (GoD class clicky)
-        -- L68 Chlorotrope (2790-2810 hp, cost 691 mana, 3.75s cast)
-        -- L70 Ancient: Chlorobon (3094 hp, cost 723 mana,3.75s cast)
-        "Ancient: Chlorobon/HealPct|60/MinMana|20",
+        "Ancient: Chlorobon/HealPct|60", -- fast heal
+        "Kelp-Covered Hammer/HealPct|68", -- tacvi
     },
 
     important = {
-        "Stor",
-        "Kamaxia",
-        "Maynarrd",
-        "Arriane",
-        "Helge",
-        "Gerrald",
-        "Hankie",
-        "Hybregee",
-
-        "Drutten",
-        "Lofty",
-        "Gimaxx",
-        "Samma",
-        "Erland",
-        "Kesok",
+        "Stor", "Helge", "Kamaxia", "Maynarrd",
     },
 
     important_heal = {
         "Kelp-Covered Hammer/HealPct|85", -- tacvi clicky
-
-        "Ancient: Chlorobon/HealPct|75/MinMana|5",
+        "Ancient: Chlorobon/HealPct|70",
     },
+
+    all_heal = {
+        "Ancient: Chlorobon/HealPct|40/MinMana|30", -- fast heal
+        "Kelp-Covered Hammer/HealPct|68/Not|raid",
+    },
+
 
     group_heal = { -- XXX impl
         -- group heals:
         -- L70 Moonshadow (1500 hp, cost 1100 mana, 4.5s cast, 18s recast)
     },
-
-    hot = { -- XXX impl
-        -- hot v2 - stacks with CLR/SHM/PAL HoT:
-        -- L60 Nature's Recovery (slot 2: 30 hp/tick, 3.0 min, recast 90s, cost 250 mana)
-        -- L63 Spirit of the Wood AA
-        --"Nature's Recovery/HealPct|70/MinMana|20",
-    },
-
-    --["who_to_hot"] = "Tanks", -- XXX impl
 }
 
 settings.assist = {
@@ -141,7 +126,7 @@ settings.assist = {
     -- L70 Ancient: Glacier Frost (2042 hp, cost 405 mana)
     nukes = {
         main = {
-            "Solstice Strike/NoAggro/MinMana|30",
+            "Solstice Strike/NoAggro/MinMana|50",
         },
         -- fastfire == main
         -- bigfire == main
@@ -164,7 +149,7 @@ settings.assist = {
         -- Lxx Winged Death
         -- L63 Swarming Death (MAGIC: resist adj -100, 216-225 hp/tick, cost 357 mana)
         -- L68 Wasp Swarm (MAGIC: resist adj -100, 283-289 hp/tick, 54s, cost 454 mana)
-        "Wasp Swarm",
+        "Wasp Swarm/Not|raid",
 
         -- fire dots:
         -- L64 Vengeance of Tunare (FIRE: resist adj -30, 293-310 hp/tick, cost 345 mana)
@@ -238,12 +223,12 @@ settings.assist = {
     -- L48 Upheaval (618-725 hp, aerange 35, recast 24, cost 625 mana)
     -- L61 Catastrophe (850 hp, aerange 35, recast 24s, cost 650 mana)
     -- L66 Earth Shiver (1105 hp, aerange 35, recast 24s, cost 812 mana)
-    -- L70 Hungry Vines (ae snare, aerange 50, recast 30s, cost 500 mana, duration 12s)
+    -- L70 Hungry Vines (ae snare, aerange 50, recast 30s, cost 500 mana, duration 12s) (OOW)
     pbae = {
-        --"Earth Shiver/Gem|6/MinMana|10",
-        --"Catastrophe/Gem|7/MinMana|10",
-        --"Upheaval/Gem|8/MinMana|10",
-    }
+        "Earth Shiver/Gem|6/MinMana|10",
+        "Catastrophe/Gem|7/MinMana|10",
+        "Upheaval/Gem|8/MinMana|10",
+    },
 }
 
 return settings

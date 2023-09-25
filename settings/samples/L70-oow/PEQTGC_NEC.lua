@@ -10,23 +10,20 @@ settings.gems = {
     ["Dread Pyre"] = 1, -- fire dot
     ["Grip of Mori"] = 2, -- disease nuke + debuff
     ["Acikin"] = 3, -- poison nuke
-    ["Glyph of Darkness"] = 4, -- pet haste
+    ["Fang of Death"] = 4, -- lifetap dod
 
     ["Dark Salve"] = 6, -- pet heal
     ["Scent of Midnight"] = 7, -- debuff
     ["Mind Flay"] = 8, -- steal mana from target, give to group
-    ["Dead Men Floating"] = 9, -- group levitate
+    ["Embracing Darkness"] = 9, -- snare
+}
+
+settings.illusions = {
+    default         = "halfling",
+    halfling        = "Fuzzy Foothairs",
 }
 
 settings.self_buffs = {
-    "Fuzzy Foothairs",
-
-    -- Chaotic Enlightenment (slot 8: 10 mana regen, slot 10: 6 hp regen)
-    "Earring of Dragonkin",
-
-    -- Maelin's Meditation (slot 4: 400 mana pool)
-    "Muramite Signet Orb",
-
     -- Form of Rejuvenation III (slot 12: 12 hp/tick, slot 6: immunity)
     "Warped Mask of Animosity",
 
@@ -66,12 +63,23 @@ settings.assist = {
             -- L66 Acikin (1823 hp, cost 556 mana)
             -- L68 Call for Blood (1770 dmg, cost 568 mana) - adjusts dot dmg randomly
             -- L?? Ancient: Touch of Orshilak XXXXXX
-            "Acikin/NoAggro/MinMana|90",
+            "Acikin/NoAggro/MinMana|70",
 
             -- mana drain:
             -- L58 Mind Wrack (-300 mana)
             -- L70 Mind Flay (-360 mana)
             "Mind Flay/MaxMana|95",
+
+            -- snare dots:
+            -- L04 Clinging Darkness (8 hp/tick, 24-30% snare, 0.8 min, cost 20 mana)
+            -- L11 Engulfing Darkness (11 hp/tick, 40% snare, 1.0 min, cost 60 mana)
+            -- L27 Dooming Darkness (20 hp/tick, 48-59% snare, 1.5 min, cost 120 mana)
+            -- L47 Cascading Darkness (72 hp/tick, 60% snare, 1.6 min, cost 300 mana)
+            -- L59 Devouring Darkness (123 hp/tick, 69-75% snare, 1.3 min, cost 400 mana)
+            -- L63 Embracing Darkness (resist adj -20, 68-70 hp/tick, 75% snare, 2.0 min, cost 200 mana)
+            -- L68 Desecrating Darkness (resist adj -20, 96 hp/tick, 75% snare, 2.0 min, cost 248 mana)
+            -- Lxx Encroaching Darkness AA (damage free snare) (SoD)
+            "Embracing Darkness/Gem|2/MaxHP|15/Not|raid",
         }
     },
 
@@ -120,20 +128,6 @@ settings.assist = {
         -- L65 Night Stalker (122 hp/tick, DISEASE, resist adj -200, cost 950 mana)
         -- L65 Night's Beckon (220 hp/tick, MAGIC resist adj -200, cost 605 mana)
         -- L68 Fang of Death (370 hp/tick, MAGIC, resist adj -200, cost 750 mana)
-
-        -- snare dots:
-        -- L04 Clinging Darkness (8 hp/tick, 24-30% snare, 0.8 min, cost 20 mana)
-        -- L11 Engulfing Darkness (11 hp/tick, 40% snare, 1.0 min, cost 60 mana)
-        -- L27 Dooming Darkness (20 hp/tick, 48-59% snare, 1.5 min, cost 120 mana)
-        -- L47 Cascading Darkness (72 hp/tick, 60% snare, 1.6 min, cost 300 mana)
-        -- L59 Devouring Darkness (123 hp/tick, 69-75% snare, 1.3 min, cost 400 mana)
-        -- L63 Embracing Darkness (resist adj -20, 68-70 hp/tick, 75% snare, 2.0 min, cost 200 mana)
-        -- L68 Desecrating Darkness (resist adj -20, 96 hp/tick, 75% snare, 2.0 min, cost 248 mana)
-        --"Embracing Darkness/Gem|2/MinMana|10",
-
-
-        -- Encroaching Darkness AA (damage free snare)
-        --"Encroaching Darkness/MaxTries|2",
     },
 
     debuffs = {
@@ -171,7 +165,7 @@ settings.assist = {
 }
 
 settings.pet = {
-    ["heals"] = {
+    heals = {
         -- pet heals:
         -- L07 Mend Bones (22-32 hp)
         -- L26 Renew Bones (121-175 hp)
@@ -186,7 +180,7 @@ settings.pet = {
         "Dark Salve/HealPct|60",
     },
 
-    ["buffs"] = {
+    buffs = {
         "Glyph of Darkness/MinMana|30", -- pet haste
 
         "Algae Covered Stiletto/Shrink", -- XXX farm this clicky in powater

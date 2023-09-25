@@ -1,36 +1,41 @@
 local settings = { }
 
 settings.swap = {   -- XXX implement
-    ["main"] = "Vengeful Taelosian Blood Axe|Mainhand",
-    ["noks"] = "The Sword of Ssraeshza|Mainhand",
-    ["noriposte"] = "Fishing Pole|Mainhand/Howling Blood-Stained Bulwark|Offhand",
+    main = "Vengeful Taelosian Blood Axe|Mainhand",
+    noks = "The Sword of Ssraeshza|Mainhand",
+    noriposte = "Fishing Pole|Mainhand/Howling Blood-Stained Bulwark|Offhand",
+}
+
+settings.illusions = {
+    default         = "halfling",
+    halfling        = "Fuzzy Foothairs",
 }
 
 settings.self_buffs = {
-    "Fuzzy Foothairs",
     "Symbol of the Planemasters", -- proc buff: Pestilence Shock
+    "Shimmering Bauble of Trickery/Shrink",
 }
 
 settings.healing = {
-    ["life_support"] = {
+    life_support = {
         "Desperation/HealPct|40", -- L70 Desperation AA, 22 min reuse - more dmg the closer to death
         "Reckless Discipline/HealPct|30", -- L56 Reckless Discipline (increase riposte rate)
         "Distillate of Divine Healing XI/HealPct|8",
     }
 }
 
-    -- XXX IMPL COMBAT BUFFS:
-    -- L68 Cry Havoc (id 8003: group 100% melee crit chance. 1 min. works with TGB)
-    --Combat Buff=Cry Havoc/Blod/MinEnd|10
+-- XXX IMPL COMBAT BUFFS:
+-- L68 Cry Havoc (id 8003: group 100% melee crit chance. 1 min. works with TGB)
+--Combat Buff=Cry Havoc/Blod/MinEnd|10
 
 settings.assist = {
-    ["type"] = "Melee",
-    ["engage_percent"] = 98,
-    ["ranged_distance"] = 60, -- XXX 60 range worked for skillups in Throwing 87/310
+    type = "Melee",
+    engage_percent = 98,
+    ranged_distance = 60, -- XXX 60 range worked for skillups in Throwing 87/310
 
-    ["abilities"] = {
+    abilities = {
         -- L?? Frenzy (ability)
-        -- L?? Kick (ability) - XXX share timer with Frenzy?
+        -- L?? Kick (ability) - share timer with Frenzy
         "Frenzy",
         --"Kick",
 
@@ -43,7 +48,7 @@ settings.assist = {
         "Baffling Strike/PctAggro|90",
     },
 
-    ["quickburns"] = {
+    quickburns = {
         -- EPIC 1.5: Raging Taelosian Alloy Axe (+75 str, +75 str cap, +200% melee crit chance, +75 hot heal)
         -- EPIC 2.0: Vengeful Taelosian Blood Axe (+100 str, +100 str cap, 300% melee crit chance, 100 hot heal)
         "Vengeful Taelosian Blood Axe",
@@ -78,7 +83,7 @@ settings.assist = {
         "Unpredictable Rage Discipline",
     },
 
-    ["longburns"] = {
+    longburns = {
         -- L65 Untamed Rage AA, 36 min reuse (GoD)
         -- L70 Cascading Rage AA, 36 min reuse (DoDH)
         "Untamed Rage",
@@ -91,6 +96,11 @@ settings.assist = {
 
         -- L6x Savage Spirit Rank 1 AA, 1h reuse
         "Savage Spirit",
+    },
+
+    pbae = {
+        -- LX Rampage Rank 1 AA (10 min reuse)
+        "Rampage/Not|raid/MinMobs|15",
     },
 }
 

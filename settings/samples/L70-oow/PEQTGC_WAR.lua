@@ -18,19 +18,21 @@ settings.swap = { -- XXX impl
     bluntdmg  = "Girplan Hammer of Carnage|Mainhand",
 }
 
-settings.illusions = { -- TODO implement
-    default       = "skeleton", -- XXX either item name, or name of another key
-    skeleton      = "Amulet of Necropotence", -- 0s
-    halfling      = "Fuzzy Foothairs", -- 0s
-    imp           = "Imp Wings", -- 0s, levitate, +15 fire resist
-    air_elemental = "Second Breath", --0s, levitate
-    human         = "Circlet of Disguise", -- 7s
-    darkelf       = "Guise of the Deceiver", -- 6s
+settings.illusions = {
+    default         = "skeleton",
+    --
+    halfling        = "Fuzzy Foothairs",          -- 0s
+    human           = "Circlet of Disguise",      -- 7s
+    darkelf         = "Guise of the Deceiver",    -- 6s
+    woodelf         = "Crown of Deceit",          -- 6s
+
+    skeleton        = "Amulet of Necropotence",   -- 0s, -100 hp
+    imp             = "Imp Wings",                -- 0.1s, levitate, +15 fire resist
+    fire_elemental  = "Fiery Rock",               -- 0.1s, slot 2: +15 ds
+    air_elemental   = "Second Breath",            -- 0.1s, levitate
 }
 
 settings.self_buffs = {
-    "Amulet of Necropotence", -- XXX remove, use settings.illusions
-
     "Necklace of the Steadfast Spirit", -- Chaotic Ward (20 all resists, 67 ac) - stacks with all resist buffs. DON'T STACK WITH Form of Defense
     "Ring of the Beast", -- Form of Endurance III (slot 5: 270 hp)
     --"Hanvar's Hoop", -- Form of Defense III (slot 10: 81 ac)
@@ -80,14 +82,10 @@ settings.healing = {
         -- L6x Warlord's Tenacity Rank 4 AA (id: 5936, inc max hp by 3000, heal by 3410, dot 410/tick, 1.1 min)
         -- L68 Warlord's Tenacity Rank 5 AA (id: 5937, inc max hp by 4000, heal by 4545, dot 545/tick, 1.1 min)
         -- L70 Warlord's Tenacity Rank 6 AA (id: 5938, inc max hp by 5000, heal by 5680, dot 680/tick, 1.1 min)
-        "Warlord's Tenacity/HealPct|6",
+        --"Warlord's Tenacity/HealPct|6",
 
         "Glyph of Stored Life/HealPct|5|Zone|anguish", -- Expendable AA
     }
-}
-
-settings.misc = {       -- XXX implement
-    ["auto-loot"] = false, -- XXX false=default if unset
 }
 
 settings.assist = {
@@ -97,15 +95,18 @@ settings.assist = {
     ranged_distance = 100,
     engage_percent = 98,
 
-    taunts = { -- XXX impl. used if set
-        "Taunt",
-        -- XXX add more + ae taunts
+    taunts = {
+        "Bazu Bellow/MinEnd|70", -- Timer 7, 30s reuse             -- XXX impl endurance check
+        "Mock/MinEnd|70",        -- Timer 8, 30s reuse
+
+        --"Bladed Fang Mantle", -- DoN class clicky (Anger, 5 min reuse)
     },
 
     abilities = {
         --"Knee Strike", -- SoD
         "Bash",
         "Kick",
+
         --"Disarm",
     },
 
@@ -117,6 +118,19 @@ settings.assist = {
         -- L58 Fellstrike Discipline (increase melee damage)
         "Fellstrike Discipline",
     },
+
+    pbae = {
+        -- L61 Whirlwind Blade (45 sec reuse, timer 9)
+        -- L69 Cyclone Blade (45 sec reuse, timer 9)
+        "Cyclone Blade/MinMobs|10",
+
+        -- LX Rampage Rank 1 AA (10 min reuse)
+        "Rampage/MinMobs|15",
+
+        -- L59 Area Taunt AA (15 min reuse, 10m30s with Hastened Instigation 3)
+        "Area Taunt/MinMobs|25",
+    },
+
 }
 
 return settings

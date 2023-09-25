@@ -1,5 +1,7 @@
 local settings = { }
 
+settings.debug = true
+
 settings.swap = { -- XXX impl
     main = "Staff of Phenomenal Power|Mainhand",
     fishing = "Fishing Pole|Mainhand",
@@ -18,11 +20,13 @@ settings.gems = {
     ["Ancient: Greater Concussion"] = 9,
 }
 
+settings.illusions = {
+    default         = "halfling",
+    halfling        = "Fuzzy Foothairs",
+}
+
 settings.self_buffs = {
-    "Fuzzy Foothairs",
     --"Pyromancy/CheckFor|Mana Flare",     -- (DODH) L70 Pyromancy AA Rank 3 (id:8408, 15% chance proc spell id:8164, -500 hate, -500 hp/tick, -50 fr)
-    "Earring of Dragonkin", -- Chaotic Enlightenment (slot 8: 10 mana regen, slot 10: 6 hp regen)
-    --"Xxeric's Matted-Fur Mask", -- Reyfin's Racing Thoughts (slot 4: 450 mana pool)
 
     "Ether Skin/MinMana|20/CheckFor|Rune of Rikkukin",
 
@@ -50,6 +54,8 @@ settings.healing = {
     life_support = {
         "Distillate of Divine Healing XI/HealPct|10",
         --"Glyph of Stored Life/HealPct|4", -- Expendable AA
+
+        "Harvest of Druzzil/MaxMana|50",
     },
 }
 
@@ -201,14 +207,6 @@ settings.assist = {
         -- L66 Tears of the Sun (1168 hp, FIRE, adj -10, aerange 25, recast 10s, cost 529 mana)
         -- L69 Meteor Storm (886 hp, FIRE, adj -300, aerange 25, recast 12s, cost 523 mana)
     },
-}
-
-settings.wizard = { -- XXX impl / rearrange
---[[
-Auto-Harvest (On/Off)=On
-;Harvest=Harvest/Gem|8/MaxMana|22
-Harvest=Harvest of Druzzil/MaxMana|20
-]]--
 }
 
 return settings
