@@ -170,6 +170,7 @@ function Assist.beginKillSpawnID(spawnID)
     if have_pet() then
         log.Debug("Attacking with my pet %s", mq.TLO.Me.Pet.CleanName())
         mq.cmdf("/pet attack %d", spawnID)
+        delay(1)
     end
 
     follow.PauseForKill()
@@ -183,8 +184,6 @@ function Assist.beginKillSpawnID(spawnID)
     end
 
     if melee then
-        mq.cmdf("/target id %d", spawnID)
-
         local spawn = spawn_from_id(spawnID)
         if spawn == nil or spawn() == nil then
             return
@@ -279,7 +278,7 @@ function performSpellAbility(targetID, abilityRows, category, used)
     end
 
     follow.Pause()
-    delay(50)
+    delay(10)
 
     for v, row in ipairs(abilityRows) do
         local skip = false
@@ -301,7 +300,7 @@ function performSpellAbility(targetID, abilityRows, category, used)
             end
             --log.Debug("Trying to %s on %s with %s", category, spawn.Name(), spellConfig.Name)
             local spawnName = spawn.Name()
-            if castSpellAbility(spawn, row) then
+            if castSpellAbility(targetID, row) then
                 log.Debug("Did \ay%s\ax on %s with %s", category, spawnName, spellConfig.Name)
                 if used ~= nil then
                     used[row] = true
@@ -331,7 +330,7 @@ function Assist.Tick()
             for k, spellRow in pairs(botSettings.settings.assist.pbae) do
                 local spellConfig = parseSpellLine(spellRow)
                 if is_spell_ready(spellConfig.Name) or is_combat_ability_ready(spellConfig.Name) then
-                    if castSpellAbility(mq.TLO.Me, spellRow) then
+                    if castSpellAbility(mq.TLO.Me.ID(), spellRow) then
                         log.Info("Used PBAE \ay%s\ax", spellConfig.Name)
                         return
                     end
@@ -368,8 +367,12 @@ function Assist.Tick()
         return
     end
 
+    if melee and mq.TLO.Target.ID() ~= Assist.targetID then
+        mq.cmdf("/target id %d", Assist.targetID)
+        mq.delay(1)
+    end
     if melee and not mq.TLO.Me.Combat() then
-        cmd("/attack on")
+        mq.cmd("/attack on")
     end
 
     Assist.TankTick()

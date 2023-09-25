@@ -149,7 +149,7 @@ local MAX_BUFF_SLOTS = 20 -- 20 for OOW with AA:s
 ---@return boolean true if spell cast
 function cure_player(name, kind)
     local spawn = spawn_from_query("pc "..name)
-    if spawn == nil then
+    if spawn == nil or spawn() == nil then
         log.Info("Failed to cure %s, not in zone!", name)
         return false
     end
@@ -175,7 +175,7 @@ function cure_player(name, kind)
             if have_spell(cureConfig.Name) or is_alt_ability_ready(cureConfig.Name) then
                 all_tellf("Curing \ag%s\ax with \ay%s\ax (\ay%s\ax)", name, cureConfig.Name, kind)
 
-                if castSpellAbility(spawn, cureRow) then
+                if castSpellAbility(spawn.ID(), cureRow) then
                     return true
                 end
             else

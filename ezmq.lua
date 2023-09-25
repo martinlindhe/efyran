@@ -1810,13 +1810,13 @@ function getEfyranRoot()
     return mq.TLO.Lua.Dir() .. "/efyran"
 end
 
----@param spawn spawn|nil
+---@param spawnID integer
 ---@param row string
 ---@param callback? fun(): boolean
 ---@return boolean true if spell/ability was cast
-function castSpellAbility(spawn, row, callback)
+function castSpellAbility(spawnID, row, callback)
 
-    if spawn == nil or spawn() == nil then
+    if spawnID == 0 or spawnID == nil then
         return false
     end
 
@@ -1873,18 +1873,6 @@ function castSpellAbility(spawn, row, callback)
         return false
     end
 
-    if spawn ~= nil and spawn() ~=nil and spell.MaxHP ~= nil and spawn.PctHPs() <= spell.MaxHP then
-        -- eg. Snare mob at low health
-        --log.Debug("SKIP MaxHP %s, %d vs required %d", spell.Name, spawn.PctHPs(), spell.MaxHP)
-        return false
-    end
-
-    if spawn ~= nil and spawn() ~=nil and spell.MaxLevel ~= nil and spawn.Level() > spell.MaxLevel then
-        -- eg. skip Stun if target is too high level
-        log.Debug("SKIP MaxLevel %s, %d vs required %d", spell.Name, spawn.Level(), spell.MaxLevel)
-        return false
-    end
-
     if spell.Summon ~= nil and inventory_item_count(spell.Name) == 0 then
         log.Info("SKIP Summon %s, missing summoned item mid-fight", spell.Name)
         return false
@@ -1892,16 +1880,6 @@ function castSpellAbility(spawn, row, callback)
 
     if spell.NoPet ~= nil and spell.NoPet and have_pet() then
         all_tellf("SKIP NoPet, i have a pet up")
-        return false
-    end
-
-    if spell.Group and spawn ~= nil and spawn() ~=nil and not is_grouped_with(spawn.Name()) then
-        all_tellf("SKIP Group, i am not grouped with %s (spell %s)", spawn.Name(), spell.Name)
-        return false
-    end
-
-    if spell.Self and spawn ~= nil and spawn() ~=nil and spawn.Name() ~= mq.TLO.Me.Name() then
-        all_tellf("SKIP Self, cant cast on %s (spell %s)", spawn.Name(), spell.Name)
         return false
     end
 
@@ -1934,11 +1912,31 @@ function castSpellAbility(spawn, row, callback)
         return false
     end
 
-    --log.Debug("castSpellAbility START CAST %s", spell.Name)
-    local spawnID = nil
-    if spawn ~= nil and spawn() ~=nil then
-        spawnID = spawn.ID()
+    local spawn = spawn_from_id(spawnID)
+
+    if spawn ~= nil and spawn() ~=nil and spell.MaxHP ~= nil and spawn.PctHPs() <= spell.MaxHP then
+        -- eg. Snare mob at low health
+        --log.Debug("SKIP MaxHP %s, %d vs required %d", spell.Name, spawn.PctHPs(), spell.MaxHP)
+        return false
     end
+
+    if spawn ~= nil and spawn() ~=nil and spell.MaxLevel ~= nil and spawn.Level() > spell.MaxLevel then
+        -- eg. skip Stun if target is too high level
+        log.Debug("SKIP MaxLevel %s, %d vs required %d", spell.Name, spawn.Level(), spell.MaxLevel)
+        return false
+    end
+
+    if spell.Group and spawn ~= nil and spawn() ~=nil and not is_grouped_with(spawn.Name()) then
+        all_tellf("SKIP Group, i am not grouped with %s (spell %s)", spawn.Name(), spell.Name)
+        return false
+    end
+
+    if spell.Self and spawn ~= nil and spawn() ~=nil and spawn.Name() ~= mq.TLO.Me.Name() then
+        all_tellf("SKIP Self, cant cast on %s (spell %s)", spawn.Name(), spell.Name)
+        return false
+    end
+
+    --log.Debug("castSpellAbility START CAST %s", spell.Name)
 
     castSpell(spell.Name, spawnID)
 

@@ -156,7 +156,7 @@ function Pet.BuffMyPet()
 
         if not skip then
             log.Debug("Refreshing pet buff %s", spellConfig.Name)
-            castSpellAbility(mq.TLO.Me.Pet, spellConfig.Name)
+            castSpellAbility(mq.TLO.Me.Pet.ID(), spellConfig.Name)
             return true
         end
     end

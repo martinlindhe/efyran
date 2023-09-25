@@ -601,7 +601,7 @@ function rez_it(spawnID)
     for i = 1, 3 do
         if is_spell_ability_ready(rez) then
             all_tellf("Rezzing \ag%s\ax with \ay%s\ax. %d/3", spawn.Name(), rez, i)
-            castSpellAbility(spawn, rez)
+            castSpellAbility(spawnID, rez)
             return true
         else
             all_tellf("\arWARN\ax: Not ready to rez \ag%s\ax. %d/3", spawn.Name(), i)

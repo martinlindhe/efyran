@@ -420,7 +420,7 @@ function healPeer(spell_list, peer, pct)
         else
             log.Info("Healing \ag%s\ax at %d%% with \ay%s\ax", peer, pct, spellConfig.Name)
 
-            local check = castSpellAbility(spawn, heal, function() -- XXX castSpellAbility should take spellConfig obj directly
+            local check = castSpellAbility(spawn.ID(), heal, function() -- XXX castSpellAbility should take spellConfig obj directly
                 if not is_casting() then
                     log.Info("Done casting heal, breaking")
                     return true

@@ -245,7 +245,7 @@ function buffs.RefreshCombatBuffs()
         spellConfig = parseSpellLine(buff)
 
         if matches_filter(buff, mq.TLO.Me.Name()) and is_spell_ability_ready(spellConfig.Name) then
-            if castSpellAbility(mq.TLO.Me, buff) then
+            if castSpellAbility(mq.TLO.Me.ID(), buff) then
                 log.Info("RefreshCombatBuffs refreshed \ay%s\ax (self)", buff)
             end
         end
@@ -269,7 +269,7 @@ function buffs.RefreshCombatBuffs()
                     if spawn ~= nil then
                         if peer_has_buff(name, spellConfig.Name) or peer_has_song(name, spellConfig.Name) then
                             log.Debug("RefreshCombatBuffs peer %s has combat buff already %s", name, spellConfig.Name)
-                        elseif castSpellAbility(spawn, buff) then
+                        elseif castSpellAbility(spawn.ID(), buff) then
                             all_tellf("COMBAT BUFF \ay%s\ax on \ag%s\ax", spellConfig.Name, name)
                         end
                     end
