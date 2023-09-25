@@ -13,6 +13,7 @@ local follow  = require("efyran/e4_Follow")
 local heal    = require("efyran/e4_Heal")
 local tribute = require("efyran/e4_Tribute")
 local qol     = require("efyran/e4_QoL")
+local alerts  = require("efyran/e4_Alerts")
 
 seed_process()
 
@@ -22,6 +23,7 @@ buffs.Init()
 group.Init()
 heal.Init()
 assist.Init()
+alerts.Init()
 
 -- NOTE: qol.Init() also verifies spell lines, so it must be called last
 qol.Init()
