@@ -197,6 +197,16 @@ function Assist.beginKillSpawnID(spawnID)
         else
             Assist.meleeDistance = tonumber(botSettings.settings.assist.melee_distance)
         end
+
+        if melee and mq.TLO.Target.ID() ~= Assist.targetID then
+            mq.cmdf("/target id %d", Assist.targetID)
+            mq.delay(1)
+        end
+        if melee and not mq.TLO.Me.Combat() then
+            mq.cmd("/attack on")
+            mq.delay(1)
+        end
+
         move_to(spawnID)
         Assist.meleeStick()
     end

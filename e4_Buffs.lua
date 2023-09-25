@@ -571,7 +571,7 @@ function buffs.RequestAvailabiliy()
 
             if found then
                 -- request available buffs from them
-                log.Info("Found buffer %s: %s", buffClasses[i], buffs.buffers[buffClasses[i]])
+                log.Debug("Found buffer %s \ag%s\ax", buffClasses[i], buffs.buffers[buffClasses[i]])
                 cmdf("/squelch /bct %s //request_buffs %s", buffs.buffers[buffClasses[i]], mq.TLO.Me.Name())
             end
         end

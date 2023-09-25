@@ -43,7 +43,6 @@ function Follow.Start(spawnName, force)
         return
     end
 
-
     if Follow.IsFollowing() then
         Follow.Pause()
     end
@@ -118,13 +117,13 @@ function Follow.Update(force)
     end
 
     local spawn = spawn_from_peer_name(Follow.spawnName)
-    if spawn == nil then
+    if spawn == nil or spawn() == nil then
         -- happens when following a toon across zoneline and the toon has yet to zone
         log.Warn("Follow update fail on %s", Follow.spawnName)
         return
     end
     local spawnID = spawn.ID()
-    if spawnID == nil then
+    if spawnID == nil or spawnID == 0 then
         return
     end
 
@@ -156,11 +155,8 @@ function Follow.Update(force)
         all_tellf("AdvPath: WaitingWarp - force follow")
     end
 
-
     if force or not mq.TLO.AdvPath.Following() then
-
-        -- XXX AdvPath MaxRange
-        mq.cmdf("/afollow spawn %d", spawn.ID())
+        mq.cmdf("/afollow spawn %d", spawnID)
     end
 end
 

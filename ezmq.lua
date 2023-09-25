@@ -152,7 +152,11 @@ end
 function peer_class_shortname(peer)
     local nb = mq.TLO.NetBots(peer)
     if nb() == nil or nb.Class() == nil then
-        all_tellf("\arERROR failed to look up peer %s", peer)
+        all_tellf("\arERROR1 failed to look up peer %s", peer)
+        return ""
+    end
+    if nb.Class() == nil then
+        all_tellf("\arERROR2 failed to look up peer %s", peer)
         return ""
     end
     return nb.Class.ShortName()
@@ -2236,7 +2240,7 @@ function findBestClickyWithEffectGroup(cat, effects)
     local best = 0
     local name = nil
     for effect, power in pairs(effects) do
-        log.Info("Effect %s  ...", effect)
+        --log.Debug("Effect %s  ...", effect)
         local itemName = findItemWithEffect(effect)
         if itemName ~= nil and power > best then
             log.Info("Found item \ag%s\ax with effect \ay%s\ax (%d)", itemName, effect, power)
