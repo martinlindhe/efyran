@@ -150,7 +150,7 @@ function CommandQueue.Process()
             end
 
             log.Info("got told to kill but already on target, ending current fight")
-            assist.EndFight()
+            assist.EndFight(false)
         end
 
         log.Debug("Killing %s, type %s", spawn.DisplayName(), spawn.Type())

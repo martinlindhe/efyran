@@ -70,7 +70,7 @@ function QoL.Init()
         elseif in_group() and not is_group_leader() then
             mq.cmdf("/consent %s", mq.TLO.Group.Leader())
         end
-        assist.EndFight()
+        assist.EndFight(false)
     end
     mq.event("died1", "You have been slain by #*#", dead)
     mq.event("died2", "You died.", dead)

@@ -5,6 +5,8 @@ local mq = require("mq")
 
 local log = require("efyran/knightlinc/Write")
 
+local timer = require("efyran/Timer")
+
 -- returns true if `spawn` is within maxDistance
 ---@param spawn spawn
 ---@param maxDistance number
@@ -1321,9 +1323,14 @@ end
 ---@field public Self boolean This is a self spell (used for auto cure).
 ---@field public Only string /only|xxx filter
 ---@field public Not string /not|xxx filter
+---@field public Delay integer Number of seconds between reuse of this spell/ability.
 
-local shortProperties = { "Shrink", "GoM", "NoAggro", "NoPet", "Group", "Self" } -- is turned into bools
-local intProperties = { "PctAggro", "MinMana", "MaxMana", "MinEnd", "MinHP", "MaxHP", "MaxLevel", "HealPct", "MinMobs", "MaxMobs", "MinPlayers", "MaxTries" } -- is turned into integers
+-- is turned into bools
+local shortProperties = { "Shrink", "GoM", "NoAggro", "NoPet", "Group", "Self" }
+
+-- is turned into integers
+local intProperties = { "PctAggro", "MinMana", "MaxMana", "MinEnd", "MinHP", "MaxHP", "MaxLevel", "HealPct", "MinMobs", "MaxMobs", "MinPlayers", "MaxTries", "Delay" }
+
 -- parses a spell/ability etc line with properties, returns a object
 -- example in: "Ward of Valiance/MinMana|50/CheckFor|Hand of Conviction"
 ---@param s string
@@ -1814,6 +1821,9 @@ function getEfyranRoot()
     return mq.TLO.Lua.Dir() .. "/efyran"
 end
 
+
+local castSpellAbilityTimers = {}
+
 ---@param spawnID integer
 ---@param row string
 ---@param callback? fun(): boolean
@@ -1938,6 +1948,20 @@ function castSpellAbility(spawnID, row, callback)
     if spell.Self and spawn ~= nil and spawn() ~=nil and spawn.Name() ~= mq.TLO.Me.Name() then
         all_tellf("SKIP Self, cant cast on %s (spell %s)", spawn.Name(), spell.Name)
         return false
+    end
+
+    -- Delay must be the last check as it resets the cast timer
+    if spell.Delay ~= nil then
+        local t = castSpellAbilityTimers[row]
+        if t == nil then
+            castSpellAbilityTimers[row] = timer.new(spell.Delay)
+        else
+            if not castSpellAbilityTimers[row]:expired() then
+                return false
+            end
+            all_tellf("Timer expired, restarting for \ay%s\ax (%d sec)", spell.Name, spell.Delay)
+            castSpellAbilityTimers[row]:restart()
+        end
     end
 
     --log.Debug("castSpellAbility START CAST %s", spell.Name)

@@ -93,7 +93,7 @@ settings.assist = {
             -- L70 Ether Flame (5848 hp, resist adj -50, cost 1550 mana, 8s cast)
             -- L70 Corona Flare (3770 hp, resist adj -10, cost 800 mana, 8s cast)
             -- L70 Ancient: Core Fire (4070 hp, resist adj -10, cost 850 mana, 8s cast)
-            "Chaos Flame/NoAggro/MinMana|5",
+            "Chaos Flame/NoAggro/MinMana|5/Delay|10",
             "Ancient: Core Fire/GoM/NoAggro",
         },
 
@@ -107,7 +107,7 @@ settings.assist = {
             "Mind Crash/PctAggro|99",
 
             "Scepter of Incantations",
-            "Ancient: Core Fire/NoAggro/MinMana|5",
+            "Ancient: Core Fire/NoAggro/MinMana|5/Delay|10",
         },
 
         -- cold nukes:
@@ -129,10 +129,10 @@ settings.assist = {
         -- L70 Ancient: Spear of Gelaqua (1976 hp, resist adj -10, cost 345 mana, 3.5s cast)
         fastcold = {
             "Spark of Ice/NoAggro/MinMana|5",
-            "Gelidin Comet/GoM/NoAggro/Gem|4/MinMana|5",
+            "Gelidin Comet/GoM/NoAggro/Gem|4/MinMana|5/Delay|10",
         },
         bigcold = {
-            "Gelidin Comet/NoAggro/Gem|4/MinMana|5",
+            "Gelidin Comet/NoAggro/Gem|4/MinMana|5/Delay|10",
         },
 
         -- magic nukes:

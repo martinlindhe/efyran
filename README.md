@@ -242,6 +242,7 @@ for assist.abilities and assist.nukes (castSpellAbility)
 - NoPet
 - MaxHP   = only use if mob is equal or below this HP %
 - MaxLevel = only use if mob is equal or below this level
+- Delay   = Number of seconds between reuse of this spell/ability
 
 for heals and life support (healPeer)
 - MinMana|50
