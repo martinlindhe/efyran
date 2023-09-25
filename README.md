@@ -45,22 +45,6 @@ Add some socials to simplify control:
 
 
 
-## How auto healing works
-
-Instead of all healers constantly monitoring everyone, the peers instead report when they need healing.
-
-All healers join the special zone healing channel, "server_shortname_healme".
-
-When a bot is < 100%, they report their name and current HP % to the healme channel, "Avicii 73".
-
-Healers read the message and given some conditions, puts the message on their internal heal queue.
-
-The heal queue is separate from the command queue and is always prioritized ahead of other actions.
-
-When picking from the queue:
-- tanks, then important bots is always picked ahead of the rest in queue
-
-
 
 
 # How auto buffing works
@@ -215,13 +199,6 @@ Also, efyran is written for modern Macroquest.
 Auto cure: each group needs a curer, and toons will auto beg for cures. This allows for zero-setup auto curing.
 Assumes that each group has at least 1 curer (shm/dru/pal/clr)
 
-
-## Special channels
-
-"skillup" - ability skill-ups is posted here
-"xp" - xp gains is posted here
-
-"server_zone_healme" - heal request channel for current zone
 
 
 

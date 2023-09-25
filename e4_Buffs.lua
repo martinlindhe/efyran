@@ -41,13 +41,16 @@ local buffs = {
     -- timers
     resumeTimer = timer.new_expired(4), -- 4s   - interval after end of fight to resume buffing
 
-    requestAvailabiliyTimer = timer.new_random(5), -- 5s  - interval after start-up to wait before requesting buff availability
+    requestAvailabiliyTimer = timer.new_random(3), -- 3s  - interval after start-up to wait before requesting buff availability
 
     -- clickies
-    manaRegenClicky  = FindBestManaRegenClicky(),
-    manaPoolClicky   = FindBestManaPoolClicky(),
-    attackClicky     = FindBestAttackClicky(),
-    allResistsClicky = FindBestAllResistsClicky(),
+    manaRegenClicky       = FindBestManaRegenClicky(),
+    manaPoolClicky        = FindBestManaPoolClicky(),
+    attackClicky          = FindBestAttackClicky(),
+
+    allResistsClicky      = FindBestAllResistsClicky(),
+    formOfEnduranceClicky = FindBestFormOfEnduranceClicky(),
+    formOfDefenseClicky   = FindBestFormOfDefenseClicky(),
 }
 
 function buffs.Init()

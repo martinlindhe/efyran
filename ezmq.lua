@@ -2294,6 +2294,7 @@ function FindBestManaPoolClicky()
 end
 
 -- XXX other attack line: Grim Aura +
+--"Reaper's Ring/CheckFor|Strength of Tunare", -- +10 atk (slot 1) - Grim Aura
 --"Totem of Elitist Rites/CheckFor|Strength of Tunare", -- Aura of Rage - 20 atk (slot 1)
 local attackEffects = {
     ["Savage Guard"]  = 25, -- slot 5: 25 attack. Items: Serrated Dart of Energy (potime), Irestone Band of Rage (ikkinz 3 raid)
@@ -2319,6 +2320,21 @@ local allResistsEffects = {
 ---@return string|nil
 function FindBestAllResistsClicky()
     return findBestClickyWithEffectGroup("all-resists", allResistsEffects)
+end
+
+local formOfEnduranceEffects = {
+    ["Form of Endurance II"]  = 180, -- slot 6: immunity, slot 5: 180 max hp. Items: Veil of the Inferno (potime)
+    ["Form of Endurance III"] = 270, -- slot 6: immunity, slot 5: 270 max hp. Items: Ring of the Beast (anguish)
+}
+function FindBestFormOfEnduranceClicky()
+    return findBestClickyWithEffectGroup("form-of-endurance", formOfEnduranceEffects)
+end
+
+local formOfDefenceEffects = {
+    ["Form of Defense III"] = 81,  -- slot 6: immunity, slot 10: 81 ac. Items: Hanvar's Hoop (anguish)
+}
+function FindBestFormOfDefenseClicky()
+    return findBestClickyWithEffectGroup("form-of-defense", formOfDefenceEffects)
 end
 
 -- returns the name of the first item found with listed effect
