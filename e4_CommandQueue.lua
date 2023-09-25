@@ -101,6 +101,7 @@ function CommandQueue.Process()
         cmd("/notify ConfirmationDialogBox Yes_Button leftmouseup")
         cmd("/squelch /raidaccept")
     elseif v.Name == "zoned" then
+        delay(5000) -- 5s
         perform_zoned_event()
     elseif v.Name == "dropinvis" then
         drop_invis()
@@ -150,7 +151,7 @@ function CommandQueue.Process()
             end
 
             log.Info("got told to kill but already on target, ending current fight")
-            assist.EndFight(false)
+            assist.EndFight()
         end
 
         log.Debug("Killing %s, type %s", spawn.DisplayName(), spawn.Type())
@@ -489,8 +490,6 @@ end
 -- performs various tasks when toon has finished starting up / zoning
 function perform_zoned_event()
     log.Debug("I zoned into %s", zone_shortname())
-
-    delay(5000) -- 5s
 
     pet.ConfigureAfterZone()
     clear_ae_rezzed()

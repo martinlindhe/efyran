@@ -83,7 +83,7 @@ end
 function Assist.backoff()
     if Assist.targetID ~= 0 then
         log.Info("Backing off target %d", Assist.targetID)
-        Assist.EndFight(false)
+        Assist.EndFight()
     end
 end
 
@@ -238,8 +238,7 @@ function Assist.meleeStick()
     end
 end
 
----@param forceFollow boolean
-function Assist.EndFight(forceFollow)
+function Assist.EndFight()
     Assist.targetID = 0
     Assist.debuffsUsed = {}
     Assist.dotsUsed = {}
@@ -272,9 +271,7 @@ function Assist.EndFight(forceFollow)
 
     Assist.prepareForNextFight()
 
-    if forceFollow then
-        follow.ResumeAfterKill()
-    end
+    follow.ResumeAfterKill()
 end
 
 -- Returns true if spell/ability was used
@@ -364,7 +361,7 @@ function Assist.Tick()
     local spawn = spawn_from_id(Assist.targetID)
 
     if spawn == nil or spawn() == nil then
-        Assist.EndFight(true)
+        Assist.EndFight()
         return
     end
 
@@ -378,7 +375,7 @@ function Assist.Tick()
     end
 
     if spawn == nil or spawn() == nil or spawn.ID() == 0 or spawn.Type() == "Corpse" or spawn.Type() == "NULL" then
-        Assist.EndFight(true)
+        Assist.EndFight()
         return
     end
 
