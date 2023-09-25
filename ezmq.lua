@@ -1823,6 +1823,9 @@ end
 
 
 local castSpellAbilityTimers = {}
+function resetCastSpellAbilityTimers()
+    castSpellAbilityTimers = {}
+end
 
 ---@param spawnID integer
 ---@param row string

@@ -247,6 +247,8 @@ function Assist.EndFight(forceFollow)
     Assist.longburns = false
     Assist.fullburns = false
 
+    resetCastSpellAbilityTimers()
+
     buffs.resumeTimer:restart()
 
     if not is_brd() and is_casting() then
