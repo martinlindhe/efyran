@@ -39,7 +39,7 @@ local buffs = {
     timeZoned = os.time(),
 
     -- timers
-    resumeTimer = timer.new_expired(4), -- 4s   - interval after end of fight to resume buffing
+    resumeTimer = timer.new_expired(2), -- 2s   - interval after end of fight to resume buffing
 
     requestAvailabiliyTimer = timer.new_random(3), -- 3s  - interval after start-up to wait before requesting buff availability
 
@@ -157,14 +157,19 @@ function buffs.Tick()
         return
     end
 
-    if not buffs.resumeTimer:expired()  then
-        --log.Debug("Buff tick: resumeTimer not ready")
-        return
-    end
-
     if checkDebuffsTimer:expired() then
         buffs.HandleDebuffs()
         checkDebuffsTimer:restart()
+    end
+
+    if refreshCombatBuffsTimer:expired() then
+        buffs.RefreshCombatBuffs()
+        refreshCombatBuffsTimer:restart()
+    end
+
+    if not buffs.resumeTimer:expired()  then
+        --log.Debug("Buff tick: resumeTimer not ready")
+        return
     end
 
     if not is_standing() or not allow_buff_in_zone() then
@@ -173,11 +178,6 @@ function buffs.Tick()
 
     if obstructive_window_open() then
         return
-    end
-
-    if refreshCombatBuffsTimer:expired() then
-        buffs.RefreshCombatBuffs()
-        refreshCombatBuffsTimer:restart()
     end
 
     if buffs.RefreshIllusion() then
@@ -240,22 +240,37 @@ function buffs.RefreshCombatBuffs()
         return
     end
 
-    -- Refresh on me (WAR, ROG)
+    -- Refresh on me (WAR, ROG, BST, MNK, BER)
+    -- BER L68 Cry Havoc (id 8003: group 100% melee crit chance. 1 min. works with TGB) DoDH
+    -- WAR L68 Commanding Voice (20% dodge to group, 100 range, disc, 200 endurance, 1 min duration) DoDH
+    -- ROG L68 Thief's Eyes (+5% hit chance with all skills to group, 1 min, cost 200 endurance) DoDH
+    -- MMK L68 Fists of Wu (group: increase double attack by 6%, 1.0 min) DoDH
     for _, buff in pairs(botSettings.settings.combat_buffs) do
         spellConfig = parseSpellLine(buff)
 
         if matches_filter(buff, mq.TLO.Me.Name()) and is_spell_ability_ready(spellConfig.Name) then
             if castSpellAbility(mq.TLO.Me.ID(), buff) then
-                log.Info("RefreshCombatBuffs refreshed \ay%s\ax (self)", buff)
+                all_tellf("RefreshCombatBuffs refreshed \ay%s\ax (self)", spellConfig.Name)
+                return
             end
         end
     end
 
-    if not is_dru() and not is_shm() and not is_enc() then
+    if not is_dru() and not is_shm() and not is_enc() and not is_bst() and not is_mag() then
         return
     end
 
-    -- Refresh on group (DRU, SHM, ENC)
+    -- XXX is there similar buffs for RNG ? or more classes?
+
+    -- TODO Skin of the Reptile should be castable on a non-grouped peer ...
+
+    -- Refresh on group (DRU, SHM, ENC, BST)
+    -- DRU L68 Skin of the Reptile (melee proc heals when hit)
+    -- SHM L68 Lingering Sloth (add proc that can slow mobs that hit it, 4 min)
+    -- SHM L69 Spirit of the Panther (add proc Panther Maw, rate mod 400, 1 min) DoN
+    -- BST L70 Ferocity of Irionu (52 sta, 187 atk, 65 all resists, 6.5 min)
+    -- ENC L70 Mana Flare (timer 7, trigger Mana Flare Strike, dmg 700)
+    -- MAG L68 Burning Aura (add defensive proc Burning Vengeance, 3 min)
     for i=1,mq.TLO.Group.Members() do
         local dist = mq.TLO.Group.Member(i).Distance()
         local name = mq.TLO.Group.Member(i).Name()
@@ -271,6 +286,7 @@ function buffs.RefreshCombatBuffs()
                             log.Debug("RefreshCombatBuffs peer %s has combat buff already %s", name, spellConfig.Name)
                         elseif castSpellAbility(spawn.ID(), buff) then
                             all_tellf("COMBAT BUFF \ay%s\ax on \ag%s\ax", spellConfig.Name, name)
+                            return
                         end
                     end
                 end
@@ -403,6 +419,8 @@ function handleBuffRequest(req)
         all_tellf("\arFATAL level is not a number: %s: %s, from peer %s, buff %s, input %s", type(level), tostring(level), req.Peer, req.Buff, checkRow)
         return false
     end
+
+    wait_until_not_casting()
 
     -- see if we have any rank of this buff
     for idx, checkRow in pairs(buffRows) do

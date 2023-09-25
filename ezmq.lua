@@ -148,20 +148,16 @@ function is_peer_in_zone(peer)
     return spawn ~= nil and is_peer(spawn.Name())
 end
 
--- Returns peer class shortname, eg "WAR".
----@param peer string
+-- Returns class shortname, eg "WAR" from a spawn in zone.
+---@param query string
 ---@return string
-function peer_class_shortname(peer)
-    local nb = mq.TLO.NetBots(peer)
-    if nb() == nil or nb.Class() == nil then
-        all_tellf("\arERROR1 failed to look up peer %s", peer)
+function spawn_class_shortname_by_name(query)
+    local spawn = spawn_from_query(query)
+    if spawn == nil or spawn() == nil then
+        all_tellf("\arERROR failed to look up spawn %s", query)
         return ""
     end
-    if nb.Class() == nil then
-        all_tellf("\arERROR2 failed to look up peer %s", peer)
-        return ""
-    end
-    return nb.Class.ShortName()
+    return spawn.Class.ShortName()
 end
 
 -- returns true if spawnID is another peer
@@ -705,6 +701,18 @@ end
 ---@return boolean
 function is_enc()
     return mq.TLO.Me.Class.ShortName() == "ENC"
+end
+
+-- Am I a Monk?
+---@return boolean
+function is_mnk()
+    return mq.TLO.Me.Class.ShortName() == "MNK"
+end
+
+-- Am I a Beastlord?
+---@return boolean
+function is_bst()
+    return mq.TLO.Me.Class.ShortName() == "BST"
 end
 
 -- Am I in a guild?
@@ -1530,10 +1538,10 @@ function unflood_delay()
     if players < count then
         count = players
     end
-    if count < 30 then
-        count = 30
+    if count < 12 then
+        count = 12
     end
-    random_delay(count * 200) -- minimum 30*200 = 6s cap
+    random_delay(count * 200) -- minimum 12*200 = 2,4s cap
 end
 
 -- Returns true if `name` is ready to use.
@@ -1680,7 +1688,7 @@ end
 ---@param line string
 ---@param sender string Peer name of sender
 function matches_filter_line(line, sender)
-    local class = peer_class_shortname(sender)
+    local class = spawn_class_shortname_by_name(sender)
     local tokens = split_str(line, " ")
     for k, v in pairs(tokens) do
         if class == v:upper() or v:lower() == mq.TLO.Me.Name():lower() or (v == "me" and is_orchestrator()) then
@@ -1924,31 +1932,39 @@ function castSpellAbility(spawnID, row, callback)
         return false
     end
 
-    if not matches_filter(row, mq.TLO.Me.Name()) then
-        --log.Debug("SKIP cast %s, not matching filter %s", spell.Name, row)
-        return false
-    end
-
     local spawn = spawn_from_id(spawnID)
 
-    if spawn ~= nil and spawn() ~=nil and spell.MaxHP ~= nil and spawn.PctHPs() <= spell.MaxHP then
+    if spawn ~= nil and spawn() ~= nil and spell.MaxHP ~= nil and spawn.PctHPs() <= spell.MaxHP then
         -- eg. Snare mob at low health
         --log.Debug("SKIP MaxHP %s, %d vs required %d", spell.Name, spawn.PctHPs(), spell.MaxHP)
         return false
     end
 
-    if spawn ~= nil and spawn() ~=nil and spell.MaxLevel ~= nil and spawn.Level() > spell.MaxLevel then
+    if spawn ~= nil and spawn() ~= nil and not matches_filter(row, spawn.DisplayName()) then
+        --log.Debug("SKIP cast %s, not matching filter %s", spell.Name, row)
+        return false
+    end
+
+    if spawn ~= nil and spawn() ~= nil and spell.MaxLevel ~= nil and spawn.Level() > spell.MaxLevel then
         -- eg. skip Stun if target is too high level
         log.Debug("SKIP MaxLevel %s, %d vs required %d", spell.Name, spawn.Level(), spell.MaxLevel)
         return false
     end
 
-    if spell.Group and spawn ~= nil and spawn() ~=nil and not is_grouped_with(spawn.Name()) then
+    if spawn ~= nil and spawn() ~= nil and is_peer(spawn.Name()) then
+        local pct = peer_hp(spawn.Name())
+        if spell.HealPct ~= nil and pct > spell.HealPct then
+            all_tellf("castSpellAbility skip use of %s, peer %s hp %d%% vs required %d%%", spell.Name, spawn.Name(), pct, spell.HealPct)
+            return false
+        end
+    end
+
+    if spell.Group and spawn ~= nil and spawn() ~= nil and not is_grouped_with(spawn.Name()) then
         all_tellf("SKIP Group, i am not grouped with %s (spell %s)", spawn.Name(), spell.Name)
         return false
     end
 
-    if spell.Self and spawn ~= nil and spawn() ~=nil and spawn.Name() ~= mq.TLO.Me.Name() then
+    if spell.Self and spawn ~= nil and spawn() ~= nil and spawn.Name() ~= mq.TLO.Me.Name() then
         all_tellf("SKIP Self, cant cast on %s (spell %s)", spawn.Name(), spell.Name)
         return false
     end
@@ -1962,7 +1978,7 @@ function castSpellAbility(spawnID, row, callback)
             if not castSpellAbilityTimers[row]:expired() then
                 return false
             end
-            all_tellf("Timer expired, restarting for \ay%s\ax (%d sec)", spell.Name, spell.Delay)
+            log.Info("Timer expired, restarting for \ay%s\ax (%d sec)", spell.Name, spell.Delay)
             castSpellAbilityTimers[row]:restart()
         end
     end
@@ -2242,7 +2258,9 @@ function count_peers()
             if spawn ~= nil then
                 local dist = spawn.Distance()
                 if dist > min_distance then
-                    log.Warn("COUNT: \ay%s\ax at \ay%d\ax distance %s, raid group %d", peer, dist, spawn.HeadingTo.ShortName(), mq.TLO.Raid.Member(peer).Group())
+                    log.Warn("COUNT: \ay%s\ax at \ay%d\ax distance %s", peer, dist, spawn.HeadingTo.ShortName())
+                elseif not spawn.LineOfSight() then
+                    log.Warn("COUNT: \ay%s\ax at \ay%d\ax distance %s \arnot LoS\ax", peer, dist, spawn.HeadingTo.ShortName())
                 else
                     sum = sum + 1
                 end

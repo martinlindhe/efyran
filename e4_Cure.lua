@@ -5,6 +5,7 @@ local cures = {}
 
 -- List of "disease" cures, order: most powerful first
 cures.disease = {
+    "Desperate Renewal",                                -- CLR/70: -18 disease, -18 poison, -18 curse
     "Radiant Cure/Group",
     "Blood of Nadox/Group",                             -- SHM/52: -9 poison x2, -9 disease x2 (group)
     --"Difinecting Aura",                                 -- SHM/52: -10 poison x2, -10 disease x2
@@ -17,6 +18,7 @@ cures.disease = {
 
 -- List of "poison" cures, order: most powerful first
 cures.poison = {
+    "Desperate Renewal",                                -- CLR/70: -18 poison, -18 disease, -18 curse
     "Radiant Cure/Group",
     --"Puratus",                                          -- CLR/70: cure all poisons from target + block next posion spell from affecting them, 15s recast
     "Purge Posion/Self",                                -- ROG/59: -99 poison x12 (AA)
@@ -33,6 +35,7 @@ cures.poison = {
 
 -- List of "curse" cures, order: most powerful first
 cures.curse = {
+    "Desperate Renewal",                                -- CLR/70: -18 curse, -18 poison, -18 disease
     "Radiant Cure/Group",
     "Remove Greater Curse",                             -- CLR/54, DRU/54, SHM/54, PAL/60: -9 curse x5
     "Remove Curse",                                     -- CLR/38, DRU/38, SHM/38, PAL/45: -4 curse x2

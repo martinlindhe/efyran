@@ -112,7 +112,9 @@ function CommandQueue.Process()
     elseif v.Name == "radiantcure" then
         cast_radiant_cure()
     elseif v.Name == "handin" then
+        follow.Pause()
         auto_hand_in_items()
+        follow.Resume()
     elseif v.Name == "coh-group" then
         cohGroup()
     elseif v.Name == "is-mgb-ready" then

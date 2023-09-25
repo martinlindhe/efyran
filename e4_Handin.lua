@@ -141,10 +141,13 @@ local handinRules = {
     ["Wayfarers Mercenary Youra/Zone|lavastorm"] = { -- DoN good (low faction)
         [""] = {"Norrath's Keepers Token"},
     },
-
     ["Xeib Darkskies/Zone|lavastorm"] = { -- DoN evil
         [""] = {"Dark Reign Token"},
     },
+    ["Wayfarers Mercenary Limann/Zone|lavastorm"] = { -- DoN evil (low faction)
+    [""] = {"Dark Reign Token"},
+},
+
 }
 
 -- performs item hand ins for quest rewards, etc

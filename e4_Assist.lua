@@ -207,7 +207,6 @@ function Assist.beginKillSpawnID(spawnID)
             mq.delay(1)
         end
 
-        move_to(spawnID)
         Assist.meleeStick()
     end
 end
@@ -222,19 +221,14 @@ function Assist.meleeStick()
     if Assist.targetID == 0 then
         return
     end
-    local stickArg
     if Assist.IsTanking() then
-        stickArg = string.format("hold front %d uw", Assist.meleeDistance)
-        --log.Debug("STICKING IN FRONT TO %d: %s", Assist.targetID, stickArg)
-        mq.cmdf("/stick %s", stickArg)
+        mq.cmdf("/stick hold front %d uw", Assist.meleeDistance)
     else
         mq.cmd("/stick snaproll uw")
-        mq.delay(1000, function()
+        mq.delay(2000, function()
             return mq.TLO.Stick.Behind() and mq.TLO.Stick.Stopped()
         end)
-        stickArg = string.format("hold moveback behind %d uw", Assist.meleeDistance)
-        --log.Debug("STICKING IN BACK TO %d: %s", Assist.targetID, stickArg)
-        mq.cmdf("/stick %s", stickArg)
+        mq.cmdf("/stick hold moveback behind %d uw", Assist.meleeDistance)
     end
 end
 
@@ -271,7 +265,7 @@ function Assist.EndFight()
 
     Assist.prepareForNextFight()
 
-    follow.ResumeAfterKill()
+    follow.Resume()
 end
 
 -- Returns true if spell/ability was used
@@ -367,6 +361,8 @@ function Assist.Tick()
 
     --log.Debug("Assist.Tick()")
 
+-- XXX if not facing target
+
     if melee and spawn.Distance() > Assist.meleeDistance and assistStickTimer:expired() then
         --log.Debug("stick update. meleeDistance = %f!", Assist.meleeDistance)
         Assist.meleeStick()
@@ -436,7 +432,7 @@ function Assist.Tick()
     end
 end
 
-local assistTauntTimer = timer.new_expired(2 * 1) -- 2s
+local assistTauntTimer = timer.new_expired(1 * 1) -- 1s
 
 function Assist.TankTick()
     if not Assist.IsTanking() or is_stunned() then

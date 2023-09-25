@@ -67,7 +67,8 @@ function Follow.PauseForKill()
     Follow.Pause()
 end
 
-function Follow.ResumeAfterKill()
+-- Resumes following a peer if we was following
+function Follow.Resume()
     if Follow.lastFollowName ~= "" then
         Follow.Start(Follow.lastFollowName, true)
         Follow.lastFollowName = ""
