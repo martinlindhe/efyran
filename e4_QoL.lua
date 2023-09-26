@@ -1165,7 +1165,7 @@ function QoL.Init()
             filter = "/" .. tokens[2]
         end
         if name ~= "" then
-            commandQueue.Add("finditem", name, filter)
+            commandQueue.Add("find-item", name, filter)
         end
     end)
 
@@ -1524,10 +1524,13 @@ end
 
 -- summon corpse using the corpse summoner in guild lobby
 function use_corpse_summoner()
+
     if zone_shortname() ~= "guildlobby" then
         log.Error("Must be in guild lobby, west wing opening to use corpse summoner script")
         return
     end
+
+    follow.Stop()
 
     if not is_naked() then
         log.Info("Not naked, ignoring corpse summoner")
@@ -1545,8 +1548,6 @@ function use_corpse_summoner()
     end
 
     unflood_delay()
-
-    follow.Stop()
 
     local soulstone, price = get_best_soulstone()
 

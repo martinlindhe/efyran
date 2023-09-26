@@ -41,7 +41,7 @@ local buffs = {
     -- timers
     resumeTimer = timer.new_expired(2), -- 2s   - interval after end of fight to resume buffing
 
-    requestAvailabiliyTimer = timer.new_random(3), -- 3s  - interval after start-up to wait before requesting buff availability
+    requestAvailabiliyTimer = timer.new_random(20), -- 20s  - interval to wait before checking buff availability
 
     -- clickies
     manaRegenClicky       = nil,
@@ -250,7 +250,7 @@ function buffs.Tick()
 end
 
 function buffs.RefreshCombatBuffs()
-    if botSettings.settings.combat_buffs == nil or not in_combat() then
+    if botSettings.settings.combat_buffs == nil or not in_combat() or is_stunned() then
         return
     end
 
@@ -260,11 +260,11 @@ function buffs.RefreshCombatBuffs()
     -- ROG L68 Thief's Eyes (+5% hit chance with all skills to group, 1 min, cost 200 endurance) DoDH
     -- MMK L68 Fists of Wu (group: increase double attack by 6%, 1.0 min) DoDH
     for _, buff in pairs(botSettings.settings.combat_buffs) do
-        spellConfig = parseSpellLine(buff)
+        local spellConfig = parseSpellLine(buff)
 
         if matches_filter(buff, mq.TLO.Me.Name()) and is_spell_ability_ready(spellConfig.Name) then
             if castSpellAbility(mq.TLO.Me.ID(), buff) then
-                all_tellf("RefreshCombatBuffs refreshed \ay%s\ax (self)", spellConfig.Name)
+                log.Info("RefreshCombatBuffs refreshed \ay%s\ax (self)", spellConfig.Name)
                 return
             end
         end
@@ -291,17 +291,13 @@ function buffs.RefreshCombatBuffs()
         if dist ~= nil and dist < 100 then
 
             for key, buff in pairs(botSettings.settings.combat_buffs) do
-                spellConfig = parseSpellLine(buff)
+                local spellConfig = parseSpellLine(buff)
 
                 if matches_filter(buff, name) and is_spell_ability_ready(spellConfig.Name) then
                     local spawn = spawn_from_peer_name(name)
-                    if spawn ~= nil then
-                        if peer_has_buff(name, spellConfig.Name) or peer_has_song(name, spellConfig.Name) then
-                            log.Debug("RefreshCombatBuffs peer %s has combat buff already %s", name, spellConfig.Name)
-                        elseif castSpellAbility(spawn.ID(), buff) then
-                            all_tellf("COMBAT BUFF \ay%s\ax on \ag%s\ax", spellConfig.Name, name)
-                            return
-                        end
+                    if spawn ~= nil and spawn() ~= nil and not peer_has_buff(name, spellConfig.Name) and not peer_has_song(name, spellConfig.Name) and castSpellAbility(spawn.ID(), buff) then
+                        all_tellf("COMBAT BUFF \ay%s\ax on \ag%s\ax", spellConfig.Name, name)
+                        return
                     end
                 end
             end
@@ -571,32 +567,33 @@ local buffClasses = { "CLR", "DRU", "SHM", "PAL", "RNG", "BST", "MAG", "ENC", "N
 function buffs.RequestAvailabiliy()
 
     for i = 1, #buffClasses do
-        if buffs.buffers[buffClasses[i]] == nil and class_shortname() ~= buffClasses[i] then
-
+        if class_shortname() ~= buffClasses[i] then
             local found = false
 
-            -- 1. find peer of needed class in my group
-            for j = 1, mq.TLO.Group.Members() do
-                if mq.TLO.Group.Member(j).ID() ~= nil and mq.TLO.Group.Member(j).Class.ShortName() == buffClasses[i] then
-                    if is_peer(mq.TLO.Group.Member(j).Name()) then
-                        --log.Debug("found class buffer in group: %s %s", buffClasses[i], mq.TLO.Group.Member(j).Name())
-                        buffs.buffers[buffClasses[i]] = mq.TLO.Group.Member(j).Name()
-                        found = true
-                        break
+            if buffs.buffers[buffClasses[i]] == nil or not is_peer_in_zone(buffs.buffers[buffClasses[i]]) then
+                -- 1. find peer of needed class in my group
+                for j = 1, mq.TLO.Group.Members() do
+                    if mq.TLO.Group.Member(j).ID() ~= nil and mq.TLO.Group.Member(j).Class.ShortName() == buffClasses[i] then
+                        if is_peer(mq.TLO.Group.Member(j).Name()) then
+                            log.Debug("found class buffer in group: %s %s", buffClasses[i], mq.TLO.Group.Member(j).Name())
+                            buffs.buffers[buffClasses[i]] = mq.TLO.Group.Member(j).Name()
+                            found = true
+                            break
+                        end
                     end
                 end
-            end
 
-            -- 2. find any peer
-            if not found then
-                local spawnQuery = "pc notid " .. mq.TLO.Me.ID() .. ' class "'.. shortToLongClass[buffClasses[i]] ..'"'
-                for j = 1, spawn_count(spawnQuery) do
-                    local spawn = mq.TLO.NearestSpawn(j, spawnQuery)
-                    if spawn ~= nil and is_peer(spawn.Name()) then
-                        --log.Debug("found class buffer nearby: %s %s, peer id = %s", buffClasses[i], spawn.Name(), tostring(mq.TLO.NetBots(spawn.Name()).ID()))
-                        buffs.buffers[buffClasses[i]] = spawn.Name()
-                        found = true
-                        break
+                -- 2. find any peer
+                if not found then
+                    local spawnQuery = "pc notid " .. mq.TLO.Me.ID() .. ' class "'.. shortToLongClass[buffClasses[i]] ..'"'
+                    for j = 1, spawn_count(spawnQuery) do
+                        local spawn = mq.TLO.NearestSpawn(j, spawnQuery)
+                        if spawn ~= nil and is_peer(spawn.Name()) then
+                            log.Debug("found class buffer nearby: %s %s, peer id = %s", buffClasses[i], spawn.Name(), tostring(mq.TLO.NetBots(spawn.Name()).ID()))
+                            buffs.buffers[buffClasses[i]] = spawn.Name()
+                            found = true
+                            break
+                        end
                     end
                 end
             end
@@ -606,6 +603,7 @@ function buffs.RequestAvailabiliy()
                 log.Debug("Found buffer %s \ag%s\ax", buffClasses[i], buffs.buffers[buffClasses[i]])
                 cmdf("/squelch /bct %s //request_buffs %s", buffs.buffers[buffClasses[i]], mq.TLO.Me.Name())
             end
+
         end
     end
 end

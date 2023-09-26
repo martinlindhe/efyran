@@ -411,7 +411,7 @@ function healPeer(spell_list, peer, pct)
             log.Warn("Skip using of heal to heal %s at %d, I do not have item on me: %s", peer, pct, spellConfig.Name)
         elseif not have_spell(spellConfig.Name) and have_item_inventory(spellConfig.Name) and not is_item_clicky_ready(spellConfig.Name) then
             -- SKIP clickies that is not ready
-            log.Info("Skip using of heal to heal %s at %d, clicky %s is not ready", peer, pct, spellConfig.Name)
+            log.Debug("Skip using of heal to heal %s at %d, clicky %s is not ready", peer, pct, spellConfig.Name)
         elseif peer_has_buff(peer, spellConfig.Name) or peer_has_song(peer, spellConfig.Name) then
             -- if target got the buff/song named on, then skip (eg. HoT heals)
             log.Debug("healPeer skip %s, spell on them", spellConfig.Name)

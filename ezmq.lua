@@ -46,7 +46,7 @@ function move_to(spawnID)
     log.Debug("move_to %d", spawnID)
 
     local spawn = spawn_from_id(spawnID)
-    if spawn == nil then
+    if spawn == nil or spawn() == nil then
         all_tellf("move_to: lost target spawn %d", spawnID)
         return
     end
@@ -72,12 +72,12 @@ function move_to(spawnID)
 
     -- Uses MQ2MoveUtils, NOTE: mq2advpath don't have a "move to" command
     mq.cmdf("/moveto id %d dist %d", spawnID, dist)
-    if spawn() == nil then
+    if spawn == nil or spawn() == nil then
         return
     end
 
     mq.delay(30000, function() -- 30s
-        return spawn.Distance() < dist
+        return spawn == nil or spawn() == nil or spawn.Distance() < dist
     end)
 
     -- MQ2Nav XXX
@@ -173,6 +173,13 @@ end
 function is_spawn_los(spawnID)
     local spawn = spawn_from_id(spawnID)
     return spawn ~= nil and spawn.LineOfSight()
+end
+
+-- returns true if spawnID is a NPC
+---@return boolean
+function is_npc(spawnID)
+    local spawn = spawn_from_id(spawnID)
+    return spawn ~= nil and spawn() ~= nil and (spawn.Type() == "NPC" or spawn.Type() == "Pet")
 end
 
 ---@param spawnID integer
@@ -623,6 +630,12 @@ end
 ---@return boolean
 function is_stunned()
     return mq.TLO.Me.Stunned()
+end
+
+-- Am I feigning?
+---@return boolean
+function is_feigning()
+    return mq.TLO.Me.Feigning()
 end
 
 -- Returns my class shortname, eg "WAR".
@@ -1936,8 +1949,13 @@ function castSpellAbility(spawnID, row, callback)
             return false
         end
 
-        if not matches_filter(row, spawn.DisplayName()) then
-            all_tellf("SKIP cast %s, not matching filter %s", spell.Name, row)
+        local filterSpawn = spawn.DisplayName()
+        if is_npc(spawn.ID()) then
+            filterSpawn = mq.TLO.Me.Name()
+        end
+        if not matches_filter(row, filterSpawn) then
+            -- so nukes with "/Not|raid" works, check vs PEER and not TARGET
+            log.Info("SKIP cast %s (filterSpawn \ay%s\ax, target \ay%s\ax), not matching %s", spell.Name, filterSpawn, spawn.Name(), row)
             return false
         end
 

@@ -43,7 +43,13 @@ function Bard.UpdateMQ2MedleyINI()
             local condition = "1"
 
             if songData.Name == "Selo's Song of Travel" or songData.Name == "Shauri's Sonorous Clouding" then
+                -- in order to only refresh when song fades
                 condition = "!${Me.Invis}"
+            end
+            if songData.Name == "Selo's Accelerating Chorus" then
+                -- in order to refresh as soon as selo's is dropped on bard
+                duration = 6
+                condition = "!${Me.Buff[Selo's Accelerating Chorus].ID}"
             end
 
             local val = songData.Name .. "^" .. string.format("%d", duration) .. "^" .. condition

@@ -98,6 +98,7 @@ function CommandQueue.Process()
         cmd("/squelch /invite")
     elseif v.Name == "joinraid" then
         wait_until_not_casting()
+        log.Info("Accepting raid invite")
         cmd("/notify ConfirmationDialogBox Yes_Button leftmouseup")
         cmd("/squelch /raidaccept")
     elseif v.Name == "zoned" then
@@ -267,7 +268,7 @@ function CommandQueue.Process()
         elseif window_open("LargeDialogWindow") then
             cmd("/notify LargeDialogWindow LDW_NoButton leftmouseup")
         end
-    elseif v.Name == "finditem" then
+    elseif v.Name == "find-item" then
         report_find_item(v.Arg, v.Arg2)
     elseif v.Name == "find-missing-item" then
         report_find_missing_item(v.Arg, v.Arg2)

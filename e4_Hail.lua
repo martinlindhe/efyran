@@ -214,9 +214,7 @@ function Hail.PerformHail()
     local max = 3
     for i = 1, max do
 
-        local done = false
-
-        log.Info("Attempting to hail %s ... (%d/%d)", name, i, max)
+        log.Info("Attempting to hail %s ... (%d/%d): %s", name, i, max, tostring(zoneTargets[name]))
         if spawn.Distance() > 25 then
             move_to(spawn.ID())
         end
@@ -224,48 +222,42 @@ function Hail.PerformHail()
         if zoneTargets[name] == true then
             -- hail only
             cmd("/hail")
-            done = true
-        end
+        else
+            -- speak
+            local s = split_str(zoneTargets[name], "|")
+            if not done then
+                -- normal Speak
+                cmdf("/say %s", zoneTargets[name])
+            elseif not done and s[1] == "task" then
+                -- select and accept named task by hailing NPC (DoN tier 0)
 
-        -- speak
-        local s = split_str(zoneTargets[name], "|")
-        if not done and #s == 1 then
-            -- normal Speak
-            cmdf("/say %s", zoneTargets[name])
-            done = true
-        end
+                -- TODO: return if we already have the task
 
-        -- TODO: return if we got the task
+                -- Open the "task select" window from NPC
+                cmd("/hail")
+                delay(1000, function()
+                    return window_open("TaskSelectWnd")
+                end)
+                delay(500)
 
-        -- select and accept named task by hailing NPC (DoN tier 0)
-        if not done and s[1] == "task" then
-            -- Open the "task select" window from NPC
-            cmd("/hail")
-            delay(1000, function()
-                return window_open("TaskSelectWnd")
-            end)
-            delay(500)
+                -- select the proper list item
+                local index = mq.TLO.Window("TaskSelectWnd/TSEL_TaskList").List("="..s[2])()
+                if index == nil or index <= 0 then
+                    all_tellf("ERROR: cant select task '%s', not in task list!", s[2])
+                    return
+                end
 
-            -- select the proper list item
-            local index = mq.TLO.Window("TaskSelectWnd/TSEL_TaskList").List("="..s[2])()
-            if index == nil or index <= 0 then
-                all_tellf("ERROR: cant select task '%s', not in task list!", s[2])
+                -- select task
+                log.Info("Selecting task \ag%s\ax, index %d", s[2], index)
+                cmdf("/notify TaskSelectWnd TSEL_TaskList listselect %d", index)
+                delay(500)
+
+                -- Accept task
+                cmd("/notify TaskSelectWnd TSEL_AcceptButton leftmouseup")
+            else
+                all_tellf("PerformHail: ERROR unknown '%s' (%s)", s[1], zoneTargets[name])
                 return
             end
-
-            -- select task
-            log.Info("Selecting task \ag%s\ax, index %d", s[2], index)
-            cmdf("/notify TaskSelectWnd TSEL_TaskList listselect %d", index)
-            delay(500)
-
-            -- Accept task
-            cmd("/notify TaskSelectWnd TSEL_AcceptButton leftmouseup")
-            done = true
-        end
-
-        if not done then
-            all_tellf("PerformHail: ERROR unknown '%s' (%s)", s[1], zoneTargets[name])
-            return
         end
 
         -- some hails result in rewards

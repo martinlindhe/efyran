@@ -64,7 +64,7 @@ function Assist.Init()
             delay(100)
         elseif mq.TLO.Target.Distance() < 20 then
             log.Debug("Cannot see target, facing them !")
-            cmdf("/face fast id %d", mq.TLO.Target.ID())
+            cmdf("/squelch /face fast id %d", mq.TLO.Target.ID())
             delay(100)
         end
 
@@ -190,7 +190,15 @@ function Assist.beginKillSpawnID(spawnID)
         end
 
         if botSettings.settings.assist.melee_distance == "auto" then
-            local dist = math.ceil(spawn.MaxRangeTo() * 0.50) -- XXX too far in riftseekers with 0.75. XXX cant disarm in riftseekers with 0.60
+            local mult = 0.5  -- XXX too far in riftseekers with 0.75. XXX cant disarm in riftseekers with 0.60
+            if me_tank() then
+                mult = 0.3
+            end
+            local dist = math.ceil(spawn.MaxRangeTo() * mult)
+            --if dist > 30 then
+            --    all_tellf("XXX DIST CALC ERROR: too far %d, going for 30", dist)
+            --    dist = 30
+            --end
 
             Assist.meleeDistance = dist
             log.Info("Calculated auto melee distance %f", Assist.meleeDistance)
@@ -297,6 +305,7 @@ function performSpellAbility(targetID, abilityRows, category, used)
         and (used == nil or used[row] == nil)
         and is_spell_ability_ready(spellConfig.Name)
         and not is_moving()
+        and not is_stunned()
         and not obstructive_window_open()
         and (is_brd() or not is_casting()) then
             local spawn = spawn_from_id(targetID)
@@ -323,6 +332,11 @@ local assistStickTimer = timer.new_expired(3 * 1) -- 3s
 -- updates current fight progress
 function Assist.Tick()
 
+    if is_feigning() then
+        all_tellf("Feigned, standing up")
+        mq.cmd("/stand on")
+    end
+
     -- progress PBAE
     if Assist.PBAE then
         local nearbyPBAEilter = "npc radius 60 zradius 50 los"
@@ -332,10 +346,10 @@ function Assist.Tick()
             return
         end
 
-        if not is_casting() then
+        if not is_casting() and not is_stunned() then
             for k, spellRow in pairs(botSettings.settings.assist.pbae) do
                 local spellConfig = parseSpellLine(spellRow)
-                if is_spell_ready(spellConfig.Name) or is_combat_ability_ready(spellConfig.Name) then
+                if is_spell_ready(spellConfig.Name) or is_combat_ability_ready(spellConfig.Name) or is_item_clicky_ready(spellConfig.Name) then
                     if castSpellAbility(mq.TLO.Me.ID(), spellRow) then
                         log.Info("Used PBAE \ay%s\ax", spellConfig.Name)
                         return
@@ -363,11 +377,11 @@ function Assist.Tick()
 
 -- XXX if not facing target
 
-    if melee and spawn.Distance() > Assist.meleeDistance and Assist.targetID ~= 0 and assistStickTimer:expired() then
+    if melee and spawn.Distance() > Assist.meleeDistance and Assist.targetID ~= 0 and assistStickTimer:expired() and not is_stunned() then
         --log.Debug("stick update. meleeDistance = %f!", Assist.meleeDistance)
         Assist.meleeStick()
         assistStickTimer:restart()
-        cmdf("/face fast id %d", Assist.targetID)
+        cmdf("/squelch /face fast id %d", Assist.targetID)
     end
 
     if spawn == nil or spawn() == nil or spawn.ID() == 0 or spawn.Type() == "Corpse" or spawn.Type() == "NULL" then
@@ -375,12 +389,14 @@ function Assist.Tick()
         return
     end
 
-    if melee and mq.TLO.Target.ID() ~= Assist.targetID then
-        mq.cmdf("/target id %d", Assist.targetID)
-        mq.delay(1)
-    end
-    if melee and not mq.TLO.Me.Combat() then
-        mq.cmd("/attack on")
+    if melee and not is_stunned() then
+        if mq.TLO.Target.ID() ~= Assist.targetID then
+            mq.cmdf("/target id %d", Assist.targetID)
+            mq.delay(1)
+        end
+        if mq.TLO.Me.Combat() then
+            mq.cmd("/attack on")
+        end
     end
 
     Assist.TankTick()

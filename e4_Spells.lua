@@ -817,26 +817,36 @@ function report_find_item(name, filter)
         return
     end
 
+    local s = ""
+    local click = ""
+
     local item = find_item(name)
     if item ~= nil then
+        click = item.ItemLink("CLICKABLE")()
         local inv_cnt = inventory_item_count(item.Name())
         if inv_cnt == 1 then
-            all_tellf("%s in %s", item.ItemLink("CLICKABLE")(), inventory_slot_name(item.ItemSlot()))
+            s = string.format("%s", inventory_slot_name(item.ItemSlot()))
         else
-            all_tellf("%s in %s (count: %d)", item.ItemLink("CLICKABLE")(), inventory_slot_name(item.ItemSlot()), inv_cnt)
+            s = string.format("%s (count: %d)", inventory_slot_name(item.ItemSlot()), inv_cnt)
         end
     end
 
     item = find_item_bank(name)
-    if item == nil then
-        return
+    if item ~= nil then
+        click = item.ItemLink("CLICKABLE")()
+        local in_bank = banked_item_count(item.Name())
+        if in_bank > 0 then
+            s = s .. ", "
+        end
+        if in_bank == 1 then
+            s = s .. string.format("bank slot %d", item.ItemSlot())
+        elseif in_bank > 0 then
+            s = s .. string.format("bank (count: %d)", in_bank)
+        end
     end
 
-    local in_bank = banked_item_count(item.Name())
-    if in_bank == 1 then
-        all_tellf("%s in bank slot %d", item.ItemLink("CLICKABLE")(), item.ItemSlot())
-    elseif in_bank > 0 then
-        all_tellf("%s in bank (count: %d)", item.ItemLink("CLICKABLE")(), in_bank)
+    if s ~= "" then
+        all_tellf("%s in %s", click, s)
     end
 end
 

@@ -104,6 +104,8 @@ function Group.RecallGroup(name, groupNumber)
         end
     end
 
+    delay(1000)
+
     -- the "xp" group is never a raid
     if orchestrator and name ~= "xp" then
         if #Group.settings[name] == 1 then

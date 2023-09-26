@@ -69,6 +69,9 @@ end
 
 -- Resumes following a peer if we was following
 function Follow.Resume()
+    if is_feigning() then
+        mq.cmd("/stand on")
+    end
     if Follow.lastFollowName ~= "" then
         Follow.Start(Follow.lastFollowName, true)
         Follow.lastFollowName = ""
@@ -197,7 +200,7 @@ function Follow.RunToZone(startingPeer)
     end
 
     -- face the same direction the orchestrator is facing
-    cmdf("/face fast heading %f", spawn.Heading.Degrees() * -1)
+    cmdf("/squelch /face fast heading %f", spawn.Heading.Degrees() * -1)
 
     -- move forward
     cmd("/keypress forward hold")
