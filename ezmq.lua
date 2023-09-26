@@ -1841,10 +1841,6 @@ end
 ---@return boolean true if spell/ability was cast
 function castSpellAbility(spawnID, row, callback)
 
-    if spawnID == 0 or spawnID == nil then
-        return false
-    end
-
     local spell = parseSpellLine(row)
 
     --log.Debug("castSpellAbility %s, row = %s", spell.Name, row)
@@ -1933,40 +1929,41 @@ function castSpellAbility(spawnID, row, callback)
     end
 
     local spawn = spawn_from_id(spawnID)
-
-    if spawn ~= nil and spawn() ~= nil and spell.MaxHP ~= nil and spawn.PctHPs() <= spell.MaxHP then
-        -- eg. Snare mob at low health
-        --log.Debug("SKIP MaxHP %s, %d vs required %d", spell.Name, spawn.PctHPs(), spell.MaxHP)
-        return false
-    end
-
-    if spawn ~= nil and spawn() ~= nil and not matches_filter(row, spawn.DisplayName()) then
-        --log.Debug("SKIP cast %s, not matching filter %s", spell.Name, row)
-        return false
-    end
-
-    if spawn ~= nil and spawn() ~= nil and spell.MaxLevel ~= nil and spawn.Level() > spell.MaxLevel then
-        -- eg. skip Stun if target is too high level
-        log.Debug("SKIP MaxLevel %s, %d vs required %d", spell.Name, spawn.Level(), spell.MaxLevel)
-        return false
-    end
-
-    if spawn ~= nil and spawn() ~= nil and is_peer(spawn.Name()) then
-        local pct = peer_hp(spawn.Name())
-        if spell.HealPct ~= nil and pct > spell.HealPct then
-            all_tellf("castSpellAbility skip use of %s, peer %s hp %d%% vs required %d%%", spell.Name, spawn.Name(), pct, spell.HealPct)
+    if spawn ~= nil and spawn() ~= nil then
+        if spell.MaxHP ~= nil and spawn.PctHPs() <= spell.MaxHP then
+            -- eg. Snare mob at low health
+            log.Debug("SKIP MaxHP %s, %d vs required %d", spell.Name, spawn.PctHPs(), spell.MaxHP)
             return false
         end
-    end
 
-    if spell.Group and spawn ~= nil and spawn() ~= nil and not is_grouped_with(spawn.Name()) then
-        all_tellf("SKIP Group, i am not grouped with %s (spell %s)", spawn.Name(), spell.Name)
-        return false
-    end
+        if not matches_filter(row, spawn.DisplayName()) then
+            all_tellf("SKIP cast %s, not matching filter %s", spell.Name, row)
+            return false
+        end
 
-    if spell.Self and spawn ~= nil and spawn() ~= nil and spawn.Name() ~= mq.TLO.Me.Name() then
-        all_tellf("SKIP Self, cant cast on %s (spell %s)", spawn.Name(), spell.Name)
-        return false
+        if spell.MaxLevel ~= nil and spawn.Level() > spell.MaxLevel then
+            -- eg. skip Stun if target is too high level
+            log.Debug("SKIP MaxLevel %s, %d vs required %d", spell.Name, spawn.Level(), spell.MaxLevel)
+            return false
+        end
+
+        if is_peer(spawn.Name()) then
+            local pct = peer_hp(spawn.Name())
+            if spell.HealPct ~= nil and pct > spell.HealPct then
+                log.Debug("castSpellAbility skip use of %s, peer %s hp %d%% vs required %d%%", spell.Name, spawn.Name(), pct, spell.HealPct)
+                return false
+            end
+        end
+
+        if spell.Group and not is_grouped_with(spawn.Name()) then
+            all_tellf("SKIP Group, i am not grouped with %s (spell %s)", spawn.Name(), spell.Name)
+            return false
+        end
+
+        if spell.Self and spawn.Name() ~= mq.TLO.Me.Name() then
+            all_tellf("SKIP Self, cant cast on %s (spell %s)", spawn.Name(), spell.Name)
+            return false
+        end
     end
 
     -- Delay must be the last check as it resets the cast timer
@@ -2298,7 +2295,7 @@ function findBestClickyWithEffectGroup(cat, effects)
         return nil
     end
 
-    if name ~= nil and not have_item_inventory(name) then
+    if name ~= nil and not have_item_inventory(name) and not is_naked() then
         all_tellf("FATAL: my best \ar%s\ax clicky is banked. PUT IN INVENTORY! (item %s, power %d)", cat, name, best)
         cmd("/beep")
     end

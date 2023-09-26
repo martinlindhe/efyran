@@ -363,11 +363,11 @@ function Assist.Tick()
 
 -- XXX if not facing target
 
-    if melee and spawn.Distance() > Assist.meleeDistance and assistStickTimer:expired() then
+    if melee and spawn.Distance() > Assist.meleeDistance and Assist.targetID ~= 0 and assistStickTimer:expired() then
         --log.Debug("stick update. meleeDistance = %f!", Assist.meleeDistance)
         Assist.meleeStick()
         assistStickTimer:restart()
-        --cmdf("/face fast id %d", Assist.targetID)
+        cmdf("/face fast id %d", Assist.targetID)
     end
 
     if spawn == nil or spawn() == nil or spawn.ID() == 0 or spawn.Type() == "Corpse" or spawn.Type() == "NULL" then

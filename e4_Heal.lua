@@ -173,6 +173,8 @@ function Heal.acceptRez()
         buffs.RequestBuffs()
 
         loot_my_corpse()
+
+        buffs.UpdateClickies()
     end
 end
 

@@ -622,7 +622,7 @@ function ae_rez()
     local classOrder = {'CLR', 'DRU', 'SHM', 'ENC', 'RNG', 'BST', 'PAL', 'SHD', 'WAR', 'BRD', 'MNK', 'ROG', 'BER', 'WIZ', 'NEC', 'MAG'}
     local spawnQuery = 'pccorpse radius 100'
     local corpses = spawn_count(spawnQuery)
-    all_tellf("\amAERez started in %s\ax (%d corpses) ...", zone_shortname(), corpses)
+    all_tellf("\amAERez started in %s\ax (%d corpses, \ay%s\ax rez) ...", zone_shortname(), corpses, rez)
     unflood_delay()
 
     for i=1, #classOrder do
@@ -692,6 +692,7 @@ function ae_rez_query(spawnQuery)
                 end
 
                 if have_spell(rez) and not is_memorized(rez) then
+                    log.Info("Memorizing %s ...", rez)
                     mq.cmdf('/memorize "%s" %d', rez, 5)
                     mq.delay(3000)
                 end

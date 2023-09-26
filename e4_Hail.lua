@@ -261,8 +261,11 @@ function Hail.PerformHail()
             -- Accept task
             cmd("/notify TaskSelectWnd TSEL_AcceptButton leftmouseup")
             done = true
-        else
+        end
+
+        if not done then
             all_tellf("PerformHail: ERROR unknown '%s' (%s)", s[1], zoneTargets[name])
+            return
         end
 
         -- some hails result in rewards

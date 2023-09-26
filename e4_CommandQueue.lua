@@ -486,7 +486,9 @@ function cast_word_heal()
         all_tellf("\arERROR: no word heal memorized!")
         return
     end
+    log.Info("Word heal using \ay%s\ax", name)
     castSpellAbility(nil, name)
+    delay(1000) -- 1s
 end
 
 -- performs various tasks when toon has finished starting up / zoning

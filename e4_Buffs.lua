@@ -44,16 +44,19 @@ local buffs = {
     requestAvailabiliyTimer = timer.new_random(3), -- 3s  - interval after start-up to wait before requesting buff availability
 
     -- clickies
-    manaRegenClicky       = FindBestManaRegenClicky(),
-    manaPoolClicky        = FindBestManaPoolClicky(),
-    attackClicky          = FindBestAttackClicky(),
+    manaRegenClicky       = nil,
+    manaPoolClicky        = nil,
+    attackClicky          = nil,
 
-    allResistsClicky      = FindBestAllResistsClicky(),
-    formOfEnduranceClicky = FindBestFormOfEnduranceClicky(),
-    formOfDefenseClicky   = FindBestFormOfDefenseClicky(),
+    allResistsClicky      = nil,
+    formOfEnduranceClicky = nil,
+    formOfDefenseClicky   = nil,
 }
 
 function buffs.Init()
+
+    buffs.UpdateClickies()
+
     -- enqueues a buff to be cast on a peer
     -- is normally called from another peer, to request a buff
     mq.bind("/buff", function(peer, buff, force)
@@ -140,6 +143,17 @@ function buffs.getAvailableGroupBuffs()
         end
     end
     return trim(s)
+end
+
+-- update status of worn clickies
+function buffs.UpdateClickies()
+    buffs.manaRegenClicky       = FindBestManaRegenClicky()
+    buffs.manaPoolClicky        = FindBestManaPoolClicky()
+    buffs.attackClicky          = FindBestAttackClicky()
+
+    buffs.allResistsClicky      = FindBestAllResistsClicky()
+    buffs.formOfEnduranceClicky = FindBestFormOfEnduranceClicky()
+    buffs.formOfDefenseClicky   = FindBestFormOfDefenseClicky()
 end
 
 -- announce buff availability, handle debuffs, refresh buffs/auras/pets/pet buffs, request buffs and handle buff requests

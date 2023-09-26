@@ -63,7 +63,7 @@ function QoL.Init()
     end
 
     local dead = function(text, killer)
-        all_tellf("I died. Killed by %s", killer)
+        all_tellf("\arI AM DEAD\ax")
         mq.cmd("/beep") -- the beep of death
         if in_raid() and not is_raid_leader() then
             mq.cmdf("/consent %s", mq.TLO.Raid.Leader())
@@ -568,6 +568,9 @@ function QoL.Init()
     end)
 
     mq.bind("/usecorpsesummoner", function()
+        if is_orchestrator() then
+            mq.cmd("/dgzexecute /usecorpsesummoner")
+        end
         commandQueue.Add("usecorpsesummoner")
     end)
 
