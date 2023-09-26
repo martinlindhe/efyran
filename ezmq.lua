@@ -516,7 +516,7 @@ function use_alt_ability(name, spawnID)
 
     wait_until_not_casting()
 
-    local args = '"'..name..'|alt -maxtries|3'
+    local args = '"'..name..'" alt -maxtries|3'
     if spawnID ~= nil then
         args = args .. ' -targetid|'.. tostring(spawnID)
     end
