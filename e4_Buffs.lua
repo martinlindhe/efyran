@@ -198,11 +198,11 @@ function buffs.Tick()
         return
     end
 
-    if buffs.RefreshAutoClickies() then
+    if in_combat() then
         return
     end
 
-    if in_combat() then
+    if buffs.RefreshAutoClickies() then
         return
     end
 
@@ -263,10 +263,21 @@ function buffs.RefreshCombatBuffs()
         local spellConfig = parseSpellLine(buff)
 
         if matches_filter(buff, mq.TLO.Me.Name()) and is_spell_ability_ready(spellConfig.Name) then
-            if castSpellAbility(mq.TLO.Me.ID(), buff) then
-                log.Info("RefreshCombatBuffs refreshed \ay%s\ax (self)", spellConfig.Name)
-                return
+
+            local spell = getSpellFromBuff(spellConfig.Name)
+            if spell ~= nil then
+                local spellName = spell.RankName()
+                if spell.TargetType() ~= "Self" then
+                    all_tellf("XXX RefreshCombatBuffs targetType is %s (%s)", spell.TargetType(), spellConfig.Name)
+                    cmd("/target myself")
+                end
+
+                if castSpellAbility(nil, buff) then
+                    log.Info("RefreshCombatBuffs refreshed \ay%s\ax (self)", spellConfig.Name)
+                    return
+                end
             end
+
         end
     end
 

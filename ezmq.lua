@@ -801,12 +801,11 @@ end
 
 -- Close window by clicking on a button
 ---@param name string
----@param button string
-function close_window(name, button)
+function close_window(name)
     if not window_open(name) then
         return
     end
-    mq.cmdf("/notify %s %s leftmouseup", name, button)
+    mq.cmdf("/invoke ${Window[%s].DoClose}", name)
 end
 
 -- Returns true if any obstructive window is open (loot, trade, bank, merchant, spell book)
@@ -821,9 +820,13 @@ end
 ---@param spawn spawn
 function open_merchant_window(spawn)
 
+    if spawn == nil or spawn() == nil then
+        return
+    end
+
     if window_open("MerchantWnd") then
         all_tellf("WARNING: A merchant window was already open. Closing it")
-        close_merchant_window()
+        close_window("MerchantWnd")
         mq.delay(1000)
     end
 
@@ -891,11 +894,6 @@ function open_nearby_merchant()
 
     move_to(merchant.ID())
     open_merchant_window(merchant)
-end
-
--- Close currently open merchant window.
-function close_merchant_window()
-    close_window("MerchantWnd", "MW_Done_Button")
 end
 
 -- lowercased zone shortnames
@@ -1848,7 +1846,7 @@ function resetCastSpellAbilityTimers()
     castSpellAbilityTimers = {}
 end
 
----@param spawnID integer
+---@param spawnID integer|nil
 ---@param row string
 ---@param callback? fun(): boolean
 ---@return boolean true if spell/ability was cast
@@ -2094,12 +2092,12 @@ function castSpell(name, spawnID)
 end
 
 ---@param name string spell name
----@param spawnId integer|nil
+---@param spawnID integer|nil
 ---@param extraArgs string|nil
-function castSpellRaw(name, spawnId, extraArgs)
+function castSpellRaw(name, spawnID, extraArgs)
     local exe = string.format('/casting "%s"', name)
-    if spawnId ~= nil then
-        exe = exe .. string.format(" -targetid|%d", spawnId)
+    if spawnID ~= nil then
+        exe = exe .. string.format(" -targetid|%d", spawnID)
     end
     if extraArgs ~= nil then
         exe = exe .. " " .. extraArgs
@@ -2201,7 +2199,7 @@ end
 ---@return boolean
 function peer_has_buff(peer, spellName)
     local spell = get_spell(spellName)
-    return spell ~= nil and mq.TLO.NetBots(peer).Buff.Find(spell.ID())()
+    return spell ~= nil and spell() == nil and mq.TLO.NetBots(peer).Buff.Find(spell.ID())() ~= nil
 
     -- TODO: return true only if buff duration is >= MIN_BUFF_DURATION, how to read it with netbots?
     -- spawn.Buff(spellName).Duration() >= MIN_BUFF_DURATION
@@ -2212,7 +2210,7 @@ end
 ---@return boolean
 function peer_has_song(peer, spellName)
     local spell = get_spell(spellName)
-    return spell ~= nil and mq.TLO.NetBots(peer).ShortBuff.Find(spell.ID())()
+    return spell ~= nil and spell() == nil and mq.TLO.NetBots(peer).ShortBuff.Find(spell.ID())() ~= nil
 end
 
 -- Returns the current HP % for given `peer`

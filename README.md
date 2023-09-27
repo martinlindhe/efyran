@@ -177,6 +177,9 @@ Buff Spell Level   Minimum Target Level
 /rezit                      - rez target
 /aerez                      - perform ae rez
 
+/rc                         - use radiant cure
+/counters                   - report debuff counters
+
 /lootmycorpse               - loot your corpse
 /lootallcorpses             - tell peers to loot their corpse
 /usecorpsesummoner          - summon corpse in guild lobby

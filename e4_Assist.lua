@@ -58,16 +58,9 @@ function Assist.Init()
             return
         end
 
-        if mq.TLO.Target.Distance() < 10 or mq.TLO.Target.Distance() > Assist.meleeDistance then
-            log.Debug("Cannot see target, moving a little !")
-            cmdf("/stick hold moveback %d", Assist.meleeDistance)
-            delay(100)
-        elseif mq.TLO.Target.Distance() < 20 then
-            log.Debug("Cannot see target, facing them !")
-            cmdf("/squelch /face fast id %d", mq.TLO.Target.ID())
-            delay(100)
-        end
-
+        log.Debug("Cannot see target, facing them !")
+        cmdf("/squelch /face fast id %d", mq.TLO.Target.ID())
+        delay(100)
     end)
 
     Assist.prepareForNextFight()

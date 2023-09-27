@@ -286,9 +286,6 @@ function Heal.performLifeSupport()
     end
 
     if botSettings.settings.healing == nil or botSettings.settings.healing.life_support == nil then
-        if mq.TLO.Me.PctHPs() < 70 then
-            log.Error("performLifeSupport ERROR I dont have healing.life_support configured. Current HP is %d%%", mq.TLO.Me.PctHPs())
-        end
         return
     end
 
@@ -361,6 +358,9 @@ function Heal.performLifeSupport()
                     end
 
                     if spell.TargetType() ~= "Self" then
+                        if spell.TargetType() ~= "Single" then
+                            all_tellf("XXX LIFE SUPPORT targetType is %s (%s)", spell.TargetType(), spellConfig.Name)
+                        end
                         cmd("/target myself")
                     end
 
@@ -368,9 +368,9 @@ function Heal.performLifeSupport()
                     local hp = mq.TLO.Me.PctHPs()
                     if castSpellAbility(nil, row) then
                         if spellConfig.MaxMana ~= nil then
-                            all_tellf("USED LIFE SUPPORT %s at %d%% Mana (was %d%%)", spellName, mq.TLO.Me.PctMana(), mana)
+                            log.Info("USED LIFE SUPPORT \ay%s\ax at %d%% Mana (was %d%%)", spellName, mq.TLO.Me.PctMana(), mana)
                         else
-                            all_tellf("USED LIFE SUPPORT %s at %d%% HP (was %d%%)", spellName, mq.TLO.Me.PctHPs(), hp)
+                            all_tellf("USED LIFE SUPPORT \ay%s\ax at %d%% HP (was %d%%)", spellName, mq.TLO.Me.PctHPs(), hp)
                         end
                     end
 
@@ -416,13 +416,13 @@ function healPeer(spell_list, peer, pct)
             -- if target got the buff/song named on, then skip (eg. HoT heals)
             log.Debug("healPeer skip %s, spell on them", spellConfig.Name)
         elseif not matches_filter(heal, mq.TLO.Me.Name()) then
-            log.Debug("healPeer skip %s, not matching ONLY filter %s", spellConfig.Name, heal)
+            --log.Debug("healPeer skip heal %s (%s), not matching ONLY filter %s", peer, spellConfig.Name, heal)
         elseif peer_hp(peer) >= 98 then
             log.Info("Skipping heal! \ag%s\ax was %d %%, is now %d %%", peer, pct, peer_hp(peer))
         else
             log.Info("Healing \ag%s\ax at %d%% with \ay%s\ax", peer, pct, spellConfig.Name)
 
-            local check = castSpellAbility(spawn.ID(), heal, function() -- XXX castSpellAbility should take spellConfig obj directly
+            local check = castSpellAbility(spawn.ID(), heal, function()
                 if not is_casting() then
                     log.Info("Done casting heal, breaking")
                     return true

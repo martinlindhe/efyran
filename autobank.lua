@@ -111,7 +111,7 @@ function autobank()
                                         doevents()
                                         if bankFull then
                                             all_tellf("/autobank: Bank is full, aborting !")
-                                            close_window("BigBankWnd", "DoneButton")
+                                            close_window("BigBankWnd")
                                             return
                                         end
 
@@ -133,6 +133,5 @@ function autobank()
         end
     end
 
-    close_window("BigBankWnd", "DoneButton")
-
+    close_window("BigBankWnd")
 end

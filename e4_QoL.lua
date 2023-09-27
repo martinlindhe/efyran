@@ -538,15 +538,18 @@ function QoL.Init()
         commandQueue.Add("portto", name)
     end)
 
-    ---@param ... string|nil filter, such as "/only|ROG"
-    mq.bind("/followon", function(...)
+    local followOn = function(...)
         local exe = string.format("/dgzexecute /followplayer %s", mq.TLO.Me.Name())
         local filter = trim(args_string(...))
         if filter ~= nil then
             exe = exe .. " " .. filter
         end
         mq.cmdf(exe)
-    end)
+    end
+
+    ---@param ... string|nil filter, such as "/only|ROG"
+    mq.bind("/followon", followOn)
+    mq.bind("/followme", followOn) -- alias for e3 compatibility
 
     mq.bind("/followoff", function(s)
         if is_orchestrator() then
@@ -602,6 +605,19 @@ function QoL.Init()
     -- auto cure target (usage: is requested by another toon)
     mq.bind("/cure", function(name, kind)
         commandQueue.Add("cure", name, kind)
+    end)
+
+    -- reports all peers with debuffs
+    mq.bind("/counters", function()
+        cmdf("/noparse /bcaa //if (${NetBots[${Me.Name}].Counters}) /bc DEBUFFED: ${NetBots[${Me.Name}].Counters} counters in ${NetBots[${Me.Name}].Detrimentals} debuffs: ${NetBots[${Me.Name}].Detrimental}")
+    end)
+
+    -- report DoN crystals count on all connected peers
+    mq.bind("/doncrystals", function()
+        if is_orchestrator() then
+            mq.cmd("/dgzexecute /doncrystals")
+        end
+        commandQueue.Add("report-don-crystals")
     end)
 
     -- tell peers in zone to use Origin
@@ -1485,6 +1501,11 @@ function QoL.Tick()
         cmd("/squelch /notify AlertWnd ALW_Dismiss_Button leftmouseup")
     end
 
+    -- auto hide task window for non-focused peers
+    if not is_orchestrator() and window_open("TaskWnd") then
+        close_window("TaskWnd")
+    end
+
     -- auto accept trades
     if window_open("tradewnd") and not has_cursor_item() then
         if has_target() and is_peer(mq.TLO.Target.Name()) then
@@ -1600,7 +1621,7 @@ function use_corpse_summoner()
         delay(20)
         cmd("/autoinventory")
 
-        close_window("BigBankWnd", "DoneButton")
+        close_window("BigBankWnd")
 
         move_to_loc(415, 250, 2)    -- middle point
         delay(1000)

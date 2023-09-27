@@ -352,6 +352,20 @@ function CommandQueue.Process()
         end
     elseif v.Name == "listtasks" then
         report_active_tasks()
+    elseif v.Name == "report-don-crystals" then
+        local s = ""
+        if mq.TLO.Me.RadiantCrystals() > 0 then
+            s = s .. string.format("Radiant Crystals \ay%d\ax", mq.TLO.Me.RadiantCrystals())
+        end
+        if mq.TLO.Me.EbonCrystals() > 0 then
+            if s ~= "" then
+                s = s .. ", "
+            end
+            s = s .. string.format("Ebon Crystals \ay%d\ax", mq.TLO.Me.EbonCrystals())
+        end
+        if s ~= "" then
+            all_tellf(s)
+        end
     else
         all_tellf("ERROR unknown command in queue: %s", v.Name)
     end

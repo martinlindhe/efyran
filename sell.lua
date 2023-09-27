@@ -90,7 +90,7 @@ end
 
 WriteLootSettings(loot)
 
-close_merchant_window()
+close_window("MerchantWnd")
 
 if is_rof2() then
     close_bags()
