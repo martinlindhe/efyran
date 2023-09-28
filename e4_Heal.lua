@@ -194,12 +194,12 @@ function Heal.medCheck()
         doevents()
 
         if mq.TLO.Me.MaxMana() > 1 and mq.TLO.Me.PctMana() >= 100 then
-            all_tellf("Ending medbreak, full mana.")
+            all_tellf("Ending medbreak, \agfull mana\ax.")
             cmd("/sit off")
             return
         end
         if mq.TLO.Me.MaxMana() == 0 and mq.TLO.Me.PctEndurance() >= 100 then
-            all_tellf("Ending medbreak, full endurance.")
+            all_tellf("Ending medbreak, \agfull endurance\ax.")
             cmd("/sit off")
             return
         end
@@ -218,7 +218,7 @@ function Heal.medCheck()
     end
 
     if Heal.autoMed and mq.TLO.Me.MaxMana() > 0 and is_standing() and not is_moving() and mq.TLO.Me.PctMana() < 70 then
-        all_tellf("Low mana, medding at %d%%", mq.TLO.Me.PctMana())
+        all_tellf("Low mana, medding at \ay%d%%\ax", mq.TLO.Me.PctMana())
         cmd("/sit on")
     end
 
@@ -357,7 +357,7 @@ function Heal.performLifeSupport()
                         spellName = spellConfig.Name
                     end
 
-                    if spell.TargetType() ~= "Self" then
+                    if spell.TargetType() ~= "Self" and spell.TargetType() ~= "Group v2" then
                         if spell.TargetType() ~= "Single" then
                             all_tellf("XXX LIFE SUPPORT targetType is %s (%s)", spell.TargetType(), spellConfig.Name)
                         end
@@ -388,7 +388,7 @@ end
 function healPeer(spell_list, peer, pct)
 
     local spawn = spawn_from_peer_name(peer)
-    if spawn == nil then
+    if spawn == nil or spawn() == nil then
         log.Error("Cant heal peer \ar%s\ax, no such spawn", peer)
         return false
     end
@@ -421,6 +421,7 @@ function healPeer(spell_list, peer, pct)
             log.Info("Skipping heal! \ag%s\ax was %d %%, is now %d %%", peer, pct, peer_hp(peer))
         else
             log.Info("Healing \ag%s\ax at %d%% with \ay%s\ax", peer, pct, spellConfig.Name)
+            mq.cmd("/target id %d", spawn.ID())
 
             local check = castSpellAbility(spawn.ID(), heal, function()
                 if not is_casting() then

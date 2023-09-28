@@ -135,7 +135,7 @@ function QoL.Init()
 
     mq.event("skillup", "You have become better at #1#! (#2#)", function(text, name, num)
         --log.Info("skill name %s, num %d", name, num)
-        tell_allf("Skillup %s (%d/%d)", name, num, skill_cap(name))
+        all_tellf("Skillup %s (%d/%d)", name, num, skill_cap(name))
     end)
 
     mq.event("faction_maxed", "Your faction standing with #1# could not possibly get any better.", function(text, faction)
@@ -250,7 +250,7 @@ function QoL.Init()
         if filter ~= nil then
             exe = exe .. " " .. filter
         end
-        log.Info("Calling assist on %s, type %s (filter %s)", spawn.DisplayName(), spawn.Type(), filter)
+        --log.Debug("Calling assist on %s, type %s (filter %s)", spawn.DisplayName(), spawn.Type(), filter)
         mq.cmdf(exe)
         commandQueue.Add("killit", tostring(spawn.ID()), filter)
     end)
@@ -1158,10 +1158,10 @@ function QoL.Init()
     mq.bind("/dzhide", function() mq.cmd("/noparse /bcaa //if (${Window[dynamiczonewnd]}) /windowstate dynamiczonewnd close") end)
 
     -- report peers with at least 5 unspent AA:s
-    mq.bind("/unspentaa", function() mq.cmd("/noparse /bcaa //if (${Me.AAPoints} >= 5 && ${Me.AAPoints} < 30) /bc UNSPENT AA: ${Me.AAPoints}") end)
+    mq.bind("/unspentaa", function() mq.cmd("/noparse /bcaa //if (${Me.AAPoints} >= 5 && ${Me.AAPoints} < 50) /bc UNSPENT AA: ${Me.AAPoints}") end)
 
     -- report peers with less than 10 unspent AA:s
-    mq.bind("/lowunspentaa", function() mq.cmd("/noparse /bcaa //if (${Me.AAPoints} >= 1 && ${Me.AAPoints} < 30) /bc UNSPENT AA: ${Me.AAPoints}") end)
+    mq.bind("/lowunspentaa", function() mq.cmd("/noparse /bcaa //if (${Me.AAPoints} >= 1 && ${Me.AAPoints} < 50) /bc UNSPENT AA: ${Me.AAPoints}") end)
 
     -- report peers with any unspent AA:s
     mq.bind("/allunspentaa", function() mq.cmd("/noparse /bcaa //if (${Me.AAPoints} >= 1) /bc UNSPENT AA: ${Me.AAPoints} (SPENT ${Me.AAPointsSpent})") end)
@@ -1493,6 +1493,41 @@ end
 
 local qolClearCursorTimer = timer.new_expired(60 * 1) -- 60s
 
+-- auto accept shared task invites
+function QoL.AcceptSharedTask()
+    if not window_open("ConfirmationDialogBox") then
+        return
+    end
+    local s = mq.TLO.Window("ConfirmationDialogBox").Child("CD_TextOutput").Text()
+
+    if string.find(s, "has asked you to join the shared task") ~= nil then
+        -- grab first word from sentence
+        local i = 1
+        local peer = ""
+        for w in s:gmatch("%S+") do
+            if i == 1 then
+                peer = w
+                break
+            end
+            i = i + 1
+        end
+
+        log.Debug("Got a shared task invite from %s", peer)
+        if not is_peer(peer) then
+            log.Warn("Got a shared task invite from \ay%s\ax: \ap%s\ax", peer, s)
+            all_tellf("Got a shared task invite from \ay%s\ax: \ap%s\ax", peer, s)
+            if not globalSettings.allowStrangers then
+                cmd("/beep 1")
+                delay(10000) -- 10s to not flood chat
+                return
+            end
+        end
+
+        all_tellf("Accepting shared task from \ag%s\ax ...", peer)
+        cmd("/notify ConfirmationDialogBox Yes_Button leftmouseup")
+    end
+end
+
 -- Runs every second.
 function QoL.Tick()
 
@@ -1505,6 +1540,13 @@ function QoL.Tick()
     if not is_orchestrator() and window_open("TaskWnd") then
         close_window("TaskWnd")
     end
+
+    -- auto hide expedition window for non-focused peers
+    if not is_orchestrator() and window_open("DynamicZoneWnd") then
+        close_window("DynamicZoneWnd")
+    end
+
+    QoL.AcceptSharedTask()
 
     -- auto accept trades
     if window_open("tradewnd") and not has_cursor_item() then

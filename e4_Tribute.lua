@@ -6,8 +6,7 @@ local Tribute = {
     rules = {
         "/Zone|txevu tacvi/Only|tanks",
         "/Zone|anguish/Only|tanks",
-
-        --"/Zone|stillmoona/Instance|Trial of Perseverance/Only|tanks",
+        "/Zone|thundercrest/Instance|An End to the Storms/Only|tanks CLR DRU SHM BRD",
     },
 
     tributeCheckTimer = timer.new_expired(60 * 2), -- 2 min
@@ -21,13 +20,18 @@ function Tribute.Tick()
     Tribute.tributeCheckTimer:restart()
 
     local isTributeZone = false
+    local instance = nil
     for _, rule in pairs(Tribute.rules) do
         local parsed = parseFilterLine(rule)
 
         local skip = false
-        if parsed.Instance ~= nil and mq.TLO.Task(parsed.Instance).Index() == nil then
-            log.Error("Tribute: in zone %s but not in instance %s!", parsed.Zone, parsed.Instance)
-            skip = true
+        if parsed.Instance ~= nil then
+            if mq.TLO.Task(parsed.Instance).Index() ~= nil then
+                instance = parsed.Instance
+            else
+                --log.Debug("Tribute: not in instance \ay%s\ax!", parsed.Instance)
+                skip = true
+            end
         end
 
         if parsed.Zone ~= nil then
@@ -53,13 +57,17 @@ function Tribute.Tick()
         if mq.TLO.Me.CurrentFavor() < 500 then
             all_tellf("\arERROR: Too low tribute, not turning it on!! (%d points)\ax", mq.TLO.Me.CurrentFavor())
             return
-        elseif mq.TLO.Me.CurrentFavor() < 25000 then
+        elseif mq.TLO.Me.CurrentFavor() < 10000 then
             all_tellf("\ayWARNING: Getting low on tribute (%d points)\ax", mq.TLO.Me.CurrentFavor())
         end
-        all_tellf("Tribute >>\agAuto Enabled\ax<< in \ay%s\ax", zone_shortname())
+        local s = string.format("Tribute >>\agAuto Enabled\ax<< in \ay%s\ax", zone_shortname())
+        if instance ~= nil then
+            s = s .. string.format(" (\ay%s\ax)",  instance)
+        end
+        all_tellf(s)
         Tribute.Enable()
     elseif not isTributeZone and mq.TLO.Me.TributeActive() then
-        all_tellf("Tribute >>\agAuto Disabled\ax<< in \ay%s\ax (timer %s)", zone_shortname(), mq.TLO.Me.TributeTimer().TimeHMS)
+        all_tellf("Tribute >>\agAuto Disabled\ax<< in \ay%s\ax (timer %s)", zone_shortname(), mq.TLO.Me.TributeTimer.TimeHMS())
         Tribute.Disable()
     end
 

@@ -137,7 +137,8 @@ end
 ---@param peer string Peer name
 ---@return boolean
 function is_peer(peer)
-    return mq.TLO.NetBots(peer).ID() ~= "NULL"
+    -- NOTE: NetBots return "NULL" if not exists
+    return tostring(mq.TLO.NetBots(peer).ID()) ~= "NULL"
 end
 
 -- returns true if peerName is in the same zone
@@ -1876,7 +1877,7 @@ function castSpellAbility(spawnID, row, callback)
     end
     if spell.NoAggro ~= nil and spell.NoAggro and mq.TLO.Me.TargetOfTarget.ID() == mq.TLO.Me.ID() then
         -- NoAggro skips cast if you are on top of aggro
-        --print("SKIP NoAggro ", spell.Name, " i have aggro")
+        log.Info("SKIP NoAggro %s, i have aggro", spell.Name)
         return false
     end
 
@@ -2003,7 +2004,8 @@ function castSpellAbility(spawnID, row, callback)
     -- delay until done casting
     if callback == nil then
         callback = function()
-            return not is_casting()
+            local spawn = spawn_from_id(spawnID)
+            return spawn == nil or spawn() == nil or spawn.Type() == "Corpse" or not is_casting()
         end
     end
 
@@ -2199,6 +2201,9 @@ end
 ---@return boolean
 function peer_has_buff(peer, spellName)
     local spell = get_spell(spellName)
+    --if spell ~= nil then
+    --    log.Debug("peer_has_buff %s, %s", spellName, tostring(mq.TLO.NetBots(peer).Buff.Find(spell.ID())()))
+    --end
     return spell ~= nil and spell() == nil and mq.TLO.NetBots(peer).Buff.Find(spell.ID())() ~= nil
 
     -- TODO: return true only if buff duration is >= MIN_BUFF_DURATION, how to read it with netbots?

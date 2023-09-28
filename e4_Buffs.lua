@@ -11,7 +11,7 @@ local bard        = require("efyran/Class_Bard")
 
 local timer = require("efyran/Timer")
 
-local MIN_BUFF_DURATION = 6 * 6000 -- 6 ticks, each tick is 6s
+local MIN_BUFF_DURATION = 1 * 6000 -- 1 tick, each tick is 6s
 
 ---@class buffQueueValue
 ---@field public Peer string Peer name
@@ -267,7 +267,7 @@ function buffs.RefreshCombatBuffs()
             local spell = getSpellFromBuff(spellConfig.Name)
             if spell ~= nil then
                 local spellName = spell.RankName()
-                if spell.TargetType() ~= "Self" then
+                if spell.TargetType() ~= "Self" and spell.TargetType() ~= "Group v1" then
                     all_tellf("XXX RefreshCombatBuffs targetType is %s (%s)", spell.TargetType(), spellConfig.Name)
                     cmd("/target myself")
                 end
@@ -586,7 +586,7 @@ function buffs.RequestAvailabiliy()
                 for j = 1, mq.TLO.Group.Members() do
                     if mq.TLO.Group.Member(j).ID() ~= nil and mq.TLO.Group.Member(j).Class.ShortName() == buffClasses[i] then
                         if is_peer(mq.TLO.Group.Member(j).Name()) then
-                            log.Debug("found class buffer in group: %s %s", buffClasses[i], mq.TLO.Group.Member(j).Name())
+                            --log.Debug("found class buffer in group: %s %s", buffClasses[i], mq.TLO.Group.Member(j).Name())
                             buffs.buffers[buffClasses[i]] = mq.TLO.Group.Member(j).Name()
                             found = true
                             break

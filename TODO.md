@@ -19,6 +19,7 @@ mq bug? /handin fails if item is in bag10 on emu. bag 1 to 9 seem to work fine (
 - / slash commands: make sure EVERY COMMAND is put on command queue so they will not interfere.
     slash commands are async out of efyran main-loop and can change data that is beeing looped over
 
+- nec: spell "Shadow Orb" handling
 
 misc:
 -- BUG: mq.TLO.NearestSpawn() results should be fetched directly and then looped over the results, as they can change
