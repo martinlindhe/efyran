@@ -70,7 +70,7 @@ end
 -- Resumes following a peer if we was following
 function Follow.Resume()
     if is_feigning() then
-        mq.cmd("/stand on")
+        mq.cmd("/stand")
     end
     if Follow.lastFollowName ~= "" then
         Follow.Start(Follow.lastFollowName, true)

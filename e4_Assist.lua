@@ -187,11 +187,12 @@ function Assist.beginKillSpawnID(spawnID)
             if me_tank() then
                 mult = 0.3
             end
+            -- several mobs report too high MaxRangeTo so cant calc reliably
             local dist = math.ceil(spawn.MaxRangeTo() * mult)
-            --if dist > 30 then
-            --    all_tellf("XXX DIST CALC ERROR: too far %d, going for 30", dist)
-            --    dist = 30
-            --end
+            if dist > 30 then
+                log.Error("MaxRangeTo ERROR: too far %d, going for 30", dist)
+                dist = 30
+            end
 
             Assist.meleeDistance = dist
             log.Info("Calculated auto melee distance %f", Assist.meleeDistance)
@@ -327,7 +328,7 @@ function Assist.Tick()
 
     if is_feigning() then
         all_tellf("Feigned, standing up")
-        mq.cmd("/stand on")
+        mq.cmd("/stand")
     end
 
     -- progress PBAE

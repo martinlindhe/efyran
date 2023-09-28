@@ -125,6 +125,10 @@ local checkDebuffsTimer = timer.new_random(15 * 1) -- 15s   -- interval for auto
 
 local refreshCombatBuffsTimer = timer.new_random(10 * 1) -- 10s
 
+local refreshIllusionTimer = timer.new_random(10 * 1) -- 10s
+
+local refreshAutoClickiesTimer = timer.new(3) -- 3s (duration of a song, so bards wont chain-queue clickies)
+
 ---@return string
 function buffs.getAvailableGroupBuffs()
     local classBuffGroups = groupBuffs[class_shortname()]
@@ -194,16 +198,20 @@ function buffs.Tick()
         return
     end
 
-    if buffs.RefreshIllusion() then
-        return
+    if refreshIllusionTimer:expired() then
+        refreshIllusionTimer:restart()
+        if buffs.RefreshIllusion() then
+            return
+        end
     end
 
     if in_combat() then
         return
     end
 
-    if buffs.RefreshAutoClickies() then
-        return
+    if refreshAutoClickiesTimer:expired() then
+        buffs.RefreshAutoClickies()
+        refreshAutoClickiesTimer:restart()
     end
 
     if not is_moving() and buffs.refreshBuffs and refreshBuffsTimer:expired() then
@@ -263,17 +271,18 @@ function buffs.RefreshCombatBuffs()
         local spellConfig = parseSpellLine(buff)
 
         if matches_filter(buff, mq.TLO.Me.Name()) and is_spell_ability_ready(spellConfig.Name) then
-
             local spell = getSpellFromBuff(spellConfig.Name)
             if spell ~= nil then
                 local spellName = spell.RankName()
+                if have_buff(spellName) or have_song(spellName) then
+                    return
+                end
                 if spell.TargetType() ~= "Self" and spell.TargetType() ~= "Group v1" then
-                    all_tellf("XXX RefreshCombatBuffs targetType is %s (%s)", spell.TargetType(), spellConfig.Name)
+                    all_tellf("XXX RefreshCombatBuffs targetType is %s (%s)", spell.TargetType(), spellName)
                     cmd("/target myself")
                 end
-
                 if castSpellAbility(nil, buff) then
-                    log.Info("RefreshCombatBuffs refreshed \ay%s\ax (self)", spellConfig.Name)
+                    log.Info("RefreshCombatBuffs refreshed \ay%s\ax (self)", spellName)
                     return
                 end
             end
@@ -412,7 +421,7 @@ end
 ---@param req buffQueueValue
 function handleBuffRequest(req)
 
-    log.Debug("handleBuffRequest: Peer %s, buff %s, queue len %d, force = %s", req.Peer, req.Buff, #buffs.queue, tostring(req.Force))
+    log.Debug("handleBuffRequest: Peer %s, buff \ay%s\ax, queue len \ay%d\ax, force = %s", req.Peer, req.Buff, #buffs.queue, tostring(req.Force))
 
     local buffRows = groupBuffs[class_shortname()][req.Buff]
     if buffRows == nil then
@@ -481,7 +490,7 @@ function handleBuffRequest(req)
 
     if minLevel > 0 and spellConfigAllowsCasting(spellName, spawn) then
         if not req.Force and peer_has_buff(req.Peer, spellName) then
-            --log.Info("handleBuffRequest: Skip \ag%s\ax %s (%s), they have buff already.", spawn.Name(), spellName, req.Buff)
+            log.Info("handleBuffRequest: Skip \ag%s\ax %s (%s), they have buff already.", spawn.Name(), spellName, req.Buff)
             return false
         end
 
@@ -536,20 +545,20 @@ end
 
 -- refreshes the auto-detected clickies (mana regen, mana pool, attack, resists)
 function buffs.RefreshAutoClickies()
-    if me_caster() or me_priest() or me_hybrid() then
-        refresh_buff_clicky(buffs.manaRegenClicky)
+    if (me_caster() or me_priest() or me_hybrid()) and refresh_buff_clicky(buffs.manaRegenClicky) then
+        return
     end
 
-    if me_caster() or me_priest() and free_buff_slots() > 1 then
-        refresh_buff_clicky(buffs.manaPoolClicky)
+    if (me_caster() or me_priest() and free_buff_slots() > 1) and refresh_buff_clicky(buffs.manaPoolClicky) then
+        return
     end
 
-    if me_melee() then
-        refresh_buff_clicky(buffs.attackClicky)
+    if me_melee() and refresh_buff_clicky(buffs.attackClicky) then
+        return
     end
 
-    if not capped_resists() then
-        refresh_buff_clicky(buffs.allResistsClicky)
+    if not capped_resists() and not in_raid() and refresh_buff_clicky(buffs.allResistsClicky) then
+        return
     end
 end
 
@@ -611,7 +620,7 @@ function buffs.RequestAvailabiliy()
 
             if found then
                 -- request available buffs from them
-                log.Debug("Found buffer %s \ag%s\ax", buffClasses[i], buffs.buffers[buffClasses[i]])
+                log.Info("Found buffer %s \ag%s\ax", buffClasses[i], buffs.buffers[buffClasses[i]])
                 cmdf("/squelch /bct %s //request_buffs %s", buffs.buffers[buffClasses[i]], mq.TLO.Me.Name())
             end
 

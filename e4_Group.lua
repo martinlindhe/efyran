@@ -104,8 +104,6 @@ function Group.RecallGroup(name, groupNumber)
         end
     end
 
-    delay(1000)
-
     -- the "xp" group is never a raid
     if orchestrator and name ~= "xp" then
         if #Group.settings[name] == 1 then
@@ -113,7 +111,7 @@ function Group.RecallGroup(name, groupNumber)
         else
             log.Info("Recalling raid \ay%s\ax with leader \ag%s\ax", name, raidLeader)
         end
-        delay(1000)
+        delay(3000)
 
         -- The raid leader invites the other groups to raid
         for idx, group in pairs(Group.settings[name]) do

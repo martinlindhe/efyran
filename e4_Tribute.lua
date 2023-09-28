@@ -6,7 +6,7 @@ local Tribute = {
     rules = {
         "/Zone|txevu tacvi/Only|tanks",
         "/Zone|anguish/Only|tanks",
-        "/Zone|thundercrest/Instance|An End to the Storms/Only|tanks CLR DRU SHM BRD",
+        "/Zone|thundercrest/Instance|An End to the Storms/Only|tanks priests melee",
     },
 
     tributeCheckTimer = timer.new_expired(60 * 2), -- 2 min

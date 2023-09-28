@@ -82,6 +82,10 @@ function QoL.Init()
         commandQueue.ZoneEvent()
     end)
 
+    mq.event("spell-interrrupted", "Your spell is interrupted.", function(text)
+        log.Info("Spell interrupted ...")
+    end)
+
     -- for DoN solo tasks
     mq.event("replay-timer", "You have received a replay timer for '#1#': #2 remaining.", function(text, task, time)
         all_tellf("Got replay timer for \ag%s\ax: %s", task, time)

@@ -217,9 +217,15 @@ function Heal.medCheck()
         return
     end
 
-    if Heal.autoMed and mq.TLO.Me.MaxMana() > 0 and is_standing() and not is_moving() and mq.TLO.Me.PctMana() < 70 then
-        all_tellf("Low mana, medding at \ay%d%%\ax", mq.TLO.Me.PctMana())
-        cmd("/sit on")
+    if Heal.autoMed and is_standing() and not is_moving() then
+        if mq.TLO.Me.MaxMana() > 0 and mq.TLO.Me.PctMana() < 70 then
+            all_tellf("\ayLow mana\ax, medding at \ay%d%%\ax", mq.TLO.Me.PctMana())
+            cmd("/sit on")
+        end
+        if mq.TLO.Me.MaxMana() == 0 and mq.TLO.Me.PctEndurance() < 50 then
+            all_tellf("\ayLow endurance\ax, medding at \ay%d%%\ax", mq.TLO.Me.PctEndurance())
+            cmd("/sit on")
+        end
     end
 
 end
@@ -246,6 +252,7 @@ function Heal.performGroupBalanceHeal()
 
     local avg = sum / members
     if members <= 1 or avg >= 90 then
+        log.Debug("performGroupBalanceHeal: not needed, average is %d%%", avg)
         return false
     end
 
@@ -277,7 +284,7 @@ end
 function Heal.performLifeSupport()
     --log.Debug("Heal.performLifeSupport")
 
-    if have_buff("Resurrection Sickness") then
+    if have_buff("Resurrection Sickness") or in_neutral_zone() then
         return
     end
 
@@ -420,8 +427,12 @@ function healPeer(spell_list, peer, pct)
         elseif peer_hp(peer) >= 98 then
             log.Info("Skipping heal! \ag%s\ax was %d %%, is now %d %%", peer, pct, peer_hp(peer))
         else
-            log.Info("Healing \ag%s\ax at %d%% with \ay%s\ax", peer, pct, spellConfig.Name)
-            mq.cmd("/target id %d", spawn.ID())
+            if not in_raid() then
+                all_tellf("Healing \ag%s\ax at %d%% with \ay%s\ax", peer, pct, spellConfig.Name)
+            else
+                log.Info("Healing \ag%s\ax at %d%% with \ay%s\ax", peer, pct, spellConfig.Name)
+            end
+            mq.cmdf("/target pc =%s", peer)
 
             local check = castSpellAbility(spawn.ID(), heal, function()
                 if not is_casting() then

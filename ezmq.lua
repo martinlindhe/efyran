@@ -133,12 +133,22 @@ function is_emu()
     return is_rof2()
 end
 
+-- returns true if `x` is a number (integer or float)
+---@param peer string Peer name
+---@return boolean
+function is_number(x)
+    if tonumber(x) ~= nil then
+        return true
+    end
+    return false
+end
+
 -- returns true if `peer` is a connected client
 ---@param peer string Peer name
 ---@return boolean
 function is_peer(peer)
-    -- NOTE: NetBots return "NULL" if not exists
-    return tostring(mq.TLO.NetBots(peer).ID()) ~= "NULL"
+    -- NOTE: NetBots return string "NULL" if not exists, if it exists then it returns a number
+    return is_number(mq.TLO.NetBots(peer).ID())
 end
 
 -- returns true if peerName is in the same zone
@@ -460,6 +470,13 @@ function have_alt_ability(name)
     return mq.TLO.Me.AltAbility(name)() ~= nil
 end
 
+-- Returns rank of AA `name`, or 0.
+---@param name string
+---@return integer
+function alt_ability_rank(name)
+    return toint(mq.TLO.Me.AltAbility(name).Rank())
+end
+
 -- Returns true if the AA `name` is ready to use.
 ---@param name string
 ---@return boolean
@@ -513,12 +530,17 @@ function use_alt_ability(name, spawnID)
         return
     end
 
+    if not is_standing() then
+        cmd("/stand")
+    end
+
     if is_brd() then
         local exe = string.format('/medley queue "%s"', name)
         if spawnID ~= nil then
             exe = exe .. string.format(" -targetid|%d", spawnID)
         end
         mq.cmd(exe)
+        mq.delay(1000) -- because bard too quickly goes back to medding in neutral zone
         return
     end
 
@@ -540,6 +562,7 @@ end
 function have_buff(name)
     local spell = mq.TLO.Spell(name)
     if spell() == nil then
+        log.Error("have_buff ERROR cannot lookup %s", name)
         if not have_ability(name) and not have_item(name) then
             all_tellf("have_buff ERROR: asked about odd buff %s", name)
         end
@@ -790,7 +813,9 @@ end
 -- Am I in combat?
 ---@return boolean
 function in_combat()
-    return mq.TLO.Me.CombatState() == "COMBAT" or mq.TLO.Me.PctAggro() > 0 or mq.TLO.Me.XTarget(1).ID() ~= 0
+    return mq.TLO.Me.CombatState() == "COMBAT"
+        or mq.TLO.Me.PctAggro() > 0
+        or (mq.TLO.Me.XTarget(1).ID() ~= 0 and mq.TLO.Me.XTarget(1).Distance() < 200)
 end
 
 -- Is window `name` open?
@@ -2009,7 +2034,7 @@ function castSpellAbility(spawnID, row, callback)
         end
     end
 
-    delay(100)
+    delay(200)
     delay(10000, callback)
     --log.Debug("castSpellAbility: Done waiting after cast.")
     return true
@@ -2118,7 +2143,7 @@ local botSettings = require("efyran/e4_BotSettings")
 ---@param defaultGem integer|nil Use nil for the default gem 5
 --@return integer|nil
 function memorize_spell(spellRow, defaultGem)
-    local o = parseSpellLine(spellRow) -- XXX parse this once on script startup. dont evaluate all the time !!!
+    local o = parseSpellLine(spellRow)
 
     if not have_spell(o.Name) then
         all_tellf("ERROR don't know spell/song \ar%s\ax", o.Name)
@@ -2201,13 +2226,7 @@ end
 ---@return boolean
 function peer_has_buff(peer, spellName)
     local spell = get_spell(spellName)
-    --if spell ~= nil then
-    --    log.Debug("peer_has_buff %s, %s", spellName, tostring(mq.TLO.NetBots(peer).Buff.Find(spell.ID())()))
-    --end
-    return spell ~= nil and spell() == nil and mq.TLO.NetBots(peer).Buff.Find(spell.ID())() ~= nil
-
-    -- TODO: return true only if buff duration is >= MIN_BUFF_DURATION, how to read it with netbots?
-    -- spawn.Buff(spellName).Duration() >= MIN_BUFF_DURATION
+    return spell ~= nil and spell() ~= nil and mq.TLO.NetBots(peer).Buff.Find(spell.ID())() ~= nil
 end
 
 ---@param peer string
@@ -2215,7 +2234,7 @@ end
 ---@return boolean
 function peer_has_song(peer, spellName)
     local spell = get_spell(spellName)
-    return spell ~= nil and spell() == nil and mq.TLO.NetBots(peer).ShortBuff.Find(spell.ID())() ~= nil
+    return spell ~= nil and spell() ~= nil and mq.TLO.NetBots(peer).ShortBuff.Find(spell.ID())() ~= nil
 end
 
 -- Returns the current HP % for given `peer`
@@ -2266,7 +2285,7 @@ end
 -- report peers out of range or in another zone
 function count_peers()
 
-    local min_distance = 100
+    local min_distance = 50
     local peers = get_peers()
     local sum = 0
 
@@ -2446,28 +2465,39 @@ function findItemWithEffect(effect)
     return nil
 end
 
+-- Calculates resist cap at Level 70
 -- Returns true if my resists are capped
 ---@return boolean
 function capped_resists()
-    -- XXX can we get current resist cap ? 500 + 50 mpg groups + 50 AA:s = 600 resist cap oow/don.
-    return mq.TLO.Me.svPrismatic() == 600
+    local cap = 550 -- base resist cap at L70
+
+    local mpgRank = alt_ability_rank("Trials of Mata Muram")
+    cap = cap + math.ceil(4.16 * mpgRank)
+
+    local aaRank = alt_ability_rank("Discordant Defiance")
+    cap = cap + (5 * aaRank)
+    --log.Info("capped_resists = %f", cap)
+    return mq.TLO.Me.svPrismatic() >= cap
 end
 
 -- Returns true if clicked
+---@param itemName string
 ---@return boolean
 function refresh_buff_clicky(itemName)
+    --log.Info("refresh_buff_clicky %s", itemName)
     if itemName == nil then
         return false
     end
     local item = find_item("="..itemName)
     if item == nil then
         all_tellf("UNLIKELY: refresh_buff_clicky find_item fail %s", itemName)
-        return
+        return false
     end
+    --log.Info("refresh_buff_clicky %s (%s)", itemName, tostring(item.Clicky.Spell.Name()))
     if not have_buff(item.Clicky.Spell.Name()) then
         if free_buff_slots() <= 0 then
             all_tellf("ERROR: would refresh buff %s (%s) but no buff slots", item.Clicky.Spell.Name(), itemName)
-            return
+            return false
         end
         log.Info("Refreshing clicky buff \ag%s\ax (%s) ...", item.Clicky.Spell.Name(), itemName)
         click_item(itemName)
@@ -2479,15 +2509,15 @@ end
 -- Clicks a item
 ---@param itemName string
 function click_item(itemName)
-    if is_brd() then
-        mq.cmdf('/medley queue "%s"', itemName)
-        return true
-    end
-
     local item = find_item("="..itemName)
     if item == nil then
         all_tellf("FATAL: click_item not found %s", itemName)
         return
+    end
+
+    if is_brd() then
+        mq.cmdf('/medley queue "%s"', itemName)
+        return true
     end
 
     mq.cmdf('/casting "%s" item', itemName)
