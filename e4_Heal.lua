@@ -7,28 +7,22 @@ local globalSettings = require("efyran/e4_Settings")
 
 local botSettings = require("efyran/e4_BotSettings")
 local timer = require("efyran/Timer")
-local follow  = require("efyran/e4_Follow")
-local buffs   = require("efyran/e4_Buffs")
 
 local timeZonedDelay = 10 -- seconds
 
 local Heal = {
     ---@type boolean
     autoMed = true,
+
+    -- Are we currently medding?
+    ---@type boolean
+    medding = false,
+
+    ---@type integer in seconds
+    timeZoned = os.time(),
 }
 
 function Heal.Init()
-    mq.event("eqbc_chat", "<#1#> [#2#] #3#", function(text, peerName, time, msg)
-        if string.sub(msg, 1, 16) == "#available-buffs" then
-            -- if peer is in my zone, remember their announcement
-            if spawn_from_peer_name(peerName) ~= nil then
-                local available = string.sub(msg, 18)
-                --log.Debug("%s ANNOUNCED AVAILABLE BUFFS: %s", peerName, available)
-                buffs.otherAvailable[peerName] = available
-            end
-        end
-    end)
-
     mq.bind("/medon", function()
         if is_orchestrator() then
             cmd("/dgzexecute /medon")
@@ -56,7 +50,7 @@ function Heal.Tick()
         return
     end
 
-    if os.time() - timeZonedDelay <= buffs.timeZoned then
+    if os.time() - timeZonedDelay <= Heal.timeZoned then
         -- ignore first few seconds after zoning, to avoid spamming heals before health data has been synced from server
         return
     end
@@ -72,8 +66,6 @@ function Heal.Tick()
     end
 
     Heal.performHealDuties()
-
-    Heal.acceptRez()
 
     Heal.medCheck()
 end
@@ -121,69 +113,7 @@ function Heal.performHealDuties()
     end
 end
 
-function Heal.acceptRez()
-    if not window_open("ConfirmationDialogBox") then
-        return
-    end
-
-    local s = mq.TLO.Window("ConfirmationDialogBox").Child("CD_TextOutput").Text()
-    -- XXX full text
-
-    -- Call of the Wild, druid recall to corpse, can still be rezzed.
-    -- "NAME is attempting to return you to your corpse. If you accept this, you will still be able to get a resurrection later. Do you wish this?"
-    if string.find(s, "wants to cast") ~= nil or string.find(s, "attempting to return you") ~= nil then
-        -- grab first word from sentence
-        local i = 1
-        local peer = ""
-        for w in s:gmatch("%S+") do
-            if i == 1 then
-                peer = w
-                break
-            end
-            i = i + 1
-        end
-
-        log.Debug("Got a rez from %s", peer)
-        if not is_peer(peer) then
-            log.Warn("Got a rez from \ay%s\ax: \ap%s\ax", peer, s)
-            all_tellf("Got a rez from \ay%s\ax: \ap%s\ax", peer, s)
-            if not globalSettings.allowStrangers then
-                cmd("/beep 1")
-                delay(10000) -- 10s to not flood chat
-                return
-            end
-        end
-
-        -- tell bots that my corpse is rezzed
-        cmdf("/bcaa //ae_rezzed %s", mq.TLO.Me.Name())
-
-        all_tellf("Accepting rez from \ag%s\ax ...", peer)
-        cmd("/notify ConfirmationDialogBox Yes_Button leftmouseup")
-
-        -- click in the RespawnWnd if open (live)
-        if window_open("RespawnWnd") then
-            all_tellf("BEEP RespawnWnd is open ...")
-            cmd("/beep 1")
-        end
-
-        -- let some time pass after accepting rez.
-        delay(5000)
-
-        -- request buffs
-        buffs.RequestBuffs()
-
-        loot_my_corpse()
-
-        buffs.UpdateClickies()
-    end
-end
-
 function Heal.medCheck()
-
-    if os.time() - timeZonedDelay <= buffs.timeZoned then
-        -- ignore first few seconds after zoning, to avoid sitting after zoning, before health data has been synced from server
-        return
-    end
 
     if botSettings.settings.healing ~= nil and botSettings.settings.healing.automed ~= nil and not botSettings.settings.healing.automed then
         return
@@ -196,11 +126,13 @@ function Heal.medCheck()
         if mq.TLO.Me.MaxMana() > 1 and mq.TLO.Me.PctMana() >= 100 then
             all_tellf("Ending medbreak, \agfull mana\ax.")
             cmd("/sit off")
+            Heal.medding = false
             return
         end
         if mq.TLO.Me.MaxMana() == 0 and mq.TLO.Me.PctEndurance() >= 100 then
             all_tellf("Ending medbreak, \agfull endurance\ax.")
             cmd("/sit off")
+            Heal.medding = false
             return
         end
     end
@@ -221,10 +153,12 @@ function Heal.medCheck()
         if mq.TLO.Me.MaxMana() > 0 and mq.TLO.Me.PctMana() < 70 then
             all_tellf("\ayLow mana\ax, medding at \ay%d%%\ax", mq.TLO.Me.PctMana())
             cmd("/sit on")
+            Heal.medding = true
         end
         if mq.TLO.Me.MaxMana() == 0 and mq.TLO.Me.PctEndurance() < 50 then
             all_tellf("\ayLow endurance\ax, medding at \ay%d%%\ax", mq.TLO.Me.PctEndurance())
             cmd("/sit on")
+            Heal.medding = true
         end
     end
 

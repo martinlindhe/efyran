@@ -540,19 +540,18 @@ function use_alt_ability(name, spawnID)
             exe = exe .. string.format(" -targetid|%d", spawnID)
         end
         mq.cmd(exe)
-        mq.delay(1000) -- because bard too quickly goes back to medding in neutral zone
-        return
+    else
+        wait_until_not_casting()
+
+        local args = '"'..name..'" alt -maxtries|3'
+        if spawnID ~= nil then
+            args = args .. ' -targetid|'.. tostring(spawnID)
+        end
+
+        mq.cmdf("/casting %s", args)
     end
 
-    wait_until_not_casting()
-
-    local args = '"'..name..'" alt -maxtries|3'
-    if spawnID ~= nil then
-        args = args .. ' -targetid|'.. tostring(spawnID)
-    end
-
-    mq.cmdf("/casting %s", args)
-    mq.delay(200)
+    mq.delay(3000)
     mq.delay(20000, function() return not is_casting() end)
 end
 
@@ -813,9 +812,10 @@ end
 -- Am I in combat?
 ---@return boolean
 function in_combat()
+    local xdist = mq.TLO.Me.XTarget(1).Distance()
     return mq.TLO.Me.CombatState() == "COMBAT"
         or mq.TLO.Me.PctAggro() > 0
-        or (mq.TLO.Me.XTarget(1).ID() ~= 0 and mq.TLO.Me.XTarget(1).Distance() < 200)
+        or (xdist ~= nil and xdist < 200)
 end
 
 -- Is window `name` open?
@@ -1056,7 +1056,7 @@ function clear_cursor()
 
         -- 77678 Molten Orb
         if mq.TLO.Cursor.ID() ~= 77678 then
-            all_tellf("Putting cursor item %s in inventory.", mq.TLO.Cursor())
+            all_tellf("Putting cursor item %s in inventory.", mq.TLO.Cursor.ItemLink("CLICKABLE")())
         end
         mq.cmd("/autoinventory")
         mq.delay(2000, function() return mq.TLO.Cursor.ID() == nil end)
@@ -1652,10 +1652,10 @@ end
 function toggleTribute()
     if not window_open("TributeBenefitWnd") then
         cmd("/keypress TOGGLE_TRIBUTEBENEFITWIN")
-        delay(2)
+        delay(50)
     end
     cmd("/notify TBW_PersonalPage TBWP_ActivateButton leftmouseup")
-    delay(2)
+    delay(50)
     cmd("/keypress TOGGLE_TRIBUTEBENEFITWIN")
 end
 

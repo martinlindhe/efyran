@@ -4,12 +4,15 @@ local timer = require("efyran/Timer")
 
 local Tribute = {
     rules = {
-        "/Zone|txevu tacvi/Only|tanks",
-        "/Zone|anguish/Only|tanks",
-        "/Zone|thundercrest/Instance|An End to the Storms/Only|tanks priests melee",
+        "Zone|txevu tacvi/Only|tanks",
+        "Zone|anguish/Only|tanks",
+        "Zone|stillmoonb/Instance|Kessdona's Perch/Only|tanks priests melee",
+        "Zone|stillmoonb/Instance|Reflections of Silver/Only|tanks",
+        "Zone|thundercrest/Instance|An End to the Storms/Only|tanks priests melee",
+        "Zone|thenest/Instance|In the Shadows/Only|tanks priests melee",
     },
 
-    tributeCheckTimer = timer.new_expired(60 * 2), -- 2 min
+    tributeCheckTimer = timer.new(20 * 1), -- 20s
 }
 
 function Tribute.Tick()
@@ -66,7 +69,7 @@ function Tribute.Tick()
         end
         all_tellf(s)
         Tribute.Enable()
-    elseif not isTributeZone and mq.TLO.Me.TributeActive() then
+    elseif not isTributeZone and mq.TLO.Me.TributeActive() and not is_naked() then
         all_tellf("Tribute >>\agAuto Disabled\ax<< in \ay%s\ax (timer %s)", zone_shortname(), mq.TLO.Me.TributeTimer.TimeHMS())
         Tribute.Disable()
     end

@@ -200,6 +200,7 @@ function Hail.PerformHail()
 
     if not found then
         all_tellf("PerformHail:: Found no recognized NPC nearby")
+        return
     end
 
     target_npc_name(name)

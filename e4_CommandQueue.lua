@@ -215,7 +215,7 @@ function CommandQueue.Process()
         cast_port_to(v.Arg)
     elseif v.Name == "movetopeer" then
         local filter = v.Arg2
-        if filter ~= nil and not matches_filter(filter, v.Arg) then
+        if filter ~= nil and not matches_filter(filter, mq.TLO.Me.Name()) then
             log.Info("movetopeer: Not matching filter, giving up: %s", filter)
             return
         end
@@ -515,10 +515,11 @@ function perform_zoned_event()
 
     memorizeListedSpells()
 
-    buffs.timeZoned = os.time()
-    buffs.refreshBuffs = true
-
+    heal.timeZoned = os.time()
     heal.autoMed = true
+
+    buffs.refreshBuffs = true
+    buffs.UpdateClickies()
 
     autoMapHeightFilter()
 end

@@ -663,12 +663,6 @@ end
 ---@param spawnQuery string
 function ae_rez_query(spawnQuery)
 
-    local rez = get_rez_spell()
-    if rez == nil then
-        all_tellf("ae_rez_query ERROR: no rez spell found!")
-        return
-    end
-
     local corpses = spawn_count(spawnQuery)
     if corpses == 0 then
         return
@@ -680,47 +674,56 @@ function ae_rez_query(spawnQuery)
         local spawn = mq.TLO.NearestSpawn(i, spawnQuery)
         if spawn ~= nil and spawn.ID() ~= nil then
             if not is_being_rezzed(spawn.DisplayName()) then
-                log.Info("Trying to rez \ag%s\ax", spawn.DisplayName())
-
-                if is_alt_ability_ready("Blessing of Resurrection") then
-                    -- CLR/65: 96% exp, 3s cast, 12s recast (SoD)
-                    rez = "Blessing of Resurrection"
-                end
-                if have_item("Water Sprinkler of Nem Ankh") and is_item_clicky_ready("Water Sprinkler of Nem Ankh") then
-                    -- CLR/65 Epic1.0: 96% exp, 10s cast
-                    rez = "Water Sprinkler of Nem Ankh"
-                end
-
-                if have_spell(rez) and not is_memorized(rez) then
-                    log.Info("Memorizing %s ...", rez)
-                    mq.cmdf('/memorize "%s" %d', rez, 5)
-                    mq.delay(3000)
-                end
-
-                if not is_spell_ability_ready(rez) then
-                    mq.delay(15000) -- 15s .. XXX
-                end
-
-                if is_spell_ability_ready(rez) then
-
-                    -- tell bots this corpse is rezzed
-                    cmdf("/dgzexecute /ae_rezzed %s", spawn.DisplayName())
-
-
-                    all_tellf("Rezzing %s \ag%s\ax with \ay%s\ax", spawn.Class.ShortName(), spawn.DisplayName(), rez)
-                    --target_id(spawn.ID())
-                    if globalSettings.allowBotTells then
-                        --cmdf("/tell %s Wait4Rez", spawn.DisplayName())
-                    end
-                    castSpellRaw(rez, spawn.ID())
-                    delay(500)
-                    wait_until_not_casting()
-                    mq.delay(15000) -- 15s .. XXX
-                else
-                    all_tellf("\arWARN\ax: Not ready to rez \ag%s\ax (%s not ready).", spawn.Name(), rez)
-                end
+                rez_corpse(spawn.ID())
             end
         end
+    end
+end
+
+-- TODO: use this in /rezit command too
+function rez_corpse(spawnID)
+    local spawn = spawn_from_id(spawnID)
+    if spawn == nil or spawn() == nil then
+        return
+    end
+    log.Info("Trying to rez \ag%s\ax", spawn.DisplayName())
+
+    local rez = get_rez_spell()
+    if rez == nil then
+        all_tellf("ae_rez_query ERROR: no rez spell found!")
+        return
+    end
+
+    if is_alt_ability_ready("Blessing of Resurrection") then
+        -- CLR/65: 96% exp, 3s cast, 12s recast (SoD)
+        rez = "Blessing of Resurrection"
+    end
+    if have_item("Water Sprinkler of Nem Ankh") and is_item_clicky_ready("Water Sprinkler of Nem Ankh") then
+        -- CLR/65 Epic1.0: 96% exp, 10s cast
+        rez = "Water Sprinkler of Nem Ankh"
+    end
+
+    if have_spell(rez) and not is_memorized(rez) then
+        log.Info("Memorizing %s ...", rez)
+        mq.cmdf('/memorize "%s" %d', rez, 8) -- avoid gem5 as it is used for temp buffs
+    end
+
+    mq.delay(5000)
+    mq.delay(15000, function() return not is_casting() and is_spell_ability_ready(rez) end)
+
+    if is_spell_ability_ready(rez) then
+
+        -- tell bots this corpse is rezzed
+        mq.cmdf("/dgzexecute /ae_rezzed %s", spawn.DisplayName())
+
+        all_tellf("Rezzing %s \ag%s\ax with \ay%s\ax", spawn.Class.ShortName(), spawn.DisplayName(), rez)
+        --target_id(spawn.ID())
+        if globalSettings.allowBotTells then
+            --cmdf("/tell %s Wait4Rez", spawn.DisplayName())
+        end
+        castSpellRaw(rez, spawn.ID())
+    else
+        all_tellf("\arWARN\ax: Not ready to rez \ag%s\ax (%s not ready).", spawn.Name(), rez)
     end
 end
 

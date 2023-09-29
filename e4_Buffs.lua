@@ -2,14 +2,14 @@ local mq = require("mq")
 local log = require("efyran/knightlinc/Write")
 
 require("efyran/e4_Spells")
-local follow  = require("efyran/e4_Follow")
-local pet     = require("efyran/e4_Pet")
-local cure    = require("efyran/e4_Cure")
+local follow      = require("efyran/e4_Follow")
+local pet         = require("efyran/e4_Pet")
+local cure        = require("efyran/e4_Cure")
+local heal        = require("efyran/e4_Heal")
 local botSettings = require("efyran/e4_BotSettings")
 local groupBuffs  = require("efyran/e4_GroupBuffs")
 local bard        = require("efyran/Class_Bard")
-
-local timer = require("efyran/Timer")
+local timer       = require("efyran/Timer")
 
 local MIN_BUFF_DURATION = 1 * 6000 -- 1 tick, each tick is 6s
 
@@ -35,9 +35,6 @@ local buffs = {
     ---@type boolean /buffon, /buffoff
     refreshBuffs = true,
 
-    ---@type integer in seconds
-    timeZoned = os.time(),
-
     -- timers
     resumeTimer = timer.new_expired(2), -- 2s   - interval after end of fight to resume buffing
 
@@ -56,6 +53,17 @@ local buffs = {
 function buffs.Init()
 
     buffs.UpdateClickies()
+
+    mq.event("eqbc_chat", "<#1#> [#2#] #3#", function(text, peerName, time, msg)
+        if string.sub(msg, 1, 16) == "#available-buffs" then
+            -- if peer is in my zone, remember their announcement
+            if spawn_from_peer_name(peerName) ~= nil then
+                local available = string.sub(msg, 18)
+                --log.Debug("%s ANNOUNCED AVAILABLE BUFFS: %s", peerName, available)
+                buffs.otherAvailable[peerName] = available
+            end
+        end
+    end)
 
     -- enqueues a buff to be cast on a peer
     -- is normally called from another peer, to request a buff
@@ -163,6 +171,8 @@ end
 -- announce buff availability, handle debuffs, refresh buffs/auras/pets/pet buffs, request buffs and handle buff requests
 function buffs.Tick()
 
+    buffs.acceptRez()
+
     if is_hovering() or is_moving() or is_invisible() then
         return
     end
@@ -234,7 +244,7 @@ function buffs.Tick()
         return
     end
 
-    if #buffs.queue > 0 and not in_combat() and handleBuffsTimer:expired() then
+    if #buffs.queue > 0 and not in_combat() and not heal.medding and handleBuffsTimer:expired() then
         -- process up  to 10 requests per tick, until at least one is handled.
         for i = 1, 10 do
             local req = table.remove(buffs.queue, 1)
@@ -622,8 +632,8 @@ function buffs.RequestAvailabiliy()
                 -- request available buffs from them
                 log.Info("Found buffer %s \ag%s\ax", buffClasses[i], buffs.buffers[buffClasses[i]])
                 cmdf("/squelch /bct %s //request_buffs %s", buffs.buffers[buffClasses[i]], mq.TLO.Me.Name())
+                mq.delay(10)
             end
-
         end
     end
 end
@@ -758,6 +768,61 @@ function buffs.RefreshAura()
         castSpellRaw(buffs.aura, nil)
     end
     return true
+end
+
+function buffs.acceptRez()
+    if not window_open("ConfirmationDialogBox") then
+        return
+    end
+
+    local s = mq.TLO.Window("ConfirmationDialogBox").Child("CD_TextOutput").Text()
+    -- XXX full text
+
+    -- Call of the Wild, druid recall to corpse, can still be rezzed.
+    -- "NAME is attempting to return you to your corpse. If you accept this, you will still be able to get a resurrection later. Do you wish this?"
+    if string.find(s, "wants to cast") ~= nil or string.find(s, "attempting to return you") ~= nil then
+        -- grab first word from sentence
+        local i = 1
+        local peer = ""
+        for w in s:gmatch("%S+") do
+            if i == 1 then
+                peer = w
+                break
+            end
+            i = i + 1
+        end
+
+        log.Debug("Got a rez from %s", peer)
+        if not is_peer(peer) then
+            log.Warn("Got a rez from \ay%s\ax: \ap%s\ax", peer, s)
+            all_tellf("Got a rez from \ay%s\ax: \ap%s\ax", peer, s)
+            if not globalSettings.allowStrangers then
+                cmd("/beep 1")
+                delay(10000) -- 10s to not flood chat
+                return
+            end
+        end
+
+        -- tell bots that my corpse is rezzed
+        cmdf("/bcaa //ae_rezzed %s", mq.TLO.Me.Name())
+
+        all_tellf("Accepting rez from \ag%s\ax ...", peer)
+        cmd("/notify ConfirmationDialogBox Yes_Button leftmouseup")
+
+        -- click in the RespawnWnd if open (live)
+        if window_open("RespawnWnd") then
+            all_tellf("BEEP RespawnWnd is open ...")
+            cmd("/beep 1")
+        end
+
+        -- let some time pass after accepting rez.
+        delay(5000)
+
+        -- request buffs
+        buffs.RequestBuffs()
+
+        loot_my_corpse()
+    end
 end
 
 return buffs
