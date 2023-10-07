@@ -15,9 +15,10 @@ local globalSettings = require("efyran/e4_Settings")
 require("efyran/autobank")
 
 local QoL = {
-    currentAAXP = mq.TLO.Me.PctAAExp(),
-    currentGroupLeaderXP =  mq.TLO.Me.PctGroupLeaderExp(),
-    currentRaidLeaderXP = mq.TLO.Me.PctRaidLeaderExp(),
+    currentExp = 0.,
+    currentAAXP = 0.,
+    currentGroupLeaderXP =  0.,
+    currentRaidLeaderXP = 0.,
 
     autoXP = {
         enabled = true, -- switch to 100% AA when max level, and back to 100% normal XP if needed
@@ -30,6 +31,10 @@ local QoL = {
 local maxFactionLoyalists = false
 
 function QoL.Init()
+    QoL.currentExp = mq.TLO.Me.PctExp()
+    QoL.currentAAXP = mq.TLO.Me.PctAAExp()
+    QoL.currentGroupLeaderXP =  mq.TLO.Me.PctGroupLeaderExp()
+    QoL.currentRaidLeaderXP = mq.TLO.Me.PctRaidLeaderExp()
 
     if is_hovering() then
         all_tellf("ERROR: cannot start e4 successfully while in HOVERING mode")
@@ -1234,6 +1239,12 @@ function QoL.Init()
 
         buffs.resumeTimer:restart()
 
+        local xpDiff = mq.TLO.Me.PctExp() - QoL.currentExp
+        if xpDiff < 0 then
+            -- we dinged level
+            xpDiff = 100 + mq.TLO.Me.PctExp() - QoL.currentExp -- XXX
+        end
+
         local aaDiff = mq.TLO.Me.PctAAExp() - QoL.currentAAXP
         if aaDiff < 0 then
             -- we dinged AA
@@ -1246,10 +1257,15 @@ function QoL.Init()
         local msg = ""
 
         if not in_raid() then
+            if xpDiff > 0. then
+                msg = string.format("(%.1f %% XP)", xpDiff)
+            else
+                msg = string.format("(%.1f %% AA)", aaDiff)
+            end
             if not in_group() then
-                msg = string.format("\agSolo XP (%.1f %% AA)", aaDiff)
+                msg = "\agSolo XP " .. msg
             elseif is_group_leader() then
-                msg = string.format("\agGroup XP (%.1f %% AA)", aaDiff)
+                msg = "\agGroup XP" .. msg
             end
         end
 
@@ -1567,7 +1583,7 @@ function QoL.Tick()
     end
 
     -- auto skill-up Sense Heading
-    if skill_value("Sense Heading") < skill_cap("Sense Heading") and is_ability_ready("Sense Heading") then
+    if mq.TLO.Me.Level() >= 4 and skill_value("Sense Heading") < skill_cap("Sense Heading") and is_ability_ready("Sense Heading") then
         --log.Info("Training Sense Heading")
         cmd('/doability "Sense Heading"')
         delay(100)

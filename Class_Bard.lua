@@ -11,6 +11,11 @@ function Bard.UpdateMQ2MedleyINI()
     if not is_brd() then
         return
     end
+    if botSettings.settings.songs == nil then
+        all_tellf("ERROR no bard songs declared")
+        return
+    end
+
     local filename = mq.TLO.MacroQuest.Path("config")() .. "\\".. current_server() .. "_" .. mq.TLO.Me.Name() .. ".ini"
 
     log.Info("UpdateMQ2MedleyINI filename: %s", filename)

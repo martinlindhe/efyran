@@ -6,8 +6,9 @@ local mq = require("mq")
 ---@field public assist PeerSettingsAssist
 ---@field public gems string[]|nil XXX key is string, val is integer
 ---@field public self_buffs string[]|nil spellRows of self buffs
----@field public combat_buffs string[]| nil spellRows of combat buffs
+---@field public combat_buffs string[]|nil spellRows of combat buffs
 ---@field public request_buffs string[]|nil spellRows of buff groups to request
+---@field public songs string[]|nil XXX decl is wrong, should be key is string (song set), val is array of strings (songs in song set)
 
 ---@class PeerSettingsAssist
 ---@field public type string "melee" or "ranged"
