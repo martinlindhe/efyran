@@ -46,7 +46,7 @@ local groupBalanceTimer = timer.new_expired(30 * 1) -- 30s
 
 function Heal.Tick()
 
-    if is_hovering() or is_moving() or is_invisible() then
+    if is_hovering() or is_moving() or is_invisible() or is_feigning() then
         return
     end
 
@@ -340,7 +340,7 @@ function healPeer(spell_list, peer, pct)
         if not spawn() then
             -- peer died
             return false
-        elseif spawn.Distance() > 200 then
+        elseif spawn ~= nil and spawn.Distance() > 200 then
             return false
         elseif spellConfig.MinMana ~= nil and mq.TLO.Me.PctMana() < spellConfig.MinMana then
             --log.Debug("SKIP HEALING %s, my mana %d vs required %d", peer, mq.TLO.Me.PctMana(), spellConfig.MinMana)
@@ -378,7 +378,7 @@ function healPeer(spell_list, peer, pct)
                     return true
                 end
                 if mq.TLO.Target() ~= nil and mq.TLO.Target.PctHPs() >= 98 and not is_tank(mq.TLO.Target.Class.ShortName()) then
-                    all_tellf("Ducking heal! \ag%s\ax was %d %%, is now %d %%", mq.TLO.Target.Name(), pct, mq.TLO.Target.PctHPs())
+                    log.Info("Ducking heal! \ag%s\ax was %d %%, is now %d %%", mq.TLO.Target.Name(), pct, mq.TLO.Target.PctHPs())
                     cmd("/interrupt")
                     return true
                 end

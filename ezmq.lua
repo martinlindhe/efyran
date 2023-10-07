@@ -12,10 +12,7 @@ local timer = require("efyran/Timer")
 ---@param maxDistance number
 ---@return boolean
 function is_within_distance(spawn, maxDistance)
-    if spawn == nil then
-        return false
-    end
-    return spawn.Distance() <= maxDistance
+    return spawn ~= nil and spawn() ~= nil and spawn.Distance() <= maxDistance
 end
 
 -- Am I the foreground instance?
@@ -553,6 +550,7 @@ function use_alt_ability(name, spawnID)
 
     mq.delay(3000)
     mq.delay(20000, function() return not is_casting() end)
+    mq.delay(500)
 end
 
 -- returns true if I have the buff `name` on me
@@ -1686,13 +1684,13 @@ end
 
 -- Send a text to all peers thru MQ2DanNet
 function all_tell(msg)
-    cmdf("/bc [%s] %s", time(), msg)
+    mq.cmdf("/bc [%s] %s", time(), msg)
 end
 
 -- Send a text to all peers thru MQ2DanNet
 function all_tellf(...)
     --cmdf("/dgtell all [%s] %s", time(), string.format(...))
-    cmdf("/bc [%s] %s", time(), string.format(...))
+    mq.cmdf("/bc [%s] %s", time(), string.format(...))
 end
 
 --- collect arg into query, needed for /fdi water flask to work without quotes
@@ -2147,7 +2145,7 @@ function memorize_spell(spellRow, defaultGem)
 
     if not have_spell(o.Name) then
         all_tellf("ERROR don't know spell/song \ar%s\ax", o.Name)
-        cmd("/beep 1")
+        mq.cmd("/beep 1")
         return nil
     end
 
@@ -2337,7 +2335,7 @@ function findBestClickyWithEffectGroup(cat, effects)
 
     if name ~= nil and not have_item_inventory(name) and not is_naked() then
         all_tellf("FATAL: my best \ar%s\ax clicky is banked. PUT IN INVENTORY! (item %s, power %d)", cat, name, best)
-        cmd("/beep")
+        mq.cmd("/beep")
     end
 
     return name

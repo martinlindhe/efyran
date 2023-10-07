@@ -30,7 +30,7 @@ function Group.Init()
         if settings ~= nil then
             Group.settings = settings()
         else
-            log.Error("No Saved Groups layouts for the server found, creating %s with phony data, PLEASE EDIT THIS FILE !!!", settingsFile)
+            all_tellf("ERROR: No Saved Groups layouts for the server found, creating %s with phony data, PLEASE EDIT THIS FILE !!!", settingsFile)
             cmd("/beep 1")
 
             local f = assert(io.open(settingsFile, "w"))
@@ -63,7 +63,7 @@ end
 function Group.RecallGroup(name, groupNumber)
 
     if Group.settings[name] == nil then
-        log.Error("/recallgroup: no such group \ar%s\ax.", name)
+        all_tellf("/recallgroup: no such group \ar%s\ax.", name)
         cmd("/beep 1")
         return
     end

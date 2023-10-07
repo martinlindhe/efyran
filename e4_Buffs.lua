@@ -11,6 +11,8 @@ local groupBuffs  = require("efyran/e4_GroupBuffs")
 local bard        = require("efyran/Class_Bard")
 local timer       = require("efyran/Timer")
 
+local globalSettings = require("efyran/e4_Settings")
+
 local MIN_BUFF_DURATION = 1 * 6000 -- 1 tick, each tick is 6s
 
 ---@class buffQueueValue
@@ -88,7 +90,13 @@ function buffs.Init()
         --log.Debug("%s told me their buffs are: %s", peer, arg)
     end)
 
-    mq.bind("/reportclickies", function()
+    mq.bind("/reportclickies", function(...)
+        local filter = trim(args_string(...))
+        if filter ~= nil and not matches_filter(filter, mq.TLO.Me.Name()) then
+            log.Info("reportclickies: Not matching filter \ay%s\ax", filter)
+            return
+        end
+
         local s = ""
         if me_caster() or me_priest() then
             if buffs.manaRegenClicky == nil then
@@ -619,7 +627,7 @@ function buffs.RequestAvailabiliy()
                     for j = 1, spawn_count(spawnQuery) do
                         local spawn = mq.TLO.NearestSpawn(j, spawnQuery)
                         if spawn ~= nil and is_peer(spawn.Name()) then
-                            log.Debug("found class buffer nearby: %s %s, peer id = %s", buffClasses[i], spawn.Name(), tostring(mq.TLO.NetBots(spawn.Name()).ID()))
+                            --log.Debug("found class buffer nearby: %s %s, peer id = %s", buffClasses[i], spawn.Name(), tostring(mq.TLO.NetBots(spawn.Name()).ID()))
                             buffs.buffers[buffClasses[i]] = spawn.Name()
                             found = true
                             break
@@ -630,7 +638,7 @@ function buffs.RequestAvailabiliy()
 
             if found then
                 -- request available buffs from them
-                log.Info("Found buffer %s \ag%s\ax", buffClasses[i], buffs.buffers[buffClasses[i]])
+                log.Info("Found \ay%s\ax buffer \ag%s\ax", buffClasses[i], buffs.buffers[buffClasses[i]])
                 cmdf("/squelch /bct %s //request_buffs %s", buffs.buffers[buffClasses[i]], mq.TLO.Me.Name())
                 mq.delay(10)
             end
@@ -684,7 +692,7 @@ function buffs.RequestBuffs()
             local tokens = split_str(spellConfig.CheckFor, ",")
             for key, value in pairs(tokens) do
                 if have_buff(value) then
-                    log.Debug("RequestBuffs CheckFor \ag%s\ax found, skipping", value)
+                    --log.Debug("RequestBuffs %s, CheckFor \ag%s\ax found, skipping", spellConfig.Name, value)
                     skip = true
                 end
             end
@@ -792,10 +800,10 @@ function buffs.acceptRez()
             i = i + 1
         end
 
-        log.Debug("Got a rez from %s", peer)
+        log.Debug("Got a rez from \ay%s\ax: \ap%s\ax", peer, s)
         if not is_peer(peer) then
             log.Warn("Got a rez from \ay%s\ax: \ap%s\ax", peer, s)
-            all_tellf("Got a rez from \ay%s\ax: \ap%s\ax", peer, s)
+            all_tellf("Got a rez from \ay%s\ax", peer)
             if not globalSettings.allowStrangers then
                 cmd("/beep 1")
                 delay(10000) -- 10s to not flood chat

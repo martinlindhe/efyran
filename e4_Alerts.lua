@@ -330,6 +330,10 @@ function Alerts.Init()
             cmd("/rs >>^<< IMMUNE (BACK OFF) >>^<<")
         end
     end)
+
+    mq.event("don-vishmitar-creeping-doom", "#*#You sense your doom approaching#*#", function(text)
+        cmd("/rs >>^<< DOOM ON ME >>^<<")
+    end)
 end
 
 return Alerts

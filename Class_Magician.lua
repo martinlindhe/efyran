@@ -6,7 +6,7 @@ require("efyran/ezmq")
 -- Makes mage summon their group with Call of the Hero spell/AA
 function cohGroup()
 
-    local cothMinDistance = 250
+    local cothMinDistance = 150
 
     if mq.TLO.Me.Class.Name() ~= "Magician" then
         all_tellf("\arERROR: I am not a Magician, so I cannot Call of the Hero")

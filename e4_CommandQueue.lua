@@ -232,12 +232,16 @@ function CommandQueue.Process()
     elseif v.Name == "recallgroup" then
         group.RecallGroup(v.Arg, v.Arg2)
     elseif v.Name == "rezit" then
-        rez_it(toint(v.Arg))
+        rez_corpse(toint(v.Arg))
     elseif v.Name == "aerez" then
         ae_rez()
     elseif v.Name == "mgb" then
         if not have_spell(v.Arg) and not have_alt_ability(v.Arg) then
             all_tellf("FATAL: I cannot mgb this, dont have it: %s", v.Arg)
+            return
+        end
+        if in_neutral_zone() then
+            all_tellf("MGB: Skipping MGB %s in neutral zone", v.Arg)
             return
         end
         cast_mgb_spell(v.Arg)
@@ -310,7 +314,6 @@ function CommandQueue.Process()
         end
 
         use_alt_ability(v.Arg)
-        delay(500)
     elseif v.Name == "dropbuff" then
         drop_buff(v.Arg)
     elseif v.Name == "mount-on" then

@@ -117,8 +117,7 @@ function Pet.BuffMyPet()
         local spellConfig = parseSpellLine(buff)  -- XXX do not parse here, cache and reuse
         local spell = getSpellFromBuff(spellConfig.Name)
         if spell == nil then
-            all_tellf("Pet.BuffMyPet: getSpellFromBuff %s FAILED", buff)
-            cmd("/beep 1")
+            all_tellf("\arERROR Pet.BuffMyPet: getSpellFromBuff %s FAILED", buff)
             return false
         end
 

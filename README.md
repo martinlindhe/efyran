@@ -150,7 +150,7 @@ Buff Spell Level   Minimum Target Level
 /fmid <id>                  - find missing item by item ID (eg. for 'Shard of Dark Matter')
 
 /listclickies               - lists every clickie on current toon
-/reportclickies             - report detected auto clickes on current toon
+/reportclickies <filter>    - report detected auto clickes on current toon
 /banker                     - summons a banker
 /autobank                   - autobanks loot listed in tradeskills.ini
 

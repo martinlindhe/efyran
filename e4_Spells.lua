@@ -565,64 +565,18 @@ function shrink_group()
     end
 end
 
-
-
--- Returns true if rez was casted
----@param spawnID integer
----@return boolean
-function rez_it(spawnID)
-    local rez = get_rez_spell()
-    if rez == nil then
-        return false
-    end
-    if is_alt_ability_ready("Blessing of Resurrection") then
-        -- CLR/65: 96% exp, 3s cast, 12s recast (SoD)
-        rez = "Blessing of Resurrection"
-    end
-    if have_item("Water Sprinkler of Nem Ankh") and is_item_clicky_ready("Water Sprinkler of Nem Ankh") then
-        -- CLR/65 Epic1.0: 96% exp, 10s cast
-        rez = "Water Sprinkler of Nem Ankh"
-    end
-
-    local spawn = spawn_from_id(spawnID)
-    if spawn == nil then
-        -- unlikely
-        all_tellf("ERROR: tried to rez spawnid %s which is not in zone %s", spawnID, zone_shortname())
-        return false
-    end
-    log.Info("Performing rez on %s, %d %s", spawn.Name(), spawnID, type(spawnID))
-    if have_spell(rez) and not is_memorized(rez) then
-        mq.cmdf('/memorize "%s" %d', rez, 5)
-        mq.delay(3000) -- memorize time
-        mq.delay(15000) -- 15s recast delay on Reviviscence
-    end
-
-    -- try 3 times to get a rez spell before giving up (to wait for ability to become ready...)
-    for i = 1, 3 do
-        if is_spell_ability_ready(rez) then
-            all_tellf("Rezzing \ag%s\ax with \ay%s\ax. %d/3", spawn.Name(), rez, i)
-            castSpellAbility(spawnID, rez)
-            return true
-        else
-            all_tellf("\arWARN\ax: Not ready to rez \ag%s\ax. %d/3", spawn.Name(), i)
-            delay(3000) -- 3s
-        end
-    end
-    delay(2000) -- 2s delay
-    return false
-end
-
 -- Cleric: performs an AE rez
 function ae_rez()
     local rez = get_rez_spell()
     if rez == nil then
+        log.Error("Cannot AE rez, got no rez spell!")
         return
     end
 
     local classOrder = {'CLR', 'DRU', 'SHM', 'ENC', 'RNG', 'BST', 'PAL', 'SHD', 'WAR', 'BRD', 'MNK', 'ROG', 'BER', 'WIZ', 'NEC', 'MAG'}
     local spawnQuery = 'pccorpse radius 100'
     local corpses = spawn_count(spawnQuery)
-    all_tellf("\amAERez started in %s\ax (%d corpses, \ay%s\ax rez) ...", zone_shortname(), corpses, rez)
+    all_tellf("\amAERez started in %s\ax (%d corpses) ...", zone_shortname(), corpses)
     unflood_delay()
 
     for i=1, #classOrder do
@@ -680,7 +634,6 @@ function ae_rez_query(spawnQuery)
     end
 end
 
--- TODO: use this in /rezit command too
 function rez_corpse(spawnID)
     local spawn = spawn_from_id(spawnID)
     if spawn == nil or spawn() == nil then

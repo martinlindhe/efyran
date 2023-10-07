@@ -1040,7 +1040,7 @@ GroupBuffs.Default.WAR = {
 
     "rng_atk/Class|RNG",
     "enc_haste/Class|ENC",
-    "shm_haste/Class|SHM/NotClass|ENC",
+    "shm_haste/Class|SHM/NotClass|ENC/CheckFor|Hastening of Salik",
 
     "dru_fire_resist/Class|DRU",
     "enc_resist/Class|ENC",
@@ -1062,7 +1062,7 @@ GroupBuffs.Default.SHD = {
 
     "rng_atk/Class|RNG",
     "enc_haste/Class|ENC",
-    "shm_haste/Class|SHM/NotClass|ENC",
+    "shm_haste/Class|SHM/NotClass|ENC/CheckFor|Hastening of Salik",
 
     "dru_fire_resist/Class|DRU",
     "enc_resist/Class|ENC",
@@ -1079,7 +1079,7 @@ GroupBuffs.Default.PAL = {
 
     "rng_atk/Class|RNG",
     "enc_haste/Class|ENC",
-    "shm_haste/Class|SHM/NotClass|ENC",
+    "shm_haste/Class|SHM/NotClass|ENC/CheckFor|Hastening of Salik",
 
     "dru_fire_resist/Class|DRU",
     "enc_resist/Class|ENC",
@@ -1099,7 +1099,7 @@ GroupBuffs.Default.BRD = {
     "rng_atk/Class|RNG",
     "shm_str/Class|SHM",
     "enc_haste/Class|ENC",
-    "shm_haste/Class|SHM/NotClass|ENC",
+    "shm_haste/Class|SHM/NotClass|ENC/CheckFor|Hastening of Salik",
 
     "dru_fire_resist/Class|DRU",
     "enc_resist/Class|ENC",
@@ -1251,7 +1251,7 @@ GroupBuffs.Default.RNG = {
 
     "shm_str/Class|SHM",
     "enc_haste/Class|ENC",
-    "shm_haste/Class|SHM/NotClass|ENC",
+    "shm_haste/Class|SHM/NotClass|ENC/CheckFor|Hastening of Salik",
 
     "clr_spellhaste/Class|CLR",
     "enc_manaregen/Class|ENC",
@@ -1273,7 +1273,7 @@ GroupBuffs.Default.BST = {
     "shm_str/Class|SHM",
     "rng_atk/Class|RNG",
     "enc_haste/Class|ENC",
-    "shm_haste/Class|SHM/NotClass|ENC",
+    "shm_haste/Class|SHM/NotClass|ENC/CheckFor|Hastening of Salik",
 
     "clr_spellhaste/Class|CLR",
     "enc_manaregen/Class|ENC",
@@ -1297,7 +1297,7 @@ GroupBuffs.Default.ROG = {
     "shm_str/Class|SHM",
     "rng_atk/Class|RNG",
     "enc_haste/Class|ENC",
-    "shm_haste/Class|SHM/NotClass|ENC",
+    "shm_haste/Class|SHM/NotClass|ENC/CheckFor|Hastening of Salik",
 
     "dru_fire_resist/Class|DRU",
     "enc_resist/Class|ENC",
@@ -1317,7 +1317,7 @@ GroupBuffs.Default.MNK = {
     "shm_str/Class|SHM",
     "rng_atk/Class|RNG",
     "enc_haste/Class|ENC",
-    "shm_haste/Class|SHM/NotClass|ENC",
+    "shm_haste/Class|SHM/NotClass|ENC/CheckFor|Hastening of Salik",
 
     "dru_fire_resist/Class|DRU",
     "enc_resist/Class|ENC",
@@ -1337,7 +1337,7 @@ GroupBuffs.Default.BER = {
     "shm_str/Class|SHM",
     "rng_atk/Class|RNG",
     "enc_haste/Class|ENC",
-    "shm_haste/Class|SHM/NotClass|ENC",
+    "shm_haste/Class|SHM/NotClass|ENC/CheckFor|Hastening of Salik",
 
     "dru_fire_resist/Class|DRU",
     "enc_resist/Class|ENC",
