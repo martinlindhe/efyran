@@ -87,8 +87,14 @@ function QoL.Init()
         commandQueue.ZoneEvent()
     end)
 
+    mq.event("mob-mezzed", "#*# has been mesmerized.", function(text, name)
+        log.Info("Mezzed %s", name)
+        mq.cmdf("/popup MEZZED %s", name)
+    end)
+
     mq.event("spell-interrrupted", "Your spell is interrupted.", function(text)
         log.Info("Spell interrupted ...")
+        mq.cmd("/popup SPELL INTERRUPTED")
     end)
 
     -- for DoN solo tasks
@@ -232,7 +238,7 @@ function QoL.Init()
     ---@param string|nil spawnID spawn ID
     ---@param ... string|nil filter, such as "/only|ROG"
     mq.bind("/assiston", function(...)
-        local filter = trim(args_string(...))
+        local filter = args_string(...)
         local spawnID = nil
         local tokens = split_str(filter, "/")
         if #tokens == 2 then
@@ -271,14 +277,14 @@ function QoL.Init()
         if is_gm() then
             return
         end
-        local filter = trim(args_string(...))
+        local filter = args_string(...)
         commandQueue.Add("killit", mobID, filter)
     end)
 
     -- ends assist call
     ---@param ... string|nil filter
     mq.bind("/backoff", function(...)
-        local filter = trim(args_string(...))
+        local filter = args_string(...)
         if is_orchestrator() then
             local exe = "/dgzexecute /backoff"
             if filter ~= nil then
@@ -328,7 +334,7 @@ function QoL.Init()
 
     -- list all active tasks
     mq.bind("/listtasks", function(...)
-        local name = trim(args_string(...))
+        local name = args_string(...)
         if is_orchestrator() then
             mq.cmdf("/dgzexecute /listtasks %s", name)
         end
@@ -337,7 +343,7 @@ function QoL.Init()
 
     -- report all toons that have task `name` active
     mq.bind("/hastask", function(...)
-        local name = trim(args_string(...))
+        local name = args_string(...)
         if is_orchestrator() then
             mq.cmdf("/dgzexecute /hastask %s", name)
         end
@@ -358,7 +364,7 @@ function QoL.Init()
 
     -- Used by orchestrator to start pbae
     mq.bind("/pbaeon", function(...)
-        local filter = trim(args_string(...))
+        local filter = args_string(...)
 
        if is_orchestrator() then
             local exe = string.format("/dgzexecute /pbaestart %s", mq.TLO.Me.Name())
@@ -374,7 +380,7 @@ function QoL.Init()
     end)
 
     mq.bind("/pbaestart", function(peer, ...)
-        local filter = trim(args_string(...))
+        local filter = args_string(...)
         if botSettings.settings.assist.pbae == nil then
             return
         end
@@ -526,7 +532,7 @@ function QoL.Init()
 
     -- tell everyone else to click door/object (pok stones, etc) near the sender
     mq.bind("/clickit", function(...)
-        local filter = trim(args_string(...))
+        local filter = args_string(...)
 
         if is_orchestrator() then
             mq.cmdf("/dgzexecute /clickdoor %s %s", mq.TLO.Me.Name(), filter)
@@ -535,7 +541,7 @@ function QoL.Init()
     end)
 
     mq.bind("/clickdoor", function(sender, ...)
-        local filter = trim(args_string(...))
+        local filter = args_string(...)
         commandQueue.Add("clickdoor", sender, filter)
     end)
 
@@ -549,7 +555,7 @@ function QoL.Init()
 
     local followOn = function(...)
         local exe = string.format("/dgzexecute /followplayer %s", mq.TLO.Me.Name())
-        local filter = trim(args_string(...))
+        local filter = args_string(...)
         if filter ~= nil then
             exe = exe .. " " .. filter
         end
@@ -571,7 +577,7 @@ function QoL.Init()
     ---@param spawnName string
     ---@param ... string|nil filter, such as "/only|ROG"
     mq.bind("/followplayer", function(spawnName, ...)
-        local filter = trim(args_string(...))
+        local filter = args_string(...)
         if filter ~= nil and not matches_filter(filter, mq.TLO.Me.Name()) then
             log.Info("followid: Not matching filter \ay%s\ax", filter)
             return
@@ -661,7 +667,7 @@ function QoL.Init()
     -- tell group to use Lesson of the Devoted
     ---@param ... string|nil filter, such as "/only|ROG"
     mq.bind("/lesson", function(...)
-        local filter = trim(args_string(...))
+        local filter = args_string(...)
         if is_orchestrator() then
             mq.cmdf("/dggexecute /lesson %s", filter)
         end
@@ -717,7 +723,7 @@ function QoL.Init()
     ---@param ... string|nil filter, such as "/only|ROG"
     local movetome = function(...)
         local exe = string.format("/dgzexecute /movetopeer %s", mq.TLO.Me.Name())
-        local filter = trim(args_string(...))
+        local filter = args_string(...)
         if filter ~= nil then
             exe = exe .. " " .. filter
         end
@@ -731,7 +737,7 @@ function QoL.Init()
     ---@param peer string Peer name
     ---@param ... string|nil filter, such as "/only|ROG"
     mq.bind("/movetopeer", function(peer, ...)
-        local filter = trim(args_string(...))
+        local filter = args_string(...)
         commandQueue.Add("movetopeer", peer, filter)
     end)
 
@@ -766,7 +772,7 @@ function QoL.Init()
     end)
 
     mq.bind("/bark", function(...)
-        local arg = trim(args_string(...))
+        local arg = args_string(...)
         local spawnID = mq.TLO.Target.ID()
         if spawnID == nil then
             log.Error("No target to bark at!")
@@ -779,7 +785,7 @@ function QoL.Init()
     end)
 
     mq.bind("/barkit", function(spawnID, ...)
-        local arg = trim(args_string(...))
+        local arg = args_string(...)
 
         local id = toint(spawnID)
         target_id(id)
@@ -1182,7 +1188,7 @@ function QoL.Init()
     -- NOTE: "/finditem" is reserved in eq live for "dragon hoard" feature
     -- arg: item name + optional /filter arguments as strings
     mq.bind("/fdi", function(...)
-        local name = trim(args_string(...))
+        local name = args_string(...)
         local filter = nil
         local tokens = split_str(name, "/")
         if #tokens == 2 then
@@ -1197,7 +1203,7 @@ function QoL.Init()
     -- find missing item
     -- arg: item name + optional /filter arguments as strings
     mq.bind("/fmi", function(...)
-        local name = trim(args_string(...))
+        local name = args_string(...)
         local filter = nil
         local tokens = split_str(name, "/")
         if #tokens == 2 then
@@ -1252,6 +1258,7 @@ function QoL.Init()
         end
 
         --log.Info("Gained XP. AA %.2f %%", aaDiff)
+        QoL.currentExp = mq.TLO.Me.PctExp()
         QoL.currentAAXP = mq.TLO.Me.PctAAExp()
 
         local msg = ""
@@ -1263,9 +1270,11 @@ function QoL.Init()
                 msg = string.format("(%.1f %% AA)", aaDiff)
             end
             if not in_group() then
-                msg = "\agSolo XP " .. msg
+                msg = "Solo XP " .. msg
             elseif is_group_leader() then
-                msg = "\agGroup XP" .. msg
+                msg = "Group XP " .. msg
+            else
+                msg = ""
             end
         end
 
@@ -1286,7 +1295,7 @@ function QoL.Init()
             all_tell(msg)
         end
 
-        -- auto adjust xp / AA ratio
+        -- auto adjust XP / AA ratio
         if QoL.autoXP.enabled then
             local aaPct = toint(mq.TLO.Window("AAWindow").Child("AAW_PercentCount").Text.Left(-1)())
             if (mq.TLO.Me.Level() < QoL.autoXP.maxLevel or mq.TLO.Me.PctExp() <= QoL.autoXP.minTreshold) and aaPct > 0 then
@@ -1298,8 +1307,7 @@ function QoL.Init()
             end
         end
     end
-    
- 
+
     mq.event("xp-solo", "You gain experience!!", xpGain)
     mq.event('xp-group', 'You gain party experience!!', xpGain)
     mq.event("xp-raid", "You gained raid experience!", xpGain)
@@ -1350,7 +1358,7 @@ function QoL.Init()
 
     -- api: used by one peer to tell other peers about what corpses are already rezzed
     mq.bind("/ae_rezzed", function(...)
-        local name = trim(args_string(...))
+        local name = args_string(...)
         mark_ae_rezzed(name)
     end)
 
@@ -1583,7 +1591,7 @@ function QoL.Tick()
     end
 
     -- auto skill-up Sense Heading
-    if mq.TLO.Me.Level() >= 4 and skill_value("Sense Heading") < skill_cap("Sense Heading") and is_ability_ready("Sense Heading") then
+    if not in_combat() and skill_value("Sense Heading") > 0 and skill_value("Sense Heading") < skill_cap("Sense Heading") and is_ability_ready("Sense Heading") then
         --log.Info("Training Sense Heading")
         cmd('/doability "Sense Heading"')
         delay(100)

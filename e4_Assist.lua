@@ -160,17 +160,19 @@ function Assist.beginKillSpawnID(spawnID)
 
     log.Info("Assist.beginKillSpawnID %d", spawnID)
 
+    follow.PauseForKill()
+
+    --cmdf("/squelch /face fast id %d", spawnID)
+
     if have_pet() then
         log.Debug("Attacking with my pet %s", mq.TLO.Me.Pet.CleanName())
         mq.cmdf("/pet attack %d", spawnID)
         delay(1)
     end
 
-    follow.PauseForKill()
+    local melee = botSettings.settings.assist ~= nil and botSettings.settings.assist.type ~= nil and botSettings.settings.assist.type:lower() == "melee"
 
-    local melee = botSettings.settings.assist ~= nil and botSettings.settings.assist.type ~= nil and botSettings.settings.assist.type == "melee"
-
-    if botSettings.settings.assist ~= nil and botSettings.settings.assist.type ~= nil and botSettings.settings.assist.type == "ranged" then
+    if botSettings.settings.assist ~= nil and botSettings.settings.assist.type ~= nil and botSettings.settings.assist.type:lower() == "ranged" then
         all_tellf("XXX TODO ADD RANGED ASSIST MODE")
         cmd("/beep 1")
         return
@@ -205,7 +207,7 @@ function Assist.beginKillSpawnID(spawnID)
             mq.delay(1)
         end
         if melee and not mq.TLO.Me.Combat() then
-            mq.cmd("/attack on")
+            cmd("/attack on")
             mq.delay(1)
         end
 
@@ -224,13 +226,13 @@ function Assist.meleeStick()
         return
     end
     if Assist.IsTanking() then
-        mq.cmdf("/stick hold front %d uw", Assist.meleeDistance)
+        cmdf("/stick hold front %d uw", Assist.meleeDistance)
     else
-        mq.cmd("/stick snaproll uw")
+        cmd("/stick snaproll uw")
         mq.delay(2000, function()
             return mq.TLO.Stick.Behind() and mq.TLO.Stick.Stopped()
         end)
-        mq.cmdf("/stick hold moveback behind %d uw", Assist.meleeDistance)
+        cmdf("/stick hold moveback behind %d uw", Assist.meleeDistance)
     end
 end
 
@@ -284,9 +286,6 @@ function performSpellAbility(targetID, abilityRows, category, used)
         -- signal ability was used, in order to leave Assist.Tick() quickly when target is nil
         return true
     end
-
-    follow.Pause()
-    delay(10)
 
     for v, row in ipairs(abilityRows) do
         local skip = false
@@ -359,7 +358,7 @@ function Assist.Tick()
         return
     end
 
-    local melee = botSettings.settings.assist ~= nil and botSettings.settings.assist.type ~= nil and botSettings.settings.assist.type == "melee"
+    local melee = botSettings.settings.assist ~= nil and botSettings.settings.assist.type ~= nil and botSettings.settings.assist.type:lower() == "melee"
     local spawn = spawn_from_id(Assist.targetID)
 
     if spawn == nil or spawn() == nil then
@@ -371,12 +370,11 @@ function Assist.Tick()
 
 -- XXX if not facing target
 
-    if melee and spawn.Distance() > Assist.meleeDistance and Assist.targetID ~= 0 and assistStickTimer:expired() and not is_stunned() then
-        --log.Debug("stick update. meleeDistance = %f!", Assist.meleeDistance)
-        Assist.meleeStick()
-        assistStickTimer:restart()
-        cmdf("/squelch /face fast id %d", Assist.targetID)
-    end
+    --if melee and spawn.Distance() > Assist.meleeDistance and Assist.targetID ~= 0 and assistStickTimer:expired() and not is_stunned() then
+    --    --log.Debug("stick update. meleeDistance = %f!", Assist.meleeDistance)
+    --    Assist.meleeStick()
+    --    assistStickTimer:restart()
+    --end
 
     if spawn == nil or spawn() == nil or spawn.ID() == 0 or spawn.Type() == "Corpse" or spawn.Type() == "NULL" then
         Assist.EndFight()
@@ -385,11 +383,11 @@ function Assist.Tick()
 
     if melee and not is_stunned() then
         if mq.TLO.Target.ID() ~= Assist.targetID then
-            mq.cmdf("/target id %d", Assist.targetID)
+            cmdf("/target id %d", Assist.targetID)
             mq.delay(1)
         end
-        if mq.TLO.Me.Combat() then
-            mq.cmd("/attack on")
+        if not mq.TLO.Me.Combat() then
+            cmd("/attack on")
         end
     end
 

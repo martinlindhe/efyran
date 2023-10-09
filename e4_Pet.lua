@@ -8,9 +8,12 @@ local Pet = {}
 
 -- summon my pet, returns true if spell was cast
 function Pet.Summon()
-    if botSettings.settings.pet == nil or is_sitting() or is_moving() then
+    if is_sitting() or is_moving() then
         --print("wont summon pet. no spell in settings")
         return false
+    end
+    if not is_mag() and not is_nec() and not is_bst() then
+        return
     end
 
     if have_pet() then
@@ -18,7 +21,7 @@ function Pet.Summon()
         return false
     end
 
-    if botSettings.settings.pet.auto ~= nil and not botSettings.settings.pet.auto then
+    if botSettings.settings.pet ~= nil and botSettings.settings.pet.auto ~= nil and not botSettings.settings.pet.auto then
         --print("wont summon pet. pet.auto is false")
         return false
     end

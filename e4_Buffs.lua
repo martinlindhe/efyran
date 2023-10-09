@@ -85,13 +85,13 @@ function buffs.Init()
     
     -- INTERNAL: for updating buff state (is sent from `peer` to this instance)
     mq.bind("/set_others_buffs", function(peer, ...)
-        local arg = trim(args_string(...))
+        local arg = args_string(...)
         buffs.otherAvailable[peer] = arg
         --log.Debug("%s told me their buffs are: %s", peer, arg)
     end)
 
     mq.bind("/reportclickies", function(...)
-        local filter = trim(args_string(...))
+        local filter = args_string(...)
         if filter ~= nil and not matches_filter(filter, mq.TLO.Me.Name()) then
             log.Info("reportclickies: Not matching filter \ay%s\ax", filter)
             return
@@ -232,7 +232,7 @@ function buffs.Tick()
         refreshAutoClickiesTimer:restart()
     end
 
-    if not is_moving() and buffs.refreshBuffs and refreshBuffsTimer:expired() then
+    if not is_moving() and not in_combat() and buffs.refreshBuffs and refreshBuffsTimer:expired() then
         if not buffs.RefreshSelfBuffs() then
             if not buffs.RefreshAura() then
                 if not pet.Summon() then
@@ -374,8 +374,11 @@ function buffs.HandleDebuffs()
                 local curer = get_group_curer()
                 if curer == nil then
                     -- TODO: in this case, just ask any curer nearby
-                    all_tellf("FATAL: cant find a curer in my group: \ar%s\ax.", spellConfig.Name)
-                    return
+                    curer = get_nearby_curer()
+                    if curer == nil then
+                        all_tellf("Can't find a curer in my group for %s", spellConfig.Name)
+                        return
+                    end
                 end
                 local spawn = spawn_from_peer_name(curer)
                 if spawn == nil then

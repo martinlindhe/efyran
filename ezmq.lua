@@ -60,7 +60,7 @@ function move_to(spawnID)
     end
 
     if mq.TLO.Stick.Active() then
-        mq.cmd("/stick off")
+        cmd("/stick off")
         mq.delay(50)
     end
 
@@ -78,13 +78,13 @@ function move_to(spawnID)
     end)
 
     -- MQ2Nav XXX
-    -- mq.cmd("/nav stop")
+    -- cmd("/nav stop")
 
     -- MQ2AdvPath XXX
-    -- mq.cmd("/afollow off")
+    -- cmd("/afollow off")
 
     if mq.TLO.Stick.Active() then
-        mq.cmd("/stick off")
+        cmd("/stick off")
     end
 end
 
@@ -236,6 +236,28 @@ function get_group_curer()
         end
     end
     return name
+end
+
+--- Returns the name of a nearby priest curer, with a preference for SHM or DRU
+---@return string|nil
+function get_nearby_curer()
+
+    local spawnQuery = 'pc radius 100'
+
+    local peers = spawn_count(spawnQuery)
+    if peers == 0 then
+        return nil
+    end
+
+    for i = 1, peers do
+        local spawn = mq.TLO.NearestSpawn(i, spawnQuery)
+        if spawn ~= nil and spawn.ID() ~= nil then
+            if spawn.Class.ShortName() == "CLR" or spawn.Class.ShortName() == "DRU" or spawn.Class.ShortName() == "SHM" then
+                return spawn.Name()
+            end
+        end
+    end
+    return nil
 end
 
 --- returns true if `id` is an item I have in inventory or in bank.
@@ -409,6 +431,16 @@ function have_spell(name)
     return mq.TLO.Me.Book(mq.TLO.Spell(name).RankName())() ~= nil
 end
 
+-- Returns true if we have enough mana to cast `spell`
+---@return boolean
+function have_mana_for_spell(name)
+    if not have_spell(name) then
+        return false
+    end
+    local spell = mq.TLO.Spell(name)
+    return mq.TLO.Me.CurrentMana() > (20 + spell.Mana())
+end
+
 -- Is this a name of a spell?
 ---@param name string
 ---@return boolean
@@ -446,6 +478,10 @@ end
 ---@param name string
 ---@return boolean
 function is_spell_ready(name)
+    if mq.TLO.Me.SpellInCooldown() then
+        -- global cooldown
+        return false
+    end
     local spell = get_spell(name)
     if spell == nil then
         return false
@@ -536,7 +572,7 @@ function use_alt_ability(name, spawnID)
         if spawnID ~= nil then
             exe = exe .. string.format(" -targetid|%d", spawnID)
         end
-        mq.cmd(exe)
+        cmd(exe)
     else
         wait_until_not_casting()
 
@@ -701,6 +737,12 @@ function is_mag()
     return mq.TLO.Me.Class.ShortName() == "MAG"
 end
 
+-- Am I a Necromancer?
+---@return boolean
+function is_nec()
+    return mq.TLO.Me.Class.ShortName() == "NEC"
+end
+
 -- Am I a Cleric?
 ---@return boolean
 function is_clr()
@@ -811,7 +853,8 @@ end
 ---@return boolean
 function in_combat()
     local xdist = mq.TLO.Me.XTarget(1).Distance()
-    return mq.TLO.Me.CombatState() == "COMBAT"
+    return mq.TLO.Me.Combat()
+        or mq.TLO.Me.CombatState() == "COMBAT"
         or mq.TLO.Me.PctAggro() > 0
         or (xdist ~= nil and xdist < 200)
 end
@@ -1699,7 +1742,7 @@ function args_string(...)
     for i = 1, select("#",...) do
         s = s ..  select(i,...) .. " "
     end
-    return s
+    return trim(s)
 end
 
 -- Check wether our class/name matches the given filter
@@ -1818,6 +1861,9 @@ end
 
 -- Creates a integer from a string with a decimal number.
 function toint(s)
+    if type(s) == "string" then
+        return tonumber(s) + 0
+    end
     if s == nil then
         return 0
     end
@@ -1834,7 +1880,7 @@ end
 ---Performs an ingame slash action provided as a string.
 ---@param command string An in-game slash command (including the slash) (e.g. '/keypress DUCK').
 function cmd(command)
-    --log.Debug("/cmd %s", command)
+    log.Debug("/cmd %s", command)
     mq.cmd(command)
 end
 
@@ -1842,7 +1888,7 @@ end
 ---@param command string An in-game slash command (including the slash) (e.g. '/keypress %s').
 ---@param ...? any Variables that provide input the formated string.
 function cmdf(command, ...)
-    --log.Debug("/cmdf %s", command)
+    log.Debug("/cmdf %s", command)
     mq.cmdf(command, ...)
 end
 
@@ -2063,7 +2109,7 @@ function castSpell(name, spawnID)
         if spawnID ~= nil then
             exe = exe .. string.format(" -targetid|%d", spawnID)
         end
-        mq.cmd(exe)
+        cmd(exe)
         return true
     end
 
@@ -2164,8 +2210,10 @@ function memorize_spell(spellRow, defaultGem)
     if mq.TLO.Me.Gem(gem).Name() ~= nameWithRank then
         log.Info("Memorizing \ag%s\ax in gem %d (had \ay%s\ax)", nameWithRank, gem, mq.TLO.Me.Gem(gem).Name())
         mq.cmdf('/memorize "%s" %d', nameWithRank, gem)
+
+        -- XXX memorize time ...
         mq.delay(200)
-        mq.delay(3000, function()
+        mq.delay(5000, function()
             return mq.TLO.Me.Gem(nameWithRank)() ~= nil
         end)
 
@@ -2224,7 +2272,18 @@ end
 ---@return boolean
 function peer_has_buff(peer, spellName)
     local spell = get_spell(spellName)
-    return spell ~= nil and spell() ~= nil and mq.TLO.NetBots(peer).Buff.Find(spell.ID())() ~= nil
+    if spell == nil or spell() == nil then
+        return false
+    end
+    ---@type string
+    local buffs = mq.TLO.NetBots(peer).Buff() -- string of buff id:s
+    local tokens = split_str(buffs, " ")
+    for k, v in pairs(tokens) do
+        if toint(v) == spell.ID() then
+            return true
+        end
+    end
+    return false
 end
 
 ---@param peer string

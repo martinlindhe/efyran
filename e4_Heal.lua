@@ -44,6 +44,8 @@ local lifeSupportTimer = timer.new_expired(5 * 1) -- 5s
 
 local groupBalanceTimer = timer.new_expired(30 * 1) -- 30s
 
+local medTimer = timer.new_expired(1 * 5) -- 5s
+
 function Heal.Tick()
 
     if is_hovering() or is_moving() or is_invisible() or is_feigning() then
@@ -149,16 +151,18 @@ function Heal.medCheck()
         return
     end
 
-    if Heal.autoMed and is_standing() and not is_moving() then
+    if Heal.autoMed and medTimer:expired() and is_standing() and not is_moving() then
         if mq.TLO.Me.MaxMana() > 0 and mq.TLO.Me.PctMana() < 70 then
             all_tellf("\ayLow mana\ax, medding at \ay%d%%\ax", mq.TLO.Me.PctMana())
             cmd("/sit on")
             Heal.medding = true
+            medTimer:restart()
         end
         if mq.TLO.Me.MaxMana() == 0 and mq.TLO.Me.PctEndurance() < 50 then
             all_tellf("\ayLow endurance\ax, medding at \ay%d%%\ax", mq.TLO.Me.PctEndurance())
             cmd("/sit on")
             Heal.medding = true
+            medTimer:restart()
         end
     end
 
@@ -284,6 +288,7 @@ function Heal.performLifeSupport()
         --print(" skip = ", skip, " spellConfig = ", spellConfig.Name)
 
         if not skip then
+            medTimer:restart()
             if is_ability_ready(spellConfig.Name) then
                 all_tellf("USING LIFE SUPPORT ability %s at %d%%", spellConfig.Name, mq.TLO.Me.PctHPs())
                 cmdf("/doability %s", spellConfig.Name)
@@ -360,6 +365,10 @@ function healPeer(spell_list, peer, pct)
             --log.Debug("healPeer skip heal %s (%s), not matching ONLY filter %s", peer, spellConfig.Name, heal)
         elseif peer_hp(peer) >= 98 then
             log.Info("Skipping heal! \ag%s\ax was %d %%, is now %d %%", peer, pct, peer_hp(peer))
+        elseif have_spell(spellConfig.Name) and not have_mana_for_spell(spellConfig.Name) then
+            log.Debug("Want to heal %s with %s but OOM (have %d mana)", peer, spellConfig.Name, mq.TLO.Me.CurrentMana())
+        elseif is_memorized(spellConfig.Name) and not is_spell_ready(spellConfig.Name) then
+            log.Debug("Want to heal %s with %s but spell not ready!", peer, spellConfig.Name)
         else
             if not in_raid() then
                 all_tellf("Healing \ag%s\ax at %d%% with \ay%s\ax", peer, pct, spellConfig.Name)
@@ -367,6 +376,13 @@ function healPeer(spell_list, peer, pct)
                 log.Info("Healing \ag%s\ax at %d%% with \ay%s\ax", peer, pct, spellConfig.Name)
             end
             mq.cmdf("/target pc =%s", peer)
+
+            medTimer:restart()
+
+            if not is_standing() then
+                cmd("/stand")
+                delay(300)
+            end
 
             local check = castSpellAbility(spawn.ID(), heal, function()
                 if not is_casting() then

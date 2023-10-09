@@ -44,6 +44,10 @@ function Bard.UpdateMQ2MedleyINI()
             local key = string.format("song%d", i)
             local songData = parseSpellLine(songRow)
             local song = get_spell(songData.Name)
+            if song == nil or song() == nil or song.Duration() == nil then
+                all_tellf("ERROR cant find song %s", songData.Name)
+                return
+            end
             local duration = song.Duration() * 6 -- ticks to seconds
             local condition = "1"
 

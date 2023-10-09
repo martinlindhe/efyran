@@ -43,6 +43,10 @@ function Follow.Start(spawnName, force)
         return
     end
 
+    if not is_standing() then
+        cmd("/stand")
+    end
+
     if Follow.IsFollowing() then
         Follow.Pause()
     end
@@ -70,7 +74,7 @@ end
 -- Resumes following a peer if we was following
 function Follow.Resume()
     if is_feigning() then
-        mq.cmd("/stand")
+        cmd("/stand")
     end
     if Follow.lastFollowName ~= "" then
         Follow.Start(Follow.lastFollowName, true)
@@ -78,20 +82,20 @@ function Follow.Resume()
     end
 end
 
--- pause follow for the moment
+-- pause follow for the moment, using MQ2AdvPath
 function Follow.Pause()
-    if is_plugin_loaded("MQ2Nav") and mq.TLO.Navigation.Active() then
-        cmd("/nav stop")
-    end
-    if is_plugin_loaded("MQ2AdvPath") and mq.TLO.AdvPath.Active() then
+    --if is_plugin_loaded("MQ2Nav") and mq.TLO.Navigation.Active() then
+    --    cmd("/nav stop")
+    --end
+    if is_plugin_loaded("MQ2AdvPath") and mq.TLO.AdvPath.Following() then
         cmd("/afollow off")
     end
-    if is_plugin_loaded("MQ2MoveUtils") and mq.TLO.Stick.Active() then
-        cmd("/stick off")
-    end
-    if is_plugin_loaded("MQ2MoveUtils") and mq.TLO.MoveTo.Moving() then
-        cmd("/moveto off")
-    end
+    --if is_plugin_loaded("MQ2MoveUtils") and mq.TLO.Stick.Active() then
+    --    cmd("/stick off")
+    --end
+    --if is_plugin_loaded("MQ2MoveUtils") and mq.TLO.MoveTo.Moving() then
+    --    cmd("/moveto off")
+    --end
 end
 
 -- stops following completely
@@ -173,8 +177,17 @@ function Follow.RunToZone(startingPeer)
         return
     end
 
+    if spawn.Distance() > 200 then
+        all_tellf("ERROR: /rtz requested from peer out of range: %d", spawn.Distance())
+        return
+    end
+
     local oldZone = zone_shortname()
     log.Info("MOVING THRU ZONE FROM %s", oldZone)
+
+    if not is_standing() then
+        cmd("/stand")
+    end
 
     Follow.Stop()
 

@@ -63,7 +63,7 @@ end
 function Group.RecallGroup(name, groupNumber)
 
     if Group.settings[name] == nil then
-        all_tellf("/recallgroup: no such group \ar%s\ax.", name)
+        all_tellf("/recallgroup ERROR: no such group \ar%s\ax.", name)
         cmd("/beep 1")
         return
     end
