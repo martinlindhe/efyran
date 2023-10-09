@@ -1198,6 +1198,11 @@ function peer_settings_file()
     return mq.TLO.MacroQuest.Server() .. "_" .. mq.TLO.Me.Class.ShortName() .. "_" .. mq.TLO.Me.Name() .. ".lua"
 end
 
+--@return string
+function server_buffs_settings_file()
+    return mq.TLO.MacroQuest.Server() .. "__Default Buffs.lua"
+end
+
 -- Returns a Level/Name compbo describing yourself, such as "WAR/100 Gimp"
 ---@return string
 function present_myself()

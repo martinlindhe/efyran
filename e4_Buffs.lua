@@ -7,11 +7,19 @@ local pet         = require("efyran/e4_Pet")
 local cure        = require("efyran/e4_Cure")
 local heal        = require("efyran/e4_Heal")
 local botSettings = require("efyran/e4_BotSettings")
-local groupBuffs  = require("efyran/e4_GroupBuffs")
 local bard        = require("efyran/Class_Bard")
 local timer       = require("efyran/Timer")
 
 local globalSettings = require("efyran/e4_Settings")
+
+local groupBuffs  = require("efyran/e4_GroupBuffs")
+
+
+local serverBuffsSettings = getEfyranRoot() .. "/settings/" .. server_buffs_settings_file()
+if file_exists(serverBuffsSettings) then
+    groupBuffs.Default = loadfile(serverBuffsSettings)()
+end
+
 
 local MIN_BUFF_DURATION = 1 * 6000 -- 1 tick, each tick is 6s
 
