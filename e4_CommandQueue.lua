@@ -106,8 +106,6 @@ function CommandQueue.Process()
         perform_zoned_event()
     elseif v.Name == "dropinvis" then
         drop_invis()
-    elseif v.Name == "playmelody" then
-        bard.PlayMelody(v.Arg)
     elseif v.Name == "cure" then
         cure_player(v.Arg, v.Arg2)
     elseif v.Name == "radiantcure" then
@@ -130,59 +128,6 @@ function CommandQueue.Process()
         make_peers_circle_me(toint(v.Arg))
     elseif v.Name == "buffit" then
         buffs.BuffIt(toint(v.Arg))
-    elseif v.Name == "killit" then
-        --Arg = spawn id
-        --Arg2 = filter
-
-        local filter = v.Arg2
-        if filter ~= nil and not matches_filter(filter, mq.TLO.Me.Name()) then
-            log.Info("Not matching filter, giving up: %s", filter)
-            return
-        end
-        local spawn = spawn_from_id(toint(v.Arg))
-        if spawn == nil or (spawn.Type() ~= "NPC" and spawn.Type() ~= "Pet") then
-            return
-        end
-        if spawn.Distance() > 400 then
-            log.Error("Wont attack, too far away %f", spawn.Distance())
-            return
-        end
-        -- if already killing something, enqueue existing target and start killing new one
-        if assist.IsAssisting() then
-            if toint(v.Arg) == assist.targetID then
-                return
-            end
-
-            log.Info("got told to kill but already on target, ending current fight")
-            assist.EndFight()
-        end
-
-        log.Debug("Killing %s, type %s", spawn.DisplayName(), spawn.Type())
-        assist.handleAssistCall(spawn)
-    elseif v.Name == "backoff" then
-        local filter = v.Arg
-        if filter ~= nil and not matches_filter(filter, mq.TLO.Me.Name()) then
-            log.Info("BACKOFF: Not matching filter, giving up: %s", filter)
-            return
-        end
-        assist.backoff()
-
-    elseif v.Name == "pbae-start" then
-        local peer = v.Arg
-        local filter = v.Arg2
-
-        if filter ~= nil and not matches_filter(filter, peer) then
-            log.Debug("NOT DOING PBAE, NOT MATCHING FILTER %s", filter)
-            return
-        end
-
-        memorizePBAESpells()
-        if not assist.PBAE then
-            all_tellf("PBAE ON")
-            assist.PBAE = true
-        end
-    elseif v.Name == "disbandall" then
-        disband_all_peers()
     elseif v.Name == "usecorpsesummoner" then
         use_corpse_summoner()
     elseif v.Name == "refreshillusion" then
@@ -198,19 +143,6 @@ function CommandQueue.Process()
         cast_group_heal()
     elseif v.Name == "shrinkgroup" then
         shrink_group()
-    elseif v.Name == "clickdoor" then
-        local peer = v.Arg
-        local filter = v.Arg2
-        local sender = spawn_from_peer_name(peer)
-        if sender ~= nil and not is_within_distance(sender, 60) then
-            all_tellf("TOO FAR AWAY FROM %s (%.2f), CANT CLICK", peer, sender.Distance())
-            return
-        end
-
-        if filter ~= nil and not matches_filter(filter, peer) then
-            return
-        end
-        click_nearby_door()
     elseif v.Name == "portto" then
         cast_port_to(v.Arg)
     elseif v.Name == "movetopeer" then
@@ -333,28 +265,6 @@ function CommandQueue.Process()
         else
             log.Error("Unknown burns set '%s'", v.Arg)
         end
-    elseif v.Name == "ward" then
-        UseWard(v.Arg)
-    elseif v.Name == "teleportbind" then
-        if is_alt_ability_ready("Teleport Bind") then
-            use_alt_ability("Teleport Bind")
-        elseif have_alt_ability("Teleport Bind") then
-            all_tellf("ERROR: \arTeleport Bind not ready\ax (in %s)", mq.TLO.Me.AltAbilityTimer("Teleport Bind").TimeHMS())
-        end
-    elseif v.Name == "secondaryrecall" then
-        if is_alt_ability_ready("Secondary Recall") then
-            use_alt_ability("Secondary Recall")
-        elseif have_alt_ability("Secondary Recall") then
-            all_tellf("ERROR: \arSecondary Recall not ready\ax (in %s)", mq.TLO.Me.AltAbilityTimer("Secondary Recall").TimeHMS())
-        end
-    elseif v.Name == "hastask" then
-        if mq.TLO.Task(v.Arg).Index() ~= nil then
-            all_tellf("Has task \ag%s\ax", mq.TLO.Task(v.Arg).Title())
-        else
-            --all_tellf("Dont have task \ar%s\ax", v.Arg)
-        end
-    elseif v.Name == "listtasks" then
-        report_active_tasks()
     elseif v.Name == "report-don-crystals" then
         local s = ""
         if mq.TLO.Me.RadiantCrystals() > 0 then
@@ -384,47 +294,6 @@ function report_active_tasks()
     end
     if s ~= "" then
         all_tellf("Tasks: %s", s)
-    end
-end
-
--- Use a ward AA (priests)
----@param kind string kind of ward ("heal", "cure")
-function UseWard(kind)
-    if not is_clr() and not is_dru() then
-        return
-    end
-    if kind == "cure" then
-        local aaName = "Ward of Purity" -- DoDH
-        if not have_alt_ability(aaName) then
-            all_tellf("I do not have AA \ar%s\ax", aaName)
-            return
-        end
-        if is_alt_ability_ready(aaName) then
-            all_tellf("Dropping %s ward '%s' ...", kind, aaName)
-            use_alt_ability(aaName)
-        else
-            all_tellf("\ar%s ward '%s' is not ready\ax. Ready in %s", kind, aaName, mq.TLO.Me.AltAbilityTimer(aaName).TimeHMS())
-        end
-
-    elseif kind == "heal" then
-        local healWards = {
-            "Exquisite Benediction", -- CLR
-            "Nature's Boon",         -- DRU
-            "Call of the Ancients",  -- SHM
-        }
-        for k, aaName in pairs(healWards) do
-            if have_alt_ability(aaName) then
-                if is_alt_ability_ready(aaName) then
-                    all_tellf("Dropping \ay%s ward\ax '%s' ...", kind, aaName)
-                    use_alt_ability(aaName)
-                else
-                    all_tellf("\ar%s ward '%s' is not ready\ax. Ready in %s", kind, aaName, mq.TLO.Me.AltAbilityTimer(aaName).TimeHMS())
-                end
-                return
-            end
-        end
-    else
-        all_tellf("UseWard FATAL: unhandled kind %s", kind)
     end
 end
 
