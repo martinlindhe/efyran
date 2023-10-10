@@ -1,10 +1,10 @@
 local commandQueue = require('app/commandQueue')
 
----@class ClickDoorCommand
+---@class TeleportBindCommand
 ---@field Peer string
 ---@field Filter string
 
----@param command ClickDoorCommand
+---@param command TeleportBindCommand
 local function execute(command)
     local sender = spawn_from_peer_name(command.Peer)
     if sender ~= nil and not is_within_distance(sender, 60) then
@@ -20,17 +20,17 @@ local function execute(command)
 end
 
 local function createCommand(peer, filter)
-  if not peer then
-    all_tellf("<peer> param is not set.")
-    return nil
-  end
+    if not peer then
+        all_tellf("<peer> param is not set.")
+        return nil
+    end
 
-  if not filter then
-    all_tellf("<filter> param is not set.")
-    return nil
-  end
+    if not filter then
+        all_tellf("<filter> param is not set.")
+        return nil
+    end
 
-  commandQueue.Enqueue(function() execute({Peer = peer, Filter = filter }) end)
+    commandQueue.Enqueue(function() execute({ Peer = peer, Filter = filter }) end)
 end
 
 mq.bind("/clickit", createCommand)
