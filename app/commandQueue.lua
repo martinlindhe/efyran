@@ -35,7 +35,7 @@ local function process()
 end
 
 return {
-    Cnqueue = clear,
+    Clear = clear,
     Enqueue = enqueue,
     Process = process,
 }
