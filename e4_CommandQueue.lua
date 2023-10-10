@@ -104,8 +104,6 @@ function CommandQueue.Process()
     elseif v.Name == "zoned" then
         delay(5000) -- 5s
         perform_zoned_event()
-    elseif v.Name == "dropinvis" then
-        drop_invis()
     elseif v.Name == "cure" then
         cure_player(v.Arg, v.Arg2)
     elseif v.Name == "radiantcure" then
@@ -246,25 +244,8 @@ function CommandQueue.Process()
         end
 
         use_alt_ability(v.Arg)
-    elseif v.Name == "dropbuff" then
-        drop_buff(v.Arg)
     elseif v.Name == "mount-on" then
         mount_on()
-    elseif v.Name == "burns" then
-        if not in_combat() then
-            log.Info("Ignoring \ay%s\ax burns request (not in combat)", v.Arg)
-            return
-        end
-        log.Info("Enabling burns \ay%s\ax", v.Arg)
-        if v.Arg == "quickburns" then
-            assist.quickburns = true
-        elseif v.Arg == "longburns" then
-            assist.longburns = true
-        elseif v.Arg == "fullburns" then
-            assist.fullburns = true
-        else
-            log.Error("Unknown burns set '%s'", v.Arg)
-        end
     elseif v.Name == "report-don-crystals" then
         local s = ""
         if mq.TLO.Me.RadiantCrystals() > 0 then

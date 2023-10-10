@@ -850,7 +850,7 @@ function report_find_missing_item_by_id(id)
     if mq.TLO.Cursor.ID() == id then
         found = true
     end
-    
+
 
     -- search equipment
     for i = 1, 22 do
@@ -928,7 +928,7 @@ function list_my_clickies(cat)
     end
 
     -- bank top level slots: 1-24 is bank bags, 25-26 is shared bank
-    for i = 1, 26 do 
+    for i = 1, 26 do
         if mq.TLO.Me.Bank(i)() ~= nil then
             local key = "bank"..tostring(i)
             local inv = mq.TLO.Me.Bank(i)
@@ -1006,21 +1006,6 @@ function open_nearby_corpse()
     cmd("/loot")
 end
 
----@param filter string
-function drop_buff(filter)
-    if filter == nil then
-        return
-    end
-    if is_orchestrator() then
-        cmdf("/dgzexecute /dropbuff %s", filter)
-    end
-
-    if filter == "all" then
-        drop_all_buffs()
-    else
-        cmdf('/removebuff "%s"', filter)
-    end
-end
 
 -- summons my mount
 function mount_on()

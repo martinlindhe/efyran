@@ -234,18 +234,6 @@ function QoL.Init()
         end
     end)
 
-    -- if filter == "all", drop all. else drop partially matched buffs
-    mq.bind("/dropbuff", function(filter)
-        commandQueue.Add("dropbuff", filter)
-    end)
-
-    mq.bind("/dropinvis", function()
-        if is_orchestrator() then
-            cmd("/dgzexecute /dropinvis")
-        end
-        commandQueue.Add("dropinvis")
-    end)
-
     -- report if MGB is ready
     mq.bind("/mgbready", function()
         if is_orchestrator() then
