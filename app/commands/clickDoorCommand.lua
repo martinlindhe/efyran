@@ -30,7 +30,7 @@ local function createCommand(peer, filter)
     return nil
   end
 
-  commandQueue.Add(function() execute({Peer = peer, Filter = filter }) end)
+  commandQueue.Enqueue(function() execute({Peer = peer, Filter = filter }) end)
 end
 
 mq.bind("/clickit", createCommand)
