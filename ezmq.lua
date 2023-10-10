@@ -878,7 +878,7 @@ end
 -- Returns true if any obstructive window is open (loot, trade, bank, merchant, spell book)
 ---@return boolean
 function obstructive_window_open()
-    return window_open("MerchantWnd") or window_open("GiveWnd") or window_open("BigBankWnd")
+    return mq.TLO.Corpse.Open() or window_open("MerchantWnd") or window_open("GiveWnd") or window_open("BigBankWnd")
         or window_open("SpellBookWnd") or window_open("LootWnd") or window_open("tradewnd")
         or window_open("ConfirmationDialogBox")
 end
@@ -1867,7 +1867,11 @@ end
 -- Creates a integer from a string with a decimal number.
 function toint(s)
     if type(s) == "string" then
-        return tonumber(s) + 0
+        local n = tonumber(s)
+        if n == nil then
+            return 0
+        end
+        return n + 0
     end
     if s == nil then
         return 0
@@ -2016,7 +2020,7 @@ function castSpellAbility(spawnID, row, callback)
 
     local spawn = spawn_from_id(spawnID)
     if spawn ~= nil and spawn() ~= nil then
-        if spell.MaxHP ~= nil and spawn.PctHPs() <= spell.MaxHP then
+        if spell.MaxHP ~= nil and spawn.PctHPs() > spell.MaxHP then
             -- eg. Snare mob at low health
             log.Debug("SKIP MaxHP %s, %d vs required %d", spell.Name, spawn.PctHPs(), spell.MaxHP)
             return false
@@ -2215,14 +2219,7 @@ function memorize_spell(spellRow, defaultGem)
     if mq.TLO.Me.Gem(gem).Name() ~= nameWithRank then
         log.Info("Memorizing \ag%s\ax in gem %d (had \ay%s\ax)", nameWithRank, gem, mq.TLO.Me.Gem(gem).Name())
         mq.cmdf('/memorize "%s" %d', nameWithRank, gem)
-
-        -- XXX memorize time ...
-        mq.delay(200)
-        mq.delay(5000, function()
-            return mq.TLO.Me.Gem(nameWithRank)() ~= nil
-        end)
-
-        mq.delay(200)
+        mq.delay(5000, function() return mq.TLO.Me.Gem(nameWithRank)() ~= nil end)
     end
 
     return gem

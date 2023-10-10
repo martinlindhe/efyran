@@ -361,6 +361,11 @@ GroupBuffs.CLR = {
 
 GroupBuffs.DRU = {
     -- hp buff:
+    -- L01 Skin like Wood
+    -- L14 Skin like Rock
+    -- L24 Skin like Steel
+    -- L39 Skin like Diamond
+    -- L49 Skin like Nature
     -- L49 Protection of Nature (16 ac, 248-25 hp, 2 hp/tick, group)
     -- L59 Protection of the Cabbage (24 ac, 467-485 hp, 6 mana/tick)
     -- L60 Protection of the Glades (24 ac, 470-485 hp, 6 mana/tick, group)
@@ -373,6 +378,11 @@ GroupBuffs.DRU = {
     -- L77 Ironwood Skin Rk. II (66 ac, 1255 hp, 14 mana/tick, cost 1382 mana)
     -- L80 Blessing of the Ironwood Rk. II (66 ac, 1255 hp, 14 mana/tick, cost 3371 mana, group)
     ["dru_skin"] = {
+        --"Skin like Wood/MinLevel|1",
+        --"Skin like Rock/MinLevel|1",-- XXX unsure of minlevel
+        --"Skin like Steel/MinLevel|1",-- XXX unsure of minlevel
+        --"Skin like Diamond/MinLevel|1",-- XXX unsure of minlevel
+        --"Skin like Nature/MinLevel|1", -- XXX unsure of minlevel
         "Protection of Nature/MinLevel|1",
         "Protection of the Nine/MinLevel|46",
         "Blessing of the Nine/MinLevel|47",
@@ -620,7 +630,7 @@ GroupBuffs.ENC = {
 }
 
 GroupBuffs.MAG = {
-    -- L07 Shield of Fire (4-6 ds, 10 fr, 15 min, single)
+    -- L07 Shield of Fire (4-6 ds, 10 fr, 1.5 min, single)
     -- L19 Shield of Flame (7-9 ds, 15 fr, 15 min, single)
     -- L28 Inferno Shield (13-15 ds, 20 fr, 15 min, single)
     -- L38 Barrier of Combustion (18-20 ds, 22 fr, 15 min, single)
@@ -632,6 +642,11 @@ GroupBuffs.MAG = {
     -- L66 Fireskin (62 ds - slot 1, 45 fr, 15 min, single)
     -- L70 Circle of Fireskin (62 ds, 45 fr, 15 min, group)
     ["mag_single_ds"] = {
+        "Shield of Fire/MinLevel|1",
+        "Shield of Flame/MinLevel|1",
+        "Inferno Shield/MinLevel|1",
+        "Barrier of Combustion/MinLevel|1",
+
         "Shield of Lava/MinLevel|1",
         "Cadeau of Flame/MinLevel|43",
         "Flameshield of Ro/MinLevel|45",

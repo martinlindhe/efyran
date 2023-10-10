@@ -306,6 +306,7 @@ function performSpellAbility(targetID, abilityRows, category, used)
                 -- signal ability was used, in order to leave Assist.Tick() quickly when target is nil
                 return true
             end
+            cmdf("/face fast id %d", targetID)
             --log.Debug("Trying to %s on %s with %s", category, spawn.Name(), spellConfig.Name)
             local spawnName = spawn.Name()
             if castSpellAbility(targetID, row) then
@@ -381,12 +382,12 @@ function Assist.Tick()
         return
     end
 
-    if melee and not is_stunned() then
+    if not is_stunned() then
         if mq.TLO.Target.ID() ~= Assist.targetID then
             cmdf("/target id %d", Assist.targetID)
             mq.delay(1)
         end
-        if not mq.TLO.Me.Combat() then
+        if melee and not mq.TLO.Me.Combat() then
             cmd("/attack on")
         end
     end
@@ -447,9 +448,19 @@ function Assist.TankTick()
         return
     end
 
+    local useDumbTaunt = true -- XXX put in settings
+
+    if useDumbTaunt and assistTauntTimer:expired() and is_ability_ready("Taunt") then
+        all_tellf("Taunting \ar%s\ax", mq.TLO.Target.CleanName())
+        use_ability("Taunt")
+        assistTauntTimer:restart()
+        return
+    end
+
+    -- requires Target of Target (server feature)
     local n = mq.TLO.Me.TargetOfTarget.Class.ShortName()
     local tot = mq.TLO.Me.TargetOfTarget.Name()
-    if tot ~= nil and  n ~= "WAR" and n ~= "PAL" and n ~= "SHD" then
+    if tot ~= nil and n ~= "WAR" and n ~= "PAL" and n ~= "SHD" then
         if assistTauntTimer:expired() then
             if is_ability_ready("Taunt") then
                 all_tellf("Taunting \ar%s\ax (\ag%s\ax has aggro)", mq.TLO.Target.CleanName(), tot)

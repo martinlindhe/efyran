@@ -120,7 +120,7 @@ function refreshBuff(buffItem, spawn)
         end
         --print("attempting to memorize ", spellName .. " ... GEM ", gem)
         cmdf('/memorize "%s" %d', spellName, gem)
-        delay(3000) -- XXX 3s
+        mq.delay(5000, function() return mq.TLO.Me.Gem(spellName)() ~= nil end)
     end
 
     if not have_item_inventory(spellConfig.Name) and mq.TLO.Me.CurrentMana() < spell.Mana() then
@@ -659,9 +659,10 @@ function rez_corpse(spawnID)
     if have_spell(rez) and not is_memorized(rez) then
         log.Info("Memorizing %s ...", rez)
         mq.cmdf('/memorize "%s" %d', rez, 8) -- avoid gem5 as it is used for temp buffs
+        mq.delay(5000, function() return mq.TLO.Me.Gem(rez)() ~= nil end)
     end
 
-    mq.delay(5000)
+
     mq.delay(15000, function() return not is_casting() and is_spell_ability_ready(rez) end)
 
     if is_spell_ability_ready(rez) then

@@ -536,7 +536,8 @@ function autoMapHeightFilter()
         soltemple = {min = 10, max = 10},
         soldunga = { min = 15, max = 15},
         lavastorm = { min = 100, max = 100},
-        unrest = { min = 10, max = 10},
+        unrest = { min = 9, max = 9},
+        felwithea = { min = 10, max = 10},
 
         -- kunark?
         chardok = {min = 60, max = 60},

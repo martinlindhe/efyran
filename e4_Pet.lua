@@ -40,7 +40,7 @@ function Pet.Summon()
         return false
     end
 
-    log.Info("Summoning L", spell.Level(), " pet with \ay"..spellName.."\ax.")
+    log.Info("Summoning L%d pet with \ay%s\ax.", spell.Level(), spellName)
 
     if mq.TLO.Me.CurrentMana() < spell.Mana() then
         log.Warn("SKIP PET SUMMON, my mana ", mq.TLO.Me.PctMana(), " vs required ", spell.Mana())
@@ -86,7 +86,7 @@ function find_pet_spell()
                 name = spell.RankName()
             end
         else
-            log.Info("Pet spell not in book: ", v)
+            log.Debug("Pet spell not in book: %s", v)
         end
     end
 

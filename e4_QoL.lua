@@ -87,7 +87,7 @@ function QoL.Init()
         commandQueue.ZoneEvent()
     end)
 
-    mq.event("mob-mezzed", "#*# has been mesmerized.", function(text, name)
+    mq.event("mob-mezzed", "#1# has been mesmerized.", function(text, name)
         log.Info("Mezzed %s", name)
         mq.cmdf("/popup MEZZED %s", name)
     end)
@@ -1594,6 +1594,13 @@ function QoL.Tick()
     if not in_combat() and skill_value("Sense Heading") > 0 and skill_value("Sense Heading") < skill_cap("Sense Heading") and is_ability_ready("Sense Heading") then
         --log.Info("Training Sense Heading")
         cmd('/doability "Sense Heading"')
+        delay(100)
+    end
+
+    -- auto skill-up Tracking
+    if not in_combat() and not obstructive_window_open() and skill_value("Tracking") > 0 and skill_value("Tracking") < skill_cap("Tracking") and is_ability_ready("Tracking") then
+        log.Info("Training Tracking")
+        cmd('/doability "Tracking"')
         delay(100)
     end
 
