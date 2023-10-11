@@ -1,6 +1,6 @@
 local mq = require("mq")
 local log = require("efyran/knightlinc/Write")
-require("efyran/ezmq")
+require("ezmq")
 
 local inventorySlots = 10
 local bankerQuery = "npc radius 100 banker"
@@ -17,7 +17,7 @@ end)
 -- Opens bank window, by summoning a clockwork banker if needed
 -- Returns true on success
 ---@return boolean
-function open_banker()
+local function open_banker()
     if not window_open("BigBankWnd") then
         if spawn_count(bankerQuery) == 0 and spawn_count(bankerPetQuery) == 0 then
             log.Info("Summoning a banker ...")
@@ -54,7 +54,7 @@ function open_banker()
 end
 
 -- reads settings/tradeskills.ini and auto banks all the stuff you should have
-function autobank()
+local function autobank()
     bankFull = false
     if not open_banker() then
         return
@@ -135,3 +135,5 @@ function autobank()
 
     close_window("BigBankWnd")
 end
+
+return autobank

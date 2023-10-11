@@ -456,34 +456,6 @@ function cast_evac_spell()
     end
 end
 
-function click_nearby_door()
-    -- TODO: dont know how to access /doors list from lua/macroquest
-
-    cmd("/doortarget")
-    delay(10)
-    if mq.TLO.DoorTarget.ID() == nil then
-        all_tellf("failed to find a door to click!")
-        return
-    end
-
-    log.Info("CLICKING NEARBY DOOR %s, id %d, distance %d", mq.TLO.DoorTarget.Name(), mq.TLO.DoorTarget.ID(), mq.TLO.DoorTarget.Distance())
-
-    unflood_delay()
-    cmd("/click left door")
-end
-
-function cast_radiant_cure()
-    if not have_alt_ability("Radiant Cure") then
-        return
-    end
-    if is_alt_ability_ready("Radiant Cure") then
-        all_tellf("\agRadiant Cure inc ...\ax")
-        use_alt_ability("Radiant Cure")
-    else
-        all_tellf("Radiant Cure is \arready in %s\ax", mq.TLO.Me.AltAbilityTimer("Radiant Cure").TimeHMS())
-    end
-end
-
 -- Perform the "/portto <name>" command
 ---@param name string
 function cast_port_to(name)
@@ -512,57 +484,6 @@ function cast_port_to(name)
         wait_until_not_casting()
     end
 
-end
-
-function cast_group_heal()
-    for idx, groupHeal in pairs(groupBuffs.GroupHealSpells) do
-        if is_spell_ready(groupHeal) then
-            all_tellf("Casting group heal \ag%s\ax ...", groupHeal)
-            castSpellRaw(groupHeal, nil)
-            return
-        end
-    end
-end
-
-function shrink_group()
-    -- find the shrink clicky/spell if we got one
-    local shrinkClicky = nil
-    local spellConfig
-    for key, buff in pairs(botSettings.settings.self_buffs) do
-        spellConfig = parseSpellLine(buff)
-        if spellConfig.Shrink ~= nil and spellConfig.Shrink then
-            shrinkClicky = buff
-            break
-        end
-    end
-
-    if shrinkClicky == nil or not in_group() then
-        log.Error("No Shrink clicky declared in self_buffs, giving up.")
-        return
-    end
-
-    local item = find_item(spellConfig.Name)
-    if item == nil then
-        all_tellf("\arERROR\ax: Did not find Shrink clicky in inventory: %s", spellConfig.Name)
-        return
-    end
-    log.Info("Shrinking group members with %s", item.ItemLink("CLICKABLE")())
-
-    -- make sure shrink is targetable check buff type
-    local spell = getSpellFromBuff(spellConfig.Name)
-    if spell ~= nil and (spell.TargetType() == "Single" or spell.TargetType() == "Group v1") then
-        -- loop over group, shrink one by one starting with yourself
-        for n = 0, 5 do
-            for i = 1, 3 do
-                if mq.TLO.Group.Member(n)() ~= nil and not mq.TLO.Group.Member(n).OtherZone() and mq.TLO.Group.Member(n).Height() > 2.04 then
-                    log.Info("Shrinking member %s from height %d", mq.TLO.Group.Member(n)(), mq.TLO.Group.Member(n).Height())
-                    castSpell(spellConfig.Name, mq.TLO.Group.Member(n).ID())
-                    -- sleep for the Duration
-                    delay(item.Clicky.CastTime() + spell.RecastTime())
-                end
-            end
-        end
-    end
 end
 
 -- Cleric: performs an AE rez
@@ -690,26 +611,6 @@ function consent_me()
             cmdf("/dexecute %s /consent %s", spawn.DisplayName(), mq.TLO.Me.Name())
         else
             all_tellf("Cannot autoconsent corpse \ar%s\ax, not a peer", spawn.DisplayName())
-        end
-    end
-end
-
--- ask for consent, then gathers corpses
-function gather_corpses()
-    consent_me()
-    local spawnQuery = 'pccorpse radius 100'
-    for i = 1, spawn_count(spawnQuery) do
-        local spawn = mq.TLO.NearestSpawn(i, spawnQuery)
-        if spawn.Distance() > 20 then
-            log.Info("Gathering corpse %s", spawn.Name())
-            target_id(spawn.ID())
-            delay(10)
-            --if is_peer(spawn.DisplayName()) then
-            --    cmdf("/dexecute %s /consent %s", spawn.DisplayName(), mq.TLO.Me.Name())
-            --    delay(100)
-            --end
-            cmd("/corpse")
-            delay(1000, function() return spawn() ~= nil and spawn.Distance() < 20 end)
         end
     end
 end
@@ -850,7 +751,7 @@ function report_find_missing_item_by_id(id)
     if mq.TLO.Cursor.ID() == id then
         found = true
     end
-    
+
 
     -- search equipment
     for i = 1, 22 do
@@ -928,7 +829,7 @@ function list_my_clickies(cat)
     end
 
     -- bank top level slots: 1-24 is bank bags, 25-26 is shared bank
-    for i = 1, 26 do 
+    for i = 1, 26 do
         if mq.TLO.Me.Bank(i)() ~= nil then
             local key = "bank"..tostring(i)
             local inv = mq.TLO.Me.Bank(i)
@@ -1004,50 +905,4 @@ function open_nearby_corpse()
         return has_target()
     end)
     cmd("/loot")
-end
-
----@param filter string
-function drop_buff(filter)
-    if filter == nil then
-        return
-    end
-    if is_orchestrator() then
-        cmdf("/dgzexecute /dropbuff %s", filter)
-    end
-
-    if filter == "all" then
-        drop_all_buffs()
-    else
-        cmdf('/removebuff "%s"', filter)
-    end
-end
-
--- summons my mount
-function mount_on()
-    if botSettings.settings.mount == nil then
-        return
-    end
-
-    if not mq.TLO.Me.CanMount() then
-        all_tellf("MOUNT ERROR, cannot mount in %s", zone_shortname())
-        return
-    end
-
-    -- XXX see if mount clicky buff is on us already
-
-    local spell = getSpellFromBuff(botSettings.settings.mount)
-    if spell == nil then
-        all_tellf("/mounton: getSpellFromBuff %s FAILED", botSettings.settings.mount)
-        cmd("/beep 1")
-        return false
-    end
-
-    if have_buff(spell.RankName()) then
-        log.Error("I am already mounted.")
-        return false
-    end
-
-    -- XXX dont summon if we are already mounted.
-    log.Info("Summoning mount %s ...", botSettings.settings.mount)
-    castSpellAbility(nil, botSettings.settings.mount)
 end

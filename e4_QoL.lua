@@ -10,9 +10,10 @@ local commandQueue = require("efyran/e4_CommandQueue")
 local botSettings = require("efyran/e4_BotSettings")
 local loot  = require("efyran/e4_Loot")
 local buffs   = require("efyran/e4_Buffs")
+local heal    = require("efyran/e4_Heal")
+local pet     = require("efyran/e4_Pet")
 local globalSettings = require("efyran/e4_Settings")
-
-require("efyran/autobank")
+local map = require("efyran/map")
 
 local QoL = {
     currentExp = 0.,
@@ -29,6 +30,26 @@ local QoL = {
 }
 
 local maxFactionLoyalists = false
+
+
+
+-- performs various tasks when toon has finished starting up / zoning
+function QoL.complete_zoned_event()
+    log.Debug("I zoned into %s", zone_shortname())
+
+    pet.ConfigureAfterZone()
+    clear_ae_rezzed()
+
+    memorizeListedSpells()
+
+    heal.timeZoned = os.time()
+    heal.autoMed = true
+
+    buffs.refreshBuffs = true
+    buffs.UpdateClickies()
+
+    map.AutoMapHeightFilter()
+end
 
 function QoL.Init()
     QoL.currentExp = mq.TLO.Me.PctExp()
@@ -79,13 +100,6 @@ function QoL.Init()
     end
     mq.event("died1", "You have been slain by #*#", dead)
     mq.event("died2", "You died.", dead)
-
-    mq.event("zoned", "You have entered #1#.", function(text, zone)
-        if zone == "an area where levitation effects do not function" then
-            return
-        end
-        commandQueue.ZoneEvent()
-    end)
 
     mq.event("mob-mezzed", "#1# has been mesmerized.", function(text, name)
         log.Info("Mezzed %s", name)
@@ -197,16 +211,6 @@ function QoL.Init()
         end
     end)
 
-    -- tells all bards to play given melody name
-    mq.bind("/playmelody", function(name)
-        if is_orchestrator() then
-            cmdf("/dgexecute brd /playmelody %s", name)
-        end
-        if is_brd() then
-            commandQueue.Add("playmelody", name)
-        end
-    end)
-
     -- change spell set
     mq.bind("/spellset", function(name)
         if is_orchestrator() then
@@ -234,194 +238,6 @@ function QoL.Init()
         end
     end)
 
-    -- tell peers to kill target until dead
-    ---@param string|nil spawnID spawn ID
-    ---@param ... string|nil filter, such as "/only|ROG"
-    mq.bind("/assiston", function(...)
-        local filter = args_string(...)
-        local spawnID = nil
-        local tokens = split_str(filter, "/")
-        if #tokens == 2 then
-            --log.Info("assiston: splitting filter into two: %s    AND   %s", tokens[1], tokens[2])
-            if string.len(tokens[1]) > 0 then
-                spawnID = trim(tokens[1])
-                filter = "/" .. tokens[2]
-                --log.Info("assiston: updating filter to '%s'", filter)
-            end
-        end
-
-        local spawn = nil
-        if spawnID == nil then
-            spawnID = mq.TLO.Target.ID()
-        end
-        spawn = spawn_from_id(spawnID)
-
-        if spawn == nil or spawn() == nil or spawn.Type() == "PC" then
-            log.Info("GIVING UP ASSIST CALL ON %s, filter %s", tostring(spawnID), tostring(filter))
-            return
-        end
-
-        local exe = string.format("/dgzexecute /killit %d", spawn.ID())
-        if filter ~= nil then
-            exe = exe .. " " .. filter
-        end
-        --log.Debug("Calling assist on %s, type %s (filter %s)", spawn.DisplayName(), spawn.Type(), filter)
-        mq.cmdf(exe)
-        commandQueue.Add("killit", tostring(spawn.ID()), filter)
-    end)
-
-    -- auto assist on mob until dead
-    ---@param mobID string
-    ---@param ... string|nil filter
-    mq.bind("/killit", function(mobID, ...)
-        if is_gm() then
-            return
-        end
-        local filter = args_string(...)
-        commandQueue.Add("killit", mobID, filter)
-    end)
-
-    -- ends assist call
-    ---@param ... string|nil filter
-    mq.bind("/backoff", function(...)
-        local filter = args_string(...)
-        if is_orchestrator() then
-            local exe = "/dgzexecute /backoff"
-            if filter ~= nil then
-                exe = exe .. " " .. filter
-            end
-            mq.cmdf(exe)
-        end
-        commandQueue.Add("backoff", filter)
-    end)
-
-    mq.bind("/quickburns", function()
-        if is_orchestrator() then
-            cmd("/dgzexecute /quickburns")
-        end
-        commandQueue.Add("burns", "quickburns")
-    end)
-    mq.bind("/longburns", function()
-        if is_orchestrator() then
-            cmd("/dgzexecute /longburns")
-        end
-        commandQueue.Add("burns", "longburns")
-    end)
-    mq.bind("/fullburns", function()
-        if is_orchestrator() then
-            cmd("/dgzexecute /fullburns")
-        end
-        commandQueue.Add("burns", "fullburns")
-    end)
-
-    -- teleport bind for all wizards (port groups to bind point)
-    local tlBind = function()
-        if is_orchestrator() then
-            cmdf("/dgzexecute /teleportbind")
-        end
-        commandQueue.Add("teleportbind")
-    end
-    mq.bind("/teleportbind", tlBind)
-    mq.bind("/tlbind", tlBind)
-
-    local secondaryRecall = function()
-        if is_orchestrator() then
-            cmdf("/dgzexecute /secondaryrecall")
-        end
-        commandQueue.Add("secondaryrecall")
-    end
-    mq.bind("/secondaryrecall", secondaryRecall)
-
-    -- list all active tasks
-    mq.bind("/listtasks", function(...)
-        local name = args_string(...)
-        if is_orchestrator() then
-            mq.cmdf("/dgzexecute /listtasks %s", name)
-        end
-        commandQueue.Add("listtasks", name)
-    end)
-
-    -- report all toons that have task `name` active
-    mq.bind("/hastask", function(...)
-        local name = args_string(...)
-        if is_orchestrator() then
-            mq.cmdf("/dgzexecute /hastask %s", name)
-        end
-        commandQueue.Add("hastask", name)
-    end)
-
-    -- Use heal ward AA (CLR/DRU/SHM, OOW)
-    mq.bind("/healward", function() commandQueue.Add("ward", "heal") end)
-
-    -- Summon all available heal wards (CLR/DRU/SHM, OOW)
-    mq.bind("/healwards", function() cmdf("/dgzexecute /healward") end)
-
-    -- Use cure ward AA "Ward of Purity" (CLR, DoDH)
-    mq.bind("/cureward", function() commandQueue.Add("ward", "cure") end)
-
-    -- Summon all available cure wards (CLR, DoDH)
-    mq.bind("/curewards", function() cmdf("/dgzexecute /cureward") end)
-
-    -- Used by orchestrator to start pbae
-    mq.bind("/pbaeon", function(...)
-        local filter = args_string(...)
-
-       if is_orchestrator() then
-            local exe = string.format("/dgzexecute /pbaestart %s", mq.TLO.Me.Name())
-            if filter ~= nil then
-                exe = exe .. " " .. filter
-            end
-            mq.cmdf(exe)
-        end
-        if botSettings.settings.assist.pbae == nil then
-            return
-        end
-        commandQueue.Add("pbae-start", mq.TLO.Me.Name(), filter)
-    end)
-
-    mq.bind("/pbaestart", function(peer, ...)
-        local filter = args_string(...)
-        if botSettings.settings.assist.pbae == nil then
-            return
-        end
-        commandQueue.Add("pbae-start", peer, filter)
-    end)
-
-    mq.bind("/pbaeoff", function()
-        if is_orchestrator() then
-            cmd("/dgzexecute /pbaeoff")
-        end
-        if assist.PBAE == true then
-            assist.PBAE = false
-            all_tellf("PBAE OFF")
-        end
-    end)
-
-    -- disband all peers from raid/group
-    mq.bind("/disbandall", function()
-        commandQueue.Add("disbandall")
-    end)
-
-    -- if filter == "all", drop all. else drop partially matched buffs
-    mq.bind("/dropbuff", function(filter)
-        commandQueue.Add("dropbuff", filter)
-    end)
-
-    mq.bind("/dropinvis", function()
-        if is_orchestrator() then
-            cmd("/dgzexecute /dropinvis")
-        end
-        commandQueue.Add("dropinvis")
-    end)
-
-    -- report if MGB is ready
-    mq.bind("/mgbready", function()
-        if is_orchestrator() then
-            cmd("/dgzexecute /mgbready")
-        end
-        commandQueue.Add("is-mgb-ready")
-    end)
-
     mq.bind("/reportmana", function()
         if is_orchestrator() then
             cmd("/dgzexecute /reportmana")
@@ -432,29 +248,6 @@ function QoL.Init()
         if mq.TLO.Me.PctMana() < 100 then
             all_tellf("%dm", mq.TLO.Me.PctMana())
         end
-    end)
-
-    -- make all clerics cast their curing group heal spell
-    mq.bind("/groupheal", function()
-        if is_orchestrator() then
-            cmd("/dgzexecute /groupheal")
-        end
-        commandQueue.Add("groupheal")
-    end)
-
-    -- /buffit: asks bots to cast level appropriate buffs on current target
-    mq.bind("/buffit", function(spawnID)
-        if is_orchestrator() then
-            spawnID = mq.TLO.Target.ID()
-            if spawnID ~= 0 then
-                cmdf("/dgzexecute /buffit %d", spawnID)
-            end
-        end
-        commandQueue.Add("buffit", spawnID)
-    end)
-
-    mq.bind("/buffme", function()
-        cmdf("/dgzexecute /buffit %d", mq.TLO.Me.ID())
     end)
 
     mq.bind("/buffon", function()
@@ -469,88 +262,6 @@ function QoL.Init()
         if is_orchestrator() then
             cmd("/dgzexecute /buffoff")
         end
-    end)
-
-    -- Perform rez on target (CLR,DRU,SHM,PAL will auto use >= 90% rez spells) or delegate it to nearby cleric
-    ---@param spawnID string
-    mq.bind("/rezit", function(spawnID)
-        if is_orchestrator() then
-            if not has_target() then
-                log.Error("/rezit: No corpse targeted.")
-                return
-            end
-            local spawn = get_target()
-            if spawn == nil then
-                log.Error("/rezit: No target to rez.")
-                return
-            end
-
-            spawnID = tostring(spawn.ID())
-            if spawn.Type() ~= "Corpse" then
-                log.Error("/rezit: Target is not a corpse. Type %s",  spawn.Type())
-                return
-            end
-
-            -- non-cleric orchestrator asks nearby CLR to rez spawnID
-            if not me_priest() and not is_pal() then
-                local clrName = nearest_peer_by_class("CLR")
-                if clrName == nil then
-                    all_tellf("\arERROR\ax: Cannot request rez, no cleric nearby.")
-                    return
-                end
-                log.Info("Requesting rez for \ay%s\ax from \ag%s\ax.", spawn.Name(), clrName)
-                cmdf("/dexecute %s /rezit %d", clrName, spawn.ID())
-                return
-            end
-        end
-
-        commandQueue.Add("rezit", spawnID)
-    end)
-
-    mq.bind("/mounton", function()
-        if is_orchestrator() then
-            cmd("/dgzexecute /mounton")
-        end
-        commandQueue.Add("mount-on")
-    end)
-
-    mq.bind("/mountoff", function()
-        if is_orchestrator() then
-            cmd("/dgzexecute /mountoff")
-        end
-        log.Info("Dismounting ...")
-        cmd("/dismount")
-    end)
-
-    mq.bind("/shrinkall", function()
-        cmd("/dgzexecute /shrinkgroup")
-    end)
-
-    mq.bind("/shrinkgroup", function()
-        commandQueue.Add("shrinkgroup")
-    end)
-
-    -- tell everyone else to click door/object (pok stones, etc) near the sender
-    mq.bind("/clickit", function(...)
-        local filter = args_string(...)
-
-        if is_orchestrator() then
-            mq.cmdf("/dgzexecute /clickdoor %s %s", mq.TLO.Me.Name(), filter)
-        end
-        commandQueue.Add("clickdoor", mq.TLO.Me.Name(), filter)
-    end)
-
-    mq.bind("/clickdoor", function(sender, ...)
-        local filter = args_string(...)
-        commandQueue.Add("clickdoor", sender, filter)
-    end)
-
-    mq.bind("/portto", function(name)
-        name = name:lower()
-        if is_orchestrator() then
-            mq.cmdf("/dgzexecute /portto %s", name)
-        end
-        commandQueue.Add("portto", name)
     end)
 
     local followOn = function(...)
@@ -585,62 +296,9 @@ function QoL.Init()
         follow.Start(spawnName, false)
     end)
 
-    mq.bind("/usecorpsesummoner", function()
-        if is_orchestrator() then
-            mq.cmd("/dgzexecute /usecorpsesummoner")
-        end
-        commandQueue.Add("usecorpsesummoner")
-    end)
-
-    mq.bind("/refreshillusion", function()
-        commandQueue.Add("refreshillusion")
-    end)
-
-    mq.bind("/refreshillusions", function()
-        cmd("/bcaa //refreshillusion")
-    end)
-
-    mq.bind("/evac", function(name)
-        if is_orchestrator() then
-            mq.cmd("/dgzexecute /evac")
-        end
-        -- clear queue so that evac happens next
-        commandQueue.Clear()
-        commandQueue.Add("evacuate")
-    end)
-
-    -- cast Radiant Cure
-    mq.bind("/rc", function(name)
-        if is_orchestrator() then
-            mq.cmd("/dgzexecute /rc")
-        end
-        commandQueue.Add("radiantcure")
-    end)
-
-    -- auto cure target (usage: is requested by another toon)
-    mq.bind("/cure", function(name, kind)
-        commandQueue.Add("cure", name, kind)
-    end)
-
     -- reports all peers with debuffs
     mq.bind("/counters", function()
         cmdf("/noparse /bcaa //if (${NetBots[${Me.Name}].Counters}) /bc DEBUFFED: ${NetBots[${Me.Name}].Counters} counters in ${NetBots[${Me.Name}].Detrimentals} debuffs: ${NetBots[${Me.Name}].Detrimental}")
-    end)
-
-    -- report DoN crystals count on all connected peers
-    mq.bind("/doncrystals", function()
-        if is_orchestrator() then
-            mq.cmd("/dgzexecute /doncrystals")
-        end
-        commandQueue.Add("report-don-crystals")
-    end)
-
-    -- tell peers in zone to use Origin
-    mq.bind("/origin", function()
-        if is_orchestrator() then
-            mq.cmd("/dgzexecute /origin")
-        end
-        commandQueue.Add("origin")
     end)
 
     -- tell peers in zone to use Throne of Heroes
@@ -659,11 +317,6 @@ function QoL.Init()
         commandQueue.Add("use-veteran-aa", "Throne of Heroes")
     end)
 
-    -- Peer proximity count
-    mq.bind("/count", function() commandQueue.Add("count-peers") end)
-    mq.bind("/cnt", function() commandQueue.Add("count-peers") end)
-
-
     -- tell group to use Lesson of the Devoted
     ---@param ... string|nil filter, such as "/only|ROG"
     mq.bind("/lesson", function(...)
@@ -678,38 +331,6 @@ function QoL.Init()
         mq.cmd("/noparse /dgzexecute /if (${Me.Buff[Lesson of the Devoted].ID}) /bc ACTIVE: ${Me.Buff[Lesson of the Devoted].Duration.TimeHMS}")
     end)
 
-    mq.bind("/staunch", function()
-        commandQueue.Add("use-veteran-aa", "Staunch Recovery")
-    end)
-
-    mq.bind("/armor", function()
-        if is_orchestrator() then
-            mq.cmd("/dgzexecute /armor") -- XXX filter
-        end
-        commandQueue.Add("use-veteran-aa", "Armor of Experience")
-    end)
-
-    mq.bind("/infusion", function()
-        if is_orchestrator() then
-            mq.cmd("/dgzexecute /infusion") -- XXX filter
-        end
-        commandQueue.Add("use-veteran-aa", "Infusion of the Faithful")
-    end)
-
-    mq.bind("/intensity", function()
-        if is_orchestrator() then
-            mq.cmd("/dgzexecute /intensity") -- XXX filter
-        end
-        commandQueue.Add("use-veteran-aa", "Intensity of the Resolute")
-    end)
-
-    mq.bind("/expedient", function()
-        if is_orchestrator() then
-            mq.cmd("/dgzexecute /expedient") -- XXX filter
-        end
-        commandQueue.Add("use-veteran-aa", "Expedient Recovery")
-    end)
-
     -- report naked toons
     mq.bind("/naked", function()
         if is_orchestrator() then
@@ -720,55 +341,10 @@ function QoL.Init()
         end
     end)
 
-    ---@param ... string|nil filter, such as "/only|ROG"
-    local movetome = function(...)
-        local exe = string.format("/dgzexecute /movetopeer %s", mq.TLO.Me.Name())
-        local filter = args_string(...)
-        if filter ~= nil then
-            exe = exe .. " " .. filter
-        end
-        mq.cmdf(exe)
-    end
-
-    mq.bind("/movetome", movetome)
-    mq.bind("/mtm", movetome)
-
-    -- move to spawn ID
-    ---@param peer string Peer name
-    ---@param ... string|nil filter, such as "/only|ROG"
-    mq.bind("/movetopeer", function(peer, ...)
-        local filter = args_string(...)
-        commandQueue.Add("movetopeer", peer, filter)
-    end)
-
-    -- run through zone based on the position of startingPeer
-    -- stand near a zoneline and face in the direction of the zoneline, run command for bots to move forward to the other zone
-    mq.bind("/rtz", function(startingPeerName)
-        if is_orchestrator() then
-            -- tell the others to cross zone line
-            cmdf("/dgzexecute /rtz %s", mq.TLO.Me.Name())
-            return
-        end
-        commandQueue.Add("rtz", startingPeerName)
-    end)
-
     -- pick up ground spawn
     mq.bind("/pickup", function()
         mq.cmd("/itemtarget")
         mq.cmd("/click left item")
-    end)
-
-    -- hail or talk to nearby recognized NPC
-    mq.bind("/hailit", function()
-        commandQueue.Add("hailit")
-    end)
-
-    -- tells all peers to hail or talk to nearby recognized NPC
-    mq.bind("/hailall", function()
-        if is_orchestrator() then
-            cmd("/dgzexecute /hailit")
-        end
-        commandQueue.Add("hailit")
     end)
 
     mq.bind("/bark", function(...)
@@ -793,13 +369,6 @@ function QoL.Init()
         cmdf("/say %s", arg)
     end)
 
-    -- wiz: cast AE TL spell
-    mq.bind("/aetl", function()
-        if not is_wiz() then
-            return
-        end
-        commandQueue.Add("aetl")
-    end)
     -- reports faction status
     mq.bind("/factions", function()
         if maxFactionLoyalists then
@@ -927,9 +496,6 @@ function QoL.Init()
     -- report all peers who are not standing
     mq.bind("/notstanding", function() mq.cmd("/noparse /bcaa //if (${Me.Feigning} || ${Me.Ducking} || ${Me.Sitting}) /bc NOT STANDING") end)
 
-    -- open loot window on closest corpse
-    mq.bind("/lcorpse", function() commandQueue.Add("open-nearby-corpse") end)
-
     -- reports all toons that are not running e4
     mq.bind("/note4", function() mq.cmd("/bcaa //lua run note4") end)
 
@@ -946,36 +512,11 @@ function QoL.Init()
         cmd("/lua run efyran/combine")
     end)
 
-    mq.bind("/handin", function()
-        commandQueue.Add("handin")
-    end)
-
-    mq.bind("/handinall", function()
-        cmd("/bcaa //handin")
-    end)
-
-    -- make peers surround you in a circle
-    mq.bind("/circleme", function(dist)
-        commandQueue.Add("circleme", dist)
-    end)
-
     local mmrl = function()
         cmdf("/dex %s /makeraidleader %s", mq.TLO.Raid.Leader(), mq.TLO.Me.Name())
     end
     mq.bind("/makemeraidleader", mmrl)
     mq.bind("/mmrl", mmrl)
-
-    -- reports all currently worn auguments
-    mq.bind("/wornaugs", function() commandQueue.Add("reportwornaugs") end)
-
-    -- reports all owned clickies (worn, inventory, bank) worn auguments
-    mq.bind("/listclickies", function() commandQueue.Add("list-clickies") end)
-
-    -- cast Summon Clockwork Banker veteran AA yourself, or the first available nearby peer
-    mq.bind("/banker", function() commandQueue.Add("summonbanker") end)
-
-    -- auto banks items from tradeskills.ini
-    mq.bind("/autobank", function() commandQueue.Add("autobank") end)
 
     -- report if tribute is too low (under 140k)
     mq.bind("/lowtribute", function()
@@ -1105,17 +646,8 @@ function QoL.Init()
         all_tellf(s)
     end)
 
-    -- MAG: use Call of the Hero to summon the group to you
-    mq.bind("/cohgroup", function() commandQueue.Add("coh-group") end)
-
     -- Ask peer owners of nearby corpses to consent me
-    mq.bind("/consentme", function() commandQueue.Add("consentme") end)
-
-    -- summon nearby corpses into a pile
-    mq.bind("/gathercorpses", function() commandQueue.Add("gathercorpses") end)
-
-    -- loot all my nearby corpses
-    mq.bind("/lootmycorpse", function() commandQueue.Add("lootmycorpse") end)
+    mq.bind("/consentme", function() consent_me() end)
 
     -- turn auto loot on
     mq.bind("/looton", function()
@@ -1125,41 +657,6 @@ function QoL.Init()
     -- turn auto loot off
     mq.bind("/lootoff", function()
         loot.autoloot = false
-    end)
-
-    -- tell peers to attempt to loot their corpses
-    mq.bind("/lootallcorpses", function()
-        if is_orchestrator() then
-            cmd("/dgzexecute /lootmycorpse")
-        end
-        commandQueue.Add("lootmycorpse")
-    end)
-
-    -- tell all peers to click yes on dialog (rez, etc)
-    mq.bind("/yes", function()
-        if is_orchestrator() then
-            cmd("/dgzexecute /yes")
-        end
-        commandQueue.Add("click-yes")
-    end)
-
-    -- tell all peers to click no on dialog (aetl, rez, etc)
-    mq.bind("/no", function()
-        if is_orchestrator() then
-            cmd("/dgzexecute /no")
-        end
-        commandQueue.Add("click-no")
-    end)
-
-    -- tell clerics to use word heals
-    mq.bind("/wordheal", function()
-        if is_orchestrator() then
-            cmd("/dgzexecute /wordheal")
-        end
-        if not is_clr() then
-            return
-        end
-        commandQueue.Add("wordheal")
     end)
 
     -- make all peer quit expedition
@@ -1184,60 +681,10 @@ function QoL.Init()
     -- report all peer total AA:s
     mq.bind("/totalaa", function() mq.cmd("/noparse /bcaa //bc ${Me.AAPointsTotal} TOTAL (${Me.AAPoints} unspent, ${Me.AAPointsSpent} spent)") end)
 
-    -- finds item by name in inventory/bags
-    -- NOTE: "/finditem" is reserved in eq live for "dragon hoard" feature
-    -- arg: item name + optional /filter arguments as strings
-    mq.bind("/fdi", function(...)
-        local name = args_string(...)
-        local filter = nil
-        local tokens = split_str(name, "/")
-        if #tokens == 2 then
-            name = trim(tokens[1])
-            filter = "/" .. tokens[2]
-        end
-        if name ~= "" then
-            commandQueue.Add("find-item", name, filter)
-        end
-    end)
-
-    -- find missing item
-    -- arg: item name + optional /filter arguments as strings
-    mq.bind("/fmi", function(...)
-        local name = args_string(...)
-        local filter = nil
-        local tokens = split_str(name, "/")
-        if #tokens == 2 then
-            name = trim(tokens[1])
-            filter = "/" .. tokens[2]
-        end
-        if name ~= "" then
-            commandQueue.Add("find-missing-item", name, filter)
-        end
-    end)
-
-    -- find missing item by id
-    mq.bind("/fmid", function(id)
-        commandQueue.Add("find-missing-item-id", id)
-    end)
-
-    -- Recalls group setup from settings. The orchestrator (caller) will tell the rest how to form up
-    mq.bind('/recallgroup', function(name, groupNumber) commandQueue.Add("recallgroup", name, groupNumber) end)
-
     mq.event('joingroup', '#1# invites you to join a group.', function(text, sender)
         if is_peer(sender) then
             commandQueue.Add("joingroup")
         end
-    end)
-
-    mq.event('joinraid', '#1# invites you to join a raid.#*#', function(text, sender)
-        if not is_peer(sender) then
-            all_tellf("Got raid invite from %s", sender)
-            if not globalSettings.allowStrangers then
-                all_tellf("ERROR: Ignoring Raid invite from unknown player %s", sender)
-                return
-            end
-        end
-        commandQueue.Add("joinraid")
     end)
 
     -- track xp, auto adjust level / AA xp and auto loot
@@ -1353,47 +800,12 @@ function QoL.Init()
         end
     end)
 
-    -- Rezzes nearby player corpses
-    mq.bind("/aerez", function() commandQueue.Add("aerez") end)
 
     -- api: used by one peer to tell other peers about what corpses are already rezzed
     mq.bind("/ae_rezzed", function(...)
         local name = args_string(...)
         mark_ae_rezzed(name)
     end)
-
-    -- MGB CLR Celestial Regeneration
-    mq.bind("/aecr", function() commandQueue.Add("mgb", "Celestial Regeneration") end)
-
-    -- MGB DRU Spirit of the Wood
-    mq.bind("/aesow",  function() commandQueue.Add("mgb", "Spirit of the Wood") end)
-    mq.bind("/aesotw", function() commandQueue.Add("mgb", "Spirit of the Wood") end)
-
-    -- MGB SHM Ancestral Aid
-    mq.bind("/aeaa", function() commandQueue.Add("mgb", "Ancestral Aid") end)
-
-    -- MGB DRU Flight of Eagles
-    mq.bind("/aefoe", function() commandQueue.Add("mgb", "Flight of Eagles") end)
-
-    -- MGB NEC Dead Men Floating
-    mq.bind("/aedmf", function() commandQueue.Add("mgb", "Dead Men Floating") end)
-
-    -- MGB ENC Rune of Rikkukin
-    mq.bind("/aerr", function() commandQueue.Add("mgb", "Rune of Rikkukin") end)
-
-    -- MGB BST Paragon of Spirit
-    mq.bind("/aepos", function() commandQueue.Add("mgb", "Paragon of Spirit") end)
-
-    -- MGB RNG Auspice of the Hunter
-    mq.bind("/aeaoh",  function() commandQueue.Add("mgb", "Auspice of the Hunter") end)
-    mq.bind("/aeaoth", function() commandQueue.Add("mgb", "Auspice of the Hunter") end)
-
-    -- MGB BER war cry
-    mq.bind("/aecry", function() commandQueue.Add("aecry") end)
-
-    -- MGB BER Bloodthirst
-    mq.bind("/aebloodthirst", function() commandQueue.Add("aebloodthirst") end)
-
 
     -- XXX
 
@@ -1413,7 +825,7 @@ function QoL.Init()
     cmd("/netbots on grab=on send=on")
 
     QoL.verifySpellLines()
-    perform_zoned_event()
+    complete_zoned_event()
 end
 
 function QoL.loadRequiredPlugins()

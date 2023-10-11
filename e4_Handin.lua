@@ -151,7 +151,7 @@ local handinRules = {
 }
 
 -- performs item hand ins for quest rewards, etc
-function auto_hand_in_items()
+local function auto_hand_in_items()
 
     local zone = zone_shortname():lower()
 
@@ -296,3 +296,5 @@ function auto_hand_in_items()
         end
     end
 end
+
+return auto_hand_in_items
