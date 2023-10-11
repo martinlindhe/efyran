@@ -80,13 +80,6 @@ function QoL.Init()
     mq.event("died1", "You have been slain by #*#", dead)
     mq.event("died2", "You died.", dead)
 
-    mq.event("zoned", "You have entered #1#.", function(text, zone)
-        if zone == "an area where levitation effects do not function" then
-            return
-        end
-        commandQueue.ZoneEvent()
-    end)
-
     mq.event("mob-mezzed", "#1# has been mesmerized.", function(text, name)
         log.Info("Mezzed %s", name)
         mq.cmdf("/popup MEZZED %s", name)
@@ -312,19 +305,6 @@ function QoL.Init()
         -- clear queue so that evac happens next
         commandQueue.Clear()
         commandQueue.Add("evacuate")
-    end)
-
-    -- cast Radiant Cure
-    mq.bind("/rc", function(name)
-        if is_orchestrator() then
-            mq.cmd("/dgzexecute /rc")
-        end
-        commandQueue.Add("radiantcure")
-    end)
-
-    -- auto cure target (usage: is requested by another toon)
-    mq.bind("/cure", function(name, kind)
-        commandQueue.Add("cure", name, kind)
     end)
 
     -- reports all peers with debuffs
@@ -619,14 +599,6 @@ function QoL.Init()
         cmd("/lua run efyran/combine")
     end)
 
-    mq.bind("/handin", function()
-        commandQueue.Add("handin")
-    end)
-
-    mq.bind("/handinall", function()
-        cmd("/bcaa //handin")
-    end)
-
     -- make peers surround you in a circle
     mq.bind("/circleme", function(dist)
         commandQueue.Add("circleme", dist)
@@ -778,9 +750,6 @@ function QoL.Init()
         all_tellf(s)
     end)
 
-    -- MAG: use Call of the Hero to summon the group to you
-    mq.bind("/cohgroup", function() commandQueue.Add("coh-group") end)
-
     -- Ask peer owners of nearby corpses to consent me
     mq.bind("/consentme", function() commandQueue.Add("consentme") end)
 
@@ -900,17 +869,6 @@ function QoL.Init()
         if is_peer(sender) then
             commandQueue.Add("joingroup")
         end
-    end)
-
-    mq.event('joinraid', '#1# invites you to join a raid.#*#', function(text, sender)
-        if not is_peer(sender) then
-            all_tellf("Got raid invite from %s", sender)
-            if not globalSettings.allowStrangers then
-                all_tellf("ERROR: Ignoring Raid invite from unknown player %s", sender)
-                return
-            end
-        end
-        commandQueue.Add("joinraid")
     end)
 
     -- track xp, auto adjust level / AA xp and auto loot
@@ -1060,7 +1018,7 @@ function QoL.Init()
     cmd("/netbots on grab=on send=on")
 
     QoL.verifySpellLines()
-    perform_zoned_event()
+    complete_zoned_event()
 end
 
 function QoL.loadRequiredPlugins()

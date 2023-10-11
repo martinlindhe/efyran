@@ -70,15 +70,6 @@ function CommandQueue.Clear()
     CommandQueue.queue = {}
 end
 
--- Is called when peer has zoned
-function CommandQueue.ZoneEvent()
-    CommandQueue.Clear()
-    CommandQueue.Add("zoned")
-    assist.backoff()
-end
-
-
-
 function CommandQueue.Process()
     --log.Debug("CommandQueue.Process()")
 
@@ -96,24 +87,6 @@ function CommandQueue.Process()
         cmd("/squelch /target clear")
         delay(100)
         cmd("/squelch /invite")
-    elseif v.Name == "joinraid" then
-        wait_until_not_casting()
-        log.Info("Accepting raid invite")
-        cmd("/notify ConfirmationDialogBox Yes_Button leftmouseup")
-        cmd("/squelch /raidaccept")
-    elseif v.Name == "zoned" then
-        delay(5000) -- 5s
-        perform_zoned_event()
-    elseif v.Name == "cure" then
-        cure_player(v.Arg, v.Arg2)
-    elseif v.Name == "radiantcure" then
-        cast_radiant_cure()
-    elseif v.Name == "handin" then
-        follow.Pause()
-        auto_hand_in_items()
-        follow.Resume()
-    elseif v.Name == "coh-group" then
-        cohGroup()
     elseif v.Name == "circleme" then
         make_peers_circle_me(toint(v.Arg))
     elseif v.Name == "usecorpsesummoner" then
@@ -324,7 +297,7 @@ function cast_word_heal()
 end
 
 -- performs various tasks when toon has finished starting up / zoning
-function perform_zoned_event()
+function complete_zoned_event()
     log.Debug("I zoned into %s", zone_shortname())
 
     pet.ConfigureAfterZone()

@@ -456,18 +456,6 @@ function cast_evac_spell()
     end
 end
 
-function cast_radiant_cure()
-    if not have_alt_ability("Radiant Cure") then
-        return
-    end
-    if is_alt_ability_ready("Radiant Cure") then
-        all_tellf("\agRadiant Cure inc ...\ax")
-        use_alt_ability("Radiant Cure")
-    else
-        all_tellf("Radiant Cure is \arready in %s\ax", mq.TLO.Me.AltAbilityTimer("Radiant Cure").TimeHMS())
-    end
-end
-
 -- Perform the "/portto <name>" command
 ---@param name string
 function cast_port_to(name)

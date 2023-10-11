@@ -1,11 +1,9 @@
-
 local mq = require("mq")
 local log = require("efyran/knightlinc/Write")
-require("efyran/ezmq")
+local commandQueue = require('app/commandQueue')
 
 -- Makes mage summon their group with Call of the Hero spell/AA
-function cohGroup()
-
+local function execute()
     local cothMinDistance = 150
 
     if mq.TLO.Me.Class.Name() ~= "Magician" then
@@ -67,3 +65,10 @@ function cohGroup()
     end
 
 end
+
+local function createCommand()
+    commandQueue.Enqueue(function() execute() end)
+end
+
+    -- MAG: use Call of the Hero to summon the group to you
+mq.bind("/cohgroup", createCommand)
