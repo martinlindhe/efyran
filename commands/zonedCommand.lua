@@ -30,7 +30,7 @@ local function execute()
     map.AutoMapHeightFilter()
 end
 
-local function createCommand(text, zone)
+local function createCommand(zone)
     if zone == "an area where levitation effects do not function" then
         return
     end
@@ -38,4 +38,8 @@ local function createCommand(text, zone)
     commandQueue.Enqueue(function() execute() end)
 end
 
-mq.event("zoned", "You have entered #1#.", createCommand)
+mq.event("zoned", "You have entered #1#.", function(text, zone) createCommand(zone) end)
+
+return {
+    Execute = createCommand
+}

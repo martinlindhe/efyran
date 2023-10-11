@@ -1,4 +1,5 @@
 require("efyran/ezmq")
+require("commands")
 
 local log = require("efyran/knightlinc/Write")
 

@@ -6,11 +6,11 @@ local timer = require("efyran/Timer")
 
 local assist  = require("efyran/e4_Assist")
 local follow  = require("efyran/e4_Follow")
-local commandQueue = require("efyran/e4_CommandQueue")
 local botSettings = require("efyran/e4_BotSettings")
 local loot  = require("efyran/e4_Loot")
 local buffs   = require("efyran/e4_Buffs")
 local globalSettings = require("efyran/e4_Settings")
+local zonedCommand = require("commands/zonedCommand")
 
 local QoL = {
     currentExp = 0.,
@@ -633,12 +633,6 @@ function QoL.Init()
     -- report all peer total AA:s
     mq.bind("/totalaa", function() mq.cmd("/noparse /bcaa //bc ${Me.AAPointsTotal} TOTAL (${Me.AAPoints} unspent, ${Me.AAPointsSpent} spent)") end)
 
-    mq.event('joingroup', '#1# invites you to join a group.', function(text, sender)
-        if is_peer(sender) then
-            commandQueue.Add("joingroup")
-        end
-    end)
-
     -- track xp, auto adjust level / AA xp and auto loot
     local xpGain = function(text)
 
@@ -777,6 +771,8 @@ function QoL.Init()
     cmd("/netbots on grab=on send=on")
 
     QoL.verifySpellLines()
+
+    zonedCommand.Execute()
     --require('commands/zonedCommand').createCommand()
 end
 
