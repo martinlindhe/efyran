@@ -1,5 +1,3 @@
-require("commands")
-
 ---@class CommandHandler
 ---@field Execute fun()
 

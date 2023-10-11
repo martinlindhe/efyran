@@ -279,32 +279,6 @@ function QoL.Init()
         cmdf("/noparse /bcaa //if (${NetBots[${Me.Name}].Counters}) /bc DEBUFFED: ${NetBots[${Me.Name}].Counters} counters in ${NetBots[${Me.Name}].Detrimentals} debuffs: ${NetBots[${Me.Name}].Detrimental}")
     end)
 
-    -- tell peers in zone to use Throne of Heroes
-    mq.bind("/throne", function()
-        if is_orchestrator() then
-            mq.cmd("/dgzexecute /throne")
-        end
-        commandQueue.Add("use-veteran-aa", "Throne of Heroes")
-    end)
-
-    -- tell all peers to use Throne of Heroes
-    mq.bind("/throneall", function()
-        if is_orchestrator() then
-            mq.cmd("/bca //throne")
-        end
-        commandQueue.Add("use-veteran-aa", "Throne of Heroes")
-    end)
-
-    -- tell group to use Lesson of the Devoted
-    ---@param ... string|nil filter, such as "/only|ROG"
-    mq.bind("/lesson", function(...)
-        local filter = args_string(...)
-        if is_orchestrator() then
-            mq.cmdf("/dggexecute /lesson %s", filter)
-        end
-        commandQueue.Add("use-veteran-aa", "Lesson of the Devoted", filter)
-    end)
-
     mq.bind("/lessonsactive", function()
         mq.cmd("/noparse /dgzexecute /if (${Me.Buff[Lesson of the Devoted].ID}) /bc ACTIVE: ${Me.Buff[Lesson of the Devoted].Duration.TimeHMS}")
     end)
@@ -803,7 +777,7 @@ function QoL.Init()
     cmd("/netbots on grab=on send=on")
 
     QoL.verifySpellLines()
-    commandQueue.Add("zoned")
+    commandQueue.Enqueue({"zoned"})
 end
 
 function QoL.loadRequiredPlugins()

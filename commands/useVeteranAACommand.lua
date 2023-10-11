@@ -4,12 +4,12 @@ local log          = require("efyran/knightlinc/Write")
 
 ---@class VeteranAACommand
 ---@field AdvancedAbilityName string
+---@field Filter string
 
 ---@param command VeteranAACommand
 local function execute(command)
-    local filter = command.AdvancedAbilityName
-    if filter ~= nil and not matches_filter(filter, mq.TLO.Me.Name()) then -- XXX sender name for /only|group to work
-        log.Info("use-veteran-aa: Not matching filter, giving up: %s", filter)
+    if command.Filter ~= nil and not matches_filter(command.Filter, mq.TLO.Me.Name()) then -- XXX sender name for /only|group to work
+        log.Info("use-veteran-aa: Not matching filter, giving up: %s", command.Filter)
         return
     end
 
@@ -56,8 +56,31 @@ local function createExpedientCommand()
     commandQueue.Enqueue(function() execute({AdvancedAbilityName = "Expedient Recovery"}) end)
 end
 
+local function createThroneCommand()
+    if is_orchestrator() then
+        mq.cmd("/dgzexecute /throne") -- XXX filter
+    end
+
+    commandQueue.Enqueue(function() execute({AdvancedAbilityName = "Throne of Heroes"}) end)
+end
+
 mq.bind("/staunch", createStaunchCommand)
 mq.bind("/armor", createArmorCommand)
 mq.bind("/infusion", createInfusionCommand)
 mq.bind("/intensity", createItensityCommand)
 mq.bind("/expedient", createExpedientCommand)
+
+-- tell peers in zone to use Throne of Heroes
+mq.bind("/throne", createThroneCommand)
+
+-- tell group to use Lesson of the Devoted
+mq.bind("/lesson", function(...)
+    local filter = args_string(...)
+    if is_orchestrator() then
+        mq.cmdf("/dggexecute /lesson %s", filter)
+    end
+    commandQueue.Enqueue(function() execute({AdvancedAbilityName = "Throne of Heroes", Filter = filter}) end)
+end)
+
+-- tell all peers to use Throne of Heroes
+mq.bind("/throneall", function() mq.cmd("/bcaa //throne") end)
