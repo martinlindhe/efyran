@@ -87,43 +87,8 @@ function CommandQueue.Process()
         cmd("/squelch /target clear")
         delay(100)
         cmd("/squelch /invite")
-    elseif v.Name == "rtz" then
-        follow.RunToZone(v.Arg)
-    elseif v.Name == "hailit" then
-        hail.PerformHail()
-    elseif v.Name == "aetl" then
-        castSpellAbility(nil, "Teleport")
-    elseif v.Name == "recallgroup" then
-        group.RecallGroup(v.Arg, v.Arg2)
-    elseif v.Name == "aerez" then
-        ae_rez()
-    elseif v.Name == "aecry" then
-        cast_ae_cry()
-    elseif v.Name == "aebloodthirst" then
-        cast_ae_bloodthirst()
-    elseif v.Name == "lootmycorpse" then
-        loot_my_corpse()
     elseif v.Name == "consentme" then
         consent_me()
-    elseif v.Name == "gathercorpses" then
-        gather_corpses()
-    elseif v.Name == "click-yes" then
-
-        log.Info("click yes")
-        unflood_delay()
-        if window_open("ConfirmationDialogBox") then
-            cmd("/notify ConfirmationDialogBox Yes_Button leftmouseup")
-        elseif window_open("LargeDialogWindow") then
-            cmd("/notify LargeDialogWindow LDW_YesButton leftmouseup")
-        end
-    elseif v.Name == "click-no" then
-
-        log.Info("click no")
-        if window_open("ConfirmationDialogBox") then
-            cmd("/notify ConfirmationDialogBox No_Button leftmouseup")
-        elseif window_open("LargeDialogWindow") then
-            cmd("/notify LargeDialogWindow LDW_NoButton leftmouseup")
-        end
     elseif v.Name == "find-item" then
         report_find_item(v.Arg, v.Arg2)
     elseif v.Name == "find-missing-item" then
@@ -132,24 +97,6 @@ function CommandQueue.Process()
         report_find_missing_item_by_id(toint(v.Arg))
     elseif v.Name == "list-clickies" then
         list_my_clickies(v.Arg)
-    elseif v.Name == "wordheal" then
-        cast_word_heal()
-    elseif v.Name == "summonbanker" then
-        local aaName = "Summon Clockwork Banker"
-        if is_alt_ability_ready(aaName) then
-            use_alt_ability(aaName, nil)
-            return
-        end
-
-        log.Warn(aaName.." is not ready. Ready in "..mq.TLO.Me.AltAbilityTimer(aaName).TimeHMS())
-
-        if not is_orchestrator() then
-            return
-        end
-
-        ask_nearby_peer_to_activate_aa(aaName)
-    elseif v.Name == "autobank" then
-        autobank()
     elseif v.Name == "reportwornaugs" then
         report_worn_augs()
     elseif v.Name == "open-nearby-corpse" then

@@ -615,26 +615,6 @@ function consent_me()
     end
 end
 
--- ask for consent, then gathers corpses
-function gather_corpses()
-    consent_me()
-    local spawnQuery = 'pccorpse radius 100'
-    for i = 1, spawn_count(spawnQuery) do
-        local spawn = mq.TLO.NearestSpawn(i, spawnQuery)
-        if spawn.Distance() > 20 then
-            log.Info("Gathering corpse %s", spawn.Name())
-            target_id(spawn.ID())
-            delay(10)
-            --if is_peer(spawn.DisplayName()) then
-            --    cmdf("/dexecute %s /consent %s", spawn.DisplayName(), mq.TLO.Me.Name())
-            --    delay(100)
-            --end
-            cmd("/corpse")
-            delay(1000, function() return spawn() ~= nil and spawn.Distance() < 20 end)
-        end
-    end
-end
-
 -- returns true if I have a corpse in current zone
 --- @return boolean
 function have_corpse_in_zone()

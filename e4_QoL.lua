@@ -12,8 +12,6 @@ local loot  = require("efyran/e4_Loot")
 local buffs   = require("efyran/e4_Buffs")
 local globalSettings = require("efyran/e4_Settings")
 
-require("efyran/autobank")
-
 local QoL = {
     currentExp = 0.,
     currentAAXP = 0.,
@@ -325,34 +323,10 @@ function QoL.Init()
         end
     end)
 
-    -- run through zone based on the position of startingPeer
-    -- stand near a zoneline and face in the direction of the zoneline, run command for bots to move forward to the other zone
-    mq.bind("/rtz", function(startingPeerName)
-        if is_orchestrator() then
-            -- tell the others to cross zone line
-            cmdf("/dgzexecute /rtz %s", mq.TLO.Me.Name())
-            return
-        end
-        commandQueue.Add("rtz", startingPeerName)
-    end)
-
     -- pick up ground spawn
     mq.bind("/pickup", function()
         mq.cmd("/itemtarget")
         mq.cmd("/click left item")
-    end)
-
-    -- hail or talk to nearby recognized NPC
-    mq.bind("/hailit", function()
-        commandQueue.Add("hailit")
-    end)
-
-    -- tells all peers to hail or talk to nearby recognized NPC
-    mq.bind("/hailall", function()
-        if is_orchestrator() then
-            cmd("/dgzexecute /hailit")
-        end
-        commandQueue.Add("hailit")
     end)
 
     mq.bind("/bark", function(...)
@@ -377,13 +351,6 @@ function QoL.Init()
         cmdf("/say %s", arg)
     end)
 
-    -- wiz: cast AE TL spell
-    mq.bind("/aetl", function()
-        if not is_wiz() then
-            return
-        end
-        commandQueue.Add("aetl")
-    end)
     -- reports faction status
     mq.bind("/factions", function()
         if maxFactionLoyalists then
@@ -542,12 +509,6 @@ function QoL.Init()
     -- reports all owned clickies (worn, inventory, bank) worn auguments
     mq.bind("/listclickies", function() commandQueue.Add("list-clickies") end)
 
-    -- cast Summon Clockwork Banker veteran AA yourself, or the first available nearby peer
-    mq.bind("/banker", function() commandQueue.Add("summonbanker") end)
-
-    -- auto banks items from tradeskills.ini
-    mq.bind("/autobank", function() commandQueue.Add("autobank") end)
-
     -- report if tribute is too low (under 140k)
     mq.bind("/lowtribute", function()
         mq.cmd("/noparse /bcaa //if (${Me.CurrentFavor} < 140000) /bc LOW TRIBUTE ${Me.CurrentFavor}")
@@ -679,12 +640,6 @@ function QoL.Init()
     -- Ask peer owners of nearby corpses to consent me
     mq.bind("/consentme", function() commandQueue.Add("consentme") end)
 
-    -- summon nearby corpses into a pile
-    mq.bind("/gathercorpses", function() commandQueue.Add("gathercorpses") end)
-
-    -- loot all my nearby corpses
-    mq.bind("/lootmycorpse", function() commandQueue.Add("lootmycorpse") end)
-
     -- turn auto loot on
     mq.bind("/looton", function()
         loot.autoloot = true
@@ -693,41 +648,6 @@ function QoL.Init()
     -- turn auto loot off
     mq.bind("/lootoff", function()
         loot.autoloot = false
-    end)
-
-    -- tell peers to attempt to loot their corpses
-    mq.bind("/lootallcorpses", function()
-        if is_orchestrator() then
-            cmd("/dgzexecute /lootmycorpse")
-        end
-        commandQueue.Add("lootmycorpse")
-    end)
-
-    -- tell all peers to click yes on dialog (rez, etc)
-    mq.bind("/yes", function()
-        if is_orchestrator() then
-            cmd("/dgzexecute /yes")
-        end
-        commandQueue.Add("click-yes")
-    end)
-
-    -- tell all peers to click no on dialog (aetl, rez, etc)
-    mq.bind("/no", function()
-        if is_orchestrator() then
-            cmd("/dgzexecute /no")
-        end
-        commandQueue.Add("click-no")
-    end)
-
-    -- tell clerics to use word heals
-    mq.bind("/wordheal", function()
-        if is_orchestrator() then
-            cmd("/dgzexecute /wordheal")
-        end
-        if not is_clr() then
-            return
-        end
-        commandQueue.Add("wordheal")
     end)
 
     -- make all peer quit expedition
@@ -787,9 +707,6 @@ function QoL.Init()
     mq.bind("/fmid", function(id)
         commandQueue.Add("find-missing-item-id", id)
     end)
-
-    -- Recalls group setup from settings. The orchestrator (caller) will tell the rest how to form up
-    mq.bind('/recallgroup', function(name, groupNumber) commandQueue.Add("recallgroup", name, groupNumber) end)
 
     mq.event('joingroup', '#1# invites you to join a group.', function(text, sender)
         if is_peer(sender) then
@@ -910,21 +827,12 @@ function QoL.Init()
         end
     end)
 
-    -- Rezzes nearby player corpses
-    mq.bind("/aerez", function() commandQueue.Add("aerez") end)
 
     -- api: used by one peer to tell other peers about what corpses are already rezzed
     mq.bind("/ae_rezzed", function(...)
         local name = args_string(...)
         mark_ae_rezzed(name)
     end)
-
-    -- MGB BER war cry
-    mq.bind("/aecry", function() commandQueue.Add("aecry") end)
-
-    -- MGB BER Bloodthirst
-    mq.bind("/aebloodthirst", function() commandQueue.Add("aebloodthirst") end)
-
 
     -- XXX
 
