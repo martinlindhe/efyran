@@ -1,265 +1,42 @@
-local mq = require("mq")
-local log = require("efyran/knightlinc/Write")
+require("commands")
 
-require("efyran/e4_Handin")
+---@class CommandHandler
+---@field Execute fun()
 
-local heal    = require("efyran/e4_Heal")
-local hail    = require("efyran/e4_Hail")
-local buffs   = require("efyran/e4_Buffs")
-local follow  = require("efyran/e4_Follow")
-local assist  = require("efyran/e4_Assist")
-local pet     = require("efyran/e4_Pet")
-local group   = require("efyran/e4_Group")
-local botSettings = require("efyran/e4_BotSettings")
+---@type CommandHandler[]
+local queue = {}
 
-local bard    = require("efyran/Class_Bard")
-local mage    = require("efyran/Class_Magician")
-
----@class CommandQueueValue
----@field public Name string Command name
----@field public Sender string Peer name (TODO unused)
----@field public Arg string Argument
----@field public Arg2 string Second argument
-
-local CommandQueue = {
-    ---@type CommandQueueValue[]
-    queue = {},
-}
-
----@param name string
----@param arg? string optional argument
----@param arg2? string optional argument
----@param sender? string optional argument
-function CommandQueue.Add(name, arg, arg2, sender)
-    if sender == nil then
-        sender = mq.TLO.Me.Name()
-    end
-    table.insert(CommandQueue.queue, {
-        Name = name,
-        Sender = sender,
-        Arg = arg,
-        Arg2 = arg2,
-    })
+---@param command fun()
+local function enqueue(command)
+    table.insert(queue, { Execute = command })
 end
 
--- remove by name
-function CommandQueue.Remove(name)
-    local idx = -1
-
-    for k, v in pairs(CommandQueue.queue) do
-        if v.Name == name then
-            idx = k
-        end
+---@return CommandHandler|nil #Returns the oldest item on the queue
+local function deQueue()
+    for idx, command in ipairs(queue) do
+        table.remove(queue, idx)
+        return command
     end
 
-    if idx ~= -1 then
-        table.remove(CommandQueue.queue, idx)
-    end
-end
-
----@return CommandQueueValue|nil
-function CommandQueue.PeekFirst()
-    for k, v in ipairs(CommandQueue.queue) do
-        return v
-    end
     return nil
 end
 
 -- Clears the command queue
-function CommandQueue.Clear()
-    CommandQueue.queue = {}
+local function clear()
+    queue = {}
 end
 
-function CommandQueue.Process()
-    --log.Debug("CommandQueue.Process()")
-
-    local v = CommandQueue.PeekFirst()
-    if v == nil then
+local function process()
+    local command = deQueue()
+    if command == nil then
         return
     end
 
-    log.Info("Performing command \ay%s\ax (%s, %s)", v.Name, v.Arg, v.Arg2)
-
-    CommandQueue.Remove(v.Name)
-
-    all_tellf("ERROR unknown command in queue: %s", v.Name)
+    command.Execute()
 end
 
--- Report all active tasks
-function report_active_tasks()
-    local s = ""
-    for i = 1, 29 do
-        if mq.TLO.Task(i).Title() ~= "" then
-            s = s .. string.format("%d:%s,", i, mq.TLO.Task(i).Title())
-        end
-    end
-    if s ~= "" then
-        all_tellf("Tasks: %s", s)
-    end
-end
-
-function cast_word_heal()
-    wait_until_not_casting()
-    local name = ""
-
-    -- group heals:
-    -- L30 Word of Health                          (380-485 hp, cost 302 mana)
-    -- L57 Word of Restoration                     (1788-1818 hp, cost 898 mana)
-    -- L60 Word of Redemption                      (7500 hp, cost 1100 mana)
-    -- L64 Word of Replenishment                   (2500 hp, -14 dr, -14 pr, -7 curse, cost 1100 mana)
-    -- L69 Word of Vivification                    (3417-3427 hp, -21 dr, -21 pr, -14 curse, cost 1357 mana)
-
-    -- L80 Word of Vivacity                        (4250 hp, -21 dr, -21 pr, -14 curse, cost 1540 mana)
-    -- L80 Word of Vivacity Rk. II                 (4610 hp, -21 dr, -21 pr, -14 curse, cost 1610 mana)
-    -- L80 Word of Vivacity Rk. III                (4851 hp, -21 dr, -21 pr, -14 curse, cost 1654 mana)
-    -- L85 Word of Recovery                        (4886 hp, -21 dr, -21 pr, -14 curse, cost 1663 mana)
-    -- L85 Word of Recovery Rk. II                 (5302 hp, -21 dr, -21 pr, -14 curse, cost 1738 mana)
-    -- L85 Word of Recovery Rk. III                (5578 hp, -21 dr, -21 pr, -14 curse, cost 1786 mana)
-    -- L90 Word of Resurgence                      (6670 hp, -27 dr, -27 pr, -18 curse, cost 1974 mana)
-    -- L90 Word of Resurgence Rk. II               (7238 hp, -27 dr, -27 pr, -18 curse, cost 2063 mana)
-    -- L90 Word of Resurgence Rk. III              (7614 hp, -29 dr, -29 pr, -20 curse, cost 2120 mana)
-    -- L95 Word of Rehabilitation                  (9137 hp, -32 dr, -32 pr, -23 curse, cost 2253 mana)
-    -- L95 Word of Rehabilitation Rk. II           (9594 hp, -32 dr, -32 pr, -23 curse, cost 2343 mana)
-    -- L95 Word of Rehabilitation Rk. III         (10074 hp, -32 dr, -32 pr, -23 curse, cost 2437 mana)
-
-    -- L100 Word of Reformation
-    -- L105 Word of Greater Reformation
-    -- L110 Word of Greater Restoration
-    -- L115 Word of Greater Replenishment
-    -- L120 Word of Greater Rejuvenation
-
-    if is_memorized("Word of Health") then
-        name = "Word of Health"
-    end
-    if is_memorized("Word of Restoration") then
-        name = "Word of Restoration"
-    end
-    if is_memorized("Word of Redemption") then
-        name = "Word of Redemption"
-    end
-    if is_memorized("Word of Replenishment") then
-        name = "Word of Replenishment"
-    end
-    if is_memorized("Word of Vivification") then
-        name = "Word of Vivification"
-    end
-    if is_memorized("Word of Vivacity") then
-        name = "Word of Vivacity"
-    end
-    if is_memorized("Word of Recovery") then
-        name = "Word of Recovery"
-    end
-    if is_memorized("Word of Resurgence") then
-        name = "Word of Resurgence"
-    end
-    if is_memorized("Word of Rehabilitation") then
-        name = "Word of Rehabilitation"
-    end
-    if is_memorized("Word of Reformation") then
-        name = "Word of Reformation"
-    end
-    if is_memorized("Word of Greater Reformation") then
-        name = "Word of Greater Reformation"
-    end
-    if is_memorized("Word of Greater Restoration") then
-        name = "Word of Greater Restoration"
-    end
-    if is_memorized("Word of Greater Replenishment") then
-        name = "Word of Greater Replenishment"
-    end
-    if is_memorized("Word of Greater Rejuvenation") then
-        name = "Word of Greater Rejuvenation"
-    end
-    if name == "" then
-        all_tellf("\arERROR: no word heal memorized!")
-        return
-    end
-    log.Info("Word heal using \ay%s\ax", name)
-    castSpellAbility(nil, name)
-    delay(1000) -- 1s
-end
-
--- performs various tasks when toon has finished starting up / zoning
-function complete_zoned_event()
-    log.Debug("I zoned into %s", zone_shortname())
-
-    pet.ConfigureAfterZone()
-    clear_ae_rezzed()
-
-    memorizeListedSpells()
-
-    heal.timeZoned = os.time()
-    heal.autoMed = true
-
-    buffs.refreshBuffs = true
-    buffs.UpdateClickies()
-
-    autoMapHeightFilter()
-end
-
--- auto adjusts map height filter in some zones
-function autoMapHeightFilter()
-
-    local heights = {
-        -- old
-        guktop = {min = 30, max = 30},
-        soltemple = {min = 10, max = 10},
-        soldunga = { min = 15, max = 15},
-        lavastorm = { min = 100, max = 100},
-        unrest = { min = 9, max = 9},
-        felwithea = { min = 10, max = 10},
-
-        -- kunark?
-        chardok = {min = 60, max = 60},
-        sirens = {min = 50, max = 50},
-        necropolis = {min = 80, max = 80},
-
-        -- luclin
-        fungusgrove = {min = 80, max = 80},
-
-        -- pop
-        codecay = {min = 30, max = 30},
-        poair = {min = 160, max = 160},
-
-        -- omens
-        riftseekers = {min = 120, max = 120},
-
-        -- DoN
-        stillmoona = {min = 50, max = 50},
-        thundercrest = {min = 70, max = 70},
-        broodlands = {min = 140, max = 140},
-    }
-
-    local data = heights[zone_shortname()]
-    local unknown = false
-    if data == nil then
-        data = {min = 20, max = 20}
-        unknown = true
-    end
-
-    local currentMin = mq.TLO.Window("MVW_MapToolBar/MVW_MinZEditBox").Text()
-    local currentMax = mq.TLO.Window("MVW_MapToolBar/MVW_MaxZEditBox").Text()
-
-    log.Info("autoMapHeightFilter setting min %d, max %d (was min %s, max %s)", data.min, data.max, currentMin, currentMax)
-
-    -- NOTE: this need recent macroquest, past july 25 2023 for the SetText.
-    --mq.TLO.Window("MVW_MapToolBar/MVW_MinZEditBox").SetText(string.format("%d", data.min))
-    --mq.TLO.Window("MVW_MapToolBar/MVW_MinZEditBox").SetText(string.format("%d", data.min))
-
-    -- TODO, if Height Filter button is not enabled, then enable it !
-    if not unknown then
-        if not mq.TLO.Window("MVW_MapToolBar/MVW_ZFilterButton").Checked() then
-            log.Info("autoMapHeightFilter height filter was off, enabling now!")
-            cmd("/notify MVW_MapToolBar MVW_ZFilterButton leftmouseup")
-        end
-    else
-        if mq.TLO.Window("MVW_MapToolBar/MVW_ZFilterButton").Checked() then
-            log.Info("autoMapHeightFilter height filter was on, disabling for unknown zone!")
-            cmd("/notify MVW_MapToolBar MVW_ZFilterButton leftmouseup")
-        end
-    end
-
-    return true
-end
-
-return CommandQueue
+return {
+    Clear = clear,
+    Enqueue = enqueue,
+    Process = process,
+}

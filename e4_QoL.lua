@@ -10,7 +10,10 @@ local commandQueue = require("efyran/e4_CommandQueue")
 local botSettings = require("efyran/e4_BotSettings")
 local loot  = require("efyran/e4_Loot")
 local buffs   = require("efyran/e4_Buffs")
+local heal    = require("efyran/e4_Heal")
+local pet     = require("efyran/e4_Pet")
 local globalSettings = require("efyran/e4_Settings")
+local map = require("efyran/map")
 
 local QoL = {
     currentExp = 0.,
@@ -27,6 +30,26 @@ local QoL = {
 }
 
 local maxFactionLoyalists = false
+
+
+
+-- performs various tasks when toon has finished starting up / zoning
+function QoL.complete_zoned_event()
+    log.Debug("I zoned into %s", zone_shortname())
+
+    pet.ConfigureAfterZone()
+    clear_ae_rezzed()
+
+    memorizeListedSpells()
+
+    heal.timeZoned = os.time()
+    heal.autoMed = true
+
+    buffs.refreshBuffs = true
+    buffs.UpdateClickies()
+
+    map.AutoMapHeightFilter()
+end
 
 function QoL.Init()
     QoL.currentExp = mq.TLO.Me.PctExp()
