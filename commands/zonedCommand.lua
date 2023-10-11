@@ -1,5 +1,5 @@
 local mq = require("mq")
-local commandQueue = require('commandQueue')
+local commandQueue = require('e4_commandQueue')
 local assist  = require("efyran/e4_Assist")
 local qol     = require("efyran/e4_QoL")
 

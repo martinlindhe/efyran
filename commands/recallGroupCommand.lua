@@ -1,5 +1,5 @@
 local mq = require("mq")
-local commandQueue = require('commandQueue')
+local commandQueue = require('e4_commandQueue')
 local group   = require("efyran/e4_Group")
 
 ---@class RecallGroupCommand

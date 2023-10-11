@@ -1,5 +1,5 @@
 local mq = require("mq")
-local commandQueue = require('commandQueue')
+local commandQueue = require('e4_commandQueue')
 
 local function execute()
     if is_alt_ability_ready("Secondary Recall") then

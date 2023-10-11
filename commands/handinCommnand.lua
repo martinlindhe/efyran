@@ -1,5 +1,5 @@
 local mq = require("mq")
-local commandQueue = require('commandQueue')
+local commandQueue = require('e4_commandQueue')
 local follow  = require("efyran/e4_Follow")
 local auto_hand_in_items = require("efyran/e4_Handin")
 

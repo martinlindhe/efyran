@@ -1,5 +1,5 @@
 local mq = require("mq")
-local commandQueue = require('commandQueue')
+local commandQueue = require('e4_commandQueue')
 local bard    = require("efyran/Class_Bard")
 
 ---@class PlayMelodyCommand
