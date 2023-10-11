@@ -82,30 +82,7 @@ function CommandQueue.Process()
 
     CommandQueue.Remove(v.Name)
 
-    if v.Name == "joingroup" then
-        wait_until_not_casting()
-        cmd("/squelch /target clear")
-        delay(100)
-        cmd("/squelch /invite")
-    elseif v.Name == "consentme" then
-        consent_me()
-    elseif v.Name == "find-item" then
-        report_find_item(v.Arg, v.Arg2)
-    elseif v.Name == "find-missing-item" then
-        report_find_missing_item(v.Arg, v.Arg2)
-    elseif v.Name == "find-missing-item-id" then
-        report_find_missing_item_by_id(toint(v.Arg))
-    elseif v.Name == "list-clickies" then
-        list_my_clickies(v.Arg)
-    elseif v.Name == "reportwornaugs" then
-        report_worn_augs()
-    elseif v.Name == "open-nearby-corpse" then
-        open_nearby_corpse()
-    elseif v.Name == "count-peers" then
-        count_peers()
-    else
-        all_tellf("ERROR unknown command in queue: %s", v.Name)
-    end
+    all_tellf("ERROR unknown command in queue: %s", v.Name)
 end
 
 -- Report all active tasks

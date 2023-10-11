@@ -294,11 +294,6 @@ function QoL.Init()
         commandQueue.Add("use-veteran-aa", "Throne of Heroes")
     end)
 
-    -- Peer proximity count
-    mq.bind("/count", function() commandQueue.Add("count-peers") end)
-    mq.bind("/cnt", function() commandQueue.Add("count-peers") end)
-
-
     -- tell group to use Lesson of the Devoted
     ---@param ... string|nil filter, such as "/only|ROG"
     mq.bind("/lesson", function(...)
@@ -478,9 +473,6 @@ function QoL.Init()
     -- report all peers who are not standing
     mq.bind("/notstanding", function() mq.cmd("/noparse /bcaa //if (${Me.Feigning} || ${Me.Ducking} || ${Me.Sitting}) /bc NOT STANDING") end)
 
-    -- open loot window on closest corpse
-    mq.bind("/lcorpse", function() commandQueue.Add("open-nearby-corpse") end)
-
     -- reports all toons that are not running e4
     mq.bind("/note4", function() mq.cmd("/bcaa //lua run note4") end)
 
@@ -502,12 +494,6 @@ function QoL.Init()
     end
     mq.bind("/makemeraidleader", mmrl)
     mq.bind("/mmrl", mmrl)
-
-    -- reports all currently worn auguments
-    mq.bind("/wornaugs", function() commandQueue.Add("reportwornaugs") end)
-
-    -- reports all owned clickies (worn, inventory, bank) worn auguments
-    mq.bind("/listclickies", function() commandQueue.Add("list-clickies") end)
 
     -- report if tribute is too low (under 140k)
     mq.bind("/lowtribute", function()
@@ -638,7 +624,7 @@ function QoL.Init()
     end)
 
     -- Ask peer owners of nearby corpses to consent me
-    mq.bind("/consentme", function() commandQueue.Add("consentme") end)
+    mq.bind("/consentme", function() consent_me() end)
 
     -- turn auto loot on
     mq.bind("/looton", function()
@@ -671,42 +657,6 @@ function QoL.Init()
 
     -- report all peer total AA:s
     mq.bind("/totalaa", function() mq.cmd("/noparse /bcaa //bc ${Me.AAPointsTotal} TOTAL (${Me.AAPoints} unspent, ${Me.AAPointsSpent} spent)") end)
-
-    -- finds item by name in inventory/bags
-    -- NOTE: "/finditem" is reserved in eq live for "dragon hoard" feature
-    -- arg: item name + optional /filter arguments as strings
-    mq.bind("/fdi", function(...)
-        local name = args_string(...)
-        local filter = nil
-        local tokens = split_str(name, "/")
-        if #tokens == 2 then
-            name = trim(tokens[1])
-            filter = "/" .. tokens[2]
-        end
-        if name ~= "" then
-            commandQueue.Add("find-item", name, filter)
-        end
-    end)
-
-    -- find missing item
-    -- arg: item name + optional /filter arguments as strings
-    mq.bind("/fmi", function(...)
-        local name = args_string(...)
-        local filter = nil
-        local tokens = split_str(name, "/")
-        if #tokens == 2 then
-            name = trim(tokens[1])
-            filter = "/" .. tokens[2]
-        end
-        if name ~= "" then
-            commandQueue.Add("find-missing-item", name, filter)
-        end
-    end)
-
-    -- find missing item by id
-    mq.bind("/fmid", function(id)
-        commandQueue.Add("find-missing-item-id", id)
-    end)
 
     mq.event('joingroup', '#1# invites you to join a group.', function(text, sender)
         if is_peer(sender) then
