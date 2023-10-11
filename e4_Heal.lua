@@ -3,8 +3,8 @@ local log = require("efyran/knightlinc/Write")
 
 require("efyran/e4_Spells")
 
+local follow  = require("efyran/e4_Follow")
 local globalSettings = require("efyran/e4_Settings")
-
 local botSettings = require("efyran/e4_BotSettings")
 local timer = require("efyran/Timer")
 
@@ -126,13 +126,13 @@ function Heal.medCheck()
         doevents()
 
         if mq.TLO.Me.MaxMana() > 1 and mq.TLO.Me.PctMana() >= 100 then
-            all_tellf("Ending medbreak, \agfull mana\ax.")
+            all_tellf("Ending medbreak, [+g+]full mana[+x+].")
             cmd("/sit off")
             Heal.medding = false
             return
         end
         if mq.TLO.Me.MaxMana() == 0 and mq.TLO.Me.PctEndurance() >= 100 then
-            all_tellf("Ending medbreak, \agfull endurance\ax.")
+            all_tellf("Ending medbreak, [+g+]full endurance[+x+].")
             cmd("/sit off")
             Heal.medding = false
             return
@@ -151,15 +151,15 @@ function Heal.medCheck()
         return
     end
 
-    if Heal.autoMed and medTimer:expired() and is_standing() and not is_moving() then
+    if Heal.autoMed and not follow.IsFollowing() and medTimer:expired() and is_standing() and not is_moving() then
         if mq.TLO.Me.MaxMana() > 0 and mq.TLO.Me.PctMana() < 70 then
-            all_tellf("\ayLow mana\ax, medding at \ay%d%%\ax", mq.TLO.Me.PctMana())
+            all_tellf("[+y+]Low mana[+x+], medding at [+y+]%d%%", mq.TLO.Me.PctMana())
             cmd("/sit on")
             Heal.medding = true
             medTimer:restart()
         end
         if mq.TLO.Me.MaxMana() == 0 and mq.TLO.Me.PctEndurance() < 50 then
-            all_tellf("\ayLow endurance\ax, medding at \ay%d%%\ax", mq.TLO.Me.PctEndurance())
+            all_tellf("[+y+]Low endurance[+x+], medding at [+y+]%d%%\ax", mq.TLO.Me.PctEndurance())
             cmd("/sit on")
             Heal.medding = true
             medTimer:restart()
@@ -316,7 +316,7 @@ function Heal.performLifeSupport()
                         if spellConfig.MaxMana ~= nil then
                             log.Info("USED LIFE SUPPORT \ay%s\ax at %d%% Mana (was %d%%)", spellName, mq.TLO.Me.PctMana(), mana)
                         else
-                            all_tellf("USED LIFE SUPPORT \ay%s\ax at %d%% HP (was %d%%)", spellName, mq.TLO.Me.PctHPs(), hp)
+                            all_tellf("USED LIFE SUPPORT [+y+]%s[+x+] at %d%% HP (was %d%%)", spellName, mq.TLO.Me.PctHPs(), hp)
                         end
                     end
 
@@ -371,9 +371,9 @@ function healPeer(spell_list, peer, pct)
             log.Debug("Want to heal %s with %s but spell not ready!", peer, spellConfig.Name)
         else
             if not in_raid() then
-                all_tellf("Healing \ag%s\ax at %d%% with \ay%s\ax", peer, pct, spellConfig.Name)
+                all_tellf("Healing [+g+]%s[+x+] at %d%% with [+y+]%s[+x+]", peer, pct, spellConfig.Name)
             else
-                log.Info("Healing \ag%s\ax at %d%% with \ay%s\ax", peer, pct, spellConfig.Name)
+                log.Info("Healing [+g+]%s[+x+] at %d%% with [+y+]%s[+x+]", peer, pct, spellConfig.Name)
             end
             mq.cmdf("/target pc =%s", peer)
 

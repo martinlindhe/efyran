@@ -451,7 +451,7 @@ function Assist.TankTick()
     local useDumbTaunt = true -- XXX put in settings
 
     if useDumbTaunt and assistTauntTimer:expired() and is_ability_ready("Taunt") then
-        all_tellf("Taunting \ar%s\ax", mq.TLO.Target.CleanName())
+        all_tellf("Taunting [+r+]%s", mq.TLO.Target.CleanName())
         use_ability("Taunt")
         assistTauntTimer:restart()
         return

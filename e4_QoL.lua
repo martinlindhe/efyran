@@ -43,9 +43,9 @@ function QoL.complete_zoned_event()
     memorizeListedSpells()
 
     heal.timeZoned = os.time()
-    heal.autoMed = true
+--    heal.autoMed = true
 
-    buffs.refreshBuffs = true
+--    buffs.refreshBuffs = true
     buffs.UpdateClickies()
 
     map.AutoMapHeightFilter()
@@ -102,7 +102,7 @@ function QoL.Init()
     mq.event("died2", "You died.", dead)
 
     mq.event("mob-mezzed", "#1# has been mesmerized.", function(text, name)
-        log.Info("Mezzed %s", name)
+        log.Info("MEZZED > \ay%s\ax <", name)
         mq.cmdf("/popup MEZZED %s", name)
     end)
 
@@ -230,11 +230,11 @@ function QoL.Init()
             return
         end
         if mq.TLO.Me.PctMana() < 50 then
-            all_tellf("MANA \ar%d %%\ax", mq.TLO.Me.PctMana())
+            all_tellf("MANA [+r+]%d %%", mq.TLO.Me.PctMana())
         elseif mq.TLO.Me.PctMana() < 75 then
-            all_tellf("MANA \ay%d %%\ax", mq.TLO.Me.PctMana())
+            all_tellf("MANA [+y+]%d %%", mq.TLO.Me.PctMana())
         else
-            all_tellf("MANA \ag%d %%\ax", mq.TLO.Me.PctMana())
+            all_tellf("MANA [+g+]%d %%", mq.TLO.Me.PctMana())
         end
     end)
 
@@ -717,9 +717,9 @@ function QoL.Init()
                 msg = string.format("(%.1f %% AA)", aaDiff)
             end
             if not in_group() then
-                msg = "Solo XP " .. msg
+                msg = "[+g+]Solo XP[+x+] " .. msg
             elseif is_group_leader() then
-                msg = "Group XP " .. msg
+                msg = "[+g+]Group XP[+x+] " .. msg
             else
                 msg = ""
             end

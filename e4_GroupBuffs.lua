@@ -497,6 +497,7 @@ GroupBuffs.DRU = {
     -- L54 Spirit of Eagle (57-70% speed, 1 hour)
     -- L62 Flight of Eagles (70% speed, 1 hour, group)
     ["dru_runspeed"] = {
+        "Spirit of Wolf/MinLevel|1",
         "Pack Spirit/MinLevel|1",
         "Spirit of Eagle/MinLevel|42",
         "Flight of Eagles/MinLevel|46",
@@ -565,7 +566,8 @@ GroupBuffs.ENC = {
     ["enc_haste"] = {
         "Swift Like the Wind/MinLevel|1",
         "Aanya's Quickening/MinLevel|41",
-        "Wondrous Rapidity/MinLevel|44",
+        --"Wondrous Rapidity/MinLevel|44",
+        "Wonderous Rapidity/MinLevel|44", -- XXX original spelling, used on some classic servers like FVP
         "Speed of Vallon/MinLevel|46",
         "Vallon's Quickening/MinLevel|47",
         "Hastening of Salik/MinLevel|62",

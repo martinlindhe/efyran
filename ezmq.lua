@@ -60,7 +60,12 @@ function move_to(spawnID)
     end
 
     if mq.TLO.Stick.Active() then
-        cmd("/stick off")
+        mq.cmd("/stick off")
+        mq.delay(50)
+    end
+
+    if not is_standing() then
+        mq.cmd("/stand")
         mq.delay(50)
     end
 
@@ -1889,7 +1894,7 @@ end
 ---Performs an ingame slash action provided as a string.
 ---@param command string An in-game slash command (including the slash) (e.g. '/keypress DUCK').
 function cmd(command)
-    log.Debug("/cmd %s", command)
+    --log.Debug("/cmd %s", command)
     mq.cmd(command)
 end
 
@@ -1897,7 +1902,7 @@ end
 ---@param command string An in-game slash command (including the slash) (e.g. '/keypress %s').
 ---@param ...? any Variables that provide input the formated string.
 function cmdf(command, ...)
-    log.Debug("/cmdf %s", command)
+    --log.Debug("/cmdf %s", command)
     mq.cmdf(command, ...)
 end
 

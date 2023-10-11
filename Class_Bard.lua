@@ -120,7 +120,7 @@ function Bard.PlayMelody(name)
     end
 
     cmdf("/medley efyran-%s", name)
-    all_tellf("Playing melody \ay%s\ax.", name)
+    all_tellf("Playing melody [+y+]%s[+x+].", name)
 
     Bard.currentMelody = name
 end
