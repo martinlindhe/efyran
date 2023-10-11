@@ -777,7 +777,7 @@ function QoL.Init()
     cmd("/netbots on grab=on send=on")
 
     QoL.verifySpellLines()
-    commandQueue.Enqueue({"zoned"})
+    --require('commands/zonedCommand').createCommand()
 end
 
 function QoL.loadRequiredPlugins()
