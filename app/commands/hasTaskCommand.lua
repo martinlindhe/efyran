@@ -1,10 +1,10 @@
+local mq = require("mq")
 local commandQueue = require('app/commandQueue')
-local bard    = require("efyran/Class_Bard")
 
 ---@class HasTaskCommand
 ---@field Name string
 
----@param command PlayMelodyCommand
+---@param command HasTaskCommand
 local function execute(command)
     if mq.TLO.Task(command.Name).Index() ~= nil then
         all_tellf("Has task \ag%s\ax", mq.TLO.Task(command.Name).Title())

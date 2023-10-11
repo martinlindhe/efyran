@@ -1,3 +1,4 @@
+local mq = require("mq")
 local commandQueue = require('app/commandQueue')
 local log          = require("efyran/knightlinc/Write")
 local assist       = require("efyran/e4_Assist")

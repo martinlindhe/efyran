@@ -2,15 +2,15 @@ local mq = require("mq")
 local commandQueue = require('app/commandQueue')
 
 local function execute()
-    drop_invis()
+    use_alt_ability("Origin")
 end
 
-local function createCommand()
+local function createCommand(distance)
     if is_orchestrator() then
-        cmd("/dgzexecute /dropinvis")
+        mq.cmd("/dgzexecute /origin")
     end
 
     commandQueue.Enqueue(function() execute() end)
 end
 
-mq.bind("/dropinvis", createCommand)
+mq.bind("/origin", createCommand)

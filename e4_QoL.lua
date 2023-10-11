@@ -243,14 +243,6 @@ function QoL.Init()
         end
     end)
 
-    mq.bind("/portto", function(name)
-        name = name:lower()
-        if is_orchestrator() then
-            mq.cmdf("/dgzexecute /portto %s", name)
-        end
-        commandQueue.Add("portto", name)
-    end)
-
     local followOn = function(...)
         local exe = string.format("/dgzexecute /followplayer %s", mq.TLO.Me.Name())
         local filter = args_string(...)
@@ -283,49 +275,9 @@ function QoL.Init()
         follow.Start(spawnName, false)
     end)
 
-    mq.bind("/usecorpsesummoner", function()
-        if is_orchestrator() then
-            mq.cmd("/dgzexecute /usecorpsesummoner")
-        end
-        commandQueue.Add("usecorpsesummoner")
-    end)
-
-    mq.bind("/refreshillusion", function()
-        commandQueue.Add("refreshillusion")
-    end)
-
-    mq.bind("/refreshillusions", function()
-        cmd("/bcaa //refreshillusion")
-    end)
-
-    mq.bind("/evac", function(name)
-        if is_orchestrator() then
-            mq.cmd("/dgzexecute /evac")
-        end
-        -- clear queue so that evac happens next
-        commandQueue.Clear()
-        commandQueue.Add("evacuate")
-    end)
-
     -- reports all peers with debuffs
     mq.bind("/counters", function()
         cmdf("/noparse /bcaa //if (${NetBots[${Me.Name}].Counters}) /bc DEBUFFED: ${NetBots[${Me.Name}].Counters} counters in ${NetBots[${Me.Name}].Detrimentals} debuffs: ${NetBots[${Me.Name}].Detrimental}")
-    end)
-
-    -- report DoN crystals count on all connected peers
-    mq.bind("/doncrystals", function()
-        if is_orchestrator() then
-            mq.cmd("/dgzexecute /doncrystals")
-        end
-        commandQueue.Add("report-don-crystals")
-    end)
-
-    -- tell peers in zone to use Origin
-    mq.bind("/origin", function()
-        if is_orchestrator() then
-            mq.cmd("/dgzexecute /origin")
-        end
-        commandQueue.Add("origin")
     end)
 
     -- tell peers in zone to use Throne of Heroes
@@ -371,27 +323,6 @@ function QoL.Init()
         if is_naked() then
             all_tellf("IM NAKED IN \ay%s\ax", zone_shortname())
         end
-    end)
-
-    ---@param ... string|nil filter, such as "/only|ROG"
-    local movetome = function(...)
-        local exe = string.format("/dgzexecute /movetopeer %s", mq.TLO.Me.Name())
-        local filter = args_string(...)
-        if filter ~= nil then
-            exe = exe .. " " .. filter
-        end
-        mq.cmdf(exe)
-    end
-
-    mq.bind("/movetome", movetome)
-    mq.bind("/mtm", movetome)
-
-    -- move to spawn ID
-    ---@param peer string Peer name
-    ---@param ... string|nil filter, such as "/only|ROG"
-    mq.bind("/movetopeer", function(peer, ...)
-        local filter = args_string(...)
-        commandQueue.Add("movetopeer", peer, filter)
     end)
 
     -- run through zone based on the position of startingPeer
@@ -597,11 +528,6 @@ function QoL.Init()
             cmd("/lua stop efyran/combine")
         end
         cmd("/lua run efyran/combine")
-    end)
-
-    -- make peers surround you in a circle
-    mq.bind("/circleme", function(dist)
-        commandQueue.Add("circleme", dist)
     end)
 
     local mmrl = function()

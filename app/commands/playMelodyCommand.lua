@@ -1,3 +1,4 @@
+local mq = require("mq")
 local commandQueue = require('app/commandQueue')
 local bard    = require("efyran/Class_Bard")
 

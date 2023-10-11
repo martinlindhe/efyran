@@ -87,31 +87,6 @@ function CommandQueue.Process()
         cmd("/squelch /target clear")
         delay(100)
         cmd("/squelch /invite")
-    elseif v.Name == "circleme" then
-        make_peers_circle_me(toint(v.Arg))
-    elseif v.Name == "usecorpsesummoner" then
-        use_corpse_summoner()
-    elseif v.Name == "refreshillusion" then
-        local illusion = botSettings.GetCurrentIllusion()
-        if illusion ~= nil then
-            -- many model changes at once lags the client
-            unflood_delay()
-            castSpell(illusion, mq.TLO.Me.ID())
-        end
-    elseif v.Name == "evacuate" then
-        cast_evac_spell()
-    elseif v.Name == "portto" then
-        cast_port_to(v.Arg)
-    elseif v.Name == "movetopeer" then
-        local filter = v.Arg2
-        if filter ~= nil and not matches_filter(filter, mq.TLO.Me.Name()) then
-            log.Info("movetopeer: Not matching filter, giving up: %s", filter)
-            return
-        end
-        local spawn = spawn_from_peer_name(v.Arg)
-        if spawn ~= nil then
-            move_to(spawn.ID())
-        end
     elseif v.Name == "rtz" then
         follow.RunToZone(v.Arg)
     elseif v.Name == "hailit" then
@@ -179,24 +154,8 @@ function CommandQueue.Process()
         report_worn_augs()
     elseif v.Name == "open-nearby-corpse" then
         open_nearby_corpse()
-    elseif v.Name == "origin" then
-        use_alt_ability("Origin")
     elseif v.Name == "count-peers" then
         count_peers()
-    elseif v.Name == "report-don-crystals" then
-        local s = ""
-        if mq.TLO.Me.RadiantCrystals() > 0 then
-            s = s .. string.format("Radiant Crystals \ay%d\ax", mq.TLO.Me.RadiantCrystals())
-        end
-        if mq.TLO.Me.EbonCrystals() > 0 then
-            if s ~= "" then
-                s = s .. ", "
-            end
-            s = s .. string.format("Ebon Crystals \ay%d\ax", mq.TLO.Me.EbonCrystals())
-        end
-        if s ~= "" then
-            all_tellf(s)
-        end
     else
         all_tellf("ERROR unknown command in queue: %s", v.Name)
     end

@@ -2,15 +2,17 @@ local mq = require("mq")
 local commandQueue = require('app/commandQueue')
 
 local function execute()
-    drop_invis()
+    cast_evac_spell()
 end
 
-local function createCommand()
+local function createCommand(distance)
     if is_orchestrator() then
-        cmd("/dgzexecute /dropinvis")
+        mq.cmd("/dgzexecute /evac")
     end
 
+    -- clear queue so that evac happens next
+    commandQueue.Clear()
     commandQueue.Enqueue(function() execute() end)
 end
 
-mq.bind("/dropinvis", createCommand)
+mq.bind("/evac", createCommand)
