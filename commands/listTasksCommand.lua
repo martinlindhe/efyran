@@ -22,5 +22,4 @@ local function createCommand(...)
     commandQueue.Enqueue(function() execute() end)
 end
 
-mq.bind("/teleportbind", createCommand)
-mq.bind("/tlbind", createCommand)
+mq.bind("/listtasks", createCommand)

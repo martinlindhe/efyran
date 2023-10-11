@@ -17,5 +17,4 @@ local function createCommand(peer, filter)
     commandQueue.Enqueue(function() execute() end)
 end
 
-mq.bind("/teleportbind", createCommand)
-mq.bind("/tlbind", createCommand)
+mq.bind("/secondaryrecall", createCommand)
