@@ -114,18 +114,8 @@ function CommandQueue.Process()
         follow.Resume()
     elseif v.Name == "coh-group" then
         cohGroup()
-    elseif v.Name == "is-mgb-ready" then
-        if have_alt_ability("Mass Group Buff") then
-            if not is_alt_ability_ready("Mass Group Buff") then
-                all_tellf("\arMass Group Buff is not available...\ax Ready in %s", mq.TLO.Me.AltAbilityTimer("Mass Group Buff").TimeHMS())
-            else
-                all_tellf("\agMass Group Buff is ready!\ax")
-            end
-        end
     elseif v.Name == "circleme" then
         make_peers_circle_me(toint(v.Arg))
-    elseif v.Name == "buffit" then
-        buffs.BuffIt(toint(v.Arg))
     elseif v.Name == "usecorpsesummoner" then
         use_corpse_summoner()
     elseif v.Name == "refreshillusion" then
@@ -137,8 +127,6 @@ function CommandQueue.Process()
         end
     elseif v.Name == "evacuate" then
         cast_evac_spell()
-    elseif v.Name == "groupheal" then
-        cast_group_heal()
     elseif v.Name == "shrinkgroup" then
         shrink_group()
     elseif v.Name == "portto" then
@@ -161,8 +149,6 @@ function CommandQueue.Process()
         castSpellAbility(nil, "Teleport")
     elseif v.Name == "recallgroup" then
         group.RecallGroup(v.Arg, v.Arg2)
-    elseif v.Name == "rezit" then
-        rez_corpse(toint(v.Arg))
     elseif v.Name == "aerez" then
         ae_rez()
     elseif v.Name == "mgb" then

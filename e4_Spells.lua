@@ -514,16 +514,6 @@ function cast_port_to(name)
 
 end
 
-function cast_group_heal()
-    for idx, groupHeal in pairs(groupBuffs.GroupHealSpells) do
-        if is_spell_ready(groupHeal) then
-            all_tellf("Casting group heal \ag%s\ax ...", groupHeal)
-            castSpellRaw(groupHeal, nil)
-            return
-        end
-    end
-end
-
 function shrink_group()
     -- find the shrink clicky/spell if we got one
     local shrinkClicky = nil

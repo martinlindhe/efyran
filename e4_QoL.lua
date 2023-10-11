@@ -197,16 +197,6 @@ function QoL.Init()
         end
     end)
 
-    -- tells all bards to play given melody name
-    mq.bind("/playmelody", function(name)
-        if is_orchestrator() then
-            cmdf("/dgexecute brd /playmelody %s", name)
-        end
-        if is_brd() then
-            commandQueue.Add("playmelody", name)
-        end
-    end)
-
     -- change spell set
     mq.bind("/spellset", function(name)
         if is_orchestrator() then
@@ -234,14 +224,6 @@ function QoL.Init()
         end
     end)
 
-    -- report if MGB is ready
-    mq.bind("/mgbready", function()
-        if is_orchestrator() then
-            cmd("/dgzexecute /mgbready")
-        end
-        commandQueue.Add("is-mgb-ready")
-    end)
-
     mq.bind("/reportmana", function()
         if is_orchestrator() then
             cmd("/dgzexecute /reportmana")
@@ -252,25 +234,6 @@ function QoL.Init()
         if mq.TLO.Me.PctMana() < 100 then
             all_tellf("%dm", mq.TLO.Me.PctMana())
         end
-    end)
-
-    -- make all clerics cast their curing group heal spell
-    mq.bind("/groupheal", function()
-        if is_orchestrator() then
-            cmd("/dgzexecute /groupheal")
-        end
-        commandQueue.Add("groupheal")
-    end)
-
-    -- /buffit: asks bots to cast level appropriate buffs on current target
-    mq.bind("/buffit", function(spawnID)
-        if is_orchestrator() then
-            spawnID = mq.TLO.Target.ID()
-            if spawnID ~= 0 then
-                cmdf("/dgzexecute /buffit %d", spawnID)
-            end
-        end
-        commandQueue.Add("buffit", spawnID)
     end)
 
     mq.bind("/buffme", function()
@@ -289,42 +252,6 @@ function QoL.Init()
         if is_orchestrator() then
             cmd("/dgzexecute /buffoff")
         end
-    end)
-
-    -- Perform rez on target (CLR,DRU,SHM,PAL will auto use >= 90% rez spells) or delegate it to nearby cleric
-    ---@param spawnID string
-    mq.bind("/rezit", function(spawnID)
-        if is_orchestrator() then
-            if not has_target() then
-                log.Error("/rezit: No corpse targeted.")
-                return
-            end
-            local spawn = get_target()
-            if spawn == nil then
-                log.Error("/rezit: No target to rez.")
-                return
-            end
-
-            spawnID = tostring(spawn.ID())
-            if spawn.Type() ~= "Corpse" then
-                log.Error("/rezit: Target is not a corpse. Type %s",  spawn.Type())
-                return
-            end
-
-            -- non-cleric orchestrator asks nearby CLR to rez spawnID
-            if not me_priest() and not is_pal() then
-                local clrName = nearest_peer_by_class("CLR")
-                if clrName == nil then
-                    all_tellf("\arERROR\ax: Cannot request rez, no cleric nearby.")
-                    return
-                end
-                log.Info("Requesting rez for \ay%s\ax from \ag%s\ax.", spawn.Name(), clrName)
-                cmdf("/dexecute %s /rezit %d", clrName, spawn.ID())
-                return
-            end
-        end
-
-        commandQueue.Add("rezit", spawnID)
     end)
 
     mq.bind("/mounton", function()
