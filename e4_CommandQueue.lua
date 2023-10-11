@@ -127,8 +127,6 @@ function CommandQueue.Process()
         end
     elseif v.Name == "evacuate" then
         cast_evac_spell()
-    elseif v.Name == "shrinkgroup" then
-        shrink_group()
     elseif v.Name == "portto" then
         cast_port_to(v.Arg)
     elseif v.Name == "movetopeer" then
@@ -151,16 +149,6 @@ function CommandQueue.Process()
         group.RecallGroup(v.Arg, v.Arg2)
     elseif v.Name == "aerez" then
         ae_rez()
-    elseif v.Name == "mgb" then
-        if not have_spell(v.Arg) and not have_alt_ability(v.Arg) then
-            all_tellf("FATAL: I cannot mgb this, dont have it: %s", v.Arg)
-            return
-        end
-        if in_neutral_zone() then
-            all_tellf("MGB: Skipping MGB %s in neutral zone", v.Arg)
-            return
-        end
-        cast_mgb_spell(v.Arg)
     elseif v.Name == "aecry" then
         cast_ae_cry()
     elseif v.Name == "aebloodthirst" then
@@ -222,16 +210,6 @@ function CommandQueue.Process()
         use_alt_ability("Origin")
     elseif v.Name == "count-peers" then
         count_peers()
-    elseif v.Name == "use-veteran-aa" then
-        local filter = v.Arg2
-        if filter ~= nil and not matches_filter(filter, mq.TLO.Me.Name()) then -- XXX sender name for /only|group to work
-            log.Info("use-veteran-aa: Not matching filter, giving up: %s", filter)
-            return
-        end
-
-        use_alt_ability(v.Arg)
-    elseif v.Name == "mount-on" then
-        mount_on()
     elseif v.Name == "report-don-crystals" then
         local s = ""
         if mq.TLO.Me.RadiantCrystals() > 0 then

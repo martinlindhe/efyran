@@ -1,10 +1,27 @@
 local commandQueue = require('app/commandQueue')
+local log          = require("efyran/knightlinc/Write")
 
----@class TeleportBindCommand
+---@class ClickDoorBindCommand
 ---@field Peer string
 ---@field Filter string
 
----@param command TeleportBindCommand
+local function click_nearby_door()
+    -- TODO: dont know how to access /doors list from lua/macroquest
+
+    cmd("/doortarget")
+    delay(10)
+    if mq.TLO.DoorTarget.ID() == nil then
+        all_tellf("failed to find a door to click!")
+        return
+    end
+
+    log.Info("CLICKING NEARBY DOOR %s, id %d, distance %d", mq.TLO.DoorTarget.Name(), mq.TLO.DoorTarget.ID(), mq.TLO.DoorTarget.Distance())
+
+    unflood_delay()
+    cmd("/click left door")
+end
+
+---@param command ClickDoorBindCommand
 local function execute(command)
     local sender = spawn_from_peer_name(command.Peer)
     if sender ~= nil and not is_within_distance(sender, 60) then
@@ -19,18 +36,20 @@ local function execute(command)
     click_nearby_door()
 end
 
-local function createCommand(peer, filter)
-    if not peer then
-        all_tellf("<peer> param is not set.")
-        return nil
+local function createClickItCommand(...)
+    local filter = args_string(...)
+
+    if is_orchestrator() then
+        mq.cmdf("/dgzexecute /clickdoor %s %s", mq.TLO.Me.Name(), filter)
     end
 
-    if not filter then
-        all_tellf("<filter> param is not set.")
-        return nil
-    end
-
-    commandQueue.Enqueue(function() execute({ Peer = peer, Filter = filter }) end)
+    commandQueue.Enqueue(function() execute({ Peer = mq.TLO.Me.Name(), Filter = filter }) end)
 end
 
-mq.bind("/clickit", createCommand)
+local function createClickDoorCommand(sender, ...)
+    local filter = args_string(...)
+    commandQueue.Enqueue(function() execute({ Peer = sender, Filter = filter }) end)
+end
+
+mq.bind("/clickit", createClickItCommand)
+mq.bind("/clickdoor", createClickDoorCommand)

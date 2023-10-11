@@ -23,3 +23,6 @@ local function createCommand()
 end
 
 mq.bind("/buffit", createCommand)
+mq.bind("/buffme", function()
+    cmdf("/dgzexecute /buffit %d", mq.TLO.Me.ID())
+end)

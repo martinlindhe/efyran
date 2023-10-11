@@ -236,10 +236,6 @@ function QoL.Init()
         end
     end)
 
-    mq.bind("/buffme", function()
-        cmdf("/dgzexecute /buffit %d", mq.TLO.Me.ID())
-    end)
-
     mq.bind("/buffon", function()
         buffs.refreshBuffs = true
         if is_orchestrator() then
@@ -252,44 +248,6 @@ function QoL.Init()
         if is_orchestrator() then
             cmd("/dgzexecute /buffoff")
         end
-    end)
-
-    mq.bind("/mounton", function()
-        if is_orchestrator() then
-            cmd("/dgzexecute /mounton")
-        end
-        commandQueue.Add("mount-on")
-    end)
-
-    mq.bind("/mountoff", function()
-        if is_orchestrator() then
-            cmd("/dgzexecute /mountoff")
-        end
-        log.Info("Dismounting ...")
-        cmd("/dismount")
-    end)
-
-    mq.bind("/shrinkall", function()
-        cmd("/dgzexecute /shrinkgroup")
-    end)
-
-    mq.bind("/shrinkgroup", function()
-        commandQueue.Add("shrinkgroup")
-    end)
-
-    -- tell everyone else to click door/object (pok stones, etc) near the sender
-    mq.bind("/clickit", function(...)
-        local filter = args_string(...)
-
-        if is_orchestrator() then
-            mq.cmdf("/dgzexecute /clickdoor %s %s", mq.TLO.Me.Name(), filter)
-        end
-        commandQueue.Add("clickdoor", mq.TLO.Me.Name(), filter)
-    end)
-
-    mq.bind("/clickdoor", function(sender, ...)
-        local filter = args_string(...)
-        commandQueue.Add("clickdoor", sender, filter)
     end)
 
     mq.bind("/portto", function(name)
@@ -423,38 +381,6 @@ function QoL.Init()
 
     mq.bind("/lessonsactive", function()
         mq.cmd("/noparse /dgzexecute /if (${Me.Buff[Lesson of the Devoted].ID}) /bc ACTIVE: ${Me.Buff[Lesson of the Devoted].Duration.TimeHMS}")
-    end)
-
-    mq.bind("/staunch", function()
-        commandQueue.Add("use-veteran-aa", "Staunch Recovery")
-    end)
-
-    mq.bind("/armor", function()
-        if is_orchestrator() then
-            mq.cmd("/dgzexecute /armor") -- XXX filter
-        end
-        commandQueue.Add("use-veteran-aa", "Armor of Experience")
-    end)
-
-    mq.bind("/infusion", function()
-        if is_orchestrator() then
-            mq.cmd("/dgzexecute /infusion") -- XXX filter
-        end
-        commandQueue.Add("use-veteran-aa", "Infusion of the Faithful")
-    end)
-
-    mq.bind("/intensity", function()
-        if is_orchestrator() then
-            mq.cmd("/dgzexecute /intensity") -- XXX filter
-        end
-        commandQueue.Add("use-veteran-aa", "Intensity of the Resolute")
-    end)
-
-    mq.bind("/expedient", function()
-        if is_orchestrator() then
-            mq.cmd("/dgzexecute /expedient") -- XXX filter
-        end
-        commandQueue.Add("use-veteran-aa", "Expedient Recovery")
     end)
 
     -- report naked toons
@@ -1108,32 +1034,6 @@ function QoL.Init()
         local name = args_string(...)
         mark_ae_rezzed(name)
     end)
-
-    -- MGB CLR Celestial Regeneration
-    mq.bind("/aecr", function() commandQueue.Add("mgb", "Celestial Regeneration") end)
-
-    -- MGB DRU Spirit of the Wood
-    mq.bind("/aesow",  function() commandQueue.Add("mgb", "Spirit of the Wood") end)
-    mq.bind("/aesotw", function() commandQueue.Add("mgb", "Spirit of the Wood") end)
-
-    -- MGB SHM Ancestral Aid
-    mq.bind("/aeaa", function() commandQueue.Add("mgb", "Ancestral Aid") end)
-
-    -- MGB DRU Flight of Eagles
-    mq.bind("/aefoe", function() commandQueue.Add("mgb", "Flight of Eagles") end)
-
-    -- MGB NEC Dead Men Floating
-    mq.bind("/aedmf", function() commandQueue.Add("mgb", "Dead Men Floating") end)
-
-    -- MGB ENC Rune of Rikkukin
-    mq.bind("/aerr", function() commandQueue.Add("mgb", "Rune of Rikkukin") end)
-
-    -- MGB BST Paragon of Spirit
-    mq.bind("/aepos", function() commandQueue.Add("mgb", "Paragon of Spirit") end)
-
-    -- MGB RNG Auspice of the Hunter
-    mq.bind("/aeaoh",  function() commandQueue.Add("mgb", "Auspice of the Hunter") end)
-    mq.bind("/aeaoth", function() commandQueue.Add("mgb", "Auspice of the Hunter") end)
 
     -- MGB BER war cry
     mq.bind("/aecry", function() commandQueue.Add("aecry") end)
