@@ -1,7 +1,7 @@
 local mq = require("mq")
-local commandQueue = require('e4_commandQueue')
-local log          = require("efyran/knightlinc/Write")
-local assist       = require("efyran/e4_Assist")
+local commandQueue = require('e4_CommandQueue')
+local log          = require("knightlinc/Write")
+local assist       = require("e4_Assist")
 
 ---@class BackOffCommand
 ---@field Filter string

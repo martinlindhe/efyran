@@ -1,4 +1,4 @@
-local log = require("efyran/knightlinc/Write")
+local log = require("knightlinc/Write")
 
 local mq = require("mq")
 

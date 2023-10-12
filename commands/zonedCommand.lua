@@ -1,12 +1,12 @@
 local mq = require("mq")
-local commandQueue = require('e4_commandQueue')
-local assist  = require("efyran/e4_Assist")
-local pet     = require("efyran/e4_Pet")
-local heal    = require("efyran/e4_Heal")
-local buffs   = require("efyran/e4_Buffs")
-local map     = require("efyran/e4_Map")
+local commandQueue = require('e4_CommandQueue')
+local assist  = require("e4_Assist")
+local pet     = require("e4_Pet")
+local heal    = require("e4_Heal")
+local buffs   = require("e4_Buffs")
+local map     = require("e4_Map")
 
-local log = require("efyran/knightlinc/Write")
+local log = require("knightlinc/Write")
 
 -- performs various tasks when toon has finished starting up / zoning
 local function execute()
@@ -41,5 +41,5 @@ end
 mq.event("zoned", "You have entered #1#.", function(text, zone) createCommand(zone) end)
 
 return {
-    Execute = createCommand
+    Enqueue = createCommand
 }

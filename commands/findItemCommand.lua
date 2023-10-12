@@ -1,6 +1,6 @@
 local mq = require("mq")
-local log          = require("efyran/knightlinc/Write")
-local commandQueue = require('e4_commandQueue')
+local log          = require("knightlinc/Write")
+local commandQueue = require('e4_CommandQueue')
 
 ---@class MissingItemBy
 ---@field Name string

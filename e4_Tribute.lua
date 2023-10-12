@@ -1,6 +1,6 @@
 local mq = require("mq")
-local log = require("efyran/knightlinc/Write")
-local timer = require("efyran/Timer")
+local log = require("knightlinc/Write")
+local timer = require("Timer")
 
 local Tribute = {
     rules = {

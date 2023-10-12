@@ -1,5 +1,5 @@
 local mq = require("mq")
-local commandQueue = require('e4_commandQueue')
+local commandQueue = require('e4_CommandQueue')
 
 local function execute()
     disband_all_peers()

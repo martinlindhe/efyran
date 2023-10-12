@@ -1,6 +1,6 @@
 local mq = require("mq")
-local commandQueue = require('e4_commandQueue')
-local hail    = require("efyran/e4_Hail")
+local commandQueue = require('e4_CommandQueue')
+local hail    = require("e4_Hail")
 
 local function execute()
     hail.PerformHail()

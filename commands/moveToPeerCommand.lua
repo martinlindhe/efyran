@@ -1,6 +1,6 @@
 local mq = require("mq")
-local commandQueue = require('e4_commandQueue')
-local log          = require("efyran/knightlinc/Write")
+local commandQueue = require('e4_CommandQueue')
+local log          = require("knightlinc/Write")
 
 ---@class MoveToPeerCommand
 ---@field Peer string

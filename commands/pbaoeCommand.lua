@@ -1,8 +1,8 @@
 local mq = require("mq")
-local log = require("efyran/knightlinc/Write")
-local commandQueue = require('e4_commandQueue')
-local assist         = require("efyran/e4_Assist")
-local botSettings    = require("efyran/e4_BotSettings")
+local log = require("knightlinc/Write")
+local commandQueue = require('e4_CommandQueue')
+local assist         = require("e4_Assist")
+local botSettings    = require("e4_BotSettings")
 
 ---@class PBAEBindCommand
 ---@field Peer string

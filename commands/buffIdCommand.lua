@@ -1,6 +1,6 @@
 local mq = require("mq")
-local commandQueue = require('e4_commandQueue')
-local buffs   = require("efyran/e4_Buffs")
+local commandQueue = require('e4_CommandQueue')
+local buffs   = require("e4_Buffs")
 
 ---@class BuffItCommand
 ---@field SpawnId number

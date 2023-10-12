@@ -1,6 +1,6 @@
 local mq = require("mq")
-local log = require("efyran/knightlinc/Write")
-local commandQueue = require('e4_commandQueue')
+local log = require("knightlinc/Write")
+local commandQueue = require('e4_CommandQueue')
 
 -- Makes mage summon their group with Call of the Hero spell/AA
 local function execute()

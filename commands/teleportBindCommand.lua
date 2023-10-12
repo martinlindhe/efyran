@@ -1,5 +1,5 @@
 local mq = require("mq")
-local commandQueue = require('e4_commandQueue')
+local commandQueue = require('e4_CommandQueue')
 
 local function execute()
     if is_alt_ability_ready("Teleport Bind") then

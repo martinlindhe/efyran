@@ -1,7 +1,7 @@
 local mq = require("mq")
-local commandQueue = require('e4_commandQueue')
-local log          = require("efyran/knightlinc/Write")
-local botSettings = require("efyran/e4_BotSettings")
+local commandQueue = require('e4_CommandQueue')
+local log          = require("knightlinc/Write")
+local botSettings = require("e4_BotSettings")
 
 local function execute()
     -- find the shrink clicky/spell if we got one

@@ -1,6 +1,6 @@
 local mq = require("mq")
-local commandQueue = require('e4_commandQueue')
-local groupBuffs = require("efyran/e4_GroupBuffs")
+local commandQueue = require('e4_CommandQueue')
+local groupBuffs = require("e4_GroupBuffs")
 
 local function execute()
     for _, groupHeal in pairs(groupBuffs.GroupHealSpells) do

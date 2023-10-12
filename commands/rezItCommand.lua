@@ -1,7 +1,7 @@
 local mq = require("mq")
-local commandQueue = require('e4_commandQueue')
-local log          = require("efyran/knightlinc/Write")
-local groupBuffs = require("efyran/e4_GroupBuffs")
+local commandQueue = require('e4_CommandQueue')
+local log          = require("knightlinc/Write")
+local groupBuffs = require("e4_GroupBuffs")
 
 ---@class RezItCommand
 ---@field SpawnId number

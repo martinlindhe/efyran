@@ -1,5 +1,5 @@
 local mq = require("mq")
-local log = require("efyran/knightlinc/Write")
+local log = require("knightlinc/Write")
 
 local Hail = {}
 
@@ -164,7 +164,7 @@ local hailTargets = {
 
         ["Private Nylaen Kel`Ther"] = true, -- DoN tier 2 flag hail
 
-        ["Gordish Frozenheart"] = "see those", -- DoN 24-man raids Rampaging Monolith, Circle of Drakes 
+        ["Gordish Frozenheart"] = "see those", -- DoN 24-man raids Rampaging Monolith, Circle of Drakes
     }
 }
 
