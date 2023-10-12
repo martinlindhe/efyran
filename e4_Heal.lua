@@ -1,5 +1,6 @@
 local mq = require("mq")
 local log = require("knightlinc/Write")
+local broadCastInterfaceFactory = require 'broadcast/broadcastinterface'
 
 require("e4_Spells")
 
@@ -9,6 +10,7 @@ local botSettings = require("e4_BotSettings")
 local timer = require("Timer")
 
 local timeZonedDelay = 10 -- seconds
+local bci = broadCastInterfaceFactory()
 
 local Heal = {
     ---@type boolean
@@ -25,7 +27,7 @@ local Heal = {
 function Heal.Init()
     mq.bind("/medon", function()
         if is_orchestrator() then
-            cmd("/dgzexecute /medon")
+            bci.ExecuteZoneCommand("/medon")
         end
         Heal.autoMed = true
         Heal.medCheck()
@@ -33,7 +35,7 @@ function Heal.Init()
 
     mq.bind("/medoff", function()
         if is_orchestrator() then
-            cmd("/dgzexecute /medoff")
+            bci.ExecuteZoneCommand("/medoff")
         end
         Heal.autoMed = false
         Heal.medCheck()

@@ -1,7 +1,10 @@
 local mq = require("mq")
+local broadCastInterfaceFactory = require 'broadcast/broadcastinterface'
 local commandQueue = require('e4_CommandQueue')
 local log          = require("knightlinc/Write")
 local assist       = require("e4_Assist")
+
+local bci = broadCastInterfaceFactory()
 
 ---@class KillItCommand
 ---@field SpawnId integer
@@ -63,12 +66,12 @@ local function createAssistOnCommand(...)
         return
     end
 
-    local exe = string.format("/dgzexecute /killit %d", spawn.ID())
+    local exe = string.format("/killit %d", spawn.ID())
     if filter ~= nil then
         exe = exe .. " " .. filter
     end
 
-    mq.cmdf(exe)
+    bci.ExecuteZoneCommand(exe)
     commandQueue.Enqueue(function() execute({ SpawnId = toint(spawn.ID()), Filter = filter }) end)
 end
 

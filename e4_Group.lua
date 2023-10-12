@@ -3,10 +3,6 @@ local log = require("knightlinc/Write")
 local broadCastInterfaceFactory = require 'broadcast/broadcastinterface'
 
 local bci = broadCastInterfaceFactory()
-if not bci then
-    log.Fatal("No networking interface found, please start eqbc or dannet")
-  return
-end
 
 local Group = { settings = nil }
 

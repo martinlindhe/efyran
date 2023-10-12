@@ -1,7 +1,10 @@
 local mq = require("mq")
+local broadCastInterfaceFactory = require 'broadcast/broadcastinterface'
 local commandQueue = require('e4_CommandQueue')
 local log          = require("knightlinc/Write")
 local assist       = require("e4_Assist")
+
+local bci = broadCastInterfaceFactory()
 
 ---@class BurnsCommand
 ---@field Type string
@@ -26,7 +29,7 @@ end
 
 local function createQuickBurnsCommand(peer, filter)
     if is_orchestrator() then
-        cmd("/dgzexecute /quickburns")
+        bci.ExecuteZoneCommand("/quickburns")
     end
 
     commandQueue.Enqueue(function() execute({ Type = "quickburns" }) end)
@@ -34,7 +37,7 @@ end
 
 local function createLongBurnsCommand(peer, filter)
     if is_orchestrator() then
-        cmd("/dgzexecute /longburns")
+        bci.ExecuteZoneCommand("/longburns")
     end
 
     commandQueue.Enqueue(function() execute({ Type = "longburns" }) end)
@@ -42,7 +45,7 @@ end
 
 local function createFullBurnsCommand(peer, filter)
     if is_orchestrator() then
-        cmd("/dgzexecute /fullburns")
+        bci.ExecuteZoneCommand("/fullburns")
     end
 
     commandQueue.Enqueue(function() execute({ Type = "fullburns" }) end)

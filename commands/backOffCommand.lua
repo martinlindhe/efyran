@@ -1,7 +1,10 @@
 local mq = require("mq")
+local broadCastInterfaceFactory = require 'broadcast/broadcastinterface'
 local commandQueue = require('e4_CommandQueue')
 local log          = require("knightlinc/Write")
 local assist       = require("e4_Assist")
+
+local bci = broadCastInterfaceFactory()
 
 ---@class BackOffCommand
 ---@field Filter string
@@ -18,11 +21,11 @@ end
 local function createCommand(...)
     local filter = args_string(...)
     if is_orchestrator() then
-        local exe = "/dgzexecute /backoff"
+        local exe = "/backoff"
         if filter ~= nil then
             exe = exe .. " " .. filter
         end
-        mq.cmdf(exe)
+        bci.ExecuteZoneCommand(exe)
     end
 
     commandQueue.Enqueue(function() execute({ Filter = filter }) end)

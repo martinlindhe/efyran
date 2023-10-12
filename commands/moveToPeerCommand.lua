@@ -1,6 +1,9 @@
 local mq = require("mq")
-local commandQueue = require('e4_CommandQueue')
 local log          = require("knightlinc/Write")
+local broadCastInterfaceFactory = require 'broadcast/broadcastinterface'
+local commandQueue = require('e4_CommandQueue')
+
+local bci = broadCastInterfaceFactory()
 
 ---@class MoveToPeerCommand
 ---@field Peer string
@@ -32,12 +35,12 @@ mq.bind("/movetopeer", createCommand)
 
 ---@param ... string|nil filter, such as "/only|ROG"
 local movetome = function(...)
-    local exe = string.format("/dgzexecute /movetopeer %s", mq.TLO.Me.Name())
+    local exe = string.format("/movetopeer %s", mq.TLO.Me.Name())
     local filter = args_string(...)
     if filter ~= nil then
         exe = exe .. " " .. filter
     end
-    mq.cmdf(exe)
+    bci.ExecuteZoneCommand(exe)
 end
 
 mq.bind("/movetome", movetome)

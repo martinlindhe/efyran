@@ -5,10 +5,6 @@ local log          = require("knightlinc/Write")
 local groupBuffs = require("e4_GroupBuffs")
 
 local bci = broadCastInterfaceFactory()
-if not bci then
-    log.Fatal("No networking interface found, please start eqbc or dannet")
-  return
-end
 
 ---@class RezItCommand
 ---@field SpawnId number

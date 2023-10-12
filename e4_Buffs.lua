@@ -16,10 +16,6 @@ local globalSettings = require("e4_Settings")
 local groupBuffs  = require("e4_GroupBuffs")
 
 local bci = broadCastInterfaceFactory()
-if not bci then
-    log.Fatal("No networking interface found, please start eqbc or dannet")
-  return
-end
 
 local serverBuffsSettings = getEfyranRoot() .. "/settings/" .. server_buffs_settings_file()
 if file_exists(serverBuffsSettings) then

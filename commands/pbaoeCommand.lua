@@ -1,8 +1,11 @@
 local mq = require("mq")
 local log = require("knightlinc/Write")
+local broadCastInterfaceFactory = require 'broadcast/broadcastinterface'
 local commandQueue = require('e4_CommandQueue')
 local assist         = require("e4_Assist")
 local botSettings    = require("e4_BotSettings")
+
+local bci = broadCastInterfaceFactory()
 
 ---@class PBAEBindCommand
 ---@field Peer string
@@ -29,11 +32,11 @@ local function createPBAEOnCommand(...)
     local filter = args_string(...)
 
     if is_orchestrator() then
-        local exe = string.format("/dgzexecute /pbaestart %s", mq.TLO.Me.Name())
+        local exe = string.format("/pbaestart %s", mq.TLO.Me.Name())
         if filter ~= nil then
             exe = exe .. " " .. filter
         end
-        mq.cmdf(exe)
+        bci.ExecuteZoneCommand(exe)
     end
     if botSettings.settings.assist.pbae == nil then
         return
@@ -56,7 +59,7 @@ mq.bind("/pbaeon", createPBAEOnCommand)
 mq.bind("/pbaestart", createPBAEStartCommand)
 mq.bind("/pbaeoff", function()
     if is_orchestrator() then
-        cmd("/dgzexecute /pbaeoff")
+        bci.ExecuteZoneCommand("/pbaeoff")
     end
     if assist.PBAE == true then
         assist.PBAE = false

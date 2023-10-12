@@ -1,6 +1,9 @@
 local mq = require("mq")
 local log = require("knightlinc/Write")
+local broadCastInterfaceFactory = require 'broadcast/broadcastinterface'
 local commandQueue = require('e4_CommandQueue')
+
+local bci = broadCastInterfaceFactory()
 
 local function execute()
     log.Info("click no")
@@ -14,7 +17,7 @@ end
 -- tell all peers to click no on dialog (aetl, rez, etc)
 local function createCommand()
     if is_orchestrator() then
-        cmd("/dgzexecute /no")
+        bci.ExecuteZoneCommand("/no")
     end
 
     commandQueue.Enqueue(function() execute() end)

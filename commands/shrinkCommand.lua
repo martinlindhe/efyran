@@ -1,7 +1,10 @@
 local mq = require("mq")
-local commandQueue = require('e4_CommandQueue')
 local log          = require("knightlinc/Write")
+local broadCastInterfaceFactory = require 'broadcast/broadcastinterface'
+local commandQueue = require('e4_CommandQueue')
 local botSettings = require("e4_BotSettings")
+
+local bci = broadCastInterfaceFactory()
 
 local function execute()
     -- find the shrink clicky/spell if we got one
@@ -50,5 +53,5 @@ end
 
 mq.bind("/shrinkgroup", createCommand)
 mq.bind("/shrinkall", function()
-    cmd("/dgzexecute /shrinkgroup")
+    bci.ExecuteZoneCommand("/shrinkgroup")
 end)

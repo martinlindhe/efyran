@@ -10,10 +10,6 @@ local groupBuffs = require("e4_GroupBuffs")
 local follow = require("e4_Follow")
 
 local bci = broadCastInterfaceFactory()
-if not bci then
-    log.Fatal("No networking interface found, please start eqbc or dannet")
-  return
-end
 
 local MIN_BUFF_DURATION = 6 * 6000 -- 6 ticks, each tick is 6s
 
@@ -596,7 +592,8 @@ function rez_corpse(spawnID)
     if is_spell_ability_ready(rez) then
 
         -- tell bots this corpse is rezzed
-        mq.cmdf("/dgzexecute /ae_rezzed %s", spawn.DisplayName())
+        local cmd = string.format("/ae_rezzed %s", spawn.DisplayName())
+        bci.ExecuteZoneCommand(cmd)
 
         all_tellf("Rezzing %s \ag%s\ax with \ay%s\ax", spawn.Class.ShortName(), spawn.DisplayName(), rez)
         --target_id(spawn.ID())
@@ -670,11 +667,11 @@ function report_find_item(name, filter)
     log.Info("Searching for %s", name)
 
     if is_orchestrator() then
-        local exe = string.format("/dgzexecute /fdi %s", name)
+        local exe = string.format("/fdi %s", name)
         if filter ~= nil then
             exe = exe .. " " .. filter
         end
-        cmd(exe)
+        bci.ExecuteZoneCommand(exe)
     end
 
     if filter ~= nil and not matches_filter(filter, mq.TLO.Me.Name()) then
@@ -722,11 +719,11 @@ function report_find_missing_item(name, filter)
     name = strip_link(name)
 
     if is_orchestrator() then
-        local exe = string.format("/dgzexecute /fmi %s", name)
+        local exe = string.format("/fmi %s", name)
         if filter ~= nil then
             exe = exe .. " " .. filter
         end
-        cmd(exe)
+        bci.ExecuteZoneCommand(exe)
     end
 
     if filter ~= nil and not matches_filter(filter, mq.TLO.Me.Name()) then
@@ -751,7 +748,7 @@ end
 function report_find_missing_item_by_id(id)
 
     if is_orchestrator() then
-        cmdf("/dgzexecute /fmid %s", tostring(id))
+        bci.ExecuteZoneCommand(string.format("/fmid %s", tostring(id)))
     end
 
     local found = false

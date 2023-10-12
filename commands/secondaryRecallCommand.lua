@@ -1,5 +1,8 @@
 local mq = require("mq")
+local broadCastInterfaceFactory = require 'broadcast/broadcastinterface'
 local commandQueue = require('e4_CommandQueue')
+
+local bci = broadCastInterfaceFactory()
 
 local function execute()
     if is_alt_ability_ready("Secondary Recall") then
@@ -11,7 +14,7 @@ end
 
 local function createCommand(peer, filter)
     if is_orchestrator() then
-        cmdf("/dgzexecute /secondaryrecall")
+        bci.ExecuteZoneCommand("/secondaryrecall")
     end
 
     commandQueue.Enqueue(function() execute() end)
