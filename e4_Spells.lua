@@ -1,5 +1,6 @@
 local mq = require("mq")
 local log = require("knightlinc/Write")
+local broadCastInterfaceFactory = require 'broadcast/broadcastinterface'
 
 local globalSettings = require("e4_Settings")
 local botSettings = require("e4_BotSettings")
@@ -7,6 +8,12 @@ local aliases = require("settings/Spell Aliases")
 local groupBuffs = require("e4_GroupBuffs")
 
 local follow = require("e4_Follow")
+
+local bci = broadCastInterfaceFactory()
+if not bci then
+    log.Fatal("No networking interface found, please start eqbc or dannet")
+  return
+end
 
 local MIN_BUFF_DURATION = 6 * 6000 -- 6 ticks, each tick is 6s
 
@@ -608,7 +615,7 @@ function consent_me()
     for i = 1, spawn_count(spawnQuery) do
         local spawn = mq.TLO.NearestSpawn(i, spawnQuery)
         if is_peer(spawn.DisplayName()) then
-            cmdf("/dexecute %s /consent %s", spawn.DisplayName(), mq.TLO.Me.Name())
+            bci.ExecuteCommand(string.format("/consent %s", spawn.DisplayName()), {mq.TLO.Me.Name()})
         else
             all_tellf("Cannot autoconsent corpse \ar%s\ax, not a peer", spawn.DisplayName())
         end
@@ -886,7 +893,7 @@ function ask_nearby_peer_to_activate_aa(aaName)
             local value = query_peer(peer, "Me.AltAbilityReady["..aaName.."]", 0)
             if value == "TRUE" then
                 log.Info("Asking %s to activate \ay%s\ax ...", peer, aaName)
-                cmdf("/dexecute %s /banker", peer)
+                bci.ExecuteCommand("/banker", {peer})
                 return
             end
         end

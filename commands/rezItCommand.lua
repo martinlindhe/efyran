@@ -1,7 +1,14 @@
 local mq = require("mq")
+local broadCastInterfaceFactory = require 'broadcast/broadcastinterface'
 local commandQueue = require('e4_CommandQueue')
 local log          = require("knightlinc/Write")
 local groupBuffs = require("e4_GroupBuffs")
+
+local bci = broadCastInterfaceFactory()
+if not bci then
+    log.Fatal("No networking interface found, please start eqbc or dannet")
+  return
+end
 
 ---@class RezItCommand
 ---@field SpawnId number
@@ -36,7 +43,7 @@ local function createCommand()
                 return
             end
             log.Info("Requesting rez for \ay%s\ax from \ag%s\ax.", spawn.Name(), clrName)
-            cmdf("/dexecute %s /rezit %d", clrName, spawn.ID())
+            bci.ExecuteCommand(string.format("/rezit %d", spawn.ID()), {clrName})
             return
         end
     end

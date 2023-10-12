@@ -1,5 +1,12 @@
 local mq = require("mq")
 local log = require("knightlinc/Write")
+local broadCastInterfaceFactory = require 'broadcast/broadcastinterface'
+
+local bci = broadCastInterfaceFactory()
+if not bci then
+    log.Fatal("No networking interface found, please start eqbc or dannet")
+  return
+end
 
 local Group = { settings = nil }
 
@@ -100,7 +107,7 @@ function Group.RecallGroup(name, groupNumber)
             end
         elseif orchestrator and groupLeader ~= 'NULL' then
             log.Info("Telling group leader %s to form group %d", groupLeader, idx)
-            cmdf("/dexecute %s /recallgroup %s %d", groupLeader, name, idx)
+            bci.ExecuteCommand(string.format("/recallgroup %s %d", name, idx) ,{groupLeader})
         end
     end
 
@@ -122,7 +129,7 @@ function Group.RecallGroup(name, groupNumber)
                     cmdf("/raidinvite %s", groupLeader)
                 elseif raidLeader ~= groupLeader then
                     log.Info("Telling raid leader \ag%s\ax to invite group leader \ay%s\ax to raid", raidLeader, groupLeader)
-                    cmdf("/dexecute %s /raidinvite %s", raidLeader, groupLeader)
+                    bci.ExecuteCommand(string.format("/raidinvite %s", groupLeader) ,{raidLeader})
                 end
                 delay(50)
             else

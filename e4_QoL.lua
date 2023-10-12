@@ -3,6 +3,7 @@
 local mq = require("mq")
 local log = require("knightlinc/Write")
 local timer = require("Timer")
+local broadCastInterfaceFactory = require 'broadcast/broadcastinterface'
 
 local assist  = require("e4_Assist")
 local follow  = require("e4_Follow")
@@ -11,6 +12,12 @@ local loot  = require("e4_Loot")
 local buffs   = require("e4_Buffs")
 local globalSettings = require("e4_Settings")
 local zonedCommand = require("commands/zonedCommand")
+
+local bci = broadCastInterfaceFactory()
+if not bci then
+    log.Fatal("No networking interface found, please start eqbc or dannet")
+  return
+end
 
 local QoL = {
     currentExp = 0.,
@@ -465,7 +472,7 @@ function QoL.Init()
     end)
 
     local mmrl = function()
-        cmdf("/dex %s /makeraidleader %s", mq.TLO.Raid.Leader(), mq.TLO.Me.Name())
+        bci.ExecuteCommand(string.format("/makeraidleader %s", mq.TLO.Me.Name()), {mq.TLO.Raid.Leader()})
     end
     mq.bind("/makemeraidleader", mmrl)
     mq.bind("/mmrl", mmrl)
@@ -1139,7 +1146,7 @@ function make_peers_circle_me(dist)
         if is_peer_in_zone(peer) then
             local y = mq.TLO.Me.Y() + (dist * math.sin(angle))
             local x = mq.TLO.Me.X() + (dist * math.cos(angle))
-            cmdf("/dex %s /moveto loc %d %d", peer, y, x)
+            bci.ExecuteCommand(string.format("/moveto loc %d %d", y, x), {peer})
         end
     end
 end

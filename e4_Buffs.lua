@@ -1,5 +1,6 @@
 local mq = require("mq")
 local log = require("knightlinc/Write")
+local broadCastInterfaceFactory = require 'broadcast/broadcastinterface'
 
 require("e4_Spells")
 local follow      = require("e4_Follow")
@@ -14,6 +15,11 @@ local globalSettings = require("e4_Settings")
 
 local groupBuffs  = require("e4_GroupBuffs")
 
+local bci = broadCastInterfaceFactory()
+if not bci then
+    log.Fatal("No networking interface found, please start eqbc or dannet")
+  return
+end
 
 local serverBuffsSettings = getEfyranRoot() .. "/settings/" .. server_buffs_settings_file()
 if file_exists(serverBuffsSettings) then
@@ -395,7 +401,7 @@ function buffs.HandleDebuffs()
                 end
                 if spawn.Distance() < 200 then
                     all_tellf("Asking \ag%s\ax to cure \ar%s\ax (\ay%s\ax)", curer, spellConfig.Name, spellConfig.Cure)
-                    cmdf("/dex %s /cure %s %s", curer, mq.TLO.Me.Name(), spellConfig.Cure)
+                    bci.ExecuteCommand(string.format("/cure %s %s", mq.TLO.Me.Name(), spellConfig.Cure), {curer})
                 else
                     all_tellf("ERROR: Want to ask \ag%s\ax to cure \ar%s\ax (\ay%s\ax). Distance %.2f", curer, spellConfig.Name, spellConfig.Cure, spawn.Distance())
                 end
