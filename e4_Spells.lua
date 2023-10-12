@@ -4,7 +4,6 @@ local log = require("knightlinc/Write")
 local globalSettings = require("e4_Settings")
 local botSettings = require("e4_BotSettings")
 local aliases = require("settings/Spell Aliases")
-local groupBuffs = require("e4_GroupBuffs")
 
 local follow = require("e4_Follow")
 

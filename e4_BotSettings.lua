@@ -67,7 +67,7 @@ end
 
 
 function botSettings.Init()
-    local settingsFile = getEfyranRoot() .. "/settings/" .. peer_settings_file()
+    local settingsFile = efyranConfigDir() .. "/" .. peer_settings_file()
     local settings = read_settings(settingsFile)
     if settings ~= nil then
         botSettings.settings = settings()

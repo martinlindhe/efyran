@@ -2,7 +2,7 @@ local log = require("knightlinc/Write")
 
 require("persistence")
 
-local lootFile = getEfyranRoot() .. "/settings/" .. current_server() .. "__Loot Settings.lua"
+local lootFile = efyranConfigDir() .. "/" .. current_server() .. "__Loot Settings.lua"
 
 -- reads the loot settings from disk
 function ReadLootSettings()

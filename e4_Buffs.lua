@@ -15,7 +15,7 @@ local globalSettings = require("e4_Settings")
 local groupBuffs  = require("e4_GroupBuffs")
 
 
-local serverBuffsSettings = getEfyranRoot() .. "/settings/" .. server_buffs_settings_file()
+local serverBuffsSettings = efyranConfigDir() .. "/" .. server_buffs_settings_file()
 if file_exists(serverBuffsSettings) then
     groupBuffs.Default = loadfile(serverBuffsSettings)()
 end

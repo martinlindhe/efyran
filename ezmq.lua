@@ -1919,11 +1919,9 @@ function delay(delayValue, condition)
     mq.delay(delayValue, condition)
 end
 
----@return string
-function getEfyranRoot()
-    return mq.TLO.Lua.Dir() .. "/efyran"
+function efyranConfigDir()
+    return mq.TLO.MacroQuest.Path("config")() .. "/efyran"
 end
-
 
 local castSpellAbilityTimers = {}
 function resetCastSpellAbilityTimers()
