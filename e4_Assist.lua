@@ -1,11 +1,11 @@
 local mq = require("mq")
-local log = require("efyran/knightlinc/Write")
-local timer = require("efyran/Timer")
+local log = require("knightlinc/Write")
+local timer = require("Timer")
 
-local follow  = require("efyran/e4_Follow")
-local buffs  = require("efyran/e4_Buffs")
-local botSettings = require("efyran/e4_BotSettings")
-local heal    = require("efyran/e4_Heal")
+local follow  = require("e4_Follow")
+local buffs  = require("e4_Buffs")
+local botSettings = require("e4_BotSettings")
+local heal    = require("e4_Heal")
 
 local Assist = {
     targetID = 0, -- the current spawn I am attacking

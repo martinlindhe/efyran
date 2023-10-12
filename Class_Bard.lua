@@ -1,6 +1,6 @@
 local mq = require("mq")
-local log = require("efyran/knightlinc/Write")
-local botSettings = require("efyran/e4_BotSettings")
+local log = require("knightlinc/Write")
+local botSettings = require("e4_BotSettings")
 
 local defaultMelody = "general"
 

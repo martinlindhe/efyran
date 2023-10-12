@@ -1,18 +1,18 @@
 local mq = require("mq")
-local log = require("efyran/knightlinc/Write")
+local log = require("knightlinc/Write")
 
-require("efyran/e4_Spells")
-local follow      = require("efyran/e4_Follow")
-local pet         = require("efyran/e4_Pet")
-local cure        = require("efyran/e4_Cure")
-local heal        = require("efyran/e4_Heal")
-local botSettings = require("efyran/e4_BotSettings")
-local bard        = require("efyran/Class_Bard")
-local timer       = require("efyran/Timer")
+require("e4_Spells")
+local follow      = require("e4_Follow")
+local pet         = require("e4_Pet")
+local cure        = require("e4_Cure")
+local heal        = require("e4_Heal")
+local botSettings = require("e4_BotSettings")
+local bard        = require("Class_Bard")
+local timer       = require("Timer")
 
-local globalSettings = require("efyran/e4_Settings")
+local globalSettings = require("e4_Settings")
 
-local groupBuffs  = require("efyran/e4_GroupBuffs")
+local groupBuffs  = require("e4_GroupBuffs")
 
 
 local serverBuffsSettings = getEfyranRoot() .. "/settings/" .. server_buffs_settings_file()
@@ -90,7 +90,7 @@ function buffs.Init()
         cmdf("/squelch /bct %s //set_others_buffs %s %s", peer, mq.TLO.Me.Name(), buffs.getAvailableGroupBuffs())
         --log.Debug("Told %s my buffs are %s", peer, buffs.getAvailableGroupBuffs())
     end)
-    
+
     -- INTERNAL: for updating buff state (is sent from `peer` to this instance)
     mq.bind("/set_others_buffs", function(peer, ...)
         local arg = args_string(...)

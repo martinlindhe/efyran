@@ -1,3 +1,5 @@
+local log = require("knightlinc/Write")
+
 ---@class CommandHandler
 ---@field Execute fun()
 

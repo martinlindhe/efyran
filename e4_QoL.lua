@@ -1,15 +1,15 @@
 -- quality of life tweaks
 
 local mq = require("mq")
-local log = require("efyran/knightlinc/Write")
-local timer = require("efyran/Timer")
+local log = require("knightlinc/Write")
+local timer = require("Timer")
 
-local assist  = require("efyran/e4_Assist")
-local follow  = require("efyran/e4_Follow")
-local botSettings = require("efyran/e4_BotSettings")
-local loot  = require("efyran/e4_Loot")
-local buffs   = require("efyran/e4_Buffs")
-local globalSettings = require("efyran/e4_Settings")
+local assist  = require("e4_Assist")
+local follow  = require("e4_Follow")
+local botSettings = require("e4_BotSettings")
+local loot  = require("e4_Loot")
+local buffs   = require("e4_Buffs")
+local globalSettings = require("e4_Settings")
 local zonedCommand = require("commands/zonedCommand")
 
 local QoL = {
@@ -772,7 +772,7 @@ function QoL.Init()
 
     QoL.verifySpellLines()
 
-    zonedCommand.Execute()
+    zonedCommand.Enqueue()
     --require('commands/zonedCommand').createCommand()
 end
 

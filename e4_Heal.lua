@@ -1,12 +1,12 @@
 local mq = require("mq")
-local log = require("efyran/knightlinc/Write")
+local log = require("knightlinc/Write")
 
-require("efyran/e4_Spells")
+require("e4_Spells")
 
-local follow  = require("efyran/e4_Follow")
-local globalSettings = require("efyran/e4_Settings")
-local botSettings = require("efyran/e4_BotSettings")
-local timer = require("efyran/Timer")
+local follow  = require("e4_Follow")
+local globalSettings = require("e4_Settings")
+local botSettings = require("e4_BotSettings")
+local timer = require("Timer")
 
 local timeZonedDelay = 10 -- seconds
 

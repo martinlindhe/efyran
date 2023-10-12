@@ -1,18 +1,18 @@
 -- quality of life tweaks
 
 local mq = require("mq")
-local log = require("efyran/knightlinc/Write")
-local timer = require("efyran/Timer")
+local log = require("knightlinc/Write")
+local timer = require("Timer")
 
-local assist  = require("efyran/e4_Assist")
-local follow  = require("efyran/e4_Follow")
-local commandQueue = require("efyran/e4_CommandQueue")
-local botSettings = require("efyran/e4_BotSettings")
-local loot  = require("efyran/e4_Loot")
-local buffs   = require("efyran/e4_Buffs")
-local globalSettings = require("efyran/e4_Settings")
+local assist  = require("e4_Assist")
+local follow  = require("e4_Follow")
+local commandQueue = require("e4_CommandQueue")
+local botSettings = require("e4_BotSettings")
+local loot  = require("e4_Loot")
+local buffs   = require("e4_Buffs")
+local globalSettings = require("e4_Settings")
 
-require("efyran/autobank")
+require("autobank")
 
 local Alerts = {
 }

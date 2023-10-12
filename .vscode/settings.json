@@ -1,4 +1,8 @@
 {
+    "files.exclude": {
+        "mq-definitions/": true,
+        "knightlinc/": true,
+    },
     "cSpell.words": [
         "aerez",
         "afollow",
@@ -74,6 +78,7 @@
     "Lua.runtime.version": "Lua 5.1",
     "Lua.workspace.library": [
         "./mq-definitions",
+        "./knightlinc",
     ],
     "Lua.completion.autoRequire": false,
 }

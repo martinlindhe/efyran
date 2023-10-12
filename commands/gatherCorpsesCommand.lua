@@ -1,6 +1,6 @@
 local mq = require("mq")
-local commandQueue = require('e4_commandQueue')
-local log          = require("efyran/knightlinc/Write")
+local commandQueue = require('e4_CommandQueue')
+local log          = require("knightlinc/Write")
 
 local function execute()
     consent_me()

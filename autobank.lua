@@ -1,5 +1,5 @@
 local mq = require("mq")
-local log = require("efyran/knightlinc/Write")
+local log = require("knightlinc/Write")
 require("ezmq")
 
 local inventorySlots = 10

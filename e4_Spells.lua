@@ -1,12 +1,12 @@
 local mq = require("mq")
-local log = require("efyran/knightlinc/Write")
+local log = require("knightlinc/Write")
 
-local globalSettings = require("efyran/e4_Settings")
-local botSettings = require("efyran/e4_BotSettings")
-local aliases = require("efyran/settings/Spell Aliases")
-local groupBuffs = require("efyran/e4_GroupBuffs")
+local globalSettings = require("e4_Settings")
+local botSettings = require("e4_BotSettings")
+local aliases = require("settings/Spell Aliases")
+local groupBuffs = require("e4_GroupBuffs")
 
-local follow = require("efyran/e4_Follow")
+local follow = require("e4_Follow")
 
 local MIN_BUFF_DURATION = 6 * 6000 -- 6 ticks, each tick is 6s
 

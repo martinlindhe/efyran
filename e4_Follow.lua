@@ -1,8 +1,8 @@
 local mq = require("mq")
-local log = require("efyran/knightlinc/Write")
-local timer = require("efyran/Timer")
+local log = require("knightlinc/Write")
+local timer = require("Timer")
 
-local globalSettings = require("efyran/e4_Settings")
+local globalSettings = require("e4_Settings")
 
 local Follow = {
     -- the current spawn I am following

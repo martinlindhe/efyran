@@ -1,7 +1,7 @@
 -- TODO read array from settings/autoaa.lua
 
 local mq = require("mq")
-local log = require("efyran/knightlinc/Write")
+local log = require("knightlinc/Write")
 
 require("ezmq")
 

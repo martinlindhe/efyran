@@ -1,6 +1,6 @@
-local log = require("efyran/knightlinc/Write")
+local log = require("knightlinc/Write")
 
-require("efyran/persistence")
+require("persistence")
 
 local lootFile = getEfyranRoot() .. "/settings/" .. current_server() .. "__Loot Settings.lua"
 

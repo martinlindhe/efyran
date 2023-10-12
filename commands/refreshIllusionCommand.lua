@@ -1,6 +1,6 @@
 local mq = require("mq")
-local commandQueue = require('e4_commandQueue')
-local botSettings = require("efyran/e4_BotSettings")
+local commandQueue = require('e4_CommandQueue')
+local botSettings = require("e4_BotSettings")
 
 local function execute()
     local illusion = botSettings.GetCurrentIllusion()

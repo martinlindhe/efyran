@@ -1,8 +1,8 @@
 local mq = require("mq")
-local log = require("efyran/knightlinc/Write")
+local log = require("knightlinc/Write")
 
-local botSettings = require("efyran/e4_BotSettings")
-local PetSpells = require("efyran/e4_PetSpells")
+local botSettings = require("e4_BotSettings")
+local PetSpells = require("e4_PetSpells")
 
 local Pet = {}
 

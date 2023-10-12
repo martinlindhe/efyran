@@ -1,6 +1,6 @@
 local mq = require("mq")
-local commandQueue = require('e4_commandQueue')
-local follow  = require("efyran/e4_Follow")
+local commandQueue = require('e4_CommandQueue')
+local follow  = require("e4_Follow")
 
 ---@class RunToZoneCommand
 ---@field Peer string

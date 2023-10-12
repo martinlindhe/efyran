@@ -3,9 +3,9 @@
 -- @type mq
 local mq = require("mq")
 
-local log = require("efyran/knightlinc/Write")
+local log = require("knightlinc/Write")
 
-local timer = require("efyran/Timer")
+local timer = require("Timer")
 
 -- returns true if `spawn` is within maxDistance
 ---@param spawn spawn
@@ -35,7 +35,7 @@ function line_of_sight_to(spawn)
     return mq.TLO.LineOfSight(q)()
 end
 
-local globalSettings = require("efyran/e4_Settings")
+local globalSettings = require("e4_Settings")
 
 -- Move to the location of `spawn` using MQ2Nav.
 ---@param spawnID integer
@@ -2194,7 +2194,7 @@ function castSpellRaw(name, spawnID, extraArgs)
     delay(400)
 end
 
-local botSettings = require("efyran/e4_BotSettings")
+local botSettings = require("e4_BotSettings")
 
 -- Returns nil on error
 ---@param spellRow string Example: "War March of Muram/Gem|4"
@@ -2508,7 +2508,7 @@ function findItemWithEffect(effect)
     end
 
     -- bank top level slots: 1-24 is bank bags, 25-26 is shared bank
-    for i = 1, 26 do 
+    for i = 1, 26 do
         if mq.TLO.Me.Bank(i)() ~= nil then
             local key = "bank"..tostring(i)
             local inv = mq.TLO.Me.Bank(i)
