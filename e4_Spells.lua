@@ -210,7 +210,7 @@ function spellConfigAllowsCasting(buffItem, spawn)
 
     if spellConfig.MinMana ~= nil then
         if mq.TLO.Me.PctMana() < spellConfig.MinMana then
-            log.Info("SKIP BUFFING, my mana is %d %% vs required %d %%",  mq.TLO.Me.PctMana(), spellConfig.MinMana)
+            log.Info("SKIP BUFFING %S, my mana is %d %% vs required %d %%", spellConfig.Name, mq.TLO.Me.PctMana(), spellConfig.MinMana)
             return false
         end
     end
@@ -611,7 +611,7 @@ function consent_me()
     for i = 1, spawn_count(spawnQuery) do
         local spawn = mq.TLO.NearestSpawn(i, spawnQuery)
         if is_peer(spawn.DisplayName()) then
-            bci.ExecuteCommand(string.format("/consent %s", spawn.DisplayName()), {mq.TLO.Me.Name()})
+            bci.ExecuteCommand(string.format("/consent %s", mq.TLO.Me.Name()), {spawn.DisplayName()})
         else
             all_tellf("Cannot autoconsent corpse \ar%s\ax, not a peer", spawn.DisplayName())
         end
