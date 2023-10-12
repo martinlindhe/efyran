@@ -1,5 +1,8 @@
 local mq = require("mq")
+local broadCastInterfaceFactory = require 'broadcast/broadcastinterface'
 local commandQueue = require('e4_CommandQueue')
+
+local bci = broadCastInterfaceFactory()
 
 local function execute()
     if have_alt_ability("Mass Group Buff") then
@@ -13,7 +16,7 @@ end
 
 local function createCommand()
     if is_orchestrator() then
-        cmd("/dgzexecute /mgbready")
+        bci.ExecuteZoneCommand("/mgbready")
     end
 
     commandQueue.Enqueue(function() execute() end)

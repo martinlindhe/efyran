@@ -1,7 +1,10 @@
 local mq = require("mq")
-local commandQueue = require('e4_CommandQueue')
 local log          = require("knightlinc/Write")
+local broadCastInterfaceFactory = require 'broadcast/broadcastinterface'
+local commandQueue = require('e4_CommandQueue')
 local botSettings = require("e4_BotSettings")
+
+local bci = broadCastInterfaceFactory()
 
 local function execute()
     if botSettings.settings.mount == nil then
@@ -34,7 +37,7 @@ end
 
 local function createMountCommand(peer, filter)
     if is_orchestrator() then
-        cmd("/dgzexecute /mounton")
+        bci.ExecuteZoneCommand("/mounton")
     end
 
     commandQueue.Enqueue(function() execute() end)
@@ -42,7 +45,7 @@ end
 
 local function createDismountCommand(peer, filter)
     if is_orchestrator() then
-        cmd("/dgzexecute /mountoff")
+        bci.ExecuteZoneCommand("/mountoff")
     end
     log.Info("Dismounting ...")
     cmd("/dismount")

@@ -1,5 +1,8 @@
 local mq = require("mq")
+local broadCastInterfaceFactory = require 'broadcast/broadcastinterface'
 local commandQueue = require('e4_CommandQueue')
+
+local bci = broadCastInterfaceFactory()
 
 ---@class DropBuffCommand
 ---@field Filter string
@@ -10,7 +13,7 @@ local function execute(command)
         return
     end
     if is_orchestrator() then
-        cmdf("/dgzexecute /dropbuff %s", command.Filter)
+        bci.ExecuteZoneCommand(string.format("/dropbuff %s", command.Filter))
     end
 
     if command.Filter == "all" then

@@ -3,6 +3,7 @@
 local mq = require("mq")
 local log = require("knightlinc/Write")
 local timer = require("Timer")
+local broadCastInterfaceFactory = require 'broadcast/broadcastinterface'
 
 local assist  = require("e4_Assist")
 local follow  = require("e4_Follow")
@@ -11,6 +12,8 @@ local loot  = require("e4_Loot")
 local buffs   = require("e4_Buffs")
 local globalSettings = require("e4_Settings")
 local zonedCommand = require("commands/zonedCommand")
+
+local bci = broadCastInterfaceFactory()
 
 local QoL = {
     currentExp = 0.,
@@ -172,7 +175,7 @@ function QoL.Init()
     -- report who got the flag
     mq.bind("/gotflag", function()
         if is_orchestrator() then
-            cmdf("/dgexecute /gotflag")
+            bci.ExecuteAllCommand("/gotflag")
         end
         if gotFlag then
             all_tellf("\agGOT FLAG\ax")
@@ -182,7 +185,7 @@ function QoL.Init()
     -- report who did not get a flag
     mq.bind("/noflag", function()
         if is_orchestrator() then
-            cmdf("/dgexecute /noflag")
+            bci.ExecuteAllCommand("/noflag")
         end
         if not gotFlag then
             all_tellf("\arNO FLAG\ax")
@@ -192,7 +195,8 @@ function QoL.Init()
     -- change spell set
     mq.bind("/spellset", function(name)
         if is_orchestrator() then
-            cmdf("/dgzexecute /spellset %s", name)
+            local cmd = string.format("/spellset %s", name)
+            bci.ExecuteZoneCommand(cmd)
         end
         log.Info("Changed spellset to %s", name)
         assist.spellSet = name
@@ -202,7 +206,7 @@ function QoL.Init()
     -- mana check
     mq.bind("/mana", function()
         if is_orchestrator() then
-            cmdf("/dgzexecute /mana")
+            bci.ExecuteZoneCommand("/mana")
         end
         if mq.TLO.Me.MaxMana() == 0 or mq.TLO.Me.PctMana() == 100 then
             return
@@ -218,7 +222,7 @@ function QoL.Init()
 
     mq.bind("/reportmana", function()
         if is_orchestrator() then
-            cmd("/dgzexecute /reportmana")
+            bci.ExecuteZoneCommand("/reportmana")
         end
         if not mq.TLO.Me.Class.CanCast() then
             return
@@ -231,24 +235,25 @@ function QoL.Init()
     mq.bind("/buffon", function()
         buffs.refreshBuffs = true
         if is_orchestrator() then
-            cmd("/dgzexecute /buffon")
+            bci.ExecuteZoneCommand("/buffon")
         end
     end)
 
     mq.bind("/buffoff", function()
         buffs.refreshBuffs = false
         if is_orchestrator() then
-            cmd("/dgzexecute /buffoff")
+            bci.ExecuteZoneCommand("/buffoff")
         end
     end)
 
     local followOn = function(...)
-        local exe = string.format("/dgzexecute /followplayer %s", mq.TLO.Me.Name())
+        local exe = string.format("/followplayer %s", mq.TLO.Me.Name())
         local filter = args_string(...)
         if filter ~= nil then
             exe = exe .. " " .. filter
         end
-        mq.cmdf(exe)
+
+        bci.ExecuteZoneCommand(exe)
     end
 
     ---@param ... string|nil filter, such as "/only|ROG"
@@ -257,7 +262,7 @@ function QoL.Init()
 
     mq.bind("/followoff", function(s)
         if is_orchestrator() then
-            cmd("/dgzexecute /followoff")
+            bci.ExecuteZoneCommand("/followoff")
         end
         follow.Stop()
     end)
@@ -276,17 +281,17 @@ function QoL.Init()
 
     -- reports all peers with debuffs
     mq.bind("/counters", function()
-        cmdf("/noparse /bcaa //if (${NetBots[${Me.Name}].Counters}) /bc DEBUFFED: ${NetBots[${Me.Name}].Counters} counters in ${NetBots[${Me.Name}].Detrimentals} debuffs: ${NetBots[${Me.Name}].Detrimental}")
+        bci.ExecuteZoneCommand("/if (${NetBots[${Me.Name}].Counters}) /bc DEBUFFED: ${NetBots[${Me.Name}].Counters} counters in ${NetBots[${Me.Name}].Detrimentals} debuffs: ${NetBots[${Me.Name}].Detrimental}")
     end)
 
     mq.bind("/lessonsactive", function()
-        mq.cmd("/noparse /dgzexecute /if (${Me.Buff[Lesson of the Devoted].ID}) /bc ACTIVE: ${Me.Buff[Lesson of the Devoted].Duration.TimeHMS}")
+        bci.ExecuteZoneCommand("/if (${Me.Buff[Lesson of the Devoted].ID}) /bc ACTIVE: ${Me.Buff[Lesson of the Devoted].Duration.TimeHMS}")
     end)
 
     -- report naked toons
     mq.bind("/naked", function()
         if is_orchestrator() then
-            mq.cmd("/dgzexecute /naked")
+            bci.ExecuteZoneCommand("/naked")
         end
         if is_naked() then
             all_tellf("IM NAKED IN \ay%s\ax", zone_shortname())
@@ -307,7 +312,8 @@ function QoL.Init()
             return
         end
         if is_orchestrator() then
-            cmdf("/dgzexecute /barkit %d %s", spawnID, arg)
+            local cmd = string.format("/barkit %d %s", spawnID, arg)
+            bci.ExecuteZoneCommand(cmd)
         end
         cmdf("/barkit %d %s", spawnID, arg)
     end)
@@ -331,7 +337,7 @@ function QoL.Init()
     end)
 
     -- tell all peers to report faction status
-    mq.bind("/factionsall", function() mq.cmd("/squelch /dgzexecute /factions") end)
+    mq.bind("/factionsall", function() bci.ExecuteZoneCommand("/factions") end)
 
     -- clear all chat windows on current peer
     mq.bind("/clr", function() mq.cmd("/clear") end)
@@ -428,11 +434,11 @@ function QoL.Init()
     end)
 
     -- make peers in zone face my target
-    mq.bind("/facetarget", function() mq.cmdf("/squelch /dgzexecute /face fast id %d", mq.TLO.Target.ID()) end)
+    mq.bind("/facetarget", function() bci.ExecuteZoneCommand("/face fast id "..mq.TLO.Target.ID()) end)
     mq.bind("/facetgt", function() mq.cmd("/facetarget") end)
 
     -- make peers in zone face me
-    mq.bind("/faceme", function() mq.cmdf("/squelch /dgzexecute /face fast id %d", mq.TLO.Me.ID()) end)
+    mq.bind("/faceme", function() bci.ExecuteZoneCommand("/face fast id "..mq.TLO.Me.ID()) end)
 
     -- useful when AE FD is cast (oow, wos Shadowhunter, Cleric 1.5 fight in lfay and so on)
     mq.bind("/standall", function()
@@ -465,7 +471,7 @@ function QoL.Init()
     end)
 
     local mmrl = function()
-        cmdf("/dex %s /makeraidleader %s", mq.TLO.Raid.Leader(), mq.TLO.Me.Name())
+        bci.ExecuteCommand(string.format("/makeraidleader %s", mq.TLO.Me.Name()), {mq.TLO.Raid.Leader()})
     end
     mq.bind("/makemeraidleader", mmrl)
     mq.bind("/mmrl", mmrl)
@@ -1132,14 +1138,14 @@ function make_peers_circle_me(dist)
         dist = 20
     end
 
-    cmd("/dgze /followoff")
+    bci.ExecuteZoneCommand("/followoff")
 
     for i, peer in pairs(get_peers()) do
         local angle = (360 / n) * i
         if is_peer_in_zone(peer) then
             local y = mq.TLO.Me.Y() + (dist * math.sin(angle))
             local x = mq.TLO.Me.X() + (dist * math.cos(angle))
-            cmdf("/dex %s /moveto loc %d %d", peer, y, x)
+            bci.ExecuteCommand(string.format("/moveto loc %d %d", y, x), {peer})
         end
     end
 end

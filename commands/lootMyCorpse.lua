@@ -1,5 +1,8 @@
 local mq = require("mq")
+local broadCastInterfaceFactory = require 'broadcast/broadcastinterface'
 local commandQueue = require('e4_CommandQueue')
+
+local bci = broadCastInterfaceFactory()
 
 local function execute()
     loot_my_corpse()
@@ -13,7 +16,7 @@ end
 -- tell peers to attempt to loot their corpses
 local function createLootAllCommand()
     if is_orchestrator() then
-        cmd("/dgzexecute /lootmycorpse")
+        bci.ExecuteZoneCommand("/lootmycorpse")
     end
 
     commandQueue.Enqueue(function() execute() end)

@@ -1,5 +1,8 @@
 local mq = require("mq")
+local broadCastInterfaceFactory = require 'broadcast/broadcastinterface'
 local commandQueue = require('e4_CommandQueue')
+
+local bci = broadCastInterfaceFactory()
 
 ---@class WardsCommand
 ---@field Kind string
@@ -57,10 +60,10 @@ end
 mq.bind("/healward", createHealWardCommand)
 
 -- Summon all available heal wards (CLR/DRU/SHM, OOW)
-mq.bind("/healwards", function() cmdf("/dgzexecute /healward") end)
+mq.bind("/healwards", function() bci.ExecuteZoneCommand("/healward") end)
 
 -- Use cure ward AA "Ward of Purity" (CLR, DoDH)
 mq.bind("/cureward", createCureWardCommand)
 
 -- Summon all available cure wards (CLR, DoDH)
-mq.bind("/curewards", function() cmdf("/dgzexecute /cureward") end)
+mq.bind("/curewards", function() bci.ExecuteZoneCommand("/cureward") end)

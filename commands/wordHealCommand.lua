@@ -1,6 +1,9 @@
 local mq = require("mq")
 local log = require("knightlinc/Write")
+local broadCastInterfaceFactory = require 'broadcast/broadcastinterface'
 local commandQueue = require('e4_CommandQueue')
+
+local bci = broadCastInterfaceFactory()
 
 local function execute()
     wait_until_not_casting()
@@ -86,7 +89,7 @@ end
 -- tell clerics to use word heals
 local function createCommand()
     if is_orchestrator() then
-        cmd("/dgzexecute /wordheal")
+        bci.ExecuteZoneCommand("/wordheal")
     end
     if not is_clr() then
         return

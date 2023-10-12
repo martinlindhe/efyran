@@ -1,5 +1,8 @@
 local mq = require("mq")
+local broadCastInterfaceFactory = require 'broadcast/broadcastinterface'
 local commandQueue = require('e4_CommandQueue')
+
+local bci = broadCastInterfaceFactory()
 
 ---@class HasTaskCommand
 ---@field Name string
@@ -16,7 +19,7 @@ end
 local function createCommand(...)
     local name = args_string(...)
     if is_orchestrator() then
-        mq.cmdf("/dgzexecute /listtasks %s", name)
+        bci.ExecuteZoneCommand(string.format("/listtasks %s", name))
     end
 
     commandQueue.Enqueue(function() execute({ Name = name }) end)

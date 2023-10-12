@@ -1,6 +1,9 @@
 local mq = require("mq")
+local broadCastInterfaceFactory = require 'broadcast/broadcastinterface'
 local commandQueue = require('e4_CommandQueue')
 local bard    = require("Class_Bard")
+
+local bci = broadCastInterfaceFactory()
 
 ---@class PlayMelodyCommand
 ---@field Name string
@@ -17,7 +20,7 @@ local function createCommand(name)
   end
 
   if is_orchestrator() then
-    cmdf("/dgexecute brd /playmelody %s", name)
+    bci.ExecuteCommand(string.format("/playmelody %s", name), {"brd"})
   end
 
   if is_brd() then

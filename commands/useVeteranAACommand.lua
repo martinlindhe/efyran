@@ -1,6 +1,9 @@
 local mq = require("mq")
-local commandQueue = require('e4_CommandQueue')
 local log          = require("knightlinc/Write")
+local broadCastInterfaceFactory = require 'broadcast/broadcastinterface'
+local commandQueue = require('e4_CommandQueue')
+
+local bci = broadCastInterfaceFactory()
 
 ---@class VeteranAACommand
 ---@field AdvancedAbilityName string
@@ -18,7 +21,7 @@ end
 
 local function createStaunchCommand()
     if is_orchestrator() then
-        mq.cmd("/dgzexecute /staunch") -- XXX filter
+        bci.ExecuteZoneCommand("/staunch") -- XXX filter
     end
 
     commandQueue.Enqueue(function() execute({AdvancedAbilityName = "Staunch Recovery"}) end)
@@ -26,7 +29,7 @@ end
 
 local function createArmorCommand()
     if is_orchestrator() then
-        mq.cmd("/dgzexecute /armor") -- XXX filter
+        bci.ExecuteZoneCommand("/armor") -- XXX filter
     end
 
     commandQueue.Enqueue(function() execute({AdvancedAbilityName = "Armor of Experience"}) end)
@@ -34,7 +37,7 @@ end
 
 local function createInfusionCommand()
     if is_orchestrator() then
-        mq.cmd("/dgzexecute /infusion") -- XXX filter
+        bci.ExecuteZoneCommand("/infusion") -- XXX filter
     end
 
     commandQueue.Enqueue(function() execute({AdvancedAbilityName = "Infusion of the Faithful"}) end)
@@ -42,7 +45,7 @@ end
 
 local function createItensityCommand()
     if is_orchestrator() then
-        mq.cmd("/dgzexecute /intensity") -- XXX filter
+        bci.ExecuteZoneCommand("/intensity") -- XXX filter
     end
 
     commandQueue.Enqueue(function() execute({AdvancedAbilityName = "Intensity of the Resolute"}) end)
@@ -50,7 +53,7 @@ end
 
 local function createExpedientCommand()
     if is_orchestrator() then
-        mq.cmd("/dgzexecute /expedient") -- XXX filter
+        bci.ExecuteZoneCommand("/expedient") -- XXX filter
     end
 
     commandQueue.Enqueue(function() execute({AdvancedAbilityName = "Expedient Recovery"}) end)
@@ -58,7 +61,7 @@ end
 
 local function createThroneCommand()
     if is_orchestrator() then
-        mq.cmd("/dgzexecute /throne") -- XXX filter
+        bci.ExecuteZoneCommand("/throne") -- XXX filter
     end
 
     commandQueue.Enqueue(function() execute({AdvancedAbilityName = "Throne of Heroes"}) end)
@@ -77,7 +80,7 @@ mq.bind("/throne", createThroneCommand)
 mq.bind("/lesson", function(...)
     local filter = args_string(...)
     if is_orchestrator() then
-        mq.cmdf("/dggexecute /lesson %s", filter)
+        mq.cmdf("/bcg //lesson %s", filter)
     end
     commandQueue.Enqueue(function() execute({AdvancedAbilityName = "Throne of Heroes", Filter = filter}) end)
 end)

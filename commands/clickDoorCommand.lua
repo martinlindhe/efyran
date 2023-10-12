@@ -1,6 +1,9 @@
 local mq = require("mq")
+local broadCastInterfaceFactory = require 'broadcast/broadcastinterface'
 local commandQueue = require('e4_CommandQueue')
 local log          = require("knightlinc/Write")
+
+local bci = broadCastInterfaceFactory()
 
 ---@class ClickDoorBindCommand
 ---@field Peer string
@@ -41,7 +44,7 @@ local function createClickItCommand(...)
     local filter = args_string(...)
 
     if is_orchestrator() then
-        mq.cmdf("/dgzexecute /clickdoor %s %s", mq.TLO.Me.Name(), filter)
+        bci.ExecuteZoneCommand(string.format("/clickdoor %s %s", mq.TLO.Me.Name(), filter))
     end
 
     commandQueue.Enqueue(function() execute({ Peer = mq.TLO.Me.Name(), Filter = filter }) end)

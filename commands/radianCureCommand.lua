@@ -1,6 +1,9 @@
 local mq = require("mq")
-local commandQueue = require('e4_CommandQueue')
 local log          = require("knightlinc/Write")
+local broadCastInterfaceFactory = require 'broadcast/broadcastinterface'
+local commandQueue = require('e4_CommandQueue')
+
+local bci = broadCastInterfaceFactory()
 
 local function execute()
     if not have_alt_ability("Radiant Cure") then
@@ -16,7 +19,7 @@ end
 
 local function createCommand()
     if is_orchestrator() then
-        mq.cmd("/dgzexecute /rc")
+        bci.ExecuteZoneCommand("/rc")
     end
 
     commandQueue.Enqueue(function() execute() end)

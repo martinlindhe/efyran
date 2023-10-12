@@ -1,6 +1,9 @@
 local mq = require("mq")
+local broadCastInterfaceFactory = require 'broadcast/broadcastinterface'
 local commandQueue = require('e4_CommandQueue')
 local follow  = require("e4_Follow")
+
+local bci = broadCastInterfaceFactory()
 
 ---@class RunToZoneCommand
 ---@field Peer string
@@ -15,7 +18,7 @@ end
 local function createCommand(startingPeerName)
     if is_orchestrator() then
         -- tell the others to cross zone line
-        cmdf("/dgzexecute /rtz %s", mq.TLO.Me.Name())
+        bci.ExecuteZoneCommand(string.format("/rtz %s", mq.TLO.Me.Name()))
         return
     end
 

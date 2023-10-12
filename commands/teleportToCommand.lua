@@ -1,5 +1,8 @@
 local mq = require("mq")
+local broadCastInterfaceFactory = require 'broadcast/broadcastinterface'
 local commandQueue = require('e4_CommandQueue')
+
+local bci = broadCastInterfaceFactory()
 
 ---@class TeleportToCommand
 ---@field ZoneName string
@@ -12,7 +15,7 @@ end
 local function createCommand(name)
     name = name:lower()
     if is_orchestrator() then
-        mq.cmdf("/dgzexecute /portto %s", name)
+        bci.ExecuteZoneCommand(string.format("/portto %s", name))
     end
 
     commandQueue.Enqueue(function() execute({ZoneName = name}) end)

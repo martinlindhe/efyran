@@ -1,11 +1,14 @@
 local mq = require("mq")
 local log = require("knightlinc/Write")
+local broadCastInterfaceFactory = require 'broadcast/broadcastinterface'
 
 local globalSettings = require("e4_Settings")
 local botSettings = require("e4_BotSettings")
 local aliases = require("settings/Spell Aliases")
 
 local follow = require("e4_Follow")
+
+local bci = broadCastInterfaceFactory()
 
 local MIN_BUFF_DURATION = 6 * 6000 -- 6 ticks, each tick is 6s
 
@@ -588,7 +591,8 @@ function rez_corpse(spawnID)
     if is_spell_ability_ready(rez) then
 
         -- tell bots this corpse is rezzed
-        mq.cmdf("/dgzexecute /ae_rezzed %s", spawn.DisplayName())
+        local cmd = string.format("/ae_rezzed %s", spawn.DisplayName())
+        bci.ExecuteZoneCommand(cmd)
 
         all_tellf("Rezzing %s \ag%s\ax with \ay%s\ax", spawn.Class.ShortName(), spawn.DisplayName(), rez)
         --target_id(spawn.ID())
@@ -607,7 +611,7 @@ function consent_me()
     for i = 1, spawn_count(spawnQuery) do
         local spawn = mq.TLO.NearestSpawn(i, spawnQuery)
         if is_peer(spawn.DisplayName()) then
-            cmdf("/dexecute %s /consent %s", spawn.DisplayName(), mq.TLO.Me.Name())
+            bci.ExecuteCommand(string.format("/consent %s", spawn.DisplayName()), {mq.TLO.Me.Name()})
         else
             all_tellf("Cannot autoconsent corpse \ar%s\ax, not a peer", spawn.DisplayName())
         end
@@ -662,11 +666,11 @@ function report_find_item(name, filter)
     log.Info("Searching for %s", name)
 
     if is_orchestrator() then
-        local exe = string.format("/dgzexecute /fdi %s", name)
+        local exe = string.format("/fdi %s", name)
         if filter ~= nil then
             exe = exe .. " " .. filter
         end
-        cmd(exe)
+        bci.ExecuteZoneCommand(exe)
     end
 
     if filter ~= nil and not matches_filter(filter, mq.TLO.Me.Name()) then
@@ -714,11 +718,11 @@ function report_find_missing_item(name, filter)
     name = strip_link(name)
 
     if is_orchestrator() then
-        local exe = string.format("/dgzexecute /fmi %s", name)
+        local exe = string.format("/fmi %s", name)
         if filter ~= nil then
             exe = exe .. " " .. filter
         end
-        cmd(exe)
+        bci.ExecuteZoneCommand(exe)
     end
 
     if filter ~= nil and not matches_filter(filter, mq.TLO.Me.Name()) then
@@ -743,7 +747,7 @@ end
 function report_find_missing_item_by_id(id)
 
     if is_orchestrator() then
-        cmdf("/dgzexecute /fmid %s", tostring(id))
+        bci.ExecuteZoneCommand(string.format("/fmid %s", tostring(id)))
     end
 
     local found = false
@@ -885,7 +889,7 @@ function ask_nearby_peer_to_activate_aa(aaName)
             local value = query_peer(peer, "Me.AltAbilityReady["..aaName.."]", 0)
             if value == "TRUE" then
                 log.Info("Asking %s to activate \ay%s\ax ...", peer, aaName)
-                cmdf("/dexecute %s /banker", peer)
+                bci.ExecuteCommand("/banker", {peer})
                 return
             end
         end

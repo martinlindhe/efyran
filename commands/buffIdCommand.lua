@@ -1,6 +1,9 @@
 local mq = require("mq")
+local broadCastInterfaceFactory = require 'broadcast/broadcastinterface'
 local commandQueue = require('e4_CommandQueue')
 local buffs   = require("e4_Buffs")
+
+local bci = broadCastInterfaceFactory()
 
 ---@class BuffItCommand
 ---@field SpawnId number
@@ -17,7 +20,7 @@ local function createCommand()
     end
 
     if is_orchestrator() then
-        cmdf("/dgzexecute /buffit %d", spawnId)
+        bci.ExecuteZoneCommand(string.format("/buffit %d", spawnId))
     end
 
     commandQueue.Enqueue(function() execute({SpawnId = spawnId}) end)
@@ -25,5 +28,5 @@ end
 
 mq.bind("/buffit", createCommand)
 mq.bind("/buffme", function()
-    cmdf("/dgzexecute /buffit %d", mq.TLO.Me.ID())
+    bci.ExecuteZoneCommand(string.format("/buffit %d", mq.TLO.Me.ID()))
 end)

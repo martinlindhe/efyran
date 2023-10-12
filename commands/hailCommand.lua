@@ -1,6 +1,9 @@
 local mq = require("mq")
+local broadCastInterfaceFactory = require 'broadcast/broadcastinterface'
 local commandQueue = require('e4_CommandQueue')
 local hail    = require("e4_Hail")
+
+local bci = broadCastInterfaceFactory()
 
 local function execute()
     hail.PerformHail()
@@ -12,7 +15,7 @@ end
 
 local function createHailAllCommand()
     if is_orchestrator() then
-        cmd("/dgzexecute /hailit")
+        bci.ExecuteZoneCommand("/hailit")
     end
 
     commandQueue.Enqueue(function() execute() end)
