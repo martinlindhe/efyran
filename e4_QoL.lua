@@ -175,7 +175,7 @@ function QoL.Init()
     -- report who got the flag
     mq.bind("/gotflag", function()
         if is_orchestrator() then
-            cmdf("/dgexecute /gotflag")
+            bci.ExecuteAllCommand("/gotflag")
         end
         if gotFlag then
             all_tellf("\agGOT FLAG\ax")
@@ -185,7 +185,7 @@ function QoL.Init()
     -- report who did not get a flag
     mq.bind("/noflag", function()
         if is_orchestrator() then
-            cmdf("/dgexecute /noflag")
+            bci.ExecuteAllCommand("/noflag")
         end
         if not gotFlag then
             all_tellf("\arNO FLAG\ax")
@@ -1138,7 +1138,7 @@ function make_peers_circle_me(dist)
         dist = 20
     end
 
-    cmd("/dgze /followoff")
+    bci.ExecuteZoneCommand("/followoff")
 
     for i, peer in pairs(get_peers()) do
         local angle = (360 / n) * i

@@ -80,7 +80,7 @@ mq.bind("/throne", createThroneCommand)
 mq.bind("/lesson", function(...)
     local filter = args_string(...)
     if is_orchestrator() then
-        mq.cmdf("/dggexecute /lesson %s", filter)
+        mq.cmdf("/bcg //lesson %s", filter)
     end
     commandQueue.Enqueue(function() execute({AdvancedAbilityName = "Throne of Heroes", Filter = filter}) end)
 end)
