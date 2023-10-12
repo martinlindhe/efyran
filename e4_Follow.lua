@@ -189,7 +189,11 @@ function Follow.RunToZone(startingPeer)
         cmd("/stand")
     end
 
-    Follow.Stop()
+    if is_casting() then
+        cmd("/interrupt")
+    end
+
+    Follow.Pause()
 
     if not is_within_distance(spawn, 10) then
         -- move to initial position
@@ -204,8 +208,6 @@ function Follow.RunToZone(startingPeer)
     end
 
     unflood_delay()
-
-    Follow.Pause()
 
     if spawn == nil or spawn() == nil then
         all_tellf("RTZ: lost spawn, giving up")
