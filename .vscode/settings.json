@@ -2,6 +2,7 @@
     "files.exclude": {
         "mq-definitions/": true,
         "knightlinc/": true,
+        "broadcast/": true,
     },
     "cSpell.words": [
         "aerez",
@@ -79,6 +80,7 @@
     "Lua.workspace.library": [
         "./mq-definitions",
         "./knightlinc",
+        "./broadcast",
     ],
     "Lua.completion.autoRequire": false,
 }
