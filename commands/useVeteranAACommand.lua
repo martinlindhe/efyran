@@ -82,7 +82,7 @@ mq.bind("/lesson", function(...)
     if is_orchestrator() then
         mq.cmdf("/bcg //lesson %s", filter)
     end
-    commandQueue.Enqueue(function() execute({AdvancedAbilityName = "Throne of Heroes", Filter = filter}) end)
+    commandQueue.Enqueue(function() execute({AdvancedAbilityName = "Lesson of the Devoted", Filter = filter}) end)
 end)
 
 -- tell all peers to use Throne of Heroes
