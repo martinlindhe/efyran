@@ -154,13 +154,21 @@ function Heal.medCheck()
     end
 
     if Heal.autoMed and not follow.IsFollowing() and medTimer:expired() and is_standing() and not is_moving() then
-        if mq.TLO.Me.MaxMana() > 0 and mq.TLO.Me.PctMana() < 70 then
+        local pct = botSettings.settings.meditate
+        if pct == nil then
+            if is_caster() or is_priest() or is_hybrid() then
+                pct = 70
+            else
+                pct = 50
+            end
+        end
+        if mq.TLO.Me.MaxMana() > 0 and mq.TLO.Me.PctMana() < pct then
             all_tellf("[+y+]Low mana[+x+], medding at [+y+]%d%%", mq.TLO.Me.PctMana())
             cmd("/sit on")
             Heal.medding = true
             medTimer:restart()
         end
-        if mq.TLO.Me.MaxMana() == 0 and mq.TLO.Me.PctEndurance() < 50 then
+        if mq.TLO.Me.MaxMana() == 0 and mq.TLO.Me.PctEndurance() < pct then
             all_tellf("[+y+]Low endurance[+x+], medding at [+y+]%d%%\ax", mq.TLO.Me.PctEndurance())
             cmd("/sit on")
             Heal.medding = true

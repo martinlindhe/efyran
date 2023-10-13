@@ -9,6 +9,7 @@ local mq = require("mq")
 ---@field public combat_buffs string[]|nil spellRows of combat buffs
 ---@field public request_buffs string[]|nil spellRows of buff groups to request
 ---@field public songs string[]|nil XXX decl is wrong, should be key is string (song set), val is array of strings (songs in song set)
+---@field public meditate integer|nil Override default mana/endurance % of when to auto med
 
 ---@class PeerSettingsAssist
 ---@field public type string "melee" or "ranged"
