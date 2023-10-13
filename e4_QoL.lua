@@ -362,8 +362,8 @@ function QoL.Init()
     mq.bind("/hcn", function() mq.cmd("/hidec none") end)
 
     -- report toons with few free buff slots
-    mq.bind("/freebuffslots", function(name) mq.cmd("/noparse /bcaa //if (${Me.FreeBuffSlots} <= 1) /bc FREE BUFF SLOTS: ${Me.FreeBuffSlots}") end)
-    mq.bind("/fbs", function(name) mq.cmd("/freebuffslots") end)
+    mq.bind("/freebuffslots", function() bci.ExecuteAllCommand("/if (${Me.FreeBuffSlots} <= 1) /bc FREE BUFF SLOTS: ${Me.FreeBuffSlots}", true) end)
+    mq.bind("/fbs", function() mq.cmd("/freebuffslots") end)
 
     -- /raidinvite shorthand
     mq.bind("/ri", function(name) mq.cmdf("/raidinvite %s", name) end)
@@ -379,9 +379,9 @@ function QoL.Init()
         mq.cmd('/squelch /exec TASKKILL "/F /PID '..tostring(mq.TLO.EverQuest.PID())..'" bg')
     end)
 
-    mq.bind("/exitnotinzone", function() mq.cmdf("/noparse /bcaa //if (!${SpawnCount[pc =%s]}) /exitme", mq.TLO.Me.Name()) end)
+    mq.bind("/exitnotinzone", function() bci.ExecuteAllCommand(string.format("/if (!${SpawnCount[pc =%s]}) /exitme", mq.TLO.Me.Name())) end)
 
-    mq.bind("/exitnotingroup", function() mq.cmd("/noparse /bcaa //if (!${Group.Members}) /exitme") end)
+    mq.bind("/exitnotingroup", function() bci.ExecuteAllCommand("/if (!${Group.Members}) /exitme", true) end)
 
     mq.bind("/exitnotinraid", function(force)
         if not in_raid() and force ~= "force" then
@@ -389,27 +389,27 @@ function QoL.Init()
             cmd("/beep")
             return
         end
-        mq.cmd("/noparse /bcaa //if (!${Raid.Members}) /exitme")
+        bci.ExecuteAllCommand("/if (!${Raid.Members}) /exitme", true)
     end)
 
     -- report all peers who are not in current zone
-    mq.bind("/notinzone", function() mq.cmdf("/noparse /bcaa //if (!${SpawnCount[pc =%s]}) /bc I'm in \ar${Zone.ShortName}\ax", mq.TLO.Me.Name()) end)
+    mq.bind("/notinzone", function() bci.ExecuteAllCommand(string.format("/if (!${SpawnCount[pc =%s]}) /bc I'm in \ar${Zone.ShortName}\ax", mq.TLO.Me.Name()), true) end)
 
-    mq.bind("/notingroup", function() mq.cmd("/noparse /bcaa //if (!${Me.Grouped}) /bc NOT IN GROUP") end)
+    mq.bind("/notingroup", function() bci.ExecuteAllCommand("/if (!${Me.Grouped}) /bc NOT IN GROUP", true) end)
 
-    mq.bind("/ingroup", function() mq.cmd("/noparse /bcaa //if (${Me.Grouped}) /bc IN GROUP") end)
+    mq.bind("/ingroup", function() bci.ExecuteAllCommand("/if (${Me.Grouped}) /bc IN GROUP", true) end)
 
-    mq.bind("/notinraid", function() mq.cmd("/noparse /bcaa //if (!${Raid.Members}) /bc NOT IN RAID") end)
+    mq.bind("/notinraid", function() bci.ExecuteAllCommand("/if (!${Raid.Members}) /bc NOT IN RAID", true) end)
 
-    mq.bind("/inraid", function() mq.cmd("/noparse /bcaa //if (${Raid.Members}) /bc IN RAID") end)
+    mq.bind("/inraid", function() bci.ExecuteAllCommand("/if (${Raid.Members}) /bc IN RAID", true) end)
 
     -- report all peers who are not levitating
-    mq.bind("/notlevi", function() mq.cmd("/noparse /bcaa //if (!${Me.Levitating}) /bc NOT LEVI") end)
+    mq.bind("/notlevi", function() bci.ExecuteAllCommand("/if (!${Me.Levitating}) /bc NOT LEVI", true) end)
 
-    mq.bind("/notitu", function() mq.cmd("/noparse /bcaa //if (!${Me.Buff[Sunskin].ID}) /bc NOT ITU") end)
+    mq.bind("/notitu", function() bci.ExecuteAllCommand("/if (!${Me.Buff[Sunskin].ID}) /bc NOT ITU", true) end)
 
     -- report all peers who are not invisible
-    mq.bind("/notinvis", function() mq.cmd("/noparse /bcaa //if (!${Me.Invis}) /bc NOT INVIS") end)
+    mq.bind("/notinvis", function() bci.ExecuteAllCommand("/if (!${Me.Invis}) /bc NOT INVIS", true) end)
 
 
     -- report special stats
