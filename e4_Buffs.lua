@@ -108,7 +108,7 @@ function buffs.Init()
         end
 
         local s = ""
-        if me_caster() or me_priest() then
+        if is_caster() or is_priest() then
             if buffs.manaRegenClicky == nil then
                 s = s .. "\arMISSING: Mana regen clicky\ax, "
             else
@@ -120,7 +120,7 @@ function buffs.Init()
                 s = s .. "ManaPool:" .. buffs.manaPoolClicky .. ", "
             end
         end
-        if me_melee() then
+        if is_melee() then
             if buffs.attackClicky == nil then
                 s = s .. "\arMISSING: Attack clicky\ax, "
             else
@@ -376,7 +376,7 @@ function buffs.HandleDebuffs()
 
                 log.Info("I have debuff \ar%s\ax, need \ay%s\ax cure.", spellConfig.Name, spellConfig.Cure)
 
-                if me_priest() and  cure_player(mq.TLO.Me.Name(), spellConfig.Cure) then
+                if is_priest() and  cure_player(mq.TLO.Me.Name(), spellConfig.Cure) then
                     return
                 end
 
@@ -576,15 +576,15 @@ end
 
 -- refreshes the auto-detected clickies (mana regen, mana pool, attack, resists)
 function buffs.RefreshAutoClickies()
-    if (me_caster() or me_priest() or me_hybrid()) and refresh_buff_clicky(buffs.manaRegenClicky) then
+    if (is_caster() or is_priest() or is_hybrid()) and refresh_buff_clicky(buffs.manaRegenClicky) then
         return
     end
 
-    if (me_caster() or me_priest() and free_buff_slots() > 1) and refresh_buff_clicky(buffs.manaPoolClicky) then
+    if (is_caster() or is_priest() and free_buff_slots() > 1) and refresh_buff_clicky(buffs.manaPoolClicky) then
         return
     end
 
-    if me_melee() and refresh_buff_clicky(buffs.attackClicky) then
+    if is_melee() and refresh_buff_clicky(buffs.attackClicky) then
         return
     end
 

@@ -184,7 +184,7 @@ function Assist.beginKillSpawnID(spawnID)
 
         if botSettings.settings.assist.melee_distance == "auto" then
             local mult = 0.5  -- XXX too far in riftseekers with 0.75. XXX cant disarm in riftseekers with 0.60
-            if me_tank() then
+            if is_tank() then
                 mult = 0.3
             end
             -- several mobs report too high MaxRangeTo so cant calc reliably

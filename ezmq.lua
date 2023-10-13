@@ -1122,31 +1122,32 @@ end
 
 -- true if CLR,DRU,SHM
 ---@return boolean
-function me_priest()
-    return is_priest(mq.TLO.Me.Class.ShortName())
+function is_priest()
+    return class_priest(mq.TLO.Me.Class.ShortName())
 end
 
 -- true if WIZ,MAG,ENC,NEC
 ---@return boolean
-function me_caster()
-    return is_caster(mq.TLO.Me.Class.ShortName())
+function is_caster()
+    return class_caster(mq.TLO.Me.Class.ShortName())
 end
 
 -- true if BRD,BER,BST,MNK,PAL,RNG,ROG,SHD,WAR
 ---@return boolean
-function me_melee()
-    return is_melee(mq.TLO.Me.Class.ShortName())
+function is_melee()
+    return class_melee(mq.TLO.Me.Class.ShortName())
 end
 
 -- true if PAL,SHD,RNG,BST
 ---@return boolean
-function me_hybrid()
-    return is_hybrid(mq.TLO.Me.Class.ShortName())
+function is_hybrid()
+    return class_hybrid(mq.TLO.Me.Class.ShortName())
 end
 
+-- true if WAR,PAL,SHD
 ---@return boolean
-function me_tank()
-    return is_tank(mq.TLO.Me.Class.ShortName())
+function is_tank()
+    return class_tank(mq.TLO.Me.Class.ShortName())
 end
 
 -- XXX add more:
@@ -1160,35 +1161,35 @@ end
 -- true if BRD,BER,BST,MNK,PAL,RNG,ROG,SHD,WAR
 ---@param class string Class shortname.
 ---@return boolean
-function is_melee(class)
+function class_melee(class)
     return class == "BRD" or class == "BER" or class == "BST" or class == "MNK" or class == "PAL" or class == "RNG" or class == "ROG" or class == "SHD" or class == "WAR"
 end
 
 -- true if PAL,SHD,RNG,BST
 ---@param class string Class shortname.
 ---@return boolean
-function is_hybrid(class)
+function class_hybrid(class)
     return class == "PAL" or class == "SHD" or class == "RNG" or class == "BST"
 end
 
 -- true if CLR,DRU,SHM
 ---@param class string Class shortname.
 ---@return boolean
-function is_priest(class)
+function class_priest(class)
     return class == "CLR" or class == "DRU" or class == "SHM"
 end
 
 -- true if WIZ,MAG,ENC,NEC
 ---@param class string Class shortname.
 ---@return boolean
-function is_caster(class)
+function class_caster(class)
     return class == "WIZ" or class == "MAG" or class == "ENC" or class == "NEC"
 end
 
 -- true if WAR,PAL,SHD
 ---@param class string Class shortname.
 ---@return boolean
-function is_tank(class)
+function class_tank(class)
     return class == "WAR" or class == "PAL" or class == "SHD"
 end
 
@@ -1788,19 +1789,19 @@ function matches_filter_line(line, sender)
         if v == "raid" and is_raided_with(sender) then
             return true
         end
-        if v == "priests" and is_priest(class) then
+        if v == "priests" and class_priest(class) then
             return true
         end
-        if v == "casters" and is_caster(class) then
+        if v == "casters" and class_caster(class) then
             return true
         end
-        if v == "tanks" and is_tank(class) then
+        if v == "tanks" and class_tank(class) then
             return true
         end
-        if v == "melee" and is_melee(class) then
+        if v == "melee" and class_melee(class) then
             return true
         end
-        if v == "hybrid" and is_hybrid(class) then
+        if v == "hybrid" and class_hybrid(class) then
             return true
         end
     end
@@ -2418,7 +2419,7 @@ local manaRegenEffects = {
 -- Mana regen (slot 8) or Mana+HP regen (slot 8 and 10) clickies
 ---@return string|nil
 function FindBestManaRegenClicky()
-    if not me_caster() and not me_priest() and not me_hybrid() then
+    if not is_caster() and not is_priest() and not is_hybrid() then
         return nil
     end
     return findBestClickyWithEffectGroup("manaregen", manaRegenEffects)
@@ -2433,7 +2434,7 @@ local manaPoolEffects = {
 -- Mana pool (slot 4) clickies
 ---@return string|nil
 function FindBestManaPoolClicky()
-    if not me_caster() and not me_priest() then
+    if not is_caster() and not is_priest() then
         return nil
     end
     return findBestClickyWithEffectGroup("manapool", manaPoolEffects)
@@ -2450,7 +2451,7 @@ local attackEffects = {
 --- Attack (slot 5) clickies
 ---@return string|nil
 function FindBestAttackClicky()
-    if not me_melee() then
+    if not is_melee() then
         return nil
     end
     return findBestClickyWithEffectGroup("attack", attackEffects)

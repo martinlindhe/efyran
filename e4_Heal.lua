@@ -403,7 +403,7 @@ function healPeer(spell_list, peer, pct)
                     all_tellf("target changed in heal callback from %s to %s, breaking", spawn.Name(), mq.TLO.Target.Name())
                     return true
                 end
-                if mq.TLO.Target() ~= nil and mq.TLO.Target.PctHPs() >= 98 and not is_tank(mq.TLO.Target.Class.ShortName()) then
+                if mq.TLO.Target() ~= nil and mq.TLO.Target.PctHPs() >= 98 and not class_tank(mq.TLO.Target.Class.ShortName()) then
                     log.Info("Ducking heal! \ag%s\ax was %d %%, is now %d %%", mq.TLO.Target.Name(), pct, mq.TLO.Target.PctHPs())
                     cmd("/interrupt")
                     return true
