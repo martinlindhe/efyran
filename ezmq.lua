@@ -600,9 +600,9 @@ end
 function have_buff(name)
     local spell = mq.TLO.Spell(name)
     if spell() == nil then
-        log.Error("have_buff ERROR cannot lookup %s", name)
+        log.Error("have_buff: cannot lookup %s", name)
         if not have_ability(name) and not have_item(name) then
-            all_tellf("have_buff ERROR: asked about odd buff %s", name)
+            log.Error("have_buff: asked about odd buff %s", name)
         end
         return false
     end
@@ -1114,7 +1114,7 @@ end
 -- Guestimates if you are naked/waiting for rez (being "naked" will block buffing)
 ---@return boolean
 function is_naked()
-    if mq.TLO.Me.Inventory("arms").ID() == nil and mq.TLO.Me.Inventory("legs").ID() == nil and mq.TLO.Me.Inventory("head").ID() == nil and mq.TLO.Me.Inventory("mainhand").ID() == nil then
+    if mq.TLO.Me.Inventory("chest").ID() == nil and mq.TLO.Me.Inventory("arms").ID() == nil and mq.TLO.Me.Inventory("legs").ID() == nil and mq.TLO.Me.Inventory("head").ID() == nil and mq.TLO.Me.Inventory("mainhand").ID() == nil then
         return true
     end
     return false
