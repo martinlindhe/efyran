@@ -348,7 +348,7 @@ function QoL.Init()
     mq.bind("/clr", function() mq.cmd("/clear") end)
 
     -- clear all chat windows on all peers
-    mq.bind("/cls", function() mq.cmd("/squelch /bcaa //clear") end)
+    mq.bind("/cls", function() bci.ExecuteAllCommand("/clear", true) end)
 
     mq.bind("/self", function() mq.cmd("/target myself") end)
 
@@ -460,7 +460,7 @@ function QoL.Init()
     mq.bind("/notstanding", function() mq.cmd("/noparse /bcaa //if (${Me.Feigning} || ${Me.Ducking} || ${Me.Sitting}) /bc NOT STANDING") end)
 
     -- reports all toons that are not running e4
-    mq.bind("/note4", function() mq.cmd("/bcaa //lua run note4") end)
+    mq.bind("/note4", function() bci.ExecuteAllCommand("/lua run note4", true) end)
 
     mq.bind("/running", function()
         -- XXX reports all running scripts on all toons
@@ -625,8 +625,8 @@ function QoL.Init()
     -- make all peer quit expedition
     mq.bind("/quitexp", function()
         all_tellf("Instructing peers to leave expedition / shared task ...")
-        cmd("/bcaa //dzquit")   -- Expedition (PoP, LDoN, GoD, OOW)
-        cmd("/bcaa //taskquit") -- Shared task (DoN)
+        bci.ExecuteAllCommand("/dzquit", true)   -- Expedition (PoP, LDoN, GoD, OOW)
+        bci.ExecuteAllCommand("/taskquit", true) -- Shared task (DoN)
     end)
 
     -- hide all dz windows

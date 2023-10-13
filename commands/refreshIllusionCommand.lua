@@ -1,6 +1,9 @@
 local mq = require("mq")
+local broadCastInterfaceFactory = require 'broadcast/broadcastinterface'
 local commandQueue = require('e4_CommandQueue')
 local botSettings = require("e4_BotSettings")
+
+local bci = broadCastInterfaceFactory()
 
 local function execute()
     local illusion = botSettings.GetCurrentIllusion()
@@ -17,5 +20,5 @@ end
 
 mq.bind("/refreshillusion", createCommand)
 mq.bind("/refreshillusions", function()
-    cmd("/bcaa //refreshillusion")
+    bci.ExecuteAllCommand("/refreshillusion", true)
 end)

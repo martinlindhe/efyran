@@ -86,4 +86,6 @@ mq.bind("/lesson", function(...)
 end)
 
 -- tell all peers to use Throne of Heroes
-mq.bind("/throneall", function() mq.cmd("/bcaa //throne") end)
+mq.bind("/throneall", function()
+    bci.ExecuteAllCommand("/throne", true)
+end)

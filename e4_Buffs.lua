@@ -652,7 +652,7 @@ function buffs.RequestAvailabiliy()
             if found then
                 -- request available buffs from them
                 log.Info("Found \ay%s\ax buffer \ag%s\ax", buffClasses[i], buffs.buffers[buffClasses[i]])
-                bci.ExecuteCommand(string.format("/request_buffs %s %s", mq.TLO.Me.Name()), {buffs.buffers[buffClasses[i]]})
+                bci.ExecuteCommand(string.format("/request_buffs %s", mq.TLO.Me.Name()), {buffs.buffers[buffClasses[i]]})
                 mq.delay(10)
             end
         end
@@ -825,7 +825,7 @@ function buffs.acceptRez()
         end
 
         -- tell bots that my corpse is rezzed
-        cmdf("/bcaa //ae_rezzed %s", mq.TLO.Me.Name())
+        bci.ExecuteAllCommand(string.format("/ae_rezzed %s", mq.TLO.Me.Name()))
 
         all_tellf("Accepting rez from \ag%s\ax ...", peer)
         cmd("/notify ConfirmationDialogBox Yes_Button leftmouseup")
