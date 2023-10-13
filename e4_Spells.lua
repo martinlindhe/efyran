@@ -607,7 +607,7 @@ end
 
 -- tell all peers with corpses nearby to consent me
 function consent_me()
-    local spawnQuery = 'pccorpse radius 500'
+    local spawnQuery = 'pccorpse radius 2500'
     for i = 1, spawn_count(spawnQuery) do
         local spawn = mq.TLO.NearestSpawn(i, spawnQuery)
         if is_peer(spawn.DisplayName()) then

@@ -87,6 +87,11 @@ function QoL.Init()
         mq.cmdf("/popup MEZZED %s", name)
     end)
 
+    mq.event("mob-resisted", "Your target resisted the #1# spell.", function(text, name)
+        log.Error("RESISTED > \ay%s\ax <", name)
+        mq.cmdf("/popup RESISTED %s", name)
+    end)
+
     mq.event("spell-interrrupted", "Your spell is interrupted.", function(text)
         log.Info("Spell interrupted ...")
         mq.cmd("/popup SPELL INTERRUPTED")
@@ -726,7 +731,7 @@ function QoL.Init()
     end)
 
     mq.event("ding-level", "You have gained a level! Welcome to level #1#!", function(text, level)
-        all_tellf("\agDing L%d", level)
+        all_tellf("[+g+]Ding L%d", level)
     end)
 
     mq.event("ding-aa", "You have gained an ability point#*#", function(text)

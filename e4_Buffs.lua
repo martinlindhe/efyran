@@ -245,7 +245,7 @@ function buffs.Tick()
     if not is_moving() and not in_combat() and buffs.refreshBuffs and refreshBuffsTimer:expired() then
         if not buffs.RefreshSelfBuffs() then
             if not buffs.RefreshAura() then
-                if not pet.Summon() then
+                if not follow.IsFollowing() and not pet.Summon() then
                     pet.BuffMyPet()
                 end
             end
