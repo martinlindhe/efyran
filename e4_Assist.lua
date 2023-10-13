@@ -162,8 +162,6 @@ function Assist.beginKillSpawnID(spawnID)
 
     follow.PauseForKill()
 
-    --cmdf("/squelch /face fast id %d", spawnID)
-
     if have_pet() then
         log.Debug("Attacking with my pet %s", mq.TLO.Me.Pet.CleanName())
         mq.cmdf("/pet attack %d", spawnID)
@@ -306,7 +304,9 @@ function performSpellAbility(targetID, abilityRows, category, used)
                 -- signal ability was used, in order to leave Assist.Tick() quickly when target is nil
                 return true
             end
-            cmdf("/face fast id %d", targetID)
+            if is_standing() then
+                cmdf("/face fast id %d", targetID)
+            end
             --log.Debug("Trying to %s on %s with %s", category, spawn.Name(), spellConfig.Name)
             local spawnName = spawn.Name()
             if castSpellAbility(targetID, row) then

@@ -111,7 +111,7 @@ function QoL.Init()
 
     mq.event("missing_component", "You are missing #1#.", function(text, name)
         if name ~= "some required components" then
-            all_tellf("Missing component \ar%s\ax.", name)
+            all_tellf("Missing component [+r+]%s[+x+].", name)
         end
     end)
 
@@ -779,7 +779,6 @@ function QoL.Init()
     QoL.verifySpellLines()
 
     zonedCommand.Enqueue()
-    --require('commands/zonedCommand').createCommand()
 end
 
 function QoL.loadRequiredPlugins()
