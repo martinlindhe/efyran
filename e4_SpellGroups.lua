@@ -59,6 +59,30 @@ SpellGroups.Lookup = {
 }
 
 SpellGroups.SHM = {
+    -- fast heals:
+    -- L01 Minor Healing (12-20 hp, cost 10 mana)
+    -- L09 Light Healing (47-65 hp, cost 28 mana)
+    -- L19 Healing (135-175 hp, cost 65 mana)
+    -- L29 Greater Healing (280-350 hp, cost 115 mana)
+    -- L51 Superior Healing (500-600 hp, cost 185 mana)
+    -- L55 Chloroblast (994-1044 hp, cost 331 mana)
+    -- L62 Tnarg's Mending (1770-1800 hp, cost 560 mana)
+    -- L65 Daluda's Mending (2144 hp, cost 607 mana, 3.8s cast)
+    -- L68 Yoppa's Mending (2448-2468 hp, cost 691 mana, 3.8s cast)
+    -- L70 Ancient: Wilslik's Mending (2716 hp, cost 723 mana, 3.8s cast)
+    shm_fast_heal = {
+        "Ancient: Wilslik's Mending",
+        "Yoppa's Mending",
+        "Daluda's Mending",
+        "Tnarg's Mending",
+        "Chloroblast",
+        "Superior Healing",
+        "Greater Healing",
+        "Healing",
+        "Light Healing",
+        "Minor Healing",
+    },
+
     -- weak focus - HP slot 1: Increase Max HP
     -- L32 Talisman of Tnarg (132-150 hp)
     -- L40 Talisman of Altuna (230-250 hp)
@@ -243,6 +267,59 @@ SpellGroups.CLR = {
         -- "Moonshadow",               -- DRU/70: 1500 hp, cost 1100 mana (18s recast time)
     },
 
+    
+    -- fast heals:
+    -- L53 Divine Light
+    -- L58 Ethereal Light (1980-2000 hp, 3.8s cast, 490 mana)
+    -- L63 Supernal Light (2730-2750 hp, 3.8s cast, 600 mana)
+    -- L65 Holy Light (3275 hp, 3.8s cast, 650 mana)
+    -- L68 Pious Light (3750-3770 hp, 3.8s cast, 740 mana)
+    -- L70 Ancient: Hallowed Light (4150 hp, 3.8s cast, 775 mana)
+    clr_fast_heal = {
+        "Ancient: Hallowed Light",
+        "Pious Light",
+        "Holy Light",
+        "Supernal Light",
+        "Ethereal Light",
+        "Divine Light",
+    },
+
+    -- quick heals:
+    -- L01 Minor Healing (12-20 hp, 1.5s cast, 10 mana)
+    -- L04 Light Healing (47-65 hp, 2s cast, 28 mana)
+    -- L10 Healing (135-175 hp, 2.5s cast, 65 mana)
+    -- L20 Greater Healing (280-350 hp, 3.0s cast, 115 mana)
+    -- L51 Remedy (463-483 hp, 1.8s cast, 167 mana)
+    -- L58 Ethereal Remedy (975 hp, 2.8s cast, 400 mana)
+    -- L61 Supernal Remedy (1450 hp, 1.8s cast, 400 mana)
+    -- L66 Pious Remedy (1990 hp, 1.8s cast, 495 mana)
+    clr_quick_heal = {
+        "Pious Remedy",
+        "Supernal Remedy",
+        "Ethereal Remedy",
+        "Remedy",
+        "Greater Healing",
+        "Healing",
+        "Light Healing",
+        "Minor Healing",
+    },
+
+    -- HoT:
+    -- L44 Celestial Healing (180 hp/tick, 0.4 min, 225 mana)
+    -- L59 Celestial Elixir (300 hp/tick, 0.4 min, 300 mana)
+    -- L60 Ethereal Elixir (300 hp/tick, 0.4 min, 975 mana, group)
+    -- L62 Supernal Elixir (600 hp/tick, 0.4 min, 480 mana)
+    -- L65 Holy Elixir (900 hp/tick, 0.4 min, 720 mana)
+    -- L67 Pious Elixir (slot 1: 1170 hp/tick, 0.4 min, 890 mana)
+    clr_hot = {
+        "Pious Elixir",
+        "Holy Elixir",
+        "Supernal Elixir",
+        "Ethereal Elixir",
+        "Celestial Elixir",
+        "Celestial Healing",
+    },
+
     -- slot 3 hp buff - symbol line:
     -- L14 Symbol of Transal (34-72 hp, single)
     -- L24 Symbol of Transal
@@ -374,6 +451,40 @@ SpellGroups.CLR = {
 }
 
 SpellGroups.DRU = {
+
+    -- fast heal:
+    -- L01 Minor Healing
+    -- L09 Light Healing
+    -- L10 Healing
+    -- L29 Greater Healing (280-350 hp, cost 115 mana)
+    -- L44 Healing Water (395-425 hp, cost 150 mana)
+    -- L51 Superior Healing (500-600 hp, cost 185 mana)
+    -- L55 Chloroblast (994-1044 hp, cost 331 mana)
+    -- L58 Tunare's Renewal (2925 hp, cost 400 mana - 75% CH)
+    -- L60 Nature's Touch (1491 hp, cost 457 mana)
+    -- L63 Nature's Infusion (2030-2050 hp, cost 560 mana)
+    -- L64 Karana's Renewal (4680 hp, cost 600 mana - 75% CH)
+    -- L65 Sylvan Infusion (2441 hp, cost 607 mana, 3.75s cast)
+
+    -- L68 Chlorotrope (2790-2810 hp, cost 691 mana, 3.75s cast)
+    -- L70 Ancient: Chlorobon (3094 hp, cost 723 mana,3.75s cast)
+    dru_fast_heal = {
+        "Ancient: Chlorobon",
+        "Chlorotrope",
+        "Sylvan Infusion",
+        "Karana's Renewal",
+        "Nature's Infusion",
+        "Nature's Touch",
+        "Tunare's Renewal",
+        "Chloroblast",
+        "Superior Healing",
+        "Healing Water",
+        "Greater Healing",
+        "Healing",
+        "Light Healing",
+        "Minor Healing",
+    },
+
     -- hp buff:
     -- L01 Skin like Wood
     -- L14 Skin like Rock
@@ -561,6 +672,63 @@ SpellGroups.DRU = {
         "Mask of the Forest",
         "Mask of the Stalker",
     },
+
+    -- L01 Snare
+    -- L29 Ensanre
+    dru_snare = {
+        "Ensnare",
+        "Snare",
+    },
+
+    
+    -- fire nuke special:
+    -- L70 Dawnstrike (2125 hp, cost 482 mana. chance to proc spell buff that adjust dmg of next nuke)
+
+    -- fire nukes:
+    -- L01 Burst of Flame (3-5 hp, cost 4 mana)
+    -- L03 Burst of Fire (11-14 hp, cost 7 mana)
+    -- L08 Ignite (38-46 hp, cost 21 mana)
+    -- L28 Combust (156-182 hp, cost 85 mana)
+    -- L38 Firestrike (402-422 hp, cost 138 mana)
+    -- L48 Starfire (634 hp, cost 186 mana)
+    -- L54 Scoriae (986 hp, cost 264 mana)
+    -- L59 Wildfire (1294 hp, cost 335 mana)
+    -- L60 Ancient: Starfire of Ro (1350 hp, cost 300 mana)
+    -- L64 Summer's Flame (1600 hp, cost 395 mana)
+    -- L65 Sylvan Fire (1761 hp, cost 435 mana)
+    -- L69 Solstice Strike (2201 hp, cost 494 mana)
+    dru_fire_nuke = {
+        "Solstice Strike",
+        "Sylvan Fire",
+        "Summer's Flame",
+        "Ancient: Starfire of Ro",
+        "Wildfire",
+        "Scoriae",
+        "Starfire",
+        "Firestrike",
+        "Combust",
+        "Ignite",
+        "Burst of Fire",
+        "Burst of Flame",
+    },
+
+    -- cold nukes:
+    -- L47 Ice (511-538 hp, cost 142 mana)
+    -- L55 Frost (837 hp, cost 202 mana)
+    -- L60 Moonfire (1132 hp, cost 263 mana)
+    -- L65 Winter's Frost (1375 hp, cost 305 mana)
+    -- L65 Ancient: Chaos Frost (1450 hp, cost 290 mana)
+    -- L70 Glitterfrost (1892 hp, cost 381 mana)
+    -- L70 Ancient: Glacier Frost (2042 hp, cost 405 mana)
+    dru_cold_nuke = {
+        "Ancient: Glacier Frost",
+        "Glitterfrost",
+        "Ancient: Chaos Frost",
+        "Winter's Frost",
+        "Moonfire",
+        "Frost",
+        "Ice",
+    },
 }
 
 SpellGroups.ENC = {
@@ -606,7 +774,7 @@ SpellGroups.ENC = {
         "Hastening of Salik",
         "Vallon's Quickening",
         "Speed of Vallon",
-        "Wonderous Rapidity", -- XXX original spelling, used on some classic servers like FVP
+        "Wonderous Rapidity", -- NOTE: original spelling, used on some classic servers like FVP
         "Wondrous Rapidity",
         "Aanya's Quickening",
         "Swift Like the Wind",
@@ -626,7 +794,10 @@ SpellGroups.ENC = {
     -- L46 Adorning Grace (40 cha)
     -- L56 Overwhelming Splendor (50 cha)
     enc_cha = {
-        -- XXX
+        "Overwhelming Splendor",
+        "Adorning Grace",
+        "Radiant Visage",
+        "Sympathetic Aura",
     },
 
     -- slot 1:
@@ -725,12 +896,9 @@ SpellGroups.MAG = {
     -- L28 Inferno Shield (13-15 ds, 20 fr, 15 min, single)
     -- L38 Barrier of Combustion (18-20 ds, 22 fr, 15 min, single)
     -- L45 Shield of Lava (25 ds, 25 fr, 15 min, single) - L1-45
-    -- L53 Boon of Immolation (25 ds, 25 fr, 15 min, group)
     -- L56 Cadeau of Flame (35 ds, 33 fr, 15 min, single)
     -- L61 Flameshield of Ro (48 ds, 45 fr, 15 min, single)
-    -- L63 Maelstrom of Ro (48 ds, 45 fr, 15 min, group)
     -- L66 Fireskin (62 ds - slot 1, 45 fr, 15 min, single)
-    -- L70 Circle of Fireskin (62 ds, 45 fr, 15 min, group)
     mag_single_ds = {
         "Fireskin",
         "Flameshield of Ro",
@@ -741,6 +909,10 @@ SpellGroups.MAG = {
         "Shield of Flame",
         "Shield of Fire",
     },
+
+    -- L53 Boon of Immolation (25 ds, 25 fr, 15 min, group)
+    -- L63 Maelstrom of Ro (48 ds, 45 fr, 15 min, group)
+    -- L70 Circle of Fireskin (62 ds, 45 fr, 15 min, group)
     mag_group_ds = {
         "Circle of Fireskin",
         "Maelstrom of Ro",
@@ -778,7 +950,10 @@ SpellGroups.MAG = {
     -- L61 Elemental Barrier (60 cr, 60 fr)
     -- NOTE: does not stack with druid resists
     mag_self_resist = {
-        -- XXX
+        "Elemental Barrier",
+        "Elemental Cloak",
+        "Elemental Armor",
+        "Elemental Shield",
     },
 
     -- L11 Burnout (15 str, 12-15% haste, 7 ac)
@@ -790,13 +965,21 @@ SpellGroups.MAG = {
     -- L62 Burnout V (80 str, 85% haste, 22 ac, 40 atk)
     -- L69 Elemental Fury (85% haste, 29 ac, 52 atk, 5% skill dmg mod)
     mag_pet_haste = {
-        -- XXX
+        "Elemental Fury",
+        "Burnout V",
+        "Ancient: Burnout Blaze",
+        "Burnout IV",
+        "Elemental Empathy", -- XXX AA ?
+        "Burnout III",
+        "Burnout II",
+        "Burnout",
     },
 
     -- L27 Expedience (20% movement, 12 min)
     -- L58 Velocity (59-80% movement, 36 min)
     mag_pet_runspeed = {
-        -- XXX
+        "Velocity",
+        "Expedience",
     },
 
 }
@@ -823,9 +1006,18 @@ SpellGroups.NEC = {
     -- L70 Grave Pact (72 mana/tick, cost 60 hp/tick, skeleton, por expansion)
     -- L74 Otherside Rk. II (81 mana/tick, cost 81 hp/tick, mottled skeleton)
     -- L79 Spectralside (87 mana/tick, cost 76 hp/tick, mottled skeleton)
-    -- NOTE: if used as "Lich Spell", will cast while running
     nec_lich = {
-        -- XXX
+        "Spectralside",
+        "Otherside",
+        "Grave Pact",
+        "Dark Possession",
+        "Ancient: Seduction of Chaos",
+        "Seduction of Saryrn",
+        "Arch Lich",
+        "Demi Lich",
+        "Lich",
+        "Call of Bones",
+        "Dark Pact",
     },
 
     -- L14 Shieldskin (absorb 27-55 dmg, reagent Cat's Eye Agate)
@@ -838,7 +1030,14 @@ SpellGroups.NEC = {
     -- L78 Shadowskin Rk. II (slot 1: absorb 1585 dmg, 4 mana/tick)
     -- NOTE: does not stack with ENC rune
     nec_self_rune = {
-        -- XXX
+        "Shadowskin",
+        "Wraithskin",
+        "Dull Pain",
+        "Force Shield",
+        "Manaskin",
+        "Steelskin",
+        "Leatherskin",
+        "Shieldskin",
     },
 
     -- L23 Intensify Death (25-33 str, 21-30% haste, 6-8 ac)
@@ -849,7 +1048,13 @@ SpellGroups.NEC = {
     -- L72 Sigil of the Unnatural (6% skills dmg mod, 96 str, 70% haste, 28 ac)
     -- L77 Sigil of the Aberrant Rk. II (10% skills dmg mod, 122 str, 70% haste, 36 ac)
     nec_pet_haste = {
-        -- XXX
+        "Sigil of the Aberrant",
+        "Sigil of the Unnatural",
+        "Glyph of Darkness",
+        "Rune of Death",
+        "Augmentation of Death",
+        "Augment Death",
+        "Intensify Death",
     },
 
     -- L01 Minor Shielding (6-10 hp, 3-4 ac)
@@ -863,7 +1068,16 @@ SpellGroups.NEC = {
     -- L66 Shadow Guard (390 hp, 46 ac, 40 mr)
     -- NOTE: does not stack with Virtue or Focus
     nec_self_shield = {
-        -- XXX
+        "Shadow Guard",
+        "Shield of Maelin",
+        "Shield of the Arcane",
+        "Shield of the Magi",
+        "Arch Shielding",
+        "Greater Shielding",
+        "Major Shielding",
+        "Shielding",
+        "Lesser Shielding",
+        "Minor Shielding",
     },
 }
 
@@ -903,6 +1117,27 @@ SpellGroups.WIZ = {
 }
 
 SpellGroups.RNG = {
+
+    -- fast heal:
+    -- L01 Salve (live)
+    -- L08 Minor Healing
+    -- L20 Light Healing
+    -- L32 Healing 
+    -- L44 Greater Healing (280-350 hp, cost 115 mana)
+    -- L62 Chloroblast (994-1044 hp, cost 331 mana)
+    -- L65 Sylvan Light (850 hp, 3s cast time, cost 370 mana)
+    -- L67 Sylvan Water (1135-1165 hp, 3s cast time, cost 456 mana)
+    rng_fast_heal = {
+        "Sylvan Water",
+        "Sylvan Light",
+        "Chloroblast",
+        "Greater Healing",
+        "Healing",
+        "Light Healing",
+        "Minor Healing",
+        "Salve",
+    },
+
     -- hp type 2 - Slot 4: Increase max HP
     -- L51 Strength of Nature (25 atk, 75 hp, single, cost 125 mana)
     -- L62 Strength of Tunare (slot 1: 92 atk, slot 4: 125 hp, group, cost 250 mana)
@@ -942,7 +1177,13 @@ SpellGroups.RNG = {
     -- L65 Natureskin (18-19 ac, 391-520 hp, 4 hp/tick)
     -- L70 Onyx Skin (33 ac, 540 hp, 6 hp/tick)
     rng_skin = {
-        -- XXX
+        "Onyx Skin",
+        "Natureskin",
+        "Skin like Nature",
+        "Skin like Diamond",
+        "Skin like Steel",
+        "Skin like Rock",
+        "Skin like Wood",
     },
 
     -- L13 Thistlecoat
@@ -953,19 +1194,33 @@ SpellGroups.RNG = {
     -- L63 Bladecoat (slot 2: 37 ac, slot 3: 6 ds)
     -- L68 Briarcoat (slot 2: 49 ac, slot 3: 8 ds)
     rng_self_ds = {
-        -- XXX
+        "Briarcoat",
+        "Bladecoat",
+        "Thorncoat",
+        "Spikecoat",
+        "Bramblecoat",
+        "Barbcoat",
+        "Thistlecoat",
     },
 
     -- L65 Protection of the Wild (slot 1: 34 ds, slot 2: 130 atk, slot 3: 34 ac, slot 4: 125 hp)
     -- L70 Ward of the Hunter     (slot 1: 45 ds, slot 2: 170 atk, slot 3: 49 ac, slot 4: 165 hp, slot 9: 3% double attack)
     rng_self_ds_atk = {
-        -- XXX
+        "Ward of the Hunter",
+        "Protection of the Wild",
     },
 
     -- L65 Mask of the Stalker (slot 3: 3 mana regen)
     rng_self_mana = {
-        -- XXX
+        "Mask of the Stalker",
     },
+
+    -- L09 Snare
+    -- L51 Ensanre
+    rng_snare = {
+        "Ensnare",
+        "Snare",
+    }
 }
 
 SpellGroups.PAL = {
@@ -989,17 +1244,23 @@ SpellGroups.PAL = {
     -- L67 Symbol of Jeron
     -- L68 Jeron's Mark (group)
     pal_symbol = {
-        -- XXX
+        "Jeron's Mark",
+        "Symbol of Jeron",
+        "Symbol of Marzin",
+        "Symbol of Pinzarn",
+        "Symbol of Ryltan",
+        "Symbol of Transal",
     },
 
     -- L64 Aura of the Crusader (slot 2: 30 ac, slot 3: 342-350 hp, slot 4: 3 mana/tick)
     -- L69 Armor of the Champion (slot 2: 39 ac, slot 3: 437 hp, slot 4: 4 mana/tick)
     pal_self_shield = {
-        -- XXX
+        "Armor of the Champion",
+        "Aura of the Crusader",
     },
 
     -- proc self buffs:
-    -- L26 Instrument of Nife (undead proc Condemnation of Nife)
+    -- L26 Instrument of Nife (UNDEAD: proc Condemnation of Nife)
     -- L45 Divine Might (proc Divine Might Effect)
     -- L62 Ward of Nife (UNDEAD: proc Ward of Nife Strike)
     -- L63 Pious Might (proc Pious Might Strike)
@@ -1007,7 +1268,13 @@ SpellGroups.PAL = {
     -- L67 Silvered Fury (proc Silvered Fury Strike)
     -- L68 Pious Fury (slot 1: proc Pious Fury Strike)
     pal_proc_buff = {
-        -- XXX
+        "Pious Fury",
+        "Silvered Fury",
+        "Holy Order",
+        "Pious Might",
+        "Ward of Nife",
+        "Divine Might",
+        "Instrument of Nife",
     },
 
     -- L09 Yaulp
@@ -1029,7 +1296,10 @@ SpellGroups.SHD = {
     -- L67 Shroud of Discord (proc: Shroud of Discord Strike, 60 min duration) - imbues attacks with chance to steal life from target (lifetap)
     -- L70 Decrepit Skin (slot 1: proc Decrepit Skin Parry, 4 min duration) - absorb dmg
     shd_combat_innate = {
-        -- XXX
+        "Decrepit Skin",
+        "Shroud of Discord",
+        "Scream of Death",
+        "Vampiric Embrace",
     },
 
     -- skeleton illusion with regen:
@@ -1038,14 +1308,18 @@ SpellGroups.SHD = {
     -- L69 Pact of Decay (17 mana/tick, -25 hp/tick)
     -- NOTE: does not stack with ENC Clairvoyance (20 mana/tick)
     shd_lich = {
-        -- XXX
+        "Pact of Decay",
+        "Pact of Hate",
+        "Deathly Temptation",
     },
 
     -- L60 Cloak of the Akheva (slot 3: 13 ac, slot 6: 5 ds, slot 10: 150 hp)
     -- L65 Cloak of Luclin (slot 3: 34 ac, slot 6: 10 ds, slot 10: 280 hp)
     -- L70 Cloak of Discord (slot 3: 49 ac, slot 6: 13 ds, slot 10: 350 hp)
     shd_self_shield = {
-        -- XXX
+        "Cloak of Discord",
+        "Cloak of Luclin",
+        "Cloak of the Akheva",
     }
 }
 
@@ -1104,6 +1378,7 @@ SpellGroups.BST = {
         "Stamina",
         "Health",
         "Spirit of Ox",
+        "Spirit of Bear",
     },
 
     -- L14 Strengthen (5-10 str)
@@ -1113,6 +1388,8 @@ SpellGroups.BST = {
     bst_str = {
         "Furious Strength",
         "Raging Strength",
+        "Spirit Strength",
+        "Strengthen",
     },
 
     -- L38 Spirit of Monkey (19-20 dex)
@@ -1131,7 +1408,12 @@ SpellGroups.BST = {
     -- L64 Arag's Celerity (115 str, 85% haste, 75 atk, 71 ac)
     -- L68 Growl of the Beast (85% haste, 90 atk, 78 ac, 5% skill dmg mod, duration 1h)
     bst_pet_haste = {
-        -- XXX
+       "Growl of the Beast",
+       "Arag's Celerity",
+       "Sha's Ferocity",
+       "Omakin's Alacrity",
+       "Bond of the Wild",
+       "Yekan's Quickening",
     },
 
     -- L13 Spirit of Lightning (Spirit of Lightning Strike proc)
@@ -1146,7 +1428,17 @@ SpellGroups.BST = {
     -- L68 Spirit of Irionu (COLD: Spirit of Irionu Strike, rate mod 150, 75 dex)
     -- L70 Spirit of Oroshar (FIRE: Spirit of Oroshar Strike, rate mod 150, 75 dex)
     bst_pet_proc = {
-        -- XXX
+        "Spirit of Oroshar",
+        "Spirit of Irionu",
+        "Spirit of Rellic",
+        "Spirit of Flame",
+        "Spirit of Snow",
+        "Spirit of the Storm",
+        "Spirit of Wind",
+        "Spirit of Vermin",
+        "Spirit of the Scorpion",
+        "Spirit of Inferno",
+        "Spirit of Lightning",
     },
 }
 
