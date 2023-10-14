@@ -7,7 +7,7 @@ local log = require("knightlinc/Write")
 
 local timer = require("Timer")
 
-local buffGroups  = require("e4_BuffGroups")
+local spellGroups  = require("e4_SpellGroups")
 
 -- returns true if `spawn` is within maxDistance
 ---@param spawn spawn
@@ -1472,14 +1472,14 @@ function parseSpellLine(s)
         o.Name = ""
     end
 
-    local buffGroup = buffGroups[class_shortname()][o.Name]
-    if buffGroup ~= nil then
+    local spellGroup = spellGroups[class_shortname()][o.Name]
+    if spellGroup ~= nil then
         local spellName = findBestSpellFromSpellGroup(o.Name)
         if spellName ~= nil then
             o.spellGroup = o.Name
             o.Name = spellName
         else
-            all_tellf("ERROR: parseSpellLine: did not find a best spell for buffGroups.%s.%s", class_shortname(), o.Name)
+            all_tellf("ERROR: parseSpellLine: did not find a best spell for spellGroups.%s.%s", class_shortname(), o.Name)
         end
     end
     return o

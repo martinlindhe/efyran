@@ -1,6 +1,6 @@
-local BuffGroups = {}
+local SpellGroups = {}
 
-BuffGroups.Lookup = {
+SpellGroups.Lookup = {
     ["shm_focus"] = "SHM",
     ["shm_runspeed"] = "SHM",
     ["shm_haste"] = "SHM",
@@ -58,7 +58,7 @@ BuffGroups.Lookup = {
     ["bst_dex"] = "BST",
 }
 
-BuffGroups.SHM = {
+SpellGroups.SHM = {
     -- weak focus - HP slot 1: Increase Max HP
     -- L32 Talisman of Tnarg (132-150 hp)
     -- L40 Talisman of Altuna (230-250 hp)
@@ -220,7 +220,7 @@ BuffGroups.SHM = {
     },
 }
 
-BuffGroups.CLR = {
+SpellGroups.CLR = {
 
     GroupHeals = {
         -- priority: the first spell in list that is memorized and not on cooldown will be used
@@ -368,7 +368,7 @@ BuffGroups.CLR = {
     }
 }
 
-BuffGroups.DRU = {
+SpellGroups.DRU = {
     -- hp buff:
     -- L01 Skin like Wood
     -- L14 Skin like Rock
@@ -555,7 +555,7 @@ BuffGroups.DRU = {
     }
 }
 
-BuffGroups.ENC = {
+SpellGroups.ENC = {
     -- L26 Clarity (7-9 mana/tick)
     -- L42 Boon of the Clear Mind (6-9 mana/tick, group)
     -- L52 Clarity II (9-11 mana/tick, single)
@@ -570,7 +570,7 @@ BuffGroups.ENC = {
     -- L75 Voice of Intuition Rk. II (25 mana/tick, cost 1625 mana, group)
     -- L78 Seer's Cognizance Rk. II (35 mana/tick, cost 610 mana)
     -- L80 Voice of Cognizance Rk. II (35 mana/tick, cost 1983 mana, group)
-    ["enc_manaregen"] = {
+    enc_manaregen = {
         "Voice of Cognizance",
         "Voice of Intuition",
         "Voice of Clairvoyance",
@@ -593,7 +593,7 @@ BuffGroups.ENC = {
     -- L67 Hastening of Salik  (68% haste, 53 atk, 60 agi, 50 dex, 42 min, 20% melee crit chance, cost 1260 mana, group)
     -- L72 Speed of Ellowind   (68% haste, 64 atk, 72 agi, 60 dex, 42 min, 24% melee crit chance, %1 crit melee damage, cost 524 mana)
     -- L75 Hastening of Ellowind Rk. II (68% haste, 66 atk, 75 agi, 63 dex, 42 min, 25% melee crit chance, 2% crit melee damage, cost 1575 mana, group)
-    ["enc_haste"] = {
+    enc_haste = {
         "Hastening of Ellowind",
         "Hastening of Salik",
         "Vallon's Quickening",
@@ -608,7 +608,7 @@ BuffGroups.ENC = {
 
     -- L48 Group Resist Magic (53-55 mr, group)
     -- L62 Guard of Druzzil (75 mr, group)
-    ["enc_resist"] = {
+    enc_resist = {
         "Guard of Druzzil",
         "Group Resist Magic",
     },
@@ -617,14 +617,14 @@ BuffGroups.ENC = {
     -- L31 Radiant Visage (25-30 cha)
     -- L46 Adorning Grace (40 cha)
     -- L56 Overwhelming Splendor (50 cha)
-    ["enc_cha"] = {
+    enc_cha = {
         -- XXX
     },
 
     -- slot 1:
     -- L69 Rune of Rikkukin (absorb 1500 dmg, group)
     -- L79 Rune of the Deep Rk. II (absorb 4118 dmg, slot 2: defensive proc Blurred Shadows Rk. II)
-    ["enc_group_rune"] = {
+    enc_group_rune = {
         "Rune of the Deep",
         "Rune of Rikkukin", -- DoN progression reward
     },
@@ -639,7 +639,7 @@ BuffGroups.ENC = {
     -- L67 Rune of Salik (absorb 1105 dmg)
     -- L71 Rune of Ellowind (absorb 2160 dmg)
     -- L76 Rune of Erradien Rk. II (absorb 5631 dmg)
-    ["enc_single_rune"] = {
+    enc_single_rune = {
         "Rune of Erradien/Reagent|Peridot",
         "Rune of Ellowind/Reagent|Peridot",
         "Rune of Salik/Reagent|Peridot",
@@ -674,9 +674,44 @@ BuffGroups.ENC = {
         "Lesser Shielding",
         "Minor Shielding",
     },
+
+    -- L04 Tashan (1 poison counter, -9-13 magic resist)
+    -- L20 Tashani
+    -- L44 Tashania
+    -- L57 Tashanian
+    enc_tash = {
+        "Tashanian",
+        "Tashania",
+        "Tashani",
+        "Tashan",
+    },
+
+    -- L04 Mesmerize (mez to L55, 1% memblur, 0.4 min, 20 mana)
+    -- L16 Enthrall (mez to L55, 1% memblur, 0.8 min, 50 mana)
+    -- L34 Entrance
+    -- L49 Dazzle
+    -- L54 Glamour of Kintaz (low resist mez)
+    -- L59 Rapture (low resist mez)
+    enc_mez = {
+        "Rapture",
+        "Glamour of Kintaz",
+        "Dazzle",
+        "Entrance",
+        "Enthrall",
+        "Mesmerize",
+    },
+
+    -- L12 Languid Pace (18-30% slow)
+    -- L24 Tepid Deeds (32-50% slow)
+    -- L44 Shiftless Deeds (49-65% slow)
+    enc_slow = {
+        "Shiftless Deeds",
+        "Tepid Deeds",
+        "Languid Pace",
+    }
 }
 
-BuffGroups.MAG = {
+SpellGroups.MAG = {
     -- L07 Shield of Fire (4-6 ds, 10 fr, 1.5 min, single)
     -- L19 Shield of Flame (7-9 ds, 15 fr, 15 min, single)
     -- L28 Inferno Shield (13-15 ds, 20 fr, 15 min, single)
@@ -758,7 +793,7 @@ BuffGroups.MAG = {
 
 }
 
-BuffGroups.NEC = {
+SpellGroups.NEC = {
     -- L41 Dead Man Floating (61-70 pr, water breathing, see invis, levitate)
     -- L45 Dead Men Floating (65-70 pr, water breathing, see invis, levitate, group)
     ["nec_group_levitate"] = {
@@ -824,7 +859,7 @@ BuffGroups.NEC = {
     },
 }
 
-BuffGroups.WIZ = {
+SpellGroups.WIZ = {
     -- L01 Minor Shielding (6-10 hp, 3-4 ac)
     -- L06 Lesser Shielding (17-30 hp, 5-9 ac, 6-10 mr)
     -- L15 Shielding (45-50 hp, 11-13 ac, 11-12 mr)
@@ -859,7 +894,7 @@ BuffGroups.WIZ = {
     },
 }
 
-BuffGroups.RNG = {
+SpellGroups.RNG = {
     -- hp type 2 - Slot 4: Increase max HP
     -- L51 Strength of Nature (25 atk, 75 hp, single, cost 125 mana)
     -- L62 Strength of Tunare (slot 1: 92 atk, slot 4: 125 hp, group, cost 250 mana)
@@ -925,7 +960,7 @@ BuffGroups.RNG = {
     },
 }
 
-BuffGroups.PAL = {
+SpellGroups.PAL = {
     -- hp type 2 buff:
     -- L35 Divine Vigor (100 hp)
     -- L49 Brell's Steadfast Aegis (145 hp, group)
@@ -979,7 +1014,7 @@ BuffGroups.PAL = {
     },
 }
 
-BuffGroups.SHD = {
+SpellGroups.SHD = {
     -- Combat Innates:
     -- L22 Vampiric Embrace (proc: Vampiric Embrace)
     -- L37 Scream of Death (proc: Scream of Death Strike)
@@ -1006,7 +1041,7 @@ BuffGroups.SHD = {
     }
 }
 
-BuffGroups.BST = {
+SpellGroups.BST = {
     -- mana regen:
     -- L41 Spiritual Light (3 hp + 3 mana/tick, group)
     -- L52 Spiritual Radiance (5 hp + 5 mana/tick, group)
@@ -1107,7 +1142,7 @@ BuffGroups.BST = {
     },
 }
 
-BuffGroups.BRD = {
+SpellGroups.BRD = {
     -- L05 Selo's Accelerando (20-65% movement)
     brd_runspeed = {
         "Selo's Accelerando",
@@ -1120,10 +1155,10 @@ BuffGroups.BRD = {
 }
 
 
-BuffGroups.Default = {}
+SpellGroups.Default = {}
 
 -- REQUEST DEFAULTS BY CLASS
-BuffGroups.Default.WAR = {
+SpellGroups.Default.WAR = {
     -- should we ask for symbol / aegolism?   XXX try this out.
     --"clr_symbol/Class|DRU,CLR",         -- CLR
     --"clr_ac/Class|DRU,CLR",             -- CLR
@@ -1150,7 +1185,7 @@ BuffGroups.Default.WAR = {
     "shm_resist/Class|SHM",
 }
 
-BuffGroups.Default.SHD = {
+SpellGroups.Default.SHD = {
     -- XXX should do self buff + aego ?
     "clr_symbol/Class|CLR",
     "clr_ac/Class|CLR",
@@ -1172,7 +1207,7 @@ BuffGroups.Default.SHD = {
     "shm_resist/Class|SHM",
 }
 
-BuffGroups.Default.PAL = {
+SpellGroups.Default.PAL = {
     -- XXX should do self buff + aego ?
     "clr_symbol/Class|CLR",
     "clr_ac/Class|CLR",
@@ -1189,7 +1224,7 @@ BuffGroups.Default.PAL = {
     "shm_resist/Class|SHM",
 }
 
-BuffGroups.Default.BRD = {
+SpellGroups.Default.BRD = {
     "clr_symbol/Class|CLR",
     --"clr_ac/Class|CLR",
     "dru_skin/Class|DRU",
@@ -1209,7 +1244,7 @@ BuffGroups.Default.BRD = {
     "shm_resist/Class|SHM",
 }
 
-BuffGroups.Default.CLR = {
+SpellGroups.Default.CLR = {
     -- XXX should do self buff + aego ?
     "dru_skin/Class|DRU",
     "shm_focus/Class|SHM",
@@ -1227,7 +1262,7 @@ BuffGroups.Default.CLR = {
     "shm_resist/Class|SHM",
 }
 
-BuffGroups.Default.DRU = {
+SpellGroups.Default.DRU = {
     "clr_symbol/Class|CLR",
     "shm_focus/Class|SHM",
 
@@ -1246,7 +1281,7 @@ BuffGroups.Default.DRU = {
     "shm_resist/Class|SHM",
 }
 
-BuffGroups.Default.SHM = {
+SpellGroups.Default.SHM = {
     "clr_symbol/Class|CLR",
     "dru_skin/Class|DRU",
 
@@ -1265,7 +1300,7 @@ BuffGroups.Default.SHM = {
     "enc_resist/Class|ENC",
 }
 
-BuffGroups.Default.ENC = {
+SpellGroups.Default.ENC = {
     "clr_symbol/Class|CLR",
     --"clr_ac/Class|CLR",
     "dru_skin/Class|DRU",
@@ -1284,7 +1319,7 @@ BuffGroups.Default.ENC = {
     "shm_resist/Class|SHM",
 }
 
-BuffGroups.Default.WIZ = {
+SpellGroups.Default.WIZ = {
     "clr_symbol/Class|CLR",
     --"clr_ac/Class|CLR",
     "dru_skin/Class|DRU",
@@ -1305,7 +1340,7 @@ BuffGroups.Default.WIZ = {
     "enc_resist/Class|ENC",
 }
 
-BuffGroups.Default.MAG = {
+SpellGroups.Default.MAG = {
     "clr_symbol/Class|CLR",
     --"clr_ac/Class|CLR",
     "dru_skin/Class|DRU",
@@ -1326,7 +1361,7 @@ BuffGroups.Default.MAG = {
     "enc_resist/Class|ENC",
 }
 
-BuffGroups.Default.NEC = {
+SpellGroups.Default.NEC = {
     "clr_symbol/Class|CLR",
     --"clr_ac/Class|CLR",
     "dru_skin/Class|DRU",
@@ -1346,7 +1381,7 @@ BuffGroups.Default.NEC = {
     "enc_resist/Class|ENC",
 }
 
-BuffGroups.Default.RNG = {
+SpellGroups.Default.RNG = {
     "clr_symbol/Class|CLR",
     --"clr_ac/Class|CLR",
     "dru_skin/Class|DRU",
@@ -1365,7 +1400,7 @@ BuffGroups.Default.RNG = {
     "shm_resist/Class|SHM",
 }
 
-BuffGroups.Default.BST = {
+SpellGroups.Default.BST = {
     "clr_symbol/Class|CLR",
     --"clr_ac/Class|CLR",
     "dru_skin/Class|DRU",
@@ -1387,7 +1422,7 @@ BuffGroups.Default.BST = {
     "shm_resist/Class|SHM",
 }
 
-BuffGroups.Default.ROG = {
+SpellGroups.Default.ROG = {
     "clr_symbol/Class|CLR",
     --"clr_ac/Class|CLR",
     "dru_skin/Class|DRU",
@@ -1407,7 +1442,7 @@ BuffGroups.Default.ROG = {
     "shm_resist/Class|SHM",
 }
 
-BuffGroups.Default.MNK = {
+SpellGroups.Default.MNK = {
     "clr_symbol/Class|CLR",
     --"clr_ac/Class|CLR",
     "dru_skin/Class|DRU",
@@ -1427,7 +1462,7 @@ BuffGroups.Default.MNK = {
     "shm_resist/Class|SHM",
 }
 
-BuffGroups.Default.BER = {
+SpellGroups.Default.BER = {
     "clr_symbol/Class|CLR",
     --"clr_ac/Class|CLR",
     "dru_skin/Class|DRU",
@@ -1448,4 +1483,4 @@ BuffGroups.Default.BER = {
 }
 
 
-return BuffGroups
+return SpellGroups

@@ -13,13 +13,13 @@ local timer       = require("Timer")
 
 local globalSettings = require("e4_Settings")
 
-local buffGroups  = require("e4_BuffGroups")
+local spellGroups  = require("e4_SpellGroups")
 
 local bci = broadCastInterfaceFactory()
 
 local serverBuffsSettings = efyranConfigDir() .. "/" .. server_buffs_settings_file()
 if file_exists(serverBuffsSettings) then
-    buffGroups.Default = loadfile(serverBuffsSettings)()
+    spellGroups.Default = loadfile(serverBuffsSettings)()
 end
 
 
@@ -157,13 +157,13 @@ local refreshAutoClickiesTimer = timer.new(3) -- 3s (duration of a song, so bard
 
 ---@return string
 function buffs.getAvailableGroupBuffs()
-    local classBuffGroups = buffGroups[class_shortname()]
-    if classBuffGroups == nil then
+    local classSpellGroups = spellGroups[class_shortname()]
+    if classSpellGroups == nil then
         return ""
     end
 
     local s = ""
-    for groupIdx, buffGroup in pairs(classBuffGroups) do
+    for groupIdx, buffGroup in pairs(classSpellGroups) do
         for rowIdx, row in pairs(buffGroup) do
             local spellConfig = parseSpellLine(row)
             if have_spell(spellConfig.Name) then
@@ -432,7 +432,7 @@ function buffs.BuffIt(spawnID)
     log.Debug("Handling /buffit request for spawn %s", spawnID)
 
     -- get the buffs for my class from the class defaults for `spawn`.
-    for idx, key in pairs(buffGroups.Default[spawn.Class.ShortName()]) do
+    for idx, key in pairs(spellGroups.Default[spawn.Class.ShortName()]) do
         local spellConfig = parseSpellLine(key)
         if spellConfig.Class == class_shortname() then
             cmdf("/buff %s %s force", spawn.Name(), spellConfig.Name)
@@ -441,9 +441,9 @@ function buffs.BuffIt(spawnID)
 end
 
 function getClassBuffGroup(classShort, buffGroup)
-    local buffRows = buffGroups[classShort][buffGroup]
+    local buffRows = spellGroups[classShort][buffGroup]
     if buffRows == nil then
-        all_tellf("FATAL ERROR: did not find buffGroups.%s entry %s", classShort, buffGroup)
+        all_tellf("FATAL ERROR: did not find spellGroups.%s entry %s", classShort, buffGroup)
         return false
     end
 end
@@ -465,7 +465,7 @@ function handleBuffRequest(req)
 
     local spellName = findBestSpellFromSpellGroup(req.Buff)
     if spellName == nil then
-        all_tellf("ERROR: handleBuffRequest: did not find buffGroups.%s entry %s", class_shortname(), req.Buff)
+        all_tellf("ERROR: handleBuffRequest: did not find spellGroups.%s entry %s", class_shortname(), req.Buff)
         return false
     end
 
@@ -500,7 +500,7 @@ end
 ---@param groupName string
 ---@return string|nil
 function findBestSpellFromSpellGroup(groupName)
-    local buffRows = buffGroups[class_shortname()][groupName]
+    local buffRows = spellGroups[class_shortname()][groupName]
     if buffRows == nil then
         all_tellf("ERROR: SHOULD NOT HAPPEN, NO SUCH BUFF GROUP %s.%s", class_shortname(), groupName)
         return nil
@@ -640,7 +640,7 @@ function buffs.RequestBuffs()
 
     local req = botSettings.settings.request_buffs
     if req == nil then
-        req = buffGroups.Default[class_shortname()]
+        req = spellGroups.Default[class_shortname()]
         if req == nil then
             -- unlikely
             all_tellf("FATAL ERROR class default buffs missing for %s", class_shortname())
@@ -688,15 +688,15 @@ function buffs.RequestBuffs()
         end
 
         if not skip then
-            local askClass = buffGroups.Lookup[spellConfig.Name]
+            local askClass = spellGroups.Lookup[spellConfig.Name]
             if askClass == nil then
-                all_tellf("\arFATAL ERROR\ax: did not find buffGroups.Lookup entry %s", spellConfig.Name)
+                all_tellf("\arFATAL ERROR\ax: did not find spellGroups.Lookup entry %s", spellConfig.Name)
                 return false
             end
 
-            local buffRows = buffGroups[askClass][spellConfig.Name]
+            local buffRows = spellGroups[askClass][spellConfig.Name]
             if buffRows == nil then
-                all_tellf("\arFATAL ERROR\ax: did not find buffGroups.%s entry %s", askClass, spellConfig.Name)
+                all_tellf("\arFATAL ERROR\ax: did not find spellGroups.%s entry %s", askClass, spellConfig.Name)
                 return false
             end
 
@@ -753,7 +753,6 @@ end
 function buffs.findAvailableBuffer(buffGroup)
     for peer, availableGroups in pairs(buffs.otherAvailable) do
         if availableGroups:find(buffGroup) and is_peer_in_zone(peer) then
-            --log.Debug("peer %s, buff groups: %s", peer, buffGroups)
             return peer
         end
     end
