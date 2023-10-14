@@ -525,6 +525,10 @@ function QoL.Init()
     -- track xp, auto adjust level / AA xp and auto loot
     local xpGain = function(text)
 
+        if loot.autoloot then
+            mq.cmd("/doloot")
+        end
+
         buffs.resumeTimer:restart()
 
         local xpDiff = mq.TLO.Me.PctExp() - QoL.currentExp

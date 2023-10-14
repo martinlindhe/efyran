@@ -6,10 +6,10 @@ local function execute()
     sellItems()
 end
 
-local function createLootAllCommand()
+local function createSellAllCommand()
     commandQueue.Enqueue(function() execute() end)
 end
 
-mq.unbind('/doloot')
-mq.bind("/doloot", createLootAllCommand)
+mq.unbind('/dosell')
+mq.bind("/dosell", createSellAllCommand)
 

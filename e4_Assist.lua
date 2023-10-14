@@ -106,18 +106,7 @@ function Assist.summonNukeComponents()
         return
     end
 
-    if is_casting() then
-        log.Info("WARNING: cannot summon nuke components. I am busy casting %s on target %s", mq.TLO.Me.Casting.Name(), mq.TLO.Target.Name())
-        return
-    end
-
     for idx, lines in pairs(botSettings.settings.assist.nukes) do
-        if type(lines) == "string" then
-            all_tellf("FATAL ERROR: settings.assist.nukes must be a map")
-            cmd("/beep 1")
-            delay(10000)
-            return
-        end
         for k, row in pairs(lines) do
             local spellConfig = parseSpellLine(row)
             if spellConfig.Summon ~= nil then
@@ -130,6 +119,7 @@ function Assist.summonNukeComponents()
 
                 if inventory_item_count(spellConfig.Name) == 0 then
                     log.Info("Summoning %s", spellConfig.Name)
+                    wait_until_not_casting()
                     castSpellRaw(spellConfig.Summon, nil)
 
                     -- wait and inventory
@@ -141,7 +131,6 @@ function Assist.summonNukeComponents()
                     return true
                 end
             end
-
         end
     end
 end
