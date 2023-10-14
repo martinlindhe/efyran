@@ -362,7 +362,7 @@ function QoL.Init()
     mq.bind("/hcn", function() mq.cmd("/hidec none") end)
 
     -- report toons with few free buff slots
-    mq.bind("/freebuffslots", function() bci.WithSelf("/if (${Me.FreeBuffSlots} <= 1) /bc FREE BUFF SLOTS: ${Me.FreeBuffSlots}") end)
+    mq.bind("/freebuffslots", function() bci.ExecuteAllWithSelfCommand("/if (${Me.FreeBuffSlots} <= 1) /bc FREE BUFF SLOTS: ${Me.FreeBuffSlots}") end)
     mq.bind("/fbs", function() mq.cmd("/freebuffslots") end)
 
     -- /raidinvite shorthand
