@@ -81,6 +81,13 @@ function Bard.resumeMelody()
     end
 end
 
+function Bard.pauseMelody()
+    if mq.TLO.Medley.Active() then
+        cmd("/medley stop")
+        mq.delay(20, function() return not mq.TLO.Me.Casting.ID() end)
+    end
+end
+
 -- memorizes and sings a set of songs defined in peer settings.songs
 ---@param name string name of song set
 function Bard.PlayMelody(name)
