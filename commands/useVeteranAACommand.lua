@@ -76,14 +76,16 @@ mq.bind("/expedient", createExpedientCommand)
 -- tell peers in zone to use Throne of Heroes
 mq.bind("/throne", createThroneCommand)
 
--- tell group to use Lesson of the Devoted
+-- tell peers in zone to use Lesson of the Devoted
 mq.bind("/lesson", function(...)
     local filter = args_string(...)
     if is_orchestrator() then
-        mq.cmdf("/bcg //lesson %s", filter)
+        bci.ExecuteZoneCommand(string.format("/lesson %s", filter))
     end
     commandQueue.Enqueue(function() execute({AdvancedAbilityName = "Lesson of the Devoted", Filter = filter}) end)
 end)
 
 -- tell all peers to use Throne of Heroes
-mq.bind("/throneall", function() mq.cmd("/bcaa //throne") end)
+mq.bind("/throneall", function()
+    bci.ExecuteAllCommand("/throne", true)
+end)

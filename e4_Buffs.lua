@@ -89,7 +89,7 @@ function buffs.Init()
 
     -- INTERNAL: for requesting buff state (is sent from `peer`. We will respond with a /set_others_buffs to `peer`
     mq.bind("/request_buffs", function(peer)
-        cmdf("/squelch /bct %s //set_others_buffs %s %s", peer, mq.TLO.Me.Name(), buffs.getAvailableGroupBuffs())
+        bci.ExecuteCommand(string.format("/set_others_buffs %s %s", mq.TLO.Me.Name(), buffs.getAvailableGroupBuffs()), {peer})
         --log.Debug("Told %s my buffs are %s", peer, buffs.getAvailableGroupBuffs())
     end)
 
@@ -652,7 +652,7 @@ function buffs.RequestAvailabiliy()
             if found then
                 -- request available buffs from them
                 log.Info("Found \ay%s\ax buffer \ag%s\ax", buffClasses[i], buffs.buffers[buffClasses[i]])
-                cmdf("/squelch /bct %s //request_buffs %s", buffs.buffers[buffClasses[i]], mq.TLO.Me.Name())
+                bci.ExecuteCommand(string.format("/request_buffs %s", mq.TLO.Me.Name()), {buffs.buffers[buffClasses[i]]})
                 mq.delay(10)
             end
         end
@@ -752,7 +752,7 @@ function buffs.RequestBuffs()
                         return true
                     else
                         log.Info("Requesting buff \ay%s\ax from \ag%s %s\ax ...", spellConfig.Name, askClass, peer)
-                        cmdf("/squelch /bct %s //buff %s %s", peer, mq.TLO.Me.Name(), spellConfig.Name)
+                        bci.ExecuteCommand(string.format("/buff %s %s", mq.TLO.Me.Name(), spellConfig.Name), {peer})
                     end
                 else
                     log.Debug("No peer of required class for buff %s found nearby: %s", spellConfig.Name, askClass)
@@ -825,7 +825,7 @@ function buffs.acceptRez()
         end
 
         -- tell bots that my corpse is rezzed
-        cmdf("/bcaa //ae_rezzed %s", mq.TLO.Me.Name())
+        bci.ExecuteAllCommand(string.format("/ae_rezzed %s", mq.TLO.Me.Name()))
 
         all_tellf("Accepting rez from \ag%s\ax ...", peer)
         cmd("/notify ConfirmationDialogBox Yes_Button leftmouseup")
