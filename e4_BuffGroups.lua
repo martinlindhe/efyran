@@ -1,6 +1,6 @@
-local GroupBuffs = {} -- XXX the name is misleading, it is both group and single target buffs. BETTER NAME IS "BUFF GROUPS"
+local BuffGroups = {}
 
-GroupBuffs.Lookup = {
+BuffGroups.Lookup = {
     ["shm_focus"] = "SHM",
     ["shm_runspeed"] = "SHM",
     ["shm_haste"] = "SHM",
@@ -58,7 +58,7 @@ GroupBuffs.Lookup = {
     ["bst_dex"] = "BST",
 }
 
-GroupBuffs.SHM = {
+BuffGroups.SHM = {
     -- weak focus - HP slot 1: Increase Max HP
     -- L32 Talisman of Tnarg (132-150 hp)
     -- L40 Talisman of Altuna (230-250 hp)
@@ -220,28 +220,29 @@ GroupBuffs.SHM = {
     },
 }
 
-GroupBuffs.GroupHealSpells = {
-    -- priority: the first spell in list that is memorized and not on cooldown will be used
+BuffGroups.CLR = {
 
-    -- CLR - cast group heals with cure component
-    "Word of Vivification",     -- CLR/69: 3417-3427 hp, -21 dr, -21 pr, -14 curse, cost 1357 mana
-    "Word of Replenishment",    -- CLR/64: 2500 hp, -14 dr, -14 pr, -7 curse, cost 1100 mana
-    "Word of Redemption",       -- CLR/60: 7500 hp, cost 1100 mana
-    "Word of Restoration",      -- CLR/57: 1788-1818 hp, cost 898 mana
-    "Word of Health",           -- CLR/30: 380-485 hp, cost 302 mana
+    GroupHeals = {
+        -- priority: the first spell in list that is memorized and not on cooldown will be used
+    
+        -- CLR - cast group heals with cure component
+        "Word of Vivification",     -- CLR/69: 3417-3427 hp, -21 dr, -21 pr, -14 curse, cost 1357 mana
+        "Word of Replenishment",    -- CLR/64: 2500 hp, -14 dr, -14 pr, -7 curse, cost 1100 mana
+        "Word of Redemption",       -- CLR/60: 7500 hp, cost 1100 mana
+        "Word of Restoration",      -- CLR/57: 1788-1818 hp, cost 898 mana
+        "Word of Health",           -- CLR/30: 380-485 hp, cost 302 mana
+    
+        "Hand of Piety",            -- PAL/??: AA Rank 1-XXX (24 min reuse with Hastened Piety Rank 3)
+        "Wave of Piety",            -- PAL/70: 1316 hp, cost 1048 mana
+        "Wave of Trushar",          -- PAL/65: 1143 hp, cost 921 mana
+        "Wave of Marr",             -- PAL/65: 960 hp, cost 850 mana
+        "Healing Wave of Prexus",   -- PAL/58: 688-698 hp
+        "Wave of Healing",          -- PAL/55: 439-489 hp
+        "Wave of Life",             -- PAL/39: 201-219 hp
+    
+        -- "Moonshadow",               -- DRU/70: 1500 hp, cost 1100 mana (18s recast time)
+    },
 
-    "Hand of Piety",            -- PAL/??: AA Rank 1-XXX (24 min reuse with Hastened Piety Rank 3)
-    "Wave of Piety",            -- PAL/70: 1316 hp, cost 1048 mana
-    "Wave of Trushar",          -- PAL/65: 1143 hp, cost 921 mana
-    "Wave of Marr",             -- PAL/65: 960 hp, cost 850 mana
-    "Healing Wave of Prexus",   -- PAL/58: 688-698 hp
-    "Wave of Healing",          -- PAL/55: 439-489 hp
-    "Wave of Life",             -- PAL/39: 201-219 hp
-
-    -- "Moonshadow",               -- DRU/70: 1500 hp, cost 1100 mana (18s recast time)
-}
-
-GroupBuffs.CLR = {
     -- slot 3 hp buff - symbol line:
     -- L14 Symbol of Transal (34-72 hp, single)
     -- L24 Symbol of Transal
@@ -367,7 +368,7 @@ GroupBuffs.CLR = {
     }
 }
 
-GroupBuffs.DRU = {
+BuffGroups.DRU = {
     -- hp buff:
     -- L01 Skin like Wood
     -- L14 Skin like Rock
@@ -545,7 +546,7 @@ GroupBuffs.DRU = {
     }
 }
 
-GroupBuffs.ENC = {
+BuffGroups.ENC = {
     -- L26 Clarity (7-9 mana/tick)
     -- L42 Boon of the Clear Mind (6-9 mana/tick, group)
     -- L52 Clarity II (9-11 mana/tick, single)
@@ -658,7 +659,7 @@ GroupBuffs.ENC = {
 
 }
 
-GroupBuffs.MAG = {
+BuffGroups.MAG = {
     -- L07 Shield of Fire (4-6 ds, 10 fr, 1.5 min, single)
     -- L19 Shield of Flame (7-9 ds, 15 fr, 15 min, single)
     -- L28 Inferno Shield (13-15 ds, 20 fr, 15 min, single)
@@ -732,7 +733,7 @@ GroupBuffs.MAG = {
 
 }
 
-GroupBuffs.NEC = {
+BuffGroups.NEC = {
     -- L41 Dead Man Floating (61-70 pr, water breathing, see invis, levitate)
     -- L45 Dead Men Floating (65-70 pr, water breathing, see invis, levitate, group)
     ["nec_group_levitate"] = {
@@ -798,7 +799,7 @@ GroupBuffs.NEC = {
     },
 }
 
-GroupBuffs.WIZ = {
+BuffGroups.WIZ = {
     -- L01 Minor Shielding (6-10 hp, 3-4 ac)
     -- L06 Lesser Shielding (17-30 hp, 5-9 ac, 6-10 mr)
     -- L15 Shielding (45-50 hp, 11-13 ac, 11-12 mr)
@@ -822,7 +823,7 @@ GroupBuffs.WIZ = {
     }
 }
 
-GroupBuffs.RNG = {
+BuffGroups.RNG = {
     -- hp type 2 - Slot 4: Increase max HP
     -- L51 Strength of Nature (25 atk, 75 hp, single, cost 125 mana)
     -- L62 Strength of Tunare (slot 1: 92 atk, slot 4: 125 hp, group, cost 250 mana)
@@ -888,7 +889,7 @@ GroupBuffs.RNG = {
     },
 }
 
-GroupBuffs.PAL = {
+BuffGroups.PAL = {
     -- hp type 2 buff:
     -- L35 Divine Vigor (100 hp)
     -- L49 Brell's Steadfast Aegis (145 hp, group)
@@ -931,7 +932,7 @@ GroupBuffs.PAL = {
     },
 }
 
-GroupBuffs.SHD = {
+BuffGroups.SHD = {
     -- Combat Innates:
     -- L22 Vampiric Embrace (proc: Vampiric Embrace)
     -- L37 Scream of Death (proc: Scream of Death Strike)
@@ -958,7 +959,7 @@ GroupBuffs.SHD = {
     }
 }
 
-GroupBuffs.BST = {
+BuffGroups.BST = {
     -- mana regen:
     -- L41 Spiritual Light (3 hp + 3 mana/tick, group)
     -- L52 Spiritual Radiance (5 hp + 5 mana/tick, group)
@@ -1060,10 +1061,10 @@ GroupBuffs.BST = {
 }
 
 
-GroupBuffs.Default = {}
+BuffGroups.Default = {}
 
 -- REQUEST DEFAULTS BY CLASS
-GroupBuffs.Default.WAR = {
+BuffGroups.Default.WAR = {
     -- should we ask for symbol / aegolism?   XXX try this out.
     --"clr_symbol/Class|DRU,CLR",         -- CLR
     --"clr_ac/Class|DRU,CLR",             -- CLR
@@ -1090,7 +1091,7 @@ GroupBuffs.Default.WAR = {
     "shm_resist/Class|SHM",
 }
 
-GroupBuffs.Default.SHD = {
+BuffGroups.Default.SHD = {
     -- XXX should do self buff + aego ?
     "clr_symbol/Class|CLR",
     "clr_ac/Class|CLR",
@@ -1112,7 +1113,7 @@ GroupBuffs.Default.SHD = {
     "shm_resist/Class|SHM",
 }
 
-GroupBuffs.Default.PAL = {
+BuffGroups.Default.PAL = {
     -- XXX should do self buff + aego ?
     "clr_symbol/Class|CLR",
     "clr_ac/Class|CLR",
@@ -1129,7 +1130,7 @@ GroupBuffs.Default.PAL = {
     "shm_resist/Class|SHM",
 }
 
-GroupBuffs.Default.BRD = {
+BuffGroups.Default.BRD = {
     "clr_symbol/Class|CLR",
     --"clr_ac/Class|CLR",
     "dru_skin/Class|DRU",
@@ -1149,7 +1150,7 @@ GroupBuffs.Default.BRD = {
     "shm_resist/Class|SHM",
 }
 
-GroupBuffs.Default.CLR = {
+BuffGroups.Default.CLR = {
     -- XXX should do self buff + aego ?
     "dru_skin/Class|DRU",
     "shm_focus/Class|SHM",
@@ -1167,7 +1168,7 @@ GroupBuffs.Default.CLR = {
     "shm_resist/Class|SHM",
 }
 
-GroupBuffs.Default.DRU = {
+BuffGroups.Default.DRU = {
     "clr_symbol/Class|CLR",
     "shm_focus/Class|SHM",
 
@@ -1186,7 +1187,7 @@ GroupBuffs.Default.DRU = {
     "shm_resist/Class|SHM",
 }
 
-GroupBuffs.Default.SHM = {
+BuffGroups.Default.SHM = {
     "clr_symbol/Class|CLR",
     "dru_skin/Class|DRU",
 
@@ -1205,7 +1206,7 @@ GroupBuffs.Default.SHM = {
     "enc_resist/Class|ENC",
 }
 
-GroupBuffs.Default.ENC = {
+BuffGroups.Default.ENC = {
     "clr_symbol/Class|CLR",
     --"clr_ac/Class|CLR",
     "dru_skin/Class|DRU",
@@ -1224,7 +1225,7 @@ GroupBuffs.Default.ENC = {
     "shm_resist/Class|SHM",
 }
 
-GroupBuffs.Default.WIZ = {
+BuffGroups.Default.WIZ = {
     "clr_symbol/Class|CLR",
     --"clr_ac/Class|CLR",
     "dru_skin/Class|DRU",
@@ -1245,7 +1246,7 @@ GroupBuffs.Default.WIZ = {
     "enc_resist/Class|ENC",
 }
 
-GroupBuffs.Default.MAG = {
+BuffGroups.Default.MAG = {
     "clr_symbol/Class|CLR",
     --"clr_ac/Class|CLR",
     "dru_skin/Class|DRU",
@@ -1266,7 +1267,7 @@ GroupBuffs.Default.MAG = {
     "enc_resist/Class|ENC",
 }
 
-GroupBuffs.Default.NEC = {
+BuffGroups.Default.NEC = {
     "clr_symbol/Class|CLR",
     --"clr_ac/Class|CLR",
     "dru_skin/Class|DRU",
@@ -1286,7 +1287,7 @@ GroupBuffs.Default.NEC = {
     "enc_resist/Class|ENC",
 }
 
-GroupBuffs.Default.RNG = {
+BuffGroups.Default.RNG = {
     "clr_symbol/Class|CLR",
     --"clr_ac/Class|CLR",
     "dru_skin/Class|DRU",
@@ -1305,7 +1306,7 @@ GroupBuffs.Default.RNG = {
     "shm_resist/Class|SHM",
 }
 
-GroupBuffs.Default.BST = {
+BuffGroups.Default.BST = {
     "clr_symbol/Class|CLR",
     --"clr_ac/Class|CLR",
     "dru_skin/Class|DRU",
@@ -1327,7 +1328,7 @@ GroupBuffs.Default.BST = {
     "shm_resist/Class|SHM",
 }
 
-GroupBuffs.Default.ROG = {
+BuffGroups.Default.ROG = {
     "clr_symbol/Class|CLR",
     --"clr_ac/Class|CLR",
     "dru_skin/Class|DRU",
@@ -1347,7 +1348,7 @@ GroupBuffs.Default.ROG = {
     "shm_resist/Class|SHM",
 }
 
-GroupBuffs.Default.MNK = {
+BuffGroups.Default.MNK = {
     "clr_symbol/Class|CLR",
     --"clr_ac/Class|CLR",
     "dru_skin/Class|DRU",
@@ -1367,7 +1368,7 @@ GroupBuffs.Default.MNK = {
     "shm_resist/Class|SHM",
 }
 
-GroupBuffs.Default.BER = {
+BuffGroups.Default.BER = {
     "clr_symbol/Class|CLR",
     --"clr_ac/Class|CLR",
     "dru_skin/Class|DRU",
@@ -1388,4 +1389,4 @@ GroupBuffs.Default.BER = {
 }
 
 
-return GroupBuffs
+return BuffGroups

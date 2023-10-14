@@ -2,7 +2,6 @@ local mq = require("mq")
 local broadCastInterfaceFactory = require 'broadcast/broadcastinterface'
 local commandQueue = require('e4_CommandQueue')
 local log          = require("knightlinc/Write")
-local groupBuffs = require("e4_GroupBuffs")
 
 local bci = broadCastInterfaceFactory()
 

@@ -13,13 +13,13 @@ local timer       = require("Timer")
 
 local globalSettings = require("e4_Settings")
 
-local groupBuffs  = require("e4_GroupBuffs")
+local buffGroups  = require("e4_BuffGroups")
 
 local bci = broadCastInterfaceFactory()
 
 local serverBuffsSettings = efyranConfigDir() .. "/" .. server_buffs_settings_file()
 if file_exists(serverBuffsSettings) then
-    groupBuffs.Default = loadfile(serverBuffsSettings)()
+    buffGroups.Default = loadfile(serverBuffsSettings)()
 end
 
 
@@ -157,7 +157,7 @@ local refreshAutoClickiesTimer = timer.new(3) -- 3s (duration of a song, so bard
 
 ---@return string
 function buffs.getAvailableGroupBuffs()
-    local classBuffGroups = groupBuffs[class_shortname()]
+    local classBuffGroups = buffGroups[class_shortname()]
     if classBuffGroups == nil then
         return ""
     end
@@ -432,7 +432,7 @@ function buffs.BuffIt(spawnID)
     log.Debug("Handling /buffit request for spawn %s", spawnID)
 
     -- get the buffs for my class from the class defaults for `spawn`.
-    for idx, key in pairs(groupBuffs.Default[spawn.Class.ShortName()]) do
+    for idx, key in pairs(buffGroups.Default[spawn.Class.ShortName()]) do
         local spellConfig = parseSpellLine(key)
         if spellConfig.Class == class_shortname() then
             cmdf("/buff %s %s force", spawn.Name(), spellConfig.Name)
@@ -441,9 +441,9 @@ function buffs.BuffIt(spawnID)
 end
 
 function getClassBuffGroup(classShort, buffGroup)
-    local buffRows = groupBuffs[classShort][buffGroup]
+    local buffRows = buffGroups[classShort][buffGroup]
     if buffRows == nil then
-        all_tellf("FATAL ERROR: did not find groupBuffs.%s entry %s", classShort, buffGroup)
+        all_tellf("FATAL ERROR: did not find buffGroups.%s entry %s", classShort, buffGroup)
         return false
     end
 end
@@ -454,9 +454,9 @@ function handleBuffRequest(req)
 
     log.Debug("handleBuffRequest: Peer %s, buff \ay%s\ax, queue len \ay%d\ax, force = %s", req.Peer, req.Buff, #buffs.queue, tostring(req.Force))
 
-    local buffRows = groupBuffs[class_shortname()][req.Buff]
+    local buffRows = buffGroups[class_shortname()][req.Buff]
     if buffRows == nil then
-        all_tellf("ERROR: handleBuffRequest: did not find groupBuffs.%s entry %s", class_shortname(), req.Buff)
+        all_tellf("ERROR: handleBuffRequest: did not find buffGroups.%s entry %s", class_shortname(), req.Buff)
         return false
     end
 
@@ -664,7 +664,7 @@ function buffs.RequestBuffs()
 
     local req = botSettings.settings.request_buffs
     if req == nil then
-        req = groupBuffs.Default[class_shortname()]
+        req = buffGroups.Default[class_shortname()]
         if req == nil then
             -- unlikely
             all_tellf("FATAL ERROR class default buffs missing for %s", class_shortname())
@@ -712,15 +712,15 @@ function buffs.RequestBuffs()
         end
 
         if not skip then
-            local askClass = groupBuffs.Lookup[spellConfig.Name]
+            local askClass = buffGroups.Lookup[spellConfig.Name]
             if askClass == nil then
-                all_tellf("\arFATAL ERROR\ax: did not find groupBuffs.Lookup entry %s", spellConfig.Name)
+                all_tellf("\arFATAL ERROR\ax: did not find buffGroups.Lookup entry %s", spellConfig.Name)
                 return false
             end
 
-            local buffRows = groupBuffs[askClass][spellConfig.Name]
+            local buffRows = buffGroups[askClass][spellConfig.Name]
             if buffRows == nil then
-                all_tellf("\arFATAL ERROR\ax: did not find groupBuffs.%s entry %s", askClass, spellConfig.Name)
+                all_tellf("\arFATAL ERROR\ax: did not find buffGroups.%s entry %s", askClass, spellConfig.Name)
                 return false
             end
 

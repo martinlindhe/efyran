@@ -1,12 +1,12 @@
 local mq = require("mq")
 local broadCastInterfaceFactory = require 'broadcast/broadcastinterface'
 local commandQueue = require('e4_CommandQueue')
-local groupBuffs = require("e4_GroupBuffs")
+local buffGroups = require("e4_BuffGroups")
 
 local bci = broadCastInterfaceFactory()
 
 local function execute()
-    for _, groupHeal in pairs(groupBuffs.GroupHealSpells) do
+    for _, groupHeal in pairs(buffGroups.CLR.GroupHeals) do
         if is_spell_ready(groupHeal) then
             all_tellf("Casting group heal \ag%s\ax ...", groupHeal)
             castSpellRaw(groupHeal, nil)
