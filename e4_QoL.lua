@@ -786,7 +786,6 @@ function QoL.loadRequiredPlugins()
         "MQ2EQBC",
         "MQ2NetBots",
 
-        "MQ2DanNet",  -- XXX drop mq2dannet for MQ2NetBots
         "MQ2Debuffs",
         "MQ2MoveUtils", -- for /stick, /moveto
         "MQ2Cast",
