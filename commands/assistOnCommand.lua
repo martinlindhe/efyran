@@ -84,5 +84,5 @@ local function createKillItCommand(mobID, ...)
     commandQueue.Enqueue(function() execute({ SpawnId = toint(mobID), Filter = filter }) end)
 end
 
-mq.bind("/killit", createKillItCommand)
-mq.bind("/assiston", createAssistOnCommand)
+bind("/killit", createKillItCommand)
+bind("/assiston", createAssistOnCommand)

@@ -11,4 +11,4 @@ local function createCommand()
     commandQueue.Enqueue(function() execute() end)
 end
 
-mq.bind("/lcorpse", createCommand)
+bind("/lcorpse", createCommand)

@@ -16,4 +16,4 @@ local function createCommand()
     commandQueue.Enqueue(function() execute() end)
 end
 
-mq.bind("/dropinvis", createCommand)
+bind("/dropinvis", createCommand)

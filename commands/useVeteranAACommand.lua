@@ -67,17 +67,17 @@ local function createThroneCommand()
     commandQueue.Enqueue(function() execute({AdvancedAbilityName = "Throne of Heroes"}) end)
 end
 
-mq.bind("/staunch", createStaunchCommand)
-mq.bind("/armor", createArmorCommand)
-mq.bind("/infusion", createInfusionCommand)
-mq.bind("/intensity", createItensityCommand)
-mq.bind("/expedient", createExpedientCommand)
+bind("/staunch", createStaunchCommand)
+bind("/armor", createArmorCommand)
+bind("/infusion", createInfusionCommand)
+bind("/intensity", createItensityCommand)
+bind("/expedient", createExpedientCommand)
 
 -- tell peers in zone to use Throne of Heroes
-mq.bind("/throne", createThroneCommand)
+bind("/throne", createThroneCommand)
 
 -- tell peers in zone to use Lesson of the Devoted
-mq.bind("/lesson", function(...)
+bind("/lesson", function(...)
     local filter = args_string(...)
     if is_orchestrator() then
         bci.ExecuteZoneCommand(string.format("/lesson %s", filter))
@@ -86,6 +86,6 @@ mq.bind("/lesson", function(...)
 end)
 
 -- tell all peers to use Throne of Heroes
-mq.bind("/throneall", function()
+bind("/throneall", function()
     bci.ExecuteAllWithSelfCommand("/throne")
 end)

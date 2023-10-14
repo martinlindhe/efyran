@@ -1920,6 +1920,13 @@ function delay(delayValue, condition)
     mq.delay(delayValue, condition)
 end
 
+---@param cmd string
+---@param fn fun(...)
+function bind(cmd, fn)
+    mq.unbind(cmd)
+    mq.bind(cmd, fn)
+end
+
 function efyranConfigDir()
     return mq.TLO.MacroQuest.Path("config")() .. "/efyran"
 end

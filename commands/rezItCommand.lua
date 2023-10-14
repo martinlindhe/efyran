@@ -48,4 +48,4 @@ local function createCommand()
 end
 
 -- Perform rez on target (CLR,DRU,SHM,PAL will auto use >= 90% rez spells) or delegate it to nearby cleric
-mq.bind("/rezit", createCommand)
+bind("/rezit", createCommand)

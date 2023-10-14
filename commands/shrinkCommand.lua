@@ -51,7 +51,7 @@ local function createCommand()
     commandQueue.Enqueue(function() execute() end)
 end
 
-mq.bind("/shrinkgroup", createCommand)
-mq.bind("/shrinkall", function()
+bind("/shrinkgroup", createCommand)
+bind("/shrinkall", function()
     bci.ExecuteZoneCommand("/shrinkgroup")
 end)

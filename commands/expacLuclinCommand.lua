@@ -50,4 +50,4 @@ local function createCommand()
 end
 
 -- report your Lucid Shards
-mq.bind("/lucidshards", createCommand)
+bind("/lucidshards", createCommand)

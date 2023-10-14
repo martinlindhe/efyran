@@ -25,7 +25,7 @@ local Heal = {
 }
 
 function Heal.Init()
-    mq.bind("/medon", function()
+    bind("/medon", function()
         if is_orchestrator() then
             bci.ExecuteZoneCommand("/medon")
         end
@@ -33,7 +33,7 @@ function Heal.Init()
         Heal.medCheck()
     end)
 
-    mq.bind("/medoff", function()
+    bind("/medoff", function()
         if is_orchestrator() then
             bci.ExecuteZoneCommand("/medoff")
         end

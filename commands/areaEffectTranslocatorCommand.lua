@@ -14,4 +14,4 @@ local function createCommand()
 end
 
     -- wiz: cast AE TL spell
-mq.bind("/aetl", createCommand)
+bind("/aetl", createCommand)

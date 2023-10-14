@@ -51,5 +51,5 @@ local function createDismountCommand(peer, filter)
     cmd("/dismount")
 end
 
-mq.bind("/mounton", createMountCommand)
-mq.bind("/mountoff", createDismountCommand)
+bind("/mounton", createMountCommand)
+bind("/mountoff", createDismountCommand)

@@ -56,4 +56,4 @@ local function createCommand(...)
     end
 end
 
-mq.bind("/fmi", createCommand)
+bind("/fmi", createCommand)

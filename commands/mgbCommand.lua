@@ -25,27 +25,27 @@ local function createCommand(name)
 end
 
 -- MGB CLR Celestial Regeneration
-mq.bind("/aecr", function() createCommand("Celestial Regeneration") end)
+bind("/aecr", function() createCommand("Celestial Regeneration") end)
 
 -- MGB DRU Spirit of the Wood
-mq.bind("/aesow",  function() createCommand("Spirit of the Wood") end)
-mq.bind("/aesotw", function() createCommand("Spirit of the Wood") end)
+bind("/aesow",  function() createCommand("Spirit of the Wood") end)
+bind("/aesotw", function() createCommand("Spirit of the Wood") end)
 
 -- MGB SHM Ancestral Aid
-mq.bind("/aeaa", function() createCommand("Ancestral Aid") end)
+bind("/aeaa", function() createCommand("Ancestral Aid") end)
 
 -- MGB DRU Flight of Eagles
-mq.bind("/aefoe", function() createCommand("Flight of Eagles") end)
+bind("/aefoe", function() createCommand("Flight of Eagles") end)
 
 -- MGB NEC Dead Men Floating
-mq.bind("/aedmf", function() createCommand("Dead Men Floating") end)
+bind("/aedmf", function() createCommand("Dead Men Floating") end)
 
 -- MGB ENC Rune of Rikkukin
-mq.bind("/aerr", function() createCommand("Rune of Rikkukin") end)
+bind("/aerr", function() createCommand("Rune of Rikkukin") end)
 
 -- MGB BST Paragon of Spirit
-mq.bind("/aepos", function() createCommand("Paragon of Spirit") end)
+bind("/aepos", function() createCommand("Paragon of Spirit") end)
 
 -- MGB RNG Auspice of the Hunter
-mq.bind("/aeaoh",  function() createCommand("Auspice of the Hunter") end)
-mq.bind("/aeaoth", function() createCommand("Auspice of the Hunter") end)
+bind("/aeaoh",  function() createCommand("Auspice of the Hunter") end)
+bind("/aeaoth", function() createCommand("Auspice of the Hunter") end)

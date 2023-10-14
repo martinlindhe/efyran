@@ -79,7 +79,7 @@ function buffs.Init()
 
     -- enqueues a buff to be cast on a peer
     -- is normally called from another peer, to request a buff
-    mq.bind("/buff", function(peer, buff, force)
+    bind("/buff", function(peer, buff, force)
         table.insert(buffs.queue, {
             Peer = peer,
             Buff = buff,
@@ -88,19 +88,19 @@ function buffs.Init()
     end)
 
     -- INTERNAL: for requesting buff state (is sent from `peer`. We will respond with a /set_others_buffs to `peer`
-    mq.bind("/request_buffs", function(peer)
+    bind("/request_buffs", function(peer)
         bci.ExecuteCommand(string.format("/set_others_buffs %s %s", mq.TLO.Me.Name(), buffs.getAvailableGroupBuffs()), {peer})
         --log.Debug("Told %s my buffs are %s", peer, buffs.getAvailableGroupBuffs())
     end)
 
     -- INTERNAL: for updating buff state (is sent from `peer` to this instance)
-    mq.bind("/set_others_buffs", function(peer, ...)
+    bind("/set_others_buffs", function(peer, ...)
         local arg = args_string(...)
         buffs.otherAvailable[peer] = arg
         --log.Debug("%s told me their buffs are: %s", peer, arg)
     end)
 
-    mq.bind("/reportclickies", function(...)
+    bind("/reportclickies", function(...)
         local filter = args_string(...)
         if filter ~= nil and not matches_filter(filter, mq.TLO.Me.Name()) then
             log.Info("reportclickies: Not matching filter \ay%s\ax", filter)

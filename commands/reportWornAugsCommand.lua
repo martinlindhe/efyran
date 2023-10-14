@@ -30,4 +30,4 @@ local function createCommand()
     commandQueue.Enqueue(function() execute() end)
 end
 
-mq.bind("/wornaugs", createCommand)
+bind("/wornaugs", createCommand)

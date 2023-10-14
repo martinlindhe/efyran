@@ -24,4 +24,4 @@ local function createCommand()
 end
 
 
-mq.bind("/banker", createCommand)
+bind("/banker", createCommand)

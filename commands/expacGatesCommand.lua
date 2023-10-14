@@ -44,4 +44,4 @@ local function createCommand()
 end
 
 -- report your GoD tongue quest status
-mq.bind("/tongues", createCommand)
+bind("/tongues", createCommand)

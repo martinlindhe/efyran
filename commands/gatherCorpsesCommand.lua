@@ -26,4 +26,4 @@ local function createCommand()
     commandQueue.Enqueue(function() execute() end)
 end
 
-mq.bind("/gathercorpses", createCommand)
+bind("/gathercorpses", createCommand)

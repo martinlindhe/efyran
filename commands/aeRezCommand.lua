@@ -11,4 +11,4 @@ local function createCommand()
 end
 
 
-mq.bind("/aerez", createCommand)
+bind("/aerez", createCommand)

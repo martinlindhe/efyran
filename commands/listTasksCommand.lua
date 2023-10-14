@@ -25,4 +25,4 @@ local function createCommand(...)
     commandQueue.Enqueue(function() execute() end)
 end
 
-mq.bind("/listtasks", createCommand)
+bind("/listtasks", createCommand)

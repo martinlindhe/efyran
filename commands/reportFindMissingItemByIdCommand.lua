@@ -72,4 +72,4 @@ local function createCommand(id)
     commandQueue.Enqueue(function() execute({Id = toint(id)}) end)
 end
 
-mq.bind("/fmid", createCommand)
+bind("/fmid", createCommand)

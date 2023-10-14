@@ -20,4 +20,4 @@ local function createCommand(peer, filter)
     commandQueue.Enqueue(function() execute() end)
 end
 
-mq.bind("/secondaryrecall", createCommand)
+bind("/secondaryrecall", createCommand)

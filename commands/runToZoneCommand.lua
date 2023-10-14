@@ -25,4 +25,4 @@ local function createCommand(startingPeerName)
     commandQueue.Enqueue(function() execute({Peer = startingPeerName}) end)
 end
 
-mq.bind("/rtz", createCommand)
+bind("/rtz", createCommand)

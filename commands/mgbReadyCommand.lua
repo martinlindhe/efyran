@@ -22,4 +22,4 @@ local function createCommand()
     commandQueue.Enqueue(function() execute() end)
 end
 
-mq.bind("/mgbready", createCommand)
+bind("/mgbready", createCommand)

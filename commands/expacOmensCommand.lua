@@ -38,4 +38,4 @@ local function createCommand()
 end
 
 -- report your CoA auguments
-mq.bind("/coaaugs", createCommand)
+bind("/coaaugs", createCommand)

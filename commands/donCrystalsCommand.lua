@@ -29,4 +29,4 @@ local function createCommand(distance)
 end
 
 -- report DoN crystals count on all connected peers
-mq.bind("/doncrystals", createCommand)
+bind("/doncrystals", createCommand)

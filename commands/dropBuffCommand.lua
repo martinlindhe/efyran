@@ -27,4 +27,4 @@ local function createCommand(filter)
     commandQueue.Enqueue(function() execute({Filter = filter}) end)
 end
 
-mq.bind("/dropbuff", createCommand)
+bind("/dropbuff", createCommand)

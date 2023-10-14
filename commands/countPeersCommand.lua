@@ -11,5 +11,5 @@ local function createCommand()
     commandQueue.Enqueue(function() execute() end)
 end
 
-mq.bind("/count", createCommand)
-mq.bind("/cnt", createCommand)
+bind("/count", createCommand)
+bind("/cnt", createCommand)

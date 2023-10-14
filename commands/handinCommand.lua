@@ -16,7 +16,7 @@ local function createCommand()
     commandQueue.Enqueue(function() execute() end)
 end
 
-mq.bind("/handin", createCommand)
-mq.bind("/handinall", function()
+bind("/handin", createCommand)
+bind("/handinall", function()
     bci.ExecuteAllWithSelfCommand("/handin")
 end)

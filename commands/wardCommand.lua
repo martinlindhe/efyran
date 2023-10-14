@@ -57,13 +57,13 @@ local function createCureWardCommand()
 end
 
 -- Use heal ward AA (CLR/DRU/SHM, OOW)
-mq.bind("/healward", createHealWardCommand)
+bind("/healward", createHealWardCommand)
 
 -- Summon all available heal wards (CLR/DRU/SHM, OOW)
-mq.bind("/healwards", function() bci.ExecuteZoneCommand("/healward") end)
+bind("/healwards", function() bci.ExecuteZoneCommand("/healward") end)
 
 -- Use cure ward AA "Ward of Purity" (CLR, DoDH)
-mq.bind("/cureward", createCureWardCommand)
+bind("/cureward", createCureWardCommand)
 
 -- Summon all available cure wards (CLR, DoDH)
-mq.bind("/curewards", function() bci.ExecuteZoneCommand("/cureward") end)
+bind("/curewards", function() bci.ExecuteZoneCommand("/cureward") end)

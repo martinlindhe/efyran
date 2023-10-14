@@ -16,4 +16,4 @@ local function createCommand(name, groupNumber)
     commandQueue.Enqueue(function() execute({Name=name, GroupNumber = groupNumber}) end)
 end
 
-mq.bind("/recallgroup", createCommand)
+bind("/recallgroup", createCommand)

@@ -51,6 +51,6 @@ local function createFullBurnsCommand(peer, filter)
     commandQueue.Enqueue(function() execute({ Type = "fullburns" }) end)
 end
 
-mq.bind("/quickburns", createQuickBurnsCommand)
-mq.bind("/longburns", createLongBurnsCommand)
-mq.bind("/fullburns", createFullBurnsCommand)
+bind("/quickburns", createQuickBurnsCommand)
+bind("/longburns", createLongBurnsCommand)
+bind("/fullburns", createFullBurnsCommand)

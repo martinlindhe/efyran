@@ -55,5 +55,5 @@ local function createClickDoorCommand(sender, ...)
     commandQueue.Enqueue(function() execute({ Peer = sender, Filter = filter }) end)
 end
 
-mq.bind("/clickit", createClickItCommand)
-mq.bind("/clickdoor", createClickDoorCommand)
+bind("/clickit", createClickItCommand)
+bind("/clickdoor", createClickDoorCommand)

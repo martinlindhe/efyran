@@ -55,9 +55,9 @@ end
 
 
 -- Used by orchestrator to start pbae
-mq.bind("/pbaeon", createPBAEOnCommand)
-mq.bind("/pbaestart", createPBAEStartCommand)
-mq.bind("/pbaeoff", function()
+bind("/pbaeon", createPBAEOnCommand)
+bind("/pbaestart", createPBAEStartCommand)
+bind("/pbaeoff", function()
     if is_orchestrator() then
         bci.ExecuteZoneCommand("/pbaeoff")
     end

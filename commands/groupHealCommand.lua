@@ -23,4 +23,4 @@ local function createCommand()
     commandQueue.Enqueue(function() execute() end)
 end
 
-mq.bind("/groupheal", createCommand)
+bind("/groupheal", createCommand)

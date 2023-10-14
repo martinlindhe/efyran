@@ -18,4 +18,4 @@ local function createCommand(distance)
     commandQueue.Enqueue(function() execute() end)
 end
 
-mq.bind("/evac", createCommand)
+bind("/evac", createCommand)

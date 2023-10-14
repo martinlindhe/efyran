@@ -99,4 +99,4 @@ local function createCommand()
 end
 
 
-mq.bind("/wordheal", createCommand)
+bind("/wordheal", createCommand)

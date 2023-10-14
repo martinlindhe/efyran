@@ -16,4 +16,4 @@ local function createCommand(name, kind)
 end
 
 -- auto cure target (usage: is requested by another toon)
-mq.bind("/cure", createCommand)
+bind("/cure", createCommand)

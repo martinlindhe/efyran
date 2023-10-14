@@ -16,4 +16,4 @@ local function createCommand(distance)
     commandQueue.Enqueue(function() execute() end)
 end
 
-mq.bind("/usecorpsesummoner", createCommand)
+bind("/usecorpsesummoner", createCommand)

@@ -30,7 +30,7 @@ local function createCommand(peer, ...)
     commandQueue.Enqueue(function() execute({Peer = peer, Filter = filter}) end)
 end
 
-mq.bind("/movetopeer", createCommand)
+bind("/movetopeer", createCommand)
 
 
 ---@param ... string|nil filter, such as "/only|ROG"
@@ -43,5 +43,5 @@ local movetome = function(...)
     bci.ExecuteZoneCommand(exe)
 end
 
-mq.bind("/movetome", movetome)
-mq.bind("/mtm", movetome)
+bind("/movetome", movetome)
+bind("/mtm", movetome)

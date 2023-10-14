@@ -26,7 +26,7 @@ local function createCommand()
     commandQueue.Enqueue(function() execute({SpawnId = spawnId}) end)
 end
 
-mq.bind("/buffit", createCommand)
-mq.bind("/buffme", function()
+bind("/buffit", createCommand)
+bind("/buffme", function()
     bci.ExecuteZoneCommand(string.format("/buffit %d", mq.TLO.Me.ID()))
 end)

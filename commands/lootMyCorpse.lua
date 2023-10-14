@@ -22,6 +22,6 @@ local function createLootAllCommand()
     commandQueue.Enqueue(function() execute() end)
 end
 
-mq.bind("/lootmycorpse", createCommand)
-mq.bind("/lootallcorpses", createLootAllCommand)
+bind("/lootmycorpse", createCommand)
+bind("/lootallcorpses", createLootAllCommand)
 

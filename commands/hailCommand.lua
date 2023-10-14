@@ -22,7 +22,7 @@ local function createHailAllCommand()
 end
 
 -- hail or talk to nearby recognized NPC
-mq.bind("/hailit", createCommand)
+bind("/hailit", createCommand)
 
 -- tells all peers to hail or talk to nearby recognized NPC
-mq.bind("/hailall", createHailAllCommand)
+bind("/hailall", createHailAllCommand)

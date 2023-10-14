@@ -31,4 +31,4 @@ local function createCommand(...)
     commandQueue.Enqueue(function() execute({ Filter = filter }) end)
 end
 
-mq.bind("/backoff", createCommand)
+bind("/backoff", createCommand)

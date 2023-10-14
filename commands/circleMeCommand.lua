@@ -13,4 +13,4 @@ local function createCommand(distance)
     commandQueue.Enqueue(function() execute({Distance = toint(distance)}) end)
 end
 
-mq.bind("/circleme", createCommand)
+bind("/circleme", createCommand)

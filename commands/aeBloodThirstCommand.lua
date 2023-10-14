@@ -11,4 +11,4 @@ local function createCommand()
 end
 
 
-mq.bind("/aebloodthirst", createCommand)
+bind("/aebloodthirst", createCommand)

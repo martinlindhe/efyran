@@ -178,7 +178,7 @@ function QoL.Init()
     mq.event("char_flag-don", "You have received a character flag!", charFlag) -- DoN
 
     -- report who got the flag
-    mq.bind("/gotflag", function()
+    bind("/gotflag", function()
         if is_orchestrator() then
             bci.ExecuteAllCommand("/gotflag")
         end
@@ -188,7 +188,7 @@ function QoL.Init()
     end)
 
     -- report who did not get a flag
-    mq.bind("/noflag", function()
+    bind("/noflag", function()
         if is_orchestrator() then
             bci.ExecuteAllCommand("/noflag")
         end
@@ -198,7 +198,7 @@ function QoL.Init()
     end)
 
     -- change spell set
-    mq.bind("/spellset", function(name)
+    bind("/spellset", function(name)
         if is_orchestrator() then
             local cmd = string.format("/spellset %s", name)
             bci.ExecuteZoneCommand(cmd)
@@ -209,7 +209,7 @@ function QoL.Init()
 
 
     -- mana check
-    mq.bind("/mana", function()
+    bind("/mana", function()
         if is_orchestrator() then
             bci.ExecuteZoneCommand("/mana")
         end
@@ -225,7 +225,7 @@ function QoL.Init()
         end
     end)
 
-    mq.bind("/reportmana", function()
+    bind("/reportmana", function()
         if is_orchestrator() then
             bci.ExecuteZoneCommand("/reportmana")
         end
@@ -237,14 +237,14 @@ function QoL.Init()
         end
     end)
 
-    mq.bind("/buffon", function()
+    bind("/buffon", function()
         buffs.refreshBuffs = true
         if is_orchestrator() then
             bci.ExecuteZoneCommand("/buffon")
         end
     end)
 
-    mq.bind("/buffoff", function()
+    bind("/buffoff", function()
         buffs.refreshBuffs = false
         if is_orchestrator() then
             bci.ExecuteZoneCommand("/buffoff")
@@ -262,10 +262,10 @@ function QoL.Init()
     end
 
     ---@param ... string|nil filter, such as "/only|ROG"
-    mq.bind("/followon", followOn)
-    mq.bind("/followme", followOn) -- alias for e3 compatibility
+    bind("/followon", followOn)
+    bind("/followme", followOn) -- alias for e3 compatibility
 
-    mq.bind("/followoff", function(s)
+    bind("/followoff", function(s)
         if is_orchestrator() then
             bci.ExecuteZoneCommand("/followoff")
         end
@@ -275,7 +275,7 @@ function QoL.Init()
     -- follows another peer
     ---@param spawnName string
     ---@param ... string|nil filter, such as "/only|ROG"
-    mq.bind("/followplayer", function(spawnName, ...)
+    bind("/followplayer", function(spawnName, ...)
         local filter = args_string(...)
         if filter ~= nil and not matches_filter(filter, mq.TLO.Me.Name()) then
             log.Info("followid: Not matching filter \ay%s\ax", filter)
@@ -285,16 +285,16 @@ function QoL.Init()
     end)
 
     -- reports all peers with debuffs
-    mq.bind("/counters", function()
+    bind("/counters", function()
         bci.ExecuteZoneCommand("/if (${NetBots[${Me.Name}].Counters}) /bc DEBUFFED: ${NetBots[${Me.Name}].Counters} counters in ${NetBots[${Me.Name}].Detrimentals} debuffs: ${NetBots[${Me.Name}].Detrimental}")
     end)
 
-    mq.bind("/lessonsactive", function()
+    bind("/lessonsactive", function()
         bci.ExecuteZoneCommand("/if (${Me.Buff[Lesson of the Devoted].ID}) /bc ACTIVE: ${Me.Buff[Lesson of the Devoted].Duration.TimeHMS}")
     end)
 
     -- report naked toons
-    mq.bind("/naked", function()
+    bind("/naked", function()
         if is_orchestrator() then
             bci.ExecuteZoneCommand("/naked")
         end
@@ -304,12 +304,12 @@ function QoL.Init()
     end)
 
     -- pick up ground spawn
-    mq.bind("/pickup", function()
+    bind("/pickup", function()
         mq.cmd("/itemtarget")
         mq.cmd("/click left item")
     end)
 
-    mq.bind("/bark", function(...)
+    bind("/bark", function(...)
         local arg = args_string(...)
         local spawnID = mq.TLO.Target.ID()
         if spawnID == nil then
@@ -323,7 +323,7 @@ function QoL.Init()
         cmdf("/barkit %d %s", spawnID, arg)
     end)
 
-    mq.bind("/barkit", function(spawnID, ...)
+    bind("/barkit", function(spawnID, ...)
         local arg = args_string(...)
 
         local id = toint(spawnID)
@@ -333,7 +333,7 @@ function QoL.Init()
     end)
 
     -- reports faction status
-    mq.bind("/factions", function()
+    bind("/factions", function()
         if maxFactionLoyalists then
             log.Debug("Dranik Loyalists: max ally")
         else
@@ -342,48 +342,48 @@ function QoL.Init()
     end)
 
     -- tell all peers to report faction status
-    mq.bind("/factionsall", function() bci.ExecuteZoneCommand("/factions") end)
+    bind("/factionsall", function() bci.ExecuteZoneCommand("/factions") end)
 
     -- clear all chat windows on current peer
-    mq.bind("/clr", function() mq.cmd("/clear") end)
+    bind("/clr", function() mq.cmd("/clear") end)
 
     -- clear all chat windows on all peers
-    mq.bind("/cls", function() bci.ExecuteAllWithSelfCommand("/clear") end)
+    bind("/cls", function() bci.ExecuteAllWithSelfCommand("/clear") end)
 
-    mq.bind("/self", function() mq.cmd("/target myself") end)
+    bind("/self", function() mq.cmd("/target myself") end)
 
     -- hide existing corpses
-    mq.bind("/hce", function() mq.cmd("/hidec all") end)
+    bind("/hce", function() mq.cmd("/hidec all") end)
 
     -- hide looted corpses
-    mq.bind("/hcl", function() mq.cmd("/hidec looted") end)
+    bind("/hcl", function() mq.cmd("/hidec looted") end)
 
     -- hide no corpses
-    mq.bind("/hcn", function() mq.cmd("/hidec none") end)
+    bind("/hcn", function() mq.cmd("/hidec none") end)
 
     -- report toons with few free buff slots
-    mq.bind("/freebuffslots", function() bci.ExecuteAllWithSelfCommand("/if (${Me.FreeBuffSlots} <= 1) /bc FREE BUFF SLOTS: ${Me.FreeBuffSlots}") end)
-    mq.bind("/fbs", function() mq.cmd("/freebuffslots") end)
+    bind("/freebuffslots", function() bci.ExecuteAllWithSelfCommand("/if (${Me.FreeBuffSlots} <= 1) /bc FREE BUFF SLOTS: ${Me.FreeBuffSlots}") end)
+    bind("/fbs", function() mq.cmd("/freebuffslots") end)
 
     -- /raidinvite shorthand
-    mq.bind("/ri", function(name) mq.cmdf("/raidinvite %s", name) end)
+    bind("/ri", function(name) mq.cmdf("/raidinvite %s", name) end)
 
     -- quickly exits all eqgame.exe instances using task manager
-    mq.bind("/exitall", function()
+    bind("/exitall", function()
         mq.cmd('/squelch /exec TASKKILL "/F /IM eqgame.exe" bg')
     end)
 
     -- quickly exits my eqgame.exe instance using task manager
-    mq.bind("/exitme", function()
+    bind("/exitme", function()
         all_tellf("Exiting")
         mq.cmd('/squelch /exec TASKKILL "/F /PID '..tostring(mq.TLO.EverQuest.PID())..'" bg')
     end)
 
-    mq.bind("/exitnotinzone", function() bci.ExecuteAllCommand(string.format("/if (!${SpawnCount[pc =%s]}) /exitme", mq.TLO.Me.Name())) end)
+    bind("/exitnotinzone", function() bci.ExecuteAllCommand(string.format("/if (!${SpawnCount[pc =%s]}) /exitme", mq.TLO.Me.Name())) end)
 
-    mq.bind("/exitnotingroup", function() bci.ExecuteAllWithSelfCommand("/if (!${Group.Members}) /exitme") end)
+    bind("/exitnotingroup", function() bci.ExecuteAllWithSelfCommand("/if (!${Group.Members}) /exitme") end)
 
-    mq.bind("/exitnotinraid", function(force)
+    bind("/exitnotinraid", function(force)
         if not in_raid() and force ~= "force" then
             all_tellf("ERROR: not exiting since you are not raided! Force with /exitnotinraid force")
             cmd("/beep")
@@ -393,77 +393,77 @@ function QoL.Init()
     end)
 
     -- report all peers who are not in current zone
-    mq.bind("/notinzone", function() bci.ExecuteAllWithSelfCommand(string.format("/if (!${SpawnCount[pc =%s]}) /bc I'm in \ar${Zone.ShortName}\ax", mq.TLO.Me.Name())) end)
+    bind("/notinzone", function() bci.ExecuteAllWithSelfCommand(string.format("/if (!${SpawnCount[pc =%s]}) /bc I'm in \ar${Zone.ShortName}\ax", mq.TLO.Me.Name())) end)
 
-    mq.bind("/notingroup", function() bci.ExecuteAllWithSelfCommand("/if (!${Me.Grouped}) /bc NOT IN GROUP") end)
+    bind("/notingroup", function() bci.ExecuteAllWithSelfCommand("/if (!${Me.Grouped}) /bc NOT IN GROUP") end)
 
-    mq.bind("/ingroup", function() bci.ExecuteAllWithSelfCommand("/if (${Me.Grouped}) /bc IN GROUP") end)
+    bind("/ingroup", function() bci.ExecuteAllWithSelfCommand("/if (${Me.Grouped}) /bc IN GROUP") end)
 
-    mq.bind("/notinraid", function() bci.ExecuteAllWithSelfCommand("/if (!${Raid.Members}) /bc NOT IN RAID") end)
+    bind("/notinraid", function() bci.ExecuteAllWithSelfCommand("/if (!${Raid.Members}) /bc NOT IN RAID") end)
 
-    mq.bind("/inraid", function() bci.ExecuteAllWithSelfCommand("/if (${Raid.Members}) /bc IN RAID") end)
+    bind("/inraid", function() bci.ExecuteAllWithSelfCommand("/if (${Raid.Members}) /bc IN RAID") end)
 
     -- report all peers who are not levitating
-    mq.bind("/notlevi", function() bci.ExecuteAllWithSelfCommand("/if (!${Me.Levitating}) /bc NOT LEVI") end)
+    bind("/notlevi", function() bci.ExecuteAllWithSelfCommand("/if (!${Me.Levitating}) /bc NOT LEVI") end)
 
-    mq.bind("/notitu", function() bci.ExecuteAllWithSelfCommand("/if (!${Me.Buff[Sunskin].ID}) /bc NOT ITU") end)
+    bind("/notitu", function() bci.ExecuteAllWithSelfCommand("/if (!${Me.Buff[Sunskin].ID}) /bc NOT ITU") end)
 
     -- report all peers who are not invisible
-    mq.bind("/notinvis", function() bci.ExecuteAllWithSelfCommand("/if (!${Me.Invis}) /bc NOT INVIS") end)
+    bind("/notinvis", function() bci.ExecuteAllWithSelfCommand("/if (!${Me.Invis}) /bc NOT INVIS") end)
 
 
     -- report special stats
-    mq.bind("/combateffects", function() bci.ExecuteAllWithSelfCommand("/if (${Select[${Me.Class.ShortName},ROG,BER,MNK]}) /bc COMBAT EFFECT ${Me.CombatEffectsBonus}") end)
+    bind("/combateffects", function() bci.ExecuteAllWithSelfCommand("/if (${Select[${Me.Class.ShortName},ROG,BER,MNK]}) /bc COMBAT EFFECT ${Me.CombatEffectsBonus}") end)
 
-    mq.bind("/accuracy", function() bci.ExecuteAllWithSelfCommand("/if (${Select[${Me.Class.ShortName},WAR,PAL,RNG,SHD,MNK,BRD,ROG,BST,BER]}) /bc ACCURACY ${Me.AccuracyBonus}/150") end)
-    mq.bind("/strikethru", function() bci.ExecuteAllWithSelfCommand("/if (${Select[${Me.Class.ShortName},RNG,MNK,BRD,ROG,BST,BER]}) /bc STRIKE THRU ${Me.StrikeThroughBonus}/35") end)
-    mq.bind("/shielding", function() bci.ExecuteAllWithSelfCommand("/bc SHIELDING ${Me.ShieldingBonus}") end)
+    bind("/accuracy", function() bci.ExecuteAllWithSelfCommand("/if (${Select[${Me.Class.ShortName},WAR,PAL,RNG,SHD,MNK,BRD,ROG,BST,BER]}) /bc ACCURACY ${Me.AccuracyBonus}/150") end)
+    bind("/strikethru", function() bci.ExecuteAllWithSelfCommand("/if (${Select[${Me.Class.ShortName},RNG,MNK,BRD,ROG,BST,BER]}) /bc STRIKE THRU ${Me.StrikeThroughBonus}/35") end)
+    bind("/shielding", function() bci.ExecuteAllWithSelfCommand("/bc SHIELDING ${Me.ShieldingBonus}") end)
 
-    mq.bind("/dotshield", function() bci.ExecuteAllWithSelfCommand("/bc DoT SHIELD ${Me.DoTShieldBonus}") end)
-    mq.bind("/spellshield", function() bci.ExecuteAllWithSelfCommand("/bc SPELL SHIELD ${Me.SpellShieldBonus}") end)
-    mq.bind("/avoidance", function() bci.ExecuteAllWithSelfCommand("/bc AVOIDANCE ${Me.AvoidanceBonus}/100") end)
-    mq.bind("/stunresist", function() bci.ExecuteAllWithSelfCommand("/bc STUN RESIST ${Me.StunResistBonus}") end)
+    bind("/dotshield", function() bci.ExecuteAllWithSelfCommand("/bc DoT SHIELD ${Me.DoTShieldBonus}") end)
+    bind("/spellshield", function() bci.ExecuteAllWithSelfCommand("/bc SPELL SHIELD ${Me.SpellShieldBonus}") end)
+    bind("/avoidance", function() bci.ExecuteAllWithSelfCommand("/bc AVOIDANCE ${Me.AvoidanceBonus}/100") end)
+    bind("/stunresist", function() bci.ExecuteAllWithSelfCommand("/bc STUN RESIST ${Me.StunResistBonus}") end)
 
     -- "free inventory slots": only lists melees as looter classes for minimal disruption
-    mq.bind("/fis", function()
+    bind("/fis", function()
         bci.ExecuteAllWithSelfCommand("/if (${Select[${Me.Class.ShortName},MNK,ROG,BER,RNG]} && ${Me.FreeInventory} > 20) /bc FREE INVENTORY SLOTS: ${Me.FreeInventory}")
     end)
 
     -- "free inventory slots all"
-    mq.bind("/fisa", function()
+    bind("/fisa", function()
         bci.ExecuteAllWithSelfCommand("/if (${Me.FreeInventory} > 20) /bc FREE INVENTORY SLOTS: ${Me.FreeInventory}")
     end)
 
     -- report all with few free inventory slots
-    mq.bind("/fewinventoryslots", function()
+    bind("/fewinventoryslots", function()
         bci.ExecuteAllWithSelfCommand("/if (${Me.FreeInventory} <= 20) /bc FULL INVENTORY, ${Me.FreeInventory} FREE SLOTS")
     end)
 
     -- make peers in zone face my target
-    mq.bind("/facetarget", function() bci.ExecuteZoneCommand("/face fast id "..mq.TLO.Target.ID()) end)
-    mq.bind("/facetgt", function() mq.cmd("/facetarget") end)
+    bind("/facetarget", function() bci.ExecuteZoneCommand("/face fast id "..mq.TLO.Target.ID()) end)
+    bind("/facetgt", function() mq.cmd("/facetarget") end)
 
     -- make peers in zone face me
-    mq.bind("/faceme", function() bci.ExecuteZoneCommand("/face fast id "..mq.TLO.Me.ID()) end)
+    bind("/faceme", function() bci.ExecuteZoneCommand("/face fast id "..mq.TLO.Me.ID()) end)
 
     -- useful when AE FD is cast (oow, wos Shadowhunter, Cleric 1.5 fight in lfay and so on)
-    mq.bind("/standall", function() bci.ExecuteAllWithSelfCommand("/if (${Me.Feigning} || ${Me.Ducking} || ${Me.Sitting}) /stand") end)
+    bind("/standall", function() bci.ExecuteAllWithSelfCommand("/if (${Me.Feigning} || ${Me.Ducking} || ${Me.Sitting}) /stand") end)
 
-    mq.bind("/sitall", function() bci.ExecuteAllWithSelfCommand("/if (${Me.Standing}) /sit on") end)
+    bind("/sitall", function() bci.ExecuteAllWithSelfCommand("/if (${Me.Standing}) /sit on") end)
 
     -- report all peers who are not standing
-    mq.bind("/notstanding", function() bci.ExecuteAllWithSelfCommand("/if (${Me.Feigning} || ${Me.Ducking} || ${Me.Sitting}) /bc NOT STANDING") end)
+    bind("/notstanding", function() bci.ExecuteAllWithSelfCommand("/if (${Me.Feigning} || ${Me.Ducking} || ${Me.Sitting}) /bc NOT STANDING") end)
 
     -- reports all toons that are not running e4
-    mq.bind("/note4", function() bci.ExecuteAllWithSelfCommand("/lua run note4") end)
+    bind("/note4", function() bci.ExecuteAllWithSelfCommand("/lua run note4") end)
 
-    mq.bind("/running", function()
+    bind("/running", function()
         -- XXX reports all running scripts on all toons
         log.Error("FIXME impl /running: report all running scripts on all toons")
     end)
 
     -- runs combine.lua tradeskill script. NOTE: /combine is reserved for MacroQuest.
-    mq.bind("/combineit", function()
+    bind("/combineit", function()
         if is_script_running("combine") then
             cmd("/lua stop efyran/combine")
         end
@@ -473,54 +473,54 @@ function QoL.Init()
     local mmrl = function()
         bci.ExecuteCommand(string.format("/makeraidleader %s", mq.TLO.Me.Name()), {mq.TLO.Raid.Leader()})
     end
-    mq.bind("/makemeraidleader", mmrl)
-    mq.bind("/mmrl", mmrl)
+    bind("/makemeraidleader", mmrl)
+    bind("/mmrl", mmrl)
 
     -- report if tribute is too low (under 140k)
-    mq.bind("/lowtribute", function()
+    bind("/lowtribute", function()
         bci.ExecuteAllWithSelfCommand("/if (${Me.CurrentFavor} < 140000) /bc LOW TRIBUTE ${Me.CurrentFavor}")
     end)
 
     -- report if tribute is active
     -- TODO add filter for /tributeactive /only|tanks
-    mq.bind("/tributeactive", function()
+    bind("/tributeactive", function()
         bci.ExecuteAllWithSelfCommand("/if (${Me.TributeActive}) /bc TRIBUTE ACTIVE, COST ${Me.ActiveFavorCost}, STORED ${Me.CurrentFavor}")
     end)
 
     -- Ask peer owners of nearby corpses to consent me
-    mq.bind("/consentme", function() consent_me() end)
+    bind("/consentme", function() consent_me() end)
 
     -- turn auto loot on
-    mq.bind("/looton", function()
+    bind("/looton", function()
         loot.autoloot = true
     end)
 
     -- turn auto loot off
-    mq.bind("/lootoff", function()
+    bind("/lootoff", function()
         loot.autoloot = false
     end)
 
     -- make all peer quit expedition
-    mq.bind("/quitexp", function()
+    bind("/quitexp", function()
         all_tellf("Instructing peers to leave expedition / shared task ...")
         bci.ExecuteAllWithSelfCommand("/dzquit")   -- Expedition (PoP, LDoN, GoD, OOW)
         bci.ExecuteAllWithSelfCommand("/taskquit") -- Shared task (DoN)
     end)
 
     -- hide all dz windows
-    mq.bind("/dzhide", function() bci.ExecuteAllWithSelfCommand("/if (${Window[dynamiczonewnd]}) /windowstate dynamiczonewnd close") end)
+    bind("/dzhide", function() bci.ExecuteAllWithSelfCommand("/if (${Window[dynamiczonewnd]}) /windowstate dynamiczonewnd close") end)
 
     -- report peers with at least 5 unspent AA:s
-    mq.bind("/unspentaa", function() bci.ExecuteAllWithSelfCommand("/if (${Me.AAPoints} >= 5 && ${Me.AAPoints} < 50) /bc UNSPENT AA: ${Me.AAPoints}") end)
+    bind("/unspentaa", function() bci.ExecuteAllWithSelfCommand("/if (${Me.AAPoints} >= 5 && ${Me.AAPoints} < 50) /bc UNSPENT AA: ${Me.AAPoints}") end)
 
     -- report peers with less than 10 unspent AA:s
-    mq.bind("/lowunspentaa", function() bci.ExecuteAllWithSelfCommand("/if (${Me.AAPoints} >= 1 && ${Me.AAPoints} < 50) /bc UNSPENT AA: ${Me.AAPoints}") end)
+    bind("/lowunspentaa", function() bci.ExecuteAllWithSelfCommand("/if (${Me.AAPoints} >= 1 && ${Me.AAPoints} < 50) /bc UNSPENT AA: ${Me.AAPoints}") end)
 
     -- report peers with any unspent AA:s
-    mq.bind("/allunspentaa", function() bci.ExecuteAllWithSelfCommand("/if (${Me.AAPoints} >= 1) /bc UNSPENT AA: ${Me.AAPoints} (SPENT ${Me.AAPointsSpent})") end)
+    bind("/allunspentaa", function() bci.ExecuteAllWithSelfCommand("/if (${Me.AAPoints} >= 1) /bc UNSPENT AA: ${Me.AAPoints} (SPENT ${Me.AAPointsSpent})") end)
 
     -- report all peer total AA:s
-    mq.bind("/totalaa", function() bci.ExecuteAllWithSelfCommand("/bc ${Me.AAPointsTotal} TOTAL (${Me.AAPoints} unspent, ${Me.AAPointsSpent} spent)") end)
+    bind("/totalaa", function() bci.ExecuteAllWithSelfCommand("/bc ${Me.AAPointsTotal} TOTAL (${Me.AAPoints} unspent, ${Me.AAPointsSpent} spent)") end)
 
     -- track xp, auto adjust level / AA xp and auto loot
     local xpGain = function(text)
@@ -625,7 +625,7 @@ function QoL.Init()
     end)
 
     -- toggles debug output on/off
-    mq.bind("/debug", function()
+    bind("/debug", function()
         if log.loglevel == "debug" then
             log.loglevel = "info"
             log.Info("Toggle debug info OFF")
@@ -637,7 +637,7 @@ function QoL.Init()
 
 
     -- api: used by one peer to tell other peers about what corpses are already rezzed
-    mq.bind("/ae_rezzed", function(...)
+    bind("/ae_rezzed", function(...)
         local name = args_string(...)
         mark_ae_rezzed(name)
     end)

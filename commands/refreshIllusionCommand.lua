@@ -18,7 +18,7 @@ local function createCommand()
     commandQueue.Enqueue(function() execute() end)
 end
 
-mq.bind("/refreshillusion", createCommand)
-mq.bind("/refreshillusions", function()
+bind("/refreshillusion", createCommand)
+bind("/refreshillusions", function()
     bci.ExecuteAllWithSelfCommand("/refreshillusion")
 end)

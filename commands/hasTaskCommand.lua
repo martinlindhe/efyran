@@ -25,4 +25,4 @@ local function createCommand(...)
     commandQueue.Enqueue(function() execute({ Name = name }) end)
 end
 
-mq.bind("/hastask", createCommand)
+bind("/hastask", createCommand)

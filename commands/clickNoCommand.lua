@@ -23,4 +23,4 @@ local function createCommand()
     commandQueue.Enqueue(function() execute() end)
 end
 
-mq.bind("/no", createCommand)
+bind("/no", createCommand)

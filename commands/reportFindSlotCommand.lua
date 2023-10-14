@@ -48,4 +48,4 @@ local function createCommand(...)
     end
 end
 
-mq.bind("/findslot", createCommand)
+bind("/findslot", createCommand)

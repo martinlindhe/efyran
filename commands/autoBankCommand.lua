@@ -12,4 +12,4 @@ local function createCommand()
 end
 
 
-mq.bind("/autobank", createCommand)
+bind("/autobank", createCommand)

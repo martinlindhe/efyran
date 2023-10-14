@@ -71,4 +71,4 @@ local function createCommand()
 end
 
     -- MAG: use Call of the Hero to summon the group to you
-mq.bind("/cohgroup", createCommand)
+bind("/cohgroup", createCommand)

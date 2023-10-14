@@ -80,5 +80,5 @@ local function createCommand(...)
     end
 end
 
-mq.bind("/fdi", createCommand)
-mq.bind("/finditem", createCommand)
+bind("/fdi", createCommand)
+bind("/finditem", createCommand)

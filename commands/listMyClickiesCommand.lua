@@ -69,4 +69,4 @@ local function createCommand(category)
     commandQueue.Enqueue(function() execute({Category = category}) end)
 end
 
-mq.bind("/listclickies", createCommand)
+bind("/listclickies", createCommand)

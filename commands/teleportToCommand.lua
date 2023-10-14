@@ -22,4 +22,4 @@ local function createCommand(name)
 end
 
 
-mq.bind("/portto", createCommand)
+bind("/portto", createCommand)

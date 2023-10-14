@@ -9,4 +9,4 @@ local function createCommand()
     commandQueue.Enqueue(execute)
 end
 
-mq.bind("/disbandall", createCommand)
+bind("/disbandall", createCommand)

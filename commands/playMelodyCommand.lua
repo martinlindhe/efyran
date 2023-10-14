@@ -28,4 +28,4 @@ local function createCommand(name)
   end
 end
 
-mq.bind("/playmelody", createCommand)
+bind("/playmelody", createCommand)
