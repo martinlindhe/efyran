@@ -1,6 +1,7 @@
 require("ezmq")
 require("commands")
-require("markItemForDestroying")
+require("looting/markItemForDestroying")
+require("looting/markItemForSelling")
 
 local log = require("knightlinc/Write")
 
