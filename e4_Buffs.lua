@@ -741,6 +741,12 @@ function buffs.RequestBuffs()
                         refresh = true
                     end
                 end
+
+                local spell = get_spell(o.Name)
+                if spell ~= nil and not spell.Stacks() then
+                    log.Debug("Can't ask for buff %s, dont stack", spellConfig.Name)
+                    return false
+                end
             end
 
             -- ask proper class for buff

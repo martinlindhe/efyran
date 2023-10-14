@@ -756,7 +756,7 @@ function verifySpellLines(label, lines)
     for k, row in pairs(lines) do
         local spellConfig = parseSpellLine(row)
         if not known_spell_ability(spellConfig.Name) then
-            all_tellf("Missing %s: \ar%s\ax (\ay%s\ax)", label, spellConfig.Name, row)
+            all_tellf("Missing %s: [+r+]%s[+x+] ([+y+]%s[+x+])", label, spellConfig.Name, row)
             cmd("/beep 1")
         end
     end

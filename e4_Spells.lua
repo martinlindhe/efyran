@@ -197,6 +197,11 @@ function spellConfigAllowsCasting(buffItem, spawn)
             return false
         end
     else
+        if is_peer_id(spawn.ID()) and not mq.TLO.NetBots(spawn.Name()).Stacks(spell.ID())() then
+            all_tellf("SKIP BUFFING %s rebuff, %s dont stack", spawn.Name(), spellConfig.Name)
+            return false
+        end
+
         if not spell.StacksSpawn(spawn.ID()) then
             all_tellf("cant rebuff %s on spawn, dont stack", spellConfig.Name)
             return false
@@ -254,7 +259,7 @@ function getSpellFromBuff(name)
         return mq.TLO.Me.CombatAbility(mq.TLO.Me.CombatAbility(name))
     else
         --log.Error("getSpellFromBuff: can't find %s", name)
-        all_tellf("ERROR: Missing \ar%s\ax", name)
+        all_tellf("ERROR: Missing [+r+]%s[+x+]", name)
         return nil
     end
 end
