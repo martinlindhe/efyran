@@ -487,123 +487,6 @@ function QoL.Init()
         bci.ExecuteAllCommand("/if (${Me.TributeActive}) /bc TRIBUTE ACTIVE, COST ${Me.ActiveFavorCost}, STORED ${Me.CurrentFavor}", true)
     end)
 
-    -- report your GoD tongue quest status
-    mq.bind("/tongues", function()
-        if have_item("Assistant Researcher's Symbol") then
-            all_tellf("tongues: DONE")
-            -- TODO check if we have any tongues that is wasting bag space if we got the reward
-            return
-        end
-        local tongues = {
-            "Ikaav Tongue",
-            "Mastruq Tongue",
-            "Aneuk Tongue",
-            "Ra'Tuk Tongue",
-            "Noc Tongue",
-            "Kyv Tongue",
-            "Ukun Tongue",
-            "Ixt Tongue",
-            "Tongue of the Zun'muram",
-            "Tongue of the Tunat'muram",
-        }
-
-        local s = ""
-        local missing = 0
-        for k, name in pairs(tongues) do
-            if not have_item(name) then
-                missing = missing + 1
-                s = s .. name .. ", "
-            end
-        end
-
-        if s == "" then
-            s = "tongues: OK"
-        else
-            s = string.format("tongues NEED %d: %s", missing, s)
-        end
-
-        all_tellf(s)
-    end)
-
-    -- report your CoA auguments
-    mq.bind("/coaaugs", function()
-        local augs = {
-            "Abhorrent Brimstone of Charring",
-            "Gem of Unnatural Regrowth",
-            "Kyv Eye of Marksmanship",
-            "Orb of Forbidden Laughter",
-            "Petrified Girplan Heart",
-            "Rune of Astral Celerity",
-            "Rune of Futile Resolutions",
-            "Rune of Grim Portents",
-            "Rune of Living Lightning",
-            "Stone of Horrid Transformation",
-            "Stone of Planar Protection",
-        }
-        local s = ""
-        local missing = 0
-        for k, name in pairs(augs) do
-            if not have_item(name) then
-                missing = missing + 1
-                s = s .. name .. ", "
-            end
-        end
-
-        if s == "" then
-            s = "coaaugs: OK"
-        else
-            s = string.format("coaaugs NEED %d: %s", missing, s)
-        end
-
-        all_tellf(s)
-    end)
-
-    -- report your Lucid Shards
-    mq.bind("/lucidshards", function()
-
-        -- 22198 The Scepter of Shadows
-        if have_item_id(22198) then
-            all_tellf("lucidshards: OK (KEYED)")
-            return
-        end
-
-        -- 17324 Unadorned Scepter of Shadows
-        if have_item_id(17324) then
-            all_tellf("lucidshards: OK")
-            return
-        end
-
-        local shards = {
-            [22185] = "The Grey",
-            [22186] = "Fungus Grove",
-            [22187] = "Scarlet Desert",
-            [22188] = "The Deep",
-            [22189] = "Ssraeshza Temple",
-            [22190] = "Akheva Ruins",
-            [22191] = "Dawnshroud Peaks",
-            [22192] = "Maiden's Eye",
-            [22193] = "Acrylia Caverns",
-            [22194] = "Sanctus Seru / Katta",
-            [17323] = "Akheva Ruins Container", -- Shadowed Scepter Frame
-        }
-        local s = ""
-        local missing = 0
-        for id, name in pairs(shards) do
-            if not have_item_id(id) then
-                missing = missing + 1
-                s = s .. name .. ", "
-            end
-        end
-
-        if s == "" then
-            s = "lucidshards: OK"
-        else
-            s = string.format("lucidshards NEED %d: %s", missing, s)
-        end
-
-        all_tellf(s)
-    end)
-
     -- Ask peer owners of nearby corpses to consent me
     mq.bind("/consentme", function() consent_me() end)
 
@@ -759,8 +642,6 @@ function QoL.Init()
         mark_ae_rezzed(name)
     end)
 
-    -- XXX
-
     if not mq.TLO.EQBC.Connected() then
         log.Info("Connecting to EQBC server ...")
         cmd("/bccmd connect")
@@ -790,8 +671,6 @@ function QoL.loadRequiredPlugins()
         "MQ2MoveUtils", -- for /stick, /moveto
         "MQ2Cast",
         "MQ2Medley",  -- Bard songs
-
-        --"MQ2TributeManager", -- adds /tribute command. does not work on emu
 
         --"MQ2AdvPath",   -- for /afollow, currently unused
         --"MQ2Nav", -- TODO requires mesh files etc
