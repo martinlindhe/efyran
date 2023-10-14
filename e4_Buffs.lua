@@ -454,12 +454,6 @@ function handleBuffRequest(req)
 
     log.Debug("handleBuffRequest: Peer %s, buff \ay%s\ax, queue len \ay%d\ax, force = %s", req.Peer, req.Buff, #buffs.queue, tostring(req.Force))
 
-    local buffRows = buffGroups[class_shortname()][req.Buff]
-    if buffRows == nil then
-        all_tellf("ERROR: handleBuffRequest: did not find buffGroups.%s entry %s", class_shortname(), req.Buff)
-        return false
-    end
-
     local spawn = spawn_from_peer_name(req.Peer)
     if spawn == nil then
         -- happens when zoning
@@ -467,59 +461,15 @@ function handleBuffRequest(req)
         return false
     end
 
-    -- find the one with highest MinLevel
-    local minLevel = 0
-    local spellName = ""
+    wait_until_not_casting()
 
-    local level = spawn.Level()
-    if level == nil then
-        all_tellf("\arFATAL level is nil, from peer %s, buff %s", req.Peer, req.Buff)
-    end
-
-    if type(level) ~= "number" then
-        all_tellf("\arFATAL level is not a number: %s: %s, from peer %s, buff %s, input %s", type(level), tostring(level), req.Peer, req.Buff, checkRow)
+    local spellName = findBestSpellFromSpellGroup(req.Buff)
+    if spellName == nil then
+        all_tellf("ERROR: handleBuffRequest: did not find buffGroups.%s entry %s", class_shortname(), req.Buff)
         return false
     end
 
-    wait_until_not_casting()
-
-    -- see if we have any rank of this buff
-    for idx, checkRow in pairs(buffRows) do
-        -- XXX same logic as /buffit. do refactor
-
-        local spellConfig = parseSpellLine(checkRow)
-        local n = tonumber(spellConfig.MinLevel)
-        if n == nil then
-            all_tellf("FATAL ERROR, group buff %s does not have a MinLevel setting", checkRow)
-            return false
-        end
-        -- XXX debug source of nil
-        if type(n) ~= "number" then
-            all_tellf("DEBUG: n is not a number, from peer %s, buff %s", req.Peer, req.Buff)
-            return false
-        end
-        if type(n) == "number" and n > minLevel and level >= n then
-            spellName = spellConfig.Name
-            local spell = get_spell(spellName)
-            if spell == nil then
-                all_tellf("FATAL ERROR cant lookup %s", spellName)
-                return false
-            end
-            if have_spell(spellName) then
-                spellName = spell.RankName()
-                --if spell.StacksTarget() then
-                    minLevel = n
-                    --print("minLevel = ", n)
-                --else
-                    -- XXX look into: seems spell.StacksTarget() checks vs myself instead of my target... is it a mq2-lua bug ????  cant cast Symbol of Naltron from CLR with higher sytmbol on a naked WAR.
-                --    cmd("/bc ERROR cannot buff ", spawn.Name(), " with ", spellName, ", MinLevel ", n, " (dont stack with current buffs)")
-                --end
-                --log.Debug("Best %s buff so far is MinLevel %d, Name %s, target L%d %s", req.Peer, spellConfig.MinLevel, spellConfig.Name, level, spawn.Name())
-            end
-        end
-    end
-
-    if minLevel > 0 and spellConfigAllowsCasting(spellName, spawn) then
+    if spellConfigAllowsCasting(spellName, spawn) then
         if not req.Force and peer_has_buff(req.Peer, spellName) then
             log.Info("handleBuffRequest: Skip \ag%s\ax %s (%s), they have buff already.", spawn.Name(), spellName, req.Buff)
             return false
@@ -543,6 +493,32 @@ function handleBuffRequest(req)
         return true
     end
     return false
+end
+
+-- Returns the name of the first available spell
+---@param level integer
+---@param groupName string
+---@return string|nil
+function findBestSpellFromSpellGroup(groupName)
+    local buffRows = buffGroups[class_shortname()][groupName]
+    if buffRows == nil then
+        all_tellf("ERROR: SHOULD NOT HAPPEN, NO SUCH BUFF GROUP %s.%s", class_shortname(), groupName)
+        return nil
+    end
+
+    -- see if we have any rank of this buff
+    for idx, checkRow in pairs(buffRows) do
+        local spellConfig = parseSpellLine(checkRow)
+        local spell = get_spell(spellConfig.Name)
+        if spell == nil then
+            all_tellf("FATAL ERROR cant lookup %s", spellConfig.Name)
+            return nil
+        end
+        if have_spell(spellConfig.Name) then
+            return spell.RankName()
+        end
+    end
+    return nil
 end
 
 -- returns true if a buff was casted

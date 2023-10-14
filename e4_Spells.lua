@@ -270,7 +270,7 @@ function memorizeListedSpells()
         return
     end
 
-    if haveMemorizedListedSpells() then
+    if haveMemorizedListedSpells(5) then
         return
     end
 
@@ -293,9 +293,10 @@ function memorizeListedSpells()
 end
 
 -- Returns true if I have memorized all current spells in their proper spell gems
+---@param defaultGem integer
 ---@return boolean
-function haveMemorizedListedSpells()
-    for spellRow, gem in pairs(botSettings.settings.gems) do
+function haveMemorizedListedSpells(defaultGem)
+    for spellRow, idx in pairs(botSettings.settings.gems) do
         local o = parseSpellLine(spellRow)
 
         if not have_spell(o.Name) then
@@ -307,8 +308,12 @@ function haveMemorizedListedSpells()
         local gem = defaultGem
         if o.Gem ~= nil then
             gem = o.Gem
-        elseif botSettings.settings.gems ~= nil and botSettings.settings.gems[o.Name] ~= nil then
-            gem = botSettings.settings.gems[o.Name]
+        elseif botSettings.settings.gems ~= nil then
+            if botSettings.settings.gems[o.Name] ~= nil then
+                gem = botSettings.settings.gems[o.Name]
+            elseif botSettings.settings.gems[o.spellGroup] ~= nil then
+                gem = botSettings.settings.gems[o.spellGroup]
+            end
         elseif gem == nil then
             all_tellf("\arWARN\ax: Spell/song lacks gems default slot or Gem|n argument: %s", spellRow)
             gem = 5

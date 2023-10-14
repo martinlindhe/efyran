@@ -7,6 +7,8 @@ local log = require("knightlinc/Write")
 
 local timer = require("Timer")
 
+local buffGroups  = require("e4_BuffGroups")
+
 -- returns true if `spawn` is within maxDistance
 ---@param spawn spawn
 ---@param maxDistance number
@@ -1421,6 +1423,7 @@ end
 ---@field public Only string /only|xxx filter
 ---@field public Not string /not|xxx filter
 ---@field public Delay integer Number of seconds between reuse of this spell/ability.
+---@field public spellGroup string used internally
 
 -- is turned into bools
 local shortProperties = { "Shrink", "GoM", "NoAggro", "NoPet", "Group", "Self" }
@@ -1467,6 +1470,17 @@ function parseSpellLine(s)
 
     if s == "" then
         o.Name = ""
+    end
+
+    local buffGroup = buffGroups[class_shortname()][o.Name]
+    if buffGroup ~= nil then
+        local spellName = findBestSpellFromSpellGroup(o.Name)
+        if spellName ~= nil then
+            o.spellGroup = o.Name
+            o.Name = spellName
+        else
+            all_tellf("ERROR: parseSpellLine: did not find a best spell for buffGroups.%s.%s", class_shortname(), o.Name)
+        end
     end
     return o
 end

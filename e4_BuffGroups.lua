@@ -73,16 +73,16 @@ BuffGroups.SHM = {
     -- L68 Wunshi's Focusing (680 hp, 85 str, 85 dex, str cap 85, dex cap 85, cost 780 mana)
     -- L70 Talisman of Wunshi (680 hp, 85 str, 85 dex, str cap 85, dex cap 85, cost 2340 mana)
     shm_focus = {
-        "Talisman of Wunshi/MinLevel|62",
-        "Focus of the Seventh/MinLevel|47",
-        "Khura's Focusing/MinLevel|45",
-        "Harnessing of Spirit/MinLevel|1",
+        "Talisman of Wunshi",
+        "Focus of the Seventh",
+        "Khura's Focusing",
+        "Harnessing of Spirit",
     },
 
     -- L09 Spirit of Wolf (48-55% speed, 36 min)
     -- L36 Spirit of Bih`Li (48-55% run speed, 15 atk, 36 min, group)
     shm_runspeed = {
-        "Spirit of Bih`Li/MinLevel|1/CheckFor|Flight of Eagles",
+        "Spirit of Bih`Li/CheckFor|Flight of Eagles",
     },
 
     -- L26 Quiuckness (27--30% haste, 11 min)
@@ -91,11 +91,11 @@ BuffGroups.SHM = {
     -- L63 Swift Like the Wind (60% haste, 16 min)
     -- L64 Talisman of Celerity (60% haste, 36 min, group)
     shm_haste = {
-        "Talisman of Celerity/MinLevel|47/CheckFor|Hastening of Salik",
-        "Swift Like the Wind/MinLevel|46",
-        "Celerity/MinLevel|43",
-        "Alacrity/MinLevel|1",
-        "Quickness/MinLevel|1",
+        "Talisman of Celerity/CheckFor|Hastening of Salik",
+        "Swift Like the Wind",
+        "Celerity",
+        "Alacrity",
+        "Quickness",
     },
 
     -- L50 Talisman of Jasinth (45 dr, group)
@@ -103,9 +103,9 @@ BuffGroups.SHM = {
     -- L58 Talisman of Epuration (55 dr, 55 pr, group)
     -- L62 Talisman of the Tribunal (65 dr, 65 pr, group)
     shm_resist = {
-        "Talisman of the Tribunal/MinLevel|46",
-        "Talisman of Epuration/MinLevel|44",
-        "Talisman of Jasinth/MinLevel|1",
+        "Talisman of the Tribunal",
+        "Talisman of Epuration",
+        "Talisman of Jasinth",
     },
 
     -- L23 Regeneration (5 hp/tick, 17.5 min, cost 100 mana)
@@ -116,10 +116,10 @@ BuffGroups.SHM = {
     -- L66 Spirit of Perseverance (60 hp/tick, 21 min, cost 343 mana)
     -- L69 Talisman of Perseverance (60 hp/tick, 20.5 min, cost 812 mana, group)
     shm_regen = {
-        "Spirit of Perseverance/MinLevel|62",
-        "Replenishment/MinLevel|45",
-        "Regrowth/MinLevel|41",
-        "Chloroplast/MinLevel|1",
+        "Spirit of Perseverance",
+        "Replenishment",
+        "Regrowth",
+        "Chloroplast",
     },
 
     -- AC (slot 4, weaker than clr_ac)
@@ -132,10 +132,10 @@ BuffGroups.SHM = {
     -- L62 Ancestral Guard (36 ac)
     -- L67 Ancestral Bulwark (46 ac)
     shm_ac = {
-        "Ancestral Bulwark/MinLevel|62",
-        "Ancestral Guard/MinLevel|46",
-        "Shroud of the Spirits/MinLevel|42",
-        "Guardian/MinLevel|1",
+        "Ancestral Bulwark",
+        "Ancestral Guard",
+        "Shroud of the Spirits",
+        "Guardian",
     },
 
     -- STA - affects HP
@@ -150,10 +150,10 @@ BuffGroups.SHM = {
     -- L68 Spirit of Fortitude (75 sta, 40 sta cap)
     -- L69 Talisman of Fortitude (78 sta, 40 sta cap, group)
     shm_sta = {
-        "Talisman of Fortitude/MinLevel|62",
-        "Talisman of the Boar/MinLevel|46",
-        "Talisman of the Brute/MinLevel|43",
-        "Stamina/MinLevel|1",
+        "Talisman of Fortitude",
+        "Talisman of the Boar",
+        "Talisman of the Brute",
+        "Stamina",
     },
 
     -- STR - affects ATK & carry limit
@@ -171,11 +171,11 @@ BuffGroups.SHM = {
     -- L70 Talisman of Might (5% skill dmg mod, group, cost 700 mana)
     -- NOTE: DRU has a weaker line of buffs
     shm_str = {
-        "Talisman of Might/MinLevel|62",
-        "Talisman of the Diaku/MinLevel|47",
-        "Talisman of the Rhino/MinLevel|44",
-        "Maniacal Strength/MinLevel|43",
-        "Strength/MinLevel|1",
+        "Talisman of Might",
+        "Talisman of the Diaku",
+        "Talisman of the Rhino",
+        "Maniacal Strength",
+        "Strength",
     },
 
     -- AGI - affects AC
@@ -188,10 +188,10 @@ BuffGroups.SHM = {
     -- L61 Agility of the Wrulan (60 agi)
     -- L62 Talisman of the Wrulan (60 agi, group)
     shm_agi = {
-        "Talisman of the Wrulan/MinLevel|46",
-        "Talisman of the Cat/MinLevel|43",
-        "Deliriously Nimble/MinLevel|41",
-        "Agility/MinLevel|1",
+        "Talisman of the Wrulan",
+        "Talisman of the Cat",
+        "Deliriously Nimble",
+        "Agility",
     },
 
     -- DEX - affects bard song missed notes, procs & crits
@@ -203,8 +203,8 @@ BuffGroups.SHM = {
     -- L58 Mortal Deftness (60 dex)
     -- L59 Talisman of the Raptor (60 dex, group)
     shm_dex = {
-        "Talisman of the Raptor/MinLevel|44",
-        "Dexterity/MinLevel|1",
+        "Talisman of the Raptor",
+        "Dexterity",
     },
 
     -- CHA - affects sale prices and DI success rate
@@ -215,8 +215,8 @@ BuffGroups.SHM = {
     -- L58 Talisman of the Serpent (40 cha, group)
     -- L59 Unfailing Reverence (55 cha)
     shm_cha = {
-        "Unfailing Reverence/MinLevel|44",
-        "Charisma/MinLevel|1",
+        "Unfailing Reverence",
+        "Charisma",
     },
 }
 
@@ -261,23 +261,23 @@ BuffGroups.CLR = {
     -- L80 Kaerra's Mark (1563 hp, cost 3130 mana)
     -- NOTE: stacks with dru_skin and clr_ac
     clr_symbol = {
-        "Kaerra's Mark/MinLevel|76", -- XXX unsure of minlevel
-        "Elushar's Mark/MinLevel|71", -- XXX unsure of minlevel
-        "Balikor's Mark/MinLevel|62",
-        "Kazad's Mark/MinLevel|46",
+        "Kaerra's Mark",
+        "Elushar's Mark",
+        "Balikor's Mark",
+        "Kazad's Mark",
 
-        "Naltron's Mark/MinLevel|44",
-        "Symbol of Marzin/MinLevel|42/Reagent|Peridot",
-        "Symbol of Naltron/MinLevel|1/Reagent|Peridot",
-        "Symbol of Pinzarn/MinLevel|1/Reagent|Jasper",
-        "Symbol of Ryltan/MinLevel|1/Reagent|Bloodstone",
-        --"Symbol of Transal/MinLevel|1/Reagent|Cat's Eye Agate",
+        "Naltron's Mark",
+        "Symbol of Marzin/Reagent|Peridot",
+        "Symbol of Naltron/Reagent|Peridot",
+        "Symbol of Pinzarn/Reagent|Jasper",
+        "Symbol of Ryltan/Reagent|Bloodstone",
+        --"Symbol of Transal/Reagent|Cat's Eye Agate",
     },
 
     -- slot 1: Death Save:
     -- L60 Divine Intervention (single)
     di = {
-        "Divine Intervention/MinLevel|45",
+        "Divine Intervention",
     },
 
     -- L61 Ward of Gallantry (slot 4: 54 ac)
@@ -287,10 +287,10 @@ BuffGroups.CLR = {
     -- L80 Order of the Resolute Rk. II (slot 4: 109 ac, group)
     -- NOTE: stacks with Symbol + DRU Skin + Focus
     clr_ac = {
-        "Order of the Resolute/MinLevel|76/CheckFor|Hand of Temerity", -- XXX unsure of minlevel
-        "Ward of the Dauntless/MinLevel|71/CheckFor|Hand of Tenacity", -- XXX unsure of minlevel
-        "Ward of Valiance/MinLevel|62/CheckFor|Hand of Conviction",
-        "Ward of Gallantry/MinLevel|45/CheckFor|Hand of Virtue",
+        "Order of the Resolute/CheckFor|Hand of Temerity",
+        "Ward of the Dauntless/CheckFor|Hand of Tenacity",
+        "Ward of Valiance/CheckFor|Hand of Conviction",
+        "Ward of Gallantry/CheckFor|Hand of Virtue",
     },
 
     -- hp buff - aegolism line (slot 2 - does not stack with dru_skin):
@@ -308,12 +308,12 @@ BuffGroups.CLR = {
     -- L7x Temerity ??? XXX
     -- L80 Hand of Temerity (2457 hp, 126 ac, group)
     clr_aegolism = {
-        "Hand of Temerity/MinLevel|76",-- XXX unsure of minlevel
-        "Hand of Tenacity/MinLevel|71", -- XXX unsure of minlevel
-        "Hand of Conviction/MinLevel|62",
-        "Hand of Virtue/MinLevel|47",
-        "Blessing of Aegolism/MinLevel|45",
-        "Blessing of Temperance/MinLevel|1",
+        "Hand of Temerity",
+        "Hand of Tenacity",
+        "Hand of Conviction",
+        "Hand of Virtue",
+        "Blessing of Aegolism",
+        "Blessing of Temperance",
     },
 
     -- absorb melee:
@@ -327,12 +327,12 @@ BuffGroups.CLR = {
     -- L78 Shield of Vie Rk. II (absorb 10% of melee dmg to 3380, 36 min)
     -- L80 Rallied Shield of Vie Rk. II (slot 1: absorb 10% of melee dmg to 3380, 36 min, group)
     clr_vie = {
-        "Rallied Shield of Vie/MinLevel|76", -- XXX unsure of minlevel
-        "Rallied Aegis of Vie/MinLevel|71", -- XXX unsure of minlevel
-        "Panoply of Vie/MinLevel|62",
-        "Bulwark of Vie/MinLevel|46",
-        "Protection of Vie/MinLevel|42",
-        "Guard of Vie/MinLevel|1",
+        "Rallied Shield of Vie",
+        "Rallied Aegis of Vie",
+        "Panoply of Vie",
+        "Bulwark of Vie",
+        "Protection of Vie",
+        "Guard of Vie",
     },
 
     -- spell haste:
@@ -347,10 +347,10 @@ BuffGroups.CLR = {
     -- L76 Blessing of Resolve Rk. II (10% spell haste to L80, 40 min, 390 mana)
     -- L77 Aura of Resolve Rk. II (10% spell haste to L80, 45 min, group, 1125 mana)
     clr_spellhaste = {
-        "Aura of Resolve/MinLevel|77", -- XXX unsure of minlevel
-        "Aura of Purpose/MinLevel|71", -- XXX unsure of minlevel
-        "Aura of Devotion/MinLevel|62",
-        "Blessing of Faith/MinLevel|1",
+        "Aura of Resolve",
+        "Aura of Purpose",
+        "Aura of Devotion",
+        "Blessing of Faith",
     },
 
 
@@ -363,7 +363,7 @@ BuffGroups.CLR = {
     -- L75 Armor of the Sacred Rk. II (704 hp, 58 ac, 10 mana/tick)
     -- L80 Armor of the Solemn Rk. II (915 hp, 71 ac, 12 mana/tick)
     -- NOTE: does not stack with DRU Skin
-    clr_self_shielding = {
+    clr_self_shield = {
         -- XXX
     }
 }
@@ -387,17 +387,17 @@ BuffGroups.DRU = {
     -- L77 Ironwood Skin Rk. II (66 ac, 1255 hp, 14 mana/tick, cost 1382 mana)
     -- L80 Blessing of the Ironwood Rk. II (66 ac, 1255 hp, 14 mana/tick, cost 3371 mana, group)
     dru_skin = {
-        "Blessing of the Ironwood/MinLevel|76",     -- XXX unsure of minlevel
-        "Blessing of the Direwild/MinLevel|71",     -- XXX unsure of minlevel
-        "Blessing of Steeloak/MinLevel|62",
-        "Blessing of the Nine/MinLevel|47",
-        "Protection of the Nine/MinLevel|46",
-        "Protection of Nature/MinLevel|1",
-        "Skin like Nature/MinLevel|1", -- XXX unsure of minlevel
-        "Skin like Diamond/MinLevel|1",-- XXX unsure of minlevel
-        "Skin like Steel/MinLevel|1",-- XXX unsure of minlevel
-        "Skin like Rock/MinLevel|1",-- XXX unsure of minlevel
-        "Skin like Wood/MinLevel|1",
+        "Blessing of the Ironwood",
+        "Blessing of the Direwild",
+        "Blessing of Steeloak",
+        "Blessing of the Nine",
+        "Protection of the Nine",
+        "Protection of Nature",
+        "Skin like Nature",
+        "Skin like Diamond",
+        "Skin like Steel",
+        "Skin like Rock",
+        "Skin like Wood",
     },
 
     -- fire resists:
@@ -407,31 +407,31 @@ BuffGroups.DRU = {
     -- L58 Circle of Seasons (slot 1: 55 fr, slot 4: 55 cr)
     -- L64 Protection of Seasons (slot 1: 72 fr, slot 2: 72 cr)
     dru_fire_resist = {
-        "Protection of Seasons/MinLevel|47",
-        "Circle of Seasons/MinLevel|44",
-        "Circle of Winter/MinLevel|40",
-        "Resist Fire/MinLevel|1",
-        "Endure Fire/MinLevel|1",
+        "Protection of Seasons",
+        "Circle of Seasons",
+        "Circle of Winter",
+        "Resist Fire",
+        "Endure Fire",
     },
 
     -- L09 Endure Cold (slot 1: 11-20 cr)
     -- L30 Resist Cold (slot 1: 39-40 cr)
     dru_cold_resist = {
-        "Resist Cold/MinLevel|1",
-        "Endure Cold/MinLevel|1",
+        "Resist Cold",
+        "Endure Cold",
     },
 
     -- L52 Circle of Summer (slot 4: 45 cr) - stack with dru_fire_resist and dru_cold_resist
     dru_cold_resist2 = {
-        "Circle of Summer/MinLevel|41",
+        "Circle of Summer",
     },
 
     -- corruption resists (CLR/DRU):
     -- L73 Resist Corruption Rk. III (slot 1: 20 corruption resist, 36 min, 50 mana)
     -- L78 Forbear Corruption Rk. II (slot 1: 23 corruption resist, 36 min, 50 mana)
     dru_corruption = {
-        "Forbear Corruption/MinLevel|76",   -- XXX unsure of minlevel
-        "Resist Corruption/MinLevel|71",    -- XXX unsure of minlevel
+        "Forbear Corruption",
+        "Resist Corruption",
     },
 
     -- L34 Regeneration (5-9 hp/tick)
@@ -447,11 +447,11 @@ BuffGroups.DRU = {
     -- L76 Spirit of the Stalwart Rk. II (105-144 hp/tick, 21 min, cost 523 mana)
     -- L79 Talisman of the Stalwart Rk. II (111-144 hp/tick, 21 min, cost 1238 mana)
     dru_regen = {
-        "Spirit of the Stalwart/MinLevel|76", -- XXX unsure of minlevel
-        "Oaken Vigor/MinLevel|62",
-        "Replenishment/MinLevel|45",
-        "Regrowth/MinLevel|42",
-        "Chloroplast/MinLevel|1",
+        "Spirit of the Stalwart",
+        "Oaken Vigor",
+        "Replenishment",
+        "Regrowth",
+        "Chloroplast",
     },
 
     -- L07 Shield of Thistles (4-6 ds, 15 min)
@@ -472,21 +472,21 @@ BuffGroups.DRU = {
     -- L80 Legacy of Viridithorns Rk. II (86 ds, 15 min, group)
     -- NOTE: MAGE DS IS STRONGER
     dru_single_ds = {
-        "Viridifloral Bulwark/MinLevel|76", -- XXX minlevel
-        "Viridifloral Shield/MinLevel|71",  -- XXX minlevel
-        "Nettle Shield/MinLevel|62",
-        "Shield of Bracken/MinLevel|46",
-        "Shield of Blades/MinLevel|44",
-        "Shield of Thorns/MinLevel|1",
+        "Viridifloral Bulwark",
+        "Viridifloral Shield",
+        "Nettle Shield",
+        "Shield of Bracken",
+        "Shield of Blades",
+        "Shield of Thorns",
     },
 
     dru_group_ds = {
-        "Legacy of Viridithorns/MinLevel|76", -- XXX minlevel
-        "Legacy of Viridiflora/MinLevel|71",  -- XXX minlevel
-        "Legacy of Nettles/MinLevel|62",
-        "Legacy of Bracken/MinLevel|47",
-        "Legacy of Thorn/MinLevel|44",
-        "Legacy of Spike/MinLevel|1",
+        "Legacy of Viridithorns",
+        "Legacy of Viridiflora",
+        "Legacy of Nettles",
+        "Legacy of Bracken",
+        "Legacy of Thorn",
+        "Legacy of Spike",
     },
 
     -- L07 Strength of Earth (8-15 str)
@@ -496,19 +496,19 @@ BuffGroups.DRU = {
     -- L62 Nature's Might (55 str)
     -- NOTE: Shaman has STR buffs too
     dru_str = {
-        "Nature's Might/MinLevel|46",
-        "Girdle of Karana/MinLevel|42",
-        "Storm Strength/MinLevel|1",
-        "Strength of Stone/MinLevel|1",
-        "Strength of Earth/MinLevel|1",
+        "Nature's Might",
+        "Girdle of Karana",
+        "Storm Strength",
+        "Strength of Stone",
+        "Strength of Earth",
     },
 
     -- L67 Lion's Strength (increase skills dmg mod by 5%, cost 165 mana)
     -- L71 Mammoth's Strength Rk. III (increase skills dmg mod by 8%, cost 215 mana)
     -- NOTE: SHM has group version of these spells
     dru_skill_dmg_mod = {
-        "Mammoth's Strength/MinLevel|71", -- XXX minlevel
-        "Lion's Strength/MinLevel|62",
+        "Mammoth's Strength",
+        "Lion's Strength",
     },
 
     -- L10 Spirit of Wolf (48-55% speed, 36 min)
@@ -516,10 +516,10 @@ BuffGroups.DRU = {
     -- L54 Spirit of Eagle (57-70% speed, 1 hour)
     -- L62 Flight of Eagles (70% speed, 1 hour, group)
     dru_runspeed = {
-        "Flight of Eagles/MinLevel|46",
-        "Spirit of Eagle/MinLevel|42",
-        "Pack Spirit/MinLevel|1",
-        "Spirit of Wolf/MinLevel|1",
+        "Flight of Eagles",
+        "Spirit of Eagle",
+        "Pack Spirit",
+        "Spirit of Wolf",
     },
 
     -- L07 Thistlecoat (4-6 ac, 1 ds)
@@ -534,7 +534,16 @@ BuffGroups.DRU = {
     -- L78 Viridithorn Coat (SELF, slot 2: 86 ac, slot 3: 23 ds)
     -- L78 Viridithorn Coat Rk. II (SELF, slot 2: 98 ac, slot 3: 26 ds)
     dru_self_ds = {
-        -- XXX
+        "Viridithorn Coat",
+        "Vididicoat",
+        "Nettlecoat",
+        "Brackencoat",
+        "Bladecoat",
+        "Thorncoat",
+        "Spikecoat",
+        "Bramblecoat",
+        "Barbcoat",
+        "Thistlecoat",
     },
 
     -- L60 Mask of the Stalker (3 mana/tick)
@@ -562,15 +571,15 @@ BuffGroups.ENC = {
     -- L78 Seer's Cognizance Rk. II (35 mana/tick, cost 610 mana)
     -- L80 Voice of Cognizance Rk. II (35 mana/tick, cost 1983 mana, group)
     ["enc_manaregen"] = {
-        "Voice of Cognizance/MinLevel|76", -- XXX minlevel
-        "Voice of Intuition/MinLevel|71", -- XXX minlevel
-        "Voice of Clairvoyance/MinLevel|62",
-        --"Dusty Cap of the Will Breaker/MinLevel|1", -- TODO make use of this clicky. make sure its picked above other spells if available. need HaveItem and NotHaveItem filters !!!
-        "Voice of Quellious/MinLevel|47",
-        "Tranquility/MinLevel|46",
-        "Koadic's Endless Intellect/MinLevel|45",
-        "Gift of Pure Thought/MinLevel|43",
-        "Boon of the Clear Mind/MinLevel|1",
+        "Voice of Cognizance",
+        "Voice of Intuition",
+        "Voice of Clairvoyance",
+        --"Dusty Cap of the Will Breaker", -- TODO make use of this clicky. make sure its picked above other spells if available. need HaveItem and NotHaveItem filters !!!
+        "Voice of Quellious",
+        "Tranquility",
+        "Koadic's Endless Intellect",
+        "Gift of Pure Thought",
+        "Boon of the Clear Mind",
     },
 
     -- L16 Quickness (single, 28-30% haste, 5.8 min)
@@ -585,23 +594,23 @@ BuffGroups.ENC = {
     -- L72 Speed of Ellowind   (68% haste, 64 atk, 72 agi, 60 dex, 42 min, 24% melee crit chance, %1 crit melee damage, cost 524 mana)
     -- L75 Hastening of Ellowind Rk. II (68% haste, 66 atk, 75 agi, 63 dex, 42 min, 25% melee crit chance, 2% crit melee damage, cost 1575 mana, group)
     ["enc_haste"] = {
-        "Hastening of Ellowind/MinLevel|71", -- XXX unsure of minlevel
-        "Hastening of Salik/MinLevel|62",
-        "Vallon's Quickening/MinLevel|47",
-        "Speed of Vallon/MinLevel|46",
-        "Wonderous Rapidity/MinLevel|44", -- XXX original spelling, used on some classic servers like FVP
-        "Wondrous Rapidity/MinLevel|44",
-        "Aanya's Quickening/MinLevel|41",
-        "Swift Like the Wind/MinLevel|1",
-        "Alacrity/MinLevel|1",
-        "Quickness/MinLevel|1",
+        "Hastening of Ellowind",
+        "Hastening of Salik",
+        "Vallon's Quickening",
+        "Speed of Vallon",
+        "Wonderous Rapidity", -- XXX original spelling, used on some classic servers like FVP
+        "Wondrous Rapidity",
+        "Aanya's Quickening",
+        "Swift Like the Wind",
+        "Alacrity",
+        "Quickness",
     },
 
     -- L48 Group Resist Magic (53-55 mr, group)
     -- L62 Guard of Druzzil (75 mr, group)
     ["enc_resist"] = {
-        "Guard of Druzzil/MinLevel|46",
-        "Group Resist Magic/MinLevel|1",
+        "Guard of Druzzil",
+        "Group Resist Magic",
     },
 
     -- L18 Sympathetic Aura (15-18 cha)
@@ -616,8 +625,8 @@ BuffGroups.ENC = {
     -- L69 Rune of Rikkukin (absorb 1500 dmg, group)
     -- L79 Rune of the Deep Rk. II (absorb 4118 dmg, slot 2: defensive proc Blurred Shadows Rk. II)
     ["enc_group_rune"] = {
-        "Rune of the Deep/MinLevel|76", -- XXX unsure of minlevel
-        "Rune of Rikkukin/MinLevel|62", -- DoN progression reward
+        "Rune of the Deep",
+        "Rune of Rikkukin", -- DoN progression reward
     },
 
     -- targeted rune - slot 1:
@@ -631,15 +640,15 @@ BuffGroups.ENC = {
     -- L71 Rune of Ellowind (absorb 2160 dmg)
     -- L76 Rune of Erradien Rk. II (absorb 5631 dmg)
     ["enc_single_rune"] = {
-        "Rune of Erradien/Reagent|Peridot/MinLevel|76",
-        "Rune of Ellowind/Reagent|Peridot/MinLevel|71",
-        "Rune of Salik/Reagent|Peridot/MinLevel|62",
-        "Rune of Zebuxoruk/Reagent|Peridot/MinLevel|45",
-        "Rune V/Reagent|Peridot/MinLevel|41",
-        "Rune IV/Reagent|Peridot/MinLevel|1",
-        "Rune III/Reagent|Jasper/MinLevel|1",
-        "Rune II/Reagent|Bloodstone/MinLevel|1",
-        "Rune I/Reagent|Cat's Eye Agate/MinLevel|1",
+        "Rune of Erradien/Reagent|Peridot",
+        "Rune of Ellowind/Reagent|Peridot",
+        "Rune of Salik/Reagent|Peridot",
+        "Rune of Zebuxoruk/Reagent|Peridot",
+        "Rune V/Reagent|Peridot",
+        "Rune IV/Reagent|Peridot",
+        "Rune III/Reagent|Jasper",
+        "Rune II/Reagent|Bloodstone",
+        "Rune I/Reagent|Cat's Eye Agate",
     },
 
     -- L01 Minor Shielding (6-10 hp, 3-4 ac)
@@ -653,10 +662,18 @@ BuffGroups.ENC = {
     -- L64 Shield of Maelin (350 hp, 38-39 ac, 40 mr)
     -- L66 Mystic Shield (390 hp, 46 ac, 40 mr)
     -- NOTE: does not stack with Virtue or Focus
-    ["enc_self_shielding"] = {
-        -- XXX
+    enc_self_shield = {
+        "Mystic Shield",
+        "Shield of Maelin",
+        "Shield of the Arcane",
+        "Shield of the Magi",
+        "Arch Shielding",
+        "Greater Shielding",
+        "Major Shielding",
+        "Shielding",
+        "Lesser Shielding",
+        "Minor Shielding",
     },
-
 }
 
 BuffGroups.MAG = {
@@ -672,20 +689,20 @@ BuffGroups.MAG = {
     -- L66 Fireskin (62 ds - slot 1, 45 fr, 15 min, single)
     -- L70 Circle of Fireskin (62 ds, 45 fr, 15 min, group)
     ["mag_single_ds"] = {
-        "Fireskin/MinLevel|62",
-        "Flameshield of Ro/MinLevel|45",
-        "Cadeau of Flame/MinLevel|43",
-        "Shield of Lava/MinLevel|1",
-        "Barrier of Combustion/MinLevel|1",
-        "Inferno Shield/MinLevel|1",
-        "Shield of Flame/MinLevel|1",
-        "Shield of Fire/MinLevel|1",
+        "Fireskin",
+        "Flameshield of Ro",
+        "Cadeau of Flame",
+        "Shield of Lava",
+        "Barrier of Combustion",
+        "Inferno Shield",
+        "Shield of Flame",
+        "Shield of Fire",
     },
     ["mag_group_ds"] = {
-        "Circle of Fireskin/MinLevel|62",
-        "Maelstrom of Ro/MinLevel|46",
-        "Boon of Immolation/MinLevel|41",
-        "Shield of Lava/MinLevel|1", -- single
+        "Circle of Fireskin",
+        "Maelstrom of Ro",
+        "Boon of Immolation",
+        "Shield of Lava", -- single
     },
 
     -- L01 Minor Shielding (6-10 hp, 3-4 ac)
@@ -699,9 +716,17 @@ BuffGroups.MAG = {
     -- L64 Shield of Maelin (350 hp, 38-39 ac, 40 mr)
     -- L66 Elemental Aura (390 hp, 46 ac, 40 mr)
     -- NOTE: does not stack with Virtue or Focus
-    ["mag_self_shielding"] = {
-        -- XXX
-        --"Elemental Aura/MinMana|80/CheckFor|Elemental Empathy R.",
+    mag_self_shield = {
+        "Elemental Aura", -- CheckFor|Elemental Empathy R.
+        "Shield of Maelin",
+        "Shield of the Arcane",
+        "Shield of the Magi",
+        "Arch Shielding",
+        "Greater Shielding",
+        "Major Shielding",
+        "Shielding",
+        "Lesser Shielding",
+        "Minor Shielding",
     },
 
     -- L19 Elemental Shield (14-15 cr, 14-15 fr)
@@ -737,10 +762,10 @@ BuffGroups.NEC = {
     -- L41 Dead Man Floating (61-70 pr, water breathing, see invis, levitate)
     -- L45 Dead Men Floating (65-70 pr, water breathing, see invis, levitate, group)
     ["nec_group_levitate"] = {
-        "Dead Men Floating/MinLevel|1",
+        "Dead Men Floating",
     },
     ["nec_single_levitate"] = {
-        "Dead Man Floating/MinLevel|1",
+        "Dead Man Floating",
     },
 
     -- lich (dont stack with clarity line):
@@ -794,7 +819,7 @@ BuffGroups.NEC = {
     -- L64 Shield of Maelin (350 hp, 38-39 ac, 40 mr)
     -- L66 Shadow Guard (390 hp, 46 ac, 40 mr)
     -- NOTE: does not stack with Virtue or Focus
-    ["nec_self_shielding"] = {
+    nec_self_shield = {
         -- XXX
     },
 }
@@ -811,16 +836,27 @@ BuffGroups.WIZ = {
     -- L64 Shield of Maelin (350 hp, 38-39 ac, 40 mr)
     -- L66 Ether Shield (390 hp, 46 ac, 40 mr)
     -- NOTE: does not stack with Virtue or Focus
-    ["wiz_self_shielding"] = {
-        -- XXX
+    wiz_self_shield = {
+        "Ether Shield",
+        "Shield of Maelin",
+        "Shield of the Arcane",
+        "Shield of the Magi",
+        "Arch Shielding",
+        "Greater Shielding",
+        "Major Shielding",
+        "Shielding",
+        "Lesser Shielding",
+        "Minor Shielding",
     },
 
     -- L63 Force Shield (slot 1: absorb 750 dmg, 2 mana/tick)
     -- L68 Ether Skin (slot 1: absorb 975 dmg, 3 mana/tick)
     -- L70 Shield of Dreams (slot 1: absorb 451 dmg, slot 8: +10 resists, slot 9: 3 mana/tick)
-    ["wiz_self_rune"] = {
-        -- XXX
-    }
+    wiz_self_rune = {
+        "Shield of Dreams",
+        "Ether Skin",
+        "Force Shield",
+    },
 }
 
 BuffGroups.RNG = {
@@ -829,9 +865,9 @@ BuffGroups.RNG = {
     -- L62 Strength of Tunare (slot 1: 92 atk, slot 4: 125 hp, group, cost 250 mana)
     -- L67 Strength of the Hunter (75 atk, 155 hp, group, cost 325 mana) NOTE: Tunare has more ATK
     ["rng_hp"] = {
-        -- "Strength of the Hunter/MinLevel|62",
-        "Strength of Tunare/MinLevel|46",
-        "Strength of Nature/MinLevel|40",
+        -- "Strength of the Hunter",
+        "Strength of Tunare",
+        "Strength of Nature",
     },
 
     -- L56 Mark of the Predator (slot 2: 20 atk, group)
@@ -839,10 +875,10 @@ BuffGroups.RNG = {
     -- L64 Spirit of the Predator (slot 2: 70 atk, group)
     -- L69 Howl of the Predator (slot 2: 90 atk, slot 9: double atk 3-20%, group)
     ["rng_atk"] = {
-        "Howl of the Predator/MinLevel|62",
-        "Spirit of the Predator/MinLevel|47",
-        "Call of the Predator/MinLevel|45",
-        "Mark of the Predator/MinLevel|43",
+        "Howl of the Predator",
+        "Spirit of the Predator",
+        "Call of the Predator",
+        "Mark of the Predator",
     },
 
     -- L29 Riftwind's Protection (slot 2: 2 ds, slot 3: 11-12 ac)
@@ -850,9 +886,9 @@ BuffGroups.RNG = {
     -- L62 Call of the Rathe (slot 2: 10 ds, slot 3: 34 ac)
     -- L67 Guard of the Earth (slot 2: 13 ds, slot 3: 49 ac)
     ["rng_ds"] = {
-        "Guard of the Earth/MinLevel|62",
-        "Call of the Rathe/MinLevel|46",
-        "Call of Earth/MinLevel|1",
+        "Guard of the Earth",
+        "Call of the Rathe",
+        "Call of Earth",
     },
 
     -- L07 Skin like Wood
@@ -896,11 +932,11 @@ BuffGroups.PAL = {
     -- L60 Brell's Mountainous Barrier (225 hp, group)
     -- L65 Brell's Stalwart Shield (330 hp, group)
     -- L70 Brell's Brawny Bulwark (412 hp, group)
-    ["pal_hp"] = {
-        "Brell's Brawny Bulwark/MinLevel|62",
-        "Brell's Stalwart Shield/MinLevel|47",
-        "Brell's Mountainous Barrier/MinLevel|45",
-        "Brell's Steadfast Aegis/MinLevel|1",
+    pal_hp = {
+        "Brell's Brawny Bulwark",
+        "Brell's Stalwart Shield",
+        "Brell's Mountainous Barrier",
+        "Brell's Steadfast Aegis",
     },
 
     -- L24 Symbol of Transal
@@ -909,13 +945,13 @@ BuffGroups.PAL = {
     -- L63 Symbol of Marzin
     -- L67 Symbol of Jeron
     -- L68 Jeron's Mark (group)
-    ["pal_symbol"] = {
+    pal_symbol = {
         -- XXX
     },
 
     -- L64 Aura of the Crusader (slot 2: 30 ac, slot 3: 342-350 hp, slot 4: 3 mana/tick)
     -- L69 Armor of the Champion (slot 2: 39 ac, slot 3: 437 hp, slot 4: 4 mana/tick)
-    ["pal_shielding"] = {
+    pal_self_shield = {
         -- XXX
     },
 
@@ -927,8 +963,19 @@ BuffGroups.PAL = {
     -- L65 Holy Order (proc Holy Order Strike)
     -- L67 Silvered Fury (proc Silvered Fury Strike)
     -- L68 Pious Fury (slot 1: proc Pious Fury Strike)
-    ["pal_proc_buff"] = {
+    pal_proc_buff = {
         -- XXX
+    },
+
+    -- L09 Yaulp
+    -- L39 Yaulp II
+    -- L56 Yaulp III
+    -- L60 Yaulp IV
+    pal_yaulp = {
+        "Yaulp IV",
+        "Yaulp III",
+        "Yaulp II",
+        "Yaulp"
     },
 }
 
@@ -954,7 +1001,7 @@ BuffGroups.SHD = {
     -- L60 Cloak of the Akheva (slot 3: 13 ac, slot 6: 5 ds, slot 10: 150 hp)
     -- L65 Cloak of Luclin (slot 3: 34 ac, slot 6: 10 ds, slot 10: 280 hp)
     -- L70 Cloak of Discord (slot 3: 49 ac, slot 6: 13 ds, slot 10: 350 hp)
-    ["shd_shielding"] = {
+    ["shd_self_shield"] = {
         -- XXX
     }
 }
@@ -967,11 +1014,11 @@ BuffGroups.BST = {
     -- L64 Spiritual Dominion (9 hp + 9 mana/tick, group)
     -- L69 Spiritual Ascendance (10 hp + 10 mana/tick, group, cost 900 mana)
     ["bst_manaregen"] = {
-        "Spiritual Ascendance/MinLevel|62",
-        "Spiritual Dominion/MinLevel|47",
-        "Spiritual Purity/MinLevel|44",
-        "Spiritual Radiance/MinLevel|41",
-        "Spiritual Light/MinLevel|1",
+        "Spiritual Ascendance",
+        "Spiritual Dominion",
+        "Spiritual Purity",
+        "Spiritual Radiance",
+        "Spiritual Light",
     },
 
     -- hp type 2 - Slot 4: Increase max HP:
@@ -981,17 +1028,17 @@ BuffGroups.BST = {
     -- L67 Spiritual Vitality (52 atk, 280 hp, group)
     -- NOTE: RNG buff has more atk
     ["bst_hp"] = {
-        "Spiritual Vitality/MinLevel|62",
-        "Spiritual Vigor/MinLevel|46",
-        "Spiritual Strength/MinLevel|45",
-        "Spiritual Brawn/MinLevel|1",
+        "Spiritual Vitality",
+        "Spiritual Vigor",
+        "Spiritual Strength",
+        "Spiritual Brawn",
     },
 
     -- L60 Alacrity (32-40% haste, 11 min)
     -- L63 Celerity (47-50% haste, 16 min)
     ["bst_haste"] = {
-        "Celerity/MinLevel|46",
-        "Alacrity/MinLevel|45",
+        "Celerity",
+        "Alacrity",
     },
 
     -- weak focus - HP slot 1: Increase Max HP
@@ -1000,10 +1047,10 @@ BuffGroups.BST = {
     -- L62 Talisman of Kragg (365-500 hp)
     -- L67 Focus of Alladnu (513 hp)
     ["bst_focus"] = {
-        "Focus of Alladnu/MinLevel|62",
-        "Talisman of Kragg/MinLevel|46",
-        "Talisman of Altuna/MinLevel|44",
-        "Talisman of Tnarg/MinLevel|41",
+        "Focus of Alladnu",
+        "Talisman of Kragg",
+        "Talisman of Altuna",
+        "Talisman of Tnarg",
     },
 
     -- L17 Spirit of Bear (11-15 sta)
@@ -1011,9 +1058,9 @@ BuffGroups.BST = {
     -- L52 Health (27-31 sta)
     -- L57 Stamina (36-40 sta)
     ["bst_sta"] = {
-        "Stamina/MinLevel|43",
-        "Health/MinLevel|41",
-        "Spirit of Ox/MinLevel|1",
+        "Stamina",
+        "Health",
+        "Spirit of Ox",
     },
 
     -- L14 Strengthen (5-10 str)
@@ -1021,17 +1068,17 @@ BuffGroups.BST = {
     -- L41 Raging Strength (23-26 str)
     -- L54 Furious Strength (31-34 str)
     ["bst_str"] = {
-        "Furious Strength/MinLevel|42",
-        "Raging Strength/MinLevel|1",
+        "Furious Strength",
+        "Raging Strength",
     },
 
     -- L38 Spirit of Monkey (19-20 dex)
     -- L53 Deftness (40 dex)
     -- L57 Dexterity (49-50 dex) - blocked by Khura's Focusing (60 dex)
     ["bst_dex"] = {
-        "Dexterity/MinLevel|43",
-        "Deftness/MinLevel|41",
-        "Spirit of Monkey/MinLevel|1",
+        "Dexterity",
+        "Deftness",
+        "Spirit of Monkey",
     },
 
     -- L37 Yekan's Quickening (43-45 str, 60% haste, 20 atk, 11-12 ac)
