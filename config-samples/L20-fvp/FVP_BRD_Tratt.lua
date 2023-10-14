@@ -9,13 +9,13 @@ settings.gems = {
 
     ["Elemental Rhythms"] = 6, -- fr, cr, magic resist
     ["Purifying Rhythms"] = 7, -- pr, dr, magic resist
-    ["Selo's Accelerando"] = 8,
+    ["brd_runspeed"] = 8,
 }
 
 settings.songs = {
     general = {
         -- PERCUSSION
-        "Selo's Accelerando",
+        "brd_runspeed",
 
         -- PERCUSSION
         "Purifying Rhythms",
@@ -28,16 +28,11 @@ settings.songs = {
     },
 }
 
-settings.swap = {
-    main = "",
-}
-
 settings.self_buffs = {
 }
 
 settings.healing = {
     life_support = {
-        --"Distillate of Divine Healing XI/HealPct|10",
     },
 }
 

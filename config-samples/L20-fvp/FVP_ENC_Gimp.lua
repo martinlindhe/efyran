@@ -7,12 +7,12 @@ settings.meditate = 50
 
 settings.gems = {
     ["Weaken"] = 1,
-    ["Languid Pace"] = 2, -- slow
+    ["enc_slow"] = 2, -- slow
     ["Mesmerize"] = 3, -- mez L55
     ["Lull"] = 4,
 
-    ["Tashani"] = 6,
-    ["Alacrity"] = 7,
+    ["enc_tash"] = 6,
+    ["enc_haste"] = 7,
     --["Juli's Animation"] = 7, -- pet
     ["enc_self_shield"] = 8,
 }
