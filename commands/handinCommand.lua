@@ -18,5 +18,5 @@ end
 
 mq.bind("/handin", createCommand)
 mq.bind("/handinall", function()
-    bci.ExecuteAllCommand("/handin", true)
+    bci.ExecuteAllWithSelfCommand("/handin")
 end)

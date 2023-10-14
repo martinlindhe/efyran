@@ -87,5 +87,5 @@ end)
 
 -- tell all peers to use Throne of Heroes
 mq.bind("/throneall", function()
-    bci.ExecuteAllCommand("/throne", true)
+    bci.ExecuteAllWithSelfCommand("/throne")
 end)

@@ -55,9 +55,9 @@ function disband_all_peers()
         delay(100)
     end
 
-    bci.ExecuteAllCommand("/if (${Raid.Members} > 0) /raiddisband", true)
+    bci.ExecuteAllWithSelfCommand("/if (${Raid.Members} > 0) /raiddisband")
     delay(1000)
-    bci.ExecuteAllCommand("/if (${Group.Members} > 0) /disband", true)
+    bci.ExecuteAllWithSelfCommand("/if (${Group.Members} > 0) /disband")
     delay(1000)
 end
 
