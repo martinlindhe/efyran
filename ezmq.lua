@@ -2232,8 +2232,12 @@ function memorize_spell(spellRow, defaultGem)
     local gem = defaultGem
     if o.Gem ~= nil then
         gem = o.Gem
-    elseif botSettings.settings.gems ~= nil and botSettings.settings.gems[o.Name] ~= nil then
-        gem = botSettings.settings.gems[o.Name]
+    elseif botSettings.settings.gems ~= nil then
+        if botSettings.settings.gems[o.Name] ~= nil then
+            gem = botSettings.settings.gems[o.Name]
+        elseif botSettings.settings.gems[o.spellGroup] ~= nil then
+            gem = botSettings.settings.gems[o.spellGroup]
+        end
     elseif gem == nil then
         all_tellf("\arWARN\ax: Spell/song lacks gems default slot or Gem|n argument: %s", spellRow)
         gem = 5

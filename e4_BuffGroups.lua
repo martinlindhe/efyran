@@ -1107,6 +1107,18 @@ BuffGroups.BST = {
     },
 }
 
+BuffGroups.BRD = {
+    -- L05 Selo's Accelerando (20-65% movement)
+    brd_runspeed = {
+        "Selo's Accelerando",
+    },
+
+    -- L51 Selo's Song of Travel (levi + invis)
+    brd_travel = {
+        "Selo's Song of Travel",
+    }
+}
+
 
 BuffGroups.Default = {}
 
