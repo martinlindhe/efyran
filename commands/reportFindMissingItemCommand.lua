@@ -6,9 +6,39 @@ local commandQueue = require('e4_CommandQueue')
 ---@field Name string
 ---@field Filter string|nil
 
+---@param name string
+---@param filter string|nil
+local function report_find_missing_item(name, filter)
+    name = strip_link(name)
+
+    if is_orchestrator() then
+        local exe = string.format("/fmi %s", name)
+        if filter ~= nil then
+            exe = exe .. " " .. filter
+        end
+        bci.ExecuteZoneCommand(exe)
+    end
+
+    if filter ~= nil and not matches_filter(filter, mq.TLO.Me.Name()) then
+        log.Info("/fmi: I do not match filter \ay%s\ax", filter)
+        return
+    end
+
+    local item = find_item(name)
+    if item ~= nil then
+        return
+    end
+
+    local item = find_item_bank(name)
+    if item ~= nil then
+        return
+    end
+    all_tellf("I miss \ay%s\ax", name)
+end
+
 ---@param command FindItemBy
 local function execute(command)
-    report_find_item(command.Name, command.Filter)
+    report_find_missing_item(command.Name, command.Filter)
 end
 
 -- find missing item
