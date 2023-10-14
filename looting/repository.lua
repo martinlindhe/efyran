@@ -8,12 +8,9 @@ local mq = require 'mq'
 ---@field public NumberOfStacks number|nil
 ---@field public Bankable boolean|nil
 
-local configDir = mq.configDir.."/"
-local serverName = mq.TLO.MacroQuest.Server()
-
 local function getFilePath()
   local fileName = "loot_settings.lua"
-  return string.format("%s/%s/data/%s", configDir, serverName, fileName)
+  return string.format("%s/%s/%s", efyranConfigDir(), current_server(), fileName)
 end
 
 local function loadStore()
