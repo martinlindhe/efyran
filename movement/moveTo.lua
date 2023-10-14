@@ -68,9 +68,9 @@ local function arrivedAtDestination(xLoc, yLoc, distanceDelta)
     mq.cmd("/nav stop")
     local arrived = arrivedAtDestination(xLoc, yLoc, distanceDelta)
     if arrived then
-        broadcast.Success({}, string.format("Arrived at destinaiotn <x:%d> <y:%d>", xLoc, yLoc))
+        broadcast.Success({}, string.format("Arrived at destination <x:%d> <y:%d>", xLoc, yLoc))
     else
-        broadcast.Fail({}, string.format("Could not navigate to destinaiotn <x:%d> <y:%d>", xLoc, yLoc))
+        broadcast.Fail({}, string.format("Could not navigate to destination <x:%d> <y:%d>", xLoc, yLoc))
     end
 
     return arrived
