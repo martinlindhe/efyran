@@ -353,7 +353,6 @@ SpellGroups.CLR = {
         "Blessing of Faith",
     },
 
-
     -- self mana regen:
     -- L34 Armor of Protection (202-225 hp, 15 ac)
     -- L49 Armor of the Faithful (252-275 hp, 22 ac)
@@ -364,8 +363,14 @@ SpellGroups.CLR = {
     -- L80 Armor of the Solemn Rk. II (915 hp, 71 ac, 12 mana/tick)
     -- NOTE: does not stack with DRU Skin
     clr_self_shield = {
-        -- XXX
-    }
+        "Armor of the Solemn",
+        "Armor of the Sacred",
+        "Armor of the Pious",
+        "Armor of the Zealot",
+        "Blessed Armor of the Risen",
+        "Armor of the Faithful",
+        "Armor of Protection",
+    },
 }
 
 SpellGroups.DRU = {
@@ -551,8 +556,11 @@ SpellGroups.DRU = {
     -- L70 Mask of the Wild (5 mana/tick)
     -- L80 Mask of the Shadowcat (SELF, slot 2: 9 mana/tick)
     dru_self_mana = {
-        -- XXX
-    }
+        "Mask of the Shadowcat",
+        "Mask of the Wild",
+        "Mask of the Forest",
+        "Mask of the Stalker",
+    },
 }
 
 SpellGroups.ENC = {
@@ -723,7 +731,7 @@ SpellGroups.MAG = {
     -- L63 Maelstrom of Ro (48 ds, 45 fr, 15 min, group)
     -- L66 Fireskin (62 ds - slot 1, 45 fr, 15 min, single)
     -- L70 Circle of Fireskin (62 ds, 45 fr, 15 min, group)
-    ["mag_single_ds"] = {
+    mag_single_ds = {
         "Fireskin",
         "Flameshield of Ro",
         "Cadeau of Flame",
@@ -733,7 +741,7 @@ SpellGroups.MAG = {
         "Shield of Flame",
         "Shield of Fire",
     },
-    ["mag_group_ds"] = {
+    mag_group_ds = {
         "Circle of Fireskin",
         "Maelstrom of Ro",
         "Boon of Immolation",
@@ -769,7 +777,7 @@ SpellGroups.MAG = {
     -- L54 Elemental Cloak (45 cr, 45 fr)
     -- L61 Elemental Barrier (60 cr, 60 fr)
     -- NOTE: does not stack with druid resists
-    ["mag_self_resist"] = {
+    mag_self_resist = {
         -- XXX
     },
 
@@ -781,13 +789,13 @@ SpellGroups.MAG = {
     -- L60 Ancient: Burnout Blaze (80 str, 80% haste, 22 ac, 50 atk)
     -- L62 Burnout V (80 str, 85% haste, 22 ac, 40 atk)
     -- L69 Elemental Fury (85% haste, 29 ac, 52 atk, 5% skill dmg mod)
-    ["mag_pet_haste"] = {
+    mag_pet_haste = {
         -- XXX
     },
 
     -- L27 Expedience (20% movement, 12 min)
     -- L58 Velocity (59-80% movement, 36 min)
-    ["mag_pet_runspeed"] = {
+    mag_pet_runspeed = {
         -- XXX
     },
 
@@ -796,10 +804,10 @@ SpellGroups.MAG = {
 SpellGroups.NEC = {
     -- L41 Dead Man Floating (61-70 pr, water breathing, see invis, levitate)
     -- L45 Dead Men Floating (65-70 pr, water breathing, see invis, levitate, group)
-    ["nec_group_levitate"] = {
+    nec_group_levitate = {
         "Dead Men Floating",
     },
-    ["nec_single_levitate"] = {
+    nec_single_levitate = {
         "Dead Man Floating",
     },
 
@@ -816,7 +824,7 @@ SpellGroups.NEC = {
     -- L74 Otherside Rk. II (81 mana/tick, cost 81 hp/tick, mottled skeleton)
     -- L79 Spectralside (87 mana/tick, cost 76 hp/tick, mottled skeleton)
     -- NOTE: if used as "Lich Spell", will cast while running
-    ["nec_lich"] = {
+    nec_lich = {
         -- XXX
     },
 
@@ -829,7 +837,7 @@ SpellGroups.NEC = {
     -- L73 Wraithskin Rk. II (slot 1: absorb 1219 dmg, 4 mana/tick)
     -- L78 Shadowskin Rk. II (slot 1: absorb 1585 dmg, 4 mana/tick)
     -- NOTE: does not stack with ENC rune
-    ["nec_self_rune"] = {
+    nec_self_rune = {
         -- XXX
     },
 
@@ -840,7 +848,7 @@ SpellGroups.NEC = {
     -- L67 Glyph of Darkness (5% skills dmg mod, 84 str, 70% haste, 23 ac)
     -- L72 Sigil of the Unnatural (6% skills dmg mod, 96 str, 70% haste, 28 ac)
     -- L77 Sigil of the Aberrant Rk. II (10% skills dmg mod, 122 str, 70% haste, 36 ac)
-    ["nec_pet_haste"] = {
+    nec_pet_haste = {
         -- XXX
     },
 
@@ -899,7 +907,7 @@ SpellGroups.RNG = {
     -- L51 Strength of Nature (25 atk, 75 hp, single, cost 125 mana)
     -- L62 Strength of Tunare (slot 1: 92 atk, slot 4: 125 hp, group, cost 250 mana)
     -- L67 Strength of the Hunter (75 atk, 155 hp, group, cost 325 mana) NOTE: Tunare has more ATK
-    ["rng_hp"] = {
+    rng_hp = {
         -- "Strength of the Hunter",
         "Strength of Tunare",
         "Strength of Nature",
@@ -909,7 +917,7 @@ SpellGroups.RNG = {
     -- L60 Call of the Predator (slot 2: 40 atk, group)
     -- L64 Spirit of the Predator (slot 2: 70 atk, group)
     -- L69 Howl of the Predator (slot 2: 90 atk, slot 9: double atk 3-20%, group)
-    ["rng_atk"] = {
+    rng_atk = {
         "Howl of the Predator",
         "Spirit of the Predator",
         "Call of the Predator",
@@ -920,7 +928,7 @@ SpellGroups.RNG = {
     -- L50 Call of Earth (slot 2: 4 ds, slot 3: 24-25 ac)
     -- L62 Call of the Rathe (slot 2: 10 ds, slot 3: 34 ac)
     -- L67 Guard of the Earth (slot 2: 13 ds, slot 3: 49 ac)
-    ["rng_ds"] = {
+    rng_ds = {
         "Guard of the Earth",
         "Call of the Rathe",
         "Call of Earth",
@@ -933,7 +941,7 @@ SpellGroups.RNG = {
     -- L59 Skin like Nature
     -- L65 Natureskin (18-19 ac, 391-520 hp, 4 hp/tick)
     -- L70 Onyx Skin (33 ac, 540 hp, 6 hp/tick)
-    ["rng_skin"] = {
+    rng_skin = {
         -- XXX
     },
 
@@ -944,18 +952,18 @@ SpellGroups.RNG = {
     -- L60 Thorncoat
     -- L63 Bladecoat (slot 2: 37 ac, slot 3: 6 ds)
     -- L68 Briarcoat (slot 2: 49 ac, slot 3: 8 ds)
-    ["rng_self_ds"] = {
+    rng_self_ds = {
         -- XXX
     },
 
     -- L65 Protection of the Wild (slot 1: 34 ds, slot 2: 130 atk, slot 3: 34 ac, slot 4: 125 hp)
     -- L70 Ward of the Hunter     (slot 1: 45 ds, slot 2: 170 atk, slot 3: 49 ac, slot 4: 165 hp, slot 9: 3% double attack)
-    ["rng_self_ds_atk"] = {
+    rng_self_ds_atk = {
         -- XXX
     },
 
     -- L65 Mask of the Stalker (slot 3: 3 mana regen)
-    ["rng_self_mana"] = {
+    rng_self_mana = {
         -- XXX
     },
 }
@@ -1020,7 +1028,7 @@ SpellGroups.SHD = {
     -- L37 Scream of Death (proc: Scream of Death Strike)
     -- L67 Shroud of Discord (proc: Shroud of Discord Strike, 60 min duration) - imbues attacks with chance to steal life from target (lifetap)
     -- L70 Decrepit Skin (slot 1: proc Decrepit Skin Parry, 4 min duration) - absorb dmg
-    ["shd_combat_innate"] = {
+    shd_combat_innate = {
         -- XXX
     },
 
@@ -1029,14 +1037,14 @@ SpellGroups.SHD = {
     -- L64 Pact of Hate (15 mana/tick, -22 hp/tick)
     -- L69 Pact of Decay (17 mana/tick, -25 hp/tick)
     -- NOTE: does not stack with ENC Clairvoyance (20 mana/tick)
-    ["shd_lich"] = {
+    shd_lich = {
         -- XXX
     },
 
     -- L60 Cloak of the Akheva (slot 3: 13 ac, slot 6: 5 ds, slot 10: 150 hp)
     -- L65 Cloak of Luclin (slot 3: 34 ac, slot 6: 10 ds, slot 10: 280 hp)
     -- L70 Cloak of Discord (slot 3: 49 ac, slot 6: 13 ds, slot 10: 350 hp)
-    ["shd_self_shield"] = {
+    shd_self_shield = {
         -- XXX
     }
 }
@@ -1048,7 +1056,7 @@ SpellGroups.BST = {
     -- L59 Spiritual Purity (7 hp + 7 mana/tick, group)
     -- L64 Spiritual Dominion (9 hp + 9 mana/tick, group)
     -- L69 Spiritual Ascendance (10 hp + 10 mana/tick, group, cost 900 mana)
-    ["bst_manaregen"] = {
+    bst_manaregen = {
         "Spiritual Ascendance",
         "Spiritual Dominion",
         "Spiritual Purity",
@@ -1062,7 +1070,7 @@ SpellGroups.BST = {
     -- L62 Spiritual Vigor (40 atk, 225 hp, group)
     -- L67 Spiritual Vitality (52 atk, 280 hp, group)
     -- NOTE: RNG buff has more atk
-    ["bst_hp"] = {
+    bst_hp = {
         "Spiritual Vitality",
         "Spiritual Vigor",
         "Spiritual Strength",
@@ -1071,7 +1079,7 @@ SpellGroups.BST = {
 
     -- L60 Alacrity (32-40% haste, 11 min)
     -- L63 Celerity (47-50% haste, 16 min)
-    ["bst_haste"] = {
+    bst_haste = {
         "Celerity",
         "Alacrity",
     },
@@ -1081,7 +1089,7 @@ SpellGroups.BST = {
     -- L58 Talisman of Altuna (230-250 hp)
     -- L62 Talisman of Kragg (365-500 hp)
     -- L67 Focus of Alladnu (513 hp)
-    ["bst_focus"] = {
+    bst_focus = {
         "Focus of Alladnu",
         "Talisman of Kragg",
         "Talisman of Altuna",
@@ -1092,7 +1100,7 @@ SpellGroups.BST = {
     -- L37 Spirit of Ox (19-23 sta)
     -- L52 Health (27-31 sta)
     -- L57 Stamina (36-40 sta)
-    ["bst_sta"] = {
+    bst_sta = {
         "Stamina",
         "Health",
         "Spirit of Ox",
@@ -1102,7 +1110,7 @@ SpellGroups.BST = {
     -- L28 Spirit Strength (16-18 str)
     -- L41 Raging Strength (23-26 str)
     -- L54 Furious Strength (31-34 str)
-    ["bst_str"] = {
+    bst_str = {
         "Furious Strength",
         "Raging Strength",
     },
@@ -1110,7 +1118,7 @@ SpellGroups.BST = {
     -- L38 Spirit of Monkey (19-20 dex)
     -- L53 Deftness (40 dex)
     -- L57 Dexterity (49-50 dex) - blocked by Khura's Focusing (60 dex)
-    ["bst_dex"] = {
+    bst_dex = {
         "Dexterity",
         "Deftness",
         "Spirit of Monkey",
@@ -1122,7 +1130,7 @@ SpellGroups.BST = {
     -- L59 Sha's Ferocity (99-100 str, 84-85% haste, 60 atk, 60 ac)
     -- L64 Arag's Celerity (115 str, 85% haste, 75 atk, 71 ac)
     -- L68 Growl of the Beast (85% haste, 90 atk, 78 ac, 5% skill dmg mod, duration 1h)
-    ["bst_pet_haste"] = {
+    bst_pet_haste = {
         -- XXX
     },
 
@@ -1137,7 +1145,7 @@ SpellGroups.BST = {
     -- L63 Spirit of Rellic (COLD: Spirit of Rellic Strike, rate mod 150)
     -- L68 Spirit of Irionu (COLD: Spirit of Irionu Strike, rate mod 150, 75 dex)
     -- L70 Spirit of Oroshar (FIRE: Spirit of Oroshar Strike, rate mod 150, 75 dex)
-    ["bst_pet_proc"] = {
+    bst_pet_proc = {
         -- XXX
     },
 }
