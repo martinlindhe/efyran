@@ -348,7 +348,7 @@ function QoL.Init()
     mq.bind("/clr", function() mq.cmd("/clear") end)
 
     -- clear all chat windows on all peers
-    mq.bind("/cls", function() bci.ExecuteAllCommand("/clear", true) end)
+    mq.bind("/cls", function() bci.ExecuteAllWithSelfCommand("/clear") end)
 
     mq.bind("/self", function() mq.cmd("/target myself") end)
 
@@ -362,7 +362,7 @@ function QoL.Init()
     mq.bind("/hcn", function() mq.cmd("/hidec none") end)
 
     -- report toons with few free buff slots
-    mq.bind("/freebuffslots", function() bci.ExecuteAllCommand("/if (${Me.FreeBuffSlots} <= 1) /bc FREE BUFF SLOTS: ${Me.FreeBuffSlots}", true) end)
+    mq.bind("/freebuffslots", function() bci.ExecuteAllWithSelfCommand("/if (${Me.FreeBuffSlots} <= 1) /bc FREE BUFF SLOTS: ${Me.FreeBuffSlots}") end)
     mq.bind("/fbs", function() mq.cmd("/freebuffslots") end)
 
     -- /raidinvite shorthand
@@ -381,7 +381,7 @@ function QoL.Init()
 
     mq.bind("/exitnotinzone", function() bci.ExecuteAllCommand(string.format("/if (!${SpawnCount[pc =%s]}) /exitme", mq.TLO.Me.Name())) end)
 
-    mq.bind("/exitnotingroup", function() bci.ExecuteAllCommand("/if (!${Group.Members}) /exitme", true) end)
+    mq.bind("/exitnotingroup", function() bci.ExecuteAllWithSelfCommand("/if (!${Group.Members}) /exitme") end)
 
     mq.bind("/exitnotinraid", function(force)
         if not in_raid() and force ~= "force" then
@@ -389,54 +389,54 @@ function QoL.Init()
             cmd("/beep")
             return
         end
-        bci.ExecuteAllCommand("/if (!${Raid.Members}) /exitme", true)
+        bci.ExecuteAllWithSelfCommand("/if (!${Raid.Members}) /exitme")
     end)
 
     -- report all peers who are not in current zone
-    mq.bind("/notinzone", function() bci.ExecuteAllCommand(string.format("/if (!${SpawnCount[pc =%s]}) /bc I'm in \ar${Zone.ShortName}\ax", mq.TLO.Me.Name()), true) end)
+    mq.bind("/notinzone", function() bci.ExecuteAllWithSelfCommand(string.format("/if (!${SpawnCount[pc =%s]}) /bc I'm in \ar${Zone.ShortName}\ax", mq.TLO.Me.Name())) end)
 
-    mq.bind("/notingroup", function() bci.ExecuteAllCommand("/if (!${Me.Grouped}) /bc NOT IN GROUP", true) end)
+    mq.bind("/notingroup", function() bci.ExecuteAllWithSelfCommand("/if (!${Me.Grouped}) /bc NOT IN GROUP") end)
 
-    mq.bind("/ingroup", function() bci.ExecuteAllCommand("/if (${Me.Grouped}) /bc IN GROUP", true) end)
+    mq.bind("/ingroup", function() bci.ExecuteAllWithSelfCommand("/if (${Me.Grouped}) /bc IN GROUP") end)
 
-    mq.bind("/notinraid", function() bci.ExecuteAllCommand("/if (!${Raid.Members}) /bc NOT IN RAID", true) end)
+    mq.bind("/notinraid", function() bci.ExecuteAllWithSelfCommand("/if (!${Raid.Members}) /bc NOT IN RAID") end)
 
-    mq.bind("/inraid", function() bci.ExecuteAllCommand("/if (${Raid.Members}) /bc IN RAID", true) end)
+    mq.bind("/inraid", function() bci.ExecuteAllWithSelfCommand("/if (${Raid.Members}) /bc IN RAID") end)
 
     -- report all peers who are not levitating
-    mq.bind("/notlevi", function() bci.ExecuteAllCommand("/if (!${Me.Levitating}) /bc NOT LEVI", true) end)
+    mq.bind("/notlevi", function() bci.ExecuteAllWithSelfCommand("/if (!${Me.Levitating}) /bc NOT LEVI") end)
 
-    mq.bind("/notitu", function() bci.ExecuteAllCommand("/if (!${Me.Buff[Sunskin].ID}) /bc NOT ITU", true) end)
+    mq.bind("/notitu", function() bci.ExecuteAllWithSelfCommand("/if (!${Me.Buff[Sunskin].ID}) /bc NOT ITU") end)
 
     -- report all peers who are not invisible
-    mq.bind("/notinvis", function() bci.ExecuteAllCommand("/if (!${Me.Invis}) /bc NOT INVIS", true) end)
+    mq.bind("/notinvis", function() bci.ExecuteAllWithSelfCommand("/if (!${Me.Invis}) /bc NOT INVIS") end)
 
 
     -- report special stats
-    mq.bind("/combateffects", function() bci.ExecuteAllCommand("/if (${Select[${Me.Class.ShortName},ROG,BER,MNK]}) /bc COMBAT EFFECT ${Me.CombatEffectsBonus}", true) end)
+    mq.bind("/combateffects", function() bci.ExecuteAllWithSelfCommand("/if (${Select[${Me.Class.ShortName},ROG,BER,MNK]}) /bc COMBAT EFFECT ${Me.CombatEffectsBonus}") end)
 
-    mq.bind("/accuracy", function() bci.ExecuteAllCommand("/if (${Select[${Me.Class.ShortName},WAR,PAL,RNG,SHD,MNK,BRD,ROG,BST,BER]}) /bc ACCURACY ${Me.AccuracyBonus}/150", true) end)
-    mq.bind("/strikethru", function() bci.ExecuteAllCommand("/if (${Select[${Me.Class.ShortName},RNG,MNK,BRD,ROG,BST,BER]}) /bc STRIKE THRU ${Me.StrikeThroughBonus}/35", true) end)
-    mq.bind("/shielding", function() bci.ExecuteAllCommand("/bc SHIELDING ${Me.ShieldingBonus}", true) end)
+    mq.bind("/accuracy", function() bci.ExecuteAllWithSelfCommand("/if (${Select[${Me.Class.ShortName},WAR,PAL,RNG,SHD,MNK,BRD,ROG,BST,BER]}) /bc ACCURACY ${Me.AccuracyBonus}/150") end)
+    mq.bind("/strikethru", function() bci.ExecuteAllWithSelfCommand("/if (${Select[${Me.Class.ShortName},RNG,MNK,BRD,ROG,BST,BER]}) /bc STRIKE THRU ${Me.StrikeThroughBonus}/35") end)
+    mq.bind("/shielding", function() bci.ExecuteAllWithSelfCommand("/bc SHIELDING ${Me.ShieldingBonus}") end)
 
-    mq.bind("/dotshield", function() bci.ExecuteAllCommand("/bc DoT SHIELD ${Me.DoTShieldBonus}", true) end)
-    mq.bind("/spellshield", function() bci.ExecuteAllCommand("/bc SPELL SHIELD ${Me.SpellShieldBonus}", true) end)
-    mq.bind("/avoidance", function() bci.ExecuteAllCommand("/bc AVOIDANCE ${Me.AvoidanceBonus}/100", true) end)
-    mq.bind("/stunresist", function() bci.ExecuteAllCommand("/bc STUN RESIST ${Me.StunResistBonus}", true) end)
+    mq.bind("/dotshield", function() bci.ExecuteAllWithSelfCommand("/bc DoT SHIELD ${Me.DoTShieldBonus}") end)
+    mq.bind("/spellshield", function() bci.ExecuteAllWithSelfCommand("/bc SPELL SHIELD ${Me.SpellShieldBonus}") end)
+    mq.bind("/avoidance", function() bci.ExecuteAllWithSelfCommand("/bc AVOIDANCE ${Me.AvoidanceBonus}/100") end)
+    mq.bind("/stunresist", function() bci.ExecuteAllWithSelfCommand("/bc STUN RESIST ${Me.StunResistBonus}") end)
 
     -- "free inventory slots": only lists melees as looter classes for minimal disruption
     mq.bind("/fis", function()
-        bci.ExecuteAllCommand("/if (${Select[${Me.Class.ShortName},MNK,ROG,BER,RNG]} && ${Me.FreeInventory} > 20) /bc FREE INVENTORY SLOTS: ${Me.FreeInventory}", true)
+        bci.ExecuteAllWithSelfCommand("/if (${Select[${Me.Class.ShortName},MNK,ROG,BER,RNG]} && ${Me.FreeInventory} > 20) /bc FREE INVENTORY SLOTS: ${Me.FreeInventory}")
     end)
 
     -- "free inventory slots all"
     mq.bind("/fisa", function()
-        bci.ExecuteAllCommand("/if (${Me.FreeInventory} > 20) /bc FREE INVENTORY SLOTS: ${Me.FreeInventory}", true)
+        bci.ExecuteAllWithSelfCommand("/if (${Me.FreeInventory} > 20) /bc FREE INVENTORY SLOTS: ${Me.FreeInventory}")
     end)
 
     -- report all with few free inventory slots
     mq.bind("/fewinventoryslots", function()
-        bci.ExecuteAllCommand("/if (${Me.FreeInventory} <= 20) /bc FULL INVENTORY, ${Me.FreeInventory} FREE SLOTS", true)
+        bci.ExecuteAllWithSelfCommand("/if (${Me.FreeInventory} <= 20) /bc FULL INVENTORY, ${Me.FreeInventory} FREE SLOTS")
     end)
 
     -- make peers in zone face my target
@@ -447,15 +447,15 @@ function QoL.Init()
     mq.bind("/faceme", function() bci.ExecuteZoneCommand("/face fast id "..mq.TLO.Me.ID()) end)
 
     -- useful when AE FD is cast (oow, wos Shadowhunter, Cleric 1.5 fight in lfay and so on)
-    mq.bind("/standall", function() bci.ExecuteAllCommand("/if (${Me.Feigning} || ${Me.Ducking} || ${Me.Sitting}) /stand", true) end)
+    mq.bind("/standall", function() bci.ExecuteAllWithSelfCommand("/if (${Me.Feigning} || ${Me.Ducking} || ${Me.Sitting}) /stand") end)
 
-    mq.bind("/sitall", function() bci.ExecuteAllCommand("/if (${Me.Standing}) /sit on", true) end)
+    mq.bind("/sitall", function() bci.ExecuteAllWithSelfCommand("/if (${Me.Standing}) /sit on") end)
 
     -- report all peers who are not standing
-    mq.bind("/notstanding", function() bci.ExecuteAllCommand("/if (${Me.Feigning} || ${Me.Ducking} || ${Me.Sitting}) /bc NOT STANDING", true) end)
+    mq.bind("/notstanding", function() bci.ExecuteAllWithSelfCommand("/if (${Me.Feigning} || ${Me.Ducking} || ${Me.Sitting}) /bc NOT STANDING") end)
 
     -- reports all toons that are not running e4
-    mq.bind("/note4", function() bci.ExecuteAllCommand("/lua run note4", true) end)
+    mq.bind("/note4", function() bci.ExecuteAllWithSelfCommand("/lua run note4") end)
 
     mq.bind("/running", function()
         -- XXX reports all running scripts on all toons
@@ -478,13 +478,13 @@ function QoL.Init()
 
     -- report if tribute is too low (under 140k)
     mq.bind("/lowtribute", function()
-        bci.ExecuteAllCommand("/if (${Me.CurrentFavor} < 140000) /bc LOW TRIBUTE ${Me.CurrentFavor}", true)
+        bci.ExecuteAllWithSelfCommand("/if (${Me.CurrentFavor} < 140000) /bc LOW TRIBUTE ${Me.CurrentFavor}")
     end)
 
     -- report if tribute is active
     -- TODO add filter for /tributeactive /only|tanks
     mq.bind("/tributeactive", function()
-        bci.ExecuteAllCommand("/if (${Me.TributeActive}) /bc TRIBUTE ACTIVE, COST ${Me.ActiveFavorCost}, STORED ${Me.CurrentFavor}", true)
+        bci.ExecuteAllWithSelfCommand("/if (${Me.TributeActive}) /bc TRIBUTE ACTIVE, COST ${Me.ActiveFavorCost}, STORED ${Me.CurrentFavor}")
     end)
 
     -- Ask peer owners of nearby corpses to consent me
@@ -503,24 +503,24 @@ function QoL.Init()
     -- make all peer quit expedition
     mq.bind("/quitexp", function()
         all_tellf("Instructing peers to leave expedition / shared task ...")
-        bci.ExecuteAllCommand("/dzquit", true)   -- Expedition (PoP, LDoN, GoD, OOW)
-        bci.ExecuteAllCommand("/taskquit", true) -- Shared task (DoN)
+        bci.ExecuteAllWithSelfCommand("/dzquit")   -- Expedition (PoP, LDoN, GoD, OOW)
+        bci.ExecuteAllWithSelfCommand("/taskquit") -- Shared task (DoN)
     end)
 
     -- hide all dz windows
-    mq.bind("/dzhide", function() bci.ExecuteAllCommand("/if (${Window[dynamiczonewnd]}) /windowstate dynamiczonewnd close", true) end)
+    mq.bind("/dzhide", function() bci.ExecuteAllWithSelfCommand("/if (${Window[dynamiczonewnd]}) /windowstate dynamiczonewnd close") end)
 
     -- report peers with at least 5 unspent AA:s
-    mq.bind("/unspentaa", function() bci.ExecuteAllCommand("/if (${Me.AAPoints} >= 5 && ${Me.AAPoints} < 50) /bc UNSPENT AA: ${Me.AAPoints}", true) end)
+    mq.bind("/unspentaa", function() bci.ExecuteAllWithSelfCommand("/if (${Me.AAPoints} >= 5 && ${Me.AAPoints} < 50) /bc UNSPENT AA: ${Me.AAPoints}") end)
 
     -- report peers with less than 10 unspent AA:s
-    mq.bind("/lowunspentaa", function() bci.ExecuteAllCommand("/if (${Me.AAPoints} >= 1 && ${Me.AAPoints} < 50) /bc UNSPENT AA: ${Me.AAPoints}", true) end)
+    mq.bind("/lowunspentaa", function() bci.ExecuteAllWithSelfCommand("/if (${Me.AAPoints} >= 1 && ${Me.AAPoints} < 50) /bc UNSPENT AA: ${Me.AAPoints}") end)
 
     -- report peers with any unspent AA:s
-    mq.bind("/allunspentaa", function() bci.ExecuteAllCommand("/if (${Me.AAPoints} >= 1) /bc UNSPENT AA: ${Me.AAPoints} (SPENT ${Me.AAPointsSpent})", true) end)
+    mq.bind("/allunspentaa", function() bci.ExecuteAllWithSelfCommand("/if (${Me.AAPoints} >= 1) /bc UNSPENT AA: ${Me.AAPoints} (SPENT ${Me.AAPointsSpent})") end)
 
     -- report all peer total AA:s
-    mq.bind("/totalaa", function() bci.ExecuteAllCommand("/bc ${Me.AAPointsTotal} TOTAL (${Me.AAPoints} unspent, ${Me.AAPointsSpent} spent)", true) end)
+    mq.bind("/totalaa", function() bci.ExecuteAllWithSelfCommand("/bc ${Me.AAPointsTotal} TOTAL (${Me.AAPoints} unspent, ${Me.AAPointsSpent} spent)") end)
 
     -- track xp, auto adjust level / AA xp and auto loot
     local xpGain = function(text)

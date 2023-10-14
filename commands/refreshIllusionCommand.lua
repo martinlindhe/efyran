@@ -20,5 +20,5 @@ end
 
 mq.bind("/refreshillusion", createCommand)
 mq.bind("/refreshillusions", function()
-    bci.ExecuteAllCommand("/refreshillusion", true)
+    bci.ExecuteAllWithSelfCommand("/refreshillusion")
 end)
