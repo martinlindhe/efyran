@@ -28,3 +28,4 @@ local function createCommand(...)
 end
 
 mq.bind("/fdi", createCommand)
+mq.bind("/finditem", createCommand)
