@@ -12,10 +12,6 @@ settings.gems = {
     ["Strengthen"] = 8,
 }
 
-settings.swap = {
-    main = "",
-}
-
 settings.self_buffs = {
 }
 

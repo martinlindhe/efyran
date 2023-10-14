@@ -6,7 +6,7 @@ settings.debug = true
 settings.gems = {
     ["Healing"] = 1,
 
-    ["Symbol of Transal"] = 3,
+    ["clr_symbol"] = 3,
     ["Divine Aura"] = 4,
 
     ["Cure Poison"] = 6,

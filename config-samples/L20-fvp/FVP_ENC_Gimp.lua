@@ -14,11 +14,11 @@ settings.gems = {
     ["Tashani"] = 6,
     ["Alacrity"] = 7,
     --["Juli's Animation"] = 7, -- pet
-    ["Major Shielding"] = 8,
+    ["enc_self_shield"] = 8,
 }
 
 settings.self_buffs = {
-    "Major Shielding",
+    "enc_self_shield",
 }
 
 settings.healing = {

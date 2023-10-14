@@ -9,27 +9,19 @@ settings.gems = {
 
     ["Shield of Fire"] = 6, -- ds
     ["Minor Summoning: Water"] = 7, -- pet
-    ["Shielding"] = 8,
-}
-
-settings.swap = {
-    main = "",
+    ["mag_self_shield"] = 8,
 }
 
 settings.self_buffs = {
-    "Shielding",
+    "mag_self_shield",
 }
 
 settings.healing = {
     life_support = {
-        --"Distillate of Divine Healing XI/HealPct|10",
     },
 }
 
 settings.assist = {
-    --type = "Melee",
-    --engage_percent = 98,
-
     nukes = {
         main = {
             "Burn/MaxHP|95/NoAggro/MinMana|20",

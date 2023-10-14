@@ -18,7 +18,7 @@ settings.self_buffs = {
 
 settings.healing = {
     life_support = {
-        --"Distillate of Divine Healing XI/HealPct|10",
+        "Minor Healing/HealPct|30",
     },
 }
 

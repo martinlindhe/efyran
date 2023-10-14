@@ -11,7 +11,7 @@ settings.gems = {
 
     ["Cure Disease"] = 6,
     ["Cure Poison"] = 7,
-    ["Skin like Rock"] = 8,
+    ["dru_skin"] = 8,
 }
 
 settings.swap = {
@@ -19,7 +19,7 @@ settings.swap = {
 }
 
 settings.self_buffs = {
-    "Thistlecoat/MinMana|80",
+    "dru_self_ds/MinMana|80",
 }
 
 settings.healing = {

@@ -4,18 +4,14 @@ local settings = { }
 settings.gems = {
     ["Light Healing"] = 1,
 
-    ["Yaulp"] = 7,
-}
-
-settings.swap = {
-    main = "",
+    ["pal_yaulp"] = 7,
 }
 
 settings.self_buffs = {
 }
 
 settings.combat_buffs = {
-    "Yaulp",
+    "pal_yaulp",
 }
 
 settings.healing = {

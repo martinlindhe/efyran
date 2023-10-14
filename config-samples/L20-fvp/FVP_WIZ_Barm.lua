@@ -4,7 +4,7 @@ local settings = { }
 settings.gems = {
     ["Fire Bolt"] = 1,
 
-    ["Shielding"] = 8,
+    ["wiz_self_shield"] = 8,
 }
 
 settings.swap = {
@@ -12,19 +12,15 @@ settings.swap = {
 }
 
 settings.self_buffs = {
-    "Shielding",
+    "wiz_self_shield",
 }
 
 settings.healing = {
     life_support = {
-        --"Distillate of Divine Healing XI/HealPct|10",
     },
 }
 
 settings.assist = {
-    --type = "Melee",
-    --engage_percent = 98,
-
     nukes = {
         main = {
             "Fire Bolt/MaxHP|90/NoAggro/MinMana|20",
