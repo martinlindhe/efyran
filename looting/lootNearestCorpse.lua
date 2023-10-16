@@ -1,7 +1,7 @@
 local mq = require 'mq'
 local log = require("knightlinc/Write")
 local broadcast = require 'broadcast/broadcast'
-local timer = require 'timer'
+local timer = require 'Timer'
 local moveTo = require 'movement/moveTo'
 local repository = require 'looting/repository'
 local bard = require 'Class_Bard'

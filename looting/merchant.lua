@@ -1,7 +1,7 @@
 --- @type Mq
 local mq = require 'mq'
 local log = require("knightlinc/Write")
-local timer = require 'timer'
+local timer = require 'Timer'
 local target = require 'target'
 
 local function findMerchant()

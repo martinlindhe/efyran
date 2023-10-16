@@ -1,7 +1,7 @@
 --- @type Mq
 local mq = require 'mq'
 local logger = require("knightlinc/Write")
-local timer = require 'timer'
+local timer = require 'Timer'
 local moveTo = require 'movement/moveTo'
 local bard = require 'Class_Bard'
 local merchant = require 'looting/merchant'
