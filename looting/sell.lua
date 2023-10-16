@@ -4,8 +4,8 @@ local logger = require("knightlinc/Write")
 local timer = require 'timer'
 local moveTo = require 'movement/moveTo'
 local bard = require 'Class_Bard'
-local merchant = require 'modules/looter/merchant'
-local repository = require 'modules/looter/repository'
+local merchant = require 'looting/merchant'
+local repository = require 'looting/repository'
 
 ---@param itemId integer
 ---@param itemName string
@@ -77,25 +77,19 @@ local function sellItems()
   local startY = mq.TLO.Me.Y()
   local startZ = mq.TLO.Me.Z()
 
-  if not merchant.FindMerchant() then
+  local nearestMerchant = merchant.FindMerchant()
+  if not nearestMerchant then
     logger.Debug("Unable to find any merchants nearby")
     return
   end
 
-  local target = mq.TLO.Target
-  if not target() then
-    return
-  end
-
-  local merchantName= target.CleanName()
-
-  if not moveTo.MoveToLoc(target.X(), target.Y(), target.Z(), 20, 12) then
+  local merchantName= nearestMerchant.CleanName()
+  if not moveTo.MoveToLoc(nearestMerchant.X(), nearestMerchant.Y(), nearestMerchant.Z(), 20, 12) then
     logger.Debug("Unable to reach merchant <%s>", merchantName)
     return
   end
 
-  if merchant.OpenMerchant(target --[[@as target]]) then
-
+  if merchant.OpenMerchant(nearestMerchant --[[@as spawn]]) then
     local maxInventory = 23 + mq.TLO.Me.NumBagSlots() - 1
     for i=23,maxInventory,1 do
       local inventoryItem = mq.TLO.Me.Inventory(i)
@@ -110,7 +104,7 @@ local function sellItems()
       end
     end
 
-    merchant.CloseMerchant(target --[[@as target]])
+    merchant.CloseMerchant(nearestMerchant --[[@as spawn]])
   end
 
   bard.resumeMelody()
