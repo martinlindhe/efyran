@@ -1,28 +1,11 @@
 local mq = require 'mq'
 local log = require("knightlinc/Write")
 local broadcast = require 'broadcast/broadcast'
-local timer = require 'timer'
+local timer = require 'Timer'
 local moveTo = require 'movement/moveTo'
 local repository = require 'looting/repository'
 local bard = require 'Class_Bard'
-
-local function ensureTarget(targetId)
-    if not targetId then
-        log.Debug("Invalid <targetId>")
-      return false
-    end
-
-    if mq.TLO.Target.ID() ~= targetId then
-      if mq.TLO.SpawnCount("id "..targetId)() > 0 then
-        mq.cmdf("/mqtarget id %s", targetId)
-        mq.delay("3s", function() return mq.TLO.Target.ID() == targetId end)
-      else
-        log.Warn("EnsureTarget has no spawncount for target id <%d>", targetId)
-      end
-    end
-
-    return mq.TLO.Target.ID() == targetId
-  end
+local target = require 'target'
 
 local function typeChrs(message, ...)
   -- https://stackoverflow.com/questions/829063/how-to-iterate-individual-characters-in-lua-string
@@ -181,20 +164,19 @@ local function lootNearestCorpse()
   if not mq.TLO.Me.Casting.ID() then
     local seekRadius = 100
     local searchCorpseString = string.format("npc corpse zradius 50 radius %s", seekRadius)
-    local closestCorpseID = mq.TLO.NearestSpawn(1, searchCorpseString).ID()
-    if mq.TLO.Spawn(closestCorpseID)() and ensureTarget(closestCorpseID) then
-      local target = mq.TLO.Target
-      if target.Distance() > 16 and target.DistanceZ() < 80 then
-        moveTo.MoveToLoc(target.X(), target.Y(), target.Z(), 20, 12)
+    local closestCorpse = mq.TLO.NearestSpawn(1, searchCorpseString)
+    if closestCorpse() and target.EnsureTarget(closestCorpse.ID()) then
+      if closestCorpse.Distance() > 16 and closestCorpse.DistanceZ() < 80 then
+        moveTo.MoveToLoc(closestCorpse.X(), closestCorpse.Y(), closestCorpse.Z(), 20, 12)
       end
 
-      if target.Distance() <= 20 and target.DistanceZ() < 40 then
+      if closestCorpse() and closestCorpse.Distance() <= 20 and closestCorpse.DistanceZ() < 40 and target.EnsureTarget(closestCorpse.ID()) then
         lootCorpse()
       else
-        log.Info("Corpse %s is %d|%d distance, skipping", target.Name(), target.Distance(), target.DistanceZ())
+        log.Info("Corpse %s is %d|%d distance, skipping", closestCorpse.Name(), closestCorpse.Distance(), closestCorpse.DistanceZ())
       end
     else
-      log.Info("Unable to locate or target corpse id <%s>", closestCorpseID)
+      log.Info("Unable to locate or target corpse id <%s>", closestCorpse.ID())
     end
 
   else
