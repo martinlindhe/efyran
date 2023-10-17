@@ -2,8 +2,10 @@
 
 -- TODO read server override from settings/PEQTGC_Settings.lua file, if it exists
 
+---@alias followModes 'MQ2Nav'|'MQ2AdvPath'|'MQ2MoveUtils'
+
 local globalSettings = {
-    ---@type string valid options are MQ2Nav, MQ2AdvPath, MQ2MoveUtils
+    ---@type followModes valid options are MQ2Nav, MQ2AdvPath, MQ2MoveUtils
     -- followMode = "MQ2Nav",
     followMode = "MQ2AdvPath",
 

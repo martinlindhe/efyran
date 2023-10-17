@@ -1,3 +1,4 @@
+---@class Timer
 local Timer = {}
 Timer.__index = Timer
 
