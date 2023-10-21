@@ -73,22 +73,6 @@ settings.debug = true -- enable debug logging for this peer
 ```
 
 
-## Buff spell level and PC target levels
-
-```
-Buff Spell Level   Minimum Target Level
-1-50:				Level 1
-51: 				Level 40
-52-53: 				Level 41
-54-55: 				Level 42
-56-57: 				Level 43
-58-59: 				Level 44
-60-61: 				Level 45
-62-63: 				Level 46
-64-65: 				Level 47
-66-70: 				Level 62
-71+:                ???
-```
 
 ## Terminology
 - Orchestrator = the main driver toon you are playing from
@@ -192,15 +176,9 @@ TODO document the remaining commands
 
 
 
-## e3 differences
+## Auto cure
 
-mag: in e3 you could list Molten Orb as a nuke and it will auto summon,
-in e4 it was changed to work with any spells, so you need to be explicit with the Summon filter.
-Example: "Molten Orb/NoAggro/Summon|Summon: Molten Orb"
-
-Also, efyran is written for modern Macroquest.
-
-Auto cure: each group needs a curer, and toons will auto beg for cures. This allows for zero-setup auto curing.
+Each group needs a curer, and toons will auto beg for cures. This allows for zero-setup auto curing.
 Assumes that each group has at least 1 curer (shm/dru/pal/clr)
 
 

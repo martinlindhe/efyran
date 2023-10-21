@@ -982,6 +982,67 @@ SpellGroups.MAG = {
         "Expedience",
     },
 
+    -- single target DD fire nukes
+    -- L01 Burst of Flame
+    -- L04 Burn
+    -- L08 Flame Bolt
+    -- L16 Shock of Flame (70 mana, 91-96 dd)
+    -- L20 Bolt of Flame (105 mana, 146-156 dd)
+    -- L34 Blaze
+    -- L34 Cinder Bolt
+    -- L49 Lava Bolt
+    -- L52 Char
+    -- L54 Scars of Sigil
+    -- L59 Seeking Flame of Seukor
+    -- L60 Shock of Fiery Blades (1294 hp, cost 335 mana)
+    -- L61 Firebolt of Tallon (2100 hp, cost 515 mana)
+    -- L62 Burning Sand (980 hp, cost 270 mana)
+    -- L65 Sun Vortex (1600 hp, cost 395 mana)
+    -- L65 Ancient: Chaos Vortex (1920 hp, cost 474 mana)
+    -- L66 Bolt of Jerikor (2889 hp, cost 644 mana)
+    -- L69 Burning Earth (1348 hp, 3s cast, cost 337 mana)
+    -- L69 Fickle Fire (2475 hp, 6.4s cast, cost 519 mana) + chance to increase dmg
+    -- L70 Spear of Ro (3119 hp, 7s cast, cost 684 mana)
+    -- L70 Star Strike (2201 hp, 6.4s cast, cost 494 mana)
+    -- L70 Ancient: Nova Strike (2377 hp, 6.3s cast, cost 525 mana)
+    mag_fire_nuke = {
+        "Ancient: Nova Strike",
+        "Star Strike",
+        "Spear of Ro",
+        "Fickle Fire",
+        "Burning Earth",
+        "Bolt of Jerikor",
+        "Ancient: Chaos Vortex",
+        "Sun Vortex",
+        "Burning Sand",
+        "Firebolt of Tallon",
+        "Shock of Fiery Blades",
+        "Seeking Flame of Seukor",
+        "Scars of Sigil",
+        "Char",
+        "Lava Bolt",
+        "Cinder Bolt",
+        "Blaze",
+        "Bolt of Flame",
+        "Shock of Flame",
+        "Flame Bolt",
+        "Burn",
+        "Burst of Flame",
+    },
+
+    -- L22 Malaise (-15-20 cr, -15-20 mr, -15-20 pr, -15-20 fr, cost 60 mana)
+    -- L44 Malaisement (-36-40 cr, -36-40 mr, -36-40 pr, -36-40 fr, cost 100 mana)
+    -- L51 Malosi (-58-60 cr, -58-60 mr, -58-60 pr, -58-60 fr, cost 175 mana)
+    -- L60 Mala (-35 cr, -35 mr, -35 pr, -35 fr, unresistable, cost 350 mana)
+    -- L63 Malosinia (-70 cr, -70 mr, -70 pr, -70 fr, cost 300 mana)
+    mag_malos = {
+        "Malosinia",
+        "Mala",
+        "Malosi",
+        "Malaisement",
+        "Malaise",
+    },
+
 }
 
 SpellGroups.NEC = {
@@ -1113,6 +1174,96 @@ SpellGroups.WIZ = {
         "Shield of Dreams",
         "Ether Skin",
         "Force Shield",
+    },
+
+    -- L04 Shock of Fire (13-16 hp, cost 15 mana)
+    -- L08 Fire Bolt (45-51 hp, cost 40 mana)
+    -- L16 Flame Shock (102-110 hp, cost 75 mana)
+    -- L29 Inferno Shock (237-250 hp, cost 135 mana)
+    -- L44 Conflagration (606-625 hp, cost 250 mana)
+    -- L49 Supernova (854 hp, cost 875 mana)
+    -- L51 Draught of Fire (643-688 hp, cost 215 mana)
+    -- L60 Sunstrike (1615 hp, resist adj -10, cost 450 mana)
+    -- L62 Draught of Ro (980 hp, resist adj -50, cost 255 mana)
+    -- L62 Lure of Ro (1090 hp, resist adj -300, cost 387 mana)
+    -- L65 Strike of Solusek (2740 hp, resist adj -10, cost 640 mana)
+    -- L65 White Fire (3015 hp, resist adj -10, cost 704 mana)
+    -- L65 Ancient: Strike of Chaos (3288 hp, resist adj -10, cost 768 mana)
+    -- L66 Spark of Fire (1348 hp, resist adj -50, cost 319 mana, 3s cast)
+    -- L68 Firebane (1500 hp, resist adj -300, cost 456 mana, 4.5s cast)
+    -- L70 Chaos Flame (random 1000 to 2000, resist adj -50, cost 275 mana, 3.0s cast)
+    -- L70 Ether Flame (5848 hp, resist adj -50, cost 1550 mana, 8s cast)
+    -- L70 Corona Flare (3770 hp, resist adj -10, cost 800 mana, 8s cast)
+    -- L70 Ancient: Core Fire (4070 hp, resist adj -10, cost 850 mana, 8s cast)
+    wiz_fire_nuke = {
+        "Ancient: Core Fire",
+        "Corona Flare",
+        "Ether Flame",
+        "Chaos Flame",
+        "Firebane",
+        "Spark of Fire",
+        "Ancient: Strike of Chaos",
+        "White Fire",
+        "Strike of Solusek",
+        "Lure of Ro",
+        "Draught of Ro",
+        "Sunstrike",
+        "Draught of Fire",
+        "Supernova",
+        "Conflagration",
+        "Inferno Shock",
+        "Flame Shock",
+        "Fire Bolt",
+        "Shock of Fire",
+    },
+
+    -- L01 Frost Bolt (9-14 hp, cost 6 mana)
+    -- L01 Blast of Cold (11-18 hp, cost 8 mana), called "Shock of Frost" on fvp
+    -- L08 Shock of Ice (46-58 hp, cost 23 mana)
+    -- L49 Ice Comet (808 hp, resist adj -10, cost 203 mana)
+    -- L57 Draught of Ice (793 hp, resist adj -10, cost 216 mana)
+    -- L60 Ice Spear of Solist (1076 hp, resist adj -10, cost 221 mana)
+    -- L61 Claw of Frost (1000 hp, resist adj -50, cost 167 mana)
+    -- L64 Ice Meteor (2460 hp, resist adj -10, cost 520 mana)
+    -- L64 Draught of E'ci (980 hp, resist adj -50, cost 255 mana)
+    -- L65 Black Ice (1078 hp, resist adj -10, cost 280 mana)
+    -- L66 Icebane (1500 hp, resist adj -300, cost 456 mana)
+    -- L68 Clinging Frost (1830 hp, resist adj -10, cost 350 mana + Clinging Frost Trigger DD)
+    -- L69 Gelidin Comet (3385 hp, resist adj -10, cost 650 mana)
+    -- L69 Spark of Ice (1348 hp, resist adj -50, cost 319 mana, 3s cast)
+    -- L69 Claw of Vox (1375 hp, resist adj -50, cost 208 mana, 5s cast)
+    -- L70 Ancient: Spear of Gelaqua (1976 hp, resist adj -10, cost 345 mana, 3.5s cast)
+    wiz_cold_nuke = {
+        -- XXX
+    },
+
+    -- L10 Shock of Lightning (74-83 hp, cost 50 mana)
+    -- L60 Elnerick's Electrical Rending (1796 hp, cost 421 mana)
+    -- L61 Lure of Thunder (1090 hp, resist adj -300, cost 365 mana)
+    -- L63 Draught of Thunder (980 hp, stun 1s/65, resist adj -50, cost 255 mana)
+    -- L63 Draught of Lightning (980 hp, resist adj -50, cost 255 mana)
+    -- L63 Agnarr's Thunder (2350 hp, cost 525 mana)
+    -- L65 Shock of Magic (random dmg up to 2400 hp, resist adj -20, cost 550 mana)
+    -- L67 Lightningbane (1500 hp, resist adj -300, cost 456 mana)
+    -- L68 Spark of Lightning (1348 hp, resist adj -50, cost 319 mana)
+    -- L68 Spark of Thunder (1348 hp, resist adj -50, cost 319 mana + 1s stun L70)
+    -- L68 Thundaka (3233 hp, cost 656 mana)
+    wiz_magic_nuke = {
+        -- XXX
+    },
+
+    -- L12 Firestorm (41 hp, FIRE, adj -10, aerange 25, recast 12s, cost 34 mana)
+    -- L24 Column of Lightning (128-136 hp, FIRE, aerange 15, recast 6s, cost 130 mana)
+    -- L26 Energy Storm (238 hp, MAGIC, adj -10, aerange 25, recast 12s, cost 148 mana)
+    -- L28 Shock Spiral of Al'Kabor (111-118 hp, MAGIC, aerange 35, recast 9s, cost 200 mana)
+    -- L31 Circle of Force (193-216 hp, FIRE, adj -10, aerange 15, recast 6s, cost 175 mana)
+    -- L32 Lava Storm (401 hp, FIRE, adj -10, aerange 25, recast 12s, cost 234 mana)
+    -- L61 Tears of Ro (1106 hp, FIRE, adj -10, aerange 25, recast 10s, cost 492 mana)
+    -- L64 Tears of Arlyxir (645 hp, FIRE, adj -300, aerange 25, recast 12s, cost 420 mana)
+    -- L66 Tears of the Sun (1168 hp, FIRE, adj -10, aerange 25, recast 10s, cost 529 mana)
+    -- L69 Meteor Storm (886 hp, FIRE, adj -300, aerange 25, recast 12s, cost 523 mana)
+    wiz_target_ae = {
+        -- XXX
     },
 }
 

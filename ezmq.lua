@@ -1479,7 +1479,7 @@ function parseSpellLine(s)
             o.spellGroup = o.Name
             o.Name = spellName
         else
-            all_tellf("ERROR: parseSpellLine: did not find a best spell for spellGroups.%s.%s", class_shortname(), o.Name)
+            all_tellf("ERROR: parseSpellLine: did not find a best spell for [+r+]spellGroups.%s.%s[+x+]", class_shortname(), o.Name)
         end
     end
     return o
