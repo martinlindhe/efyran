@@ -1195,6 +1195,26 @@ function class_tank(class)
     return class == "WAR" or class == "PAL" or class == "SHD"
 end
 
+-- true if class wears plate armor (WAR,PAL,SHD,CLR,BRD)
+function class_plate(class)
+    return class == "WAR" or class == "PAL" or class == "SHD" or class == "CLR" or class == "BRD"
+end
+
+-- true if class wears chain armor (RNG,ROG,SHM,BER)
+function class_chain(class)
+    return class == "RNG" or class == "ROG" or class == "SHM" or class == "BER"
+end
+
+-- true if class wears silk armor (WIZ,MAG,ENC,NEC)
+function class_silk(class)
+    return class == "WIZ" or class == "MAG" or class == "ENC" or class == "NEC"
+end
+
+-- true if class wears leather armor (DRU,MNK,BST)
+function class_leather(class)
+    return class == "DRU" or class == "MNK" or class == "BST"
+end
+
 ---Get the current server name ("antonius" for Antonius Bayle)
 ---@return string
 function current_server()
@@ -1818,7 +1838,19 @@ function matches_filter_line(line, sender)
         if v == "hybrid" and class_hybrid(class) then
             return true
         end
-    end
+        if v == "plate" and class_plate(class) then
+            return true
+        end
+        if v == "chain" and class_chain(class) then
+            return true
+        end
+        if v == "silk" and class_silk(class) then
+            return true
+        end
+        if v == "leather" and class_leather(class) then
+            return true
+        end
+     end
     return false
 end
 
