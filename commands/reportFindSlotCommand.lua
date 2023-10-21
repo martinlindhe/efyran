@@ -5,6 +5,23 @@ local commandQueue = require('e4_CommandQueue')
 local broadCastInterfaceFactory = require 'broadcast/broadcastinterface'
 local bci = broadCastInterfaceFactory()
 
+-- Returns true if `name` is a valid equipment slot
+---@param name string slot name
+---@return boolean
+local function isValidEquipmentSlotName(name)
+    local validNames = {
+        "charm", "leftear", "head", "face", "rightear", "neck", "shoulder", "arms", "back", "leftwrist",
+        "rightwrist", "ranged", "hands", "mainhand", "offhand", "leftfinger", "rightfinger", "chest", "legs",
+        "feet", "waist", "powersource", "ammo",
+    }
+    for _, v in pairs(validNames) do
+        if v == name then
+            return true
+        end
+    end
+    return false
+end
+
 ---@class ItemBy
 ---@field Slot string slot name
 ---@field Filter string|nil
@@ -16,15 +33,27 @@ local function execute(command)
         return
     end
     local slot = command.Slot
-    if slot == "primary" then
-        slot = "mainhand"
-    elseif slot == "secondary" then
-        slot = "offhand"
+
+    local aliases = {
+        primary = "mainhand",
+        secondary = "offhand",
+        shoulders = "shoulder",
+        hand = "hands",
+        leg = "legs",
+        foot = "feet",
+    }
+    if aliases[slot] ~= nil then
+        slot = aliases[slot]
+    end
+
+    if not isValidEquipmentSlotName(slot) then
+        log.Error("Invalid slot name \ay%s\ax!", slot)
+        return
     end
 
     local item = mq.TLO.Me.Inventory(slot)
     if item() == nil then
-        all_tellf("%s slot: empty", slot)
+        all_tellf("%s slot: [+y+]empty[+x+]", slot)
     else
         all_tellf("%s slot: %s", slot, item.ItemLink("CLICKABLE")())
     end
