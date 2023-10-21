@@ -27,7 +27,7 @@ local mq = require("mq")
 function Group.Init()
 
     if Group.settings == nil then
-        local settingsFile = efyranConfigDir() .. '/' .. current_server() .. '__Saved Groups.lua'
+        local settingsFile = efyranConfigDir() .. "\\" .. current_server() .. '__Saved Groups.lua'
 
         local settings = loadfile(settingsFile)
         if settings ~= nil then

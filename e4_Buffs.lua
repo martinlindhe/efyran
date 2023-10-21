@@ -17,7 +17,7 @@ local spellGroups  = require("e4_SpellGroups")
 
 local bci = broadCastInterfaceFactory()
 
-local serverBuffsSettings = efyranConfigDir() .. "/" .. server_buffs_settings_file()
+local serverBuffsSettings = efyranConfigDir() .. "\\" .. server_buffs_settings_file()
 if file_exists(serverBuffsSettings) then
     spellGroups.Default = loadfile(serverBuffsSettings)()
 end

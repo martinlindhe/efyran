@@ -6,7 +6,7 @@ local inventorySlots = 10
 local bankerQuery = "npc radius 100 banker"
 local bankerPetQuery = "pet radius 100 banker" -- summoned banker is a pet
 
-local tradeskillsIni = efyranConfigDir() .. "/tradeskills.ini"
+local tradeskillsIni = efyranConfigDir() .. "\\tradeskills.ini"
 
 local bankFull = false
 
