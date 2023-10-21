@@ -23,7 +23,7 @@ local function isValidEquipmentSlotName(name)
 end
 
 ---@class ItemBy
----@field Slot string slot name
+---@field Slot string slot name or item link
 ---@field Filter string|nil
 
 ---@param command ItemBy
@@ -44,6 +44,20 @@ local function execute(command)
     }
     if aliases[slot] ~= nil then
         slot = aliases[slot]
+    end
+
+    if is_item_link(slot) then
+        local item = find_item(strip_link(slot))
+        if item == nil then
+            all_tellf("UNLIKELY: /findslot cant resolve item link %s", slot)
+            return
+        end
+        -- TODO create slot name from item, auto chose the first one if multiple equippable slots allowed on the item
+        -- TODO create /only|classes races filter
+
+        -- STATUS: unsure if can be done atm with the exported properties. 
+        --     would need access to item equipslots, list of allowed races, list of allowed classes
+        log.Info("item slot for %s: %d, %d", item.Name(), item.ItemSlot(), item.ItemSlot2())
     end
 
     if not isValidEquipmentSlotName(slot) then

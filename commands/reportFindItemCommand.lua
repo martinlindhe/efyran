@@ -7,7 +7,7 @@ local commandQueue = require('e4_CommandQueue')
 ---@field Filter string|nil
 
 -- used by /fdi
----@param name string
+---@param name string partial item name or item link
 ---@param filter string|nil
 local function report_find_item(name, filter)
     name = strip_link(name)

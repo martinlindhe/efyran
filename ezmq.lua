@@ -161,18 +161,6 @@ function is_peer_in_zone(peer)
     return spawn ~= nil and is_peer(spawn.Name())
 end
 
--- Returns class shortname, eg "WAR" from a spawn in zone.
----@param query string
----@return string
-function spawn_class_shortname_by_name(query)
-    local spawn = spawn_from_query(query)
-    if spawn == nil or spawn() == nil then
-        all_tellf("\arERROR failed to look up spawn %s", query)
-        return ""
-    end
-    return spawn.Class.ShortName()
-end
-
 -- returns true if spawnID is another peer
 ---@param spawnID integer
 ---@return boolean
@@ -392,7 +380,7 @@ function find_item_bank(name)
     return nil
 end
 
--- Partial search by name, return item name (clickable link if possible)
+-- Partial search by name, return item name (clickable item link if possible)
 ---@param name string
 ---@return string
 function item_link(name)
@@ -710,6 +698,13 @@ end
 -- Returns my race shortname, eg "OGR".
 ---@return string
 function race_shortname()
+    return map_race_shortname(mq.TLO.Me.Race.Name())
+end
+
+-- Returns the race shortname, like HUM for Human.
+---@param race string name
+---@return string
+function map_race_shortname(race)
     local map = {
         ["Barbarian"] = "BAR",
         ["Dark Elf"]  = "DEF",
@@ -728,12 +723,11 @@ function race_shortname()
         ["Vah Shir"]  = "VAH",
         ["Wood Elf"]  = "ELF",
     }
-    local name = mq.TLO.Me.Race.Name()
-    if map[name] == nil then
-        all_tellf("UNLIKELY: race_shortname unmapped %s", name)
+    if map[race] == nil then
+        all_tellf("UNLIKELY: map_race_shortname unmapped %s", race)
         return "XXX"
     end
-    return map[name]
+    return map[race]
 end
 
 -- Am I a Bard?
@@ -1625,7 +1619,7 @@ function have_combat_ability(name)
     return mq.TLO.Me.CombatAbility(name)() ~= nil
 end
 
--- Number of open buff slots (not counting the short duration buff slots)
+-- Number of open buff slots (not counting the short duration buff slots).
 ---@return integer
 function free_buff_slots()
     return mq.TLO.Me.FreeBuffSlots()
@@ -1668,13 +1662,19 @@ end
 function strip_link(s)
     -- TODO: macroquest can expose existing functionality to lua, says brainiac. someone just need to write a patch
     if string.find(s, "000") then
-        log.Debug("strip_link: assume item link")
+        log.Debug("strip_link: detected item link %s", s)
         s = string.sub(s, 58, string.len(s) - 1)
     end
     return s
 end
 
--- Delay between 0 and `ms` milliseconds (random)
+--- Returns true if `s` is a item link.
+---@return boolean
+function is_item_link(s)
+    return s ~= strip_link(s)
+end
+
+-- Delay between 0 and `ms` milliseconds (random).
 ---@param ms integer milliseconds
 function random_delay(ms)
     mq.delay(math.random(0, ms))
@@ -1836,13 +1836,21 @@ function matches_filter(filter, sender)
 end
 
 ---@return boolean true if we match
----@param line string
+---@param line string A filter argument, like "casters WAR BRD"
 ---@param sender string Peer name of sender
 function matches_filter_line(line, sender)
-    local class = spawn_class_shortname_by_name(sender)
+
+    local spawn = spawn_from_query(sender)
+    if spawn == nil or spawn() == nil then
+        all_tellf("\arERROR failed to look up spawn %s", sender)
+        return false
+    end
+    local class = spawn.Class.ShortName()
+    local race = map_race_shortname(spawn.Race.Name())
+
     local tokens = split_str(line, " ")
     for k, v in pairs(tokens) do
-        if class == v:upper() or v:lower() == mq.TLO.Me.Name():lower() or (v == "me" and is_orchestrator()) then
+        if class == v:upper() or race == v:upper() or v:lower() == mq.TLO.Me.Name():lower() or (v == "me" and is_orchestrator()) then
             return true
         end
         if v == "group" and is_grouped_with(sender) then
