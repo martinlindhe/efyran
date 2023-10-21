@@ -11,11 +11,18 @@ Some concepts are borrowed from E3, while others are new.
 
 ## Getting started
 
-Put this repository under your Lua folder,
-so it lives in `Macroqest\lua\efyran`.
+Oct 2023: When using git version, make sure you pull the submodules (external dependencies)
+
+```sh
+git pull
+git submodule update --init
+```
+
+Place the `efyran` folder in `Macroqest-Root\lua\efyran`.
 
 Then start it with `/lua run efyran`
 
+## Auto-starting
 You can auto start efyran with this `Macroquest\config\zoned.cfg`:
 
 ```
@@ -23,7 +30,7 @@ You can auto start efyran with this `Macroquest\config\zoned.cfg`:
 /if (!${Bool[${Lua.PIDs}]}) /lua run efyran
 ```
 
-For ease of starting / stopping / re-launching efyran, you can also put the following in your `Macroquest\config\MacroQuest.ini`:
+For ease of starting / stopping / re-launching, you can also put the following in your `Macroquest\config\MacroQuest.ini`:
 
 ```ini
 [Aliases]
@@ -43,7 +50,7 @@ Add some socials to simplify control:
 | /hotbutton STOP           | /followoff
 | /hotbutton KILL           | /assiston
 
-
+See [Command Reference](#command-reference) for more commands.
 
 
 
@@ -51,7 +58,7 @@ Add some socials to simplify control:
 
 e3 had a concept of Bot Buffs and Group Buffs. Efyran chose to instead implement a beg-for-buff system,
 which makes use of "buff groups" (tags mapping to multiple buffs). This setup allows for a zero-configuration
-buff bot with default settings, while still allowing fine grained control where you need to.
+buff bot if using the default settings, while still allowing fine grained control where you need to.
 
 
 
@@ -68,7 +75,6 @@ If you want to permanently enable debugging, you need to add a per-character set
 
 ```lua
 local settings = { }
-
 settings.debug = true -- enable debug logging for this peer
 ```
 
@@ -76,11 +82,11 @@ settings.debug = true -- enable debug logging for this peer
 
 ## Terminology
 - Orchestrator = the main driver toon you are playing from
-- Peer = A connected character that you control
+- Peer = A connected character that you control, including the orchestrator
 - Buff group = A tag such as "clr_symbol", which translates to a table of the Cleric "Symbol" line of buffs
 
 
-## Command reference
+## Command Reference
 
 ```
 /assiston <filter>          - tell peers to kill current target
