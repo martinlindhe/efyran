@@ -73,7 +73,7 @@ function botSettings.Init()
     if settings ~= nil then
         botSettings.settings = settings()
     elseif not file_exists(settingsFile) then
-        all_tellf("PEER INI NOT FOUND, CREATING EMPTY ONE. PLEASE EDIT %s", settingsFile)
+        all_tellf("PEER SETTINGS NOT FOUND, CREATING EMPTY ONE. PLEASE EDIT %s", settingsFile)
         cmd("/beep 1")
 
         local f = assert(io.open(settingsFile, "w"))
