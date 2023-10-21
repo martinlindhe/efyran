@@ -2,6 +2,10 @@ local mq = require("mq")
 local log          = require("knightlinc/Write")
 local commandQueue = require('e4_CommandQueue')
 
+local broadCastInterfaceFactory = require 'broadcast/broadcastinterface'
+
+local bci = broadCastInterfaceFactory()
+
 ---@class MissingItemBy
 ---@field Name string
 ---@field Filter string|nil

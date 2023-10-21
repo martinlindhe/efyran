@@ -5,6 +5,7 @@ local spellGroups = require("e4_SpellGroups")
 
 local bci = broadCastInterfaceFactory()
 
+-- the first spell in list that is memorized and not on cooldown will be used
 local function execute()
     for _, groupHeal in pairs(spellGroups.CLR.GroupHeals) do
         if is_spell_ready(groupHeal) then

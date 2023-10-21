@@ -88,7 +88,7 @@ local function execute(command)
         rings = {"leftfinger", "rightfinger"},
     }
     if dualSlots[slot] ~= nil then
-        all_tellf("slot: %s, %s (%s %s)", presentEquippedItem(dualSlots[slot][1]), presentEquippedItem(dualSlots[slot][2]), class_shortname(), race_shortname())
+        all_tellf("slot %s, %s (%s %s)", presentEquippedItem(dualSlots[slot][1]), presentEquippedItem(dualSlots[slot][2]), class_shortname(), race_shortname())
         return
     end
 
@@ -96,7 +96,7 @@ local function execute(command)
         log.Error("Invalid slot name \ay%s\ax!", slot)
         return
     end
-    all_tellf("slot: %s (%s %s)", presentEquippedItem(slot), class_shortname(), race_shortname())
+    all_tellf("slot %s (%s %s)", presentEquippedItem(slot), class_shortname(), race_shortname())
 end
 
 -- arg: item name + optional /filter arguments as strings

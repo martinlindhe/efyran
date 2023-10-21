@@ -1,61 +1,61 @@
 local SpellGroups = {}
 
 SpellGroups.Lookup = {
-    ["shm_focus"] = "SHM",
-    ["shm_runspeed"] = "SHM",
-    ["shm_haste"] = "SHM",
-    ["shm_resist"] = "SHM",
-    ["shm_sta"] = "SHM",
-    ["shm_str"] = "SHM",
-    ["shm_agi"] = "SHM",
-    ["shm_dex"] = "SHM",
-    ["shm_cha"] = "SHM",
+    shm_focus = "SHM",
+    shm_runspeed = "SHM",
+    shm_haste = "SHM",
+    shm_resist = "SHM",
+    shm_sta = "SHM",
+    shm_str = "SHM",
+    shm_agi = "SHM",
+    shm_dex = "SHM",
+    shm_cha = "SHM",
 
-    ["clr_symbol"] = "CLR",
-    ["clr_ac"] = "CLR",
-    ["clr_aegolism"] = "CLR",
-    ["clr_vie"] = "CLR",
-    ["clr_spellhaste"] = "CLR",
-    ["di"] = "CLR",
+    clr_symbol = "CLR",
+    clr_ac = "CLR",
+    clr_aegolism = "CLR",
+    clr_vie = "CLR",
+    clr_spellhaste = "CLR",
+    di = "CLR",
 
-    ["dru_skin"] = "DRU",
-    ["dru_fire_resist"] = "DRU",
-    ["dru_cold_resist"] = "DRU",
-    ["dru_corruption"] = "DRU",
-    ["dru_regen"] = "DRU",
-    ["dru_ds"] = "DRU",
-    ["dru_str"] = "DRU",
-    ["dru_skill_dmg_mod"] = "DRU",
-    ["dru_runspeed"] = "DRU",
+    dru_skin = "DRU",
+    dru_fire_resist = "DRU",
+    dru_cold_resist = "DRU",
+    dru_corruption = "DRU",
+    dru_regen = "DRU",
+    dru_ds = "DRU",
+    dru_str = "DRU",
+    dru_skill_dmg_mod = "DRU",
+    dru_runspeed = "DRU",
 
-    ["enc_manaregen"] = "ENC",
-    ["enc_haste"] = "ENC",
-    ["enc_resist"] = "ENC",
-    ["enc_cha"] = "ENC",
-    ["enc_group_rune"] = "ENC",
-    ["enc_single_rune"] = "ENC",
+    enc_manaregen = "ENC",
+    enc_haste = "ENC",
+    enc_resist = "ENC",
+    enc_cha = "ENC",
+    enc_group_rune = "ENC",
+    enc_single_rune = "ENC",
 
-    ["mag_group_ds"] = "MAG",
-    ["mag_single_ds"] = "MAG",
+    mag_group_ds = "MAG",
+    mag_single_ds = "MAG",
 
-    ["nec_group_levitate"] = "NEC",
-    ["nec_single_levitate"] = "NEC",
+    nec_group_levitate = "NEC",
+    nec_single_levitate = "NEC",
 
-    ["rng_hp"] = "RNG",
-    ["rng_atk"] = "RNG",
-    ["rng_ds"] = "RNG",
-    ["rng_skin"] = "RNG",
+    rng_hp = "RNG",
+    rng_atk = "RNG",
+    rng_ds = "RNG",
+    rng_skin = "RNG",
 
-    ["pal_hp"] = "PAL",
-    ["pal_symbol"] = "PAL",
+    pal_hp = "PAL",
+    pal_symbol = "PAL",
 
-    ["bst_manaregen"] = "BST",
-    ["bst_hp"] = "BST",
-    ["bst_haste"] = "BST",
-    ["bst_focus"] = "BST",
-    ["bst_sta"] = "BST",
-    ["bst_str"] = "BST",
-    ["bst_dex"] = "BST",
+    bst_manaregen = "BST",
+    bst_hp = "BST",
+    bst_haste = "BST",
+    bst_focus = "BST",
+    bst_sta = "BST",
+    bst_str = "BST",
+    bst_dex = "BST",
 }
 
 SpellGroups.SHM = {
@@ -247,27 +247,14 @@ SpellGroups.SHM = {
 SpellGroups.CLR = {
 
     GroupHeals = {
-        -- priority: the first spell in list that is memorized and not on cooldown will be used
-    
         -- CLR - cast group heals with cure component
         "Word of Vivification",     -- CLR/69: 3417-3427 hp, -21 dr, -21 pr, -14 curse, cost 1357 mana
         "Word of Replenishment",    -- CLR/64: 2500 hp, -14 dr, -14 pr, -7 curse, cost 1100 mana
         "Word of Redemption",       -- CLR/60: 7500 hp, cost 1100 mana
         "Word of Restoration",      -- CLR/57: 1788-1818 hp, cost 898 mana
         "Word of Health",           -- CLR/30: 380-485 hp, cost 302 mana
-    
-        "Hand of Piety",            -- PAL/??: AA Rank 1-XXX (24 min reuse with Hastened Piety Rank 3)
-        "Wave of Piety",            -- PAL/70: 1316 hp, cost 1048 mana
-        "Wave of Trushar",          -- PAL/65: 1143 hp, cost 921 mana
-        "Wave of Marr",             -- PAL/65: 960 hp, cost 850 mana
-        "Healing Wave of Prexus",   -- PAL/58: 688-698 hp
-        "Wave of Healing",          -- PAL/55: 439-489 hp
-        "Wave of Life",             -- PAL/39: 201-219 hp
-    
-        -- "Moonshadow",               -- DRU/70: 1500 hp, cost 1100 mana (18s recast time)
     },
 
-    
     -- fast heals:
     -- L53 Divine Light
     -- L58 Ethereal Light (1980-2000 hp, 3.8s cast, 490 mana)
@@ -322,7 +309,7 @@ SpellGroups.CLR = {
 
     -- slot 3 hp buff - symbol line:
     -- L14 Symbol of Transal (34-72 hp, single)
-    -- L24 Symbol of Transal
+    -- L24 Symbol of Ryltan
     -- L34 Symbol of Pinzarn
     -- L41 Symbol of Naltron (406-525 hp, single)
     -- L54 Symbol of Marzin (640-700 hp, single)
@@ -348,7 +335,7 @@ SpellGroups.CLR = {
         "Symbol of Naltron/Reagent|Peridot",
         "Symbol of Pinzarn/Reagent|Jasper",
         "Symbol of Ryltan/Reagent|Bloodstone",
-        --"Symbol of Transal/Reagent|Cat's Eye Agate",
+        "Symbol of Transal/Reagent|Cat's Eye Agate",
     },
 
     -- slot 1: Death Save:
@@ -451,6 +438,9 @@ SpellGroups.CLR = {
 }
 
 SpellGroups.DRU = {
+    GroupHeals = { -- TODO make use of
+        "Moonshadow",               -- DRU/70: 1500 hp, cost 1100 mana (18s recast time)
+    },
 
     -- fast heal:
     -- L01 Minor Healing
@@ -680,7 +670,7 @@ SpellGroups.DRU = {
         "Snare",
     },
 
-    
+
     -- fire nuke special:
     -- L70 Dawnstrike (2125 hp, cost 482 mana. chance to proc spell buff that adjust dmg of next nuke)
 
@@ -1273,7 +1263,7 @@ SpellGroups.RNG = {
     -- L01 Salve (live)
     -- L08 Minor Healing
     -- L20 Light Healing
-    -- L32 Healing 
+    -- L32 Healing
     -- L44 Greater Healing (280-350 hp, cost 115 mana)
     -- L62 Chloroblast (994-1044 hp, cost 331 mana)
     -- L65 Sylvan Light (850 hp, 3s cast time, cost 370 mana)
@@ -1375,6 +1365,16 @@ SpellGroups.RNG = {
 }
 
 SpellGroups.PAL = {
+    GroupHeals = { -- TODO make use of
+        "Hand of Piety",            -- PAL/??: AA Rank 1-XXX (24 min reuse with Hastened Piety Rank 3)
+        "Wave of Piety",            -- PAL/70: 1316 hp, cost 1048 mana
+        "Wave of Trushar",          -- PAL/65: 1143 hp, cost 921 mana
+        "Wave of Marr",             -- PAL/65: 960 hp, cost 850 mana
+        "Healing Wave of Prexus",   -- PAL/58: 688-698 hp
+        "Wave of Healing",          -- PAL/55: 439-489 hp
+        "Wave of Life",             -- PAL/39: 201-219 hp
+    },
+
     -- hp type 2 buff:
     -- L35 Divine Vigor (100 hp)
     -- L49 Brell's Steadfast Aegis (145 hp, group)
