@@ -56,18 +56,33 @@ local function read_settings(settingsFile)
     return loadfile(settingsFile)
 end
 
-function file_exists(name)
-    local f = io.open(name, "r")
-    if f ~= nil then
-        io.close(f)
-        return true
-    else
-        return false
+--- Check if a file or directory exists in this path
+function file_exists(file)
+    local ok, err, code = os.rename(file, file)
+    if not ok then
+       if code == 13 then
+          -- Permission denied, but it exists
+          return true
+       end
     end
+    return ok, err
 end
 
+--- Check if a directory exists in this path
+function dir_exists(path)
+    return file_exists(path.."/")
+end
+
+function mkdir(dir)
+    log.Info("XXX MKDIR ".. dir)
+    os.execute("mkdir " .. dir)
+end
 
 function botSettings.Init()
+    if not dir_exists(efyranConfigDir()) then
+        mkdir(efyranConfigDir())
+    end
+
     local settingsFile = efyranConfigDir() .. "/" .. peer_settings_file()
     local settings = read_settings(settingsFile)
     if settings ~= nil then

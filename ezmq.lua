@@ -1942,7 +1942,7 @@ function bind(cmd, fn)
 end
 
 function efyranConfigDir()
-    return mq.TLO.MacroQuest.Path("config")() .. "/efyran"
+    return mq.TLO.MacroQuest.Path("config")() .. "\\efyran"
 end
 
 local castSpellAbilityTimers = {}
