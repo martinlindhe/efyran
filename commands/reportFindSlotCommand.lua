@@ -26,6 +26,19 @@ end
 ---@field Slot string slot name or item link
 ---@field Filter string|nil
 
+---@param slot string slot name
+---@return string
+local function presentEquippedItem(slot)
+    local item = mq.TLO.Me.Inventory(slot)
+    local s = ""
+    if item() == nil then
+        s = s .. string.format("%s: [+y+]empty[+x+]", slot)
+    else
+        s = s .. string.format("%s: %s", slot, item.ItemLink("CLICKABLE")())
+    end
+    return s
+end
+
 ---@param command ItemBy
 local function execute(command)
     if command.Filter ~= nil and not matches_filter(command.Filter, mq.TLO.Me.Name()) then
@@ -33,18 +46,6 @@ local function execute(command)
         return
     end
     local slot = command.Slot
-
-    local aliases = {
-        primary = "mainhand",
-        secondary = "offhand",
-        shoulders = "shoulder",
-        hand = "hands",
-        leg = "legs",
-        foot = "feet",
-    }
-    if aliases[slot] ~= nil then
-        slot = aliases[slot]
-    end
 
     if is_item_link(slot) then
         local item = find_item(strip_link(slot))
@@ -55,22 +56,47 @@ local function execute(command)
         -- TODO create slot name from item, auto chose the first one if multiple equippable slots allowed on the item
         -- TODO create /only|classes races filter
 
-        -- STATUS: unsure if can be done atm with the exported properties. 
+        -- STATUS: unsure if can be done atm with the exported properties.
         --     would need access to item equipslots, list of allowed races, list of allowed classes
-        log.Info("item slot for %s: %d, %d", item.Name(), item.ItemSlot(), item.ItemSlot2())
+        log.Info("TODO IMPL item link handling. item slot for %s: %d, %d", item.Name(), item.ItemSlot(), item.ItemSlot2())
+        return
+    end
+
+    local aliases = {
+        primary = "mainhand",
+        secondary = "offhand",
+        shoulders = "shoulder",
+        hand = "hands",
+        leg = "legs",
+        foot = "feet",
+
+        -- dual slot aliases
+        ear = "ears",
+        finger = "rings",
+        fingers = "rings",
+        ring = "rings",
+        wrist = "wrists",
+    }
+    if aliases[slot] ~= nil then
+        slot = aliases[slot]
+    end
+
+    local dualSlots = {
+        weapons = {"mainhand", "offhand"},
+        wrists = {"leftwrist", "rightwrist"},
+        ears = {"leftear", "rightear"},
+        rings = {"leftfinger", "rightfinger"},
+    }
+    if dualSlots[slot] ~= nil then
+        all_tellf("slot: %s, %s (%s %s)", presentEquippedItem(dualSlots[slot][1]), presentEquippedItem(dualSlots[slot][2]), class_shortname(), race_shortname())
+        return
     end
 
     if not isValidEquipmentSlotName(slot) then
         log.Error("Invalid slot name \ay%s\ax!", slot)
         return
     end
-
-    local item = mq.TLO.Me.Inventory(slot)
-    if item() == nil then
-        all_tellf("%s slot: [+y+]empty[+x+] (%s %s)", slot, class_shortname(), race_shortname())
-    else
-        all_tellf("%s slot: %s (%s %s)", slot, item.ItemLink("CLICKABLE")(), class_shortname(), race_shortname())
-    end
+    all_tellf("slot: %s (%s %s)", presentEquippedItem(slot), class_shortname(), race_shortname())
 end
 
 -- arg: item name + optional /filter arguments as strings

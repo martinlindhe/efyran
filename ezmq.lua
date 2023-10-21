@@ -589,9 +589,9 @@ end
 function have_buff(name)
     local spell = mq.TLO.Spell(name)
     if spell() == nil then
-        log.Error("have_buff: cannot lookup %s", name)
+        log.Debug("have_buff: spell didnt resolve for \ay%s", name)
         if not have_ability(name) and not have_item(name) then
-            log.Error("have_buff: asked about odd buff %s", name)
+            log.Debug("have_buff: asked about odd buff \ay%s", name)
         end
         return false
     end
@@ -1818,18 +1818,16 @@ function args_string(...)
     return trim(s)
 end
 
--- Check wether our class/name matches the given filter
+-- Check wether our class/race/name matches the given filter
 ---@param filter string A filter, such as "/only|WAR", or "/not|casters"
 ---@param sender string Peer name of sender
 ---@return boolean true if we match filter
 function matches_filter(filter, sender)
     local filterConfig = parseFilterLine(filter)
     if filterConfig.Only ~= nil and not matches_filter_line(filterConfig.Only, sender) then
-        --log.Debug("I am not matching this ONLY line: %s", filterConfig.Only)
         return false
     end
     if filterConfig.Not ~= nil and matches_filter_line(filterConfig.Not, sender) then
-        --log.Debug("I am matching this NOT line: %s", filterConfig.Not)
         return false
     end
     return true
