@@ -37,8 +37,6 @@ function line_of_sight_to(spawn)
     return mq.TLO.LineOfSight(q)()
 end
 
-local globalSettings = require("e4_Settings")
-
 -- Move to the location of `spawn` using MQ2Nav.
 ---@param spawnID integer
 function move_to(spawnID)
@@ -557,6 +555,7 @@ function use_ability(name)
     mq.cmdf('/doability "%s"', name)
 end
 
+-- Performs alt ability `name` unconditionally, including retrying and waiting until cast is completed before returning
 ---@param name string
 ---@param spawnID integer|nil
 function use_alt_ability(name, spawnID)
@@ -591,7 +590,7 @@ function use_alt_ability(name, spawnID)
         mq.cmdf("/casting %s", args)
     end
 
-    mq.delay(3000)
+    mq.delay(500)
     mq.delay(20000, function() return not is_casting() end)
     mq.delay(500)
 end
@@ -706,6 +705,35 @@ end
 ---@return string
 function class_shortname()
     return mq.TLO.Me.Class.ShortName()
+end
+
+-- Returns my race shortname, eg "OGR".
+---@return string
+function race_shortname()
+    local map = {
+        ["Barbarian"] = "BAR",
+        ["Dark Elf"]  = "DEF",
+        ["Drakkin"] = "DRK",
+        ["Dwarf"] = "DWF",
+        ["Erudite"] = "ERU",
+        ["Froglok"] = "FRG",
+        ["Gnome"] = "GNM",
+        ["Half Elf"]  = "HEF",
+        ["Halfling"] = "HFL",
+        ["High Elf"] = "HIE",
+        ["Human"] = "HUM",
+        ["Iksar"] = "IKS",
+        ["Ogre"] = "OGR",
+        ["Troll"] = "TRL",
+        ["Vah Shir"]  = "VAH",
+        ["Wood Elf"]  = "ELF",
+    }
+    local name = mq.TLO.Me.Race.Name()
+    if map[name] == nil then
+        all_tellf("UNLIKELY: race_shortname unmapped %s", name)
+        return "XXX"
+    end
+    return map[name]
 end
 
 -- Am I a Bard?

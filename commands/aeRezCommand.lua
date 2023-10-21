@@ -1,4 +1,3 @@
-local mq = require("mq")
 local commandQueue = require('e4_CommandQueue')
 
 local function execute()

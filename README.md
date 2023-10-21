@@ -129,7 +129,7 @@ settings.debug = true -- enable debug logging for this peer
 /teleportbind               - WIZ: port group to bind point using "Teleport Bind" AA
 /secondaryrecall            - WIZ/DRU: port to secondary bind
 
-/findslot <name> <filter>   - reports equipped inventory slot
+/findslot <name> <filter>   - reports equipped inventory slot (eg /findslot face /only|plate chain)
 /fdi <name> <filter>        - find item by partial name and optional filter (eg /fdi crystal /only|ROG)
 /fmi <name> <filter>        - find missing item by item name (all peers who lack an item)
 /fmid <id>                  - find missing item by item ID (eg. for 'Shard of Dark Matter')

@@ -50,7 +50,7 @@ local buffs = {
     -- timers
     resumeTimer = timer.new_expired(2), -- 2s   - interval after end of fight to resume buffing
 
-    requestAvailabiliyTimer = timer.new_random(20), -- 20s  - interval to wait before checking buff availability
+    requestAvailabiliyTimer = timer.new_expires_in(20, 5), -- 20s  - interval to wait before checking buff availability
 
     -- clickies
     manaRegenClicky       = nil,

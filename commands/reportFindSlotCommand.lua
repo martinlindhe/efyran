@@ -53,9 +53,9 @@ local function execute(command)
 
     local item = mq.TLO.Me.Inventory(slot)
     if item() == nil then
-        all_tellf("%s slot: [+y+]empty[+x+]", slot)
+        all_tellf("%s slot: [+y+]empty[+x+] (%s %s)", slot, class_shortname(), race_shortname())
     else
-        all_tellf("%s slot: %s", slot, item.ItemLink("CLICKABLE")())
+        all_tellf("%s slot: %s (%s %s)", slot, item.ItemLink("CLICKABLE")(), class_shortname(), race_shortname())
     end
 end
 

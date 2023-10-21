@@ -1,4 +1,3 @@
-local mq = require("mq")
 local commandQueue = require('e4_CommandQueue')
 
 local function execute()
@@ -9,6 +8,5 @@ end
 local function createCommand()
     commandQueue.Enqueue(function() execute() end)
 end
-
 
 bind("/aebloodthirst", createCommand)
