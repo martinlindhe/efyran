@@ -14,23 +14,23 @@ Some concepts are borrowed from E3, while others are new.
 Put this repository under your Lua folder,
 so it lives in `Macroqest\lua\efyran`.
 
-Then start it with `/lua run efyran/e4`
+Then start it with `/lua run efyran`
 
 You can auto start efyran with this `Macroquest\config\zoned.cfg`:
 
 ```
 /setwintitle ${Me.Name}
-/if (!${Bool[${Lua.PIDs}]}) /lua run efyran/e4
+/if (!${Bool[${Lua.PIDs}]}) /lua run efyran
 ```
 
 For ease of starting / stopping / re-launching efyran, you can also put the following in your `Macroquest\config\MacroQuest.ini`:
 
 ```ini
 [Aliases]
-/e4=/multiline ; /lua stop efyran/e4 ; /timed 5 /lua run efyran/e4
-/e4all=/bcaa //multiline ; /lua stop efyran/e4 ; /timed 5 /lua run efyran/e4
-/stope4=/lua stop efyran/e4
-/stopall=/bcaa //lua stop efyran/e4
+/e4=/multiline ; /lua stop efyran ; /timed 5 /lua run efyran
+/e4all=/bcaa //multiline ; /lua stop efyran ; /timed 5 /lua run efyran
+/stope4=/lua stop efyran
+/stopall=/bcaa //lua stop efyran
 ```
 
 ## Moving around
