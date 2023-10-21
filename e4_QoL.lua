@@ -82,10 +82,12 @@ function QoL.Init()
     mq.event("died1", "You have been slain by #*#", dead)
     mq.event("died2", "You died.", dead)
 
-    mq.event("mob-mezzed", "#1# has been mesmerized.", function(text, name)
+    local mobMezzed = function(text, name)
         log.Info("MEZZED > \ay%s\ax <", name)
         mq.cmdf("/popup MEZZED %s", name)
-    end)
+    end
+    mq.event("mob-mezzed1", "#1# has been mesmerized.", mobMezzed) -- ENC Mesmerize
+    mq.event("mob-mezzed2", "#1# has been enthralled.", mobMezzed) -- ENC Enthrall
 
     mq.event("mob-resisted", "Your target resisted the #1# spell.", function(text, name)
         log.Error("RESISTED > \ay%s\ax <", name)
