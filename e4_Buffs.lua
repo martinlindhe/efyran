@@ -720,7 +720,7 @@ function buffs.RequestBuffs()
 
                 local spell = get_spell(o.Name)
                 if spell ~= nil and not spell.Stacks() then
-                    log.Debug("Can't ask for buff %s, dont stack", spellConfig.Name)
+                    log.Debug("Can't ask for buff \ay%s\ax, won't stack", spellConfig.Name)
                     return false
                 end
             end
@@ -737,7 +737,7 @@ function buffs.RequestBuffs()
                         bci.ExecuteCommand(string.format("/buff %s %s", mq.TLO.Me.Name(), spellConfig.Name), {peer})
                     end
                 else
-                    log.Debug("No peer of required class for buff %s found nearby: %s", spellConfig.Name, askClass)
+                    log.Debug("No peer of required class \ay%s\ax for buff \ay%s\ax found nearby", askClass, spellConfig.Name)
                 end
             end
         else
