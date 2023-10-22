@@ -2,7 +2,7 @@
 local mq = require 'mq'
 local logger = require("knightlinc/Write")
 local timer = require 'Timer'
-local bard = require 'Class_Bard'
+local bard = require 'classes/Bard'
 local merchant = require 'looting/merchant'
 local repository = require 'looting/repository'
 require("ezmq")

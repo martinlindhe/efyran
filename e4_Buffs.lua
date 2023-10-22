@@ -8,7 +8,7 @@ local pet         = require("e4_Pet")
 local cure        = require("e4_Cure")
 local heal        = require("e4_Heal")
 local botSettings = require("e4_BotSettings")
-local bard        = require("Class_Bard")
+local bard        = require("classes/Bard")
 local timer       = require("Timer")
 
 local globalSettings = require("e4_Settings")

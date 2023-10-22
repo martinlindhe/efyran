@@ -3,7 +3,7 @@ local log = require("knightlinc/Write")
 local broadcast = require 'broadcast/broadcast'
 local timer = require 'Timer'
 local repository = require 'looting/repository'
-local bard = require 'Class_Bard'
+local bard = require 'classes/Bard'
 local target = require 'target'
 require("ezmq")
 
