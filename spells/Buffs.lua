@@ -7,11 +7,11 @@ local follow      = require("following/Follow")
 local pet         = require("pets/Pet")
 local cure        = require("healing/Cure")
 local heal        = require("healing/Heal")
-local botSettings = require("e4_BotSettings")
+local botSettings = require("settings/BotSettings")
 local bard        = require("classes/Bard")
 local timer       = require("Timer")
 
-local globalSettings = require("e4_Settings")
+local globalSettings = require("settings/default/Settings")
 
 local spellGroups  = require("spells/SpellGroups")
 

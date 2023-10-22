@@ -5,8 +5,8 @@ local broadCastInterfaceFactory = require 'broadcast/broadcastinterface'
 require("spells/Spells")
 
 local follow  = require("following/Follow")
-local globalSettings = require("e4_Settings")
-local botSettings = require("e4_BotSettings")
+local globalSettings = require("settings/default/Settings")
+local botSettings = require("settings/BotSettings")
 local timer = require("Timer")
 
 local timeZonedDelay = 10 -- seconds

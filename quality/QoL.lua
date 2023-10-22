@@ -7,9 +7,9 @@ local broadCastInterfaceFactory = require 'broadcast/broadcastinterface'
 
 local assist  = require("assisting/Assist")
 local follow  = require("following/Follow")
-local botSettings = require("e4_BotSettings")
+local botSettings = require("settings/BotSettings")
 local buffs   = require("spells/Buffs")
-local globalSettings = require("e4_Settings")
+local globalSettings = require("settings/default/Settings")
 local zonedCommand = require("commands/zonedCommand")
 
 local bci = broadCastInterfaceFactory()

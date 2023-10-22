@@ -2297,7 +2297,7 @@ function EnsureTarget(targetId)
     return mq.TLO.Target.ID() == targetId
 end
 
-local botSettings = require("e4_BotSettings")
+local botSettings = require("settings/BotSettings")
 
 -- Returns nil on error
 ---@param spellRow string Example: "War March of Muram/Gem|4"

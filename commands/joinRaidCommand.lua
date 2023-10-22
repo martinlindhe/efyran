@@ -1,7 +1,7 @@
 local mq = require("mq")
 local commandQueue = require("CommandQueue")
 local log          = require("knightlinc/Write")
-local globalSettings = require("e4_Settings")
+local globalSettings = require("settings/default/Settings")
 
 local function execute()
     wait_until_not_casting()

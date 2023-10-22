@@ -1,7 +1,7 @@
 local mq = require("mq")
 local broadCastInterfaceFactory = require 'broadcast/broadcastinterface'
 local commandQueue = require("CommandQueue")
-local botSettings = require("e4_BotSettings")
+local botSettings = require("settings/BotSettings")
 
 local bci = broadCastInterfaceFactory()
 

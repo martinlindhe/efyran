@@ -2,7 +2,7 @@ local mq = require("mq")
 local log = require("knightlinc/Write")
 local timer = require("Timer")
 
-local globalSettings = require("e4_Settings")
+local globalSettings = require("settings/default/Settings")
 
 local Follow = {
     -- the current spawn I am following

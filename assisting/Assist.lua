@@ -4,7 +4,7 @@ local timer = require("Timer")
 
 local follow  = require("following/Follow")
 local buffs  = require("spells/Buffs")
-local botSettings = require("e4_BotSettings")
+local botSettings = require("settings/BotSettings")
 local heal    = require("healing/Heal")
 
 local Assist = {

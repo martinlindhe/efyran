@@ -6,4 +6,4 @@ test:
 
 deps:
     echo "Update dependencies ..."
-    git pull --recurse-submodules
+    git submodule update --init
