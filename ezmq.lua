@@ -1514,14 +1514,16 @@ function parseSpellLine(s)
         o.Name = ""
     end
 
-    local spellGroup = spellGroups[class_shortname()][o.Name]
-    if spellGroup ~= nil then
-        local spellName = findBestSpellFromSpellGroup(o.Name)
-        if spellName ~= nil then
-            o.spellGroup = o.Name
-            o.Name = spellName
-        else
-            all_tellf("ERROR: parseSpellLine: did not find a best spell for [+r+]spellGroups.%s.%s[+x+]", class_shortname(), o.Name)
+    if spellGroups[class_shortname()] ~= nil then
+        local spellGroup = spellGroups[class_shortname()][o.Name]
+        if spellGroup ~= nil then
+            local spellName = findBestSpellFromSpellGroup(o.Name)
+            if spellName ~= nil then
+                o.spellGroup = o.Name
+                o.Name = spellName
+            else
+                all_tellf("ERROR: parseSpellLine: did not find a best spell for [+r+]spellGroups.%s.%s[+x+]", class_shortname(), o.Name)
+            end
         end
     end
     return o

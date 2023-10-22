@@ -686,7 +686,7 @@ function QoL.loadRequiredPlugins()
     for k, v in pairs(requiredPlugins) do
         if not is_plugin_loaded(v) then
             load_plugin(v)
-            log.Warn(v.." was not loaded")
+            log.Debug("Loaded plugin %s, was not loaded", v)
         end
     end
 
