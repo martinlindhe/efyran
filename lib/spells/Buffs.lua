@@ -221,6 +221,11 @@ function buffs.Tick()
         return
     end
 
+    if buffs.refreshBuffs and not in_combat() and requestBuffsTimer:expired() then
+        buffs.RequestBuffs()
+        requestBuffsTimer:restart()
+    end
+
     if obstructive_window_open() then
         return
     end
@@ -276,11 +281,6 @@ function buffs.Tick()
 
     if follow.IsFollowing() then
         return
-    end
-
-    if buffs.refreshBuffs and not in_combat() and requestBuffsTimer:expired() then
-        buffs.RequestBuffs()
-        requestBuffsTimer:restart()
     end
 end
 

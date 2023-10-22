@@ -116,7 +116,7 @@ SpellGroups.SHM = {
     -- L63 Swift Like the Wind (60% haste, 16 min)
     -- L64 Talisman of Celerity (60% haste, 36 min, group)
     shm_haste = {
-        "Talisman of Celerity/CheckFor|Hastening of Salik",
+        "Talisman of Celerity",
         "Swift Like the Wind",
         "Celerity",
         "Alacrity",
@@ -852,7 +852,7 @@ SpellGroups.ENC = {
     },
 
     -- slot 1:
-    -- L69 Rune of Rikkukin (absorb 1500 dmg, group)
+    -- L69 Rune of Rikkukin (absorb 1500 dmg, group) DoN
     -- L79 Rune of the Deep Rk. II (absorb 4118 dmg, slot 2: defensive proc Blurred Shadows Rk. II)
     enc_group_rune = {
         "Rune of the Deep",
@@ -860,15 +860,15 @@ SpellGroups.ENC = {
     },
 
     -- targeted rune - slot 1:
-    -- L16 Rune I (absorb 27-55 dmg)
-    -- L24 Rune II
-    -- L33 Rune III (absorb 168-230 dmg)
-    -- L40 Rune IV (absorb 305-394 dmg)
-    -- L52 Rune V (absorb 620-700 dmg)
-    -- L61 Rune of Zebuxoruk (absorb 850 dmg)
-    -- L67 Rune of Salik (absorb 1105 dmg)
-    -- L71 Rune of Ellowind (absorb 2160 dmg)
-    -- L76 Rune of Erradien Rk. II (absorb 5631 dmg)
+    -- L16 Rune I (absorb 27-55 dmg, 36 min) Original
+    -- L24 Rune II (absorb 71-118 dmg, 54 min) Original
+    -- L34 Rune III (absorb 168-230 dmg, 72 min) Original
+    -- L44 Rune IV (absorb 305-394 dmg, 90 min) Original
+    -- L52 Rune V (absorb 620-700 dmg) Kunark
+    -- L61 Rune of Zebuxoruk (absorb 850 dmg) PoP
+    -- L67 Rune of Salik (absorb 1105 dmg) OOW
+    -- L71 Rune of Ellowind (absorb 2160 dmg) SerpentSpine
+    -- L76 Rune of Erradien (absorb rk1 5363 dmg, rk2 5631 dmg) SoF
     enc_single_rune = {
         "Rune of Erradien/Reagent|Peridot",
         "Rune of Ellowind/Reagent|Peridot",
@@ -879,6 +879,23 @@ SpellGroups.ENC = {
         "Rune III/Reagent|Jasper",
         "Rune II/Reagent|Bloodstone",
         "Rune I/Reagent|Cat's Eye Agate",
+    },
+
+    -- self rune - slot 3:
+    -- L61 Arcane Rune (absorb 1500 dmg) PoP
+    -- L65 Eldritch Rune AA Rank 1 (id:3258, absorb 500 dmg) PoP
+    -- L65 Eldritch Rune AA Rank 2 (id:3259, absorb 1000 dmg) PoP
+    -- L65 Eldritch Rune AA Rank 3 (id:3260, absorb 1500 dmg) PoP
+    -- L66 Ethereal Rune (absorb 1950 dmg) OOW
+    -- L66 Eldritch Rune AA Rank 4 (id:8109, absorb 1800 dmg)
+    -- L67 Eldritch Rune AA Rank 5 (id:8110, absorb 2100 dmg)
+    -- L68 Eldritch Rune AA Rank 6 (id:8111, absorb 2400 dmg)
+    -- L69 Eldritch Rune AA Rank 7 (id:8112, absorb 2700 dmg)
+    -- L70 Eldritch Rune AA Rank 8 (id:8113, absorb 3000 dmg, 10 min recast)
+    enc_self_rune = {
+        "Eldritch Rune",
+        "Ethereal Rune",
+        "Arcane Rune",
     },
 
     -- L01 Minor Shielding (6-10 hp, 3-4 ac)
@@ -905,20 +922,19 @@ SpellGroups.ENC = {
         "Minor Shielding",
     },
 
-    -- L04 Tashan (1 poison counter, -9-13 magic resist)
-    -- L20 Tashani
-    -- L44 Tashania
-    -- L57 Tashanian
+    -- L04 Tashan (-9-13 mr, 10 mana) Original
+    -- L20 Tashani (-20-23 mr, 20 mana) Original
+    -- L44 Tashania (-31-33 mr, 30 mana) Original
+    -- L57 Tashanian (-37-43 mr, 12.4 min, 40 mana) Kunark
+    -- L61 Howl of Tashan (-48-50 mr, 13.6 min, cost 40 mana) PoP
     enc_tash = {
+        "Howl of Tashan",
         "Tashanian",
         "Tashania",
         "Tashani",
         "Tashan",
     },
 
-
-    --
-    -- single mez:
     -- L04 Mesmerize         (0.4 min/L55, 1% memblur, 20 mana, 2.25s recast) Original
     -- L16 Enthrall          (0.8 min/L55, 1% memblur, 50 mana, 2.5s recasat) Original
     -- L34 Entrance          (1.2 min/L55, 1% memblur, 85 mana, 3.75s recast) Original
@@ -957,13 +973,125 @@ SpellGroups.ENC = {
         "Mesmerization/MaxLevel|55",
     },
 
-    -- L12 Languid Pace (18-30% slow)
-    -- L24 Tepid Deeds (32-50% slow)
-    -- L44 Shiftless Deeds (49-65% slow)
+    -- L12 Languid Pace (MAGIC: 18-30% slow, 2.7 min, 50 mana) Original
+    -- L24 Tepid Deeds (MAGIC: 32-50% slow, 2.7 min, 100 mana) Original
+    -- L44 Shiftless Deeds (MAGIC: 49-65% slow, 2.7 min, 200 mana) Original
+    -- L57 Forlorn Deeds (MAGIC: 67-70% slow, 2.9 min, 225 mana) Kunark
+    -- L65 Dreary Deeds (MAGIC: 70% slow, resist adj -10, 1.5 min, cost 270 mana) GoD
+    -- L69 Desolate Deeds (MAGIC: 70% slow, resist adj -30, 1.5 min, cost 300 mana) OOW
     enc_slow = {
+        "Desolate Deeds",
+        "Dreary Deeds",
+        "Forlorn Deeds",
         "Shiftless Deeds",
         "Tepid Deeds",
         "Languid Pace",
+    },
+
+    -- L04 Enfeeblement (-18-20 str, -3 ac, cost 20 mana) Original
+    -- L16 Disempower (-9-12 sta, -13-15 str, -6-9 ac) Original
+    -- L25 Listless Power (-22-35 agi, -22-35 str, -10-18 ac, cost 90 mana) Original
+    -- L40 Incapacitate (-45-55 agi, -45-55 str, -21-24 ac, cost 150 mana) Original
+    -- L53 Cripple (-58-105 dex, -68-115 agi, -68-115 str, -30-45 ac, cost 225 mana) Kunark
+    -- L66 Synapsis Spasm (-100 dex, -100 agi, -100 str, -39 ac, cost 225 mana) OOW
+    enc_disempower = {
+        "Synapsis Spasm",
+        "Cripple",
+        "Incapacitate",
+        "Listless Power",
+        "Disempower",
+        "Enfeeblement",
+    },
+
+    -- L48 Ordinance (-1000 magic, charm/L52, 0.8 min, 5m recast)
+    -- L60 Dictate (-1000 magic, charm/L58, 0.8 min, 5m recast)
+    -- L70 Ancient: Voice of Muram (-1000 magic, charm/L70, 0.8 min, 5m recast)
+    enc_unresistable_charm = {
+        "Ancient: Voice of Muram/MaxLevel|70",
+        "Dictate/MaxLevel|58",
+        "Ordinance/MaxLevel|52",
+    },
+
+    -- L11 Charm (magic, charm/L25, 20.5 min)
+    -- L23 Beguile (magic, charm/L37, 20.5 min)
+    -- L37 Cajoling Whispers (magic, charm/L46, 20.5 min)
+    -- L46 Allure (magic, charm/L51, 20.5 min)
+    -- L53 Boltran's Agacerie (-10 magic, charm/L53, 7.5 min)
+    -- L62 Beckon (magic, charm/L57, 7.5 min)
+    -- L64 Command of Druzzil (magic, charm/L64, 7.5 min). 5s cast time, 1.5s recast
+    -- L68 Compel (magic, charm/L67, 7.5 min). 5s cast time, 1.5s recast
+    -- L70 True Name (magic, charm/L69, 7.5 min). 5s cast time, 1.5s recast
+    enc_charm = {
+        "True Name/MaxLevel|69",
+        "Compel/MaxLevel|67",
+        "Command of Druzzil/MaxLevel|64",
+        "Beckon/MaxLevel|57",
+        "Boltran's Agacerie/MaxLevel|53",
+        "Allure/MaxLevel|51",
+        "Cajoling Whispers/MaxLevel|46",
+        "Beguile/MaxLevel|37",
+        "Charm/MaxLevel|25",
+    },
+
+    -- L07 Chaotic Feedback (28-32 hp, 1s stun, 16 mana)
+    -- L16 Sanity Warp (81-87 hp, 1s stun, 38 mana)
+    -- L21 Chaos Flux (152-175 hp, 1s stun, 67 mana)
+    -- L32 Anarchy (264-275 hp, 1s stun, 99 mana)
+    -- L43 Discordant Mind (387 hp, 1s stun, 126 mana)
+    -- L54 Dementia (571 hp, 1s stun, 169 mana)
+    -- L58 Dementing Visions (836 hp, 239 mana)
+    -- L64 Insanity (1100 hp, cost 300 mana)
+    -- L65 Madness of Ikkibi (1210 hp, cost 330 mana)
+    -- L65 Ancient: Chaos Madness (1320 hp, cost 360 mana)
+    -- L68 Psychosis (1513 hp, cost 375 mana)
+    -- L70 Ancient: Neurosis (1634 hp, cost 398 mana)
+    enc_magic_nuke = {
+        "Ancient: Neurosis",
+        "Psychosis",
+        "Ancient: Chaos Madness",
+        "Madness of Ikkibi",
+        "Insanity",
+        "Dementing Visions",
+        "Dementia",
+        "Discordant Mind",
+        "Anarchy",
+        "Chaos Flux",
+        "Sanity Warp",
+        "Chaotic Feedback",
+    },
+
+    -- L69 Colored Chaos (CHROMATIC, 1600 hp, cost 425 mana)
+    enc_chromatic_nuke = {
+        "Colored Chaos",
+    },
+
+    -- L03 Color Flux (4s stun/L55?, aerange 20, recast 12s)
+    -- L20 Color Shift (6s stun/L55?, aerange 25, recast 12s)
+    -- L43 Color Skew (8s stun/L55?, aerange 30, recast 12s)
+    -- L52 Color Slant (8s stun/L55?, -100 mana, aerange 35, recast 12s)
+    -- L63 Color Cloud (timer 3, 8s stun/L65, aerange 30, recast 12s)   XXX best for pop stuns then!?
+    -- L69 Color Snap (timer 3, 6s stun/L70, aerange 30, recast 12s)
+    enc_ae_stun = {
+        "Color Snap",
+        "Color Cloud",
+        "Color Slant",
+        "Color Skew",
+        "Color Shift",
+        "Color Flux",
+    },
+
+    -- epic 1.5: slot 5: absorb 1500 dmg. Oculus of Persuasion (Protection of the Eye)
+    -- epic 2.0: slot 5: absorb 1800 dmg. Staff of Eternal Eloquence (Aegis of Abstraction)
+    enc_epic2 = {
+        "Staff of Eternal Eloquence",
+        "Oculus of Persuasion",
+    },
+
+    -- oow T1 bp: 30 sec, -1% spell resist rate, 5 min reuse. Charmweaver's Robe (Bedazzling Eyes)
+    -- oow T2 bp: 42 sec, -1% spell resist rate, 5 min reuse. Mindreaver's Vest of Coercion (Bedazzling Aura)
+    enc_oow_bp = {
+        "Mindreaver's Vest of Coercion",
+        "Charmweaver's Robe",
     }
 }
 
@@ -1723,14 +1851,14 @@ SpellGroups.Default.WAR = {
 
     "shm_focus/Class|SHM",
 
-    --"pal_hp/Class|PAL/CheckFor|Spiritual Vitality,Strength of Tunare",                 -- 1st
-    --"bst_hp/Class|BST/NotClass|PAL/CheckFor|Brell's Brawny Bulwark,Strength of Tunare",    -- 2nd
-    --"rng_hp/Class|RNG/NotClass|PAL,BST/CheckFor|Brell's Brawny Bulwark,Spiritual Vitality",-- 3rd
-    "rng_hp/Class|RNG/CheckFor|Brell's Brawny Bulwark,Spiritual Vitality",
+    --"pal_hp/Class|PAL",                 -- 1st
+    --"bst_hp/Class|BST/NotClass|PAL",    -- 2nd
+    --"rng_hp/Class|RNG/NotClass|PAL,BST",-- 3rd
+    "rng_hp/Class|RNG",
 
     "rng_atk/Class|RNG",
     "enc_haste/Class|ENC",
-    "shm_haste/Class|SHM/NotClass|ENC/CheckFor|Hastening of Salik",
+    "shm_haste/Class|SHM/NotClass|ENC",
 
     "dru_fire_resist/Class|DRU",
     "enc_magic_resist/Class|ENC",
@@ -1748,11 +1876,11 @@ SpellGroups.Default.SHD = {
     --"pal_hp/Class|PAL",                 -- 1st
     --"bst_hp/Class|BST/NotClass|PAL",    -- 2nd
     --"rng_hp/Class|RNG/NotClass|PAL,BST",-- 3rd
-    "rng_hp/Class|RNG/CheckFor|Brell's Brawny Bulwark,Spiritual Vitality",
+    "rng_hp/Class|RNG",
 
     "rng_atk/Class|RNG",
     "enc_haste/Class|ENC",
-    "shm_haste/Class|SHM/NotClass|ENC/CheckFor|Hastening of Salik",
+    "shm_haste/Class|SHM/NotClass|ENC",
 
     "dru_fire_resist/Class|DRU",
     "enc_magic_resist/Class|ENC",
@@ -1769,7 +1897,7 @@ SpellGroups.Default.PAL = {
 
     "rng_atk/Class|RNG",
     "enc_haste/Class|ENC",
-    "shm_haste/Class|SHM/NotClass|ENC/CheckFor|Hastening of Salik",
+    "shm_haste/Class|SHM/NotClass|ENC",
 
     "dru_fire_resist/Class|DRU",
     "enc_magic_resist/Class|ENC",
@@ -1782,14 +1910,14 @@ SpellGroups.Default.BRD = {
     "dru_skin/Class|DRU",
     "shm_focus/Class|SHM",
 
-    "rng_hp/Class|RNG/CheckFor|Brell's Brawny Bulwark,Spiritual Vitality",            -- 1st
+    "rng_hp/Class|RNG",            -- 1st
     --"bst_hp/Class|BST/NotClass|RNG",    -- 2nd
     --"pal_hp/Class|PAL/NotClass|RNG,BST",-- 3rd
 
     "rng_atk/Class|RNG",
     "shm_str/Class|SHM",
     "enc_haste/Class|ENC",
-    "shm_haste/Class|SHM/NotClass|ENC/CheckFor|Hastening of Salik",
+    "shm_haste/Class|SHM/NotClass|ENC",
 
     "dru_fire_resist/Class|DRU",
     "enc_magic_resist/Class|ENC",
@@ -1804,7 +1932,7 @@ SpellGroups.Default.CLR = {
     --"pal_hp/Class|PAL",                 -- 1st
     --"bst_hp/Class|BST/NotClass|PAL",    -- 2nd
     --"rng_hp/Class|RNG/NotClass|PAL,BST",-- 3rd
-    "rng_hp/Class|RNG/CheckFor|Brell's Brawny Bulwark,Spiritual Vitality",
+    "rng_hp/Class|RNG",
 
     "enc_manaregen/Class|ENC",
     "bst_manaregen/Class|BST",
@@ -1821,7 +1949,7 @@ SpellGroups.Default.DRU = {
     --"pal_hp/Class|PAL",                 -- 1st
     --"bst_hp/Class|BST/NotClass|PAL",    -- 2nd
     --"rng_hp/Class|RNG/NotClass|PAL,BST",-- 3rd
-    "rng_hp/Class|RNG/CheckFor|Brell's Brawny Bulwark,Spiritual Vitality",
+    "rng_hp/Class|RNG",
 
     "enc_manaregen/Class|ENC",
     "bst_manaregen/Class|BST",
@@ -1840,7 +1968,7 @@ SpellGroups.Default.SHM = {
     --"pal_hp/Class|PAL",                 -- 1st
     --"bst_hp/Class|BST/NotClass|PAL",    -- 2nd
     --"rng_hp/Class|RNG/NotClass|PAL,BST",-- 3rd
-    "rng_hp/Class|RNG/CheckFor|Brell's Brawny Bulwark,Spiritual Vitality",
+    "rng_hp/Class|RNG",
 
     "enc_manaregen/Class|ENC",
     "bst_manaregen/Class|BST",
@@ -1861,7 +1989,7 @@ SpellGroups.Default.ENC = {
     --"pal_hp/Class|PAL",                 -- 1st
     --"bst_hp/Class|BST/NotClass|PAL",    -- 2nd
     --"rng_hp/Class|RNG/NotClass|PAL,BST",-- 3rd
-    "rng_hp/Class|RNG/CheckFor|Brell's Brawny Bulwark,Spiritual Vitality",
+    "rng_hp/Class|RNG",
 
     "clr_spellhaste/Class|CLR",
     "bst_manaregen/Class|BST",
@@ -1880,7 +2008,7 @@ SpellGroups.Default.WIZ = {
     --"pal_hp/Class|PAL",                 -- 1st
     --"bst_hp/Class|BST/NotClass|PAL",    -- 2nd
     --"rng_hp/Class|RNG/NotClass|PAL,BST",-- 3rd
-    "rng_hp/Class|RNG/CheckFor|Brell's Brawny Bulwark,Spiritual Vitality",
+    "rng_hp/Class|RNG",
 
     "clr_spellhaste/Class|CLR",
     "enc_manaregen/Class|ENC",
@@ -1901,7 +2029,7 @@ SpellGroups.Default.MAG = {
     --"pal_hp/Class|PAL",                 -- 1st
     --"bst_hp/Class|BST/NotClass|PAL",    -- 2nd
     --"rng_hp/Class|RNG/NotClass|PAL,BST",-- 3rd
-    "rng_hp/Class|RNG/CheckFor|Brell's Brawny Bulwark,Spiritual Vitality",
+    "rng_hp/Class|RNG",
 
     "clr_spellhaste/Class|CLR",
     "enc_manaregen/Class|ENC",
@@ -1922,7 +2050,7 @@ SpellGroups.Default.NEC = {
     --"pal_hp/Class|PAL",                 -- 1st
     --"bst_hp/Class|BST/NotClass|PAL",    -- 2nd
     --"rng_hp/Class|RNG/NotClass|PAL,BST",-- 3rd
-    "rng_hp/Class|RNG/CheckFor|Brell's Brawny Bulwark,Spiritual Vitality",
+    "rng_hp/Class|RNG",
 
     "clr_spellhaste/Class|CLR",
     "bst_manaregen/Class|BST",
@@ -1941,7 +2069,7 @@ SpellGroups.Default.RNG = {
 
     "shm_str/Class|SHM",
     "enc_haste/Class|ENC",
-    "shm_haste/Class|SHM/NotClass|ENC/CheckFor|Hastening of Salik",
+    "shm_haste/Class|SHM/NotClass|ENC",
 
     "clr_spellhaste/Class|CLR",
     "enc_manaregen/Class|ENC",
@@ -1958,12 +2086,12 @@ SpellGroups.Default.BST = {
     "dru_skin/Class|DRU",
     "shm_focus/Class|SHM",
 
-    "rng_hp/Class|RNG/CheckFor|Brell's Brawny Bulwark,Spiritual Vitality",                 -- 1st
+    "rng_hp/Class|RNG",                 -- 1st
 
     "shm_str/Class|SHM",
     "rng_atk/Class|RNG",
     "enc_haste/Class|ENC",
-    "shm_haste/Class|SHM/NotClass|ENC/CheckFor|Hastening of Salik",
+    "shm_haste/Class|SHM/NotClass|ENC",
 
     "clr_spellhaste/Class|CLR",
     "enc_manaregen/Class|ENC",
@@ -1980,14 +2108,14 @@ SpellGroups.Default.ROG = {
     "dru_skin/Class|DRU",
     "shm_focus/Class|SHM",
 
-    "rng_hp/Class|RNG/CheckFor|Brell's Brawny Bulwark,Spiritual Vitality",                 -- 1st
+    "rng_hp/Class|RNG",                 -- 1st
     --"bst_hp/Class|BST/NotClass|RNG",    -- 2nd
     --"pal_hp/Class|PAL/NotClass|RNG,BST",-- 3rd
 
     "shm_str/Class|SHM",
     "rng_atk/Class|RNG",
     "enc_haste/Class|ENC",
-    "shm_haste/Class|SHM/NotClass|ENC/CheckFor|Hastening of Salik",
+    "shm_haste/Class|SHM/NotClass|ENC",
 
     "dru_fire_resist/Class|DRU",
     "enc_magic_resist/Class|ENC",
@@ -2000,14 +2128,14 @@ SpellGroups.Default.MNK = {
     "dru_skin/Class|DRU",
     "shm_focus/Class|SHM",
 
-    "rng_hp/Class|RNG/CheckFor|Brell's Brawny Bulwark,Spiritual Vitality",                 -- 1st
+    "rng_hp/Class|RNG",                 -- 1st
     --"bst_hp/Class|BST/NotClass|RNG",    -- 2nd
     --"pal_hp/Class|PAL/NotClass|RNG,BST",-- 3rd
 
     "shm_str/Class|SHM",
     "rng_atk/Class|RNG",
     "enc_haste/Class|ENC",
-    "shm_haste/Class|SHM/NotClass|ENC/CheckFor|Hastening of Salik",
+    "shm_haste/Class|SHM/NotClass|ENC",
 
     "dru_fire_resist/Class|DRU",
     "enc_magic_resist/Class|ENC",
@@ -2020,14 +2148,14 @@ SpellGroups.Default.BER = {
     "dru_skin/Class|DRU",
     "shm_focus/Class|SHM",
 
-    "rng_hp/Class|RNG/CheckFor|Brell's Brawny Bulwark,Spiritual Vitality",                 -- 1st
+    "rng_hp/Class|RNG",                 -- 1st
     --"bst_hp/Class|BST/NotClass|RNG",    -- 2nd
     --"pal_hp/Class|PAL/NotClass|RNG,BST",-- 3rd
 
     "shm_str/Class|SHM",
     "rng_atk/Class|RNG",
     "enc_haste/Class|ENC",
-    "shm_haste/Class|SHM/NotClass|ENC/CheckFor|Hastening of Salik",
+    "shm_haste/Class|SHM/NotClass|ENC",
 
     "dru_fire_resist/Class|DRU",
     "enc_magic_resist/Class|ENC",
