@@ -20,7 +20,7 @@ local function markItemForSelling()
     local cursor = mq.TLO.Cursor
     if not cursor() then
         log.Debug("No item to mark for selling on cursor")
-      return
+        return
     end
 
     local itemId = cursor.ID()
@@ -33,9 +33,9 @@ local function markItemForSelling()
     repository:upsert(sellItem)
     log.info("Marked <%d:%s> for destroying", sellItem.Id, sellItem.Name)
     broadcast.Success({}, "Marked <%d:%s> for destroying", sellItem.Id, sellItem.Name)
-  end
+end
 
-  local function createAliases()
+local function createAliases()
     mq.unbind('/setsellitem')
     mq.bind("/setsellitem", markItemForSelling)
 end

@@ -9,23 +9,23 @@ local repository = require 'looting/repository'
 local function canDestroyItem(itemId, itemName)
     local itemToDestroy = repository:tryGet(itemId)
     if not itemToDestroy then
-      itemToDestroy = { Id = itemId, Name = itemName, DoSell = false, DoDestroy = false }
+        itemToDestroy = { Id = itemId, Name = itemName, DoSell = false, DoDestroy = false }
     end
 
     return itemToDestroy.DoDestroy, itemToDestroy
-  end
+end
 
 local function markItemForDestroying()
     local cursor = mq.TLO.Cursor
     if not cursor() then
-      log.Debug("No item to mark for destroying on cursor")
-      return
+        log.Debug("No item to mark for destroying on cursor")
+        return
     end
 
     local itemId = cursor.ID()
     local shouldDestroy, item = canDestroyItem(itemId, cursor.Name())
     if shouldDestroy then
-      log.Debug("Item already marked for destroying")
+        log.Debug("Item already marked for destroying")
     end
 
     item.DoDestroy = true
@@ -34,9 +34,9 @@ local function markItemForDestroying()
     broadcast.Success({}, "Marked <%d:%s> for destroying", item.Id, item.Name)
   end
 
-  local function createAliases()
+local function createAliases()
     mq.unbind('/setdestroyitem')
     mq.bind("/setdestroyitem", markItemForDestroying)
-  end
+end
 
-  createAliases()
+createAliases()

@@ -9,8 +9,8 @@ local mq = require 'mq'
 ---@field public Bankable boolean|nil
 
 local function getFilePath()
-  local fileName = "loot_settings.lua"
-  return string.format("%s/%s/%s", efyranConfigDir(), current_server(), fileName)
+    local fileName = "loot_settings.lua"
+    return string.format("%s/%s/%s", efyranConfigDir(), current_server(), fileName)
 end
 
 local function loadStore()
@@ -27,38 +27,38 @@ end
 
 ---@class Repository
 local Repository = {
-  items = loadStore()
+    items = loadStore()
 }
 
 ---@param item LootItem
 function Repository:add (item)
-  table.insert(self.items, item)
+    table.insert(self.items, item)
 end
 
 ---@param itemId integer
 ---@return LootItem?
 function Repository:tryGet (itemId)
-  for i, v in ipairs (self.items) do
-    if (v.Id == itemId) then
-      return v
+    for i, v in ipairs (self.items) do
+        if (v.Id == itemId) then
+        return v
+        end
     end
-  end
 
-  return nil
+    return nil
 end
 
 ---@param upsertItem LootItem
 function Repository:upsert (upsertItem)
-  for k, v in ipairs (self.items) do
-    if (v.Id == upsertItem.Id) then
-      self.items[k] = upsertItem
-      return
+    for k, v in ipairs (self.items) do
+        if (v.Id == upsertItem.Id) then
+        self.items[k] = upsertItem
+        return
+        end
     end
-  end
 
-  self:add(upsertItem)
-  local filePath = getFilePath()
-  mq.pickle(filePath, Repository.items)
+    self:add(upsertItem)
+    local filePath = getFilePath()
+    mq.pickle(filePath, Repository.items)
 end
 
 return Repository
