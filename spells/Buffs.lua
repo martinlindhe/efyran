@@ -22,7 +22,6 @@ if file_exists(serverBuffsSettings) then
     spellGroups.Default = loadfile(serverBuffsSettings)()
 end
 
-
 local MIN_BUFF_DURATION = 1 * 6000 -- 1 tick, each tick is 6s
 
 ---@class buffQueueValue

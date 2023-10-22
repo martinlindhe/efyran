@@ -14,8 +14,7 @@ Some concepts are borrowed from E3, while others are new.
 Oct 2023: When using git version, make sure you pull the submodules (external dependencies)
 
 ```sh
-git pull
-git submodule update --init
+git pull --recurse-submodules
 ```
 
 Place the `efyran` folder in `Macroqest-Root\lua\efyran`.
