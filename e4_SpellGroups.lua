@@ -4,7 +4,7 @@ SpellGroups.Lookup = {
     shm_focus = "SHM",
     shm_runspeed = "SHM",
     shm_haste = "SHM",
-    shm_resist = "SHM",
+    shm_disease_resist = "SHM",
     shm_sta = "SHM",
     shm_str = "SHM",
     shm_agi = "SHM",
@@ -83,15 +83,13 @@ SpellGroups.SHM = {
         "Minor Healing",
     },
 
-    -- weak focus - HP slot 1: Increase Max HP
+    -- focus - HP Slot 1: Increase Max HP + stats
     -- L32 Talisman of Tnarg (132-150 hp)
     -- L40 Talisman of Altuna (230-250 hp)
     -- L55 Talisman of Kragg (365-500 hp)
-
-    -- focus - HP Slot 1: Increase Max HP + stats
-    -- L46 Harnessing of Spirit (243-251 hp, 67 str, 50 dex, cost 425 mana)
-    -- L60 Focus of Spirit (405-525 hp, 67 str, 60 dex, cost 500 mana)
-    -- L60 Khura's Focusing (430-550 hp, 67 str, 60 dex, cost 1250 mana, group)
+    -- L46 Harnessing of Spirit (243-251 hp, 67 str, 50 dex, cost 425 mana) Luclin
+    -- L60 Focus of Spirit (405-525 hp, 67 str, 60 dex, cost 500 mana) Velious
+    -- L60 Khura's Focusing (430-550 hp, 67 str, 60 dex, cost 1250 mana, group) Luclin
     -- L62 Focus of Soul (544 hp, 75 str, 70 dex, cost XXX mana)
     -- L65 Focus of the Seventh (544 hp, 75 str, 70 dex, cost 1800 mana, group)
     -- L68 Wunshi's Focusing (680 hp, 85 str, 85 dex, str cap 85, dex cap 85, cost 780 mana)
@@ -101,6 +99,9 @@ SpellGroups.SHM = {
         "Focus of the Seventh",
         "Khura's Focusing",
         "Harnessing of Spirit",
+        "Talisman of Kragg",
+        "Talisman of Altuna",
+        "Talisman of Tnarg",
     },
 
     -- L09 Spirit of Wolf (48-55% speed, 36 min)
@@ -122,14 +123,27 @@ SpellGroups.SHM = {
         "Quickness",
     },
 
-    -- L50 Talisman of Jasinth (45 dr, group)
-    -- L53 Talisman of Shadoo (45 pr, group)
-    -- L58 Talisman of Epuration (55 dr, 55 pr, group)
-    -- L62 Talisman of the Tribunal (65 dr, 65 pr, group)
-    shm_resist = {
+    -- L09 Endure Disease (19-20 dr)
+    -- L34 Resist Disease (40 dr)
+    -- L50 Talisman of Jasinth (45 dr, group) Kunark
+    -- L58 Talisman of Epuration (55 dr, 55 pr, group) Luclin
+    -- L62 Talisman of the Tribunal (65 dr, 65 pr, group) PoP
+    shm_disease_resist = {
         "Talisman of the Tribunal",
         "Talisman of Epuration",
         "Talisman of Jasinth",
+        "Resist Disease",
+        "Endure Disease",
+    },
+
+    -- NOTE: shm_poison_resist don't stack with Talisman of the Tribunal
+    -- L14 Endure Poison (19-20 pr)
+    -- L39 Resist Poison (40 pr)
+    -- L53 Talisman of Shadoo (45 pr, group) Kunark
+    shm_poison_resist = {
+        "Talisman of Shadoo",
+        "Resist Poison",
+        "Endure Poison",
     },
 
     -- L23 Regeneration (5 hp/tick, 17.5 min, cost 100 mana)
@@ -1327,7 +1341,7 @@ SpellGroups.RNG = {
     },
 
     -- hp type 2 - Slot 4: Increase max HP
-    -- L51 Strength of Nature (25 atk, 75 hp, single, cost 125 mana)
+    -- L51 Strength of Nature (25 atk, 75 hp, single, cost 125 mana) Velious
     -- L62 Strength of Tunare (slot 1: 92 atk, slot 4: 125 hp, group, cost 250 mana)
     -- L67 Strength of the Hunter (75 atk, 155 hp, group, cost 325 mana) NOTE: Tunare has more ATK
     rng_hp = {
@@ -1361,7 +1375,7 @@ SpellGroups.RNG = {
     -- L21 Skin like Rock
     -- L38 Skin like Steel
     -- L54 Skin like Diamond
-    -- L59 Skin like Nature
+    -- L59 Skin like Nature (Velious)
     -- L65 Natureskin (18-19 ac, 391-520 hp, 4 hp/tick)
     -- L70 Onyx Skin (33 ac, 540 hp, 6 hp/tick)
     rng_skin = {
@@ -1680,7 +1694,7 @@ SpellGroups.Default.WAR = {
 
     "dru_fire_resist/Class|DRU",
     "enc_resist/Class|ENC",
-    "shm_resist/Class|SHM",
+    "shm_disease_resist/Class|SHM",
 }
 
 SpellGroups.Default.SHD = {
@@ -1702,7 +1716,7 @@ SpellGroups.Default.SHD = {
 
     "dru_fire_resist/Class|DRU",
     "enc_resist/Class|ENC",
-    "shm_resist/Class|SHM",
+    "shm_disease_resist/Class|SHM",
 }
 
 SpellGroups.Default.PAL = {
@@ -1719,7 +1733,7 @@ SpellGroups.Default.PAL = {
 
     "dru_fire_resist/Class|DRU",
     "enc_resist/Class|ENC",
-    "shm_resist/Class|SHM",
+    "shm_disease_resist/Class|SHM",
 }
 
 SpellGroups.Default.BRD = {
@@ -1739,7 +1753,7 @@ SpellGroups.Default.BRD = {
 
     "dru_fire_resist/Class|DRU",
     "enc_resist/Class|ENC",
-    "shm_resist/Class|SHM",
+    "shm_disease_resist/Class|SHM",
 }
 
 SpellGroups.Default.CLR = {
@@ -1757,7 +1771,7 @@ SpellGroups.Default.CLR = {
 
     "dru_fire_resist/Class|DRU",
     "enc_resist/Class|ENC",
-    "shm_resist/Class|SHM",
+    "shm_disease_resist/Class|SHM",
 }
 
 SpellGroups.Default.DRU = {
@@ -1776,7 +1790,7 @@ SpellGroups.Default.DRU = {
     "clr_vie/Class|CLR",
 
     "enc_resist/Class|ENC",
-    "shm_resist/Class|SHM",
+    "shm_disease_resist/Class|SHM",
 }
 
 SpellGroups.Default.SHM = {
@@ -1814,7 +1828,7 @@ SpellGroups.Default.ENC = {
     "clr_vie/Class|CLR",
 
     "dru_fire_resist/Class|DRU",
-    "shm_resist/Class|SHM",
+    "shm_disease_resist/Class|SHM",
 }
 
 SpellGroups.Default.WIZ = {
@@ -1834,7 +1848,7 @@ SpellGroups.Default.WIZ = {
     "clr_vie/Class|CLR",
 
     "dru_fire_resist/Class|DRU",
-    "shm_resist/Class|SHM",
+    "shm_disease_resist/Class|SHM",
     "enc_resist/Class|ENC",
 }
 
@@ -1855,7 +1869,7 @@ SpellGroups.Default.MAG = {
     --"clr_vie/Class|CLR",
 
     "dru_fire_resist/Class|DRU",
-    "shm_resist/Class|SHM",
+    "shm_disease_resist/Class|SHM",
     "enc_resist/Class|ENC",
 }
 
@@ -1875,7 +1889,7 @@ SpellGroups.Default.NEC = {
     --"clr_vie/Class|CLR",
 
     "dru_fire_resist/Class|DRU",
-    "shm_resist/Class|SHM",
+    "shm_disease_resist/Class|SHM",
     "enc_resist/Class|ENC",
 }
 
@@ -1895,7 +1909,7 @@ SpellGroups.Default.RNG = {
 
     "dru_fire_resist/Class|DRU",
     "enc_resist/Class|ENC",
-    "shm_resist/Class|SHM",
+    "shm_disease_resist/Class|SHM",
 }
 
 SpellGroups.Default.BST = {
@@ -1917,7 +1931,7 @@ SpellGroups.Default.BST = {
 
     "dru_fire_resist/Class|DRU",
     "enc_resist/Class|ENC",
-    "shm_resist/Class|SHM",
+    "shm_disease_resist/Class|SHM",
 }
 
 SpellGroups.Default.ROG = {
@@ -1937,7 +1951,7 @@ SpellGroups.Default.ROG = {
 
     "dru_fire_resist/Class|DRU",
     "enc_resist/Class|ENC",
-    "shm_resist/Class|SHM",
+    "shm_disease_resist/Class|SHM",
 }
 
 SpellGroups.Default.MNK = {
@@ -1957,7 +1971,7 @@ SpellGroups.Default.MNK = {
 
     "dru_fire_resist/Class|DRU",
     "enc_resist/Class|ENC",
-    "shm_resist/Class|SHM",
+    "shm_disease_resist/Class|SHM",
 }
 
 SpellGroups.Default.BER = {
@@ -1977,7 +1991,7 @@ SpellGroups.Default.BER = {
 
     "dru_fire_resist/Class|DRU",
     "enc_resist/Class|ENC",
-    "shm_resist/Class|SHM",
+    "shm_disease_resist/Class|SHM",
 }
 
 

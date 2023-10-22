@@ -44,14 +44,14 @@ end
 ---@return boolean
 local function canLootItem(item)
     if item.NoDrop() then
-        log.Debug("<%s> is [NO DROP], skipping.", item.Name())
-        mq.cmd("/beep")
+        all_tellf("<%s> is [NO DROP], skipping.", item.Name())
+        mq.cmd("/beep 1")
         return false
     end
 
     if alreadyHaveLoreItem(item) then
-        log.Debug("<%s> is [Lore] and I already have one.", item.Name())
-        mq.cmd("/beep")
+        all_tellf("<%s> is [LORE] and I already have one.", item.Name())
+        mq.cmd("/beep 1")
         return false
     end
 
@@ -60,7 +60,7 @@ local function canLootItem(item)
             return true
         end
 
-        log.Debug("My inventory is full!", item.Name())
+        all_tellf("My inventory is full!", item.Name())
         mq.cmd("/beep")
         return false
   end

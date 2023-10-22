@@ -530,7 +530,6 @@ function QoL.Init()
     local xpGain = function(text)
 
         if botSettings.settings.autoloot then
-            all_tellf("AUTO LOOTING")
             mq.cmd("/doloot")
         end
 

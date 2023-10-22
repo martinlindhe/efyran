@@ -701,27 +701,45 @@ function buffs.RequestBuffs()
             end
 
             -- see if we have any of this buff form on
-            -- XXX assume what spell will be used and see if it will stack on me.
+            -- assume what spell will be used and see if it will stack on me.
             local found = false
             local refresh = false
             for idx, checkRow in pairs(buffRows) do
                 local o = parseSpellLine(checkRow)
+                --log.Debug("Checking stacking status for buff \ay%s\ax (%s)", spellConfig.Name, o.Name)
+
                 if have_buff(o.Name) then
                     local duration = mq.TLO.Me.Buff(o.Name).Duration()
                     if duration ~= nil and duration >= MIN_BUFF_DURATION then
                         --log.Debug("Will not request \ay%s\ax. I have buff \ay%s\ax for %d more ticks.", spellConfig.Name, o.Name, duration)
                         found = true
-                        break
                     else
                         -- only check for free buff slots if we are not refreshing buff
                         refresh = true
                     end
+                    break
                 end
 
                 local spell = get_spell(o.Name)
                 if spell ~= nil and not spell.Stacks() then
-                    log.Debug("Can't ask for buff \ay%s\ax, won't stack", spellConfig.Name)
+                    --log.Debug("Can't ask for buff \ay%s\ax, won't stack (%s) spell.Stacks", spellConfig.Name, o.Name)
                     return false
+                end
+
+                -- NOTE: evaluating wether WillStack() ever kicks in (oct 2023)
+                for i = 1, mq.TLO.Me.MaxBuffSlots() do
+                    local buff = mq.TLO.Me.Buff(i)()
+                    if buff ~= nil then
+                        local spell1 = get_spell(buff)
+                        if spell1 == nil then
+                            all_tellf("XXX get_spell nil unexpected", buff)
+                        end
+                        if spell1 ~= nil and not spell1.WillStack(o.Name) then
+                            -- TODO: see if this ever triggers
+                            all_tellf("UNLIKELY: Can't ask for buff \ay%s\ax, won't stack (%s) spell.WillStack", spellConfig.Name, o.Name)
+                            return false
+                        end
+                    end
                 end
             end
 
@@ -737,7 +755,7 @@ function buffs.RequestBuffs()
                         bci.ExecuteCommand(string.format("/buff %s %s", mq.TLO.Me.Name(), spellConfig.Name), {peer})
                     end
                 else
-                    log.Debug("No peer of required class \ay%s\ax for buff \ay%s\ax found nearby", askClass, spellConfig.Name)
+                    log.Debug("No \ay%s\ax buffer offering \ay%s\ax found nearby", askClass, spellConfig.Name)
                 end
             end
         else

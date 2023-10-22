@@ -26,7 +26,7 @@ Default.WAR = {
 
     --"dru_fire_resist/Class|DRU",
     "enc_resist/Class|ENC",
-    "shm_resist/Class|SHM",
+    "shm_disease_resist/Class|SHM",
 
     "mag_single_ds/Class|MAG",
 }
@@ -50,7 +50,7 @@ Default.SHD = {
 
     --"dru_fire_resist/Class|DRU",
     "enc_resist/Class|ENC",
-    "shm_resist/Class|SHM",
+    "shm_disease_resist/Class|SHM",
 
     "mag_single_ds/Class|MAG",
 }
@@ -69,7 +69,7 @@ Default.PAL = {
 
     --"dru_fire_resist/Class|DRU",
     "enc_resist/Class|ENC",
-    "shm_resist/Class|SHM",
+    "shm_disease_resist/Class|SHM",
 
 --    "mag_single_ds/Class|MAG",
     "dru_str/Class|DRU",
@@ -92,7 +92,7 @@ Default.BRD = {
 
     --"dru_fire_resist/Class|DRU",
     "enc_resist/Class|ENC",
-    "shm_resist/Class|SHM",
+    "shm_disease_resist/Class|SHM",
 }
 
 Default.CLR = {
@@ -110,7 +110,7 @@ Default.CLR = {
 
     --"dru_fire_resist/Class|DRU",
     "enc_resist/Class|ENC",
-    "shm_resist/Class|SHM",
+    "shm_disease_resist/Class|SHM",
 }
 
 Default.DRU = {
@@ -129,7 +129,7 @@ Default.DRU = {
     "clr_vie/Class|CLR",
 
     "enc_resist/Class|ENC",
-    "shm_resist/Class|SHM",
+    "shm_disease_resist/Class|SHM",
 }
 
 Default.SHM = {
@@ -165,7 +165,7 @@ Default.ENC = {
     "clr_vie/Class|CLR",
 
     --"dru_fire_resist/Class|DRU",
-    "shm_resist/Class|SHM",
+    "shm_disease_resist/Class|SHM",
 
     --"mag_single_ds/Class|MAG",
 
@@ -188,7 +188,7 @@ Default.WIZ = {
     "clr_vie/Class|CLR",
 
     --"dru_fire_resist/Class|DRU",
-    "shm_resist/Class|SHM",
+    "shm_disease_resist/Class|SHM",
     "enc_resist/Class|ENC",
 }
 
@@ -208,7 +208,7 @@ Default.MAG = {
     --"clr_vie/Class|CLR",
 
     --"dru_fire_resist/Class|DRU",
-    "shm_resist/Class|SHM",
+    "shm_disease_resist/Class|SHM",
     "enc_resist/Class|ENC",
 }
 
@@ -227,7 +227,7 @@ Default.NEC = {
     --"clr_vie/Class|CLR",
 
     --"dru_fire_resist/Class|DRU",
-    "shm_resist/Class|SHM",
+    "shm_disease_resist/Class|SHM",
     "enc_resist/Class|ENC",
 }
 
@@ -246,7 +246,7 @@ Default.RNG = {
 
     --"dru_fire_resist/Class|DRU",
     "enc_resist/Class|ENC",
-    "shm_resist/Class|SHM",
+    "shm_disease_resist/Class|SHM",
 
     "dru_str/Class|DRU",
 }
@@ -268,7 +268,7 @@ Default.ROG = {
 
     --"dru_fire_resist/Class|DRU",
     "enc_resist/Class|ENC",
-    "shm_resist/Class|SHM",
+    "shm_disease_resist/Class|SHM",
 }
 
 Default.MNK = {
@@ -288,7 +288,7 @@ Default.MNK = {
 
     --"dru_fire_resist/Class|DRU",
     "enc_resist/Class|ENC",
-    "shm_resist/Class|SHM",
+    "shm_disease_resist/Class|SHM",
 }
 
 Default.BST = {
@@ -309,7 +309,7 @@ Default.BST = {
 
     --"dru_fire_resist/Class|DRU",
     "enc_resist/Class|ENC",
-    "shm_resist/Class|SHM",
+    "shm_disease_resist/Class|SHM",
 }
 
 Default.BER = {
@@ -329,7 +329,7 @@ Default.BER = {
 
     --"dru_fire_resist/Class|DRU",
     "enc_resist/Class|ENC",
-    "shm_resist/Class|SHM",
+    "shm_disease_resist/Class|SHM",
 }
 
 return Default
