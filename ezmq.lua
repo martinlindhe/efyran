@@ -434,6 +434,7 @@ function have_mana_for_spell(name)
         return false
     end
     local spell = mq.TLO.Spell(name)
+    -- add 20 mana to spell cost to mitigate rof2 client being out of sync with server regen (oct 2023)
     return mq.TLO.Me.CurrentMana() > (20 + spell.Mana())
 end
 
