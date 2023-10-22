@@ -7,6 +7,7 @@ local bci = broadCastInterfaceFactory()
 
 local trainers = {
     language = require 'commands/train/language',
+    begging = require 'commands/train/begging',
 }
 
 ---@class TrainCommand

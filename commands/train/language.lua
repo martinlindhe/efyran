@@ -1,5 +1,4 @@
 -- based on langtrain.mac by Cr4zyb4rd
--- Run this on 2 or more chars, will cycle through the languages and skill them up.
 
 local mq = require("mq")
 local log = require("knightlinc/Write")
@@ -9,7 +8,7 @@ require("ezmq")
 local MAX_LANGUAGE_ID = 25
 local maxAttempts = 100 + 10 -- Skill cap is 100
 
-local TrainLanguage = function()
+return function()
     if not in_group() then
         log.Error("To train language, first group up!")
         return
@@ -72,5 +71,3 @@ local TrainLanguage = function()
     -- restore to Common Tongue
     cmdf("/language 1")
 end
-
-return TrainLanguage
