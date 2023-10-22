@@ -1,6 +1,6 @@
 local mq = require("mq")
 local broadCastInterfaceFactory = require 'broadcast/broadcastinterface'
-local commandQueue = require('e4_CommandQueue')
+local commandQueue = require("CommandQueue")
 local follow  = require("e4_Follow")
 local auto_hand_in_items = require("e4_Handin")
 

@@ -1,5 +1,5 @@
 local mq = require("mq")
-local commandQueue = require('e4_CommandQueue')
+local commandQueue = require("CommandQueue")
 local lootNearestCorpse = require 'looting/lootNearestCorpse'
 
 local function execute()

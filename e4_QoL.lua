@@ -5,10 +5,9 @@ local log = require("knightlinc/Write")
 local timer = require("Timer")
 local broadCastInterfaceFactory = require 'broadcast/broadcastinterface'
 
-local assist  = require("e4_Assist")
+local assist  = require("assisting/Assist")
 local follow  = require("e4_Follow")
 local botSettings = require("e4_BotSettings")
-local loot  = require("e4_Loot")
 local buffs   = require("e4_Buffs")
 local globalSettings = require("e4_Settings")
 local zonedCommand = require("commands/zonedCommand")

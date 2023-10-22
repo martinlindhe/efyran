@@ -1,8 +1,8 @@
 local mq = require("mq")
-local commandQueue = require('e4_CommandQueue')
-local assist  = require("e4_Assist")
-local pet     = require("e4_Pet")
-local heal    = require("e4_Heal")
+local commandQueue = require("CommandQueue")
+local assist  = require("assisting/Assist")
+local pet     = require("pets/Pet")
+local heal    = require("healing/Heal")
 local buffs   = require("e4_Buffs")
 local map     = require("e4_Map")
 

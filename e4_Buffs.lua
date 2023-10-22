@@ -4,9 +4,9 @@ local broadCastInterfaceFactory = require 'broadcast/broadcastinterface'
 
 require("e4_Spells")
 local follow      = require("e4_Follow")
-local pet         = require("e4_Pet")
-local cure        = require("e4_Cure")
-local heal        = require("e4_Heal")
+local pet         = require("pets/Pet")
+local cure        = require("healing/Cure")
+local heal        = require("healing/Heal")
 local botSettings = require("e4_BotSettings")
 local bard        = require("classes/Bard")
 local timer       = require("Timer")

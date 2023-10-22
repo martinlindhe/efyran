@@ -1,5 +1,5 @@
 local mq = require("mq")
-local commandQueue = require('e4_CommandQueue')
+local commandQueue = require("CommandQueue")
 local autobank = require("autobank")
 
 local function execute()

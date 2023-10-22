@@ -1092,20 +1092,6 @@ function is_script_running(name)
     return false
 end
 
--- returns a comma-separated list of all running scripts, except for `name`.
----@param name string
-function get_running_scripts_except(name)
-    local others = ""
-    for pid in string.gmatch(mq.TLO.Lua.PIDs(), '([^,]+)') do
-        ---@diagnostic disable-next-line: param-type-mismatch
-        local luainfo = mq.TLO.Lua.Script(pid)
-        if luainfo.Name() ~= name then
-            others = others .. ", " .. luainfo.Name()
-        end
-    end
-    return others
-end
-
 ---@return boolean
 function has_cursor_item()
     return mq.TLO.Cursor.ID() ~= nil

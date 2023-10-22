@@ -1,5 +1,5 @@
 local mq = require("mq")
-local commandQueue = require('e4_CommandQueue')
+local commandQueue = require("CommandQueue")
 
 local function execute()
     -- 22198 The Scepter of Shadows

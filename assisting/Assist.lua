@@ -5,7 +5,7 @@ local timer = require("Timer")
 local follow  = require("e4_Follow")
 local buffs  = require("e4_Buffs")
 local botSettings = require("e4_BotSettings")
-local heal    = require("e4_Heal")
+local heal    = require("healing/Heal")
 
 local Assist = {
     targetID = 0, -- the current spawn I am attacking

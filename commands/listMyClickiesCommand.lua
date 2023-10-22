@@ -1,6 +1,6 @@
 local mq = require("mq")
 local log          = require("knightlinc/Write")
-local commandQueue = require('e4_CommandQueue')
+local commandQueue = require("CommandQueue")
 
 ---@class ListClickesCommand
 ---@field Category string

@@ -1,8 +1,8 @@
 local mq = require("mq")
 local log = require("knightlinc/Write")
 local broadCastInterfaceFactory = require 'broadcast/broadcastinterface'
-local commandQueue = require('e4_CommandQueue')
-local assist         = require("e4_Assist")
+local commandQueue = require("CommandQueue")
+local assist         = require("assisting/Assist")
 local botSettings    = require("e4_BotSettings")
 
 local bci = broadCastInterfaceFactory()

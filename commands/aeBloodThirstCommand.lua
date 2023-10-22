@@ -1,4 +1,4 @@
-local commandQueue = require('e4_CommandQueue')
+local commandQueue = require("CommandQueue")
 
 local function execute()
     cast_ae_bloodthirst()
