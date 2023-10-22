@@ -4,7 +4,6 @@ local broadcast = require 'broadcast/broadcast'
 local timer = require 'Timer'
 local repository = require 'looting/repository'
 local bard = require 'classes/Bard'
-local target = require 'target'
 require("ezmq")
 
 local function typeChrs(message, ...)
@@ -173,12 +172,12 @@ local function lootNearestCorpse()
         local seekRadius = 100
         local searchCorpseString = string.format("npc corpse zradius 50 radius %s", seekRadius)
         local closestCorpse = mq.TLO.NearestSpawn(1, searchCorpseString)
-        if closestCorpse() and target.EnsureTarget(closestCorpse.ID()) then
+        if closestCorpse() and EnsureTarget(closestCorpse.ID()) then
         if closestCorpse.Distance() > 16 and closestCorpse.DistanceZ() < 80 then
             move_to(closestCorpse.ID())
         end
 
-        if closestCorpse() and closestCorpse.Distance() <= 20 and closestCorpse.DistanceZ() < 40 and target.EnsureTarget(closestCorpse.ID()) then
+        if closestCorpse() and closestCorpse.Distance() <= 20 and closestCorpse.DistanceZ() < 40 and EnsureTarget(closestCorpse.ID()) then
             lootCorpse()
         else
             log.Info("Corpse %s is %d|%d distance, skipping", closestCorpse.Name(), closestCorpse.Distance(), closestCorpse.DistanceZ())

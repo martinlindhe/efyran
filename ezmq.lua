@@ -2276,6 +2276,27 @@ function castSpellRaw(name, spawnID, extraArgs)
     delay(400)
 end
 
+
+---@param targetId number
+---@return boolean
+function EnsureTarget(targetId)
+    if not targetId then
+        log.Debug("Invalid <targetId>")
+      return false
+    end
+
+    if mq.TLO.Target.ID() ~= targetId then
+      if mq.TLO.SpawnCount("id "..targetId)() > 0 then
+        mq.cmdf("/target id %s", targetId)
+        mq.delay(500, function() return mq.TLO.Target.ID() == targetId end)
+      else
+        log.Warn("EnsureTarget has no spawncount for target id <%d>", targetId)
+      end
+    end
+
+    return mq.TLO.Target.ID() == targetId
+end
+
 local botSettings = require("e4_BotSettings")
 
 -- Returns nil on error

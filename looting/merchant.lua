@@ -2,7 +2,6 @@
 local mq = require 'mq'
 local log = require("knightlinc/Write")
 local timer = require 'Timer'
-local target = require 'target'
 
 local function findMerchant()
     local merchantSpawn = mq.TLO.NearestSpawn("Merchant radius 100")
@@ -26,7 +25,7 @@ local function openMerchant(merchant)
     local merchantWindow = mq.TLO.Window("MerchantWnd")
     local openMerchantTimer = timer.new(10)
 
-    if target.EnsureTarget(merchant.ID()) and not merchantWindow.Open() then
+    if EnsureTarget(merchant.ID()) and not merchantWindow.Open() then
         mq.cmd("/click right target")
         mq.delay("5s", function ()
         return merchantWindow.Open() or openMerchantTimer:expired()
