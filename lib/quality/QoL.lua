@@ -671,9 +671,6 @@ end
 
 function QoL.loadRequiredPlugins()
     local requiredPlugins = {
-        "MQ2EQBC",
-        "MQ2NetBots",
-
         "MQ2Debuffs",
         "MQ2MoveUtils", -- for /stick, /moveto
         "MQ2Cast",
@@ -681,6 +678,12 @@ function QoL.loadRequiredPlugins()
         "MQ2AdvPath",   -- for /afollow
         --"MQ2Nav", -- TODO requires mesh files etc
     }
+    if not is_plugin_loaded("MQ2EQBC") and not is_plugin_loaded("MQ2DanNet") then
+        load_plugin("MQ2EQBC")
+    end
+    if is_plugin_loaded("MQ2EQBC") and not is_plugin_loaded("MQ2NetBots") then
+        load_plugin("MQ2NetBots")
+    end
     for k, v in pairs(requiredPlugins) do
         if not is_plugin_loaded(v) then
             load_plugin(v)
@@ -696,7 +699,7 @@ function QoL.loadRequiredPlugins()
         for k, v in pairs(requiredEmuPlugins) do
             if not is_plugin_loaded(v) then
                 load_plugin(v)
-                log.Warn(v.." was not loaded")
+                log.Debug("Loaded plugin %s, was not loaded", v)
             end
         end
     end
