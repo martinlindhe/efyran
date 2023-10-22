@@ -175,6 +175,8 @@ settings.debug = true -- enable debug logging for this peer
 /lootmycorpse               - loot your corpse
 /lootallcorpses             - tell peers to loot their corpse
 /usecorpsesummoner          - summon corpse in guild lobby
+
+/train <skill>              - train skill. currently supported skills: language
 ```
 
 TODO document the remaining commands

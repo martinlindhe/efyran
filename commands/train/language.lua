@@ -1,0 +1,76 @@
+-- based on langtrain.mac by Cr4zyb4rd
+-- Run this on 2 or more chars, will cycle through the languages and skill them up.
+
+local mq = require("mq")
+local log = require("knightlinc/Write")
+
+require("ezmq")
+
+local MAX_LANGUAGE_ID = 25
+local maxAttempts = 100 + 10 -- Skill cap is 100
+
+local TrainLanguage = function()
+    if not in_group() then
+        log.Error("To train language, first group up!")
+        return
+    end
+
+    cmdf("/target %s", mq.TLO.Group.Member(1)())
+
+    for i = 1, MAX_LANGUAGE_ID do
+        local attempts = maxAttempts - mq.TLO.Me.LanguageSkill(i)()
+
+        all_tellf("Training language %s (id %d, skill %d) for %d attempts ...", mq.TLO.Me.Language(i)(), i, mq.TLO.Me.LanguageSkill(i)(), attempts)
+        cmdf("/language %d", i)
+        delay(10)
+
+        for inner = 0, attempts do
+            random_delay(500)
+            cmd("/keypress enter chat")
+            cmd("/keypress /")
+            cmd("/keypress g chat")
+            cmd("/keypress s chat")
+            cmd("/keypress a chat")
+            cmd("/keypress y chat")
+            cmd("/keypress space chat")
+            cmd("/keypress N chat")
+            cmd("/keypress o chat")
+            cmd("/keypress w chat")
+            cmd("/keypress space chat")
+            cmd("/keypress l chat")
+            cmd("/keypress e chat")
+            cmd("/keypress a chat")
+            cmd("/keypress r chat")
+            cmd("/keypress n chat")
+            cmd("/keypress enter chat")
+
+            delay(4)
+            cmd("/keypress enter chat")
+            cmd("/keypress /")
+            cmd("/keypress g chat")
+            cmd("/keypress s chat")
+            cmd("/keypress a chat")
+            cmd("/keypress y chat")
+            cmd("/keypress space chat")
+            cmd("/keypress v chat")
+            cmd("/keypress e chat")
+            cmd("/keypress r chat")
+            cmd("/keypress y chat")
+            cmd("/keypress space chat")
+            cmd("/keypress s chat")
+            cmd("/keypress p chat")
+            cmd("/keypress e chat")
+            cmd("/keypress c chat")
+            cmd("/keypress i chat")
+            cmd("/keypress a chat")
+            cmd("/keypress l chat")
+            cmd("/keypress enter chat")
+            delay(4)
+        end
+    end
+
+    -- restore to Common Tongue
+    cmdf("/language 1")
+end
+
+return TrainLanguage
