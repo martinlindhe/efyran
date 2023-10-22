@@ -124,18 +124,13 @@ function in_array(t, v)
     return false
 end
 
--- returns true if we are running the Emu build of MacroQuest (rof2)
+-- returns true if we are running the Emu build of MacroQuest (rof2 client)
 ---@return boolean
 function is_rof2()
     if mq.TLO.MacroQuest.BuildName() == "Emu" then
         return true
     end
     return false
-end
-
----@return boolean
-function is_emu()
-    return is_rof2()
 end
 
 -- returns true if `x` is a number (integer or float)
@@ -1014,7 +1009,7 @@ end
 -- returns true if we allow to cast buffs in neutral zones (allowed on emu, disallowed on live)
 ---@return boolean
 function allow_buff_in_zone()
-    if is_emu() then
+    if is_rof2() then
         return true
     end
     return not in_neutral_zone()

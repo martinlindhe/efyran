@@ -458,7 +458,7 @@ function QoL.Init()
     bind("/notstanding", function() bci.ExecuteAllWithSelfCommand("/if (${Me.Feigning} || ${Me.Ducking} || ${Me.Sitting}) /bc NOT STANDING") end)
 
     -- reports all toons that are not running e4
-    bind("/note4", function() bci.ExecuteAllWithSelfCommand("/lua run note4") end)
+    bind("/note4", function() bci.ExecuteAllWithSelfCommand("/lua run efyran/note4") end)
 
     bind("/running", function()
         -- XXX reports all running scripts on all toons
