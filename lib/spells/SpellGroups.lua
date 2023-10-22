@@ -27,6 +27,8 @@ SpellGroups.Lookup = {
     dru_str = "DRU",
     dru_skill_dmg_mod = "DRU",
     dru_runspeed = "DRU",
+    dru_epic2 = "DRU",
+    dru_oow_bp = "DRU",
 
     enc_manaregen = "ENC",
     enc_haste = "ENC",
@@ -34,6 +36,8 @@ SpellGroups.Lookup = {
     enc_cha = "ENC",
     enc_group_rune = "ENC",
     enc_single_rune = "ENC",
+    enc_epic2 = "ENC",
+    enc_oow_bp = "ENC",
 
     mag_group_ds = "MAG",
     mag_single_ds = "MAG",
@@ -108,6 +112,7 @@ SpellGroups.SHM = {
     -- L36 Spirit of Bih`Li (48-55% run speed, 15 atk, 36 min, group)
     shm_runspeed = {
         "Spirit of Bih`Li/CheckFor|Flight of Eagles",
+        "Spirit of Wolf",
     },
 
     -- L26 Quiuckness (27--30% haste, 11 min)
@@ -496,7 +501,7 @@ SpellGroups.CLR = {
 
 SpellGroups.DRU = {
     GroupHeals = { -- TODO make use of
-        "Moonshadow",               -- DRU/70: 1500 hp, cost 1100 mana (18s recast time)
+        "Moonshadow",               -- DRU/70: 1500 hp, cost 1100 mana, 4.5S cast, 18s recast
     },
 
     -- fast heal:
@@ -674,10 +679,10 @@ SpellGroups.DRU = {
         "Lion's Strength",
     },
 
-    -- L10 Spirit of Wolf (48-55% speed, 36 min)
-    -- L35 Pack Spirit (47-55% speed, 36 min, group)
-    -- L54 Spirit of Eagle (57-70% speed, 1 hour)
-    -- L62 Flight of Eagles (70% speed, 1 hour, group)
+    -- L10 Spirit of Wolf (48-55% speed, 36 min) Original
+    -- L35 Pack Spirit (47-55% speed, 36 min, group) Original
+    -- L54 Spirit of Eagle (57-70% speed, 1 hour) Luclin
+    -- L62 Flight of Eagles (70% speed, 1 hour, group) PoP
     dru_runspeed = {
         "Flight of Eagles",
         "Spirit of Eagle",
@@ -775,6 +780,110 @@ SpellGroups.DRU = {
         "Moonfire",
         "Frost",
         "Ice",
+    },
+
+    -- hot v2 - stacks with CLR/SHM/PAL HoT:
+    -- L60 Nature's Recovery (slot 2: 30 hp/tick, 3.0 min, recast 90s, cost 250 mana)
+    -- L63 Spirit of the Wood AA
+    dru_hot_v2 = {
+        "Nature's Recovery",
+    },
+
+    -- magic pbae nukes:
+    -- L21 Tremor (106-122 hp, aerange 30, recast 10s, cost 200 mana) Original
+    -- L31 Earthquake (214-246 hp, aerange 30, recast 24s, cost 375 mana) Original
+    -- L48 Upheaval (618-725 hp, aerange 35, recast 24, cost 625 mana) Kunark
+    -- L61 Catastrophe (850 hp, aerange 35, recast 24s, cost 650 mana) PoP
+    -- L66 Earth Shiver (1105 hp, aerange 35, recast 24s, cost 812 mana) OOW
+    dru_pbae_nuke = {
+        "Earth Shiver",
+        "Catastrophe",
+        "Upheaval",
+        "Earthquake",
+        "Tremor",
+    },
+
+    -- L70 Hungry Vines (ae snare, aerange 50, recast 30s, cost 500 mana, duration 12s) OOW
+    dru_pbae_snare = {
+        "Hungry Vines",
+    },
+
+    -- L10 Stinging Swarm (resist -100) Original
+    -- L24 Creeping Crud (resist -100) Original
+    -- L32 Drones of Doom (resist -100) Original
+    -- L40 Drifting Death (resist -100) Original
+    -- L53 Winged Death (resist -100) Kunark
+    -- L63 Swarming Death (resist -100, 216-225 hp/tick, cost 357 mana)
+    -- L68 Wasp Swarm (resist -100, 283-289 hp/tick, 54s, cost 454 mana)
+    dru_magic_dot = {
+        "Wasp Swarm",
+        "Swarming Death",
+        "Winged Death",
+        "Drifting Death",
+        "Drones of Doom",
+        "Creeping Crud",
+        "Stinging Swarm",
+    },
+
+    -- L63 Eci's Frosty Breath (-55 cr, -24-30 ac, resist adj -200)
+    -- L67 Glacier Breath (-55 cr, -30-36 ac, resist adj -200)
+    dru_cold_debuff = {
+        "Eci's Frosty Breath",
+        "Glacier Breath",
+    },
+
+    -- fire dot + ac debuff:
+    -- L01 Flame Lick (-1-3 hp/tick, slot 10: -3 ac) Fire Beetle Eye
+    -- L62 Immolation of Ro (-145 hp/tick, -35 fr, slot 10: -27 ac, resist adj -50) PoP
+    -- L65 Sylvan Embers (-132-142 hp/tick, slot 3: -40 fr, slot 10: -30 ac, resist adj -50, 1 min) GoD
+    -- L67 Immolation of the Sun (-174-178 hp/tick, slot 3: -40 fr, slot 10: -36 ac, resist adj -50) OOW
+    dru_ac_dot = {
+        "Immolation of the Sun",
+        "Sylvan Embers",
+        "Immolation of Ro",
+        "Flame Lick",
+    },
+
+    -- L29 Immolate (-24 hp/tick, -11-18 ac) Fire Beetle Eye
+    -- L49 Vengeance of the Wild (-124 hp/tick)
+    -- L55 Vengeance of Nature (resist adj -30, -170-174 hp/tick)
+    -- L64 Vengeance of Tunare (-293-310 hp/tick)
+    -- L69 Vengeance of the Sun (-408-412 hp/tick)
+    dru_fire_dot = {
+        "Vengeance of the Sun",
+        "Vengeance of Tunare",
+        "Vengeance of Nature",
+        "Vengeance of the Wild",
+        "Immolate",
+    },
+
+    -- fire debuffs (slot 7):
+    -- L56 Ro's Smoldering Disjunction (-150 hp, slot 4: -58-80 atk, slot 6: -26-33 ac, slot 7: -64-71 fr) Luclin
+    -- L61 Hand of Ro (slot 7: -72 fr, slot 10: -100 atk, slot 12: -15 ac, resist adj -200) PoP
+    dru_fire_debuff = {
+        "Hand of Ro",
+        "Ro's Smoldering Disjunction",
+    },
+
+    -- L62 Ro's Illumination (slot 5: -80 atk, slot 6: -15 ac) PoP
+    -- L67 Sun's Corona (FIRE: slot 5: -90 atk, slot 6: -19 ac) OOW
+    dru_attack_debuff = {
+        "Sun's Corona",
+        "Ro's Illumination",
+    },
+
+    -- epic 1.5: Staff of Living Brambles
+    -- epic 2.0: Staff of Everliving Brambles (3 min recast, increase spell damage by 50% for 0.5 min)
+    dru_epic2 = {
+        "Staff of Everliving Brambles",
+        "Staff of Living Brambles",
+    },
+
+    -- oow t1 chest: Greenvale Jerkin (slot 1: reduce cast time by 25% for 0.5 min)
+    -- oow t2 chest: Everspring Jerkin of the Tangled Briars (slot 1: reduce cast time by 25% for 0.7 min)
+    dru_oow_bp = {
+        "Everspring Jerkin of the Tangled Briars",
+        "Greenvale Jerkin",
     },
 }
 
