@@ -59,13 +59,10 @@ local function canLootItem(item)
         if item.Stackable() and item.FreeStack() > 0 then
             return true
         end
-
-        all_tellf("My inventory is full!", item.Name())
-        mq.cmd("/beep")
         return false
-  end
+    end
 
-  return true
+    return true
 end
 
 local function lootItem(slotNum)
@@ -129,14 +126,21 @@ local function lootCorpse()
     if corpse.Items() > 0 then
         log.Debug("Looting <%s> with # of items: %d", mq.TLO.Target.Name(), corpse.Items())
         for i=1,corpse.Items() do
-        local itemToLoot = corpse.Item(i) --[[@as item]]
-        log.Debug("Looting %s from slot %d of %d", itemToLoot.Name(), i, corpse.Items())
+            local itemToLoot = corpse.Item(i) --[[@as item]]
+            log.Debug("Looting %s from slot %d of %d", itemToLoot.Name(), i, corpse.Items())
 
-        if canLootItem(itemToLoot) then
-            lootItem(i)
-            mq.delay(10)
-        end
-        log.Debug("Done looting slot <%d>", i)
+            if (mq.TLO.Me.FreeInventory() < 1 and not itemToLoot.Stackable())
+                or (itemToLoot.Stackable() and itemToLoot.FreeStack() == 0) then
+                all_tellf("ERROR: Inventory full! Cannot loot %s", itemToLoot.ItemLink("CLICKABLE")())
+                mq.cmd("/beep 1")
+                return false
+            end
+
+            if canLootItem(itemToLoot) then
+                lootItem(i)
+                mq.delay(10)
+            end
+            log.Debug("Done looting slot <%d>", i)
         end
     end
 
