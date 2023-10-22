@@ -242,6 +242,39 @@ SpellGroups.SHM = {
         "Unfailing Reverence",
         "Charisma",
     },
+
+    -- L01 Burst of Flame
+    shm_fire_nuke = {
+        "Burst of Flame",
+    },
+
+    -- L05 Frost Rift
+    -- L14 Spirit Strike (72-78 hp, cost 44 mana)
+    -- L23 Frost Strike (142-156 hp, cost 78 mana)
+    -- L33 Winter's Roar (236-246 hp, cost 116 mana)
+    -- L44 Blizzard Blast (332-346 hp, cost 147 mana)
+    -- L54 Ice Strike (511 hp, cost 198 mana)
+    -- L64 Velium Strike (925 hp, cost 330 mana)
+    -- L69 Ice Age (1273 hp, cost  413 mana)
+    shm_cold_nuke = {
+        "Ice Age",
+        "Velium Strike",
+        "Ice Strike",
+        "Blizzard Blast",
+        "Winter's Roar",
+        "Frost Strike",
+        "Spirit Strike",
+        "Frost Rift",
+    },
+
+    -- L54 Blast of Venom (704 hp, cost 289 mana)
+    -- L61 Spear of Torment (870 hp, cost 340 mana)
+    -- L66 Yoppa's Spear of Venom (1197 hp, cost 425 mana)
+    shm_poison_nuke = {
+        "Yoppa's Spear of Venom",
+        "Spear of Torment",
+        "Blast of Venom",
+    },
 }
 
 SpellGroups.CLR = {
@@ -1033,6 +1066,20 @@ SpellGroups.MAG = {
         "Malaise",
     },
 
+    -- L08 Renew Elements
+    -- L20 Renew Summoning
+    -- Lxx Primal Remedy
+    -- L59 Mend Companion AA (36 min reuse without Hastened Mending AA)
+    -- L60 Transon's Elemental Renewal (849-873 hp, -20 dr pr curse, cost 237 mana)
+    -- L64 Planar Renewal (1190-1200 hp, -24 dr pr curse, cost 290 mana)
+    -- L69 Renewal of Jerikor (1635-1645 hp, -28 dr pr curse, cost 358 mana)
+    mag_pet_heal = {
+        "Renewal of Jerikor",
+        "Planar Renewal",
+        "Transon's Elemental Renewal",
+        "Renew Summoning",
+        "Renew Elements",
+    },
 }
 
 SpellGroups.NEC = {
