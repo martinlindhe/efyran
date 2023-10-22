@@ -687,7 +687,7 @@ function QoL.loadRequiredPlugins()
     for k, v in pairs(requiredPlugins) do
         if not is_plugin_loaded(v) then
             load_plugin(v)
-            log.Debug("Loaded plugin %s, was not loaded", v)
+            log.Debug("Loaded base plugin %s, was not loaded", v)
         end
     end
 
@@ -699,7 +699,7 @@ function QoL.loadRequiredPlugins()
         for k, v in pairs(requiredEmuPlugins) do
             if not is_plugin_loaded(v) then
                 load_plugin(v)
-                log.Debug("Loaded plugin %s, was not loaded", v)
+                log.Debug("Loaded emu plugin %s, was not loaded", v)
             end
         end
     end

@@ -132,7 +132,7 @@ local function lootCorpse()
                 or (itemToLoot.Stackable() and itemToLoot.FreeStack() == 0) then
                 all_tellf("ERROR: Inventory full! Cannot loot %s", itemToLoot.ItemLink("CLICKABLE")())
                 mq.cmd("/beep 1")
-                return false
+                break
             end
 
             if canLootItem(itemToLoot) then

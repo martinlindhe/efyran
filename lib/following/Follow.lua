@@ -34,7 +34,7 @@ function Follow.Start(spawnName, force)
         return
     end
     if not force and not spawn.LineOfSight() then
-        all_tellf("I cannot see [+r+]r%s[+x+]", spawn.Name())
+        all_tellf("I cannot see [+r+]%s[+x+]", spawn.Name())
         return
     end
 
