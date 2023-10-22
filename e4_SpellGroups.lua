@@ -887,13 +887,11 @@ SpellGroups.ENC = {
         "Tashani",
         "Tashan",
     },
-
     -- L04 Mesmerize (mez to L55, 1% memblur, 0.4 min, 20 mana)
     -- L16 Enthrall (mez to L55, 1% memblur, 0.8 min, 50 mana)
     -- L34 Entrance
     -- L49 Dazzle
     -- L54 Glamour of Kintaz (low resist mez)
-    -- L59 Rapture (low resist mez)
     enc_mez = {
         "Rapture",
         "Glamour of Kintaz",
@@ -901,6 +899,18 @@ SpellGroups.ENC = {
         "Entrance",
         "Enthrall",
         "Mesmerize",
+    },
+
+    -- L16 Mesmerization
+    -- L52 Fascination
+    enc_ae_mez = {
+        "Fascination",
+        "Mesmerization"
+    },
+
+    -- L59 Rapture (low resist mez)
+    enc_unresistable_mez  = {
+        "Rapture",
     },
 
     -- L12 Languid Pace (18-30% slow)
@@ -1649,6 +1659,17 @@ SpellGroups.BRD = {
     -- L51 Selo's Song of Travel (levi + invis)
     brd_travel = {
         "Selo's Song of Travel",
+    },
+    -- L28 Crission's Pixie Strike
+    -- L53 Song of Twilight
+    brd_mez = {
+        "Song of Twilight",
+        "Crission's Pixie Strike"
+    },
+
+    -- L15 Kelin's Lucid Lullaby
+    brd_ae_mez  = {
+        "Kelin's Lucid Lullaby"
     }
 }
 
