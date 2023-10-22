@@ -4,6 +4,7 @@ local broadcast = require 'broadcast/broadcast'
 local target = require 'target'
 local assist = require("e4_Assist")
 local spellGroups = require 'e4_SpellGroups'
+local botSettings = require 'e4_BotSettings'
 local ezmq = require("ezmq/spell")
 local mezzSpells = require("crowdcontrol/mesmerize_spells")
 local repository = require 'crowdcontrol/repository'
@@ -35,20 +36,24 @@ local function getMezzSpell(category)
 end
 
 local function canCast(spell)
-    local me = mq.TLO.Me
-    if me.Stunned() then
+    if is_stunned() then
         log.Debug("Unable to cast <%s>, I am stunned.", spell.Name())
       return false
     end
 
-    if me.Casting() then
+    if ezmq.is_casting() then
         log.Debug("Unable to cast <%s>, already casting <%s>.", spell.Name(), me.Casting.Name())
       return false
     end
 
+    local me = mq.TLO.Me
     if spell.Mana() > me.CurrentMana() then
         log.Debug("Unable to cast <%s>, not enough mana.", spell.Name())
       return false
+    end
+
+    if not ezmq.is_spell_ready(spell.Name()) then
+        return false
     end
 
     return true
@@ -69,6 +74,10 @@ local function canCastOn(spawn, spell)
     end
 
     if not spawn.Aggressive() then
+        return false
+    end
+
+    if spell.MaxLevel() < spawn.Level() then
         return false
     end
 
@@ -120,6 +129,16 @@ local function doSingleMezz()
     end
 end
 
+
+local function tick()
+    if botSettings.settings.automezz ~= true
+    or (not is_brd() and not is_enc()) then
+        return
+    end
+
+    doSingleMezz()
+end
+
 return {
-    doSingleMezz = doSingleMezz
+    Tick = tick
 }

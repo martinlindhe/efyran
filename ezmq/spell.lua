@@ -1,9 +1,31 @@
+local mq = require 'mq'
+
+-- Am I casting a spell/song?
+---@return boolean
+local function is_casting()
+    return mq.TLO.Me.Casting() ~= nil
+end
 
 -- returns true if `name` is a spell currently memorized in a gem
 ---@param name string
 ---@return boolean
 local function is_memorized(name)
     return mq.TLO.Me.Gem(mq.TLO.Spell(name).RankName())() ~= nil
+end
+
+-- Is spell `name` ready to cast?
+---@param name string
+---@return boolean
+local function is_spell_ready(name)
+    if mq.TLO.Me.SpellInCooldown() then
+        -- global cooldown
+        return false
+    end
+    local spell = get_spell(name)
+    if spell == nil then
+        return false
+    end
+    return mq.TLO.Me.SpellReady(spell.RankName())()
 end
 
 -- Is spell in my spellbook?
@@ -22,7 +44,6 @@ local function has_spell(name)
     return mq.TLO.Me.Book(mq.TLO.Spell(name).RankName())() ~= nil
 end
 
-
 ---@param name string
 ---@return spell|nil
 function get_spell(name)
@@ -34,7 +55,9 @@ function get_spell(name)
 end
 
 return {
+    is_casting = is_casting,
     is_memorized = is_memorized,
+    is_spell_ready = is_spell_ready,
     has_spell = has_spell,
     get_spell = get_spell,
 }

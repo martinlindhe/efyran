@@ -14,6 +14,7 @@ local buffs   = require("e4_Buffs")
 local group   = require("e4_Group")
 local follow  = require("e4_Follow")
 local heal    = require("e4_Heal")
+local crowdcontrol = require("crowdcontrol.mesmerize")
 local tribute = require("e4_Tribute")
 local qol     = require("e4_QoL")
 local alerts  = require("e4_Alerts")
@@ -38,6 +39,9 @@ log.Info("E4 started")
 -- MAIN LOOP
 while true do
     heal.Tick()
+    doevents()
+
+    crowdcontrol.Tick()
     doevents()
 
     buffs.Tick()
