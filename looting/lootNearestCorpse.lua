@@ -2,10 +2,10 @@ local mq = require 'mq'
 local log = require("knightlinc/Write")
 local broadcast = require 'broadcast/broadcast'
 local timer = require 'Timer'
-local moveTo = require 'movement/moveTo'
 local repository = require 'looting/repository'
 local bard = require 'Class_Bard'
 local target = require 'target'
+require("ezmq")
 
 local function typeChrs(message, ...)
   -- https://stackoverflow.com/questions/829063/how-to-iterate-individual-characters-in-lua-string
@@ -167,7 +167,7 @@ local function lootNearestCorpse()
     local closestCorpse = mq.TLO.NearestSpawn(1, searchCorpseString)
     if closestCorpse() and target.EnsureTarget(closestCorpse.ID()) then
       if closestCorpse.Distance() > 16 and closestCorpse.DistanceZ() < 80 then
-        moveTo.MoveToLoc(closestCorpse.X(), closestCorpse.Y(), closestCorpse.Z(), 20, 12)
+        move_to(closestCorpse.ID())
       end
 
       if closestCorpse() and closestCorpse.Distance() <= 20 and closestCorpse.DistanceZ() < 40 and target.EnsureTarget(closestCorpse.ID()) then
@@ -184,7 +184,7 @@ local function lootNearestCorpse()
   end
 
   bard.resumeMelody()
-  moveTo.MoveToLoc(startX, startY, startZ, 20, 1)
+  move_to_loc(startY, startX, startZ)
 end
 
 return lootNearestCorpse

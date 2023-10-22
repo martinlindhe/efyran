@@ -38,14 +38,16 @@ function line_of_sight_to(spawn)
 end
 
 -- Move to the location of `spawn` using MQ2Nav.
+-- Returns true on success
 ---@param spawnID integer
+---@return boolean
 function move_to(spawnID)
     log.Debug("move_to %d", spawnID)
 
     local spawn = spawn_from_id(spawnID)
     if spawn == nil or spawn() == nil then
         all_tellf("move_to: lost target spawn %d", spawnID)
-        return
+        return false
     end
 
     --if not line_of_sight_to(spawn) then
@@ -56,7 +58,7 @@ function move_to(spawnID)
     local dist = 10
 
     if spawn.Distance() < dist then
-        return
+        return true
     end
 
     if mq.TLO.Stick.Active() then
@@ -75,7 +77,7 @@ function move_to(spawnID)
     -- Uses MQ2MoveUtils, NOTE: mq2advpath don't have a "move to" command
     mq.cmdf("/moveto id %d dist %d", spawnID, dist)
     if spawn == nil or spawn() == nil then
-        return
+        return false
     end
 
     mq.delay(30000, function() -- 30s
@@ -91,6 +93,7 @@ function move_to(spawnID)
     if mq.TLO.Stick.Active() then
         cmd("/stick off")
     end
+    return spawn.Distance() < dist
 end
 
 -- Returns true if low on endurance

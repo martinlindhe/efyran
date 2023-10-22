@@ -2,10 +2,10 @@
 local mq = require 'mq'
 local logger = require("knightlinc/Write")
 local timer = require 'Timer'
-local moveTo = require 'movement/moveTo'
 local bard = require 'Class_Bard'
 local merchant = require 'looting/merchant'
 local repository = require 'looting/repository'
+require("ezmq")
 
 ---@param itemId integer
 ---@param itemName string
@@ -84,7 +84,7 @@ local function sellItems()
   end
 
   local merchantName= nearestMerchant.CleanName()
-  if not moveTo.MoveToLoc(nearestMerchant.X(), nearestMerchant.Y(), nearestMerchant.Z(), 20, 12) then
+  if not move_to(nearestMerchant.ID()) then
     logger.Debug("Unable to reach merchant <%s>", merchantName)
     return
   end
@@ -108,7 +108,7 @@ local function sellItems()
   end
 
   bard.resumeMelody()
-  moveTo.MoveToLoc(startX, startY, startZ, 20, 12)
+  move_to_loc(startY, startX, startZ)
   logger.Info("Completed selling items to [%s].", merchantName)
 end
 

@@ -2,7 +2,6 @@
 
 
 sep 2023:
-mq bug? /handin fails if item is in bag10 on emu. bag 1 to 9 seem to work fine (also bags must be open on emu, dont need on live)
 
 - enc auto mez
 
@@ -12,9 +11,7 @@ mq bug? /handin fails if item is in bag10 on emu. bag 1 to 9 seem to work fine (
 
 - pet classes: auto equip pet focus items while summoning pets
 
-- rez: dont try to rez "this corpse cannot be ressurected" corpses, instead force that toon to autoloot their corpse
-
-- qol: auto join shared task: "XXX has asked you to join the shared task 'XXX'. Would you like to join?"
+- rez: dont try to rez "this corpse cannot be ressurected" corpses, instead force that toon to loot their corpse
 
 - / slash commands: make sure EVERY COMMAND is put on command queue so they will not interfere.
     slash commands are async out of efyran main-loop and can change data that is beeing looped over
@@ -57,19 +54,6 @@ tribute:
     https://gitlab.com/redguides/plugins/MQ2TributeManager
 
 
-
-
-loot:
-    check out
-    https://www.mmobugs.com/wiki/index.php?title=MQ2AutoLoot
-    https://gitlab.com/redguides/plugins/mq2autoloot
-    https://gitlab.com/redguides/plugins/MQ2AutoLootSort
-    https://www.redguides.com/wiki/MQ2LootManager                           <-- only for LIVE
-    https://www.mmobugs.com/wiki/index.php?title=MQ2MasterLooter
-
-    git submodule add -b master -f https://gitlab.com/redguides/plugins/MQ2AutoLoot.git plugins/MQ2AutoLoot
-    git submodule add -b master -f https://gitlab.com/redguides/plugins/MQ2AutoLootSort.git plugins/MQ2AutoLootSort
-    git submodule add -b master -f https://github.com/jessebevil/MQ2LootManager.git plugins/MQ2LootManager
 
 
 auto aa:
