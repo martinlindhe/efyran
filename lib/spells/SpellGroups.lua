@@ -916,19 +916,45 @@ SpellGroups.ENC = {
         "Tashan",
     },
 
-    -- L04 Mesmerize (mez to L55, 1% memblur, 0.4 min, 20 mana)
-    -- L16 Enthrall (mez to L55, 1% memblur, 0.8 min, 50 mana)
-    -- L34 Entrance
-    -- L49 Dazzle
-    -- L54 Glamour of Kintaz (low resist mez)
-    -- L59 Rapture (low resist mez)
-    enc_mez = {
-        "Rapture",
-        "Glamour of Kintaz",
-        "Dazzle",
-        "Entrance",
-        "Enthrall",
-        "Mesmerize",
+
+    --
+    -- single mez:
+    -- L04 Mesmerize         (0.4 min/L55, 1% memblur, 20 mana, 2.25s recast) Original
+    -- L16 Enthrall          (0.8 min/L55, 1% memblur, 50 mana, 2.5s recasat) Original
+    -- L34 Entrance          (1.2 min/L55, 1% memblur, 85 mana, 3.75s recast) Original
+    -- L49 Dazzle            (1.6 min/L55, 1% memblur, 125 mana, 5s recast) Original
+    -- L54 Glamour of Kintaz (0.9 min/L57, resist adj -10, 70% memblur, 125 mana, 1.5s recast) Kunark
+    -- L59 Rapture           (0.7 min/L61, resist adj -1000, 80% memblur, 250 mana, 24s recast) Kunark
+    -- L61 Apathy            (0.9 min/L62, reisst adj -10, 70% memblur, 225 mana) PoP
+    -- L63 Sleep             (0.9 min/L65, resist adj -10, 75% memblur, 275 mana) PoP
+    -- L64 Bliss             (0.9 min/L68, resist adj -10, 80% memblur, 300 mana) PoP
+    -- L67 Felicity          (0.9 min/L70, resist adj -10, 70% memblur, 340 mana) OOW
+    -- L69 Euphoria          (0.9 min/L73, resist adj -10, 70% memblur, 375 mana) OOW
+    enc_single_mez = {
+        "Euphoria/MaxLevel|73",
+        "Felicity/MaxLevel|70",
+        "Bliss/MaxLevel|68",
+        "Sleep/MaxLevel|65",
+        "Apathy/MaxLevel|62",
+        "Rapture/MaxLevel|61",
+        "Glamour of Kintaz/MaxLevel|57",
+        "Dazzle/MaxLevel|55",
+        "Entrance/MaxLevel|55",
+        "Enthrall/MaxLevel|55",
+        "Mesmerize/MaxLevel|55",
+    },
+
+    -- L16 Mesmerization (0.4 min/L55, aerange 30, 1% memblur, cost 70 mana) Original
+    -- L52 Fascination (36 sec/L55, 35 aerange resist adj -10, 1% memblur, cost 200 mana) Kunark
+    -- L62 Word of Morell (0.3 min/L65, aerange 30, cost 300 mana) PoP
+    -- L65 Bliss of the Nihil (0.6 min/L68, aerange 25, cost 850 mana, 6 sec recast) GoD
+    -- L69 Wake of Felicity (0.9 min/L70, 25 aerange, 6 sec recast)
+    enc_mez_ae = {
+        "Wake of Felicity/MaxLevel|70",
+        "Bliss of the Nihil/MaxLevel|68",
+        "Word of Morell/MaxLevel|65",
+        "Fascination/MaxLevel|55",
+        "Mesmerization/MaxLevel|55",
     },
 
     -- L12 Languid Pace (18-30% slow)
