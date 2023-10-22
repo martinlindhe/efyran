@@ -5,10 +5,8 @@ local commandQueue = require('e4_CommandQueue')
 
 local bci = broadCastInterfaceFactory()
 
-local trainLanguage = require 'commands/train/language'
-
 local trainers = {
-    language = trainLanguage,
+    language = require 'commands/train/language',
 }
 
 ---@class TrainCommand
@@ -16,8 +14,6 @@ local trainers = {
 
 ---@param command TrainCommand
 local function execute(command)
-    log.Info("XXX train skill %s", command.Skill)
-
     local trainer = trainers[command.Skill]
     if trainer == nil then
         all_tellf("ERROR: /train unhandled skill %s", command.Skill)
