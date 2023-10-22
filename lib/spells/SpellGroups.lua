@@ -2031,6 +2031,17 @@ SpellGroups.BST = {
         "Spirit of Monkey",
     },
 
+    -- L47 Frenzy (6-10 ac, 18-25 agi, 19-28 str, 25 dex, 10 min)
+    -- L61 Growl of the Leopard (15% skill damage mod, 80 hp/tick, max hp 850, 1 min, cost 500 mana)
+    -- L65 Ferocity (40 sta, 150 atk, 65 all resists, 6.5 min)
+    -- L70 Ferocity of Irionu (52 sta, 187 atk, 65 all resists, 6.5 min, 2 min recast)
+    bst_ferocity = {
+        "Ferocity of Irionu",
+        "Ferocity",
+        "Growl of the Leopard",
+        "Frenzy",
+    },
+
     -- L37 Yekan's Quickening (43-45 str, 60% haste, 20 atk, 11-12 ac)
     -- L52 Bond of the Wild (51-55 str, 60% haste, 25 atk, 13-15 ac)
     -- L55 Omakin's Alacrity (60 str, 65-70% haste, 40 atk, 30 ac)
@@ -2070,6 +2081,113 @@ SpellGroups.BST = {
         "Spirit of Inferno",
         "Spirit of Lightning",
     },
+
+    -- L09 Sharik's Replenishing
+    -- L15 Keshuval's Rejuvenation
+    -- L27 Herikol's Soothing (274-298 hp, decrease dr 10, pr 10, cr 10)
+    -- L36 Yekan's Recovery
+    -- L49 Vigor of Zehkes (671 hp, decrease dr 10, pr 10, cr 10, cost 206 mana)
+    -- L52 Aid of Khurenz (1044 hp, decrease dr 16, pr 16, cr 16, cost 293 mana)
+    -- L55 Sha's Restoration (1426-1461 hp, decrease dr 20, pr 20, cr 20, cost 404 mana)
+    -- L61 Healing of Sorsha (2018-2050 hp, decrease dr 24, pr 24, cr 24, cost 495 mana)
+    -- L66 Healing of Mikkily (2810 hp, decrease dr 28, pr 28, cr 28, cost 610 mana)
+    bst_pet_heal = {
+        "Healing of Mikkily",
+        "Healing of Sorsha",
+        "Sha's Restoration",
+        "Aid of Khurenz",
+        "Vigor of Zehkes",
+        "Yekan's Recovery",
+        "Herikol's Soothing",
+        "Keshuval's Rejuvenation",
+        "Sharik's Replenishing",
+    },
+
+    -- ice nukes:
+    -- L12 Blast of Frost (71 hp, cost 40 mana)
+    -- L26 Spirit Strike (72-78 hp, cost 44 mana)
+    -- L33 Ice Spear (207 hp, cost 97 mana)
+    -- L47 Frost Shard (281 hp, cost 119 mana)
+    -- L54 Ice Shard (404 hp, cost 156 mana)
+    -- L59 Blizzard Blast (332-346 hp, cost 147 mana)
+    -- L63 Frost Spear (600 hp, cost 235 mana)
+    -- L65 Trushar's Frost (742 hp, cost 274 mana)
+    -- L65 Ancient: Frozen Chaos (836 hp, cost 298 mana)
+    -- L69 Glacier Spear (958 hp, cost 310 mana)
+    -- L70 Ancient: Savage Ice (1034 hp, cost 329 mana, 30s recast)
+    bst_ice_nuke = {
+        "Ancient: Savage Ice",
+        "Glacier Spear",
+        "Ancient: Frozen Chaos",
+        "Trushar's Frost",
+        "Frost Spear",
+        "Blizzard Blast",
+        "Ice Shard",
+        "Frost Shard",
+        "Ice Spear",
+        "Spirit Strike",
+        "Blast of Frost",
+    },
+
+    -- slow:
+    -- L65 Sha's Revenge (MAGIC, 65% slow, 3m30s duration)
+    -- L70 Sha's Legacy (MAGIC -30 adj, 65% slow, 1m30s duration)
+    bst_slow = {
+        "Sha's Legacy",
+        "Sha's Revenge",
+    },
+
+    -- quick heals:
+    -- L06 Minor Healing (12-20 hp, cost 10 mana)
+    -- L20 Light Healing (47-65 hp, cost 28 mana)
+    -- L36 Healing (135-175 hp, cost 65 mana)
+    -- L57 Greater Healing (280-350 hp, cost 115 mana)
+    -- L62 Chloroblast (994-1044 hp, cost 331 mana)
+    -- L65 Trushar's Mending (1048 hp, cost 330 mana)
+    -- L67 Muada's Mending (1176-1206 hp, cost 376 mana, 3s cast time)
+    bst_quick_heal = {
+        "Muada's Mending",
+        "Trushar's Mending",
+        "Chloroblast",
+        "Greater Healing",
+        "Healing",
+        "Light Healing",
+        "Minor Healing",
+    },
+
+    -- L19 Tainted Breath (14-19/tick, poison)
+    -- L35 Envenomed Breath (59-71/tick, poison, cost 181 mana)
+    -- L52 Venom of the Snake (104-114 hp/tick, poison, cost 172 mana)
+    -- L61 Scorpion Venom (162-170/tick, poison, cost 350 mana)
+    -- L65 Turepta Blood (168/tick, poison, cost 377 mana)
+    bst_posion_dot = {
+        "Turepta Blood",
+        "Scorpion Venom",
+        "Venom of the Snake",
+        "Envenomed Breath",
+        "Tainted Breath",
+    },
+
+    -- L14 Sicken (3-5/tick, disease)
+    -- L65 Plague (74-79 hp/tick, disease, cost 172 mana)
+    bst_disease_dot = {
+        "Plague",
+        "Sicken",
+    },
+
+    -- epic 1.5: Savage Lord's Totem (pet buff: double attack 5%, evasion 10%, hp 800, proc Savage Blessing Strike)
+    -- epic 2.0: Spiritcaller Totem of the Feral (pet buff: double attack 8%, evasion 12%, hp 1000, proc Wild Spirit Strike)
+    bst_epic2 = {
+        "Spiritcaller Totem of the Feral",
+        "Savage Lord's Totem",
+    },
+
+    -- oow T1 bp: Beast Tamer's Jerkin (Wild Spirit Infusion, +50% skill dmg mod, -15% dmg taken for 18s)
+    -- oow T2 bp: Savagesoul Jerkin of the Wilds (Savage Spirit Infusion, +50% skill dmg mod, -15% dmg taken for 30s)
+    bst_oow_bp = {
+        "Savagesoul Jerkin of the Wilds",
+        "Beast Tamer's Jerkin",
+    }
 }
 
 SpellGroups.BRD = {
