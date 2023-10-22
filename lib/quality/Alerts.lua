@@ -1,16 +1,7 @@
--- quality of life tweaks
-
 local mq = require("mq")
 local log = require("knightlinc/Write")
-local timer = require("Timer")
 
-local assist  = require("assisting/Assist")
-local follow  = require("following/Follow")
-local commandQueue = require("CommandQueue")
-local botSettings = require("settings/BotSettings")
-local loot  = require("looting/Loot")
-local buffs   = require("spells/Buffs")
-local globalSettings = require("settings/default/Settings")
+local assist  = require("lib/assisting/Assist")
 
 require("autobank")
 

@@ -1,20 +1,20 @@
 require("ezmq")
 require("commands")
-require("looting/markItemForDestroying")
-require("looting/markItemForSelling")
+require("lib/looting/markItemForDestroying")
+require("lib/looting/markItemForSelling")
 
 local log = require("knightlinc/Write")
 
 local commandQueue = require("CommandQueue")
 
-local assist  = require("assisting/Assist")
-local buffs   = require("spells/Buffs")
-local group   = require("following/Group")
-local follow  = require("following/Follow")
-local heal    = require("healing/Heal")
-local qol     = require("quality/QoL")
-local tribute = require("quality/Tribute")
-local alerts  = require("quality/Alerts")
+local assist  = require("lib/assisting/Assist")
+local buffs   = require("lib/spells/Buffs")
+local group   = require("lib/following/Group")
+local follow  = require("lib/following/Follow")
+local heal    = require("lib/healing/Heal")
+local qol     = require("lib/quality/QoL")
+local tribute = require("lib/quality/Tribute")
+local alerts  = require("lib/quality/Alerts")
 
 seed_process()
 

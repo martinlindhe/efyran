@@ -1,8 +1,8 @@
 local mq = require("mq")
 local log = require("knightlinc/Write")
 
-local botSettings = require("settings/BotSettings")
-local PetSpells = require("pets/PetSpells")
+local botSettings = require("lib/settings/BotSettings")
+local PetSpells = require("lib/pets/PetSpells")
 
 local Pet = {}
 

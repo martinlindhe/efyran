@@ -1,9 +1,9 @@
-local mq = require 'mq'
+local mq = require("mq")
 local log = require("knightlinc/Write")
-local broadcast = require 'broadcast/broadcast'
-local timer = require 'Timer'
-local repository = require 'looting/repository'
-local bard = require 'classes/Bard'
+local broadcast = require("broadcast/broadcast")
+local timer = require("Timer")
+local repository = require("lib/looting/repository")
+local bard = require("lib/classes/Bard")
 require("ezmq")
 
 local function typeChrs(message, ...)

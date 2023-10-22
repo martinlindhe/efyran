@@ -18,7 +18,7 @@ settings.self_buffs = {
 
 settings.healing = {
     life_support = {
-        "Minor Healing/HealPct|30",
+        "Minor lib/healing/HealPct|30",
     },
 }
 

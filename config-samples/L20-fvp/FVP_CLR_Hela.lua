@@ -27,7 +27,7 @@ settings.healing = {
         -- L01 Minor Healing (10 hp, 1s cast, 10 mana)
         -- L05 Light Healing (26-33 hp, 2s cast, 25 mana)
         -- L14 Healing (14-100 hp, 3s cast, 60 mana)
-        "Healing/HealPct|80/MinMana|5",
+        "lib/healing/HealPct|80/MinMana|5",
 
         -- 15 min reuse, 18s invuln
         "Divine Aura/HealPct|40/MinMobs|2/Not|raid",
@@ -39,11 +39,11 @@ settings.healing = {
     },
 
     tank_heal = {
-        "Healing/HealPct|85/MinMana|5",
+        "lib/healing/HealPct|85/MinMana|5",
     },
 
     all_heal = {
-        "Healing/HealPct|75/MinMana|20",
+        "lib/healing/HealPct|75/MinMana|20",
     },
 }
 

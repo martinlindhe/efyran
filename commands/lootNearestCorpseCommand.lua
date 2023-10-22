@@ -1,6 +1,6 @@
 local mq = require("mq")
 local commandQueue = require("CommandQueue")
-local lootNearestCorpse = require 'looting/lootNearestCorpse'
+local lootNearestCorpse = require("lib/looting/lootNearestCorpse")
 
 local function execute()
     lootNearestCorpse()

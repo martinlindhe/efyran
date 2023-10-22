@@ -3,7 +3,7 @@
 require("ezmq")
 local log = require("knightlinc/Write")
 
-local loot = require("looting/Loot")
+local loot = require("lib/looting/Loot")
 
 local lootSettings = loot.ReadLootSettings()
 

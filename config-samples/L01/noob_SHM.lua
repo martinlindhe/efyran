@@ -18,11 +18,11 @@ settings.healing = {
     },
 
     tank_heal = {
-        "Minor Healing/HealPct|45/MinMana|5",
+        "Minor lib/healing/HealPct|45/MinMana|5",
     },
 
     all_heal = {
-        "Minor Healing/HealPct|44/MinMana|20",
+        "Minor lib/healing/HealPct|44/MinMana|20",
     },
 
     ["who_to_heal"] = "Tanks/All",

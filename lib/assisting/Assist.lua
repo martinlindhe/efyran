@@ -2,10 +2,10 @@ local mq = require("mq")
 local log = require("knightlinc/Write")
 local timer = require("Timer")
 
-local follow  = require("following/Follow")
-local buffs  = require("spells/Buffs")
-local botSettings = require("settings/BotSettings")
-local heal    = require("healing/Heal")
+local follow  = require("lib/following/Follow")
+local buffs  = require("lib/spells/Buffs")
+local botSettings = require("lib/settings/BotSettings")
+local heal    = require("lib/healing/Heal")
 
 local Assist = {
     targetID = 0, -- the current spawn I am attacking

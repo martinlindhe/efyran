@@ -1,7 +1,7 @@
 local mq = require 'mq'
 local log = require("knightlinc/Write")
-local broadcast = require 'broadcast/broadcast'
-local repository = require 'looting/repository'
+local broadcast = require("broadcast/broadcast")
+local repository = require("lib/looting/repository")
 
 ---@param itemId integer
 ---@param itemName string

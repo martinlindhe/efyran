@@ -10,8 +10,8 @@ local destroyItemIDs = {
     25654, -- Crystalline Silk Shirt
 }
 
--- autoinventories all items on cursor. returns false on failure
-function combine_clear_cursor()
+-- autoinventories all items on cursor and autodestroys known items. returns false on failure
+local function clear_cursor_and_autodestroy()
     while true do
         if mq.TLO.Cursor.ID() == nil then
             return true
@@ -58,7 +58,7 @@ while true do
     if mq.TLO.Window("TradeskillWnd").Child("CombineButton").Enabled() then
         cmd("/notify TradeskillWnd CombineButton leftmouseup")
         delay(1000, function() return mq.TLO.Cursor.ID() ~= nil end)
-        if not combine_clear_cursor() then
+        if not clear_cursor_and_autodestroy() then
             print("Failed to clear cursor, giving up.")
             return
         end

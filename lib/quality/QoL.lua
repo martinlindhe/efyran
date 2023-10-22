@@ -5,11 +5,11 @@ local log = require("knightlinc/Write")
 local timer = require("Timer")
 local broadCastInterfaceFactory = require 'broadcast/broadcastinterface'
 
-local assist  = require("assisting/Assist")
-local follow  = require("following/Follow")
-local botSettings = require("settings/BotSettings")
-local buffs   = require("spells/Buffs")
-local globalSettings = require("settings/default/Settings")
+local assist  = require("lib/assisting/Assist")
+local follow  = require("lib/following/Follow")
+local botSettings = require("lib/settings/BotSettings")
+local buffs   = require("lib/spells/Buffs")
+local globalSettings = require("lib/settings/default/Settings")
 local zonedCommand = require("commands/zonedCommand")
 
 local bci = broadCastInterfaceFactory()

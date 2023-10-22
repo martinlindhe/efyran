@@ -7,7 +7,7 @@ local log = require("knightlinc/Write")
 
 local timer = require("Timer")
 
-local spellGroups  = require("spells/SpellGroups")
+local spellGroups  = require("lib/spells/SpellGroups")
 
 -- returns true if `spawn` is within maxDistance
 ---@param spawn spawn
@@ -2297,7 +2297,7 @@ function EnsureTarget(targetId)
     return mq.TLO.Target.ID() == targetId
 end
 
-local botSettings = require("settings/BotSettings")
+local botSettings = require("lib/settings/BotSettings")
 
 -- Returns nil on error
 ---@param spellRow string Example: "War March of Muram/Gem|4"

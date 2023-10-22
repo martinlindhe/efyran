@@ -1,7 +1,7 @@
 local mq = require("mq")
 local broadCastInterfaceFactory = require 'broadcast/broadcastinterface'
 local commandQueue = require("CommandQueue")
-local hail    = require("quality/Hail")
+local hail    = require("lib/quality/Hail")
 
 local bci = broadCastInterfaceFactory()
 

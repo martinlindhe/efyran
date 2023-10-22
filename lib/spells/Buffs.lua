@@ -2,18 +2,18 @@ local mq = require("mq")
 local log = require("knightlinc/Write")
 local broadCastInterfaceFactory = require 'broadcast/broadcastinterface'
 
-require("spells/Spells")
-local follow      = require("following/Follow")
-local pet         = require("pets/Pet")
-local cure        = require("healing/Cure")
-local heal        = require("healing/Heal")
-local botSettings = require("settings/BotSettings")
-local bard        = require("classes/Bard")
+require("lib/spells/Spells")
+local follow      = require("lib/following/Follow")
+local pet         = require("lib/pets/Pet")
+local cure        = require("lib/healing/Cure")
+local heal        = require("lib/healing/Heal")
+local botSettings = require("lib/settings/BotSettings")
+local bard        = require("lib/classes/Bard")
 local timer       = require("Timer")
 
-local globalSettings = require("settings/default/Settings")
+local globalSettings = require("lib/settings/default/Settings")
 
-local spellGroups  = require("spells/SpellGroups")
+local spellGroups  = require("lib/spells/SpellGroups")
 
 local bci = broadCastInterfaceFactory()
 
@@ -185,7 +185,7 @@ function buffs.UpdateClickies()
     buffs.formOfDefenseClicky   = FindBestFormOfDefenseClicky()
 end
 
--- announce buff availability, handle debuffs, refresh buffs/auras/pets/pet buffs, request buffs and handle buff requests
+-- announce buff availability, handle debuffs, refresh buffs/auras/pet-buffs, request buffs and handle buff requests
 function buffs.Tick()
 
     buffs.acceptRez()

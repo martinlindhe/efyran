@@ -24,7 +24,7 @@ settings.self_buffs = {
 
 settings.healing = {
     life_support = {
-        "Healing/HealPct|80/MinMana|5",
+        "lib/healing/HealPct|80/MinMana|5",
     },
 
     tanks = {
@@ -33,11 +33,11 @@ settings.healing = {
     },
 
     tank_heal = {
-        "Healing/HealPct|68/MinMana|5",
+        "lib/healing/HealPct|68/MinMana|5",
     },
 
     all_heal = {
-        "Healing/HealPct|65/MinMana|15",
+        "lib/healing/HealPct|65/MinMana|15",
     },
 }
 

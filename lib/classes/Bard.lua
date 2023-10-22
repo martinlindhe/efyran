@@ -1,6 +1,6 @@
 local mq = require("mq")
 local log = require("knightlinc/Write")
-local botSettings = require("settings/BotSettings")
+local botSettings = require("lib/settings/BotSettings")
 
 local defaultMelody = "general"
 

@@ -1,10 +1,10 @@
 local mq = require("mq")
 local commandQueue = require("CommandQueue")
-local assist  = require("assisting/Assist")
-local pet     = require("pets/Pet")
-local heal    = require("healing/Heal")
-local buffs   = require("spells/Buffs")
-local map     = require("quality/Map")
+local assist  = require("lib/assisting/Assist")
+local pet     = require("lib/pets/Pet")
+local heal    = require("lib/healing/Heal")
+local buffs   = require("lib/spells/Buffs")
+local map     = require("lib/quality/Map")
 local log     = require("knightlinc/Write")
 
 -- performs various tasks when toon has finished starting up / zoning

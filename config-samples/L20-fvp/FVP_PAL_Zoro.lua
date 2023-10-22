@@ -16,7 +16,7 @@ settings.combat_buffs = {
 
 settings.healing = {
     life_support = {
-        "Light Healing/HealPct|50/MinMana|5",
+        "Light lib/healing/HealPct|50/MinMana|5",
     },
 }
 
