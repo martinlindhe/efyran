@@ -34,12 +34,12 @@ function Follow.Start(spawnName, force)
         return
     end
     if not force and not spawn.LineOfSight() then
-        all_tellf("I cannot see \ar%s\ax", spawn.Name())
+        all_tellf("I cannot see [+r+]r%s[+x+]", spawn.Name())
         return
     end
 
     if spawn.Distance() > 500 then
-        all_tellf("Too far away to \ar%s\ax: %d", spawn.Name(), spawn.Distance())
+        all_tellf("Too far away to [+r+]%s[+x+]: %d", spawn.Name(), spawn.Distance())
         return
     end
 

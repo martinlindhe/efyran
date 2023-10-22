@@ -30,7 +30,7 @@ SpellGroups.Lookup = {
 
     enc_manaregen = "ENC",
     enc_haste = "ENC",
-    enc_resist = "ENC",
+    enc_magic_resist = "ENC",
     enc_cha = "ENC",
     enc_group_rune = "ENC",
     enc_single_rune = "ENC",
@@ -819,11 +819,15 @@ SpellGroups.ENC = {
         "Quickness",
     },
 
-    -- L48 Group Resist Magic (53-55 mr, group)
-    -- L62 Guard of Druzzil (75 mr, group)
-    enc_resist = {
+    -- L20 Endure Magic (20 mr)
+    -- L39 Resist Magic (40 mr)
+    -- L49 Group Resist Magic (55 mr, group)
+    -- L62 Guard of Druzzil (75 mr, group) PoP
+    enc_magic_resist = {
         "Guard of Druzzil",
         "Group Resist Magic",
+        "Resist Magic",
+        "Endure Magic",
     },
 
     -- L18 Sympathetic Aura (15-18 cha)
@@ -1693,7 +1697,7 @@ SpellGroups.Default.WAR = {
     "shm_haste/Class|SHM/NotClass|ENC/CheckFor|Hastening of Salik",
 
     "dru_fire_resist/Class|DRU",
-    "enc_resist/Class|ENC",
+    "enc_magic_resist/Class|ENC",
     "shm_disease_resist/Class|SHM",
 }
 
@@ -1715,7 +1719,7 @@ SpellGroups.Default.SHD = {
     "shm_haste/Class|SHM/NotClass|ENC/CheckFor|Hastening of Salik",
 
     "dru_fire_resist/Class|DRU",
-    "enc_resist/Class|ENC",
+    "enc_magic_resist/Class|ENC",
     "shm_disease_resist/Class|SHM",
 }
 
@@ -1732,7 +1736,7 @@ SpellGroups.Default.PAL = {
     "shm_haste/Class|SHM/NotClass|ENC/CheckFor|Hastening of Salik",
 
     "dru_fire_resist/Class|DRU",
-    "enc_resist/Class|ENC",
+    "enc_magic_resist/Class|ENC",
     "shm_disease_resist/Class|SHM",
 }
 
@@ -1752,7 +1756,7 @@ SpellGroups.Default.BRD = {
     "shm_haste/Class|SHM/NotClass|ENC/CheckFor|Hastening of Salik",
 
     "dru_fire_resist/Class|DRU",
-    "enc_resist/Class|ENC",
+    "enc_magic_resist/Class|ENC",
     "shm_disease_resist/Class|SHM",
 }
 
@@ -1770,7 +1774,7 @@ SpellGroups.Default.CLR = {
     "bst_manaregen/Class|BST",
 
     "dru_fire_resist/Class|DRU",
-    "enc_resist/Class|ENC",
+    "enc_magic_resist/Class|ENC",
     "shm_disease_resist/Class|SHM",
 }
 
@@ -1789,7 +1793,7 @@ SpellGroups.Default.DRU = {
     "clr_spellhaste/Class|CLR",
     "clr_vie/Class|CLR",
 
-    "enc_resist/Class|ENC",
+    "enc_magic_resist/Class|ENC",
     "shm_disease_resist/Class|SHM",
 }
 
@@ -1809,7 +1813,7 @@ SpellGroups.Default.SHM = {
     "clr_vie/Class|CLR",
 
     "dru_fire_resist/Class|DRU",
-    "enc_resist/Class|ENC",
+    "enc_magic_resist/Class|ENC",
 }
 
 SpellGroups.Default.ENC = {
@@ -1849,7 +1853,7 @@ SpellGroups.Default.WIZ = {
 
     "dru_fire_resist/Class|DRU",
     "shm_disease_resist/Class|SHM",
-    "enc_resist/Class|ENC",
+    "enc_magic_resist/Class|ENC",
 }
 
 SpellGroups.Default.MAG = {
@@ -1870,7 +1874,7 @@ SpellGroups.Default.MAG = {
 
     "dru_fire_resist/Class|DRU",
     "shm_disease_resist/Class|SHM",
-    "enc_resist/Class|ENC",
+    "enc_magic_resist/Class|ENC",
 }
 
 SpellGroups.Default.NEC = {
@@ -1890,7 +1894,7 @@ SpellGroups.Default.NEC = {
 
     "dru_fire_resist/Class|DRU",
     "shm_disease_resist/Class|SHM",
-    "enc_resist/Class|ENC",
+    "enc_magic_resist/Class|ENC",
 }
 
 SpellGroups.Default.RNG = {
@@ -1908,7 +1912,7 @@ SpellGroups.Default.RNG = {
     --"bst_manaregen/Class|BST",   -- XXX out of buff slots, sep 2022
 
     "dru_fire_resist/Class|DRU",
-    "enc_resist/Class|ENC",
+    "enc_magic_resist/Class|ENC",
     "shm_disease_resist/Class|SHM",
 }
 
@@ -1930,7 +1934,7 @@ SpellGroups.Default.BST = {
     "bst_manaregen/Class|BST",
 
     "dru_fire_resist/Class|DRU",
-    "enc_resist/Class|ENC",
+    "enc_magic_resist/Class|ENC",
     "shm_disease_resist/Class|SHM",
 }
 
@@ -1950,7 +1954,7 @@ SpellGroups.Default.ROG = {
     "shm_haste/Class|SHM/NotClass|ENC/CheckFor|Hastening of Salik",
 
     "dru_fire_resist/Class|DRU",
-    "enc_resist/Class|ENC",
+    "enc_magic_resist/Class|ENC",
     "shm_disease_resist/Class|SHM",
 }
 
@@ -1970,7 +1974,7 @@ SpellGroups.Default.MNK = {
     "shm_haste/Class|SHM/NotClass|ENC/CheckFor|Hastening of Salik",
 
     "dru_fire_resist/Class|DRU",
-    "enc_resist/Class|ENC",
+    "enc_magic_resist/Class|ENC",
     "shm_disease_resist/Class|SHM",
 }
 
@@ -1990,7 +1994,7 @@ SpellGroups.Default.BER = {
     "shm_haste/Class|SHM/NotClass|ENC/CheckFor|Hastening of Salik",
 
     "dru_fire_resist/Class|DRU",
-    "enc_resist/Class|ENC",
+    "enc_magic_resist/Class|ENC",
     "shm_disease_resist/Class|SHM",
 }
 
