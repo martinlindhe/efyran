@@ -215,27 +215,29 @@ function QoL.Init()
         if is_orchestrator() then
             bci.ExecuteZoneCommand("/mana")
         end
-        if mq.TLO.Me.MaxMana() == 0 or mq.TLO.Me.PctMana() == 100 then
+        if not mq.TLO.Me.Class.CanCast() then
             return
         end
-        if mq.TLO.Me.PctMana() < 50 then
+        if mq.TLO.Me.PctMana() < 50 then -- red
             all_tellf("MANA [+r+]%d %%", mq.TLO.Me.PctMana())
-        elseif mq.TLO.Me.PctMana() < 75 then
+        elseif mq.TLO.Me.PctMana() < 75 then -- yellow
             all_tellf("MANA [+y+]%d %%", mq.TLO.Me.PctMana())
-        else
+        else -- green
             all_tellf("MANA [+g+]%d %%", mq.TLO.Me.PctMana())
         end
     end)
 
-    bind("/reportmana", function()
+    -- weight check
+    bind("/weight", function()
         if is_orchestrator() then
-            bci.ExecuteZoneCommand("/reportmana")
+            bci.ExecuteZoneCommand("/weight")
         end
-        if not mq.TLO.Me.Class.CanCast() then
-            return
-        end
-        if mq.TLO.Me.PctMana() < 100 then
-            all_tellf("%dm", mq.TLO.Me.PctMana())
+        if mq.TLO.Me.CurrentWeight() > mq.TLO.Me.STR() then -- red
+            all_tellf("WEIGHT [+r+]%d/%d", mq.TLO.Me.CurrentWeight(), mq.TLO.Me.STR())
+        elseif mq.TLO.Me.CurrentWeight() + 20 > mq.TLO.Me.STR() then -- yellow
+            all_tellf("WEIGHT [+y+]%d/%d", mq.TLO.Me.CurrentWeight(), mq.TLO.Me.STR())
+        else -- green
+            all_tellf("WEIGHT [+g+]%d/%d", mq.TLO.Me.CurrentWeight(), mq.TLO.Me.STR())
         end
     end)
 
