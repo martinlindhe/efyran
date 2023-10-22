@@ -69,6 +69,10 @@ local function canLootItem(item)
 end
 
 local function lootItem(slotNum)
+  if mq.TLO.Me.FreeInventory() <= 0 then
+    all_tellf("Cannot loot! No free inventory slots")
+    return
+  end
   local lootTimer = timer.new(3)
   local cursor = mq.TLO.Cursor
 
