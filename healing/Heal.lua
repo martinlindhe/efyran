@@ -2,9 +2,9 @@ local mq = require("mq")
 local log = require("knightlinc/Write")
 local broadCastInterfaceFactory = require 'broadcast/broadcastinterface'
 
-require("e4_Spells")
+require("spells/Spells")
 
-local follow  = require("e4_Follow")
+local follow  = require("following/Follow")
 local globalSettings = require("e4_Settings")
 local botSettings = require("e4_BotSettings")
 local timer = require("Timer")

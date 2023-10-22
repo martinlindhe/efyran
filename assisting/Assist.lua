@@ -2,8 +2,8 @@ local mq = require("mq")
 local log = require("knightlinc/Write")
 local timer = require("Timer")
 
-local follow  = require("e4_Follow")
-local buffs  = require("e4_Buffs")
+local follow  = require("following/Follow")
+local buffs  = require("spells/Buffs")
 local botSettings = require("e4_BotSettings")
 local heal    = require("healing/Heal")
 

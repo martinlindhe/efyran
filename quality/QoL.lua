@@ -6,9 +6,9 @@ local timer = require("Timer")
 local broadCastInterfaceFactory = require 'broadcast/broadcastinterface'
 
 local assist  = require("assisting/Assist")
-local follow  = require("e4_Follow")
+local follow  = require("following/Follow")
 local botSettings = require("e4_BotSettings")
-local buffs   = require("e4_Buffs")
+local buffs   = require("spells/Buffs")
 local globalSettings = require("e4_Settings")
 local zonedCommand = require("commands/zonedCommand")
 

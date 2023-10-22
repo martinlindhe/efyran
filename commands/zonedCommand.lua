@@ -3,10 +3,9 @@ local commandQueue = require("CommandQueue")
 local assist  = require("assisting/Assist")
 local pet     = require("pets/Pet")
 local heal    = require("healing/Heal")
-local buffs   = require("e4_Buffs")
-local map     = require("e4_Map")
-
-local log = require("knightlinc/Write")
+local buffs   = require("spells/Buffs")
+local map     = require("quality/Map")
+local log     = require("knightlinc/Write")
 
 -- performs various tasks when toon has finished starting up / zoning
 local function execute()

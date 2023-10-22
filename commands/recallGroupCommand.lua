@@ -1,6 +1,6 @@
 local mq = require("mq")
 local commandQueue = require("CommandQueue")
-local group   = require("e4_Group")
+local group   = require("following/Group")
 
 ---@class RecallGroupCommand
 ---@field Name string

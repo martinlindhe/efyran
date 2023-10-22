@@ -2,8 +2,8 @@ local mq = require("mq")
 local log = require("knightlinc/Write")
 local broadCastInterfaceFactory = require 'broadcast/broadcastinterface'
 
-require("e4_Spells")
-local follow      = require("e4_Follow")
+require("spells/Spells")
+local follow      = require("following/Follow")
 local pet         = require("pets/Pet")
 local cure        = require("healing/Cure")
 local heal        = require("healing/Heal")
@@ -13,7 +13,7 @@ local timer       = require("Timer")
 
 local globalSettings = require("e4_Settings")
 
-local spellGroups  = require("e4_SpellGroups")
+local spellGroups  = require("spells/SpellGroups")
 
 local bci = broadCastInterfaceFactory()
 

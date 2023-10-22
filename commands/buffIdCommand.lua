@@ -1,7 +1,7 @@
 local mq = require("mq")
 local broadCastInterfaceFactory = require 'broadcast/broadcastinterface'
 local commandQueue = require("CommandQueue")
-local buffs   = require("e4_Buffs")
+local buffs   = require("spells/Buffs")
 
 local bci = broadCastInterfaceFactory()
 

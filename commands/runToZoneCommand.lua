@@ -1,7 +1,7 @@
 local mq = require("mq")
 local broadCastInterfaceFactory = require 'broadcast/broadcastinterface'
 local commandQueue = require("CommandQueue")
-local follow  = require("e4_Follow")
+local follow  = require("following/Follow")
 
 local bci = broadCastInterfaceFactory()
 

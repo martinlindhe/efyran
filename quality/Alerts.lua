@@ -5,11 +5,11 @@ local log = require("knightlinc/Write")
 local timer = require("Timer")
 
 local assist  = require("assisting/Assist")
-local follow  = require("e4_Follow")
+local follow  = require("following/Follow")
 local commandQueue = require("CommandQueue")
 local botSettings = require("e4_BotSettings")
 local loot  = require("looting/Loot")
-local buffs   = require("e4_Buffs")
+local buffs   = require("spells/Buffs")
 local globalSettings = require("e4_Settings")
 
 require("autobank")

@@ -6,7 +6,7 @@ local globalSettings = require("e4_Settings")
 local botSettings = require("e4_BotSettings")
 local aliases = require("settings/Spell Aliases")
 
-local follow = require("e4_Follow")
+local follow = require("following/Follow")
 
 local bci = broadCastInterfaceFactory()
 

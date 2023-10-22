@@ -5,18 +5,16 @@ require("looting/markItemForSelling")
 
 local log = require("knightlinc/Write")
 
-require("e4_Hail")
-
 local commandQueue = require("CommandQueue")
 
 local assist  = require("assisting/Assist")
-local buffs   = require("e4_Buffs")
-local group   = require("e4_Group")
-local follow  = require("e4_Follow")
+local buffs   = require("spells/Buffs")
+local group   = require("following/Group")
+local follow  = require("following/Follow")
 local heal    = require("healing/Heal")
-local tribute = require("e4_Tribute")
-local qol     = require("e4_QoL")
-local alerts  = require("e4_Alerts")
+local qol     = require("quality/QoL")
+local tribute = require("quality/Tribute")
+local alerts  = require("quality/Alerts")
 
 seed_process()
 

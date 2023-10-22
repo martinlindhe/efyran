@@ -7,7 +7,7 @@ local log = require("knightlinc/Write")
 
 local timer = require("Timer")
 
-local spellGroups  = require("e4_SpellGroups")
+local spellGroups  = require("spells/SpellGroups")
 
 -- returns true if `spawn` is within maxDistance
 ---@param spawn spawn
