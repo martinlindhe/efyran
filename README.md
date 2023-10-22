@@ -11,26 +11,33 @@ Some concepts are borrowed from E3, while others are new.
 
 ## Getting started
 
-Put this repository under your Lua folder,
-so it lives in `Macroqest\lua\efyran`.
+Oct 2023: When using git version, make sure you pull the submodules (external dependencies)
 
-Then start it with `/lua run efyran/e4`
+```sh
+git pull
+git submodule update --init
+```
 
+Place the `efyran` folder in `Macroqest-Root\lua\efyran`.
+
+Then start it with `/lua run efyran`
+
+## Auto-starting
 You can auto start efyran with this `Macroquest\config\zoned.cfg`:
 
 ```
 /setwintitle ${Me.Name}
-/if (!${Bool[${Lua.PIDs}]}) /lua run efyran/e4
+/if (!${Bool[${Lua.PIDs}]}) /lua run efyran
 ```
 
-For ease of starting / stopping / re-launching efyran, you can also put the following in your `Macroquest\config\MacroQuest.ini`:
+For ease of starting / stopping / re-launching, you can also put the following in your `Macroquest\config\MacroQuest.ini`:
 
 ```ini
 [Aliases]
-/e4=/multiline ; /lua stop efyran/e4 ; /timed 5 /lua run efyran/e4
-/e4all=/bcaa //multiline ; /lua stop efyran/e4 ; /timed 5 /lua run efyran/e4
-/stope4=/lua stop efyran/e4
-/stopall=/bcaa //lua stop efyran/e4
+/e4=/multiline ; /lua stop efyran ; /timed 5 /lua run efyran
+/e4all=/bcaa //multiline ; /lua stop efyran ; /timed 5 /lua run efyran
+/stope4=/lua stop efyran
+/stopall=/bcaa //lua stop efyran
 ```
 
 ## Moving around
@@ -43,7 +50,7 @@ Add some socials to simplify control:
 | /hotbutton STOP           | /followoff
 | /hotbutton KILL           | /assiston
 
-
+See [Command Reference](#command-reference) for more commands.
 
 
 
@@ -51,7 +58,7 @@ Add some socials to simplify control:
 
 e3 had a concept of Bot Buffs and Group Buffs. Efyran chose to instead implement a beg-for-buff system,
 which makes use of "buff groups" (tags mapping to multiple buffs). This setup allows for a zero-configuration
-buff bot with default settings, while still allowing fine grained control where you need to.
+buff bot if using the default settings, while still allowing fine grained control where you need to.
 
 
 
@@ -68,35 +75,18 @@ If you want to permanently enable debugging, you need to add a per-character set
 
 ```lua
 local settings = { }
-
 settings.debug = true -- enable debug logging for this peer
 ```
 
 
-## Buff spell level and PC target levels
-
-```
-Buff Spell Level   Minimum Target Level
-1-50:				Level 1
-51: 				Level 40
-52-53: 				Level 41
-54-55: 				Level 42
-56-57: 				Level 43
-58-59: 				Level 44
-60-61: 				Level 45
-62-63: 				Level 46
-64-65: 				Level 47
-66-70: 				Level 62
-71+:                ???
-```
 
 ## Terminology
 - Orchestrator = the main driver toon you are playing from
-- Peer = A connected character that you control
+- Peer = A connected character that you control, including the orchestrator
 - Buff group = A tag such as "clr_symbol", which translates to a table of the Cleric "Symbol" line of buffs
 
 
-## Command reference
+## Command Reference
 
 ```
 /assiston <filter>          - tell peers to kill current target
@@ -111,6 +101,7 @@ Buff Spell Level   Minimum Target Level
 /fullburns
 
 /mana                       - tell peers to report mana %
+/weight                     - tell peers to report current weight
 
 /followon <filter>          - tell peers to follow you
 /followoff                  - tell peers to stop
@@ -145,7 +136,7 @@ Buff Spell Level   Minimum Target Level
 /teleportbind               - WIZ: port group to bind point using "Teleport Bind" AA
 /secondaryrecall            - WIZ/DRU: port to secondary bind
 
-/findslot <name> <filter>   - reports equipped inventory slot
+/findslot <name> <filter>   - reports equipped inventory slot (eg /findslot face /only|plate chain)
 /fdi <name> <filter>        - find item by partial name and optional filter (eg /fdi crystal /only|ROG)
 /fmi <name> <filter>        - find missing item by item name (all peers who lack an item)
 /fmid <id>                  - find missing item by item ID (eg. for 'Shard of Dark Matter')
@@ -184,6 +175,8 @@ Buff Spell Level   Minimum Target Level
 /lootmycorpse               - loot your corpse
 /lootallcorpses             - tell peers to loot their corpse
 /usecorpsesummoner          - summon corpse in guild lobby
+
+/train <skill>              - train skill. currently supported skills: language
 ```
 
 TODO document the remaining commands
@@ -192,15 +185,9 @@ TODO document the remaining commands
 
 
 
-## e3 differences
+## Auto cure
 
-mag: in e3 you could list Molten Orb as a nuke and it will auto summon,
-in e4 it was changed to work with any spells, so you need to be explicit with the Summon filter.
-Example: "Molten Orb/NoAggro/Summon|Summon: Molten Orb"
-
-Also, efyran is written for modern Macroquest.
-
-Auto cure: each group needs a curer, and toons will auto beg for cures. This allows for zero-setup auto curing.
+Each group needs a curer, and toons will auto beg for cures. This allows for zero-setup auto curing.
 Assumes that each group has at least 1 curer (shm/dru/pal/clr)
 
 

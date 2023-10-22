@@ -2,10 +2,12 @@ local log = require("knightlinc/Write")
 
 require("persistence")
 
-local lootFile = efyranConfigDir() .. "/" .. current_server() .. "__Loot Settings.lua"
+local lootFile = efyranConfigDir() .. "\\" .. current_server() .. "__Loot Settings.lua"
+
+local Loot = {}
 
 -- reads the loot settings from disk
-function ReadLootSettings()
+function Loot.ReadLootSettings()
     local o = persistence.load(lootFile)
     if o == nil then
         log.Warn("No loot settings found (", lootFile, "), creating new table")
@@ -22,7 +24,7 @@ function ReadLootSettings()
     return o
 end
 
-function WriteLootSettings(settings)
+function Loot.WriteLootSettings(settings)
     -- WARNING DO not write from multiple toons.
 
     -- XXX force reload of settings on all other toons!
@@ -30,19 +32,14 @@ function WriteLootSettings(settings)
     persistence.store(lootFile, settings)
 end
 
-function GetLootItemSetting(lootSettings, item)
+function Loot.GetLootItemSetting(lootSettings, item)
     local first = item.Name():sub(1, 1)
     return lootSettings[first][item.Name()]
 end
 
-function SetLootItemSetting(lootSettings, item, value)
+function Loot.SetLootItemSetting(lootSettings, item, value)
     local first = item.Name():sub(1, 1)
     lootSettings[first][item.Name()] = value
 end
-
-
-local Loot = {
-    autoloot = false
-}
 
 return Loot

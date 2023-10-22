@@ -198,7 +198,7 @@ function spellConfigAllowsCasting(buffItem, spawn)
         end
     else
         if is_peer_id(spawn.ID()) and not mq.TLO.NetBots(spawn.Name()).Stacks(spell.ID())() then
-            all_tellf("SKIP BUFFING %s rebuff, %s dont stack", spawn.Name(), spellConfig.Name)
+            log.Info("SKIP BUFFING %s, %s dont stack", spawn.Name(), spellConfig.Name)
             return false
         end
 
@@ -300,7 +300,7 @@ function haveMemorizedListedSpells(defaultGem)
         local o = parseSpellLine(spellRow)
 
         if not have_spell(o.Name) then
-            all_tellf("ERROR don't know spell/song \ar%s\ax", o.Name)
+            all_tellf("ERROR don't know spell/song [+r+]%s[+x+]", o.Name)
             cmd("/beep 1")
             return false
         end

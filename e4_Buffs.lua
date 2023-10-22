@@ -17,7 +17,7 @@ local spellGroups  = require("e4_SpellGroups")
 
 local bci = broadCastInterfaceFactory()
 
-local serverBuffsSettings = efyranConfigDir() .. "/" .. server_buffs_settings_file()
+local serverBuffsSettings = efyranConfigDir() .. "\\" .. server_buffs_settings_file()
 if file_exists(serverBuffsSettings) then
     spellGroups.Default = loadfile(serverBuffsSettings)()
 end
@@ -50,7 +50,7 @@ local buffs = {
     -- timers
     resumeTimer = timer.new_expired(2), -- 2s   - interval after end of fight to resume buffing
 
-    requestAvailabiliyTimer = timer.new_random(20), -- 20s  - interval to wait before checking buff availability
+    requestAvailabiliyTimer = timer.new_expires_in(20, 5), -- 20s  - interval to wait before checking buff availability
 
     -- clickies
     manaRegenClicky       = nil,
@@ -720,7 +720,7 @@ function buffs.RequestBuffs()
 
                 local spell = get_spell(o.Name)
                 if spell ~= nil and not spell.Stacks() then
-                    log.Debug("Can't ask for buff %s, dont stack", spellConfig.Name)
+                    log.Debug("Can't ask for buff \ay%s\ax, won't stack", spellConfig.Name)
                     return false
                 end
             end
@@ -737,7 +737,7 @@ function buffs.RequestBuffs()
                         bci.ExecuteCommand(string.format("/buff %s %s", mq.TLO.Me.Name(), spellConfig.Name), {peer})
                     end
                 else
-                    log.Debug("No peer of required class for buff %s found nearby: %s", spellConfig.Name, askClass)
+                    log.Debug("No peer of required class \ay%s\ax for buff \ay%s\ax found nearby", askClass, spellConfig.Name)
                 end
             end
         else

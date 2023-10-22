@@ -200,7 +200,7 @@ function Heal.performGroupBalanceHeal()
 
     local avg = sum / members
     if members <= 1 or avg >= 90 then
-        log.Debug("performGroupBalanceHeal: not needed, average is %d%%", avg)
+        --log.Debug("performGroupBalanceHeal: not needed, average is %d%%", avg)
         return false
     end
 

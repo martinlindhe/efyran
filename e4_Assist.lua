@@ -315,11 +315,6 @@ local assistStickTimer = timer.new_expired(3 * 1) -- 3s
 -- updates current fight progress
 function Assist.Tick()
 
-    if is_feigning() then
-        all_tellf("Feigned, standing up")
-        mq.cmd("/stand")
-    end
-
     -- progress PBAE
     if Assist.PBAE then
         local nearbyPBAEilter = "npc radius 60 zradius 50 los"
@@ -346,6 +341,11 @@ function Assist.Tick()
 
     if Assist.targetID == 0 then
         return
+    end
+
+    if is_feigning() then
+        all_tellf("Feigned, standing up")
+        mq.cmd("/stand")
     end
 
     local melee = botSettings.settings.assist ~= nil and botSettings.settings.assist.type ~= nil and botSettings.settings.assist.type:lower() == "melee"

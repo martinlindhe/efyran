@@ -3,6 +3,8 @@ local log = require("knightlinc/Write")
 local mq = require("mq")
 
 ---@class PeerSettings
+---@field public debug boolean Enable debug logs
+---@field public autoloot boolean Enable auto loot
 ---@field public assist PeerSettingsAssist
 ---@field public gems string[]|nil XXX key is string, val is integer
 ---@field public self_buffs string[]|nil spellRows of self buffs
@@ -24,6 +26,8 @@ local botSettings = {
 local peerTemplate = [[
 ---@type PeerSettings
 local settings = { }
+
+settings.autoloot = false
 
 settings.gems = {
     --["Minor Healing"] = 1,
@@ -56,24 +60,39 @@ local function read_settings(settingsFile)
     return loadfile(settingsFile)
 end
 
-function file_exists(name)
-    local f = io.open(name, "r")
-    if f ~= nil then
-        io.close(f)
-        return true
-    else
-        return false
+--- Check if a file or directory exists in this path
+function file_exists(file)
+    local ok, err, code = os.rename(file, file)
+    if not ok then
+       if code == 13 then
+          -- Permission denied, but it exists
+          return true
+       end
     end
+    return ok, err
 end
 
+--- Check if a directory exists in this path
+function dir_exists(path)
+    return file_exists(path.."/")
+end
+
+function mkdir(dir)
+    log.Info("XXX MKDIR ".. dir)
+    os.execute("mkdir " .. dir)
+end
 
 function botSettings.Init()
-    local settingsFile = efyranConfigDir() .. "/" .. peer_settings_file()
+    if not dir_exists(efyranConfigDir()) then
+        mkdir(efyranConfigDir())
+    end
+
+    local settingsFile = efyranConfigDir() .. "\\" .. peer_settings_file()
     local settings = read_settings(settingsFile)
     if settings ~= nil then
         botSettings.settings = settings()
     elseif not file_exists(settingsFile) then
-        all_tellf("PEER INI NOT FOUND, CREATING EMPTY ONE. PLEASE EDIT %s", settingsFile)
+        all_tellf("PEER SETTINGS NOT FOUND, CREATING EMPTY ONE. PLEASE EDIT %s", settingsFile)
         cmd("/beep 1")
 
         local f = assert(io.open(settingsFile, "w"))

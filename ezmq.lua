@@ -37,8 +37,6 @@ function line_of_sight_to(spawn)
     return mq.TLO.LineOfSight(q)()
 end
 
-local globalSettings = require("e4_Settings")
-
 -- Move to the location of `spawn` using MQ2Nav.
 ---@param spawnID integer
 function move_to(spawnID)
@@ -161,18 +159,6 @@ end
 function is_peer_in_zone(peer)
     local spawn = spawn_from_peer_name(peer)
     return spawn ~= nil and is_peer(spawn.Name())
-end
-
--- Returns class shortname, eg "WAR" from a spawn in zone.
----@param query string
----@return string
-function spawn_class_shortname_by_name(query)
-    local spawn = spawn_from_query(query)
-    if spawn == nil or spawn() == nil then
-        all_tellf("\arERROR failed to look up spawn %s", query)
-        return ""
-    end
-    return spawn.Class.ShortName()
 end
 
 -- returns true if spawnID is another peer
@@ -394,7 +380,7 @@ function find_item_bank(name)
     return nil
 end
 
--- Partial search by name, return item name (clickable link if possible)
+-- Partial search by name, return item name (clickable item link if possible)
 ---@param name string
 ---@return string
 function item_link(name)
@@ -557,6 +543,7 @@ function use_ability(name)
     mq.cmdf('/doability "%s"', name)
 end
 
+-- Performs alt ability `name` unconditionally, including retrying and waiting until cast is completed before returning
 ---@param name string
 ---@param spawnID integer|nil
 function use_alt_ability(name, spawnID)
@@ -591,7 +578,7 @@ function use_alt_ability(name, spawnID)
         mq.cmdf("/casting %s", args)
     end
 
-    mq.delay(3000)
+    mq.delay(500)
     mq.delay(20000, function() return not is_casting() end)
     mq.delay(500)
 end
@@ -602,9 +589,9 @@ end
 function have_buff(name)
     local spell = mq.TLO.Spell(name)
     if spell() == nil then
-        log.Error("have_buff: cannot lookup %s", name)
+        log.Debug("have_buff: spell didnt resolve for \ay%s", name)
         if not have_ability(name) and not have_item(name) then
-            log.Error("have_buff: asked about odd buff %s", name)
+            log.Debug("have_buff: asked about odd buff \ay%s", name)
         end
         return false
     end
@@ -706,6 +693,41 @@ end
 ---@return string
 function class_shortname()
     return mq.TLO.Me.Class.ShortName()
+end
+
+-- Returns my race shortname, eg "OGR".
+---@return string
+function race_shortname()
+    return map_race_shortname(mq.TLO.Me.Race.Name())
+end
+
+-- Returns the race shortname, like HUM for Human.
+---@param race string name
+---@return string
+function map_race_shortname(race)
+    local map = {
+        ["Barbarian"] = "BAR",
+        ["Dark Elf"]  = "DEF",
+        ["Drakkin"] = "DRK",
+        ["Dwarf"] = "DWF",
+        ["Erudite"] = "ERU",
+        ["Froglok"] = "FRG",
+        ["Gnome"] = "GNM",
+        ["Half Elf"]  = "HEF",
+        ["Halfling"] = "HFL",
+        ["High Elf"] = "HIE",
+        ["Human"] = "HUM",
+        ["Iksar"] = "IKS",
+        ["Ogre"] = "OGR",
+        ["Troll"] = "TRL",
+        ["Vah Shir"]  = "VAH",
+        ["Wood Elf"]  = "ELF",
+    }
+    if map[race] == nil then
+        all_tellf("UNLIKELY: map_race_shortname unmapped %s", race)
+        return "XXX"
+    end
+    return map[race]
 end
 
 -- Am I a Bard?
@@ -1195,6 +1217,26 @@ function class_tank(class)
     return class == "WAR" or class == "PAL" or class == "SHD"
 end
 
+-- true if class wears plate armor (WAR,PAL,SHD,CLR,BRD)
+function class_plate(class)
+    return class == "WAR" or class == "PAL" or class == "SHD" or class == "CLR" or class == "BRD"
+end
+
+-- true if class wears chain armor (RNG,ROG,SHM,BER)
+function class_chain(class)
+    return class == "RNG" or class == "ROG" or class == "SHM" or class == "BER"
+end
+
+-- true if class wears silk armor (WIZ,MAG,ENC,NEC)
+function class_silk(class)
+    return class == "WIZ" or class == "MAG" or class == "ENC" or class == "NEC"
+end
+
+-- true if class wears leather armor (DRU,MNK,BST)
+function class_leather(class)
+    return class == "DRU" or class == "MNK" or class == "BST"
+end
+
 ---Get the current server name ("antonius" for Antonius Bayle)
 ---@return string
 function current_server()
@@ -1472,14 +1514,16 @@ function parseSpellLine(s)
         o.Name = ""
     end
 
-    local spellGroup = spellGroups[class_shortname()][o.Name]
-    if spellGroup ~= nil then
-        local spellName = findBestSpellFromSpellGroup(o.Name)
-        if spellName ~= nil then
-            o.spellGroup = o.Name
-            o.Name = spellName
-        else
-            all_tellf("ERROR: parseSpellLine: did not find a best spell for spellGroups.%s.%s", class_shortname(), o.Name)
+    if spellGroups[class_shortname()] ~= nil then
+        local spellGroup = spellGroups[class_shortname()][o.Name]
+        if spellGroup ~= nil then
+            local spellName = findBestSpellFromSpellGroup(o.Name)
+            if spellName ~= nil then
+                o.spellGroup = o.Name
+                o.Name = spellName
+            else
+                all_tellf("ERROR: parseSpellLine: did not find a best spell for [+r+]spellGroups.%s.%s[+x+]", class_shortname(), o.Name)
+            end
         end
     end
     return o
@@ -1577,7 +1621,7 @@ function have_combat_ability(name)
     return mq.TLO.Me.CombatAbility(name)() ~= nil
 end
 
--- Number of open buff slots (not counting the short duration buff slots)
+-- Number of open buff slots (not counting the short duration buff slots).
 ---@return integer
 function free_buff_slots()
     return mq.TLO.Me.FreeBuffSlots()
@@ -1620,13 +1664,19 @@ end
 function strip_link(s)
     -- TODO: macroquest can expose existing functionality to lua, says brainiac. someone just need to write a patch
     if string.find(s, "000") then
-        log.Debug("strip_link: assume item link")
+        log.Debug("strip_link: detected item link %s", s)
         s = string.sub(s, 58, string.len(s) - 1)
     end
     return s
 end
 
--- Delay between 0 and `ms` milliseconds (random)
+--- Returns true if `s` is a item link.
+---@return boolean
+function is_item_link(s)
+    return s ~= strip_link(s)
+end
+
+-- Delay between 0 and `ms` milliseconds (random).
 ---@param ms integer milliseconds
 function random_delay(ms)
     mq.delay(math.random(0, ms))
@@ -1770,31 +1820,37 @@ function args_string(...)
     return trim(s)
 end
 
--- Check wether our class/name matches the given filter
+-- Check wether our class/race/name matches the given filter
 ---@param filter string A filter, such as "/only|WAR", or "/not|casters"
 ---@param sender string Peer name of sender
 ---@return boolean true if we match filter
 function matches_filter(filter, sender)
     local filterConfig = parseFilterLine(filter)
     if filterConfig.Only ~= nil and not matches_filter_line(filterConfig.Only, sender) then
-        --log.Debug("I am not matching this ONLY line: %s", filterConfig.Only)
         return false
     end
     if filterConfig.Not ~= nil and matches_filter_line(filterConfig.Not, sender) then
-        --log.Debug("I am matching this NOT line: %s", filterConfig.Not)
         return false
     end
     return true
 end
 
 ---@return boolean true if we match
----@param line string
+---@param line string A filter argument, like "casters WAR BRD"
 ---@param sender string Peer name of sender
 function matches_filter_line(line, sender)
-    local class = spawn_class_shortname_by_name(sender)
+
+    local spawn = spawn_from_query(sender)
+    if spawn == nil or spawn() == nil then
+        all_tellf("\arERROR failed to look up spawn %s", sender)
+        return false
+    end
+    local class = spawn.Class.ShortName()
+    local race = map_race_shortname(spawn.Race.Name())
+
     local tokens = split_str(line, " ")
     for k, v in pairs(tokens) do
-        if class == v:upper() or v:lower() == mq.TLO.Me.Name():lower() or (v == "me" and is_orchestrator()) then
+        if class == v:upper() or race == v:upper() or v:lower() == mq.TLO.Me.Name():lower() or (v == "me" and is_orchestrator()) then
             return true
         end
         if v == "group" and is_grouped_with(sender) then
@@ -1818,7 +1874,19 @@ function matches_filter_line(line, sender)
         if v == "hybrid" and class_hybrid(class) then
             return true
         end
-    end
+        if v == "plate" and class_plate(class) then
+            return true
+        end
+        if v == "chain" and class_chain(class) then
+            return true
+        end
+        if v == "silk" and class_silk(class) then
+            return true
+        end
+        if v == "leather" and class_leather(class) then
+            return true
+        end
+     end
     return false
 end
 
@@ -1942,7 +2010,7 @@ function bind(cmd, fn)
 end
 
 function efyranConfigDir()
-    return mq.TLO.MacroQuest.Path("config")() .. "/efyran"
+    return mq.TLO.MacroQuest.Path("config")() .. "\\efyran"
 end
 
 local castSpellAbilityTimers = {}
@@ -2101,14 +2169,18 @@ function castSpellAbility(spawnID, row, callback)
     end
 
     --log.Debug("castSpellAbility START CAST %s", spell.Name)
+    if not is_standing() then
+        mq.cmd("/stand")
+        mq.delay(50)
+    end
 
     castSpell(spell.Name, spawnID)
 
     -- delay until done casting
     if callback == nil then
         callback = function()
-            local spawn = spawn_from_id(spawnID)
-            return spawn == nil or spawn() == nil or spawn.Type() == "Corpse" or not is_casting()
+            local spawn1 = spawn_from_id(spawnID)
+            return spawn1 == nil or spawn1() == nil or spawn1.Type() == "Corpse" or not is_casting()
         end
     end
 

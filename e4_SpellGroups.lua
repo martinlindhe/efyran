@@ -1,61 +1,61 @@
 local SpellGroups = {}
 
 SpellGroups.Lookup = {
-    ["shm_focus"] = "SHM",
-    ["shm_runspeed"] = "SHM",
-    ["shm_haste"] = "SHM",
-    ["shm_resist"] = "SHM",
-    ["shm_sta"] = "SHM",
-    ["shm_str"] = "SHM",
-    ["shm_agi"] = "SHM",
-    ["shm_dex"] = "SHM",
-    ["shm_cha"] = "SHM",
+    shm_focus = "SHM",
+    shm_runspeed = "SHM",
+    shm_haste = "SHM",
+    shm_resist = "SHM",
+    shm_sta = "SHM",
+    shm_str = "SHM",
+    shm_agi = "SHM",
+    shm_dex = "SHM",
+    shm_cha = "SHM",
 
-    ["clr_symbol"] = "CLR",
-    ["clr_ac"] = "CLR",
-    ["clr_aegolism"] = "CLR",
-    ["clr_vie"] = "CLR",
-    ["clr_spellhaste"] = "CLR",
-    ["di"] = "CLR",
+    clr_symbol = "CLR",
+    clr_ac = "CLR",
+    clr_aegolism = "CLR",
+    clr_vie = "CLR",
+    clr_spellhaste = "CLR",
+    di = "CLR",
 
-    ["dru_skin"] = "DRU",
-    ["dru_fire_resist"] = "DRU",
-    ["dru_cold_resist"] = "DRU",
-    ["dru_corruption"] = "DRU",
-    ["dru_regen"] = "DRU",
-    ["dru_ds"] = "DRU",
-    ["dru_str"] = "DRU",
-    ["dru_skill_dmg_mod"] = "DRU",
-    ["dru_runspeed"] = "DRU",
+    dru_skin = "DRU",
+    dru_fire_resist = "DRU",
+    dru_cold_resist = "DRU",
+    dru_corruption = "DRU",
+    dru_regen = "DRU",
+    dru_ds = "DRU",
+    dru_str = "DRU",
+    dru_skill_dmg_mod = "DRU",
+    dru_runspeed = "DRU",
 
-    ["enc_manaregen"] = "ENC",
-    ["enc_haste"] = "ENC",
-    ["enc_resist"] = "ENC",
-    ["enc_cha"] = "ENC",
-    ["enc_group_rune"] = "ENC",
-    ["enc_single_rune"] = "ENC",
+    enc_manaregen = "ENC",
+    enc_haste = "ENC",
+    enc_resist = "ENC",
+    enc_cha = "ENC",
+    enc_group_rune = "ENC",
+    enc_single_rune = "ENC",
 
-    ["mag_group_ds"] = "MAG",
-    ["mag_single_ds"] = "MAG",
+    mag_group_ds = "MAG",
+    mag_single_ds = "MAG",
 
-    ["nec_group_levitate"] = "NEC",
-    ["nec_single_levitate"] = "NEC",
+    nec_group_levitate = "NEC",
+    nec_single_levitate = "NEC",
 
-    ["rng_hp"] = "RNG",
-    ["rng_atk"] = "RNG",
-    ["rng_ds"] = "RNG",
-    ["rng_skin"] = "RNG",
+    rng_hp = "RNG",
+    rng_atk = "RNG",
+    rng_ds = "RNG",
+    rng_skin = "RNG",
 
-    ["pal_hp"] = "PAL",
-    ["pal_symbol"] = "PAL",
+    pal_hp = "PAL",
+    pal_symbol = "PAL",
 
-    ["bst_manaregen"] = "BST",
-    ["bst_hp"] = "BST",
-    ["bst_haste"] = "BST",
-    ["bst_focus"] = "BST",
-    ["bst_sta"] = "BST",
-    ["bst_str"] = "BST",
-    ["bst_dex"] = "BST",
+    bst_manaregen = "BST",
+    bst_hp = "BST",
+    bst_haste = "BST",
+    bst_focus = "BST",
+    bst_sta = "BST",
+    bst_str = "BST",
+    bst_dex = "BST",
 }
 
 SpellGroups.SHM = {
@@ -242,31 +242,51 @@ SpellGroups.SHM = {
         "Unfailing Reverence",
         "Charisma",
     },
+
+    -- L01 Burst of Flame
+    shm_fire_nuke = {
+        "Burst of Flame",
+    },
+
+    -- L05 Frost Rift
+    -- L14 Spirit Strike (72-78 hp, cost 44 mana)
+    -- L23 Frost Strike (142-156 hp, cost 78 mana)
+    -- L33 Winter's Roar (236-246 hp, cost 116 mana)
+    -- L44 Blizzard Blast (332-346 hp, cost 147 mana)
+    -- L54 Ice Strike (511 hp, cost 198 mana)
+    -- L64 Velium Strike (925 hp, cost 330 mana)
+    -- L69 Ice Age (1273 hp, cost  413 mana)
+    shm_cold_nuke = {
+        "Ice Age",
+        "Velium Strike",
+        "Ice Strike",
+        "Blizzard Blast",
+        "Winter's Roar",
+        "Frost Strike",
+        "Spirit Strike",
+        "Frost Rift",
+    },
+
+    -- L54 Blast of Venom (704 hp, cost 289 mana)
+    -- L61 Spear of Torment (870 hp, cost 340 mana)
+    -- L66 Yoppa's Spear of Venom (1197 hp, cost 425 mana)
+    shm_poison_nuke = {
+        "Yoppa's Spear of Venom",
+        "Spear of Torment",
+        "Blast of Venom",
+    },
 }
 
 SpellGroups.CLR = {
 
     GroupHeals = {
-        -- priority: the first spell in list that is memorized and not on cooldown will be used
-
         -- CLR - cast group heals with cure component
         "Word of Vivification",     -- CLR/69: 3417-3427 hp, -21 dr, -21 pr, -14 curse, cost 1357 mana
         "Word of Replenishment",    -- CLR/64: 2500 hp, -14 dr, -14 pr, -7 curse, cost 1100 mana
         "Word of Redemption",       -- CLR/60: 7500 hp, cost 1100 mana
         "Word of Restoration",      -- CLR/57: 1788-1818 hp, cost 898 mana
         "Word of Health",           -- CLR/30: 380-485 hp, cost 302 mana
-
-        "Hand of Piety",            -- PAL/??: AA Rank 1-XXX (24 min reuse with Hastened Piety Rank 3)
-        "Wave of Piety",            -- PAL/70: 1316 hp, cost 1048 mana
-        "Wave of Trushar",          -- PAL/65: 1143 hp, cost 921 mana
-        "Wave of Marr",             -- PAL/65: 960 hp, cost 850 mana
-        "Healing Wave of Prexus",   -- PAL/58: 688-698 hp
-        "Wave of Healing",          -- PAL/55: 439-489 hp
-        "Wave of Life",             -- PAL/39: 201-219 hp
-
-        -- "Moonshadow",               -- DRU/70: 1500 hp, cost 1100 mana (18s recast time)
     },
-
 
     -- fast heals:
     -- L53 Divine Light
@@ -322,7 +342,7 @@ SpellGroups.CLR = {
 
     -- slot 3 hp buff - symbol line:
     -- L14 Symbol of Transal (34-72 hp, single)
-    -- L24 Symbol of Transal
+    -- L24 Symbol of Ryltan
     -- L34 Symbol of Pinzarn
     -- L41 Symbol of Naltron (406-525 hp, single)
     -- L54 Symbol of Marzin (640-700 hp, single)
@@ -348,7 +368,7 @@ SpellGroups.CLR = {
         "Symbol of Naltron/Reagent|Peridot",
         "Symbol of Pinzarn/Reagent|Jasper",
         "Symbol of Ryltan/Reagent|Bloodstone",
-        --"Symbol of Transal/Reagent|Cat's Eye Agate",
+        "Symbol of Transal/Reagent|Cat's Eye Agate",
     },
 
     -- slot 1: Death Save:
@@ -451,6 +471,9 @@ SpellGroups.CLR = {
 }
 
 SpellGroups.DRU = {
+    GroupHeals = { -- TODO make use of
+        "Moonshadow",               -- DRU/70: 1500 hp, cost 1100 mana (18s recast time)
+    },
 
     -- fast heal:
     -- L01 Minor Healing
@@ -870,6 +893,7 @@ SpellGroups.ENC = {
     -- L34 Entrance
     -- L49 Dazzle
     -- L54 Glamour of Kintaz (low resist mez)
+    -- L59 Rapture (low resist mez)
     enc_mez = {
         "Rapture",
         "Glamour of Kintaz",
@@ -877,18 +901,6 @@ SpellGroups.ENC = {
         "Entrance",
         "Enthrall",
         "Mesmerize",
-    },
-
-    -- L16 Mesmerization
-    -- L52 Fascination
-    enc_ae_mez = {
-        "Fascination",
-        "Mesmerization"
-    },
-
-    -- L59 Rapture (low resist mez)
-    enc_unresistable_mez  = {
-        "Rapture",
     },
 
     -- L12 Languid Pace (18-30% slow)
@@ -993,6 +1005,81 @@ SpellGroups.MAG = {
         "Expedience",
     },
 
+    -- single target DD fire nukes
+    -- L01 Burst of Flame
+    -- L04 Burn
+    -- L08 Flame Bolt
+    -- L16 Shock of Flame (70 mana, 91-96 dd)
+    -- L20 Bolt of Flame (105 mana, 146-156 dd)
+    -- L34 Blaze
+    -- L34 Cinder Bolt
+    -- L49 Lava Bolt
+    -- L52 Char
+    -- L54 Scars of Sigil
+    -- L59 Seeking Flame of Seukor
+    -- L60 Shock of Fiery Blades (1294 hp, cost 335 mana)
+    -- L61 Firebolt of Tallon (2100 hp, cost 515 mana)
+    -- L62 Burning Sand (980 hp, cost 270 mana)
+    -- L65 Sun Vortex (1600 hp, cost 395 mana)
+    -- L65 Ancient: Chaos Vortex (1920 hp, cost 474 mana)
+    -- L66 Bolt of Jerikor (2889 hp, cost 644 mana)
+    -- L69 Burning Earth (1348 hp, 3s cast, cost 337 mana)
+    -- L69 Fickle Fire (2475 hp, 6.4s cast, cost 519 mana) + chance to increase dmg
+    -- L70 Spear of Ro (3119 hp, 7s cast, cost 684 mana)
+    -- L70 Star Strike (2201 hp, 6.4s cast, cost 494 mana)
+    -- L70 Ancient: Nova Strike (2377 hp, 6.3s cast, cost 525 mana)
+    mag_fire_nuke = {
+        "Ancient: Nova Strike",
+        "Star Strike",
+        "Spear of Ro",
+        "Fickle Fire",
+        "Burning Earth",
+        "Bolt of Jerikor",
+        "Ancient: Chaos Vortex",
+        "Sun Vortex",
+        "Burning Sand",
+        "Firebolt of Tallon",
+        "Shock of Fiery Blades",
+        "Seeking Flame of Seukor",
+        "Scars of Sigil",
+        "Char",
+        "Lava Bolt",
+        "Cinder Bolt",
+        "Blaze",
+        "Bolt of Flame",
+        "Shock of Flame",
+        "Flame Bolt",
+        "Burn",
+        "Burst of Flame",
+    },
+
+    -- L22 Malaise (-15-20 cr, -15-20 mr, -15-20 pr, -15-20 fr, cost 60 mana)
+    -- L44 Malaisement (-36-40 cr, -36-40 mr, -36-40 pr, -36-40 fr, cost 100 mana)
+    -- L51 Malosi (-58-60 cr, -58-60 mr, -58-60 pr, -58-60 fr, cost 175 mana)
+    -- L60 Mala (-35 cr, -35 mr, -35 pr, -35 fr, unresistable, cost 350 mana)
+    -- L63 Malosinia (-70 cr, -70 mr, -70 pr, -70 fr, cost 300 mana)
+    mag_malos = {
+        "Malosinia",
+        "Mala",
+        "Malosi",
+        "Malaisement",
+        "Malaise",
+    },
+
+    -- L08 Renew Elements
+    -- L20 Renew Summoning
+    -- Lxx Primal Remedy
+    -- L59 Mend Companion AA (36 min reuse without Hastened Mending AA)
+    -- L60 Transon's Elemental Renewal (849-873 hp, -20 dr pr curse, cost 237 mana)
+    -- L64 Planar Renewal (1190-1200 hp, -24 dr pr curse, cost 290 mana)
+    -- L69 Renewal of Jerikor (1635-1645 hp, -28 dr pr curse, cost 358 mana)
+    mag_pet_heal = {
+        "Renewal of Jerikor",
+        "Planar Renewal",
+        "Transon's Elemental Renewal",
+        "Renew Summoning",
+        "Renew Elements",
+    },
 }
 
 SpellGroups.NEC = {
@@ -1125,6 +1212,96 @@ SpellGroups.WIZ = {
         "Ether Skin",
         "Force Shield",
     },
+
+    -- L04 Shock of Fire (13-16 hp, cost 15 mana)
+    -- L08 Fire Bolt (45-51 hp, cost 40 mana)
+    -- L16 Flame Shock (102-110 hp, cost 75 mana)
+    -- L29 Inferno Shock (237-250 hp, cost 135 mana)
+    -- L44 Conflagration (606-625 hp, cost 250 mana)
+    -- L49 Supernova (854 hp, cost 875 mana)
+    -- L51 Draught of Fire (643-688 hp, cost 215 mana)
+    -- L60 Sunstrike (1615 hp, resist adj -10, cost 450 mana)
+    -- L62 Draught of Ro (980 hp, resist adj -50, cost 255 mana)
+    -- L62 Lure of Ro (1090 hp, resist adj -300, cost 387 mana)
+    -- L65 Strike of Solusek (2740 hp, resist adj -10, cost 640 mana)
+    -- L65 White Fire (3015 hp, resist adj -10, cost 704 mana)
+    -- L65 Ancient: Strike of Chaos (3288 hp, resist adj -10, cost 768 mana)
+    -- L66 Spark of Fire (1348 hp, resist adj -50, cost 319 mana, 3s cast)
+    -- L68 Firebane (1500 hp, resist adj -300, cost 456 mana, 4.5s cast)
+    -- L70 Chaos Flame (random 1000 to 2000, resist adj -50, cost 275 mana, 3.0s cast)
+    -- L70 Ether Flame (5848 hp, resist adj -50, cost 1550 mana, 8s cast)
+    -- L70 Corona Flare (3770 hp, resist adj -10, cost 800 mana, 8s cast)
+    -- L70 Ancient: Core Fire (4070 hp, resist adj -10, cost 850 mana, 8s cast)
+    wiz_fire_nuke = {
+        "Ancient: Core Fire",
+        "Corona Flare",
+        "Ether Flame",
+        "Chaos Flame",
+        "Firebane",
+        "Spark of Fire",
+        "Ancient: Strike of Chaos",
+        "White Fire",
+        "Strike of Solusek",
+        "Lure of Ro",
+        "Draught of Ro",
+        "Sunstrike",
+        "Draught of Fire",
+        "Supernova",
+        "Conflagration",
+        "Inferno Shock",
+        "Flame Shock",
+        "Fire Bolt",
+        "Shock of Fire",
+    },
+
+    -- L01 Frost Bolt (9-14 hp, cost 6 mana)
+    -- L01 Blast of Cold (11-18 hp, cost 8 mana), called "Shock of Frost" on fvp
+    -- L08 Shock of Ice (46-58 hp, cost 23 mana)
+    -- L49 Ice Comet (808 hp, resist adj -10, cost 203 mana)
+    -- L57 Draught of Ice (793 hp, resist adj -10, cost 216 mana)
+    -- L60 Ice Spear of Solist (1076 hp, resist adj -10, cost 221 mana)
+    -- L61 Claw of Frost (1000 hp, resist adj -50, cost 167 mana)
+    -- L64 Ice Meteor (2460 hp, resist adj -10, cost 520 mana)
+    -- L64 Draught of E'ci (980 hp, resist adj -50, cost 255 mana)
+    -- L65 Black Ice (1078 hp, resist adj -10, cost 280 mana)
+    -- L66 Icebane (1500 hp, resist adj -300, cost 456 mana)
+    -- L68 Clinging Frost (1830 hp, resist adj -10, cost 350 mana + Clinging Frost Trigger DD)
+    -- L69 Gelidin Comet (3385 hp, resist adj -10, cost 650 mana)
+    -- L69 Spark of Ice (1348 hp, resist adj -50, cost 319 mana, 3s cast)
+    -- L69 Claw of Vox (1375 hp, resist adj -50, cost 208 mana, 5s cast)
+    -- L70 Ancient: Spear of Gelaqua (1976 hp, resist adj -10, cost 345 mana, 3.5s cast)
+    wiz_cold_nuke = {
+        -- XXX
+    },
+
+    -- L10 Shock of Lightning (74-83 hp, cost 50 mana)
+    -- L60 Elnerick's Electrical Rending (1796 hp, cost 421 mana)
+    -- L61 Lure of Thunder (1090 hp, resist adj -300, cost 365 mana)
+    -- L63 Draught of Thunder (980 hp, stun 1s/65, resist adj -50, cost 255 mana)
+    -- L63 Draught of Lightning (980 hp, resist adj -50, cost 255 mana)
+    -- L63 Agnarr's Thunder (2350 hp, cost 525 mana)
+    -- L65 Shock of Magic (random dmg up to 2400 hp, resist adj -20, cost 550 mana)
+    -- L67 Lightningbane (1500 hp, resist adj -300, cost 456 mana)
+    -- L68 Spark of Lightning (1348 hp, resist adj -50, cost 319 mana)
+    -- L68 Spark of Thunder (1348 hp, resist adj -50, cost 319 mana + 1s stun L70)
+    -- L68 Thundaka (3233 hp, cost 656 mana)
+    wiz_magic_nuke = {
+        -- XXX
+    },
+
+    -- L12 Firestorm (41 hp, FIRE, adj -10, aerange 25, recast 12s, cost 34 mana)
+    -- L24 Column of Lightning (128-136 hp, FIRE, aerange 15, recast 6s, cost 130 mana)
+    -- L26 Energy Storm (238 hp, MAGIC, adj -10, aerange 25, recast 12s, cost 148 mana)
+    -- L28 Shock Spiral of Al'Kabor (111-118 hp, MAGIC, aerange 35, recast 9s, cost 200 mana)
+    -- L31 Circle of Force (193-216 hp, FIRE, adj -10, aerange 15, recast 6s, cost 175 mana)
+    -- L32 Lava Storm (401 hp, FIRE, adj -10, aerange 25, recast 12s, cost 234 mana)
+    -- L61 Tears of Ro (1106 hp, FIRE, adj -10, aerange 25, recast 10s, cost 492 mana)
+    -- L64 Tears of Arlyxir (645 hp, FIRE, adj -300, aerange 25, recast 12s, cost 420 mana)
+    -- L66 Tears of the Sun (1168 hp, FIRE, adj -10, aerange 25, recast 10s, cost 529 mana)
+    -- L69 Meteor Storm (886 hp, FIRE, adj -300, aerange 25, recast 12s, cost 523 mana)
+    wiz_target_ae = {
+        -- XXX
+    },
 }
 
 SpellGroups.RNG = {
@@ -1235,6 +1412,16 @@ SpellGroups.RNG = {
 }
 
 SpellGroups.PAL = {
+    GroupHeals = { -- TODO make use of
+        "Hand of Piety",            -- PAL/??: AA Rank 1-XXX (24 min reuse with Hastened Piety Rank 3)
+        "Wave of Piety",            -- PAL/70: 1316 hp, cost 1048 mana
+        "Wave of Trushar",          -- PAL/65: 1143 hp, cost 921 mana
+        "Wave of Marr",             -- PAL/65: 960 hp, cost 850 mana
+        "Healing Wave of Prexus",   -- PAL/58: 688-698 hp
+        "Wave of Healing",          -- PAL/55: 439-489 hp
+        "Wave of Life",             -- PAL/39: 201-219 hp
+    },
+
     -- hp type 2 buff:
     -- L35 Divine Vigor (100 hp)
     -- L49 Brell's Steadfast Aegis (145 hp, group)
@@ -1462,18 +1649,6 @@ SpellGroups.BRD = {
     -- L51 Selo's Song of Travel (levi + invis)
     brd_travel = {
         "Selo's Song of Travel",
-    },
-
-    -- L28 Crission's Pixie Strike
-    -- L53 Song of Twilight
-    brd_mez = {
-        "Song of Twilight",
-        "Crission's Pixie Strike"
-    },
-
-    -- L15 Kelin's Lucid Lullaby
-    brd_ae_mez  = {
-        "Kelin's Lucid Lullaby"
     }
 }
 
