@@ -3,9 +3,9 @@
 require("ezmq")
 local log = require("knightlinc/Write")
 
-require("e4_Loot")
+local loot = require("e4_Loot")
 
-local loot = ReadLootSettings()
+local lootSettings = loot.ReadLootSettings()
 
 open_nearby_merchant()
 
@@ -43,7 +43,7 @@ for n = 1, num_inventory_slots() do
                 -- enqueue by posting to a special chanel, moderate using a custom UI
 
                 -- Until above is done, just write "Keep" for new items
-                local lootSetting = GetLootItemSetting(loot, item)
+                local lootSetting = loot.GetLootItemSetting(lootSettings, item)
                 --print(item, lootSetting)
 
                 if lootSetting ~= nil then
@@ -78,7 +78,7 @@ for n = 1, num_inventory_slots() do
                     end
                 else
                     all_tellf("New loot. Keeping %s", item.ItemLink("CLICKABLE")())
-                    SetLootItemSetting(loot, item, "Keep")
+                    loot.SetLootItemSetting(lootSettings, item, "Keep")
                 end
 
             end
@@ -88,7 +88,7 @@ for n = 1, num_inventory_slots() do
    end
 end
 
-WriteLootSettings(loot)
+loot.WriteLootSettings(lootSettings)
 
 close_window("MerchantWnd")
 

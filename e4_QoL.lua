@@ -496,12 +496,12 @@ function QoL.Init()
 
     -- turn auto loot on
     bind("/looton", function()
-        loot.autoloot = true
+        botSettings.settings.autoloot = true
     end)
 
     -- turn auto loot off
     bind("/lootoff", function()
-        loot.autoloot = false
+        botSettings.settings.autoloot = false
     end)
 
     -- make all peer quit expedition
@@ -529,7 +529,8 @@ function QoL.Init()
     -- track xp, auto adjust level / AA xp and auto loot
     local xpGain = function(text)
 
-        if loot.autoloot then
+        if botSettings.settings.autoloot then
+            all_tellf("AUTO LOOTING")
             mq.cmd("/doloot")
         end
 

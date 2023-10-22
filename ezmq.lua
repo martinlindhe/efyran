@@ -2169,14 +2169,18 @@ function castSpellAbility(spawnID, row, callback)
     end
 
     --log.Debug("castSpellAbility START CAST %s", spell.Name)
+    if not is_standing() then
+        mq.cmd("/stand")
+        mq.delay(50)
+    end
 
     castSpell(spell.Name, spawnID)
 
     -- delay until done casting
     if callback == nil then
         callback = function()
-            local spawn = spawn_from_id(spawnID)
-            return spawn == nil or spawn() == nil or spawn.Type() == "Corpse" or not is_casting()
+            local spawn1 = spawn_from_id(spawnID)
+            return spawn1 == nil or spawn1() == nil or spawn1.Type() == "Corpse" or not is_casting()
         end
     end
 

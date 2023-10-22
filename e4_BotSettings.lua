@@ -3,6 +3,8 @@ local log = require("knightlinc/Write")
 local mq = require("mq")
 
 ---@class PeerSettings
+---@field public debug boolean Enable debug logs
+---@field public autoloot boolean Enable auto loot
 ---@field public assist PeerSettingsAssist
 ---@field public gems string[]|nil XXX key is string, val is integer
 ---@field public self_buffs string[]|nil spellRows of self buffs
@@ -24,6 +26,8 @@ local botSettings = {
 local peerTemplate = [[
 ---@type PeerSettings
 local settings = { }
+
+settings.autoloot = false
 
 settings.gems = {
     --["Minor Healing"] = 1,
