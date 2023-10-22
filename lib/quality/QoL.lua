@@ -528,7 +528,7 @@ function QoL.Init()
     -- track xp, auto adjust level / AA xp and auto loot
     local xpGain = function(text)
 
-        if botSettings.settings.autoloot then
+        if botSettings.settings.autoloot and nearby_npc_count(50) == 0 then
             mq.cmd("/doloot")
         end
 

@@ -391,17 +391,27 @@ SpellGroups.CLR = {
         "Divine Intervention",
     },
 
+    -- L05 Holy Armor (slot 4: 6 ac)
+    -- L19 Spirit Armor (slot 4: 11-13 ac)
+    -- L29 Guard (slot 4: 18-19 ac)
+    -- L39 Armor of Faith (slot 4: 24-25 ac)
+    -- L49 Shield of Words (slot 4: 31 ac)
     -- L61 Ward of Gallantry (slot 4: 54 ac)
     -- L66 Ward of Valiance (slot 4: 72 ac)
     -- L71 Ward of the Dauntless (slot 4: 86 ac)
     -- L76 Ward of the Resolute Rk. II (solt 4: 109 ac)
     -- L80 Order of the Resolute Rk. II (slot 4: 109 ac, group)
-    -- NOTE: stacks with Symbol + DRU Skin + Focus
+    -- NOTE: stacks with clr_symbol + dru_skin + shm_focus
     clr_ac = {
-        "Order of the Resolute/CheckFor|Hand of Temerity",
-        "Ward of the Dauntless/CheckFor|Hand of Tenacity",
-        "Ward of Valiance/CheckFor|Hand of Conviction",
-        "Ward of Gallantry/CheckFor|Hand of Virtue",
+        "Order of the Resolute",
+        "Ward of the Dauntless",
+        "Ward of Valiance",
+        "Ward of Gallantry",
+        "Shield of Words",
+        "Armor of Faith",
+        "Guard",
+        "Spirit Armor",
+        "Holy Armor",
     },
 
     -- hp buff - aegolism line (slot 2 - does not stack with dru_skin):
@@ -645,8 +655,8 @@ SpellGroups.DRU = {
     -- L07 Strength of Earth (8-15 str)
     -- L34 Strength of Stone (22-25 str)
     -- L44 Storm Strength (32-35 str)
-    -- L55 Girdle of Karana (42 str)
-    -- L62 Nature's Might (55 str)
+    -- L55 Girdle of Karana (42 str) Kunark
+    -- L62 Nature's Might (55 str) PoP
     -- NOTE: Shaman has STR buffs too
     dru_str = {
         "Nature's Might",
@@ -1441,11 +1451,11 @@ SpellGroups.PAL = {
     },
 
     -- hp type 2 buff:
-    -- L35 Divine Vigor (100 hp)
-    -- L49 Brell's Steadfast Aegis (145 hp, group)
-    -- L60 Brell's Mountainous Barrier (225 hp, group)
-    -- L65 Brell's Stalwart Shield (330 hp, group)
-    -- L70 Brell's Brawny Bulwark (412 hp, group)
+    -- L35 Divine Vigor (100 hp) Luclin
+    -- L49 Brell's Steadfast Aegis (145 hp, group) PoP
+    -- L60 Brell's Mountainous Barrier (225 hp, group) Luclin
+    -- L65 Brell's Stalwart Shield (330 hp, group) PoP
+    -- L70 Brell's Brawny Bulwark (412 hp, group) OOW
     pal_hp = {
         "Brell's Brawny Bulwark",
         "Brell's Stalwart Shield",
