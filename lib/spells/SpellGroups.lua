@@ -34,16 +34,16 @@ SpellGroups.Lookup = {
     enc_haste = "ENC",
     enc_magic_resist = "ENC",
     enc_cha = "ENC",
+    enc_rune = "ENC",
     enc_group_rune = "ENC",
-    enc_single_rune = "ENC",
     enc_epic2 = "ENC",
     enc_oow_bp = "ENC",
 
     mag_group_ds = "MAG",
-    mag_single_ds = "MAG",
+    mag_ds = "MAG",
 
+    nec_levitate = "NEC",
     nec_group_levitate = "NEC",
-    nec_single_levitate = "NEC",
 
     rng_hp = "RNG",
     rng_atk = "RNG",
@@ -298,7 +298,7 @@ SpellGroups.SHM = {
 
 SpellGroups.CLR = {
 
-    GroupHeals = {
+    clr_group_heal = {
         -- CLR - cast group heals with cure component
         "Word of Vivification",     -- CLR/69: 3417-3427 hp, -21 dr, -21 pr, -14 curse, cost 1357 mana
         "Word of Replenishment",    -- CLR/64: 2500 hp, -14 dr, -14 pr, -7 curse, cost 1100 mana
@@ -359,35 +359,49 @@ SpellGroups.CLR = {
         "Celestial Healing",
     },
 
+    -- group hot:
+    -- L70 Elixir of Divinity (900 hp/tick, group, cost 1550 mana)
+    -- XXX add celestial regen aa here?!
+    clr_group_hot = {
+
+    },
+
     -- slot 3 hp buff - symbol line:
     -- L14 Symbol of Transal (34-72 hp, single)
     -- L24 Symbol of Ryltan
     -- L34 Symbol of Pinzarn
     -- L41 Symbol of Naltron (406-525 hp, single)
     -- L54 Symbol of Marzin (640-700 hp, single)
-    -- L58 Naltron's Mark (525 hp, group)
-    -- L60 Marzin's Mark (725 hp, group)
-    -- L61 Symbol of Kazad (910 hp, cost 600 mana)
-    -- L63 Kazad's Mark (910 hp, cost 1800 mana, group)
+    -- L61 Symbol of Kazad (910 hp, cost 600 mana) PoP
     -- L66 Symbol of Balikor (1137 hp, cost 780 mana)
-    -- L70 Balikor's Mark (1137 hp, cost 2340 mana, group)
     -- L71 Symbol of Elushar (1364 hp, cost 936 mana)
-    -- L75 Elushar's Mark Rk. II (1421 hp, cost 2925 mana, group)
     -- L76 Symbol of Kaerra Rk. II (1847 hp, cost 1190 mana)
-    -- L80 Kaerra's Mark (1563 hp, cost 3130 mana)
     -- NOTE: stacks with dru_skin and clr_ac
     clr_symbol = {
-        "Kaerra's Mark",
-        "Elushar's Mark",
-        "Balikor's Mark",
-        "Kazad's Mark",
-
-        "Naltron's Mark",
+        "Symbol of Kaerra",
+        "Symbol of Elushar",
+        "Symbol of Balikor",
+        "Symbol of Kazad",
         "Symbol of Marzin/Reagent|Peridot",
         "Symbol of Naltron/Reagent|Peridot",
         "Symbol of Pinzarn/Reagent|Jasper",
         "Symbol of Ryltan/Reagent|Bloodstone",
         "Symbol of Transal/Reagent|Cat's Eye Agate",
+    },
+
+    -- L58 Naltron's Mark (525 hp, group)
+    -- L60 Marzin's Mark (725 hp, group)
+    -- L63 Kazad's Mark (910 hp, cost 1800 mana, group) PoP
+    -- L70 Balikor's Mark (1137 hp, cost 2340 mana, group)
+    -- L75 Elushar's Mark Rk. II (1421 hp, cost 2925 mana, group)
+    -- L80 Kaerra's Mark (1563 hp, cost 3130 mana, group)
+    clr_group_symbol = {
+        "Kaerra's Mark",
+        "Elushar's Mark",
+        "Balikor's Mark",
+        "Kazad's Mark",
+        "Marzin's Mark",
+        "Naltron's Mark",
     },
 
     -- slot 1: Death Save:
@@ -421,19 +435,45 @@ SpellGroups.CLR = {
 
     -- hp buff - aegolism line (slot 2 - does not stack with dru_skin):
     -- L01 Courage (20 hp, 4 ac, single)
-    -- L40 Temperance (800 hp, 48 ac, single) - LANDS ON L01
-    -- L45 Blessing of Temperance (800 hp, 48 ac, group) - LANDS ON L01
-    -- L60 Aegolism (1150 hp, 60 ac, single)
-    -- L60 Blessing of Aegolism (1150 hp, 60 ac, group)
-    -- L62 Virtue (1405 hp, 72 ac, single)
-    -- L65 Hand of Virtue (1405 hp, 72 ac, group) - LANDS ON L47
+    -- L09 Center (44-105 hp, 5-6 ac)
+    -- L19 Daring (84-135 hp, 7-9 ac)
+    -- L24 Bravery (114-140 hp, 9-10 ac)
+    -- L34 Valor (168-200 hp, 12-13 ac)
+    -- L40 Temperance (800 hp, 48 ac, single) LoY - LANDS ON L01
+    -- L44 Resolution (232-250 hp, 15-16 ac)
+    -- L52 Heroism (360-400 hp, 18-19 ac, 1h12m duration) Kunark
+    -- L52 Heroic Bond (360-400 hp, 18-19 ac, group) Kunark
+    -- L55 Fortitude (320-360 hp, 17-18 ac, 2h24m duration) Kunark
+    -- L60 Aegolism (1150 hp, 60 ac, single) Velious
+    -- L62 Virtue (1405 hp, 72 ac, single) PoP
     -- L67 Conviction (1787 hp, 94 ac)
-    -- L70 Hand of Conviction (1787 hp, 94 ac, group) - LANDS ON L62
     -- L72 Tenacity (2144 hp, 113 ac)
-    -- L75 Hand of Tenacity Rk. II (2234 hp, 118 ac, group)
     -- L7x Temerity ??? XXX
-    -- L80 Hand of Temerity (2457 hp, 126 ac, group)
     clr_aegolism = {
+        "Temerity",
+        "Tenacity",
+        "Conviction",
+        "Virtue",
+        "Aegolism",
+        "Temperance",
+        "Fortitude",
+        "Heroic Bond",
+        "Heroism",
+        "Resolution",
+        "Valor",
+        "Bravery",
+        "Daring",
+        "Center",
+        "Courage",
+    },
+
+    -- L45 Blessing of Temperance (800 hp, 48 ac, group) LDoN - LANDS ON L01
+    -- L60 Blessing of Aegolism (1150 hp, 60 ac, group) Luclin
+    -- L65 Hand of Virtue (1405 hp, 72 ac, group) PoP - LANDS ON L47
+    -- L70 Hand of Conviction (1787 hp, 94 ac, group) - LANDS ON L62
+    -- L75 Hand of Tenacity Rk. II (2234 hp, 118 ac, group)
+    -- L80 Hand of Temerity (2457 hp, 126 ac, group)
+    clr_group_aegoism = {
         "Hand of Temerity",
         "Hand of Tenacity",
         "Hand of Conviction",
@@ -461,22 +501,30 @@ SpellGroups.CLR = {
         "Guard of Vie",
     },
 
-    -- spell haste:
-    -- L15 Blessing of Piety (10% spell haste to L39, 40 min)
-    -- L35 Blessing of Faith (10% spell haste to L61, 40 min)
-    -- L62 Blessing of Reverence (10% spell haste to L65, 40 min)
-    -- L64 Aura of Reverence (10% spell haste to L65, 40 min, group)
-    -- L67 Blessing of Devotion (10% spell haste to L70, 40 min, 390 mana)
-    -- L69 Aura of Devotion (10% spell haste to L70, 45 min, group, 1125 mana)
+    -- L15 Blessing of Piety (10% spell haste to L39, 40 min) PoP
+    -- L35 Blessing of Faith (10% spell haste to L61, 40 min) PoP
+    -- L62 Blessing of Reverence (10% spell haste to L65, 40 min) PoP
+    -- L67 Blessing of Devotion (10% spell haste to L70, 40 min, 390 mana) OOW
     -- L71 Blessing of Purpose (9% spell haste to L75, 40 min, 390 mana)
-    -- L72 Aura of Purpose Rk. II (10% spell haste to L75, 45 min, group, 1125 mana)
     -- L76 Blessing of Resolve Rk. II (10% spell haste to L80, 40 min, 390 mana)
-    -- L77 Aura of Resolve Rk. II (10% spell haste to L80, 45 min, group, 1125 mana)
     clr_spellhaste = {
+        "Blessing of Resolve",
+        "Blessing of Purpose",
+        "Blessing of Devotion",
+        "Blessing of Reverence",
+        "Blessing of Faith",
+        "Blessing of Piety",
+    },
+
+    -- L64 Aura of Reverence (10% spell haste to L65, 40 min, group) LDoN
+    -- L69 Aura of Devotion (10% spell haste to L70, 45 min, group, 1125 mana) OOW
+    -- L72 Aura of Purpose Rk. II (10% spell haste to L75, 45 min, group, 1125 mana)
+    -- L77 Aura of Resolve Rk. II (10% spell haste to L80, 45 min, group, 1125 mana)
+    clr_group_spellhaste = {
         "Aura of Resolve",
         "Aura of Purpose",
         "Aura of Devotion",
-        "Blessing of Faith",
+        "Aura of Reverence",
     },
 
     -- self mana regen:
@@ -497,10 +545,102 @@ SpellGroups.CLR = {
         "Armor of the Faithful",
         "Armor of Protection",
     },
+
+    -- L01 Yaulp () Original
+    -- L19 Yaulp II () Original
+    -- L44 Yaulp III () Original
+    -- L53 Yaulp IV () Kunark
+    -- L56 Yaulp V (50 atk, 10 mana/tick, 75 dex, 25% haste)
+    -- L65 Yaulp VI (60 atk, 12 mana/tick, 90 dex, 30% haste)
+    -- L69 Yaulp VII (80 atk, 14 mana/tick, 100 dex, 30% haste)
+    clr_yaulp = {
+        "Yaulp VII",
+        "Yaulp VI",
+        "Yaulp V",
+        "Yaulp IV",
+        "Yaulp III",
+        "Yaulp II",
+        "Yaulp",
+    },
+
+    -- L05 Stun
+    -- L19 Holy Might
+    -- L34 Force
+    -- L49 Sound of Force
+    -- L58 Enforced Reverence
+    clr_stun = {
+        "Enforced Reverence",
+        "Sound of Force",
+        "Force",
+        "Holy Might",
+        "Stun",
+    },
+
+    -- L01 Strike (-6-8 hp, cost 12 mana)
+    -- L05 Furor (-16-19 hp, cost 20 mana)
+    -- L14 Smite (-74-83 hp, cost 70 mana)
+    -- L29 Wrath (-192-218 hp, cost 145 mana)
+    -- L44 Retribution (372-390 hp, cost 240 mana) Original
+    -- L54 Reckoning (675 hp, cost 250 mana) Kunark
+    -- L56 Judgment (842 hp, cost 274 mana)
+    -- L62 Condemnation (1175 hp, cost 365 mana)
+    -- L65 Order (1219 hp, cost 379 mana)
+    -- L65 Ancient: Chaos Censure (1329 hp, cost 413 mana)
+    -- L67 Reproach (1424-1524 hp, cost 430 mana)
+    -- L69 Chromastrike (1200 hp, cost 375 mana, chromatic resist)
+    -- L70 Ancient: Pious Conscience (1646 hp, cost 457 mana)
+    clr_magic_nuke = {
+        "Ancient: Pious Conscience",
+        "Chromastrike",
+        "Reproach",
+        "Ancient: Chaos Censure",
+        "Order",
+        "Condemnation",
+        "Judgment",
+        "Reckoning",
+        "Retribution",
+        "Wrath",
+        "Smite",
+        "Furor",
+        "Strike",
+    },
+
+    -- pbae magic nukes:
+    -- L09 Word of Pain (24-29 hp, aerange 20, recast 9s, cost 47 mana)
+    -- L19 Word of Shadow (52-58 hp, aerange 20, recast 9s, cost 85 mana)
+    -- L26 Word of Spirit (91-104 hp, aerange 20, recast 9s, cost 133 mana)
+    -- L34 Tremor (106-122 hp, aerange 30, recast 10s, cost 200 mana)
+    -- L39 Word of Souls (138-155 hp, aerange 20, recast 9s, cost 171 mana)
+    -- L44 Earthquake (214-246 hp, aerange 30, recast 24s, cost 375 mana)
+    -- L49 Word Divine (339 hp, aerange 20, recast 9s, cost 304 mana)
+    -- L52 Upheaval (618-725 hp, aerange 35, recast 24s, cost 625 mana)
+    -- L59 The Unspoken Word (605 hp, aerange 20, recast 120s, cost 427 mana)
+    -- L64 Catastrophe (850 hp, aerange 35, recast 24s, cost 650 mana)
+    -- L69 Calamity (1105 hp, aerange 35, recast 24s, cost 812 mana - PUSHBACK 1.0)
+    clr_pbae_nuke = {
+        "Calamity",
+        "Catastrophe",
+        "The Unspoken Word",
+        "Upheaval",
+        "Word Divine",
+        "Earthquake",
+        "Word of Souls",
+        "Tremor",
+        "Word of Spirit",
+        "Word of Shadow",
+        "Word of Pain",
+    },
+
+    -- oow T1 bp: Sanctified Chestguard (increase healing spell potency by 1-50% for 0.5 min)
+    -- oow T2 bp: Faithbringer's Breastplate of Conviction (increase healing spell potency by 1-50% for 0.7 min)
+    clr_oow_bp = {
+        "Faithbringer's Breastplate of Conviction",
+        "Sanctified Chestguard",
+    },
 }
 
 SpellGroups.DRU = {
-    GroupHeals = { -- TODO make use of
+    dru_group_heal = { -- TODO make use of
         "Moonshadow",               -- DRU/70: 1500 hp, cost 1100 mana, 4.5S cast, 18s recast
     },
 
@@ -639,7 +779,7 @@ SpellGroups.DRU = {
     -- L77 Viridifloral Bulwark Rk. II (86 ds, 15 min)
     -- L80 Legacy of Viridithorns Rk. II (86 ds, 15 min, group)
     -- NOTE: MAGE DS IS STRONGER
-    dru_single_ds = {
+    dru_ds = {
         "Viridifloral Bulwark",
         "Viridifloral Shield",
         "Nettle Shield",
@@ -960,14 +1100,6 @@ SpellGroups.ENC = {
         "Sympathetic Aura",
     },
 
-    -- slot 1:
-    -- L69 Rune of Rikkukin (absorb 1500 dmg, group) DoN
-    -- L79 Rune of the Deep Rk. II (absorb 4118 dmg, slot 2: defensive proc Blurred Shadows Rk. II)
-    enc_group_rune = {
-        "Rune of the Deep",
-        "Rune of Rikkukin", -- DoN progression reward
-    },
-
     -- targeted rune - slot 1:
     -- L16 Rune I (absorb 27-55 dmg, 36 min) Original
     -- L24 Rune II (absorb 71-118 dmg, 54 min) Original
@@ -978,7 +1110,7 @@ SpellGroups.ENC = {
     -- L67 Rune of Salik (absorb 1105 dmg) OOW
     -- L71 Rune of Ellowind (absorb 2160 dmg) SerpentSpine
     -- L76 Rune of Erradien (absorb rk1 5363 dmg, rk2 5631 dmg) SoF
-    enc_single_rune = {
+    enc_rune = {
         "Rune of Erradien/Reagent|Peridot",
         "Rune of Ellowind/Reagent|Peridot",
         "Rune of Salik/Reagent|Peridot",
@@ -988,6 +1120,14 @@ SpellGroups.ENC = {
         "Rune III/Reagent|Jasper",
         "Rune II/Reagent|Bloodstone",
         "Rune I/Reagent|Cat's Eye Agate",
+    },
+
+    -- slot 1:
+    -- L69 Rune of Rikkukin (absorb 1500 dmg, group) DoN
+    -- L79 Rune of the Deep Rk. II (absorb 4118 dmg, slot 2: defensive proc Blurred Shadows Rk. II)
+    enc_group_rune = {
+        "Rune of the Deep",
+        "Rune of Rikkukin", -- DoN progression reward
     },
 
     -- self rune - slot 3:
@@ -1055,7 +1195,7 @@ SpellGroups.ENC = {
     -- L64 Bliss             (0.9 min/L68, resist adj -10, 80% memblur, 300 mana) PoP
     -- L67 Felicity          (0.9 min/L70, resist adj -10, 70% memblur, 340 mana) OOW
     -- L69 Euphoria          (0.9 min/L73, resist adj -10, 70% memblur, 375 mana) OOW
-    enc_single_mez = {
+    enc_mez = {
         "Euphoria/MaxLevel|73",
         "Felicity/MaxLevel|70",
         "Bliss/MaxLevel|68",
@@ -1074,7 +1214,7 @@ SpellGroups.ENC = {
     -- L62 Word of Morell (0.3 min/L65, aerange 30, cost 300 mana) PoP
     -- L65 Bliss of the Nihil (0.6 min/L68, aerange 25, cost 850 mana, 6 sec recast) GoD
     -- L69 Wake of Felicity (0.9 min/L70, 25 aerange, 6 sec recast)
-    enc_mez_ae = {
+    enc_ae_mez = {
         "Wake of Felicity/MaxLevel|70",
         "Bliss of the Nihil/MaxLevel|68",
         "Word of Morell/MaxLevel|65",
@@ -1213,7 +1353,7 @@ SpellGroups.MAG = {
     -- L56 Cadeau of Flame (35 ds, 33 fr, 15 min, single)
     -- L61 Flameshield of Ro (48 ds, 45 fr, 15 min, single)
     -- L66 Fireskin (62 ds - slot 1, 45 fr, 15 min, single)
-    mag_single_ds = {
+    mag_ds = {
         "Fireskin",
         "Flameshield of Ro",
         "Cadeau of Flame",
@@ -1375,12 +1515,13 @@ SpellGroups.MAG = {
 
 SpellGroups.NEC = {
     -- L41 Dead Man Floating (61-70 pr, water breathing, see invis, levitate)
+    nec_levitate = {
+        "Dead Man Floating",
+    },
+
     -- L45 Dead Men Floating (65-70 pr, water breathing, see invis, levitate, group)
     nec_group_levitate = {
         "Dead Men Floating",
-    },
-    nec_single_levitate = {
-        "Dead Man Floating",
     },
 
     -- lich (dont stack with clarity line):
@@ -1703,7 +1844,7 @@ SpellGroups.RNG = {
 }
 
 SpellGroups.PAL = {
-    GroupHeals = { -- TODO make use of
+    pal_group_heal = { -- TODO make use of
         "Hand of Piety",            -- PAL/??: AA Rank 1-XXX (24 min reuse with Hastened Piety Rank 3)
         "Wave of Piety",            -- PAL/70: 1316 hp, cost 1048 mana
         "Wave of Trushar",          -- PAL/65: 1143 hp, cost 921 mana

@@ -1,11 +1,9 @@
-
 local Default = {}
 
--- REQUEST DEFAULTS BY CLASS
+-- BUFF REQUEST DEFAULTS BY CLASS
 Default.WAR = {
-    -- should we ask for symbol / aegolism?   XXX try this out.
+    -- should we ask for symbol / aegolism?   XXX try this out:
     --"clr_symbol/Class|DRU,CLR",         -- CLR
-    --"clr_ac/Class|DRU,CLR",             -- CLR
     --"dru_skin/Class|DRU,CLR",           -- DRU
     --"clr_aegolism/Class|CLR/NotClass|DRU",  -- CLR
 
@@ -15,20 +13,15 @@ Default.WAR = {
 
     "shm_focus/Class|SHM",
 
-    --"pal_hp/Class|PAL/CheckFor|Spiritual Vitality,Strength of Tunare",                 -- 1st
-    --"bst_hp/Class|BST/NotClass|PAL/CheckFor|Brell's Brawny Bulwark,Strength of Tunare",    -- 2nd
-    --"rng_hp/Class|RNG/NotClass|PAL,BST/CheckFor|Brell's Brawny Bulwark,Spiritual Vitality",-- 3rd
-    "rng_hp/Class|RNG/CheckFor|Brell's Brawny Bulwark,Spiritual Vitality",
-
     "rng_atk/Class|RNG",
     "enc_haste/Class|ENC",
-    "shm_haste/Class|SHM/NotClass|ENC/CheckFor|Hastening of Salik",
+    "shm_haste/Class|SHM/NotClass|ENC",
 
     --"dru_fire_resist/Class|DRU",
     "enc_magic_resist/Class|ENC",
     "shm_disease_resist/Class|SHM",
 
-    "mag_single_ds/Class|MAG",
+    "mag_ds/Class|MAG",
 }
 
 Default.SHD = {
@@ -39,20 +32,15 @@ Default.SHD = {
 
     "shm_focus/Class|SHM",
 
-    --"pal_hp/Class|PAL",                 -- 1st
-    --"bst_hp/Class|BST/NotClass|PAL",    -- 2nd
-    --"rng_hp/Class|RNG/NotClass|PAL,BST",-- 3rd
-    "rng_hp/Class|RNG/CheckFor|Brell's Brawny Bulwark,Spiritual Vitality",
-
     "rng_atk/Class|RNG",
     "enc_haste/Class|ENC",
-    "shm_haste/Class|SHM/NotClass|ENC/CheckFor|Hastening of Salik",
+    "shm_haste/Class|SHM/NotClass|ENC",
 
     --"dru_fire_resist/Class|DRU",
     "enc_magic_resist/Class|ENC",
     "shm_disease_resist/Class|SHM",
 
-    "mag_single_ds/Class|MAG",
+    "mag_ds/Class|MAG",
 }
 
 Default.PAL = {
@@ -65,30 +53,26 @@ Default.PAL = {
 
     "rng_atk/Class|RNG",
     "enc_haste/Class|ENC",
-    "shm_haste/Class|SHM/NotClass|ENC/CheckFor|Hastening of Salik",
+    "shm_haste/Class|SHM/NotClass|ENC",
 
     --"dru_fire_resist/Class|DRU",
     "enc_magic_resist/Class|ENC",
     "shm_disease_resist/Class|SHM",
 
---    "mag_single_ds/Class|MAG",
+--    "mag_ds/Class|MAG",
     "dru_str/Class|DRU",
 }
 
 Default.BRD = {
-    "clr_symbol/Class|CLR",
+    --"clr_symbol/Class|CLR", -- expensive for my L20 CLR
     --"clr_ac/Class|CLR",
     "dru_skin/Class|DRU",
     "shm_focus/Class|SHM",
 
-    "rng_hp/Class|RNG/CheckFor|Brell's Brawny Bulwark,Spiritual Vitality",            -- 1st
-    --"bst_hp/Class|BST/NotClass|RNG",    -- 2nd
-    --"pal_hp/Class|PAL/NotClass|RNG,BST",-- 3rd
-
     "rng_atk/Class|RNG",
     "shm_str/Class|SHM",
     "enc_haste/Class|ENC",
-    "shm_haste/Class|SHM/NotClass|ENC/CheckFor|Hastening of Salik",
+    "shm_haste/Class|SHM/NotClass|ENC",
 
     --"dru_fire_resist/Class|DRU",
     "enc_magic_resist/Class|ENC",
@@ -100,33 +84,23 @@ Default.CLR = {
     "dru_skin/Class|DRU",
     "shm_focus/Class|SHM",
 
-    --"pal_hp/Class|PAL",                 -- 1st
-    --"bst_hp/Class|BST/NotClass|PAL",    -- 2nd
-    --"rng_hp/Class|RNG/NotClass|PAL,BST",-- 3rd
-    "rng_hp/Class|RNG/CheckFor|Brell's Brawny Bulwark,Spiritual Vitality",
-
     "enc_manaregen/Class|ENC",
     "bst_manaregen/Class|BST",
 
     --"dru_fire_resist/Class|DRU",
     "enc_magic_resist/Class|ENC",
     "shm_disease_resist/Class|SHM",
+
+    "dru_str/Class|DRU", -- for looting
 }
 
 Default.DRU = {
     "clr_symbol/Class|CLR",
     "shm_focus/Class|SHM",
 
-    --"pal_hp/Class|PAL",                 -- 1st
-    --"bst_hp/Class|BST/NotClass|PAL",    -- 2nd
-    --"rng_hp/Class|RNG/NotClass|PAL,BST",-- 3rd
-    "rng_hp/Class|RNG/CheckFor|Brell's Brawny Bulwark,Spiritual Vitality",
-
     "enc_manaregen/Class|ENC",
-    "bst_manaregen/Class|BST",
 
-    "clr_spellhaste/Class|CLR",
-    "clr_vie/Class|CLR",
+    --"clr_vie/Class|CLR",
 
     "enc_magic_resist/Class|ENC",
     "shm_disease_resist/Class|SHM",
@@ -136,15 +110,9 @@ Default.SHM = {
     "clr_symbol/Class|CLR",
     "dru_skin/Class|DRU",
 
-    --"pal_hp/Class|PAL",                 -- 1st
-    --"bst_hp/Class|BST/NotClass|PAL",    -- 2nd
-    --"rng_hp/Class|RNG/NotClass|PAL,BST",-- 3rd
-    "rng_hp/Class|RNG/CheckFor|Brell's Brawny Bulwark,Spiritual Vitality",
-
     "enc_manaregen/Class|ENC",
-    "bst_manaregen/Class|BST",
 
-    "clr_vie/Class|CLR",
+    --"clr_vie/Class|CLR",
 
     --"dru_fire_resist/Class|DRU",
     "enc_magic_resist/Class|ENC",
@@ -152,24 +120,21 @@ Default.SHM = {
 
 Default.ENC = {
     "clr_symbol/Class|CLR",
-    --"clr_ac/Class|CLR",
+
     "dru_skin/Class|DRU",
     "shm_focus/Class|SHM",
 
-    --"pal_hp/Class|PAL",                 -- 1st
-    --"bst_hp/Class|BST/NotClass|PAL",    -- 2nd
-    --"rng_hp/Class|RNG/NotClass|PAL,BST",-- 3rd
-    "rng_hp/Class|RNG/CheckFor|Brell's Brawny Bulwark,Spiritual Vitality",
-
-    "bst_manaregen/Class|BST",
-    "clr_vie/Class|CLR",
+    --"clr_vie/Class|CLR",
 
     --"dru_fire_resist/Class|DRU",
     "shm_disease_resist/Class|SHM",
 
-    --"mag_single_ds/Class|MAG",
+    --"mag_ds/Class|MAG",
 
-    "dru_runspeed/Class|DRU",
+    "clr_ac/Class|CLR", -- for pulling
+    "dru_runspeed/Class|DRU",  -- for pulling
+
+    "dru_str/Class|DRU", -- for looting
 }
 
 Default.WIZ = {
@@ -178,14 +143,8 @@ Default.WIZ = {
     "dru_skin/Class|DRU",
     "shm_focus/Class|SHM",
 
-    --"pal_hp/Class|PAL",                 -- 1st
-    --"bst_hp/Class|BST/NotClass|PAL",    -- 2nd
-    --"rng_hp/Class|RNG/NotClass|PAL,BST",-- 3rd
-    "rng_hp/Class|RNG/CheckFor|Brell's Brawny Bulwark,Spiritual Vitality",
-
     "enc_manaregen/Class|ENC",
-    "bst_manaregen/Class|BST",
-    "clr_vie/Class|CLR",
+    --"clr_vie/Class|CLR",
 
     --"dru_fire_resist/Class|DRU",
     "shm_disease_resist/Class|SHM",
@@ -198,13 +157,7 @@ Default.MAG = {
     "dru_skin/Class|DRU",
     "shm_focus/Class|SHM",
 
-    --"pal_hp/Class|PAL",                 -- 1st
-    --"bst_hp/Class|BST/NotClass|PAL",    -- 2nd
-    --"rng_hp/Class|RNG/NotClass|PAL,BST",-- 3rd
-    "rng_hp/Class|RNG/CheckFor|Brell's Brawny Bulwark,Spiritual Vitality",
-
     "enc_manaregen/Class|ENC",
-    "bst_manaregen/Class|BST",
     --"clr_vie/Class|CLR",
 
     --"dru_fire_resist/Class|DRU",
@@ -218,12 +171,6 @@ Default.NEC = {
     "dru_skin/Class|DRU",
     "shm_focus/Class|SHM",
 
-    --"pal_hp/Class|PAL",                 -- 1st
-    --"bst_hp/Class|BST/NotClass|PAL",    -- 2nd
-    --"rng_hp/Class|RNG/NotClass|PAL,BST",-- 3rd
-    "rng_hp/Class|RNG/CheckFor|Brell's Brawny Bulwark,Spiritual Vitality",
-
-    "bst_manaregen/Class|BST",
     --"clr_vie/Class|CLR",
 
     --"dru_fire_resist/Class|DRU",
@@ -239,10 +186,9 @@ Default.RNG = {
 
     "shm_str/Class|SHM",
     "enc_haste/Class|ENC",
-    "shm_haste/Class|SHM/NotClass|ENC/CheckFor|Hastening of Salik",
+    "shm_haste/Class|SHM/NotClass|ENC",
 
     "enc_manaregen/Class|ENC",
-    --"bst_manaregen/Class|BST",   -- XXX out of buff slots, sep 2022
 
     --"dru_fire_resist/Class|DRU",
     "enc_magic_resist/Class|ENC",
@@ -257,14 +203,10 @@ Default.ROG = {
     "dru_skin/Class|DRU",
     "shm_focus/Class|SHM",
 
-    "rng_hp/Class|RNG/CheckFor|Brell's Brawny Bulwark,Spiritual Vitality",                 -- 1st
-    --"bst_hp/Class|BST/NotClass|RNG",    -- 2nd
-    --"pal_hp/Class|PAL/NotClass|RNG,BST",-- 3rd
-
     "shm_str/Class|SHM",
     "rng_atk/Class|RNG",
     "enc_haste/Class|ENC",
-    "shm_haste/Class|SHM/NotClass|ENC/CheckFor|Hastening of Salik",
+    "shm_haste/Class|SHM/NotClass|ENC",
 
     --"dru_fire_resist/Class|DRU",
     "enc_magic_resist/Class|ENC",
@@ -277,55 +219,10 @@ Default.MNK = {
     "dru_skin/Class|DRU",
     "shm_focus/Class|SHM",
 
-    "rng_hp/Class|RNG/CheckFor|Brell's Brawny Bulwark,Spiritual Vitality",                 -- 1st
-    --"bst_hp/Class|BST/NotClass|RNG",    -- 2nd
-    --"pal_hp/Class|PAL/NotClass|RNG,BST",-- 3rd
-
     "shm_str/Class|SHM",
     "rng_atk/Class|RNG",
     "enc_haste/Class|ENC",
-    "shm_haste/Class|SHM/NotClass|ENC/CheckFor|Hastening of Salik",
-
-    --"dru_fire_resist/Class|DRU",
-    "enc_magic_resist/Class|ENC",
-    "shm_disease_resist/Class|SHM",
-}
-
-Default.BST = {
-    "clr_symbol/Class|CLR",
-    --"clr_ac/Class|CLR",
-    "dru_skin/Class|DRU",
-    "shm_focus/Class|SHM",
-
-    "rng_hp/Class|RNG/CheckFor|Brell's Brawny Bulwark,Spiritual Vitality",                 -- 1st
-
-    "shm_str/Class|SHM",
-    "rng_atk/Class|RNG",
-    "enc_haste/Class|ENC",
-    "shm_haste/Class|SHM/NotClass|ENC/CheckFor|Hastening of Salik",
-
-    "enc_manaregen/Class|ENC",
-    "bst_manaregen/Class|BST",
-
-    --"dru_fire_resist/Class|DRU",
-    "enc_magic_resist/Class|ENC",
-    "shm_disease_resist/Class|SHM",
-}
-
-Default.BER = {
-    "clr_symbol/Class|CLR",
-    --"clr_ac/Class|CLR",
-    "dru_skin/Class|DRU",
-    "shm_focus/Class|SHM",
-
-    "rng_hp/Class|RNG/CheckFor|Brell's Brawny Bulwark,Spiritual Vitality",                 -- 1st
-    --"bst_hp/Class|BST/NotClass|RNG",    -- 2nd
-    --"pal_hp/Class|PAL/NotClass|RNG,BST",-- 3rd
-
-    "shm_str/Class|SHM",
-    "rng_atk/Class|RNG",
-    "enc_haste/Class|ENC",
-    "shm_haste/Class|SHM/NotClass|ENC/CheckFor|Hastening of Salik",
+    "shm_haste/Class|SHM/NotClass|ENC",
 
     --"dru_fire_resist/Class|DRU",
     "enc_magic_resist/Class|ENC",
