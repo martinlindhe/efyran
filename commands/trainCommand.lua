@@ -1,13 +1,14 @@
 local mq = require("mq")
 local log = require("knightlinc/Write")
-local broadCastInterfaceFactory = require 'broadcast/broadcastinterface'
+local broadCastInterfaceFactory = require("broadcast/broadcastinterface")
 local commandQueue = require("CommandQueue")
 
 local bci = broadCastInterfaceFactory()
 
 local trainers = {
-    language = require 'commands/train/language',
-    begging = require 'commands/train/begging',
+    language = require("commands/train/language"),
+    begging = require("commands/train/begging"),
+    alcohol = require("commands/train/alcohol"),
 }
 
 ---@class TrainCommand
