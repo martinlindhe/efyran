@@ -353,6 +353,8 @@ function QoL.Init()
     -- clear all chat windows on all peers
     bind("/cls", function() bci.ExecuteAllWithSelfCommand("/clear") end)
 
+    bind("/separator", function() mq.cmd("/bc ... <- [+r+]${Time.Time24}[+x+] -> ...") end)
+
     bind("/self", function() mq.cmd("/target myself") end)
 
     -- hide existing corpses
@@ -672,8 +674,10 @@ end
 function QoL.loadRequiredPlugins()
     local requiredPlugins = {
         "MQ2Debuffs",
+        "MQ2Cast", -- for /casting
+        "MQ2LinkDB", -- for /link and /findslot
+
         "MQ2MoveUtils", -- for /stick, /moveto
-        "MQ2Cast",
         "MQ2Medley",  -- Bard songs
         "MQ2AdvPath",   -- for /afollow
         --"MQ2Nav", -- TODO requires mesh files etc
