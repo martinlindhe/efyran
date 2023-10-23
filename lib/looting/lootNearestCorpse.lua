@@ -185,7 +185,10 @@ local function lootCorpse()
         mq.delay("1s", function() return not mq.TLO.Window("LootWnd").Open() end)
     end
 
-    broadcast.Success({}, "Ending loot on \ay%s\ax, %d items left", name, corpse.Items() or 0)
+    local left = corpse.Items() or 0
+    if left > 0 then
+        broadcast.Success({}, "Ending loot on \ay%s\ax, %d items left", name, corpse.Items() or 0)
+    end
 end
 
 --@param seekRadius integer

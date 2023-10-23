@@ -3,6 +3,11 @@ local log = require("knightlinc/Write")
 local commandQueue = require("CommandQueue")
 local lootNearestCorpse = require("lib/looting/lootNearestCorpse")
 
+local cantLoot = false
+mq.event("cannot-loot", "You may not loot this corpse at this time.", function(line)
+    cantLoot = true
+end)
+
 -- loot up several  nearby corpses at once
 local function execute()
     local seekRadius = 100
@@ -12,13 +17,14 @@ local function execute()
 
     while true do
         local count = spawn_count(string.format("npccorpse zradius 50 radius %d", seekRadius))
-        if count == 0 or tries >= maxTries then
-            log.Info("/doloot: Giving up, %d corpse nearby, try %d", count, tries)
+        if count == 0 or tries >= maxTries or cantLoot then
+            log.Info("/doloot: Giving up, %d corpse nearby, try %d, cantLoot %s", count, tries, tostring(cantLoot))
             break
         end
 
         lootNearestCorpse(seekRadius)
         tries = tries + 1
+        mq.doevents()
     end
 end
 
