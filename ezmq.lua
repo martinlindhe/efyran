@@ -7,7 +7,10 @@ local log = require("knightlinc/Write")
 
 local timer = require("Timer")
 
+local follow  = require("lib/following/Follow")
+
 local spellGroups  = require("lib/spells/SpellGroups")
+local globalSettings = require("lib/settings/default/Settings")
 
 -- returns true if `spawn` is within maxDistance
 ---@param spawn spawn
@@ -50,7 +53,7 @@ function move_to(spawnID)
         return false
     end
 
-    --if not line_of_sight_to(spawn) then
+    --if globalSettings.followMode:lower() == "mq2advpath" and not line_of_sight_to(spawn) then
     --    all_tellf("move_to ERROR: cannot see %s", spawn.Name())
     --    return
     --end
@@ -61,37 +64,29 @@ function move_to(spawnID)
         return true
     end
 
-    if mq.TLO.Stick.Active() then
-        mq.cmd("/stick off")
-        mq.delay(50)
-    end
-
     if not is_standing() then
         mq.cmd("/stand")
         mq.delay(50)
     end
 
-    -- MQ2Nav XXX
-    -- mq.cmdf("/nav id %d", spawnID)
+    -- abort existing follow commands
+    follow.Pause()
 
-    -- Uses MQ2MoveUtils, NOTE: mq2advpath don't have a "move to" command
-    mq.cmdf("/moveto id %d dist %d", spawnID, dist)
-    if spawn == nil or spawn() == nil then
-        return false
+    if globalSettings.followMode:lower() == "mq2nav" then
+        mq.cmdf("/nav id %d", spawnID)
+    elseif globalSettings.followMode:lower() == "mq2advpath" then
+        mq.cmdf("/afollow spawn %d", spawnID)
     end
 
     mq.delay(30000, function() -- 30s
         return spawn == nil or spawn() == nil or spawn.Distance() < dist
     end)
 
-    -- MQ2Nav XXX
-    -- cmd("/nav stop")
+    -- abort our given move-to commands
+    follow.Pause()
 
-    -- MQ2AdvPath XXX
-    -- cmd("/afollow off")
-
-    if mq.TLO.Stick.Active() then
-        cmd("/stick off")
+    if spawn() == nil then
+        return false
     end
     return spawn.Distance() < dist
 end
@@ -106,11 +101,28 @@ end
 ---@param x number
 ---@param z number|nil
 function move_to_loc(y, x, z)
-    mq.cmdf("/moveto loc %f %f %f", y, x, z)
-    mq.delay(10000, function() return is_within_distance_to_loc(y, x, z, 15) end)
-    if mq.TLO.MoveTo.Moving() then
-        mq.cmd("/moveto off")
+
+    local dist = 10
+
+    if not is_standing() then
+        mq.cmd("/stand")
+        mq.delay(50)
     end
+
+    -- abort existing follow commands
+    follow.Pause()
+
+    if globalSettings.followMode:lower() == "mq2nav" then
+        mq.cmdf("/nav loc %d %d %d", x, y, z)
+    elseif globalSettings.followMode:lower() == "mq2advpath" then
+        -- uses MQ2MoveUtils. TODO: can we move to a location using /afollow ?
+        mq.cmdf("/moveto loc %f %f %f", y, x, z)
+    end
+
+    mq.delay(30000, function() return is_within_distance_to_loc(y, x, z, 15) end)
+
+    -- abort our given move-to commands
+    follow.Pause()
 end
 
 -- Does `t` contain `v`?

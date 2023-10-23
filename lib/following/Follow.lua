@@ -18,11 +18,10 @@ local Follow = {
 ---@param spawnName string
 ---@param force boolean
 function Follow.Start(spawnName, force)
-
-    --if not mq.TLO.Navigation.MeshLoaded() then
-    --    all_tellf("MQ2Nav: MISSING NAVMESH FOR %s. Rebuild with MeshGenerator.exe and reload MQ2Nav plugin", zone_shortname())
-    --    return
-    --end
+    if globalSettings.followMode:lower() == "mq2nav" and not mq.TLO.Navigation.MeshLoaded() then
+        all_tellf("MQ2Nav: MISSING NAVMESH FOR %s. Rebuild with MeshGenerator.exe and reload MQ2Nav plugin", zone_shortname())
+        return
+    end
 
     if not is_peer(spawnName) then
         all_tellf("\arERROR: /followplayer failed: %s is not a peer. Giving up", spawnName)
@@ -33,7 +32,7 @@ function Follow.Start(spawnName, force)
     if spawn == nil then
         return
     end
-    if not force and not spawn.LineOfSight() then
+    if globalSettings.followMode:lower() == "mq2advpath" and not force and not spawn.LineOfSight() then
         all_tellf("I cannot see [+r+]%s[+x+]", spawn.Name())
         return
     end
@@ -82,20 +81,20 @@ function Follow.Resume()
     end
 end
 
--- pause follow for the moment, using MQ2AdvPath
+-- pause follow for the moment, using all possible ways
 function Follow.Pause()
-    --if is_plugin_loaded("MQ2Nav") and mq.TLO.Navigation.Active() then
-    --    cmd("/nav stop")
-    --end
+    if is_plugin_loaded("MQ2Nav") and mq.TLO.Navigation.Active() then
+        cmd("/nav stop")
+    end
     if is_plugin_loaded("MQ2AdvPath") and mq.TLO.AdvPath.Following() then
         cmd("/afollow off")
     end
-    --if is_plugin_loaded("MQ2MoveUtils") and mq.TLO.Stick.Active() then
-    --    cmd("/stick off")
-    --end
-    --if is_plugin_loaded("MQ2MoveUtils") and mq.TLO.MoveTo.Moving() then
-    --    cmd("/moveto off")
-    --end
+    if is_plugin_loaded("MQ2MoveUtils") and mq.TLO.Stick.Active() then
+        cmd("/stick off")
+    end
+    if is_plugin_loaded("MQ2MoveUtils") and mq.TLO.MoveTo.Moving() then
+        cmd("/moveto off")
+    end
 end
 
 -- stops following completely
@@ -135,36 +134,23 @@ function Follow.Update(force)
         return
     end
 
-    local exe = ""
     local maxRange = 5 -- spawn.MaxRangeTo()
 
     --log.Debug("Follow.Update, mode %s, distance %f", globalSettings.followMode, spawn.Distance3D())
 
-
-    --if globalSettings.followMode:lower() == "mq2nav" then
-    --    exe = string.format("/nav spawn PC =%s | distance=%d log=trace", spawn.Name(), maxRange)
-    --elseif globalSettings.followMode:lower() == "mq2advpath" then
-    --    if mq.TLO.AdvPath.WaitingWarp() then
-    --        force = true
-    --        all_tellf("AdvPath: WaitingWarp - force follow")
-    --    end
-
-    --    -- XXX AdvPath MaxRange
-
-    --    if force or not mq.TLO.AdvPath.Following() then
-    --        exe = string.format("/afollow spawn %d", spawn.ID())
-    --    end
-    --elseif globalSettings.followMode:lower() == "mq2moveutils" then
-    --    exe = string.format("/stick hold %d uw", maxRange) -- face upwards to better run over obstacles
-    --end
-
-    if mq.TLO.AdvPath.WaitingWarp() then
-        force = true
-        all_tellf("AdvPath: WaitingWarp - force follow")
-    end
-
-    if force or not mq.TLO.AdvPath.Following() then
-        mq.cmdf("/afollow spawn %d", spawnID)
+    if globalSettings.followMode:lower() == "mq2nav" then
+        if not mq.TLO.Navigation.Active() then
+            log.Info("Follow.Update: nav activated !")
+            mq.cmdf("/nav spawn PC =%s | distance=%d log=trace", spawn.Name(), maxRange)
+        end
+    elseif globalSettings.followMode:lower() == "mq2advpath" then
+        if mq.TLO.AdvPath.WaitingWarp() then
+            force = true
+            all_tellf("AdvPath: WaitingWarp - force follow")
+        end
+        if force or not mq.TLO.AdvPath.Following() then
+            mq.cmdf("/afollow spawn %d", spawnID)
+        end
     end
 end
 

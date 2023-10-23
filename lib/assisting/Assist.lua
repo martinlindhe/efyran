@@ -247,15 +247,13 @@ function Assist.EndFight()
     if mq.TLO.Me.Combat() then
         cmd("/attack off")
     end
-    if mq.TLO.Stick.Active() then
-        cmd("/stick off")
-    end
-    if mq.TLO.MoveTo.Moving() then
-        cmd("/moveto off")
-    end
+
+    -- abort all current follow commands
+    follow.Pause()
 
     Assist.prepareForNextFight()
 
+    -- resume following orchestrator
     follow.Resume()
 end
 

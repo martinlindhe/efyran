@@ -676,13 +676,13 @@ end
 function QoL.loadRequiredPlugins()
     local requiredPlugins = {
         "MQ2Debuffs",
-        "MQ2Cast", -- for /casting
-        "MQ2LinkDB", -- for /link and /findslot
+        "MQ2Medley",    -- Bard songs
+        "MQ2Cast",      -- for /casting
+        "MQ2LinkDB",    -- for /link and /findslot
 
-        "MQ2MoveUtils", -- for /stick, /moveto
-        "MQ2Medley",  -- Bard songs
-        "MQ2AdvPath",   -- for /afollow
-        --"MQ2Nav", -- TODO requires mesh files etc
+        "MQ2MoveUtils", -- for MQ2AdvPath follow mode, /stick, /moveto
+        "MQ2AdvPath",   -- for MQ2AdvPath follow mode, /afollow
+        "MQ2Nav",       -- for MQ2Nav follow mode, requires meshes, /nav
     }
     if not is_plugin_loaded("MQ2EQBC") and not is_plugin_loaded("MQ2DanNet") then
         load_plugin("MQ2EQBC")
@@ -699,7 +699,7 @@ function QoL.loadRequiredPlugins()
 
     if is_rof2() then
         local requiredEmuPlugins = {
-            "MQ2ConstantAffinity",
+            "MQ2ConstantAffinity",  -- https://github.com/martinlindhe/MQ2ConstantAffinity
             --"MQMountClassicModels", -- TODO make use of
         }
         for k, v in pairs(requiredEmuPlugins) do
