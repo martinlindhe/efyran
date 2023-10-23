@@ -1103,7 +1103,6 @@ function clear_cursor(force)
 
         local cursor = mq.TLO.Cursor
         if cursor() == nil or cursor.ID() == nil then
-            log.Debug("cursor clear. ending")
             return true
         end
 
