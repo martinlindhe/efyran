@@ -142,7 +142,7 @@ end
 
 local refreshBuffsTimer = timer.new_expired(10) -- 10s
 
-local requestBuffsTimer = timer.new_random(60 * 1) -- 60s
+local requestBuffsTimer = timer.new_random(90 * 1) -- 90s
 
 local handleBuffsTimer = timer.new_random(2 * 1) -- 2s
 

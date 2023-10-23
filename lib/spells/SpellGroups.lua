@@ -330,8 +330,8 @@ SpellGroups.SHM = {
 
 SpellGroups.CLR = {
 
+    -- group heals with cure component
     clr_group_heal = {
-        -- CLR - cast group heals with cure component
         "Word of Vivification",     -- CLR/69: 3417-3427 hp, -21 dr, -21 pr, -14 curse, cost 1357 mana
         "Word of Replenishment",    -- CLR/64: 2500 hp, -14 dr, -14 pr, -7 curse, cost 1100 mana
         "Word of Redemption",       -- CLR/60: 7500 hp, cost 1100 mana
@@ -671,7 +671,7 @@ SpellGroups.CLR = {
 }
 
 SpellGroups.DRU = {
-    dru_group_heal = { -- TODO make use of
+    dru_group_heal = {
         "Moonshadow",               -- DRU/70: 1500 hp, cost 1100 mana, 4.5S cast, 18s recast
     },
 
@@ -737,7 +737,6 @@ SpellGroups.DRU = {
         "Skin like Wood",
     },
 
-    -- fire resists:
     -- L01 Endure Fire (slot 1: 11-20 fr)
     -- L20 Resist Fire (slot 1: 30-40 fr)
     -- L51 Circle of Winter (slot 1: 45 fr)
@@ -763,12 +762,41 @@ SpellGroups.DRU = {
         "Circle of Summer",
     },
 
+    -- L19 Endure Poison (19-20 pr)
+    -- L44 Resist Poison (40 pr)
+    dru_poison_resist = {
+        "Resist Poison",
+        "Endure Poison",
+    },
+
+
+    -- L19 Endure Disease (19-20 dr)
+    -- L44 Resist Disease (40 dr)
+    dru_disease_resist = {
+        "Resist Disease",
+        "Endure Disease",
+    },
+
     -- corruption resists (CLR/DRU):
     -- L73 Resist Corruption Rk. III (slot 1: 20 corruption resist, 36 min, 50 mana)
     -- L78 Forbear Corruption Rk. II (slot 1: 23 corruption resist, 36 min, 50 mana)
-    dru_corruption = {
+    dru_corruption_resist = {
         "Forbear Corruption",
         "Resist Corruption",
+    },
+
+    -- L05 Cure Poison (-1-4 poison counter)
+    -- L29 Counteract Poison (-8 poison counter)
+    dru_poison_cure = {
+        "Counteract Poison",
+        "Cure Poison",
+    },
+
+    -- L05 Cure Disease (-1-4 disease counter)
+    -- L29 Counteract Disease (-8 disease counter)
+    dru_disease_cure = {
+        "Counteract Disease",
+        "Cure Disease",
     },
 
     -- L34 Regeneration (5-9 hp/tick)
@@ -895,17 +923,18 @@ SpellGroups.DRU = {
     },
 
     -- L01 Snare
-    -- L29 Ensanre
+    -- L29 Ensnare
+    -- L61 Mire Thorns (chromatic -20, snare 55-60%, 3.0 min, cast time 3s, cost 75 mana)
+    -- L69 Serpent Vines (chromatic -50, snare 55-60%, 3.0 min, cast time 3s, cost 125 mana)
+    -- AA L64 Entrap AA (magic -0, snare 41-56%, 14 min, 5 sec recast)
+    -- Special L70 Hungry Vines (magic -100, snare 50%, 0.3 min, cast time 3s, cost 500 mana) + absorb 1600 melee dmg on group
     dru_snare = {
+        "Serpent Vines",
+        "Mire Thorns",
         "Ensnare",
         "Snare",
     },
 
-
-    -- fire nuke special:
-    -- L70 Dawnstrike (2125 hp, cost 482 mana. chance to proc spell buff that adjust dmg of next nuke)
-
-    -- fire nukes:
     -- L01 Burst of Flame (3-5 hp, cost 4 mana)
     -- L03 Burst of Fire (11-14 hp, cost 7 mana)
     -- L08 Ignite (38-46 hp, cost 21 mana)
@@ -918,6 +947,7 @@ SpellGroups.DRU = {
     -- L64 Summer's Flame (1600 hp, cost 395 mana)
     -- L65 Sylvan Fire (1761 hp, cost 435 mana)
     -- L69 Solstice Strike (2201 hp, cost 494 mana)
+    -- Special L70 Dawnstrike (2125 hp, cost 482 mana. chance to proc spell buff that adjust dmg of next nuke)
     dru_fire_nuke = {
         "Solstice Strike",
         "Sylvan Fire",
@@ -933,7 +963,6 @@ SpellGroups.DRU = {
         "Burst of Flame",
     },
 
-    -- cold nukes:
     -- L47 Ice (511-538 hp, cost 142 mana)
     -- L55 Frost (837 hp, cost 202 mana)
     -- L60 Moonfire (1132 hp, cost 263 mana)
@@ -2162,7 +2191,7 @@ SpellGroups.PAL = {
         "Salve",
     },
 
-    pal_group_heal = { -- TODO make use of
+    pal_group_heal = {
         "Wave of Piety",            -- PAL/70: 1316 hp, cost 1048 mana
         "Wave of Trushar",          -- PAL/65: 1143 hp, cost 921 mana
         "Wave of Marr",             -- PAL/65: 960 hp, cost 850 mana
@@ -2516,117 +2545,103 @@ SpellGroups.BST = {
         "Tainted Breath",
     },
 
-    -- L14 Sicken (3-5/tick, disease)
-    -- L65 Plague (74-79 hp/tick, disease, cost 172 mana)
     bst_disease_dot = {
-        "Plague",
-        "Sicken",
+        "Plague",    -- L65 Plague (74-79 hp/tick, disease, cost 172 mana)
+        "Sicken",    -- L14 Sicken (3-5/tick, disease)
     },
-
-    -- epic 1.5: Savage Lord's Totem (pet buff: double attack 5%, evasion 10%, hp 800, proc Savage Blessing Strike)
-    -- epic 2.0: Spiritcaller Totem of the Feral (pet buff: double attack 8%, evasion 12%, hp 1000, proc Wild Spirit Strike)
     bst_epic2 = {
-        "Spiritcaller Totem of the Feral",
-        "Savage Lord's Totem",
+        "Spiritcaller Totem of the Feral",  -- epic 2.0: pet buff, double attack 8%, evasion 12%, hp 1000, proc Wild Spirit Strike
+        "Savage Lord's Totem",              -- epic 1.5: pet buff, double attack 5%, evasion 10%, hp 800, proc Savage Blessing Strike
     },
-
-    -- oow T1 bp: Beast Tamer's Jerkin (Wild Spirit Infusion, +50% skill dmg mod, -15% dmg taken for 18s)
-    -- oow T2 bp: Savagesoul Jerkin of the Wilds (Savage Spirit Infusion, +50% skill dmg mod, -15% dmg taken for 30s)
     bst_oow_bp = {
-        "Savagesoul Jerkin of the Wilds",
-        "Beast Tamer's Jerkin",
+        "Savagesoul Jerkin of the Wilds",   -- oow T2 bp: Savage Spirit Infusion, +50% skill dmg mod, -15% dmg taken for 30s
+        "Beast Tamer's Jerkin",             -- oow T1 bp: Wild Spirit Infusion, +50% skill dmg mod, -15% dmg taken for 18s
     }
 }
 
 SpellGroups.BRD = {
-    -- L05 Selo's Accelerando (20-65% movement)
     brd_runspeed = {
-        "Selo's Accelerando",
+        "Selo's Accelerating Chorus",       -- L49: PERCUSSION, 64-65% speed, 2.5 min, Luclin
+        "Selo's Accelerando",               -- L05: PERCUSSION, 20-65% speed, 0.3 min, Original
     },
-
-    -- L51 Selo's Song of Travel (levi + invis)
     brd_travel = {
-        "Selo's Song of Travel",
+        "Selo's Song of Travel",            -- L51: 65% speed, invis, levi, 0.3 min, Kunark
     },
-
-    -- epic 1.5: slot 9: spell crit  8%, slot 10: dot crit  8%, slot 12: accuracy 130% (Prismatic Dragon Blade)
-    -- epic 2.0: slot 9: spell crit 12%, slot 10: dot crit 12%, slot 12: accuracy 140% (Blade of Vesagran)
+    brd_invis = {
+        "Shauri's Sonorous Clouding",       -- L19: invis
+    },
+    brd_levitate = {
+        "Agilmente's Aria of Eagles",       -- L31: levitate
+    },
+    brd_pbae_debuff = {
+        "Zuriki's Song of Shenanigans",     -- L67 Zuriki's Song of Shenanigans (stringed, dd+haste debuff 45%) OOW
+        "Melody of Mischief",               -- L62 Melody of Mischief (stringed, dd+haste debuff 45%) PoP
+        "Selo's Chords of Cessation",       -- L48 Selo's Chords of Cessation (stringed, dd+haste debuff 30%) Original
+        "Denon's Disruptive Discord",       -- L18 Denon's Disruptive Discord (brass, dd+ac debuff) Original
+        "Chords of Dissonance",             -- L02 Chords of Dissonance (stringed, dd if target not moving) Original
+    },
+    brd_ae_fear = {
+        "Angstlich's Wail of Panic",        -- L67: ae range 25, fear to L65
+        "Angstlich's Echo of Terror",       -- L62: ae range 25, fear to L60
+        "Song of Midnight",                 -- L56: ae range 35, fear to L52, sow mobs
+        "Angstlich's Appalling Screech",    -- L26: ae range 25, fear to L52
+    },
+    brd_da = {
+        "Kazumi's Note of Preservation",   -- L60 Kazumi's Note of Preservation
+    },
     brd_epic2 = {
-        "Blade of Vesagran",
-        "Prismatic Dragon Blade",
+        "Blade of Vesagran",                        -- epic 2.0: slot 9: spell crit 12%, slot 10: dot crit 12%, slot 12: accuracy 140%
+        "Prismatic Dragon Blade",                   -- epic 1.5: slot 9: spell crit  8%, slot 10: dot crit  8%, slot 12: accuracy 130%
     },
-
-    -- oow T1 bp: increase double attack by  30% for 12s, 5 min reuse (Traveler's Mail Chestguard)
-    -- oow T2 bp: increase double attack by 100% for 24s, 5 min reuse (Farseeker's Plate Chestguard of Harmony)
     brd_oow_bp = {
-        "Farseeker's Plate Chestguard of Harmony",
-        "Traveler's Mail Chestguard",
+        "Farseeker's Plate Chestguard of Harmony",  -- oow T2 bp: increase double attack by 100% for 24s, 5 min reuse
+        "Traveler's Mail Chestguard",               -- oow T1 bp: increase double attack by  30% for 12s, 5 min reuse
     },
 }
 
 SpellGroups.WAR = {
-    -- epic 1.5: Champion's Sword of Eternal Power (group 600 hp)
-    -- epic 2.0: Kreljnok's Sword of Eternal Power (group 800 hp)
     war_epic2 = {
-        "Kreljnok's Sword of Eternal Power",
-        "Champion's Sword of Eternal Power",
+        "Kreljnok's Sword of Eternal Power",        -- epic 2.0: group 800 hp
+        "Champion's Sword of Eternal Power",        -- epic 1.5: group 600 hp
     },
-
-    -- oow T1 bp: Armsmaster's Breastplate - reduce damage taken for 12s
-    -- oow T2 bp: Gladiator's Plate Chestguard of War - reduce damage taken for 24s
     war_oow_bp = {
-        "Gladiator's Plate Chestguard of War",
-        "Armsmaster's Breastplate",
+        "Gladiator's Plate Chestguard of War",      -- oow T2 bp: reduce damage taken for 24s
+        "Armsmaster's Breastplate",                 -- oow T1 bp: reduce damage taken for 12s
     },
 }
 
 SpellGroups.ROG = {
-    -- epic 1.5: Fatestealer (35% triple backstab, Assassin's Taint Strike proc)
-    -- epic 2.0: Nightshade, Blade of Entropy (45% triple backstab, Deceiver's Blight Strike proc)
     rog_epic2 = {
-        "Nightshade, Blade of Entropy",
-        "Fatestealer",
+        "Nightshade, Blade of Entropy",             -- epic 2.0: 45% triple backstab, Deceiver's Blight Strike proc
+        "Fatestealer",                              -- epic 1.5: 35% triple backstab, Assassin's Taint Strike proc
     },
-
-    -- oow T1 bp: (increase 1hb dmg   taken by 20% for 12s, 5 min reuse) Darkraider's Vest
-    -- oow T2 bp: (increase all melee taken by 20% for 24s, 5 min reuse) Whispering Tunic of Shadows
     rog_oow_bp = {
-        "Whispering Tunic of Shadows",
-        "Darkraider's Vest",
+        "Whispering Tunic of Shadows",              -- oow T2 bp: increase all melee taken by 20% for 24s, 5 min reuse
+        "Darkraider's Vest",                        -- oow T1 bp: increase 1hb dmg   taken by 20% for 12s, 5 min reuse
     },
 }
 
 SpellGroups.BER = {
-    -- epic 1.5: Raging Taelosian Alloy Axe (+75 str, +75 str cap, +200% melee crit chance, +75 hot heal)
-    -- epic 2.0: Vengeful Taelosian Blood Axe (+100 str, +100 str cap, 300% melee crit chance, 100 hot heal)
     ber_epic2 = {
-        "Vengeful Taelosian Blood Axe",
-        "Raging Taelosian Alloy Axe",
+        "Vengeful Taelosian Blood Axe",             -- epic 2.0: +100 str and cap, +300% melee crit chance, 100 hot heal
+        "Raging Taelosian Alloy Axe",               -- epic 1.5:  +75 str and cap, +200% melee crit chance, 75 hot heal
     },
-
-    -- oow T1 bp: Ragebound Chain Chestguard (increase melee chance to hit by 40% for 12s)
-    -- oow T2 bp: Wrathbringer's Chain Chestguard of the Vindicator (increase melee chance to hit by 40% for 24s)
     ber_oow_bp = {
-        "Wrathbringer's Chain Chestguard of the Vindicator",
-        "Ragebound Chain Chestguard",
+        "Wrathbringer's Chain Chestguard of the Vindicator",-- oow T2 bp: increase melee chance to hit by 40% for 24s
+        "Ragebound Chain Chestguard",                       -- oow T1 bp: increase melee chance to hit by 40% for 12s
     }
 }
 
 SpellGroups.MNK = {
-    -- epic 1.5: Fistwraps of Celestial Discipline (15% max hp, +10000 hp, add proc Peace of the Order Strike, 0.5 min, 6 min recast)
-    -- epic 2.0: Transcended Fistwraps of Immortality (25% max hp, +10000 hp, add proc Peace of the Disciple Strike, 0.5 min, 3 min recast)
     mnk_epic2 = {
-        "Transcended Fistwraps of Immortality",
-        "Fistwraps of Celestial Discipline",
+        "Transcended Fistwraps of Immortality",     -- epic 2.0: 25% max hp, +10000 hp, add proc Peace of the Disciple Strike, 0.5 min, 3 min recast
+        "Fistwraps of Celestial Discipline",        -- epic 1.5: 15% max hp, +10000 hp, add proc Peace of the Order Strike, 0.5 min, 6 min recast
     },
-    -- oow bp t1: Stillmind Tunic (cancel beneficial buffs)
-    -- oow bp t2: Fiercehand Shroud of the Focused (cancel beneficial buffs)
     mnk_oow_bp = {
-        "Fiercehand Shroud of the Focused",
-        "Stillmind Tunic",
+        "Fiercehand Shroud of the Focused",         -- oow bp t2: cancel beneficial buffs
+        "Stillmind Tunic",                          -- oow bp t1: cancel beneficial buffs
     },
 }
-
 
 SpellGroups.Default = {}
 
