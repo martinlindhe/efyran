@@ -101,6 +101,7 @@ settings.debug = true -- enable debug logging for this peer
 
 /mana                       - tell peers to report mana %
 /weight                     - tell peers to report current weight
+/food                       - tell peers to report food & drink status
 
 /followon <filter>          - tell peers to follow you
 /followoff                  - tell peers to stop

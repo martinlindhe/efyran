@@ -293,14 +293,14 @@ function have_item_banked_id(id)
     return mq.TLO.FindItemBankCount(id)() > 0
 end
 
--- returns number of items by name in bank
+-- returns number of items by EXACT NAME in bank
 ---@param name string
 ---@return integer
 function banked_item_count(name)
     return mq.TLO.FindItemBankCount("=" .. name)()
 end
 
--- returns number of items by name in inventory
+-- returns number of items by EXACT NAME in inventory
 ---@param name string
 ---@return integer
 function inventory_item_count(name)
@@ -356,7 +356,7 @@ function wait_for_buffs_populated()
     end
 end
 
--- Partial search by name (inventory, bags)
+-- Partial search by name (inventory, bags). Will not search bank!
 ---@param name string
 ---@return item|nil
 function find_item(name)
