@@ -42,14 +42,18 @@ end
 ---@param item item
 ---@return boolean
 local function canLootItem(item)
+    if item() == nil or item == nil then
+        all_tellf("UNLIKELY: canLootItem item poofed")
+        return false
+    end
     if item.NoDrop() then
-        all_tellf("<%s> is [NO DROP], skipping.", item.Name())
+        all_tellf("%s is [NO DROP], skipping.", item.ItemLink("CLICKABLE")())
         mq.cmd("/beep 1")
         return false
     end
 
     if alreadyHaveLoreItem(item) then
-        all_tellf("<%s> is [LORE] and I already have one.", item.Name())
+        all_tellf("%s is [LORE] and I already have one.", item.ItemLink("CLICKABLE")())
         mq.cmd("/beep 1")
         return false
     end
@@ -86,12 +90,14 @@ local function lootItem(slotNum)
         mq.cmd("/notify QuantityWnd QTYW_Accept_Button leftmouseup")
     end
 
-    mq.delay(200)
+    mq.delay(50)
 
     if not cursor() then
         log.Debug("Unable to loot item in slotnumber %d", slotNum)
         return
     end
+
+    local itemLink = cursor.ItemLink("CLICKABLE")()
 
     local shouldDestroy, item = canDestroyItem(cursor.ID(), cursor.Name())
     if shouldDestroy then
@@ -108,23 +114,31 @@ local function lootItem(slotNum)
             end
         end
     else
-        broadcast.Success({}, "Looted %s",  cursor.ItemLink("CLICKABLE")())
+        broadcast.Success({}, "Looted %s", itemLink)
     end
     clear_cursor(true)
 end
 
 local function lootCorpse()
     local target = mq.TLO.Target
-    local name = mq.TLO.Target.Name()
     if not target() or target.Type() ~= "Corpse" then
         broadcast.Fail({}, "No corpse on target.")
         return
     end
+    local name = target.Name()
 
     clear_cursor()
     mq.cmd("/loot")
     local corpse = mq.TLO.Corpse
+    if corpse() == nil or corpse == nil then
+        all_tellf("UNLIKELY: corpse poofed while looting (1)")
+        return
+    end
     mq.delay("1s", function() return corpse.Open() and corpse.Items() > 0 end)
+    if corpse() == nil or corpse == nil then
+        all_tellf("UNLIKELY: corpse poofed while looting (2)")
+        return
+    end
     if not corpse.Open() then
         broadcast.Fail({}, "Unable to open corpse for looting.")
         return
@@ -133,6 +147,10 @@ local function lootCorpse()
     if corpse.Items() > 0 then
         log.Debug("Looting \ay%s\ax with \ay%d\ax items", name, corpse.Items())
         for i=1,corpse.Items() do
+            if corpse() == nil or corpse == nil then
+                all_tellf("UNLIKELY: corpse poofed while looting item %d", i)
+                break
+            end
             local item = corpse.Item(i) --[[@as item]]
             log.Debug("Checking corpse item %s (%d/%d)", item.Name(), i, corpse.Items())
 
@@ -151,7 +169,7 @@ local function lootCorpse()
         end
     end
 
-    if corpse.Items() > 0 then
+    if corpse() ~= nil and corpse.Items() > 0 then
         mq.cmd("/keypress /")
         mq.delay(10)
         typeChrs("say %d ", mq.TLO.Target.ID())

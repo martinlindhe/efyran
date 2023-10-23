@@ -65,6 +65,7 @@ return function()
             cmd("/keypress l chat")
             cmd("/keypress enter chat")
             delay(4)
+            mq.doevents()
         end
     end
 
