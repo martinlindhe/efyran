@@ -108,7 +108,7 @@ local function lootItem(slotNum)
             end
         end
     else
-        broadcast.Success({}, "Looted %s from slot# %s", item.Name, slotNum)
+        broadcast.Success({}, "Looted %s",  cursor.ItemLink("CLICKABLE")())
     end
     clear_cursor(true)
 end

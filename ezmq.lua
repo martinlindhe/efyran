@@ -1115,7 +1115,7 @@ function clear_cursor(force)
         end
 
         -- 77678 Molten Orb
-        if cursor.ID() ~= 77678 then
+        if not force and cursor.ID() ~= 77678 then
             all_tellf("Putting cursor item %s in inventory.", cursor.ItemLink("CLICKABLE")())
         end
         mq.cmd("/autoinventory")
