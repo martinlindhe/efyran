@@ -2280,16 +2280,17 @@ end
 function EnsureTarget(targetId)
     if not targetId then
         log.Debug("Invalid <targetId>")
-      return false
+        return false
     end
 
     if mq.TLO.Target.ID() ~= targetId then
-      if mq.TLO.SpawnCount("id "..targetId)() > 0 then
-        mq.cmdf("/target id %s", targetId)
-        mq.delay(500, function() return mq.TLO.Target.ID() == targetId end)
-      else
-        log.Warn("EnsureTarget has no spawncount for target id <%d>", targetId)
-      end
+        log.Info("EnsureTarget: changing target from %s to %d", tostring(mq.TLO.Target.ID()), targetId)
+        if mq.TLO.SpawnCount(string.format("id %d", targetId))() > 0 then
+            mq.cmdf("/target id %s", targetId)
+            mq.delay(500, function() return mq.TLO.Target.ID() == targetId end)
+        else
+            log.Warn("EnsureTarget has no spawncount for target id %d", targetId)
+        end
     end
 
     return mq.TLO.Target.ID() == targetId

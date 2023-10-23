@@ -188,7 +188,8 @@ local function lootCorpse()
     broadcast.Success({}, "Ending loot on \ay%s\ax, %d items left", name, corpse.Items() or 0)
 end
 
-local function lootNearestCorpse()
+--@param seekRadius integer
+local function lootNearestCorpse(seekRadius)
 
     bard.pauseMelody()
 
@@ -197,16 +198,23 @@ local function lootNearestCorpse()
     local startX = mq.TLO.Me.X()
     local startY = mq.TLO.Me.Y()
     local startZ = mq.TLO.Me.Z()
-    local seekRadius = 100
-    local searchCorpseString = string.format("npccorpse zradius 50 radius %s", seekRadius)
+    local searchCorpseString = string.format("npccorpse zradius 50 radius %d", seekRadius)
     local corpse = mq.TLO.NearestSpawn(1, searchCorpseString)
 
-    if corpse() and EnsureTarget(corpse.ID()) then
+    if corpse() == nil then
+        all_tellf("UNLIKELY: lootNearestCorpse corpse poofed %s", tostring(corpse.ID()))
+        return
+    end
+    if EnsureTarget(corpse.ID()) then
         if corpse.Distance() > 16 and corpse.DistanceZ() < 80 then
             move_to(corpse.ID())
         end
 
-        if corpse() and corpse.Distance() <= 20 and corpse.DistanceZ() < 40 and EnsureTarget(corpse.ID()) then
+        if corpse() == nil then
+            all_tellf("UNLIKELY: lootNearestCorpse corpse poofed")
+            return
+        end
+        if corpse.Distance() <= 20 and corpse.DistanceZ() < 40 and EnsureTarget(corpse.ID()) then
             lootCorpse()
         else
             all_tellf("WARN: Corpse %s is %d|%d distance, skipping", corpse.Name(), corpse.Distance(), corpse.DistanceZ())
