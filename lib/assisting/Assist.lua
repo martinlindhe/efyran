@@ -294,7 +294,7 @@ function performSpellAbility(targetID, abilityRows, category, used)
                 return true
             end
             if is_standing() then
-                cmdf("/face fast id %d", targetID)
+                cmdf("/squelch /face fast id %d", targetID)
             end
             --log.Debug("Trying to %s on %s with %s", category, spawn.Name(), spellConfig.Name)
             local spawnName = spawn.Name()
