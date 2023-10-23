@@ -215,7 +215,7 @@ function spellConfigAllowsCasting(buffItem, spawn)
 
     if spellConfig.MinMana ~= nil then
         if mq.TLO.Me.PctMana() < spellConfig.MinMana then
-            log.Info("SKIP BUFFING %s, my mana is %d %% vs required %d %%", spellConfig.Name, mq.TLO.Me.PctMana(), spellConfig.MinMana)
+            log.Debug("SKIP BUFFING %s, my mana is %d %% vs required %d %%", spellConfig.Name, mq.TLO.Me.PctMana(), spellConfig.MinMana)
             return false
         end
     end

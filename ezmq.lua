@@ -2502,7 +2502,7 @@ function findBestClickyWithEffectGroup(cat, effects)
     end
 
     if name ~= nil and not have_item_inventory(name) and not is_naked() then
-        all_tellf("FATAL: my best \ar%s\ax clicky is banked. Put it in inventory for use! (item %s, power %d)", cat, name, best)
+        all_tellf("ERROR: my best \ar%s\ax clicky is banked. Put it in inventory for use! (item %s, power %d)", cat, name, best)
         mq.cmd("/beep")
         return nil
     end

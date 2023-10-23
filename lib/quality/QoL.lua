@@ -666,7 +666,7 @@ function QoL.Init()
 
     QoL.verifySpellLines()
 
-    zonedCommand.Enqueue()
+    zonedCommand.Enqueue(nil, 0)
 end
 
 function QoL.loadRequiredPlugins()

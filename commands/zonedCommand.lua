@@ -8,8 +8,8 @@ local map     = require("lib/quality/Map")
 local log     = require("knightlinc/Write")
 
 -- performs various tasks when toon has finished starting up / zoning
-local function execute()
-    delay(5000) -- 5s
+local function execute(delay)
+    mq.delay(delay)
     commandQueue.Clear()
     assist.backoff()
 
@@ -29,15 +29,15 @@ local function execute()
     map.AutoMapHeightFilter()
 end
 
-local function createCommand(zone)
+local function createCommand(zone, delay)
     if zone == "an area where levitation effects do not function" then
         return
     end
 
-    commandQueue.Enqueue(function() execute() end)
+    commandQueue.Enqueue(function() execute(delay) end)
 end
 
-mq.event("zoned", "You have entered #1#.", function(text, zone) createCommand(zone) end)
+mq.event("zoned", "You have entered #1#.", function(text, zone) createCommand(zone, 5000) end)
 
 return {
     Enqueue = createCommand
