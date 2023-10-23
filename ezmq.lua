@@ -2692,3 +2692,45 @@ function click_item(itemName)
 
     mq.delay(item.CastTime())
 end
+
+-- Opens bank window, by summoning a clockwork banker if needed
+-- Returns true on success
+---@return boolean
+function open_banker()
+    local bankerQuery = "npc radius 100 banker"
+    local bankerPetQuery = "pet radius 100 banker" -- summoned banker is a pet
+
+    if not window_open("BigBankWnd") then
+        if spawn_count(bankerQuery) == 0 and spawn_count(bankerPetQuery) == 0 then
+            log.Info("Summoning a banker ...")
+            cmd("/banker")
+            delay(500)
+
+            if spawn_count(bankerQuery) == 0 and spawn_count(bankerPetQuery) == 0 then
+                log.Error("No banker nearby! Giving up!")
+                return false
+            end
+        end
+        log.Info("Opening nearby banker ...")
+
+        local bankerID = 0
+        if spawn_count(bankerQuery) > 0 then
+            bankerID = mq.TLO.Spawn(bankerQuery).ID()
+        elseif spawn_count(bankerPetQuery) > 0 then
+            bankerID = mq.TLO.Spawn(bankerPetQuery).ID()
+        end
+
+        cmdf("/target id %d", bankerID)
+        move_to(bankerID)
+        delay(250)
+
+        cmd("/click right target")
+        delay(250)
+    end
+
+    if not window_open("BigBankWnd") then
+        log.Error("Bank window not open! Giving up!")
+        return false
+    end
+    return true
+end
