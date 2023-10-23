@@ -8,6 +8,7 @@ local map     = require("lib/quality/Map")
 local log     = require("knightlinc/Write")
 
 -- performs various tasks when toon has finished starting up / zoning
+---@param delay number
 local function execute(delay)
     mq.delay(delay)
     commandQueue.Clear()
@@ -29,6 +30,8 @@ local function execute(delay)
     map.AutoMapHeightFilter()
 end
 
+---@param zone string|nil
+---@param delay number
 local function createCommand(zone, delay)
     if zone == "an area where levitation effects do not function" then
         return

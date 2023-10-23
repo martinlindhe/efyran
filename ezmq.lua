@@ -588,9 +588,9 @@ end
 function have_buff(name)
     local spell = mq.TLO.Spell(name)
     if spell() == nil then
-        log.Debug("have_buff: spell didnt resolve for \ay%s", name)
-        if not have_ability(name) and not have_item(name) then
-            log.Debug("have_buff: asked about odd buff \ay%s", name)
+        --log.Debug("have_buff: spell didnt resolve for \ay%s", name)
+        if not have_ability(name) and not have_item(name) and name ~= "Wondrous Rapidity" then
+            log.Debug("have_buff: asked about unrecognized buff \ay%s", name)
         end
         return false
     end

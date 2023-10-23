@@ -1,7 +1,5 @@
 1. You need the following plugins, all is included in the MacroQuest releases at https://github.com/macroquest/macroquest/releases
 
-xxxxx
-
 MQ2Cast     for /casting, /memorize (not for bards!)
 MQ2DanNet   modern replacement for EQBC and MQ2NetBots
 MQ2AdvPath  modern replacement for MQ2MoveUtils
