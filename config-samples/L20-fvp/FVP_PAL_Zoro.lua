@@ -1,8 +1,10 @@
 ---@type PeerSettings
 local settings = { }
 
+settings.debug = true
+
 settings.gems = {
-    ["Light Healing"] = 1,
+    ["pal_heal"] = 1,
 
     ["pal_yaulp"] = 7,
 }
@@ -16,7 +18,7 @@ settings.combat_buffs = {
 
 settings.healing = {
     life_support = {
-        "Light lib/healing/HealPct|50/MinMana|5",
+        "pal_heal/HealPct|50/MinMana|5",
     },
 }
 

@@ -18,7 +18,7 @@ Default.WAR = {
     "shm_haste/Class|SHM/NotClass|ENC",
 
     --"dru_fire_resist/Class|DRU",
-    "enc_magic_resist/Class|ENC",
+    --"enc_magic_resist/Class|ENC",
     "shm_disease_resist/Class|SHM",
 
     "mag_ds/Class|MAG",
@@ -37,7 +37,7 @@ Default.SHD = {
     "shm_haste/Class|SHM/NotClass|ENC",
 
     --"dru_fire_resist/Class|DRU",
-    "enc_magic_resist/Class|ENC",
+    --"enc_magic_resist/Class|ENC",
     "shm_disease_resist/Class|SHM",
 
     "mag_ds/Class|MAG",
@@ -56,7 +56,7 @@ Default.PAL = {
     "shm_haste/Class|SHM/NotClass|ENC",
 
     --"dru_fire_resist/Class|DRU",
-    "enc_magic_resist/Class|ENC",
+    --"enc_magic_resist/Class|ENC",
     "shm_disease_resist/Class|SHM",
 
 --    "mag_ds/Class|MAG",
@@ -75,7 +75,7 @@ Default.BRD = {
     "shm_haste/Class|SHM/NotClass|ENC",
 
     --"dru_fire_resist/Class|DRU",
-    "enc_magic_resist/Class|ENC",
+    --"enc_magic_resist/Class|ENC",
     "shm_disease_resist/Class|SHM",
 }
 
@@ -88,7 +88,7 @@ Default.CLR = {
     "bst_manaregen/Class|BST",
 
     --"dru_fire_resist/Class|DRU",
-    "enc_magic_resist/Class|ENC",
+    --"enc_magic_resist/Class|ENC",
     "shm_disease_resist/Class|SHM",
 
     "dru_str/Class|DRU", -- for looting
@@ -102,7 +102,7 @@ Default.DRU = {
 
     --"clr_vie/Class|CLR",
 
-    "enc_magic_resist/Class|ENC",
+    --"enc_magic_resist/Class|ENC",
     "shm_disease_resist/Class|SHM",
 }
 
@@ -115,7 +115,7 @@ Default.SHM = {
     --"clr_vie/Class|CLR",
 
     --"dru_fire_resist/Class|DRU",
-    "enc_magic_resist/Class|ENC",
+    --"enc_magic_resist/Class|ENC",
 }
 
 Default.ENC = {
@@ -148,7 +148,7 @@ Default.WIZ = {
 
     --"dru_fire_resist/Class|DRU",
     "shm_disease_resist/Class|SHM",
-    "enc_magic_resist/Class|ENC",
+    --"enc_magic_resist/Class|ENC",
 }
 
 Default.MAG = {
@@ -162,7 +162,7 @@ Default.MAG = {
 
     --"dru_fire_resist/Class|DRU",
     "shm_disease_resist/Class|SHM",
-    "enc_magic_resist/Class|ENC",
+    --"enc_magic_resist/Class|ENC",
 }
 
 Default.NEC = {
@@ -175,7 +175,7 @@ Default.NEC = {
 
     --"dru_fire_resist/Class|DRU",
     "shm_disease_resist/Class|SHM",
-    "enc_magic_resist/Class|ENC",
+    --"enc_magic_resist/Class|ENC",
 }
 
 Default.RNG = {
@@ -191,7 +191,7 @@ Default.RNG = {
     "enc_manaregen/Class|ENC",
 
     --"dru_fire_resist/Class|DRU",
-    "enc_magic_resist/Class|ENC",
+    --"enc_magic_resist/Class|ENC",
     "shm_disease_resist/Class|SHM",
 
     "dru_str/Class|DRU",
@@ -209,7 +209,7 @@ Default.ROG = {
     "shm_haste/Class|SHM/NotClass|ENC",
 
     --"dru_fire_resist/Class|DRU",
-    "enc_magic_resist/Class|ENC",
+    --"enc_magic_resist/Class|ENC",
     "shm_disease_resist/Class|SHM",
 }
 
@@ -225,7 +225,7 @@ Default.MNK = {
     "shm_haste/Class|SHM/NotClass|ENC",
 
     --"dru_fire_resist/Class|DRU",
-    "enc_magic_resist/Class|ENC",
+    --"enc_magic_resist/Class|ENC",
     "shm_disease_resist/Class|SHM",
 }
 

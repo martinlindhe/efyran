@@ -2,12 +2,12 @@
 local settings = { }
 
 settings.gems = {
-    ["Burn"] = 1,
+    ["mag_fire_nuke"] = 1,
     ["Summon Drink"] = 2,
     ["Summon Food"] = 3,
-    ["Burnout"] = 4, -- pet buff
+    ["mag_pet_haste"] = 4,
 
-    ["Shield of Fire"] = 6, -- ds
+    ["mag_ds"] = 6, -- ds
     ["Minor Summoning: Water"] = 7, -- pet
     ["mag_self_shield"] = 8,
 }
@@ -24,7 +24,7 @@ settings.healing = {
 settings.assist = {
     nukes = {
         main = {
-            "Burn/MaxHP|95/NoAggro/MinMana|20",
+            "mag_fire_nuke/MaxHP|95/NoAggro/MinMana|20",
         },
     },
 }
@@ -34,7 +34,7 @@ settings.pet = {
     },
 
     buffs = {
-        "Burnout",
+        "mag_pet_haste",
     },
 
     taunt = false, -- XXX impl

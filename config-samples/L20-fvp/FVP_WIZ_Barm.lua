@@ -2,7 +2,7 @@
 local settings = { }
 
 settings.gems = {
-    ["Fire Bolt"] = 1,
+    ["wiz_fire_nuke"] = 1,
 
     ["wiz_self_shield"] = 8,
 }
@@ -23,7 +23,7 @@ settings.healing = {
 settings.assist = {
     nukes = {
         main = {
-            "Fire Bolt/MaxHP|90/NoAggro/MinMana|20",
+            "wiz_fire_nuke/MaxHP|90/NoAggro/MinMana|20",
         },
     },
 }

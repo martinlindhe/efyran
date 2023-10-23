@@ -2,7 +2,7 @@
 local settings = { }
 
 settings.gems = {
-    ["Healing"] = 1,
+    ["shm_heal"] = 1,
     ["Burst of Flame"] = 2,
 
     ["Dexterous Aura"] = 4,
@@ -17,7 +17,7 @@ settings.self_buffs = {
 
 settings.healing = {
     life_support = {
-        "lib/healing/HealPct|80/MinMana|5",
+        "shm_heal/HealPct|80/MinMana|5",
     },
 
     tanks = {
@@ -26,11 +26,11 @@ settings.healing = {
     },
 
     tank_heal = {
-        "lib/healing/HealPct|70/MinMana|5",
+        "shm_heal/HealPct|70/MinMana|5",
     },
 
     all_heal = {
-        "lib/healing/HealPct|63/MinMana|5",
+        "shm_heal/HealPct|63/MinMana|5",
     },
 }
 

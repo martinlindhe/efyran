@@ -2,10 +2,10 @@
 local settings = { }
 
 settings.gems = {
-    ["Minor Healing"] = 1,
+    ["rng_heal"] = 1,
 
-    ["Snare"] = 7,
-    ["Thistlecoat"] = 8, -- ac + ds
+    ["rng_snare"] = 7,
+    ["rng_self_ds"] = 8, -- ac + ds
 }
 
 settings.swap = {
@@ -13,12 +13,12 @@ settings.swap = {
 }
 
 settings.self_buffs = {
-    "Thistlecoat",
+    "rng_self_ds",
 }
 
 settings.healing = {
     life_support = {
-        "Minor lib/healing/HealPct|30",
+        "rng_heal/HealPct|30",
     },
 }
 
@@ -31,7 +31,7 @@ settings.assist = {
     },
 
     dots = {
-        "Snare/MaxHP|30/MaxTries|2/Not|raid",
+        "rng_snare/MaxHP|40/MaxTries|2/Not|raid",
     },
 
 }
