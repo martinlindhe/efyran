@@ -497,11 +497,13 @@ function QoL.Init()
 
     -- turn auto loot on
     bind("/looton", function()
+        all_tellf("Auto-loot ENABLED")
         botSettings.settings.autoloot = true
     end)
 
     -- turn auto loot off
     bind("/lootoff", function()
+        all_tellf("Auto-loot DISABLED")
         botSettings.settings.autoloot = false
     end)
 

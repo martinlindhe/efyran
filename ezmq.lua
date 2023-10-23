@@ -647,9 +647,9 @@ function is_casting()
     return mq.TLO.Me.Casting() ~= nil
 end
 
--- pauses until casting current spell is finished
+-- Pauses up to 60 seconds until casting current spell is finished
 function wait_until_not_casting()
-    mq.delay(20000, function() return is_brd() or not is_casting() end)
+    mq.delay("60s", function() return is_brd() or not is_casting() end)
 end
 
 -- Am I moving?
@@ -1093,30 +1093,34 @@ function has_cursor_item()
 end
 
 -- autoinventories all items on cursor. returns false on failure
-function clear_cursor()
+---@param force? boolean
+function clear_cursor(force)
     while true do
-        if obstructive_window_open() then
+        if not force and obstructive_window_open() then
+            log.Debug("clear_cursor: obstructive_window_open is true, aborting")
             return false
         end
 
-        if mq.TLO.Cursor.ID() == nil then
-            --log.Debug("cursor clear. ending")
+        local cursor = mq.TLO.Cursor
+        if cursor() == nil or cursor.ID() == nil then
+            log.Debug("cursor clear. ending")
             return true
         end
-        if mq.TLO.Me.FreeInventory() == 0 then
-            all_tellf("Cannot clear cursor, no free inventory slots")
+
+        if (mq.TLO.Me.FreeInventory() < 1 and not cursor.Stackable())
+        or (mq.TLO.Me.FreeInventory() == 0 and cursor.Stackable() and cursor.FreeStack() == 0) then
+            all_tellf("ERROR: Inventory full! Cannot auto-inventory %s", cursor.ItemLink("CLICKABLE")())
             mq.cmd("/beep 1")
             return false
         end
 
         -- 77678 Molten Orb
-        if mq.TLO.Cursor.ID() ~= 77678 then
-            all_tellf("Putting cursor item %s in inventory.", mq.TLO.Cursor.ItemLink("CLICKABLE")())
+        if cursor.ID() ~= 77678 then
+            all_tellf("Putting cursor item %s in inventory.", cursor.ItemLink("CLICKABLE")())
         end
         mq.cmd("/autoinventory")
         mq.delay(2000, function() return mq.TLO.Cursor.ID() == nil end)
-        mq.delay(100)
-        mq.doevents()
+        mq.delay(200)
     end
 end
 

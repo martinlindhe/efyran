@@ -64,6 +64,7 @@ local function canLootItem(item)
     return true
 end
 
+-- Loot item from currently opened corpse and autodestroy or autoinventory
 local function lootItem(slotNum)
     if mq.TLO.Me.FreeInventory() <= 0 then
         all_tellf("Cannot loot! No free inventory slots")
@@ -77,37 +78,44 @@ local function lootItem(slotNum)
         mq.delay("1s", function() return cursor() ~= nil end)
     end
 
-    if mq.TLO.Window("ConfirmationDialogBox").Open() then
+    mq.delay(50)
+
+    if window_open("ConfirmationDialogBox") then
         mq.cmd("/notify ConfirmationDialogBox Yes_Button leftmouseup")
-    elseif mq.TLO.Window("QuantityWnd").Open() then
+    elseif window_open("QuantityWnd") then
         mq.cmd("/notify QuantityWnd QTYW_Accept_Button leftmouseup")
     end
 
-    local itemId = cursor.ID()
-    if not itemId then
-        log.Debug("Unable to loot item in slotnumber <%d>", slotNum)
+    mq.delay(200)
+
+    if not cursor() then
+        log.Debug("Unable to loot item in slotnumber %d", slotNum)
         return
     end
 
-    local shouldDestroy, item = canDestroyItem(itemId, cursor.Name())
+    local shouldDestroy, item = canDestroyItem(cursor.ID(), cursor.Name())
     if shouldDestroy then
+        log.Debug("Destroying item %s ...", cursor.Name())
+
+        -- XXX IMPORTANT FIXME TODO: rework loop so it aborts if item ID changes, so cursor items wont be destroyed
         while cursor() ~= nil and not lootTimer:expired() do
             mq.cmdf("/destroy")
             mq.delay(100, function() return cursor() == nil end)
             if cursor() == nil then
-                broadcast.Success("Destroyed %s from slot# %s", item.Name, slotNum)
+                broadcast.Success({}, "Destroyed %s from slot# %s", item.Name, slotNum)
             else
-                broadcast.Fail("Destroying %s from slot# %s", item.Name, slotNum)
+                broadcast.Fail({}, "Destroying %s from slot# %s", item.Name, slotNum)
             end
         end
     else
-        clear_cursor()
-        broadcast.Success("Looted %s from slot# %s", item.Name, slotNum)
+        broadcast.Success({}, "Looted %s from slot# %s", item.Name, slotNum)
     end
+    clear_cursor(true)
 end
 
 local function lootCorpse()
     local target = mq.TLO.Target
+    local name = mq.TLO.Target.Name()
     if not target() or target.Type() ~= "Corpse" then
         broadcast.Fail({}, "No corpse on target.")
         return
@@ -123,30 +131,30 @@ local function lootCorpse()
     end
 
     if corpse.Items() > 0 then
-        log.Debug("Looting <%s> with # of items: %d", mq.TLO.Target.Name(), corpse.Items())
+        log.Debug("Looting \ay%s\ax with \ay%d\ax items", name, corpse.Items())
         for i=1,corpse.Items() do
-            local itemToLoot = corpse.Item(i) --[[@as item]]
-            log.Debug("Looting %s from slot %d of %d", itemToLoot.Name(), i, corpse.Items())
+            local item = corpse.Item(i) --[[@as item]]
+            log.Debug("Checking corpse item %s (%d/%d)", item.Name(), i, corpse.Items())
 
-            if (mq.TLO.Me.FreeInventory() < 1 and not itemToLoot.Stackable())
-                or (itemToLoot.Stackable() and itemToLoot.FreeStack() == 0) then
-                all_tellf("ERROR: Inventory full! Cannot loot %s", itemToLoot.ItemLink("CLICKABLE")())
+            if (mq.TLO.Me.FreeInventory() < 1 and not item.Stackable())
+                or (mq.TLO.Me.FreeInventory() == 0 and item.Stackable() and item.FreeStack() == 0) then
+                all_tellf("ERROR: Inventory full! Cannot loot %s", item.ItemLink("CLICKABLE")())
                 mq.cmd("/beep 1")
                 break
             end
 
-            if canLootItem(itemToLoot) then
+            if canLootItem(item) then
+                log.Debug("Looting %s (%d/%d)", item.ItemLink("CLICKABLE")(), i, corpse.Items())
                 lootItem(i)
-                mq.delay(10)
             end
-            log.Debug("Done looting slot <%d>", i)
+            log.Debug("Done looting slot %d", i)
         end
     end
 
     if corpse.Items() > 0 then
         mq.cmd("/keypress /")
         mq.delay(10)
-        typeChrs("say %s %d", mq.TLO.Target.Name(), mq.TLO.Target.ID())
+        typeChrs("say %d ", mq.TLO.Target.ID())
         mq.delay(10)
         mq.cmd("/notify LootWnd BroadcastButton leftmouseup")
         mq.delay(10)
@@ -159,35 +167,34 @@ local function lootCorpse()
         mq.delay("1s", function() return not mq.TLO.Window("LootWnd").Open() end)
     end
 
-    broadcast.Success({}, "Ending loot on <%s>, # of items left: %d", mq.TLO.Target.Name(), corpse.Items() or 0)
+    broadcast.Success({}, "Ending loot on \ay%s\ax, %d items left", name, corpse.Items() or 0)
 end
 
 local function lootNearestCorpse()
+
+    bard.pauseMelody()
+
+    wait_until_not_casting()
+
     local startX = mq.TLO.Me.X()
     local startY = mq.TLO.Me.Y()
     local startZ = mq.TLO.Me.Z()
-    bard.pauseMelody()
+    local seekRadius = 100
+    local searchCorpseString = string.format("npccorpse zradius 50 radius %s", seekRadius)
+    local corpse = mq.TLO.NearestSpawn(1, searchCorpseString)
 
-    if not mq.TLO.Me.Casting.ID() then
-        local seekRadius = 100
-        local searchCorpseString = string.format("npc corpse zradius 50 radius %s", seekRadius)
-        local closestCorpse = mq.TLO.NearestSpawn(1, searchCorpseString)
-        if closestCorpse() and EnsureTarget(closestCorpse.ID()) then
-        if closestCorpse.Distance() > 16 and closestCorpse.DistanceZ() < 80 then
-            move_to(closestCorpse.ID())
+    if corpse() and EnsureTarget(corpse.ID()) then
+        if corpse.Distance() > 16 and corpse.DistanceZ() < 80 then
+            move_to(corpse.ID())
         end
 
-        if closestCorpse() and closestCorpse.Distance() <= 20 and closestCorpse.DistanceZ() < 40 and EnsureTarget(closestCorpse.ID()) then
+        if corpse() and corpse.Distance() <= 20 and corpse.DistanceZ() < 40 and EnsureTarget(corpse.ID()) then
             lootCorpse()
         else
-            log.Info("Corpse %s is %d|%d distance, skipping", closestCorpse.Name(), closestCorpse.Distance(), closestCorpse.DistanceZ())
+            all_tellf("WARN: Corpse %s is %d|%d distance, skipping", corpse.Name(), corpse.Distance(), corpse.DistanceZ())
         end
-        else
-        log.Info("Unable to locate or target corpse id <%s>", closestCorpse.ID())
-        end
-
     else
-        log.Info("Unable to loot corpse, currently casting.")
+        all_tellf("WARN: Unable to locate or target corpse id <%s>", corpse.ID())
     end
 
     bard.resumeMelody()
