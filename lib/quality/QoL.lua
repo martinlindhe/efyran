@@ -666,7 +666,7 @@ function QoL.Init()
     -- enable MQ2NetBots
     cmd("/netbots on grab=on send=on")
 
-    QoL.verifySpellLines()
+    QoL.verifyAllSpellLines()
 
     zonedCommand.Enqueue(nil, 0)
 end
@@ -710,7 +710,7 @@ function QoL.loadRequiredPlugins()
 end
 
 -- make sure I know all listed abilities
-function QoL.verifySpellLines()
+function QoL.verifyAllSpellLines()
     if is_naked() then
         return
     end
