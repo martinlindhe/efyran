@@ -74,7 +74,7 @@ SpellGroups.SHM = {
     -- L65 Daluda's Mending (2144 hp, cost 607 mana, 3.8s cast)
     -- L68 Yoppa's Mending (2448-2468 hp, cost 691 mana, 3.8s cast)
     -- L70 Ancient: Wilslik's Mending (2716 hp, cost 723 mana, 3.8s cast)
-    shm_fast_heal = {
+    shm_heal = {
         "Ancient: Wilslik's Mending",
         "Yoppa's Mending",
         "Daluda's Mending",
@@ -126,6 +126,24 @@ SpellGroups.SHM = {
         "Celerity",
         "Alacrity",
         "Quickness",
+    },
+
+    -- malos (slot 2: cr, slot 3: mr, slot 4: pr, slot 5: fr):
+    -- L19 Malaise (-20 cr, -20 mr, -20 fr, cost 60 mana)
+    -- L34 Malaisement (-40 cr, -40 mr, -40 fr, cost 100 mana)
+    -- L49 Malosi (-60 cr, -60 mr, -60 fr, cost 175 mana, 5.8 min)
+    -- L57 Malosini (-60 cr, -60 mr, -60 fr, cost 200 mana, 8.2 min)
+    -- L60 Malo (-45 cr, -45 mr, -45 pr, -45 fr, unresistable, cost 350 mana)
+    -- L63 Malosinia (-70 cr, -70 mr, -70 pr, -70 fr, cost 300 mana)
+    -- L65 Malos (-55 cr, -55 mr, -55 pr, -55 fr, unresistable, cost 400 mana)
+    shm_malo = {
+        "Malos",
+        "Malosinia",
+        "Malo",
+        "Malosini",
+        "Malosi",
+        "Malaisement",
+        "Malaise",
     },
 
     -- L09 Endure Disease (19-20 dr)
@@ -294,6 +312,20 @@ SpellGroups.SHM = {
         "Spear of Torment",
         "Blast of Venom",
     },
+
+    -- epic 1.5: Crafted Talisman of Fates
+    -- epic 2.0: Blessed Spiritstaff of the Heyokah (Prophet's Gift of the Ruchu: group buff: skill crit damage 110%, 65% melee crit, slot 12: 500 HoT, 1 min, 3 min reuse)
+    shm_epic2 = {
+        "Blessed Spiritstaff of the Heyokah",
+        "Crafted Talisman of Fates",
+    },
+
+    -- oow t1 bp: Spiritkin Tunic (reduce resist rate by 40% for 0.5 min, 5 min recast)
+    -- oow t2 bp: Ritualchanter's Tunic of the Ancestors (reduce resist rate by 40% for 0.7 min, 5 min recast)
+    shm_oow_bp = {
+        "Ritualchanter's Tunic of the Ancestors",
+        "Spiritkin Tunic",
+    },
 }
 
 SpellGroups.CLR = {
@@ -308,39 +340,38 @@ SpellGroups.CLR = {
     },
 
     -- fast heals:
+    -- L01 Minor Healing (12-20 hp, 1.5s cast, 10 mana)
+    -- L04 Light Healing (47-65 hp, 2s cast, 28 mana)
+    -- L10 Healing (135-175 hp, 2.5s cast, 65 mana)
+    -- L20 Greater Healing (280-350 hp, 3.0s cast, 115 mana)
     -- L53 Divine Light
     -- L58 Ethereal Light (1980-2000 hp, 3.8s cast, 490 mana)
     -- L63 Supernal Light (2730-2750 hp, 3.8s cast, 600 mana)
     -- L65 Holy Light (3275 hp, 3.8s cast, 650 mana)
     -- L68 Pious Light (3750-3770 hp, 3.8s cast, 740 mana)
     -- L70 Ancient: Hallowed Light (4150 hp, 3.8s cast, 775 mana)
-    clr_fast_heal = {
+    clr_heal = {
         "Ancient: Hallowed Light",
         "Pious Light",
         "Holy Light",
         "Supernal Light",
         "Ethereal Light",
         "Divine Light",
-    },
-
-    -- quick heals:
-    -- L01 Minor Healing (12-20 hp, 1.5s cast, 10 mana)
-    -- L04 Light Healing (47-65 hp, 2s cast, 28 mana)
-    -- L10 Healing (135-175 hp, 2.5s cast, 65 mana)
-    -- L20 Greater Healing (280-350 hp, 3.0s cast, 115 mana)
-    -- L51 Remedy (463-483 hp, 1.8s cast, 167 mana)
-    -- L58 Ethereal Remedy (975 hp, 2.8s cast, 400 mana)
-    -- L61 Supernal Remedy (1450 hp, 1.8s cast, 400 mana)
-    -- L66 Pious Remedy (1990 hp, 1.8s cast, 495 mana)
-    clr_quick_heal = {
-        "Pious Remedy",
-        "Supernal Remedy",
-        "Ethereal Remedy",
-        "Remedy",
         "Greater Healing",
         "Healing",
         "Light Healing",
         "Minor Healing",
+    },
+
+    -- L51 Remedy (463-483 hp, 1.8s cast, 167 mana)
+    -- L58 Ethereal Remedy (975 hp, 2.8s cast, 400 mana)
+    -- L61 Supernal Remedy (1450 hp, 1.8s cast, 400 mana)
+    -- L66 Pious Remedy (1990 hp, 1.8s cast, 495 mana)
+    clr_remedy = {
+        "Pious Remedy",
+        "Supernal Remedy",
+        "Ethereal Remedy",
+        "Remedy",
     },
 
     -- HoT:
@@ -644,7 +675,6 @@ SpellGroups.DRU = {
         "Moonshadow",               -- DRU/70: 1500 hp, cost 1100 mana, 4.5S cast, 18s recast
     },
 
-    -- fast heal:
     -- L01 Minor Healing
     -- L09 Light Healing
     -- L10 Healing
@@ -657,10 +687,9 @@ SpellGroups.DRU = {
     -- L63 Nature's Infusion (2030-2050 hp, cost 560 mana)
     -- L64 Karana's Renewal (4680 hp, cost 600 mana - 75% CH)
     -- L65 Sylvan Infusion (2441 hp, cost 607 mana, 3.75s cast)
-
     -- L68 Chlorotrope (2790-2810 hp, cost 691 mana, 3.75s cast)
     -- L70 Ancient: Chlorobon (3094 hp, cost 723 mana,3.75s cast)
-    dru_fast_heal = {
+    dru_heal = {
         "Ancient: Chlorobon",
         "Chlorotrope",
         "Sylvan Infusion",
@@ -1489,7 +1518,7 @@ SpellGroups.MAG = {
     -- L51 Malosi (-58-60 cr, -58-60 mr, -58-60 pr, -58-60 fr, cost 175 mana)
     -- L60 Mala (-35 cr, -35 mr, -35 pr, -35 fr, unresistable, cost 350 mana)
     -- L63 Malosinia (-70 cr, -70 mr, -70 pr, -70 fr, cost 300 mana)
-    mag_malos = {
+    mag_malo = {
         "Malosinia",
         "Mala",
         "Malosi",
@@ -1957,11 +1986,39 @@ SpellGroups.WIZ = {
     wiz_target_ae = {
         -- XXX
     },
+
+    -- L01 Numbing Cold (14 hp, ICE, aerange 25, recast 12s, cost 6 mana)
+    -- L05 Fingers of Fire (19-28 hp, FIRE, aerange 25, recast 6s, cost 47 mana)
+    -- L14 Project Lightning (55-62 hp, MAGIC, aerange 25, recast 6s, cost 85 mana)
+    -- L30 Thunderclap (210-232 hp, MAGIC, aerange 20, recast 12s, cost 175 mana)
+    -- L45 Supernova (854 hp, FIRE, aerange 35, recast 12s, cost 875 mana)
+    -- L53 Jyll's Static Pulse (495-510 hp, MAGIC, aerange 25, recast 6s, cost 285 mana)
+    -- L56 Jyll's Zephyr of Ice (594 hp, ICE, adj -10, aerange 25, recast 6s, cost 313 mana)
+    -- L59 Jyll's Wave of Heat (638-648 hp, FIRE, adj -10, aerange 25, recast 6s, cost 342 mana)
+    -- L60 Winds of Gelid (1260 hp, ICE, adj -10, aerange 35, recast 12s, cost 875 mana)
+    -- L67 Circle of Fire (845 hp, FIRE, adj -10, aerange 35, recast 6s, cost 430 mana)
+    -- L70 Circle of Thunder (1450 hp, MAGIC; adj -10, aerange 35, recast 12s, cost 990 mana)
+    wiz_pbae_nuke = {
+        -- xxx
+    },
+
+    -- epic 1.5: Staff of Prismatic Power (-30% spell resist rate for group, -4% spell hate)
+    -- epic 2.0: Staff of Phenomenal Power (-50% spell resist rate for group, -6% spell hate)
+    wiz_epic2 = {
+        "Staff of Phenomenal Power",
+        "Staff of Prismatic Power",
+    },
+
+    -- oow T1 bp: Spelldeviser's Cloth Robe (Academic's Foresight, -25% cast time for 0.5 min, 5 min reuse)
+    -- oow T2 bp: Academic's Robe of the Arcanists (Academic's Intellect, -25% cast time for 0.7 min, 5 min reuse)
+    wiz_oow_bp = {
+        "Academic's Robe of the Arcanists",
+        "Spelldeviser's Cloth Robe",
+    },
 }
 
 SpellGroups.RNG = {
 
-    -- fast heal:
     -- L01 Salve (live)
     -- L08 Minor Healing
     -- L20 Light Healing
@@ -1970,7 +2027,7 @@ SpellGroups.RNG = {
     -- L62 Chloroblast (994-1044 hp, cost 331 mana)
     -- L65 Sylvan Light (850 hp, 3s cast time, cost 370 mana)
     -- L67 Sylvan Water (1135-1165 hp, 3s cast time, cost 456 mana)
-    rng_fast_heal = {
+    rng_heal = {
         "Sylvan Water",
         "Sylvan Light",
         "Chloroblast",
@@ -2063,18 +2120,66 @@ SpellGroups.RNG = {
     rng_snare = {
         "Ensnare",
         "Snare",
-    }
+    },
+
+    -- epic 1.5: Heartwood Blade (critical melee chance 110%, accuracy 110%)
+    -- epic 2.0: Aurora, the Heartwood Blade (critical melee chance 170%, accuracy 170%, 1 min duration, 5 min recast)
+    rng_epic2 = {
+        "Aurora, the Heartwood Blade",
+        "Heartwood Blade",
+    },
+
+    -- oow T1 bp: Sunrider's Vest (slot 3: Add Proc: Minor Lightning Call Effect for 0.3 min)
+    -- oow T2 bp: Bladewhisper Chain Vest of Journeys (slot 3: Add Proc: Major Lightning Call Effect for 0.5 min)
+    rng_oow_bp = {
+        "Bladewhisper Chain Vest of Journeys",
+        "Sunrider's Vest",
+    },
 }
 
 SpellGroups.PAL = {
+
+    -- L01 Salve (5-9 hp)
+    -- L06 Minor Healing (12-20 hp)
+    -- L12 Light Healing (47-65 hp)
+    -- L27 Healing (135-175 hp)
+    -- L36 Greater Healing (280-350 hp, cost 115 mana)
+    -- L52 Light of Life (410 hp, cast time 1.5s, 7s recast, cost 215 mana)
+    -- L57 Superior Healing (500-600 hp, cast time 3.5s, 1.5s recast, cost 185 mana)
+    -- L61 Touch of Nife (1210-1250 hp, cast time 3.8s, 1.5s recast, cost 4556 mana)
+    -- L65 Light of Order (1072 hp, cast time 1.0s, 5s recast, cost 428 mana)
+    -- L68 Light of Piety (1234 hp, cast time 1.0s, 5s recast, cost 487 mana)
+    pal_heal = {
+        "Light of Piety",
+        "Light of Order",
+        "Touch of Nife",
+        "Superior Healing",
+        "Light of Life",
+        "Greater Healing",
+        "Healing",
+        "Light Healing",
+        "Minor Healing",
+        "Salve",
+    },
+
     pal_group_heal = { -- TODO make use of
-        "Hand of Piety",            -- PAL/??: AA Rank 1-XXX (24 min reuse with Hastened Piety Rank 3)
         "Wave of Piety",            -- PAL/70: 1316 hp, cost 1048 mana
         "Wave of Trushar",          -- PAL/65: 1143 hp, cost 921 mana
         "Wave of Marr",             -- PAL/65: 960 hp, cost 850 mana
-        "Healing Wave of Prexus",   -- PAL/58: 688-698 hp
-        "Wave of Healing",          -- PAL/55: 439-489 hp
-        "Wave of Life",             -- PAL/39: 201-219 hp
+        "Healing Wave of Prexus",   -- PAL/58: 688-698 hp, cost 698 mana
+        "Wave of Healing",          -- PAL/55: 439-489 hp, cost 503 mana
+        "Wave of Life",             -- PAL/39: 201-219 hp, cost 274 mana
+    },
+
+    -- L44 Ethereal Cleansing (98-100 hp/tick, 30s recast, cost 150 mana)
+    -- L59 Celestial Cleansing (175 hp/tick, 30s recast, cost 225 mana)
+    -- L64 Supernal Cleansing (300 hp/tick, 30s recast, cost 360 mana)
+    -- L69 Pious Cleansing (585 hp/tick, 30s recast, cost 668 mana)
+    pal_hot = {
+        "Pious Cleansing",
+        "Supernal Cleansing",
+        "Celestial Cleansing",
+        "Ethereal Cleansing",
     },
 
     -- hp type 2 buff:
@@ -2140,6 +2245,13 @@ SpellGroups.PAL = {
         "Yaulp II",
         "Yaulp"
     },
+
+    -- OOW T1 bp: Oathbound Breastplate (proc Minor Pious Shield Effect, 0.2 min)
+    -- OOW T1 bp: Dawnseeker's Chestpiece of the Defender (proc Minor Pious Shield Effect, 0.4 min)
+    pal_oow_bp = {
+        "Dawnseeker's Chestpiece of the Defender",
+        "Oathbound Breastplate",
+    },
 }
 
 SpellGroups.SHD = {
@@ -2173,7 +2285,21 @@ SpellGroups.SHD = {
         "Cloak of Discord",
         "Cloak of Luclin",
         "Cloak of the Akheva",
-    }
+    },
+
+    -- epic 1.5 (30% accuracy for group, 35% melee lifetap. 10 min reuse) Innoruuk's Voice
+    -- epic 2.0 (40% accuracy for group, 50% melee lifetap. 5 min reuse) Innoruuk's Dark Blessing
+    shd_epic2 = {
+        "Innoruuk's Dark Blessing",
+        "Innoruuk's Voice",
+    },
+
+    -- oow t1 bp: Heartstiller's Mail Chestguard - Lifetap from Weapon Damage (15) for 2 ticks
+    -- oow t2 bp: Duskbringer's Plate Chestguard of the Hateful - Lifetap from Weapon Damage (15) for 4 ticks. 5 min reuse
+    shd_oow_bp = {
+        "Duskbringer's Plate Chestguard of the Hateful",
+        "Heartstiller's Mail Chestguard",
+    },
 }
 
 SpellGroups.BST = {
@@ -2360,7 +2486,6 @@ SpellGroups.BST = {
         "Sha's Revenge",
     },
 
-    -- quick heals:
     -- L06 Minor Healing (12-20 hp, cost 10 mana)
     -- L20 Light Healing (47-65 hp, cost 28 mana)
     -- L36 Healing (135-175 hp, cost 65 mana)
@@ -2368,7 +2493,7 @@ SpellGroups.BST = {
     -- L62 Chloroblast (994-1044 hp, cost 331 mana)
     -- L65 Trushar's Mending (1048 hp, cost 330 mana)
     -- L67 Muada's Mending (1176-1206 hp, cost 376 mana, 3s cast time)
-    bst_quick_heal = {
+    bst_heal = {
         "Muada's Mending",
         "Trushar's Mending",
         "Chloroblast",
