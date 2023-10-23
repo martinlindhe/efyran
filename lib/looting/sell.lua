@@ -65,6 +65,8 @@ local function sellItem(itemToSell)
         mq.delay(30, function() return not quantityWindow() or not quantityWindow.Open() end)
     end
 
+    mq.delay("1s", function() return not merchantWindow.Child("MW_Sell_Button").Enabled() end)
+
     if(itemToSell.ItemSlot2() >= 0 and mq.TLO.Me.Inventory("pack"..packslot).Item(itemToSell.ItemSlot).Item())
         or mq.TLO.Me.Inventory("pack"..packslot).Item() then
         logger.Error("Failed to sell [%s], skipping.", itemToSell.Name())
