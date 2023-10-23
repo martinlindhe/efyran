@@ -1511,6 +1511,33 @@ SpellGroups.MAG = {
         "Renew Summoning",
         "Renew Elements",
     },
+
+    -- L01 Fire Flux (8-12 hp, aerange 20, recast 6s , cost 23 mana) - for PL
+    -- L22 Flame Flux (89-96 hp, aerange 20, recast 6s, cost 123 mana)
+    -- L39 Flame Arc (171-181 hp, aerange 20, recast 7s , cost 199 mana)
+    -- L51 Scintillation (597-608 hp, aerange 25, recast 6.5s, cost 361 mana)
+    -- L60 Wind of the Desert (1050 hp, aerange 25, recast 12s, cost 780 mana)
+    mag_pbae_nuke = {
+        "Wind of the Desert",
+        "Scintillation",
+        "Flame Arc",
+        "Flame Flux",
+        "Fire Flux",
+    },
+
+    -- epic 1.5: hp  800, mana 10/tick, hp 20/tick, proc Elemental Conjunction Strike, defensive proc Elemental Conjunction Parry (Staff of Elemental Essence)
+    -- epic 2.0: hp 1000, mana 12/tick, hp 24/tick, proc Primal Fusion Strike, defensive proc Primal Fusion Parry, 20 min (34 min with ext duration) (Focus of Primal Elements)
+    mag_epic2 = {
+        "Focus of Primal Elements",
+        "Staff of Elemental Essence",
+    },
+
+    -- oow t1 bp: Runemaster's Robe (pet buff: +50% skill dmg mod, -15% skill dmg taken for 0.3 min)
+    -- oow t2 bp: Glyphwielder's Tunic of the Summoner (pet buff: +50% skill dmg mod, -15% skill dmg taken for 0.5 min)
+    mag_oow_bp = {
+        "Glyphwielder's Tunic of the Summoner",
+        "Runemaster's Robe",
+    },
 }
 
 SpellGroups.NEC = {
@@ -1587,6 +1614,19 @@ SpellGroups.NEC = {
         "Intensify Death",
     },
 
+    -- L07 Mend Bones (22-32 hp)
+    -- L26 Renew Bones (121-175 hp)
+    -- L64 Touch of Death (1190-1200 hp, -24 dr, -24 pr, -24 curse, cost 290 mana)
+    -- L69 Dark Salve (1635-1645 hp, -28 dr, -28 pr, -28 curse, cost 358 mana)
+    -- L73 Chilling Renewal (2420-2440 hp, -34 dr, -34 pr, -34 curse, -8 corruption, cost 504 mana)
+    nec_pet_heal = {
+        "Chilling Renewal",
+        "Dark Salve",
+        "Touch of Death",
+        "Renew Bones",
+        "Mend Bones",
+    },
+
     -- L01 Minor Shielding (6-10 hp, 3-4 ac)
     -- L16 Shielding (45-50 hp, 11-13 ac, 11-12 mr)
     -- L24 Major Shielding (68-75 hp, 16-18 ac, 14 mr)
@@ -1608,6 +1648,189 @@ SpellGroups.NEC = {
         "Shielding",
         "Lesser Shielding",
         "Minor Shielding",
+    },
+
+    -- L04 Clinging Darkness (8 hp/tick, 24-30% snare, 0.8 min, cost 20 mana)
+    -- L11 Engulfing Darkness (11 hp/tick, 40% snare, 1.0 min, cost 60 mana)
+    -- L27 Dooming Darkness (20 hp/tick, 48-59% snare, 1.5 min, cost 120 mana)
+    -- L47 Cascading Darkness (72 hp/tick, 60% snare, 1.6 min, cost 300 mana)
+    -- L59 Devouring Darkness (123 hp/tick, 69-75% snare, 1.3 min, cost 400 mana)
+    -- L63 Embracing Darkness (resist adj -20, 68-70 hp/tick, 75% snare, 2.0 min, cost 200 mana)
+    -- L68 Desecrating Darkness (resist adj -20, 96 hp/tick, 75% snare, 2.0 min, cost 248 mana)
+    nec_snare_dot = {
+        "Desecrating Darkness",
+        "Embracing Darkness",
+        "Devouring Darkness",
+        "Cascading Darkness",
+        "Dooming Darkness",
+        "Engulfing Darkness",
+        "Clinging Darkness",
+    },
+
+    -- L04 Poison Bolt (10 hp/tick, poison)
+    -- L34 Venom of the Snake (x)
+    -- L36 Chilling Embrace (100-114 hp/tick, poison)
+    -- L65 Blood of Thule (350-360 hp/tick, resist adj -50, poison)
+    -- L69 Corath Venom (611 hp/tick, POISON,  resist adj -50, cost 655 mana)
+    -- L70 Chaos Venom (473 hp/tick, POISON, resist adj -50, cost 566 mana)
+    nec_poison_dot = {
+        "Chaos Venom",
+        "Corath Venom",
+        "Blood of Thule",
+        "Chilling Embrace",
+        "Venom of the Snake",
+        "Poison Bolt",
+    },
+
+    -- L01 Disease Cloud (x)
+    -- L13 Heart Flutter (18-22 hp/tick, -13-20 str, -7-9 ac)
+    -- L35 Scrounge (x)
+    -- L40 Asystole (x)
+    -- L61 Dark Plague (182-190 hp/tick, resist adj -50, disease, cost 340 mana)
+    -- L66 Chaos Plague (247-250 hp/tick, resist adj -50, disease)
+    -- L67 Grip of Mori (194-197 hp/tick, -63-65 str, -35-36 ac, cost 325 mana)
+    nec_disease_dot = {
+        "Grip of Mori",
+        "Chaos Plague",
+        "Dark Plague",
+        "Asystole",
+        "Scrounge",
+        "Heart Flutter",
+        "Disease Cloud",
+    },
+
+    -- magic dots:
+    -- L39 Dark Soul (x)
+    -- L51 Splurt (x)
+    -- L63 Horror (432-450 hp/tick, resist adj -30, magic, cost 450 mana)
+    -- L67 Dark Nightmare (591 hp/tick, resist adj -30, magic, cost 585 mana)
+    -- L70 Ancient: Curse of Mori (639 hp/tick, resist adj -30, magic, cost 625 mana)
+    nec_magic_dot = {
+        "Ancient: Curse of Mori",
+        "Dark Nightmare",
+        "Horror",
+        "Splurt",
+        "Dark Soul",
+    },
+
+    -- L10 Heat Blood (28-43 hp/tick)
+    -- L28 Boil Blood (67 hp/tick)
+    -- L47 Ignite Blood (X)
+    -- L58 Pyrocruor (156-166 hp/tick)
+    -- L65 Night Fire (335 hp/tick, resist adj -100)
+    -- L69 Pyre of Mori (419 hp/tick, resist adj -100, cost 560 mana)
+    -- L70 Dread Pyre (956 hp/tick, resist adj -100, cost 1093 mana)
+    nec_fire_dot = {
+        "Dread Pyre",
+        "Pyre of Mori",
+        "Night Fire",
+        "Pyrocruor",
+        "Ignite Blood",
+        "Boil Blood",
+        "Heat Blood",
+    },
+
+    -- duration taps (dot + heal):
+    -- L09 Leech (8 hp/tick, MAGIC, resist adj -200)
+    -- L29 Vampiric Curse (21 hp/tick, MAGIC, resist adj -200)
+    -- L45 Auspice (30 hp/tick, DISEASE, resist adj -200)
+    -- L62 Saryrn's Kiss (191-200 hp/tick, MAGIC, resist adj -200, magic, cost 550 mana)
+    -- L65 Night Stalker (122 hp/tick, DISEASE, resist adj -200, cost 950 mana)
+    -- L65 Night's Beckon (220 hp/tick, MAGIC resist adj -200, cost 605 mana)
+    -- L68 Fang of Death (370 hp/tick, MAGIC, resist adj -200, cost 750 mana)
+    nec_heal_dot = {
+        "Fang of Death",
+        "Night's Beckon",
+        "Night Stalker",
+        "Saryrn's Kiss",
+        "Auspice",
+        "Vampiric Curse",
+        "Leech",
+    },
+
+    -- poison nukes:
+    -- L21 Shock of Poison (171-210 dmg)
+    -- L32 Torbas' Acid Blast (314-332 dmg)
+    -- L54 Torbas' Venom Blast (688 dmg, cost 251 mana)
+    -- L60 Ancient: Lifebane (1050 dmg)
+    -- L61 Neurotoxin (1325 hp, cost 445 mana) PoP
+    -- L66 Acikin (1823 hp, cost 556 mana) OOW
+    -- L68 Call for Blood (1770 dmg, cost 568 mana) DoDH - adjusts dot dmg randomly
+    -- L70 Ancient: Touch of Orshilak (-200 resist check, 1300 dmg, cost 598) OOW
+    nec_poison_nuke = {
+        "Call for Blood", -- better than Ancient: Touch of Orshilak
+        "Ancient: Touch of Orshilak",
+        "Acikin",
+        "Neurotoxin",
+        "Ancient: Lifebane",
+        "Torbas' Venom Blast",
+        "Shock of Poison",
+    },
+
+    -- L20 Word of Shadow (MAGIC, 52-58 hp, aerange 20, recast 9s, cost 85 mana)
+    -- L27 Word of Spirit (MAGIC, 91-104 hp, aerange 20, recast 9s, cost 133 mana)
+    -- L36 Word of Souls (MAGIC, 138-155 hp, aerange 20, recast 9s, cost 171 mana)
+    nec_pbae_nuke = {
+        "Word of Souls",
+        "Word of Spirit",
+        "Word of Shadow",
+    },
+
+    -- L10 Scent of Dusk (-6-9 fr, -6-9 pr, -6-9 dr)
+    -- L37 Scent of Darkness (-23-27 fr, -23-27 pr, -23-27 dr)
+    -- L52 Scent of Terris (-33-36 fr, -33-36 pr, -33-36 dr, poison)
+    -- L68 Scent of Midnight (-55 dr, -55 pr, disease, resist adj -200)
+    nec_scent_debuff = {
+        "Scent of Midnight",
+        "Scent of Terris",
+        "Scent of Darkness",
+        "Scent of Dusk",
+    },
+
+    -- L01 Lifetap (4-6 hp, cost 8 mana)
+    -- L03 Lifespike (8-12 hp, cost 13 mana)
+    -- L12 Lifedraw (102-105 hp, cost 86 mana)
+    -- L20 Siphon Life (140-150 hp, cost 115 mana)
+    -- L26 Spirit Tap (202-210 hp, cost 152 mana)
+    -- L39 Drain Spirit (314 hp, cost 213 mana)
+    -- L54 Deflux (535 hp, cost 299 mana)
+    -- L59 Touch of Night (708 hp, cost 382 mana)
+    -- L67 Soulspike (1204 hp, cost 563 mana)
+    -- L70 Ancient: Touch of Orshilak (1300 hp, cost 598 mana)
+    nec_lifetap = {
+        "Ancient: Touch of Orshilak",
+        "Soulspike",
+        "Touch of Night",
+        "Deflux",
+        "Drain Spirit",
+        "Spirit Tap",
+        "Siphon Life",
+        "Lifedraw",
+        "Lifespike",
+        "Lifetap",
+    },
+
+    -- L21 Rapacious Subvention (60 mana, cost 200 mana)
+    -- L43 Covetous Subversion (100 mana, cost 300 mana, 8s recast)
+    -- L56 Sedulous Subversion (150 mana, cost 400 mana, 8s recast)
+    nec_manadump = {
+        "Sedulous Subversion",
+        "Covetous Subversion",
+        "Rapacious Subvention",
+    },
+
+    -- epic 1.5: Soulwhisper (Servant of Blood, swarm pet)
+    -- epic 2.0: Deathwhisper (Guardian of Blood, swarm pet)
+    nec_epic2 = {
+        "Deathwhisper",
+        "Soulwhisper",
+    },
+
+    -- oow tier 1 bp: Deathcaller's Robe (increase dot dmg)
+    -- oow tier 2 bp: Blightbringer's Tunic of the Grave
+    new_oow_bp = {
+        "Blightbringer's Tunic of the Grave",
+        "Deathcaller's Robe",
     },
 }
 
@@ -2199,7 +2422,84 @@ SpellGroups.BRD = {
     -- L51 Selo's Song of Travel (levi + invis)
     brd_travel = {
         "Selo's Song of Travel",
+    },
+
+    -- epic 1.5: slot 9: spell crit  8%, slot 10: dot crit  8%, slot 12: accuracy 130% (Prismatic Dragon Blade)
+    -- epic 2.0: slot 9: spell crit 12%, slot 10: dot crit 12%, slot 12: accuracy 140% (Blade of Vesagran)
+    brd_epic2 = {
+        "Blade of Vesagran",
+        "Prismatic Dragon Blade",
+    },
+
+    -- oow T1 bp: increase double attack by  30% for 12s, 5 min reuse (Traveler's Mail Chestguard)
+    -- oow T2 bp: increase double attack by 100% for 24s, 5 min reuse (Farseeker's Plate Chestguard of Harmony)
+    brd_oow_bp = {
+        "Farseeker's Plate Chestguard of Harmony",
+        "Traveler's Mail Chestguard",
+    },
+}
+
+SpellGroups.WAR = {
+    -- epic 1.5: Champion's Sword of Eternal Power (group 600 hp)
+    -- epic 2.0: Kreljnok's Sword of Eternal Power (group 800 hp)
+    war_epic2 = {
+        "Kreljnok's Sword of Eternal Power",
+        "Champion's Sword of Eternal Power",
+    },
+
+    -- oow T1 bp: Armsmaster's Breastplate - reduce damage taken for 12s
+    -- oow T2 bp: Gladiator's Plate Chestguard of War - reduce damage taken for 24s
+    war_oow_bp = {
+        "Gladiator's Plate Chestguard of War",
+        "Armsmaster's Breastplate",
+    },
+}
+
+SpellGroups.ROG = {
+    -- epic 1.5: Fatestealer (35% triple backstab, Assassin's Taint Strike proc)
+    -- epic 2.0: Nightshade, Blade of Entropy (45% triple backstab, Deceiver's Blight Strike proc)
+    rog_epic2 = {
+        "Nightshade, Blade of Entropy",
+        "Fatestealer",
+    },
+
+    -- oow T1 bp: (increase 1hb dmg   taken by 20% for 12s, 5 min reuse) Darkraider's Vest
+    -- oow T2 bp: (increase all melee taken by 20% for 24s, 5 min reuse) Whispering Tunic of Shadows
+    rog_oow_bp = {
+        "Whispering Tunic of Shadows",
+        "Darkraider's Vest",
+    },
+}
+
+SpellGroups.BER = {
+    -- epic 1.5: Raging Taelosian Alloy Axe (+75 str, +75 str cap, +200% melee crit chance, +75 hot heal)
+    -- epic 2.0: Vengeful Taelosian Blood Axe (+100 str, +100 str cap, 300% melee crit chance, 100 hot heal)
+    ber_epic2 = {
+        "Vengeful Taelosian Blood Axe",
+        "Raging Taelosian Alloy Axe",
+    },
+
+    -- oow T1 bp: Ragebound Chain Chestguard (increase melee chance to hit by 40% for 12s)
+    -- oow T2 bp: Wrathbringer's Chain Chestguard of the Vindicator (increase melee chance to hit by 40% for 24s)
+    ber_oow_bp = {
+        "Wrathbringer's Chain Chestguard of the Vindicator",
+        "Ragebound Chain Chestguard",
     }
+}
+
+SpellGroups.MNK = {
+    -- epic 1.5: Fistwraps of Celestial Discipline (15% max hp, +10000 hp, add proc Peace of the Order Strike, 0.5 min, 6 min recast)
+    -- epic 2.0: Transcended Fistwraps of Immortality (25% max hp, +10000 hp, add proc Peace of the Disciple Strike, 0.5 min, 3 min recast)
+    mnk_epic2 = {
+        "Transcended Fistwraps of Immortality",
+        "Fistwraps of Celestial Discipline",
+    },
+    -- oow bp t1: Stillmind Tunic (cancel beneficial buffs)
+    -- oow bp t2: Fiercehand Shroud of the Focused (cancel beneficial buffs)
+    mnk_oow_bp = {
+        "Fiercehand Shroud of the Focused",
+        "Stillmind Tunic",
+    },
 }
 
 
