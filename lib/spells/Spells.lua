@@ -2,7 +2,7 @@ local mq = require("mq")
 local log = require("knightlinc/Write")
 local broadCastInterfaceFactory = require 'broadcast/broadcastinterface'
 
-local globalSettings = require("lib/settings/default/Settings")
+local serverSettings = require("lib/settings/default/ServerSettings")
 local botSettings = require("lib/settings/BotSettings")
 local aliases = require("lib/settings/default/SpellAliases")
 
@@ -606,7 +606,7 @@ function rez_corpse(spawnID)
 
         all_tellf("Rezzing %s \ag%s\ax with \ay%s\ax", spawn.Class.ShortName(), spawn.DisplayName(), rez)
         --target_id(spawn.ID())
-        if globalSettings.allowBotTells then
+        if serverSettings.allowBotTells then
             --cmdf("/tell %s Wait4Rez", spawn.DisplayName())
         end
         castSpellRaw(rez, spawn.ID())

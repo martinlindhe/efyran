@@ -11,7 +11,7 @@ local botSettings = require("lib/settings/BotSettings")
 local bard        = require("lib/classes/Bard")
 local timer       = require("Timer")
 
-local globalSettings = require("lib/settings/default/Settings")
+local serverSettings = require("lib/settings/default/ServerSettings")
 
 local spellGroups  = require("lib/spells/SpellGroups")
 
@@ -815,7 +815,7 @@ function buffs.acceptRez()
         if not is_peer(peer) then
             log.Warn("Got a rez from \ay%s\ax: \ap%s\ax", peer, s)
             all_tellf("Got a rez from \ay%s\ax", peer)
-            if not globalSettings.allowStrangers then
+            if not serverSettings.allowStrangers then
                 cmd("/beep 1")
                 delay(10000) -- 10s to not flood chat
                 return

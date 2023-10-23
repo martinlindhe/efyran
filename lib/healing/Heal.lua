@@ -5,7 +5,7 @@ local broadCastInterfaceFactory = require 'broadcast/broadcastinterface'
 require("lib/spells/Spells")
 
 local follow  = require("lib/following/Follow")
-local globalSettings = require("lib/settings/default/Settings")
+local serverSettings = require("lib/settings/default/ServerSettings")
 local botSettings = require("lib/settings/BotSettings")
 local timer = require("Timer")
 

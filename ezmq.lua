@@ -10,7 +10,7 @@ local timer = require("Timer")
 local follow  = require("lib/following/Follow")
 
 local spellGroups  = require("lib/spells/SpellGroups")
-local globalSettings = require("lib/settings/default/Settings")
+local serverSettings = require("lib/settings/default/ServerSettings")
 
 -- returns true if `spawn` is within maxDistance
 ---@param spawn spawn
@@ -53,7 +53,7 @@ function move_to(spawnID)
         return false
     end
 
-    --if globalSettings.followMode:lower() == "mq2advpath" and not line_of_sight_to(spawn) then
+    --if serverSettings.followMode:lower() == "mq2advpath" and not line_of_sight_to(spawn) then
     --    all_tellf("move_to ERROR: cannot see %s", spawn.Name())
     --    return
     --end
@@ -72,9 +72,9 @@ function move_to(spawnID)
     -- abort existing follow commands
     follow.Pause()
 
-    if globalSettings.followMode:lower() == "mq2nav" then
+    if serverSettings.followMode:lower() == "mq2nav" then
         mq.cmdf("/nav id %d", spawnID)
-    elseif globalSettings.followMode:lower() == "mq2advpath" then
+    elseif serverSettings.followMode:lower() == "mq2advpath" then
         mq.cmdf("/afollow spawn %d", spawnID)
     end
 
@@ -112,9 +112,9 @@ function move_to_loc(y, x, z)
     -- abort existing follow commands
     follow.Pause()
 
-    if globalSettings.followMode:lower() == "mq2nav" then
+    if serverSettings.followMode:lower() == "mq2nav" then
         mq.cmdf("/nav loc %d %d %d", x, y, z)
-    elseif globalSettings.followMode:lower() == "mq2advpath" then
+    elseif serverSettings.followMode:lower() == "mq2advpath" then
         -- uses MQ2MoveUtils. TODO: can we move to a location using /afollow ?
         mq.cmdf("/moveto loc %f %f %f", y, x, z)
     end

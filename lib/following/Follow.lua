@@ -2,7 +2,7 @@ local mq = require("mq")
 local log = require("knightlinc/Write")
 local timer = require("Timer")
 
-local globalSettings = require("lib/settings/default/Settings")
+local serverSettings = require("lib/settings/default/ServerSettings")
 
 local Follow = {
     -- the current spawn I am following
@@ -18,7 +18,7 @@ local Follow = {
 ---@param spawnName string
 ---@param force boolean
 function Follow.Start(spawnName, force)
-    if globalSettings.followMode:lower() == "mq2nav" and not mq.TLO.Navigation.MeshLoaded() then
+    if serverSettings.followMode:lower() == "mq2nav" and not mq.TLO.Navigation.MeshLoaded() then
         all_tellf("MQ2Nav: MISSING NAVMESH FOR %s. Rebuild with MeshGenerator.exe and reload MQ2Nav plugin", zone_shortname())
         return
     end
@@ -32,7 +32,7 @@ function Follow.Start(spawnName, force)
     if spawn == nil then
         return
     end
-    if globalSettings.followMode:lower() == "mq2advpath" and not force and not spawn.LineOfSight() then
+    if serverSettings.followMode:lower() == "mq2advpath" and not force and not spawn.LineOfSight() then
         all_tellf("I cannot see [+r+]%s[+x+]", spawn.Name())
         return
     end
@@ -136,14 +136,14 @@ function Follow.Update(force)
 
     local maxRange = 5 -- spawn.MaxRangeTo()
 
-    --log.Debug("Follow.Update, mode %s, distance %f", globalSettings.followMode, spawn.Distance3D())
+    --log.Debug("Follow.Update, mode %s, distance %f", serverSettings.followMode, spawn.Distance3D())
 
-    if globalSettings.followMode:lower() == "mq2nav" then
+    if serverSettings.followMode:lower() == "mq2nav" then
         if not mq.TLO.Navigation.Active() then
             log.Info("Follow.Update: nav activated !")
             mq.cmdf("/nav spawn PC =%s | distance=%d log=trace", spawn.Name(), maxRange)
         end
-    elseif globalSettings.followMode:lower() == "mq2advpath" then
+    elseif serverSettings.followMode:lower() == "mq2advpath" then
         if mq.TLO.AdvPath.WaitingWarp() then
             force = true
             all_tellf("AdvPath: WaitingWarp - force follow")

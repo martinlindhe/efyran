@@ -1,7 +1,7 @@
 local mq = require("mq")
 local commandQueue = require("CommandQueue")
 local log          = require("knightlinc/Write")
-local globalSettings = require("lib/settings/default/Settings")
+local serverSettings = require("lib/settings/default/ServerSettings")
 
 local function execute()
     wait_until_not_casting()
@@ -13,7 +13,7 @@ end
 local function createCommand(text, sender)
     if not is_peer(sender) then
         all_tellf("Got raid invite from %s", sender)
-        if not globalSettings.allowStrangers then
+        if not serverSettings.allowStrangers then
             all_tellf("ERROR: Ignoring Raid invite from unknown player %s", sender)
             return
         end
