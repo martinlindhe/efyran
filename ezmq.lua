@@ -113,7 +113,7 @@ function move_to_loc(y, x, z)
     follow.Pause()
 
     if serverSettings.followMode:lower() == "mq2nav" then
-        mq.cmdf("/nav loc %d %d %d", x, y, z)
+        mq.cmdf("/nav loc %d %d %d", y, x, z)
     elseif serverSettings.followMode:lower() == "mq2advpath" then
         -- uses MQ2MoveUtils. TODO: can we move to a location using /afollow ?
         mq.cmdf("/moveto loc %f %f %f", y, x, z)

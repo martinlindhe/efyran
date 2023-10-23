@@ -21,8 +21,9 @@ local function execute()
             log.Info("/doloot: Giving up, %d corpse nearby, try %d, cantLoot %s", count, tries, tostring(cantLoot))
             break
         end
-
-        lootNearestCorpse(seekRadius)
+        if not lootNearestCorpse(seekRadius) then
+            log.Info("/doloot: Giving up, lootNearestCorpse failed. %d corpse nearby, try %d", count, tries)
+        end
         tries = tries + 1
         mq.doevents()
     end

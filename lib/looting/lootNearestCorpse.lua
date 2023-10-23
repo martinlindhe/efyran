@@ -70,7 +70,7 @@ end
 
 -- Loot item from currently opened corpse and autodestroy or autoinventory
 local function lootItem(slotNum)
-    if mq.TLO.Me.FreeInventory() <= 0 then
+    if mq.TLO.Me.FreeInventory() < 1 then
         all_tellf("Cannot loot! No free inventory slots")
         return
     end
@@ -119,11 +119,13 @@ local function lootItem(slotNum)
     clear_cursor(true)
 end
 
+-- Returns true on successful loot
+---@return boolean
 local function lootCorpse()
     local target = mq.TLO.Target
     if not target() or target.Type() ~= "Corpse" then
         broadcast.Fail({}, "No corpse on target.")
-        return
+        return false
     end
     local name = target.Name()
 
@@ -132,16 +134,16 @@ local function lootCorpse()
     local corpse = mq.TLO.Corpse
     if corpse() == nil or corpse == nil then
         all_tellf("UNLIKELY: corpse poofed while looting (1)")
-        return
+        return false
     end
     mq.delay("1s", function() return corpse.Open() and corpse.Items() > 0 end)
     if corpse() == nil or corpse == nil then
         all_tellf("UNLIKELY: corpse poofed while looting (2)")
-        return
+        return false
     end
     if not corpse.Open() then
         broadcast.Fail({}, "Unable to open corpse for looting.")
-        return
+        return false
     end
 
     if corpse.Items() > 0 then
@@ -189,9 +191,12 @@ local function lootCorpse()
     if left > 0 then
         broadcast.Success({}, "Ending loot on \ay%s\ax, %d items left", name, corpse.Items() or 0)
     end
+    return true
 end
 
---@param seekRadius integer
+-- Returns true if successfully looted a corpse
+---@param seekRadius integer
+---@return boolean
 local function lootNearestCorpse(seekRadius)
 
     bard.pauseMelody()
@@ -206,8 +211,10 @@ local function lootNearestCorpse(seekRadius)
 
     if corpse() == nil then
         all_tellf("UNLIKELY: lootNearestCorpse corpse poofed %s", tostring(corpse.ID()))
-        return
+        return false
     end
+
+    local ok = true
     if EnsureTarget(corpse.ID()) then
         if corpse.Distance() > 16 and corpse.DistanceZ() < 80 then
             move_to(corpse.ID())
@@ -215,10 +222,12 @@ local function lootNearestCorpse(seekRadius)
 
         if corpse() == nil then
             all_tellf("UNLIKELY: lootNearestCorpse corpse poofed")
-            return
+            return false
         end
         if corpse.Distance() <= 20 and corpse.DistanceZ() < 40 and EnsureTarget(corpse.ID()) then
-            lootCorpse()
+            if not lootCorpse() then
+                ok = false
+            end
         else
             all_tellf("WARN: Corpse %s is %d|%d distance, skipping", corpse.Name(), corpse.Distance(), corpse.DistanceZ())
         end
@@ -228,6 +237,7 @@ local function lootNearestCorpse(seekRadius)
 
     bard.resumeMelody()
     move_to_loc(startY, startX, startZ)
+    return ok
 end
 
 return lootNearestCorpse

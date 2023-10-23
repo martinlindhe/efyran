@@ -81,7 +81,7 @@ function Follow.Resume()
     end
 end
 
--- pause follow for the moment, using all possible ways
+-- pause follow for now, in all possible ways
 function Follow.Pause()
     if is_plugin_loaded("MQ2Nav") and mq.TLO.Navigation.Active() then
         cmd("/nav stop")
@@ -113,8 +113,6 @@ function Follow.Tick()
     Follow.Update(false)
     followUpdateTimer:restart()
 end
-
-local lastHeading = ""
 
 -- called from Follow.Tick() in main loop, restores auto follow after a Follow.Pause() call
 ---@param force boolean

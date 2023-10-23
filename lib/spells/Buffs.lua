@@ -217,7 +217,7 @@ function buffs.Tick()
         return
     end
 
-    if not is_standing() or not allow_buff_in_zone() then
+    if not allow_buff_in_zone() then
         return
     end
 
@@ -226,7 +226,7 @@ function buffs.Tick()
         requestBuffsTimer:restart()
     end
 
-    if obstructive_window_open() then
+    if not is_standing() or obstructive_window_open() then
         return
     end
 
