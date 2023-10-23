@@ -17,12 +17,16 @@ local function execute()
 
     while true do
         local count = spawn_count(string.format("npccorpse zradius 50 radius %d", seekRadius))
-        if count == 0 or tries >= maxTries or cantLoot then
+        if count == 0 then
+            log.Debug("/doloot: Finished looting area!")
+            break
+        end
+        if tries >= maxTries or cantLoot then
             log.Info("/doloot: Giving up, %d corpse nearby, try %d, cantLoot %s", count, tries, tostring(cantLoot))
             break
         end
         if not lootNearestCorpse(seekRadius) then
-            log.Info("/doloot: Giving up, lootNearestCorpse failed. %d corpse nearby, try %d", count, tries)
+            log.Debug("/doloot: Giving up, lootNearestCorpse failed. %d corpse nearby, try %d", count, tries)
         end
         tries = tries + 1
         mq.doevents()

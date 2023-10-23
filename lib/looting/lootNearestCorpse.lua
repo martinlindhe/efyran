@@ -154,12 +154,11 @@ local function lootCorpse()
                 break
             end
             local item = corpse.Item(i) --[[@as item]]
-            log.Debug("Checking corpse item %s (%d/%d)", item.Name(), i, corpse.Items())
+            --log.Debug("Checking corpse item %s (%d/%d)", item.Name(), i, corpse.Items())
 
             if (mq.TLO.Me.FreeInventory() < 1 and not item.Stackable())
                 or (mq.TLO.Me.FreeInventory() == 0 and item.Stackable() and item.FreeStack() == 0) then
                 all_tellf("ERROR: Inventory full! Cannot loot %s", item.ItemLink("CLICKABLE")())
-                mq.cmd("/beep 1")
                 break
             end
 
@@ -167,7 +166,7 @@ local function lootCorpse()
                 log.Debug("Looting %s (%d/%d)", item.ItemLink("CLICKABLE")(), i, corpse.Items())
                 lootItem(i)
             end
-            log.Debug("Done looting slot %d", i)
+            --log.Debug("Done looting slot %d", i)
         end
     end
 

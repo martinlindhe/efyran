@@ -80,9 +80,9 @@ SpellGroups.SHM = {
         "Focus of Soul",                            -- L62: 544 hp, 75 str, 70 dex, cost 600 mana, PoP
         "Focus of Spirit",                          -- L60: 405-525 hp, 67 str, 60 dex, cost 500 mana, Velious
         "Harnessing of Spirit",                     -- L46: 243-251 hp, 67 str, 50 dex, cost 425 mana, Luclin
-        "Talisman of Kragg",                        -- L55: 365-500 hp
-        "Talisman of Altuna",                       -- L40: 230-250 hp
-        "Talisman of Tnarg",                        -- L32: 132-150 hp
+        "Talisman of Kragg",                        -- L55: 365-500 hp, Kunark
+        "Talisman of Altuna",                       -- L40: 230-250 hp, Original
+        "Talisman of Tnarg",                        -- L32: 132-150 hp, Original
     },
     shm_group_focus = {
         "Talisman of Wunshi",                       -- L70: 680 hp, 85 str, 85 dex, str cap 85, dex cap 85, cost 2340 mana, OOW
@@ -674,22 +674,27 @@ SpellGroups.DRU = {
 
 SpellGroups.ENC = {
     enc_manaregen = {
-        "Seer's Cognizance",                        -- L78 Seer's Cognizance Rk. II (35 mana/tick, cost 610 mana)
-        "Seer's Intuition",                         -- L73 Seer's Intuition (24 mana/tick, cost 480 mana)
-        "Clairvoyance",                             -- L68 Clairvoyance (20 mana/tick, cost 400 mana)
-        "Clarity II",                               -- L52 Clarity II (9-11 mana/tick, single)
-        "Clarity",                                  -- L26 Clarity (7-9 mana/tick)
+        "Seer's Cognizance",                        -- L78: 35 mana/tick, cost 610 mana
+        "Seer's Intuition",                         -- L73: 24 mana/tick, cost 480 mana
+        "Clairvoyance",                             -- L68: 20 mana/tick, cost 400 mana
+        "Clarity II",                               -- L52: 9-11 mana/tick, cost 115 mana, Kunark
+        "Clarity",                                  -- L26: 7-9 mana/tick, cost 75 mana, Original
+        "Breeze",                                   -- L16: 2 mana/tick, cost 35 mana, Kunark
     },
     enc_group_manaregen = {
         "Voice of Cognizance",                      -- L80 Voice of Cognizance Rk. II (35 mana/tick, cost 1983 mana, group)
         "Voice of Intuition",                       -- L75 Voice of Intuition Rk. II (25 mana/tick, cost 1625 mana, group)
-        "Voice of Clairvoyance",                    -- L70 Voice of Clairvoyance (20 mana/tick, cost 1300 mana, group)
-        "Voice of Quellious",                       -- L65 Voice of Quellious (18 mana/tick, group, cost 1200 mana)
+        "Voice of Clairvoyance",                    -- L70 Voice of Clairvoyance (20 mana/tick, cost 1300 mana, group), OOW
+        "Voice of Quellious",                       -- L65 Voice of Quellious (18 mana/tick, group, cost 1200 mana), PoP
         --"Dusty Cap of the Will Breaker",          -- L65 Dusty Cap of the Will Breaker (LDoN raid). casts Voice of Quellious on L01 toons, TODO make use of
-        "Tranquility",                              -- L63 Tranquility (16 mana/tick, group)
-        "Koadic's Endless Intellect",               -- L60 Koadic's Endless Intellect (14 mana/tick, group)
-        "Gift of Pure Thought",                     -- L56 Gift of Pure Thought (10-11 mana/tick, group)
-        "Boon of the Clear Mind",                   -- L42 Boon of the Clear Mind (6-9 mana/tick, group)
+        "Tranquility",                              -- L63 Tranquility (16 mana/tick, group), PoP
+        "Koadic's Endless Intellect",               -- L60 Koadic's Endless Intellect (14 mana/tick, group), Luclin
+        "Gift of Pure Thought",                     -- L56 Gift of Pure Thought (10-11 mana/tick, group), Kunark
+        "Boon of the Clear Mind",                   -- L42 Boon of the Clear Mind (6-9 mana/tick, group), Kunark
+    },
+    enc_mana_pool = {
+        "Gift of Brilliance",                       -- L60: slot 1: 150 mana cap, slot 3: 2 mana/tick, Velious
+        "Gift of Insight",                          -- L55: slot 1: 100 mana cap, slot 3: 1 mana/tick, Velious
     },
     enc_haste = {
         "Speed of Ellowind",                        -- L72 Speed of Ellowind   (68% haste, 64 atk, 72 agi, 60 dex, 42 min, 24% melee crit chance, %1 crit melee damage, cost 524 mana)

@@ -2296,7 +2296,6 @@ function EnsureTarget(targetId)
     end
 
     if mq.TLO.Target.ID() ~= targetId then
-        log.Info("EnsureTarget: changing target from %s to %d", tostring(mq.TLO.Target.ID()), targetId)
         if mq.TLO.SpawnCount(string.format("id %d", targetId))() > 0 then
             mq.cmdf("/target id %s", targetId)
             mq.delay(500, function() return mq.TLO.Target.ID() == targetId end)

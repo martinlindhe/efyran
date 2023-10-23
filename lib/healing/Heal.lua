@@ -146,7 +146,7 @@ function Heal.medCheck()
     end
 
     local neutral = in_neutral_zone()
-    if nearby_npc_count(50) > 0 and not neutral then
+    if nearby_npc_count(45) > 0 and not neutral then
         return
     end
     if not neutral and is_brd() then
