@@ -1844,19 +1844,19 @@ function matches_filter_line(line, sender)
         if v == "raid" and is_raided_with(sender) then
             return true
         end
-        if v == "priests" and class_priest(class) then
+        if (v == "priest" or v == "priests") and class_priest(class) then
             return true
         end
-        if v == "casters" and class_caster(class) then
+        if (v == "caster" or v == "casters") and class_caster(class) then
             return true
         end
-        if v == "tanks" and class_tank(class) then
+        if (v == "tank" or v == "tanks") and class_tank(class) then
             return true
         end
-        if v == "melee" and class_melee(class) then
+        if (v == "melee" or v == "melees") and class_melee(class) then
             return true
         end
-        if v == "hybrid" and class_hybrid(class) then
+        if (v == "hybrid" or v == "hybrids") and class_hybrid(class) then
             return true
         end
         if v == "plate" and class_plate(class) then
