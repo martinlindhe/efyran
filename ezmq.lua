@@ -2359,6 +2359,9 @@ function memorize_spell(spellRow, defaultGem)
         log.Info("Memorizing \ag%s\ax in gem %d (had \ay%s\ax)", nameWithRank, gem, mq.TLO.Me.Gem(gem).Name())
         mq.cmdf('/memorize "%s" %d', nameWithRank, gem)
         mq.delay(5000, function() return mq.TLO.Me.Gem(nameWithRank)() ~= nil end)
+
+        local waitForReady = mq.TLO.Spell(o.Name).RecoveryTime()
+        mq.delay(waitForReady)
     end
 
     return gem
