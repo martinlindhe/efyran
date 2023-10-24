@@ -2745,11 +2745,16 @@ function open_banker()
     local bankerQuery = "npc radius 100 banker"
     local bankerPetQuery = "pet radius 100 banker" -- summoned banker is a pet
 
-    if not window_open("BigBankWnd") then
-        if spawn_count(bankerQuery) == 0 and spawn_count(bankerPetQuery) == 0 then
+    local bankWnd = "BigBankWnd"
+    if not serverSettings.bigBank then
+        bankWnd = "BankWnd"
+    end
+
+    if not window_open(bankWnd) then
+        if spawn_count(bankerQuery) == 0 and spawn_count(bankerPetQuery) == 0 and have_alt_ability("Summon Clockwork Banker") then
             log.Info("Summoning a banker ...")
             cmd("/banker")
-            delay(500)
+            delay(1000)
 
             if spawn_count(bankerQuery) == 0 and spawn_count(bankerPetQuery) == 0 then
                 log.Error("No banker nearby! Giving up!")
@@ -2767,13 +2772,12 @@ function open_banker()
 
         cmdf("/target id %d", bankerID)
         move_to(bankerID)
-        delay(250)
 
         cmd("/click right target")
         delay(250)
     end
 
-    if not window_open("BigBankWnd") then
+    if not window_open(bankWnd) then
         log.Error("Bank window not open! Giving up!")
         return false
     end

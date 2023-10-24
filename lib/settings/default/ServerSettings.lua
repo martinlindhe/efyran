@@ -15,6 +15,8 @@ local serverSettings = {
     allowStrangers = true,  -- auto accept rez & raid invites from non-peers
 
     allowBotTells = true,   -- allow sending & receiving of "bot tells" such as "Wait4Rez"
+
+    bigBank = true,         -- FVP uses BankWnd
 }
 
 return serverSettings

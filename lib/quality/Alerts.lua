@@ -3,8 +3,6 @@ local log = require("knightlinc/Write")
 
 local assist  = require("lib/assisting/Assist")
 
-require("autobank")
-
 local Alerts = {
 }
 
