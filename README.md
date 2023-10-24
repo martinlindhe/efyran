@@ -14,7 +14,7 @@ Some concepts are borrowed from E3, while others are new.
 Oct 2023: When using git version, make sure you pull the submodules (external dependencies)
 
 ```sh
-git submodule update --init
+git submodule update --init --recursive
 ```
 
 Place the `efyran` folder in `Macroqest-Root\lua\efyran`.
@@ -177,12 +177,17 @@ settings.debug = true -- enable debug logging for this peer
 /lootallcorpses             - tell peers to loot their corpse
 /usecorpsesummoner          - summon corpse in guild lobby
 
-/looton, /lootoff           - toggle autoloot (non-persistent. Use peer `settings.autoloot = true` to make it permanent)
-/doloot                     - manually trigger autoloot on this peer
-
 /scribe                     - scribes all spells in inventory
 
 /train <skill>              - train skill [language, begging, alcohol]
+
+
+# autoloot
+/looton, /lootoff           - toggle autoloot (non-persistent. Use peer `settings.autoloot = true` to make it permanent)
+/doloot                     - manually trigger autoloot on this peer
+/setdestroyitem             - mark item on cursor for auto-destroy
+/setsellitem                - mark item on cursor for auto-sell
+/dosell                     - auto sell to nearby vendor
 ```
 
 TODO document the remaining commands

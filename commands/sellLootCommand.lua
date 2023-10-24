@@ -10,6 +10,5 @@ local function createSellAllCommand()
     commandQueue.Enqueue(function() execute() end)
 end
 
-mq.unbind('/dosell')
 mq.bind("/dosell", createSellAllCommand)
 

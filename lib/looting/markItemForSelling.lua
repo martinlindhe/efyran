@@ -9,35 +9,29 @@ local repository = require("lib/looting/repository")
 local function canSellItem(itemId, itemName)
     local itemToSell = repository:tryGet(itemId)
     if not itemToSell then
-        itemToSell = { Id = itemId, Name = itemName, DoSell = false, DoDestroy = false }
+        itemToSell = { Id = itemId, Name = itemName, Sell = false, Destroy = false }
     end
 
-    return itemToSell.DoSell, itemToSell
+    return itemToSell.Sell, itemToSell
 end
-
 
 local function markItemForSelling()
     local cursor = mq.TLO.Cursor
     if not cursor() then
-        log.Debug("No item to mark for selling on cursor")
+        log.Error("No item to mark for selling on cursor")
         return
     end
 
     local itemId = cursor.ID()
     local shouldSell, sellItem = canSellItem(itemId, cursor.Name())
     if shouldSell then
-        log.Debug("Item already marked for selling")
+        log.Debug("Item %s already marked for selling", cursor.ItemLink("CLICKABLE")())
     end
 
-    sellItem.DoSell = true
+    sellItem.Sell = true
     repository:upsert(sellItem)
-    log.info("Marked <%d:%s> for destroying", sellItem.Id, sellItem.Name)
-    broadcast.Success({}, "Marked <%d:%s> for destroying", sellItem.Id, sellItem.Name)
+    log.Info("Marked %s for selling", cursor.ItemLink("CLICKABLE")())
+    --broadcast.Success({}, "Marked %s for selling", cursor.ItemLink("CLICKABLE")())
 end
 
-local function createAliases()
-    mq.unbind('/setsellitem')
-    mq.bind("/setsellitem", markItemForSelling)
-end
-
-createAliases()
+mq.bind("/setsellitem", markItemForSelling)

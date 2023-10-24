@@ -45,11 +45,11 @@ local function autoMapHeightFilter()
 
     log.Info("autoMapHeightFilter setting min %d, max %d (was min %s, max %s)", data.min, data.max, currentMin, currentMax)
 
-    -- NOTE: this need recent macroquest, past july 25 2023 for the SetText.
-    --mq.TLO.Window("MVW_MapToolBar/MVW_MinZEditBox").SetText(string.format("%d", data.min))
-    --mq.TLO.Window("MVW_MapToolBar/MVW_MinZEditBox").SetText(string.format("%d", data.min))
+    -- NOTE: this need recent macroquest, past july 25 2023 for the SetText
+    mq.TLO.Window("MVW_MapToolBar/MVW_MinZEditBox").SetText(string.format("%d", data.min))
+    mq.TLO.Window("MVW_MapToolBar/MVW_MinZEditBox").SetText(string.format("%d", data.min))
 
-    -- TODO, if Height Filter button is not enabled, then enable it !
+    -- if Height Filter button is not enabled, then enable it !
     if not unknown then
         if not mq.TLO.Window("MVW_MapToolBar/MVW_ZFilterButton").Checked() then
             log.Info("autoMapHeightFilter height filter was off, enabling now!")

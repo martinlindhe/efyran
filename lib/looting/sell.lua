@@ -1,6 +1,6 @@
 --- @type Mq
 local mq = require 'mq'
-local logger = require("knightlinc/Write")
+local log = require("knightlinc/Write")
 local timer = require("lib/Timer")
 local bard = require("lib/classes/Bard")
 local merchant = require("lib/looting/merchant")
@@ -13,10 +13,10 @@ require("ezmq")
 local function canSellItem(itemId, itemName)
     local itemToSell = repository:tryGet(itemId)
     if not itemToSell then
-        itemToSell = { Id = itemId, Name = itemName, DoSell = false, DoDestroy = false }
+        itemToSell = { Id = itemId, Name = itemName, Sell = false, Destroy = false }
     end
 
-    return itemToSell.DoSell, itemToSell
+    return itemToSell.Sell, itemToSell
 end
 
 ---@param itemToSell item
@@ -25,14 +25,14 @@ local function sellItem(itemToSell)
         return
     end
 
-    local shouldSell, _ =  canSellItem(itemToSell.ID(), itemToSell.Name())
+    local shouldSell, _ = canSellItem(itemToSell.ID(), itemToSell.Name())
     if not shouldSell then
-        logger.Info("%s has not listed for selling, skipping.", itemToSell.Name())
+        --log.Debug("%s has not listed for selling, skipping.", itemToSell.Name())
         return
     end
 
     if itemToSell.Value() <= 0 then
-        logger.Info("%s has no value, skipping.", itemToSell.Name())
+        log.Info("%s has no value, skipping.", itemToSell.Name())
         return
     end
 
@@ -40,18 +40,18 @@ local function sellItem(itemToSell)
     local merchantWindow = mq.TLO.Window("MerchantWnd")
 
     local packslot = itemToSell.ItemSlot() - 22
+    log.Info("Selecting item for sell in pack%d %d: %s", packslot, itemToSell.ItemSlot2() + 1, itemToSell.Name())
     while merchantWindow.Child("MW_SelectedItemLabel").Text() ~= itemToSell.Name() do
-        if(itemToSell.ItemSlot2() >= 0) then
-        mq.cmdf("/nomodkey /itemnotify in pack%d %d leftmouseup", packslot, itemToSell.ItemSlot2() + 1)
+        if itemToSell.ItemSlot2() >= 0 then
+            mq.cmdf("/nomodkey /itemnotify in pack%d %d leftmouseup", packslot, itemToSell.ItemSlot2() + 1)
         else
-        mq.cmdf("/nomodkey /itemnotify pack%d leftmouseup", packslot)
+            mq.cmdf("/nomodkey /itemnotify pack%d leftmouseup", packslot)
         end
 
-        mq.delay(retryTimer:TimeRemaining(), function() return merchantWindow.Child("MW_SelectedItemLabel").Text() == itemToSell.Name() end)
-
+        mq.delay(1000, function() return merchantWindow.Child("MW_SelectedItemLabel").Text() == itemToSell.Name() end)
         if retryTimer:expired() then
-        logger.Error("Failed to select [%s], skipping.", itemToSell.Name())
-        return
+            log.Error("Failed to select [%s], skipping.", itemToSell.Name())
+            return
         end
     end
 
@@ -66,52 +66,59 @@ local function sellItem(itemToSell)
     end
 
     mq.delay("1s", function() return not merchantWindow.Child("MW_Sell_Button").Enabled() end)
+    mq.delay(100)
 
     if(itemToSell.ItemSlot2() >= 0 and mq.TLO.Me.Inventory("pack"..packslot).Item(itemToSell.ItemSlot).Item())
         or mq.TLO.Me.Inventory("pack"..packslot).Item() then
-        logger.Error("Failed to sell [%s], skipping.", itemToSell.Name())
+        log.Error("Failed to sell [%s], skipping.", itemToSell.Name())
     end
 end
 
+-- Sells all items in inventory that's marked for selling
 local function sellItems()
     bard.pauseMelody()
+    open_bags()
+    clear_cursor(true)
+
     local startX = mq.TLO.Me.X()
     local startY = mq.TLO.Me.Y()
     local startZ = mq.TLO.Me.Z()
 
     local nearestMerchant = merchant.FindMerchant()
     if not nearestMerchant then
-        logger.Debug("Unable to find any merchants nearby")
+        log.Debug("Unable to find any merchants nearby")
         return
     end
 
-    local merchantName= nearestMerchant.CleanName()
+    local merchantName = nearestMerchant.CleanName()
     if not move_to(nearestMerchant.ID()) then
-        logger.Debug("Unable to reach merchant <%s>", merchantName)
+        log.Debug("Unable to reach merchant <%s>", merchantName)
         return
     end
 
     if merchant.OpenMerchant(nearestMerchant --[[@as spawn]]) then
         local maxInventory = 23 + mq.TLO.Me.NumBagSlots() - 1
-        for i=23,maxInventory,1 do
-        local inventoryItem = mq.TLO.Me.Inventory(i)
-        if inventoryItem() then
-            if inventoryItem.Container() > 0 then
-            for p=1,inventoryItem.Container() do
-                sellItem(inventoryItem.Item(p))
+        for i = 23, maxInventory do
+            local inventoryItem = mq.TLO.Me.Inventory(i)
+            if inventoryItem() then
+                if inventoryItem.Container() > 0 then
+                    for p = 1, inventoryItem.Container() do
+                        sellItem(inventoryItem.Item(p))
+                    end
+                else
+                    sellItem(inventoryItem --[[@as item]])
+                end
             end
-            else
-            sellItem(inventoryItem --[[@as item]])
-            end
-        end
         end
 
         merchant.CloseMerchant(nearestMerchant --[[@as spawn]])
     end
 
+    close_bags()
     bard.resumeMelody()
+
     move_to_loc(startY, startX, startZ)
-    logger.Info("Completed selling items to [%s].", merchantName)
+    log.Info("Completed selling items to [%s].", merchantName)
 end
 
 return sellItems

@@ -1122,7 +1122,7 @@ function clear_cursor(force)
         if (mq.TLO.Me.FreeInventory() < 1 and not cursor.Stackable())
         or (mq.TLO.Me.FreeInventory() == 0 and cursor.Stackable() and cursor.FreeStack() == 0) then
             all_tellf("ERROR: Inventory full! Cannot auto-inventory %s", cursor.ItemLink("CLICKABLE")())
-            mq.cmd("/beep 1")
+            --mq.cmd("/beep 1")
             return false
         end
 

@@ -15,6 +15,8 @@ local qol           = require("lib/quality/QoL")
 local tribute       = require("lib/quality/Tribute")
 local alerts        = require("lib/quality/Alerts")
 
+--local hud           = require("hud/hud")
+
 seed_process()
 
 qol.loadRequiredPlugins()
@@ -57,5 +59,9 @@ while true do
 
     follow.Tick()
     doevents()
-    delay(10)
+    delay(1)
+
+--    if not hud.ShouldTerminate() and is_orchestrator() then
+--        hud.Update()
+--    end
 end

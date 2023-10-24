@@ -2,6 +2,7 @@ local mq = require("mq")
 local log = require("knightlinc/Write")
 local broadcast = require("broadcast/broadcast")
 local repository = require("lib/looting/repository")
+local loot = require("lib/looting/Loot")
 
 ---@param itemId integer
 ---@param itemName string
@@ -9,16 +10,16 @@ local repository = require("lib/looting/repository")
 local function canDestroyItem(itemId, itemName)
     local itemToDestroy = repository:tryGet(itemId)
     if not itemToDestroy then
-        itemToDestroy = { Id = itemId, Name = itemName, DoSell = false, DoDestroy = false }
+        itemToDestroy = { Id = itemId, Name = itemName, Sell = false, Destroy = false }
     end
 
-    return itemToDestroy.DoDestroy, itemToDestroy
+    return itemToDestroy.Destroy, itemToDestroy
 end
 
 local function markItemForDestroying()
     local cursor = mq.TLO.Cursor
     if not cursor() then
-        log.Debug("No item to mark for destroying on cursor")
+        log.Error("No item to mark for destroying on cursor")
         return
     end
 
@@ -28,15 +29,12 @@ local function markItemForDestroying()
         log.Debug("Item already marked for destroying")
     end
 
-    item.DoDestroy = true
+    item.Destroy = true
     repository:upsert(item)
-    log.Info("Marked <%d:%s> for destroying", item.Id, item.Name)
-    broadcast.Success({}, "Marked <%d:%s> for destroying", item.Id, item.Name)
-  end
+    log.Info("Marked %s for destroying", cursor.ItemLink("CLICKABLE")())
+    --broadcast.Success({}, "Marked %s for destroying", cursor.ItemLink("CLICKABLE")())
 
-local function createAliases()
-    mq.unbind('/setdestroyitem')
-    mq.bind("/setdestroyitem", markItemForDestroying)
+    loot.DestroyCursorItem()
 end
 
-createAliases()
+mq.bind("/setdestroyitem", markItemForDestroying)

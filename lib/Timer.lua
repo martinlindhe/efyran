@@ -36,6 +36,12 @@ function Timer.new_random(duration)
     return t
 end
 
+-- Return expire time in seconds
+---@return integer
+function Timer.expires_in(self)
+    return self.expires or 0
+end
+
 -- Expires timer.
 function Timer.expire(self)
     self.expires = 0

@@ -8,3 +8,6 @@
 [submodule "broadcast"]
 	path = broadcast
 	url = https://github.com/peonMQ/broadcast.git
+[submodule "ext/hud"]
+	path = hud
+	url = https://github.com/peonMQ/hud
