@@ -4,7 +4,7 @@ require("ezmq")
 
 local inventorySlots = 10
 
-local tradeskillsIni = efyranConfigDir() .. "\\tradeskills.ini"
+local tradeskillsIni = efyranConfigDir() .. "\\" .. current_server() .. "__Tradeskills.ini"
 
 local bankFull = false
 

@@ -144,7 +144,8 @@ settings.debug = true -- enable debug logging for this peer
 /listclickies               - lists every clickie on current toon
 /reportclickies <filter>    - report detected auto clickes on current toon
 /banker                     - summons a banker
-/autobank                   - autobanks loot listed in tradeskills.ini
+/autobank                   - autobanks loot listed in Tradeskills.ini
+/autosort                   - autosorts loot listed in Tradeskills.ini (move between peers)
 
 /recallgroup <name>         - recalls a group/raid formation
 /disbandall                 - disband all peers from group/raids

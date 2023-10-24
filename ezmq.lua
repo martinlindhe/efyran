@@ -41,6 +41,14 @@ function line_of_sight_to(spawn)
     return mq.TLO.LineOfSight(q)()
 end
 
+function move_to_peer(peer)
+    local spawn = spawn_from_peer_name(peer)
+    if spawn == nil then
+        return
+    end
+    move_to(spawn.ID())
+end
+
 -- Move to the location of `spawn` using MQ2Nav.
 -- Returns true on success
 ---@param spawnID integer
@@ -919,7 +927,7 @@ end
 -- Returns true if any obstructive window is open (loot, trade, bank, merchant, spell book)
 ---@return boolean
 function obstructive_window_open()
-    return mq.TLO.Corpse.Open() or window_open("MerchantWnd") or window_open("GiveWnd") or window_open("BigBankWnd")
+    return mq.TLO.Corpse.Open() or window_open("MerchantWnd") or window_open("GiveWnd") or window_open("BankWnd") or window_open("BigBankWnd")
         or window_open("SpellBookWnd") or window_open("LootWnd") or window_open("tradewnd")
         or window_open("ConfirmationDialogBox")
 end
