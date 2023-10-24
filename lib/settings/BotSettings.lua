@@ -64,30 +64,36 @@ end
 function file_exists(file)
     local ok, err, code = os.rename(file, file)
     if not ok then
-       if code == 13 then
-          -- Permission denied, but it exists
-          return true
-       end
+        if code == 13 then
+            -- Permission denied, but it exists
+            return true
+        end
     end
     return ok, err
 end
 
 --- Check if a directory exists in this path
-function dir_exists(path)
+local function dir_exists(path)
     return file_exists(path.."/")
 end
 
-function mkdir(dir)
+local function mkdir(dir)
     log.Info("XXX MKDIR ".. dir)
     os.execute("mkdir " .. dir)
 end
 
+--@return string
+local function peer_settings_file()
+    return mq.TLO.MacroQuest.Server() .. "_" .. mq.TLO.Me.Class.ShortName() .. "_" .. mq.TLO.Me.Name() .. ".lua"
+end
+
 function botSettings.Init()
-    if not dir_exists(efyranConfigDir()) then
-        mkdir(efyranConfigDir())
+    local configDir = mq.TLO.MacroQuest.Path("config")() .. "\\efyran"
+    if not dir_exists(configDir) then
+        mkdir(configDir)
     end
 
-    local settingsFile = efyranConfigDir() .. "\\" .. peer_settings_file()
+    local settingsFile = configDir .. "\\" .. peer_settings_file()
     local settings = read_settings(settingsFile)
     if settings ~= nil then
         botSettings.settings = settings()

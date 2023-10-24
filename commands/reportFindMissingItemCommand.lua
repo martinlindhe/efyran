@@ -1,6 +1,6 @@
 local mq = require("mq")
 local log          = require("knightlinc/Write")
-local commandQueue = require("CommandQueue")
+local commandQueue = require("lib/CommandQueue")
 
 ---@class FindItemBy
 ---@field Name string

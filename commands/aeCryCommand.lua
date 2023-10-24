@@ -1,4 +1,4 @@
-local commandQueue = require("CommandQueue")
+local commandQueue = require("lib/CommandQueue")
 
 local function execute()
     cast_ae_cry()

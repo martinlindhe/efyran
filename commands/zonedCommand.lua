@@ -1,5 +1,5 @@
 local mq = require("mq")
-local commandQueue = require("CommandQueue")
+local commandQueue = require("lib/CommandQueue")
 local assist  = require("lib/assisting/Assist")
 local pet     = require("lib/pets/Pet")
 local heal    = require("lib/healing/Heal")

@@ -1,7 +1,7 @@
 local mq = require("mq")
 local log = require("knightlinc/Write")
 local broadCastInterfaceFactory = require 'broadcast/broadcastinterface'
-local commandQueue = require("CommandQueue")
+local commandQueue = require("lib/CommandQueue")
 local assist         = require("lib/assisting/Assist")
 local botSettings    = require("lib/settings/BotSettings")
 

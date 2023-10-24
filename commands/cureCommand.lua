@@ -1,5 +1,5 @@
 local mq = require("mq")
-local commandQueue = require("CommandQueue")
+local commandQueue = require("lib/CommandQueue")
 local log          = require("knightlinc/Write")
 
 ---@class CureCommand

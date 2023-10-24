@@ -11,6 +11,7 @@ local follow  = require("lib/following/Follow")
 
 local spellGroups  = require("lib/spells/SpellGroups")
 local serverSettings = require("lib/settings/default/ServerSettings")
+local botSettings = require("lib/settings/BotSettings")
 
 -- returns true if `spawn` is within maxDistance
 ---@param spawn spawn
@@ -1244,11 +1245,6 @@ function current_server()
 end
 
 --@return string
-function peer_settings_file()
-    return mq.TLO.MacroQuest.Server() .. "_" .. mq.TLO.Me.Class.ShortName() .. "_" .. mq.TLO.Me.Name() .. ".lua"
-end
-
---@return string
 function server_buffs_settings_file()
     return mq.TLO.MacroQuest.Server() .. "__Default Buffs.lua"
 end
@@ -2329,8 +2325,6 @@ function IsMaybeAggressive(spawn)
 
     return false
 end
-
-local botSettings = require("lib/settings/BotSettings")
 
 -- Returns nil on error
 ---@param spellRow string Example: "War March of Muram/Gem|4"

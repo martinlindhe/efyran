@@ -1,6 +1,6 @@
 local mq = require("mq")
 local log          = require("knightlinc/Write")
-local commandQueue = require("CommandQueue")
+local commandQueue = require("lib/CommandQueue")
 
 local function execute()
     wait_until_not_casting()

@@ -1,5 +1,5 @@
 local mq = require("mq")
-local commandQueue = require("CommandQueue")
+local commandQueue = require("lib/CommandQueue")
 local sellItems = require("lib/looting/sell")
 
 local function execute()

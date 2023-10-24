@@ -1,5 +1,5 @@
 local mq = require("mq")
-local commandQueue = require("CommandQueue")
+local commandQueue = require("lib/CommandQueue")
 
 local function execute()
     if have_item("Assistant Researcher's Symbol") then

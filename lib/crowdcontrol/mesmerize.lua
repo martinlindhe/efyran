@@ -1,11 +1,11 @@
 local mq = require("mq")
 local log = require("knightlinc/Write")
 local broadcast = require("broadcast/broadcast")
-local assist = require("e4_Assist")
-local spellGroups = require("e4_SpellGroups")
-local botSettings = require("e4_BotSettings")
-local mezzSpells = require("crowdcontrol/mesmerize_spells")
-local repository = require("crowdcontrol/repository")
+local assist = require("lib/assisting/Assist")
+local spellGroups  = require("lib/spells/SpellGroups")
+local botSettings = require("lib/settings/BotSettings")
+local mezzSpells = require("lib/crowdcontrol/mesmerize_spells")
+local repository = require("lib/crowdcontrol/repository")
 
 local immunities = {}
 
