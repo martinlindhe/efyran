@@ -82,6 +82,11 @@ local function destroyCursorItem()
             all_tellf("WARNING: destroyCursorItem aborted. item id to destroy changed from %d to %s", id, tostring(newID))
             break
         end
+        if cursor.NoDrop() then
+            all_tellf("ERROR: cant mark NO-DROP item for destroy. TODO add a 'force' argument")
+            cmd("/beep")
+            return
+        end
         mq.cmdf("/destroy")
         mq.delay(200, function() return cursor() == nil end)
         if cursor() == nil then
