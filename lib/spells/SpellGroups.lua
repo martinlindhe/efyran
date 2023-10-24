@@ -1011,12 +1011,12 @@ SpellGroups.NEC = {
     nec_self_rune = {
         "Shadowskin",                               -- L78 Shadowskin Rk. II (slot 1: absorb 1585 dmg, 4 mana/tick)
         "Wraithskin",                               -- L73 Wraithskin Rk. II (slot 1: absorb 1219 dmg, 4 mana/tick)
-        "Dull Pain",                                -- L69 Dull Pain (absorb 975 dmg, 3 mana/tick)
-        "Force Shield",                             -- L63 Force Shield (absorb 750 dmg, 2 mana/tick)
-        "Manaskin",                                 -- L52 Manaskin (absorb 521-600 dmg, 1 mana/tick, reagent Peridot)
-        "Steelskin",                                -- L32 Steelskin (absorb 168-230 dmg, reagent Jasper)
-        "Leatherskin",                              -- L22 Leatherskin (absorb 71-118 dmg, reagent Bloodstone)
-        "Shieldskin",                               -- L14 Shieldskin (absorb 27-55 dmg, reagent Cat's Eye Agate)
+        "Dull Pain",                                -- L69: absorb 975 dmg, 3 mana/tick
+        "Force Shield",                             -- L63: absorb 750 dmg, 2 mana/tick
+        "Manaskin/Reagent|Peridot",                 -- L52: absorb 521-600 dmg, 1 mana/tick
+        "Steelskin/Reagent|Jasper",                 -- L32: absorb 168-230 dmg
+        "Leatherskin/Reagent|Bloodstone",           -- L22: absorb 71-118 dmg
+        "Shieldskin/Reagent|Cat's Eye Agate",       -- L14: absorb 27-55 dmg
     },
     nec_pet_haste = {
         "Sigil of the Aberrant",                    -- L77 Sigil of the Aberrant Rk. II (10% skills dmg mod, 122 str, 70% haste, 36 ac)
@@ -1593,6 +1593,26 @@ SpellGroups.BRD = {
     },
     brd_ae_mez  = {
         "Kelin's Lucid Lullaby"                     -- L15 Kelin's Lucid Lullaby
+    },
+    -- HP regen songs
+    brd_hp_regen = {
+        "Hymn of Restoration",                      -- L06: 2-12 hp/tick, aerange 30, Original
+    },
+    -- Mana regen songs
+    brd_mana_regen = {
+        "Cassindra's Chorus of Clarity",            -- L32: 5-7 mana/tick, Original
+        "Cassindra's Chant of Clarity",             -- L20: 2 mana/tick, Velious
+    },
+    -- HP + mana regen songs
+    brd_hp_mana_regen = {
+        "Chorus of Life",                           -- L69: OOW
+        "Cantata of Life",                          -- L67: OOW
+        "Chorus of Marr",                           -- L64: PoP
+        "Wind of Marr",                             -- L62: PoP
+        "Ancient: Lcea's Lament",                   -- L60: Velious
+        "Chorus of Replenishment",                  -- L58: Luclin
+        "Cantata of Replenishment",                 -- L55: Original
+        "Cantana of Soothing",                      -- L34: 4 hp/tick, 5 mana/tick, Velious
     },
     brd_epic2 = {
         "Blade of Vesagran",                        -- epic 2.0: slot 9: spell crit 12%, slot 10: dot crit 12%, slot 12: accuracy 140%
