@@ -178,6 +178,7 @@ settings.debug = true -- enable debug logging for this peer
 /usecorpsesummoner          - summon corpse in guild lobby
 
 /scribe                     - scribes all spells in inventory
+/campall                    - camp all peers to desktop
 
 /train <skill>              - train skill [language, begging, alcohol]
 

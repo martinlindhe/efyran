@@ -635,6 +635,14 @@ function QoL.Init()
         log.Info("You was summoned to %d, %d", mq.TLO.Me.Y(), mq.TLO.Me.X())
     end)
 
+    -- tell all toons to camp
+    bind("/campall", function()
+        if is_orchestrator() then
+            bci.ExecuteZoneCommand("/camp desktop")
+        end
+        cmd("/camp desktop")
+    end)
+
     -- tell all toons in zone to accept open trade windows
     bind("/trade", function()
         if window_open("tradewnd") then
