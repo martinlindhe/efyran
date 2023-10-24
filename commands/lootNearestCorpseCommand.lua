@@ -15,6 +15,9 @@ local function execute()
 
     local tries = 0
 
+    -- reset state when starting over
+    cantLoot = false
+
     while true do
         local count = spawn_count(string.format("npccorpse zradius 50 radius %d", seekRadius))
         if count == 0 then
