@@ -306,8 +306,6 @@ function performSpellAbility(targetID, abilityRows, category, used)
     return false
 end
 
-local assistStickTimer = timer.new_expired(3 * 1) -- 3s
-
 -- updates current fight progress
 function Assist.Tick()
 
@@ -352,19 +350,15 @@ function Assist.Tick()
         return
     end
 
-    --log.Debug("Assist.Tick()")
-
--- XXX if not facing target
-
-    --if melee and spawn.Distance() > Assist.meleeDistance and Assist.targetID ~= 0 and assistStickTimer:expired() and not is_stunned() then
-    --    --log.Debug("stick update. meleeDistance = %f!", Assist.meleeDistance)
-    --    Assist.meleeStick()
-    --    assistStickTimer:restart()
-    --end
-
     if spawn == nil or spawn() == nil or spawn.ID() == 0 or spawn.Type() == "Corpse" or spawn.Type() == "NULL" then
         Assist.EndFight()
         return
+    end
+
+    if have_pet() and not mq.TLO.Me.Pet.Combat() then
+        all_tellf("mid-fight Attacking with my pet %s", mq.TLO.Me.Pet.CleanName())
+        mq.cmdf("/pet attack %d", Assist.targetID)
+        delay(1)
     end
 
     if not is_stunned() then
