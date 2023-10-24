@@ -6,10 +6,6 @@ local bci = broadCastInterfaceFactory()
 
 -- food + drink check
 local function execute()
-    if is_orchestrator() then
-        bci.ExecuteZoneCommand("/food")
-     end
-
      local foods = {
          -- food duration: select NAME,id,casttime_ from items where itemtype=14 ORDER BY casttime_ desc
          "Bristlebanes Party Platter",   -- 120: baking (PoP)
