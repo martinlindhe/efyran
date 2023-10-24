@@ -161,10 +161,9 @@ SpellGroups.SHM = {
         "Talisman of the Boar",                     -- L63: 60-68 sta
         "Talisman of the Brute",                    -- L57: 50 sta
     },
-    -- NOTE: DRU has a weaker line of buffs
+    -- NOTE: dru_str exists too
     -- blocked by shm_focus (67 str)
     shm_str = {
-        "Spirit of Might",                          -- L67: 5% skill dmg mod, cost 175 mana, same as DRU Lion's Strength
         "Strength of the Diaku",                    -- L63: 35 str, 28 dex
         "Maniacal Strength",                        -- L57: 68 str
         "Strength",                                 -- L46: 65-67 str - works on L01
@@ -174,10 +173,16 @@ SpellGroups.SHM = {
         "Strengthen",                               -- L01: 5-10 str
     },
     shm_group_str = {
-        "Talisman of Might",                        -- L70: 5% skill dmg mod, group, cost 700 mana
         "Talisman of the Diaku",                    -- L64: 45 str, 35 dex
         "Talisman of the Rhino",                    -- L58: 68 str
         "Tumultuous Strength",                      -- L35: 34 str
+    },
+    -- NOTE: same as dru_skill_dmg_mod
+    shm_skill_dmg_mod = {
+        "Spirit of Might",                          -- L67: 5% skill dmg mod, cost 175 mana
+    },
+    shm_group_skill_dmg_mod = {
+        "Talisman of Might",                        -- L70: 5% skill dmg mod, group, cost 700 mana
     },
     shm_agi = {
         "Agility of the Wrulan",                    -- L61: 60 agi
@@ -276,12 +281,10 @@ SpellGroups.CLR = {
         "Celestial Elixir",                         -- L59 Celestial Elixir (300 hp/tick, 0.4 min, 300 mana)
         "Celestial Healing",                        -- L44 Celestial Healing (180 hp/tick, 0.4 min, 225 mana)
     },
-
     -- group hot, don't stack with Celestial Regeneration AA
     clr_group_hot = {
         "Elixir of Divinity",                       -- L70 Elixir of Divinity (900 hp/tick, group, cost 1550 mana)
     },
-
     -- NOTE: stacks with dru_skin and clr_ac
     clr_symbol = {
         "Symbol of Kaerra",                         -- L76 Symbol of Kaerra Rk. II (1847 hp, cost 1190 mana)
@@ -371,7 +374,7 @@ SpellGroups.CLR = {
         "Aura of Devotion",                         -- L69 Aura of Devotion (10% spell haste to L70, 45 min, group, 1125 mana) OOW
         "Aura of Reverence",                        -- L64 Aura of Reverence (10% spell haste to L65, 40 min, group) LDoN
     },
-    -- NOTE: does not stack with DRU Skin
+    -- NOTE: does not stack with dru_skin
     clr_self_shield = {
         "Armor of the Solemn",                      -- L80 Armor of the Solemn Rk. II (915 hp, 71 ac, 12 mana/tick)
         "Armor of the Sacred",                      -- L75 Armor of the Sacred Rk. II (704 hp, 58 ac, 10 mana/tick)
@@ -544,7 +547,7 @@ SpellGroups.DRU = {
         "Legacy of Thorn",                          -- L59: 32 ds, 15 min
         "Legacy of Spike",                          -- L49: 24 ds, 15 min - lands on LV1
     },
-    -- NOTE: Shaman has STR buffs too
+    -- NOTE: shm_str exists too
     dru_str = {
         "Nature's Might",                           -- L62 Nature's Might (55 str) PoP
         "Girdle of Karana",                         -- L55 Girdle of Karana (42 str) Kunark
@@ -552,7 +555,7 @@ SpellGroups.DRU = {
         "Strength of Stone",                        -- L34 Strength of Stone (22-25 str)
         "Strength of Earth",                        -- L07 Strength of Earth (8-15 str)
     },
-    -- NOTE: SHM has group version of these spells
+    -- NOTE: shm_skill_dmg_mod is the same and shm_group_skill_dmg_mod exists
     dru_skill_dmg_mod = {
         "Mammoth's Strength",                       -- L71 Mammoth's Strength Rk. III (increase skills dmg mod by 8%, cost 215 mana)
         "Lion's Strength",                          -- L67 Lion's Strength (increase skills dmg mod by 5%, cost 165 mana)
@@ -755,7 +758,7 @@ SpellGroups.ENC = {
         "Arcane Rune",                              -- L61 Arcane Rune (absorb 1500 dmg) PoP
     },
 
-    -- NOTE: does not stack with Virtue or Focus
+    -- NOTE: does not stack with clr_aegolism or shm_focus
     enc_self_shield = {
         "Mystic Shield",                            -- L66: 390 hp, 46 ac, 40 mr
         "Shield of Maelin",                         -- L64: 350 hp, 38-39 ac, 40 mr
@@ -885,8 +888,7 @@ SpellGroups.MAG = {
         "Ancient: Veil of Pyrilonus",               -- L70: 500 ds - slot 12, 24 sec
         "Pyrilen Skin",                             -- L68: 420 ds - slot 12, 12 sec
     },
-
-    -- NOTE: does not stack with Virtue or Focus
+    -- NOTE: does not stack with clr_aegolism or shm_focus
     mag_self_shield = {
         "Elemental Aura",                           -- L66: 390 hp, 46 ac, 40 mr
         "Shield of Maelin",                         -- L64: 350 hp, 38-39 ac, 40 mr
@@ -899,7 +901,6 @@ SpellGroups.MAG = {
         "Lesser Shielding",                         -- L05: 17-30 hp, 5-9 ac, 6-10 mr
         "Minor Shielding",                          -- L01: 6-10 hp, 3-4 ac
     },
-
     -- NOTE: does not stack with druid resists
     mag_self_resist = {
         "Elemental Barrier",                        -- L61 Elemental Barrier (60 cr, 60 fr)
@@ -907,7 +908,6 @@ SpellGroups.MAG = {
         "Elemental Armor",                          -- L41 Elemental Armor (30 cr, 30 fr)
         "Elemental Shield",                         -- L19 Elemental Shield (14-15 cr, 14-15 fr)
     },
-
     mag_pet_haste = {
         "Elemental Fury",                           -- L69 Elemental Fury (85% haste, 29 ac, 52 atk, 5% skill dmg mod)
         "Burnout V",                                -- L62 Burnout V (80 str, 85% haste, 22 ac, 40 atk)
@@ -975,7 +975,6 @@ SpellGroups.MAG = {
         "Flame Flux",                               -- L22 Flame Flux (89-96 hp, aerange 20, recast 6s, cost 123 mana)
         "Fire Flux",                                -- L01 Fire Flux (8-12 hp, aerange 20, recast 6s , cost 23 mana)
     },
-
     mag_epic2 = {
         "Focus of Primal Elements",                 -- epic 2.0: hp 1000, mana 12/tick, hp 24/tick, proc Primal Fusion Strike, defensive proc Primal Fusion Parry, 20 min (34 min with ext duration)
         "Staff of Elemental Essence",               -- epic 1.5: hp  800, mana 10/tick, hp 20/tick, proc Elemental Conjunction Strike, defensive proc Elemental Conjunction Parry
@@ -1034,7 +1033,7 @@ SpellGroups.NEC = {
         "Renew Bones",                              -- L26 Renew Bones (121-175 hp)
         "Mend Bones",                               -- L07 Mend Bones (22-32 hp)
     },
-    -- NOTE: does not stack with Virtue or Focus
+    -- NOTE: does not stack with clr_aegolism or shm_focus
     nec_self_shield = {
         "Shadow Guard",                             -- L66: 390 hp, 46 ac, 40 mr
         "Shield of Maelin",                         -- L64: 350 hp, 38-39 ac, 40 mr
@@ -1148,7 +1147,7 @@ SpellGroups.NEC = {
 }
 
 SpellGroups.WIZ = {
-    -- NOTE: does not stack with Virtue or Focus
+    -- NOTE: does not stack with clr_aegolism or shm_focus
     wiz_self_shield = {
         "Ether Shield",                             -- L66 Ether Shield (390 hp, 46 ac, 40 mr)
         "Shield of Maelin",                         -- L64 Shield of Maelin (350 hp, 38-39 ac, 40 mr)
@@ -1251,7 +1250,6 @@ SpellGroups.WIZ = {
     wiz_pbae_nuke = {
         -- xxx
     },
-
     wiz_epic2 = {
         "Staff of Phenomenal Power",                -- epic 2.0: -50% spell resist rate for group, -6% spell hate
         "Staff of Prismatic Power",                 -- epic 1.5: -30% spell resist rate for group, -4% spell hate
@@ -1342,7 +1340,6 @@ SpellGroups.PAL = {
         "Minor Healing",                            -- L06 Minor Healing (12-20 hp)
         "Salve",                                    -- L01 Salve (5-9 hp)
     },
-
     pal_group_heal = {
         "Wave of Piety",                            -- L70: 1316 hp, cost 1048 mana
         "Wave of Trushar",                          -- L65: 1143 hp, cost 921 mana
@@ -1406,7 +1403,7 @@ SpellGroups.SHD = {
         "Scream of Death",                          -- L37: proc: Scream of Death Strike
         "Vampiric Embrace",                         -- L22: proc: Vampiric Embrace
     },
-    -- NOTE: does not stack with ENC Clairvoyance (20 mana/tick)
+    -- NOTE: does not stack with enc_manaregen
     shd_lich = {
         "Pact of Decay",                            -- L69 Pact of Decay (illusion: skeleton?, 17 mana/tick, -25 hp/tick)
         "Pact of Hate",                             -- L64 Pact of Hate (illusion: skeleton?, 15 mana/tick, -22 hp/tick)
