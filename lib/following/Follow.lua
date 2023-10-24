@@ -37,7 +37,7 @@ function Follow.Start(spawnName, force)
         return
     end
 
-    if spawn.Distance() > 500 then
+    if serverSettings.followMode:lower() == "mq2advpath" and spawn.Distance() > 500 then
         all_tellf("Too far away to [+r+]%s[+x+]: %d", spawn.Name(), spawn.Distance())
         return
     end
@@ -137,8 +137,8 @@ function Follow.Update(force)
     --log.Debug("Follow.Update, mode %s, distance %f", serverSettings.followMode, spawn.Distance3D())
 
     if serverSettings.followMode:lower() == "mq2nav" then
-        if not mq.TLO.Navigation.Active() then
-            log.Info("Follow.Update: nav activated !")
+        if not mq.TLO.Navigation.Active() and spawn.Distance() > 5 then
+            log.Info("Follow.Update: Navigate to %s activated", Follow.spawnName)
             mq.cmdf("/nav spawn PC =%s | distance=%d log=trace", spawn.Name(), maxRange)
         end
     elseif serverSettings.followMode:lower() == "mq2advpath" then
