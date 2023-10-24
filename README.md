@@ -160,6 +160,7 @@ settings.debug = true -- enable debug logging for this peer
 /coaaugs                    - reports missing CoA auguments
 /lucidshards                - reports missing Lucid shards
 
+/trade                      - tell peers to accept any open trades
 /handin                     - performs NPC hand-ins, see handin.lua
 /wordheal                   - clerics: cast word heal (group heal with cure effect)
 /aetl                       - wizard: cast AE TL spell
@@ -175,6 +176,9 @@ settings.debug = true -- enable debug logging for this peer
 /lootmycorpse               - loot your corpse
 /lootallcorpses             - tell peers to loot their corpse
 /usecorpsesummoner          - summon corpse in guild lobby
+
+/looton, /lootoff           - toggle autoloot (non-persistent. Use peer `settings.autoloot = true` to make it permanent)
+/doloot                     - manually trigger autoloot on this peer
 
 /scribe                     - scribes all spells in inventory
 
