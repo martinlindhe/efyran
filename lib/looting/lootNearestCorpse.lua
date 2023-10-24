@@ -142,7 +142,7 @@ local function lootCorpse()
         return false
     end
     if not corpse.Open() then
-        broadcast.Fail({}, "Unable to open corpse for looting.")
+        log.Debug("Unable to open corpse %d for looting.", corpse.ID())
         return false
     end
 
@@ -208,34 +208,31 @@ local function lootNearestCorpse(seekRadius)
     local searchCorpseString = string.format("npccorpse zradius 50 radius %d", seekRadius)
     local corpse = mq.TLO.NearestSpawn(1, searchCorpseString)
 
-    if corpse() == nil then
-        all_tellf("UNLIKELY: lootNearestCorpse corpse poofed %s", tostring(corpse.ID()))
-        return false
-    end
-
     local ok = true
-    if EnsureTarget(corpse.ID()) then
-        if corpse.Distance() > 16 and corpse.DistanceZ() < 80 then
-            move_to(corpse.ID())
-        end
+    if corpse() ~= nil then
+        if EnsureTarget(corpse.ID()) then
+            if corpse.Distance() > 16 and corpse.DistanceZ() < 80 then
+                move_to(corpse.ID())
+            end
 
-        if corpse() == nil then
-            all_tellf("UNLIKELY: lootNearestCorpse corpse poofed")
-            return false
-        end
-        if corpse.Distance() <= 20 and corpse.DistanceZ() < 40 and EnsureTarget(corpse.ID()) then
-            if not lootCorpse() then
-                ok = false
+            if corpse() == nil then
+                all_tellf("UNLIKELY: lootNearestCorpse corpse poofed")
+                return false
+            end
+            if corpse.Distance() <= 20 and corpse.DistanceZ() < 40 and EnsureTarget(corpse.ID()) then
+                if not lootCorpse() then
+                    ok = false
+                end
+            else
+                all_tellf("WARN: Corpse %s is %d|%d distance, skipping", corpse.Name(), corpse.Distance(), corpse.DistanceZ())
             end
         else
-            all_tellf("WARN: Corpse %s is %d|%d distance, skipping", corpse.Name(), corpse.Distance(), corpse.DistanceZ())
+            all_tellf("WARN: Unable to locate or target corpse id <%s>", corpse.ID())
         end
-    else
-        all_tellf("WARN: Unable to locate or target corpse id <%s>", corpse.ID())
-    end
 
-    bard.resumeMelody()
-    move_to_loc(startY, startX, startZ)
+        bard.resumeMelody()
+        move_to_loc(startY, startX, startZ)
+    end
     return ok
 end
 

@@ -295,7 +295,7 @@ SpellGroups.CLR = {
         "Symbol of Naltron/Reagent|Peridot",        -- L41 Symbol of Naltron (406-525 hp)
         "Symbol of Pinzarn/Reagent|Jasper",         -- L34 Symbol of Pinzarn
         "Symbol of Ryltan/Reagent|Bloodstone",      -- L24 Symbol of Ryltan
-        "Symbol of Transal/Reagent|Cat's Eye Agate",-- L14 Symbol of Transal (34-72 hp)
+        --"Symbol of Transal/Reagent|Cat's Eye Agate",-- L14 Symbol of Transal (34-72 hp)
     },
     clr_group_symbol = {
         "Kaerra's Mark",                            -- L80 Kaerra's Mark (1563 hp, cost 3130 mana)
