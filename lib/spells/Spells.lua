@@ -321,7 +321,7 @@ function haveMemorizedListedSpells(defaultGem)
 
         local nameWithRank = mq.TLO.Spell(o.Name).RankName()
         if mq.TLO.Me.Gem(gem).Name() ~= nameWithRank then
-            log.Info("Do not have memorized \ag%s\ax in gem %d (have \ay%s\ax)", nameWithRank, gem, mq.TLO.Me.Gem(gem).Name())
+            log.Info("I don't have \ag%s\ax memorized in gem %d (have \ay%s\ax)", nameWithRank, gem, mq.TLO.Me.Gem(gem).Name())
             return false
         end
     end
