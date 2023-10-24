@@ -2307,6 +2307,29 @@ function EnsureTarget(targetId)
     return mq.TLO.Target.ID() == targetId
 end
 
+--- Returns true if spawn might be aggro (for classic)
+---@param spawn spawn
+---@return boolean
+function IsMaybeAggressive(spawn)
+    if spawn.Aggressive() then
+        return true
+    end
+
+    local spawnAnimation = spawn.Animation();
+    if not spawnAnimation then
+        return false
+    end
+
+    local possibleAggroAnimations = {5,8,12,17,18,32,42,44,80,106,129,144}
+    for index, value in ipairs(possibleAggroAnimations) do
+        if value == spawnAnimation then
+            return true
+        end
+    end
+
+    return false
+end
+
 local botSettings = require("lib/settings/BotSettings")
 
 -- Returns nil on error

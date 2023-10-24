@@ -3,18 +3,17 @@ require("commands")
 require("lib/looting/markItemForDestroying")
 require("lib/looting/markItemForSelling")
 
-local log = require("knightlinc/Write")
-
-local commandQueue = require("CommandQueue")
-
-local assist  = require("lib/assisting/Assist")
-local buffs   = require("lib/spells/Buffs")
-local group   = require("lib/following/Group")
-local follow  = require("lib/following/Follow")
-local heal    = require("lib/healing/Heal")
-local qol     = require("lib/quality/QoL")
-local tribute = require("lib/quality/Tribute")
-local alerts  = require("lib/quality/Alerts")
+local log           = require("knightlinc/Write")
+local commandQueue  = require("CommandQueue")
+local assist        = require("lib/assisting/Assist")
+local buffs         = require("lib/spells/Buffs")
+local group         = require("lib/following/Group")
+local follow        = require("lib/following/Follow")
+local heal          = require("lib/healing/Heal")
+local crowdcontrol  = require("crowdcontrol.mesmerize")
+local qol           = require("lib/quality/QoL")
+local tribute       = require("lib/quality/Tribute")
+local alerts        = require("lib/quality/Alerts")
 
 seed_process()
 
@@ -36,6 +35,9 @@ log.Info("E4 started")
 -- MAIN LOOP
 while true do
     heal.Tick()
+    doevents()
+
+    crowdcontrol.Tick()
     doevents()
 
     buffs.Tick()

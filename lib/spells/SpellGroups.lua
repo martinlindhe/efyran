@@ -781,12 +781,14 @@ SpellGroups.ENC = {
         "Bliss/MaxLevel|68",                        -- L64: 0.9 min/L68, resist adj -10, 80% memblur, 300 mana, PoP
         "Sleep/MaxLevel|65",                        -- L63: 0.9 min/L65, resist adj -10, 75% memblur, 275 mana, PoP
         "Apathy/MaxLevel|62",                       -- L61: 0.9 min/L62, reisst adj -10, 70% memblur, 225 mana, PoP
-        "Rapture/MaxLevel|61",                      -- L59: 0.7 min/L61, resist adj -1000, 80% memblur, 250 mana, 24s recast, Kunark
         "Glamour of Kintaz/MaxLevel|57",            -- L54: 0.9 min/L57, resist adj -10, 70% memblur, 125 mana, 1.5s recast, Kunark
         "Dazzle/MaxLevel|55",                       -- L49: 1.6 min/L55, 1% memblur, 125 mana, 5s recast, Original
         "Entrance/MaxLevel|55",                     -- L34: 1.2 min/L55, 1% memblur, 85 mana, 3.75s recast, Original
         "Enthrall/MaxLevel|55",                     -- L16: 0.8 min/L55, 1% memblur, 50 mana, 2.5s recasat, Original
         "Mesmerize/MaxLevel|55",                    -- L04: 0.4 min/L55, 1% memblur, 20 mana, 2.25s recast, Original
+    },
+    enc_unresistable_mez = {
+        "Rapture/MaxLevel|61",                      -- L59: 0.7 min/L61, resist adj -1000, 80% memblur, 250 mana, 24s recast, Kunark
     },
     enc_ae_mez = {
         "Wake of Felicity/MaxLevel|70",             -- L69: 0.9 min/L70, 25 aerange, 6 sec recast
@@ -1584,6 +1586,13 @@ SpellGroups.BRD = {
     },
     brd_da = {
         "Kazumi's Note of Preservation",            -- L60 Kazumi's Note of Preservation
+    },
+    brd_mez = {
+        "Song of Twilight",                         -- L53 Song of Twilight, Kunark
+        "Crission's Pixie Strike"                   -- L28 Crission's Pixie Strike, Original
+    },
+    brd_ae_mez  = {
+        "Kelin's Lucid Lullaby"                     -- L15 Kelin's Lucid Lullaby
     },
     brd_epic2 = {
         "Blade of Vesagran",                        -- epic 2.0: slot 9: spell crit 12%, slot 10: dot crit 12%, slot 12: accuracy 140%
