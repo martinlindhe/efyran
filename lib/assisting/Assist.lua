@@ -149,12 +149,6 @@ function Assist.beginKillSpawnID(spawnID)
 
     follow.PauseForKill()
 
-    if have_pet() then
-        log.Debug("Attacking with my pet %s", mq.TLO.Me.Pet.CleanName())
-        mq.cmdf("/pet attack %d", spawnID)
-        delay(1)
-    end
-
     local melee = botSettings.settings.assist ~= nil and botSettings.settings.assist.type ~= nil and botSettings.settings.assist.type:lower() == "melee"
 
     if botSettings.settings.assist ~= nil and botSettings.settings.assist.type ~= nil and botSettings.settings.assist.type:lower() == "ranged" then
@@ -356,7 +350,7 @@ function Assist.Tick()
     end
 
     if have_pet() and not mq.TLO.Me.Pet.Combat() then
-        all_tellf("mid-fight Attacking with my pet %s", mq.TLO.Me.Pet.CleanName())
+        log.Debug("Attacking with my pet %s", mq.TLO.Me.Pet.CleanName())
         mq.cmdf("/pet attack %d", Assist.targetID)
         delay(1)
     end
