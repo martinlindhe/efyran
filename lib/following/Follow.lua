@@ -1,6 +1,6 @@
 local mq = require("mq")
 local log = require("knightlinc/Write")
-local timer = require("Timer")
+local timer = require("lib/Timer")
 
 local serverSettings = require("lib/settings/default/ServerSettings")
 

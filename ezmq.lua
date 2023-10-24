@@ -5,7 +5,7 @@ local mq = require("mq")
 
 local log = require("knightlinc/Write")
 
-local timer = require("Timer")
+local timer = require("lib/Timer")
 
 local follow  = require("lib/following/Follow")
 

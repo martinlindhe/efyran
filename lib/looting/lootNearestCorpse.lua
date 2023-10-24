@@ -1,7 +1,7 @@
 local mq = require("mq")
 local log = require("knightlinc/Write")
 local broadcast = require("broadcast/broadcast")
-local timer = require("Timer")
+local timer = require("lib/Timer")
 local repository = require("lib/looting/repository")
 local bard = require("lib/classes/Bard")
 require("ezmq")

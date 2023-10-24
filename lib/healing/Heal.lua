@@ -1,13 +1,13 @@
 local mq = require("mq")
 local log = require("knightlinc/Write")
-local broadCastInterfaceFactory = require 'broadcast/broadcastinterface'
+local broadCastInterfaceFactory = require("broadcast/broadcastinterface")
 
 require("lib/spells/Spells")
 
 local follow  = require("lib/following/Follow")
 local serverSettings = require("lib/settings/default/ServerSettings")
 local botSettings = require("lib/settings/BotSettings")
-local timer = require("Timer")
+local timer = require("lib/Timer")
 
 local timeZonedDelay = 10 -- seconds
 local bci = broadCastInterfaceFactory()

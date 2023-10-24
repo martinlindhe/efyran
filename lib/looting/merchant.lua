@@ -1,7 +1,7 @@
 --- @type Mq
-local mq = require 'mq'
+local mq = require("mq")
 local log = require("knightlinc/Write")
-local timer = require 'Timer'
+local timer = require("lib/Timer")
 
 local function findMerchant()
     local merchantSpawn = mq.TLO.NearestSpawn("Merchant radius 100")

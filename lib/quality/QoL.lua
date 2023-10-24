@@ -2,7 +2,7 @@
 
 local mq = require("mq")
 local log = require("knightlinc/Write")
-local timer = require("Timer")
+local timer = require("lib/Timer")
 local broadCastInterfaceFactory = require 'broadcast/broadcastinterface'
 
 local assist  = require("lib/assisting/Assist")

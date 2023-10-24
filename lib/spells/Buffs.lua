@@ -9,7 +9,7 @@ local cure        = require("lib/healing/Cure")
 local heal        = require("lib/healing/Heal")
 local botSettings = require("lib/settings/BotSettings")
 local bard        = require("lib/classes/Bard")
-local timer       = require("Timer")
+local timer       = require("lib/Timer")
 
 local serverSettings = require("lib/settings/default/ServerSettings")
 

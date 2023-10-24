@@ -1,5 +1,5 @@
-local mq = require 'mq'
-local timer = require 'Timer'
+local mq = require("mq")
+local timer = require("lib/Timer")
 
 --[[
     {
