@@ -176,6 +176,8 @@ settings.debug = true -- enable debug logging for this peer
 /lootallcorpses             - tell peers to loot their corpse
 /usecorpsesummoner          - summon corpse in guild lobby
 
+/scribe                     - scribes all spells in inventory
+
 /train <skill>              - train skill [language, begging, alcohol]
 ```
 

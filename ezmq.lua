@@ -1948,7 +1948,9 @@ function bools(b)
     return tostring(b)
 end
 
--- Creates a integer from a string with a decimal number.
+-- Creates a integer from a string with a decimal number, or a float
+---@param s string|number
+---@return integer
 function toint(s)
     if type(s) == "string" then
         local n = tonumber(s)
