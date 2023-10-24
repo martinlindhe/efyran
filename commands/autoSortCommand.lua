@@ -20,12 +20,14 @@ local function findItemType()
             for Slot = 1, mq.TLO.InvSlot(pack).Item.Container() do
                 local item = mq.TLO.InvSlot(pack).Item.Item(Slot)
                 if item.ID() and not item.NoDrop() then
-
-                    -- skip if Peridot and me = ENC
-                    -- skip if Emerald and me = CLR
-                    if (is_enc() and item.Name() ~= "Peridot") or (is_clr() and item.Name() ~= "Peridot") then
+                    local skip = false
+                    if (is_enc() and item.Name() == "Peridot") or (is_clr() and item.Name() == "Peridot") then
+                        skip = true
+                    end
+                    if not skip then
                         local itemType = mq.TLO.Ini(tradeskillsIni, "Items", item.Name(), "-")()
                         local reciever = mq.TLO.Ini(tradeskillsIni, "Roles", itemType, "-")()
+                        --log.Debug("itemType %s to reciever %s", itemType, reciever)
                         if itemType ~= "-" and mq.TLO.Me.Name() ~= reciever then
                             if spawn_count("pc "..reciever.." radius 100") == 0 then
                                 log.Error("Reciever %s not in zone: %s", reciever, itemType)
@@ -46,7 +48,7 @@ local function handOverComponents(itemType, reciever)
     log.Info("Handing over all %s components to %s ...", itemType, reciever)
 
     local recvSpawn = spawn_from_query("pc ="..reciever)
-    if recvSpawn() == nil or recvSpawn.Distance() > 25 then
+    if recvSpawn == nil or recvSpawn() == nil or recvSpawn.Distance() > 25 then
         all_tellf("ERROR: reciever %s is out of range", reciever)
         cmd("/beep 1")
         return
@@ -68,9 +70,11 @@ local function handOverComponents(itemType, reciever)
                     local currentItemType = mq.TLO.Ini(tradeskillsIni, "Items", item.Name(), "-")()
                     if currentItemType == itemType then
 
-                        -- skip if Peridot and me = ENC
-                        -- skip if Emerald and me = CLR
-                        if (is_enc() and item.Name() ~= "Peridot") or (is_clr() and item.Name() ~= "Peridot") then
+                        local skip = false
+                        if (is_enc() and item.Name() == "Peridot") or (is_clr() and item.Name() == "Peridot") then
+                            skip = true
+                        end
+                        if not skip then
                             count = count + 1
                             log.Info("Handing over #%d %s: %s", count, currentItemType, item.Name())
 
