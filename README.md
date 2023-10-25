@@ -143,6 +143,8 @@ settings.debug = true -- enable debug logging for this peer
 
 /listclickies               - lists every clickie on current toon
 /reportclickies <filter>    - report detected auto clickes on current toon
+
+/coins                      - reports coin on all peers
 /banker                     - summons a banker
 /autobank                   - autobanks loot listed in Tradeskills.ini
 /sort                       - sorts loot listed in Tradeskills.ini (move between peers)
