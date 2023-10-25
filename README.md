@@ -183,7 +183,7 @@ settings.debug = true -- enable debug logging for this peer
 /bindgroup                  - binds all group members using Bind Affinity
 
 /train <skill>              - train skill [language, begging, alcohol, spells]
-
+/combineit                  - tradeskill: autocombine (uses new tradeskill window)
 
 # autoloot
 /looton, /lootoff           - toggle autoloot (non-persistent. Use peer `settings.autoloot = true` to make it permanent)

@@ -467,14 +467,6 @@ function QoL.Init()
         log.Error("FIXME impl /running: report all running scripts on all toons")
     end)
 
-    -- runs combine.lua tradeskill script. NOTE: /combine is reserved for MacroQuest.
-    bind("/combineit", function()
-        if is_script_running("combine") then
-            cmd("/lua stop efyran/combine")
-        end
-        cmd("/lua run efyran/combine")
-    end)
-
     local mmrl = function()
         bci.ExecuteCommand(string.format("/makeraidleader %s", mq.TLO.Me.Name()), {mq.TLO.Raid.Leader()})
     end
