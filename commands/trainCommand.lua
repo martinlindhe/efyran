@@ -9,6 +9,7 @@ local trainers = {
     language = require("commands/train/language"),
     begging = require("commands/train/begging"),
     alcohol = require("commands/train/alcohol"),
+    spells = require("commands/train/spells"),
 }
 
 ---@class TrainCommand
