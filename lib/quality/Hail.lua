@@ -17,7 +17,7 @@ local hailTargets = {
     },
 
     ["oot"] = { -- Ocean of Tears
-        ["Translocator Narrik"] = "travel to butcherblock", -- TL to Butcherblock
+        ["Translocator Narrik"] = "travel to butcherblock", -- TL to Butcherblock and Freeport
     },
     ["erudnext"] = { -- Erudin
         ["Translocator Eniela"] = "travel to erud's crossing", -- TL to Erud's Crossing
@@ -165,7 +165,10 @@ local hailTargets = {
         ["Private Nylaen Kel`Ther"] = true, -- DoN tier 2 flag hail
 
         ["Gordish Frozenheart"] = "see those", -- DoN 24-man raids Rampaging Monolith, Circle of Drakes
-    }
+    },
+    ecommons = {
+        ["A Shady Swashbuckler"] = true, -- FVP special NPC
+    },
 }
 
 function Hail.PerformHail()
