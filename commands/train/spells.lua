@@ -93,6 +93,11 @@ function VerifySpecialization()
 		end
 	end
 
+    if current_server() == "FVP" then
+        -- FVP: No AA:s in Kunark era
+        return true, ""
+    end
+
 	-- Secondary Forte
 	local expectedSecondary = {
 		CLR = "Specialize Evocation",   -- nukes
