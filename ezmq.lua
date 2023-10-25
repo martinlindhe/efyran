@@ -412,11 +412,11 @@ function find_item_bank(name)
     return nil
 end
 
--- Partial search by name, return item name (clickable item link if possible)
+-- Exact search by name, return item name (clickable item link if possible)
 ---@param name string
 ---@return string
 function item_link(name)
-    local item = find_item(name)
+    local item = find_item("="..name)
     if item == nil then
         return name
     end

@@ -1,7 +1,40 @@
 local mq = require("mq")
 local log = require("knightlinc/Write")
 
-require("ezmq")
+-- Returns the first instrument for given instrument skill.
+-- BRD epics have Performance Resonance (all instrument mod)
+---@param skill string eg 'Brass Instruments'
+---@return string|nil
+local function findInstrument(skill)
+    local skillFirst = split_str(skill, " ")
+
+    -- 0-22 is worn gear, 23-32 is top level inventory
+    for i = 0, 32 do
+        local inv = mq.TLO.Me.Inventory(i)
+        if inv() ~= nil then
+            --log.Debug("inv slot %d: %s", i, inv.Name())
+            if inv.Container() > 0 then
+                for c = 1, inv.Container() do
+                    local item = inv.Item(c)
+                    local focusFirst = split_str(item.Focus2() or "", " ")
+                    if #focusFirst > 0 then
+                        if focusFirst[1] == "Performance" or focusFirst[1] == skillFirst[1] then
+                            return item.Name()
+                        end
+                    end
+                end
+            else
+                local focusFirst = split_str(inv.Focus2() or "", " ")
+                if #focusFirst > 0 then
+                    if focusFirst[1] == "Performance" or focusFirst[1] == skillFirst[1] then
+                        return inv.Name()
+                    end
+                end
+            end
+        end
+    end
+    return nil
+end
 
 return function()
 
@@ -27,30 +60,6 @@ return function()
         ["Wind Instruments"] = "Tarew's Aquatic Ayre",              -- L16
     }
 
-    -- NOTE: Only instruments that go in OFFHAND slot!
-    local instruments = {
-        ["Brass Instruments"] = {
-            "Horn",
-            "Combine Horn",
-        },
-        ["Percussion Instruments"] = {
-            "Hand Drum",
-            "Combine Hand Drum",
-        },
-        ["Stringed Instruments"] = {
-            "Lute",
-            "Mandolin",
-            "Combine Lute",
-            "Combine Mandolin",
-        },
-        ["Wind Instruments"] = {
-            "Wooden Flute",
-            "Combine Wooden Flute",
-        },
-    }
-
-    -- TODO: check for BRD epic 1.0, 1.5 and 2.0, they have Performance Resonance (all instrument mod)
-
     local trainSkills = {
         ["Singing"] = true,
     }
@@ -59,28 +68,35 @@ return function()
     local prevOffhand = nil
 
     for skill, song in pairs(songs) do
-        log.Debug("Considering %s %d/%d", skill, skill_value(skill), skill_cap(skill))
+        --log.Debug("Considering %s %d/%d", skill, skill_value(skill), skill_cap(skill))
         if not skipRest and skill_value(skill) < skill_cap(skill) then
             if have_spell(song) then
+                local skipCurrent = false
                 if skill ~= "Singing" then
-                    for _, instrument in pairs(instruments[skill]) do
-                        if have_item_inventory(instrument) and not have_item_equipped(instrument) then
-                            -- Need to equip proper instruments in order to skill up!
-                            -- So equip the first item found for the required instrument skill, and then skip train the other skills.
+                    local instrument = findInstrument(skill)
+                    if instrument ~= nil then
+                        -- Need to equip proper instruments in order to skill up!
+                        -- So equip the first item found for the required instrument skill, and then skip train the other skills.
+                        if not have_item_equipped(instrument) then
                             cmdf('/exchange "%s" offhand', instrument)
                             prevOffhand = mq.TLO.Me.Inventory("offhand")
-                            skipRest = true -- only train this instrument skill
-                            log.Info("OLD OFFHAND %s", prevOffhand.Name())
-                            all_tellf("Equipped %s to train %s (had %s)", instrument, skill, tostring(prevOffhand.Name()))
+                            log.Debug("Prev offhand is %s", prevOffhand.Name())
                         end
+                        skipRest = true -- only train this instrument skill
+                        all_tellf("Using instrument %s to train [+y+]%s[+x+] %d/%d", item_link(instrument), skill, skill_value(skill), skill_cap(skill))
+                    else
+                        all_tellf("ERROR: cannot train [+r+]%s[+x+], no instrument found", skill)
+                        skipCurrent = true
                     end
                 end
 
-                log.Info("Memorizing %s in %d", song, currentGem)
-                mq.cmdf('/memorize "%s" %d', song, currentGem)
-                currentGem = currentGem + 1
-                trainSkills[skill] = true
-                mq.delay("6s")
+                if not skipCurrent then
+                    log.Info("Memorizing %s in %d", song, currentGem)
+                    mq.cmdf('/memorize "%s" %d', song, currentGem)
+                    currentGem = currentGem + 1
+                    trainSkills[skill] = true
+                    mq.delay("6s")
+                end
             else
                 all_tellf("ERROR: Cannot train [+y+]%s[+x+], missing song [+y+]%s[+x+]", skill, song)
             end
@@ -94,7 +110,7 @@ return function()
         for skill, song in pairs(songs) do
             if trainSkills[skill] == true and skill_value(skill) < skill_cap(skill) and have_spell(song) then
                 capped = false
-                log.Info("Training %s %d/%d", skill, skill_value(skill), skill_cap(skill))
+                log.Debug("Training %s %d/%d", skill, skill_value(skill), skill_cap(skill))
                 mq.cmdf('/medley queue "%s"', song)
                 mq.delay("3s")
                 mq.doevents()
