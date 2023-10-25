@@ -2238,6 +2238,10 @@ function castSpell(name, spawnID)
         extra = "|item"
     end
 
+    if is_sitting() then
+        cmd("/stand")
+    end
+
     castSpellRaw(name..extra, spawnID, "-maxtries|3")
 
     local instant = false

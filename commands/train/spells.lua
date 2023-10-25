@@ -87,7 +87,7 @@ function VerifySpecialization()
 				return false, currentSpec
 			end
 			if spec ~= currentSpec and currentSkill > 50 then
-				all_tellf("FATAL (need manual reset): Specialization is [+r+]%s[+x+], expected [+y+]%s[+x+]", currentSpec, spec)
+				all_tellf("ERROR: Specialization is [+r+]%s[+x+], expected [+y+]%s[+x+] (need re-specialization quest to reset)", currentSpec, spec)
 				return false, ""
 			end
 		end
@@ -152,7 +152,7 @@ local trainSpellMatrix = {
 	DRU = {Abjuration = "Skin like Wood",  Divination = "See Invisible",  Conjuration = "Dance of the Fireflies", Alteration = "Minor Healing",  Evocation = "Burst of Flame"},
 	SHM = {Abjuration = "Inner Fire",      Divination = "True North",     Conjuration = "Summon Drink",           Alteration = "Minor Healing",  Evocation = "Burst of Flame"},
 
-	WIZ = {Abjuration = "Minor Shielding", Divination = "True North",     Conjuration = "Halo of Light",          Alteration = "Levitation",     Evocation = "Blast of Cold"},
+	WIZ = {Abjuration = "Minor Shielding", Divination = "True North",     Conjuration = "Halo of Light",          Alteration = "Root",           Evocation = "Blast of Cold"},
 	MAG = {Abjuration = "Minor Shielding", Divination = "True North",     Conjuration = "Summon Drink",           Alteration = "Renew Elements", Evocation = "Burst of Flame"},
 	NEC = {Abjuration = "Minor Shielding", Divination = "Locate Corpse",  Conjuration = "Coldlight",              Alteration = "Cure Disease",   Evocation = "Word of Shadow"},   -- Word of Shadow: AoE DD
 	ENC = {Abjuration = "Minor Shielding", Divination = "True North",     Conjuration = "Pendril's Animation",    Alteration = "Strengthen",     Evocation = "Chaotic Feedback"},
@@ -164,14 +164,14 @@ local trainSpellMatrix = {
 }
 
 -- Trains the specified spell skill (Abjuration, Alteration, Divination, Conjuration, Evocation) or their specialization skill
----@param skillName string
-function TrainSpellSkill(skillName)
+---@param baseSkill string
+function TrainSpellSkill(baseSkill)
 
 	if not is_priest() and not is_caster() and not is_hybrid() then
 		return
 	end
 
-	if is_mag() and not have_pet() and skillName == "Alteration" then
+	if is_mag() and not have_pet() and baseSkill == "Alteration" then
 		-- Renew Elements: requries Pet
 		all_tellf("ERROR: MAG training Alteration must have a pet!")
 		return
@@ -179,39 +179,39 @@ function TrainSpellSkill(skillName)
 
 	local trainSkill = ""
 
-	log.Info("TrainSpellSkill %s", skillName)
-
-	if mq.TLO.Me.Skill(skillName)() ~= mq.TLO.Me.SkillCap(skillName)() then
-		log.Info("Training \ag%s\ax: %d/%d", skillName, mq.TLO.Me.Skill(skillName)(), mq.TLO.Me.SkillCap(skillName)())
-		trainSkill = skillName
-	end
-
-	local specName = "Specialize "..skillName
-	if specName == "Specialize Abjuration" then
+	local specName = "Specialize "..baseSkill
+	if baseSkill == "Abjuration" then
 		specName = "Specialize Abjure"
 	end
 
-    if (is_caster() and mq.TLO.Me.Level() >= 20) or (is_priest() and mq.TLO.Me.Level() >= 30) and mq.TLO.Me.Skill(specName)() ~= mq.TLO.Me.SkillCap(specName)() then
-		log.Info("Training \ag%s\ax: %d/%d", specName, mq.TLO.Me.Skill(specName)(), mq.TLO.Me.SkillCap(specName)())
+    if ((is_caster() and mq.TLO.Me.Level() >= 20) or (is_priest() and mq.TLO.Me.Level() >= 30)) and mq.TLO.Me.Skill(specName)() < mq.TLO.Me.SkillCap(specName)() then
+        -- first, train until spec is capped
 		trainSkill = specName
 	end
 
-	local spell = trainSpellMatrix[class_shortname()][skillName]
-	if spell == nil then
-		all_tellf("FATAL: no spell match (should not happen): skillName=%s", skillName)
-		return
+    if trainSkill == "" and mq.TLO.Me.Skill(baseSkill)() < mq.TLO.Me.SkillCap(baseSkill)() then
+        -- then train until base skill is capped
+		trainSkill = baseSkill
 	end
-    if not have_spell(spell) then
-        all_tellf("FATAL: i do not have required training spell %s, cannot train %s", spell, skillName)
+
+    if trainSkill == "" then
+        log.Debug("Capped \ag%s\ax, ending!", baseSkill)
         return
     end
 
-	if trainSkill == "" then
-		log.Info("Capped \ag%s\ax, skill %d/%d, ending!", skillName, mq.TLO.Me.Skill(skillName)(), mq.TLO.Me.SkillCap(skillName)())
+    log.Info("Training \ag%s\ax: %d/%d", trainSkill, mq.TLO.Me.Skill(trainSkill)(), mq.TLO.Me.SkillCap(trainSkill)())
+
+	local spell = trainSpellMatrix[class_shortname()][baseSkill]
+	if spell == nil then
+		all_tellf("FATAL: no spell match (should not happen): skillName=%s", baseSkill)
 		return
 	end
+    if not have_spell(spell) then
+        all_tellf("FATAL: i do not have required training spell [+r+]%s[+x+], cannot train %s", spell, baseSkill)
+        return
+    end
 
-	if is_enc() and skillName == "Conjuration" and inventory_item_count("Tiny Dagger") == 0 then
+	if is_enc() and baseSkill == "Conjuration" and inventory_item_count("Tiny Dagger") == 0 then
 		-- Pendril's Animation: Tiny Dagger reagent
 		all_tellf("ERROR: missing [+r+]Tiny Dagger[+x+] reagent")
 		return
@@ -221,6 +221,7 @@ function TrainSpellSkill(skillName)
 
 	local tries = 0
 	local maxTries = 800
+    local spellCost = mq.TLO.Spell(spell).Mana() + 50
 
 	while true do
 		memorize_spell(spell, 1)
@@ -239,7 +240,7 @@ function TrainSpellSkill(skillName)
 		doevents()
 
 		if mq.TLO.Me.Skill(trainSkill)() == mq.TLO.Me.SkillCap(trainSkill)() then
-			all_tellf("Capped \ag%s\ax, ending!", trainSkill)
+			all_tellf("Capped [+g+]%s[+x+], ending!", trainSkill)
 			return
 		end
 
@@ -252,11 +253,20 @@ function TrainSpellSkill(skillName)
 			cmd("/destroy")
 		end
 
-		if is_enc() and skillName == "Conjuration" and have_pet() then
+		if is_enc() and baseSkill == "Conjuration" and have_pet() then
 			-- Pendril's Animation: summons Pet
 			-- kill pet in order to summon another
 			cmd("/pet leave")
 		end
+
+        if mq.TLO.Me.CurrentMana() < spellCost then
+            if is_standing() then
+                log.Info("spell train: medding for %s (%s)", spell, trainSkill)
+                cmd("/sit")
+            end
+            mq.delay("300s", function() return mq.TLO.Me.PctMana() >= 100 end)
+        end
+
 	end
 end
 
@@ -289,7 +299,7 @@ function RemoveTrainSpellBlockerBuffs()
 		"Hand of Virtue",
 		"Hand of Conviction",
 	}
-	for idx, blocker in pairs(blockers) do
+	for _, blocker in pairs(blockers) do
 		if have_buff(blocker) then
 			log.Info("Removing buff \ag%s\ax", blocker)
 			cmdf('/removebuff "%s"', blocker)
@@ -321,6 +331,7 @@ return function()
         "Evocation",
     }
     for idx, skill in pairs(skills) do
+        RemoveTrainSpellBlockerBuffs()
         TrainSpellSkill(skill)
     end
 end
