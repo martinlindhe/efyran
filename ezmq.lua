@@ -1118,7 +1118,7 @@ end
 function clear_cursor(force)
     while true do
         if not force and obstructive_window_open() then
-            log.Debug("clear_cursor: obstructive_window_open is true, aborting")
+            log.Debug("clear_cursor: aborting, obstructive window is open")
             return false
         end
 
@@ -2185,6 +2185,9 @@ function castSpellAbility(spawnID, row, callback)
     -- delay until done casting
     if callback == nil then
         callback = function()
+            if spawnID == nil then
+                return true
+            end
             local spawn1 = spawn_from_id(spawnID)
             return spawn1 == nil or spawn1() == nil or spawn1.Type() == "Corpse" or not is_casting()
         end
@@ -2196,7 +2199,7 @@ function castSpellAbility(spawnID, row, callback)
     return true
 end
 
--- DO NOT use directly, use castSpellAbility() instead !!!
+-- Unconditionally performs a spell cast. For processing spellRows, use castSpellAbility() instead !!!
 --
 -- helper for casting spell, clicky, AA, combat ability
 -- returns true if spell was cast (special case 'false' on instant-cast clickies)

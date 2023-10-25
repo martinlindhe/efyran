@@ -145,7 +145,7 @@ settings.debug = true -- enable debug logging for this peer
 /reportclickies <filter>    - report detected auto clickes on current toon
 /banker                     - summons a banker
 /autobank                   - autobanks loot listed in Tradeskills.ini
-/autosort                   - autosorts loot listed in Tradeskills.ini (move between peers)
+/sort                       - sorts loot listed in Tradeskills.ini (move between peers)
 
 /recallgroup <name>         - recalls a group/raid formation
 /disbandall                 - disband all peers from group/raids
@@ -180,6 +180,7 @@ settings.debug = true -- enable debug logging for this peer
 
 /scribe                     - scribes all spells in inventory
 /campall                    - camp all peers to desktop
+/bindgroup                  - binds all group members using Bind Affinity
 
 /train <skill>              - train skill [language, begging, alcohol]
 

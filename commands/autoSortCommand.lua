@@ -114,10 +114,9 @@ local function handOverComponents(itemType, reciever)
         cmd("/notify TradeWnd TRDW_Trade_Button leftmouseup")
         mq.delay(5)
         cmdf("/bct %s //notify TradeWnd TRDW_Trade_Button leftmouseup", reciever)
-        mq.delay(5000, function() return not window_open("TradeWnd") end)
+        mq.delay("10s", function() return not window_open("TradeWnd") end)
     end
     if window_open("TradeWnd") then
-        cmd("/beep")
         all_tellf("ERROR: trade window still open with %s", reciever)
     end
 end
@@ -140,4 +139,4 @@ local function createCommand()
     commandQueue.Enqueue(function() execute() end)
 end
 
-bind("/autosort", createCommand)
+bind("/sort", createCommand)
