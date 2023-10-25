@@ -453,14 +453,14 @@ function handleBuffRequest(req)
 
     log.Debug("handleBuffRequest: Peer %s, buff \ay%s\ax, queue len \ay%d\ax, force = %s", req.Peer, req.Buff, #buffs.queue, tostring(req.Force))
 
+    wait_until_not_casting()
+
     local spawn = spawn_from_peer_name(req.Peer)
-    if spawn == nil then
+    if spawn == nil or spawn() == nil then
         -- happens when zoning
         --log.Error("handleBuffRequest: Spawn not found %s", req.Peer)
         return false
     end
-
-    wait_until_not_casting()
 
     local spellName = findBestSpellFromSpellGroup(req.Buff)
     if spellName == nil then
@@ -484,7 +484,7 @@ function handleBuffRequest(req)
             end
             if not req.Force and peer_has_buff(req.Peer, spellName) then
                 -- abort if they got the buff while we are casting
-                log.Info("handleBuffRequest: My target %s has buff %s for %f sec, ducking.", mq.TLO.Target.Name(), spellName, mq.TLO.Target.Buff(spellName).Duration() / 1000)
+                log.Info("handleBuffRequest: Peer %s has buff %s, ducking.", req.Peer, spellName)
                 cmdf("/interrupt")
                 return true
             end
@@ -495,7 +495,6 @@ function handleBuffRequest(req)
 end
 
 -- Returns the name of the first available spell
----@param level integer
 ---@param groupName string
 ---@return string|nil
 function findBestSpellFromSpellGroup(groupName)
