@@ -5,7 +5,7 @@ sep 2023:
 
 - enc auto mez
 
-- allow to override GroupBuffs, PetBuffs, Hails, Handins, AutoTribute with per-server settings that is user supplied
+- allow to override PetBuffs, Hails, Handins, AutoTribute with per-server settings that is user supplied
 
 - mag: auto pet weapons
 
@@ -46,16 +46,6 @@ buffs:
     - /dson mode = clicky ds buffs + auto ask for MAG & RNG ds (for power leveling)
 
 
-moving:
-    - check out https://gitlab.com/redguides/plugins/mq2portalsetter
-
-
-tribute:
-    https://gitlab.com/redguides/plugins/MQ2TributeManager
-
-
-
-
 auto aa:
     MQ2AAspend is buggy / dont work on emu sep 2023
 
@@ -65,7 +55,3 @@ auto aa:
 stat food:
     auto forage + mq2feedme maybe perfect (auto save pod of water, roots etc and auto eat those-all classes have Forage AA)
     mq2feedme is limited... check out https://www.redguides.com/community/threads/mq2cursor.66818/
-
-
-QoL:
-    MQ2Discord to post to discord on tells etc...

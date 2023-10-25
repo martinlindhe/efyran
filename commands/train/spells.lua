@@ -224,6 +224,7 @@ function TrainSpellSkill(baseSkill)
     local spellCost = mq.TLO.Spell(spell).Mana() + 50
 
 	while true do
+        RemoveTrainSpellBlockerBuffs()
 		memorize_spell(spell, 1)
 
 		if not is_casting() and is_spell_ready(spell) then
@@ -312,8 +313,6 @@ return function()
     local done, spec = VerifySpecialization()
     if not done and spec ~= "" then
         -- train Specialization and Secondary Forte skill
-        RemoveTrainSpellBlockerBuffs()
-
         local trainSkill = string.sub(spec, 12)
         if trainSkill == "Abjure" then
             -- "Specialize Abjure" -> "Abjuration"
@@ -331,7 +330,6 @@ return function()
         "Evocation",
     }
     for idx, skill in pairs(skills) do
-        RemoveTrainSpellBlockerBuffs()
         TrainSpellSkill(skill)
     end
 end
