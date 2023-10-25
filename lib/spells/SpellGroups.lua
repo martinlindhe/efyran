@@ -236,6 +236,20 @@ SpellGroups.SHM = {
         "Spear of Torment",                         -- L61 Spear of Torment (870 hp, cost 340 mana)
         "Blast of Venom",                           -- L54 Blast of Venom (704 hp, cost 289 mana)
     },
+    shm_slow = {
+        "Balance of Discord",                       -- L69: MAGIC, resist adj -60, 75% slow, 1.5 min, 1.5s cast, 350 mana, OOW
+        "Balance of the Nihil",                     -- L65: MAGIC: 75% slow, 1.5 min, 1.5s cast, 300 mana, GoD
+        "Turgur's Insects",                         -- L51: MAGIC: 66-75% slow, 5.1 min, 3s cast, 250 mana, Kunark
+        "Togor's Insects",                          -- L38: MAGIC: 48-70% slow, 2.6 min, 5s cast, 175 mana, Original
+        "Tagar's Insects",                          -- L27: MAGIC: 33-50% slow, 2.6 min, 125 mana, Original
+        "Walking Sleep",                            -- L13: MAGIC: 23-35% slow, 2.6 min, 60 mana, Original
+        "Drowsy",                                   -- L05: MAGIC: 11-25% slow, 2.6 min, 20 mana, Original
+    },
+    shm_disease_slow = {
+        "Hungry Plague",                            -- L70: DISEASE: resist adj -50, 40% slow, 1 min, 3s cast, 450 mana, DoDH
+        "Cloud of Grummus",                         -- L61: DISEASE: 40% slow, 3.3 min, 6.4s cast, 400 mana, PoP
+        "Plague of Insects",                        -- L54: DISEASE: 25% slow, 3.3 min, 6.4s cast, 250 mana, Luclin
+    },
     shm_epic2 = {
         "Blessed Spiritstaff of the Heyokah",       -- epic 2.0: Prophet's Gift of the Ruchu: group buff: skill crit damage 110%, 65% melee crit, slot 12: 500 HoT, 1 min, 3 min reuse
         "Crafted Talisman of Fates",                -- epic 1.5:
