@@ -683,6 +683,7 @@ end
 function QoL.loadRequiredPlugins()
     local requiredPlugins = {
         "MQ2Debuffs",
+        "MQ2Exchange",  -- Equipment swapper
         "MQ2Medley",    -- Bard songs
         "MQ2Cast",      -- for /casting
         "MQ2LinkDB",    -- for /link and /findslot

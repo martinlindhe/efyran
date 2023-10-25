@@ -272,69 +272,82 @@ function get_nearby_curer()
     return nil
 end
 
---- returns true if `id` is an item I have in inventory or in bank.
+--- Returns true if `id` is an item I have in inventory or in bank.
 ---@param id integer
 ---@return boolean
 function have_item_id(id)
     return have_item_inventory_id(id) or have_item_banked_id(id)
 end
 
---- returns true if `name` is an item name I have in inventory or in bank.
+--- Returns true if `name` is an item name I have in inventory or in bank.
 ---@param name string
 ---@return boolean
 function have_item(name)
     return have_item_inventory(name) or have_item_banked(name)
 end
 
--- returns true if `name` is an item i have in inventory.
+-- Returns true if `name` is an item i have in inventory.
 ---@param name string
 ---@return boolean
 function have_item_inventory(name)
     return name == nil or mq.TLO.FindItemCount("=" .. name)() > 0
 end
 
--- returns true if `id` is an item i have in inventory.
+-- Returns true if `id` is an item i have in inventory.
 ---@param id integer
 ---@return boolean
 function have_item_inventory_id(id)
     return mq.TLO.FindItemCount(id)() > 0
 end
 
--- returns true if `name` is an item i have in bank.
+-- Returns true if `name` is an item i have in bank.
 ---@param name string
 ---@return boolean
 function have_item_banked(name)
     return mq.TLO.FindItemBankCount("=" .. name)() > 0
 end
 
--- returns true if `id` is an item i have in bank.
+-- Returns true if `id` is an item i have in bank.
 ---@param id integer
 ---@return boolean
 function have_item_banked_id(id)
     return mq.TLO.FindItemBankCount(id)() > 0
 end
 
--- returns number of items by EXACT NAME in bank
+-- Returns number of items by EXACT NAME in bank
 ---@param name string
 ---@return integer
 function banked_item_count(name)
     return mq.TLO.FindItemBankCount("=" .. name)()
 end
 
--- returns number of items by EXACT NAME in inventory
+-- Returns number of items by EXACT NAME in inventory
 ---@param name string
 ---@return integer
 function inventory_item_count(name)
     return mq.TLO.FindItemCount("=" .. name)()
 end
 
--- return true if peer has a target
+-- Returns true if we have item `name` equipped
+---@param name string
+---@return boolean
+function have_item_equipped(name)
+    -- equipment: 0-22 is worn gear, 23-32 is inventory top level
+    for i = 0, 22 do
+        if mq.TLO.Me.Inventory(i).ID() ~= nil and mq.TLO.Me.Inventory(i).Name() == name then
+            return true
+        end
+    end
+    return false
+end
+
+-- Returnss true if peer has a target.
 ---@return boolean
 function has_target()
     return mq.TLO.Target() ~= nil
 end
 
--- Get the current target
+-- Get the current target.
 ---@return spawn|nil
 function get_target()
     if not has_target() then
@@ -343,13 +356,13 @@ function get_target()
     return mq.TLO.Target
 end
 
--- Target NPC by name
+-- Target NPC by name.
 ---@param name string
 function target_npc_name(name)
     mq.cmdf('/target npc "%s"', name)
 end
 
--- Target spawn by id
+-- Target spawn by id.
 ---@param id integer
 function target_id(id)
     if id ~= nil then
@@ -421,7 +434,7 @@ function is_item_clicky_ready(name)
     return item.Clicky() ~= nil and item.Timer.Ticks() == 0
 end
 
--- returns true if `name` is a spell currently memorized in a gem
+-- Returns true if `name` is a spell currently memorized in a gem
 ---@param name string
 ---@return boolean
 function is_memorized(name)
