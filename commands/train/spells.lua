@@ -160,7 +160,7 @@ local trainSpellMatrix = {
 	WIZ = {Abjuration = "Minor Shielding", Divination = "True North",     Conjuration = "Halo of Light",          Alteration = "Root",           Evocation = "Blast of Cold"},
 	MAG = {Abjuration = "Minor Shielding", Divination = "True North",     Conjuration = "Summon Drink",           Alteration = "Renew Elements", Evocation = "Burst of Flame"},
 	NEC = {Abjuration = "Minor Shielding", Divination = "Locate Corpse",  Conjuration = "Coldlight",              Alteration = "Cure Disease",   Evocation = "Word of Shadow"},   -- Word of Shadow: AoE DD
-	ENC = {Abjuration = "Minor Shielding", Divination = "True North",     Conjuration = "Pendril's Animation",    Alteration = "Strengthen",     Evocation = "Chaotic Feedback"},
+	ENC = {Abjuration = "Minor Shielding", Divination = "True North",     Conjuration = "Pendril's Animation",    Alteration = "Strengthen",     Evocation = "Chaotic Feedback"}, -- Chaotic Feedback: stun (face a corner)
 
 	SHD = {Abjuration = "Endure Cold",     Divination = "Sense the Dead", Conjuration = "Disease Cloud",          Alteration = "Grim Aura",      Evocation = "Word of Spirit"},
 	PAL = {Abjuration = "Yaulp",           Divination = "True North",     Conjuration = "Halo of Light",          Alteration = "Minor Healing",  Evocation = "Cease"},
@@ -270,7 +270,7 @@ function TrainSpellSkill(baseSkill)
                 log.Info("spell train: medding for %s (%s)", spell, trainSkill)
                 cmd("/sit")
             end
-            mq.delay("300s", function() return mq.TLO.Me.PctMana() >= 100 end)
+            mq.delay("300s", function() return mq.TLO.Me.PctMana() >= 100 or is_standing() end)
         end
 
 	end
