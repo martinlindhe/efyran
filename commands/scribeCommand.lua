@@ -135,7 +135,7 @@ local function execute()
         --/call ScribeTomes
     end
 
-    if is_caster() or is_priest() or is_hybrid() then
+    if is_caster() or is_priest() or is_hybrid() or is_brd() then
         log.Info("Scribing spells !")
         scribeSpells()
     end
