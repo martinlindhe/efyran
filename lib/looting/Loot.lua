@@ -235,7 +235,7 @@ local function lootNearestCorpse(seekRadius)
             end
 
             if corpse() == nil then
-                all_tellf("UNLIKELY: lootNearestCorpse corpse poofed")
+                log.Debug("lootNearestCorpse: giving up, corpse poofed")
                 return false
             end
             if corpse.Distance() <= 20 and corpse.DistanceZ() < 40 and EnsureTarget(corpse.ID()) then

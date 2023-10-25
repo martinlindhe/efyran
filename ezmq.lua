@@ -744,8 +744,8 @@ function map_race_shortname(race)
         ["Wood Elf"]  = "ELF",
     }
     if map[race] == nil then
-        all_tellf("UNLIKELY: map_race_shortname unmapped %s", race)
-        return "XXX"
+        log.Debug("map_race_shortname unmapped %s (not a player race)", race)
+        return "UNKNOWN-RACE"
     end
     return map[race]
 end

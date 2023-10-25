@@ -11,6 +11,7 @@ local function autoMapHeightFilter()
         lavastorm = { min = 100, max = 100},
         unrest = { min = 9, max = 9},
         felwithea = { min = 10, max = 10},
+        highkeep = { min = 10, max = 10},
 
         -- kunark?
         chardok = {min = 60, max = 60},

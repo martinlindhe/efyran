@@ -2,6 +2,9 @@ local mq = require("mq")
 local log          = require("knightlinc/Write")
 local commandQueue = require("lib/CommandQueue")
 
+local broadCastInterfaceFactory = require 'broadcast/broadcastinterface'
+local bci = broadCastInterfaceFactory()
+
 ---@class FindItemBy
 ---@field Name string
 ---@field Filter string|nil
