@@ -12,6 +12,7 @@ local function autoMapHeightFilter()
         unrest = { min = 9, max = 9},
         felwithea = { min = 10, max = 10},
         highkeep = { min = 10, max = 10},
+        blackburrow = { min = 10, max = 10},
 
         -- kunark?
         chardok = {min = 60, max = 60},

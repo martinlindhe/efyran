@@ -111,7 +111,6 @@ function Bard.PlayMelody(name)
     end
 
     Bard.StopMelody()
-
     if name == "off" or name == "stop" then
         return
     end
