@@ -5,7 +5,6 @@ local log = require("knightlinc/Write")
 
 require("ezmq")
 
-local MAX_LANGUAGE_ID = 25
 local maxAttempts = 100 + 10 -- Skill cap is 100
 
 return function()
@@ -16,7 +15,12 @@ return function()
 
     cmdf("/target %s", mq.TLO.Group.Member(1)())
 
-    for i = 1, MAX_LANGUAGE_ID do
+    local maxLanguageID = 25
+    if current_server() == "FVP" then
+        maxLanguageID = 24 -- 25 "Vah Shir" was added with Luclin
+    end
+
+    for i = 1, maxLanguageID do
         local attempts = maxAttempts - mq.TLO.Me.LanguageSkill(i)()
 
         all_tellf("Training language %s (id %d, skill %d) for %d attempts ...", mq.TLO.Me.Language(i)(), i, mq.TLO.Me.LanguageSkill(i)(), attempts)
