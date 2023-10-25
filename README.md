@@ -185,6 +185,7 @@ settings.debug = true -- enable debug logging for this peer
 /bindgroup                  - binds all group members using Bind Affinity
 
 /train <skill>              - train skill [language, begging, alcohol, spells, songs]
+/languages                  - report language skills for all peers
 /combineit                  - tradeskill: autocombine (uses new tradeskill window)
 
 # autoloot
