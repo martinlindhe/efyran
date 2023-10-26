@@ -1144,6 +1144,12 @@ function has_cursor_item()
     return mq.TLO.Cursor.ID() ~= nil
 end
 
+-- Returns the number of free inventory slots.
+---@return integer
+function free_inventory_slots()
+    return mq.TLO.Me.FreeInventory()
+end
+
 -- autoinventories all items on cursor. returns false on failure
 ---@param force? boolean
 function clear_cursor(force)

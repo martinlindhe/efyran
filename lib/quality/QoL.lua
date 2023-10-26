@@ -640,13 +640,6 @@ function QoL.Init()
         cmd("/camp desktop")
     end)
 
-    -- tell all toons in zone to accept open trade windows
-    bind("/trade", function()
-        if window_open("tradewnd") then
-            cmd("/bcza //notify tradewnd TRDW_Trade_Button leftmouseup")
-        end
-    end)
-
     -- toggles debug output on/off
     bind("/debug", function()
         if log.loglevel == "debug" then
