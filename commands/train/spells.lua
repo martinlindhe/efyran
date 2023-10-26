@@ -152,21 +152,32 @@ function VerifySpecialization()
 	return true, ""
 end
 
-local trainSpellMatrix = {
-	CLR = {Abjuration = "Courage",         Divination = "True North",     Conjuration = "Summon Drink",           Alteration = "Minor Healing",  Evocation = "Strike"},
-	DRU = {Abjuration = "Skin like Wood",  Divination = "See Invisible",  Conjuration = "Dance of the Fireflies", Alteration = "Minor Healing",  Evocation = "Burst of Flame"},
-	SHM = {Abjuration = "Inner Fire",      Divination = "True North",     Conjuration = "Summon Drink",           Alteration = "Minor Healing",  Evocation = "Burst of Flame"},
+-- Returns a matrix of training spells
+-- The defaults are all classic spells, they should all be available in Original Everquest.
+function getSpellMatrix()
+    local matrix = {
+        CLR = {Abjuration = "Courage",         Divination = "True North",     Conjuration = "Summon Drink",           Alteration = "Minor Healing",  Evocation = "Strike"},             -- Strike: stun (face a corner)
+        DRU = {Abjuration = "Skin like Wood",  Divination = "See Invisible",  Conjuration = "Dance of the Fireflies", Alteration = "Minor Healing",  Evocation = "Burst of Flame"},
+        SHM = {Abjuration = "Inner Fire",      Divination = "True North",     Conjuration = "Summon Drink",           Alteration = "Minor Healing",  Evocation = "Burst of Flame"},
 
-	WIZ = {Abjuration = "Minor Shielding", Divination = "True North",     Conjuration = "Halo of Light",          Alteration = "Root",           Evocation = "Blast of Cold"},
-	MAG = {Abjuration = "Minor Shielding", Divination = "True North",     Conjuration = "Summon Drink",           Alteration = "Renew Elements", Evocation = "Burst of Flame"},
-	NEC = {Abjuration = "Minor Shielding", Divination = "Locate Corpse",  Conjuration = "Coldlight",              Alteration = "Cure Disease",   Evocation = "Word of Shadow"},     -- Word of Shadow: AoE DD
-	ENC = {Abjuration = "Minor Shielding", Divination = "True North",     Conjuration = "Pendril's Animation",    Alteration = "Strengthen",     Evocation = "Chaotic Feedback"},   -- Chaotic Feedback: stun (face a corner)
+        WIZ = {Abjuration = "Minor Shielding", Divination = "True North",     Conjuration = "Halo of Light",          Alteration = "Root",           Evocation = "Blast of Cold"},
+        MAG = {Abjuration = "Minor Shielding", Divination = "True North",     Conjuration = "Summon Drink",           Alteration = "Renew Elements", Evocation = "Burst of Flame"},
+        NEC = {Abjuration = "Minor Shielding", Divination = "Locate Corpse",  Conjuration = "Coldlight",              Alteration = "Cure Disease",   Evocation = "Word of Shadow"},     -- Word of Shadow: AoE DD
+        ENC = {Abjuration = "Minor Shielding", Divination = "True North",     Conjuration = "Pendril's Animation",    Alteration = "Strengthen",     Evocation = "Chaotic Feedback"},   -- Chaotic Feedback: stun (face a corner)
 
-	SHD = {Abjuration = "Endure Cold",     Divination = "Sense the Dead", Conjuration = "Disease Cloud",          Alteration = "Grim Aura",      Evocation = "Word of Spirit"},
-	PAL = {Abjuration = "Yaulp",           Divination = "True North",     Conjuration = "Halo of Light",          Alteration = "Minor Healing",  Evocation = "Stun"},               -- NOTE: L07 Cease (Evocation) is Luclin
-	RNG = {Abjuration = "Endure Fire",     Divination = "Glimpse",        Conjuration = "Dance of the Fireflies", Alteration = "Minor Healing",  Evocation = "Burst of Fire"},
-	BST = {Abjuration = "Fleeting Fury",   Divination = "Serpent Sight",  Conjuration = "Summon Drink",           Alteration = "Salve",          Evocation = "Blast of Frost"},
-}
+        SHD = {Abjuration = "Endure Cold",     Divination = "Sense the Dead", Conjuration = "Disease Cloud",          Alteration = "Grim Aura",      Evocation = "Word of Spirit"},
+        PAL = {Abjuration = "Yaulp",           Divination = "True North",     Conjuration = "Halo of Light",          Alteration = "Minor Healing",  Evocation = "Stun"},
+        RNG = {Abjuration = "Endure Fire",     Divination = "Glimpse",        Conjuration = "Dance of the Fireflies", Alteration = "Minor Healing",  Evocation = "Burst of Fire"},
+        BST = {Abjuration = "Fleeting Fury",   Divination = "Serpent Sight",  Conjuration = "Summon Drink",           Alteration = "Salve",          Evocation = "Blast of Frost"},
+    }
+
+    if is_pal() and have_spell("Cease") then
+        -- L07 Cease, Luclin
+        matrix.PAL.Evocation = "Cease"
+    end
+
+    return matrix
+end
 
 -- Trains the specified spell skill (Abjuration, Alteration, Divination, Conjuration, Evocation) or their specialization skill
 ---@param baseSkill string
@@ -206,7 +217,9 @@ function TrainSpellSkill(baseSkill)
 
     log.Info("Training \ag%s\ax: %d/%d", trainSkill, skill_value(trainSkill), skill_cap(trainSkill))
 
-	local spell = trainSpellMatrix[class_shortname()][baseSkill]
+    local matrix = getSpellMatrix()
+
+	local spell = matrix[class_shortname()][baseSkill]
 	if spell == nil then
 		all_tellf("FATAL: no spell match (should not happen): skillName=%s", baseSkill)
 		return
