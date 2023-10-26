@@ -149,12 +149,12 @@ local function shouldBuySpell(item, maxLevel)
     end
 
     if item.BuyPrice() > mq.TLO.Me.Cash() then
-        log.Error("CANNOT AFFORD %s, price %d", item.ItemLink("CLICKABLE")(), item.BuyPrice())
+        log.Error("CANNOT AFFORD L%d %s, price %d", item.Spell.Level(), item.ItemLink("CLICKABLE")(), item.BuyPrice())
         return false
     end
 
     if item.Spell.Level() > maxLevel then
-        log.Error("Skipping %s with too high level %d", item.ItemLink("CLICKABLE")(), item.Spell.Level())
+        log.Error("Skipping L%d %s, tpo high level", item.Spell.Level(), item.ItemLink("CLICKABLE")())
         return false
     end
 
@@ -207,7 +207,7 @@ local function buySpells(maxLevel)
             -- merchant line number matches what we are looking to buy, buy 1 copy of it
             if c then
                 purchased = true
-                log.Info("Buying %s", item.ItemLink("CLICKABLE")())
+                log.Info("Buying L%d %s", item.Spell.Level(), item.ItemLink("CLICKABLE")())
 
                 cmdf("/notify MerchantWnd MW_ItemList listselect %d", c)
                 mq.delay(5)
@@ -225,10 +225,19 @@ local function buySpells(maxLevel)
     end
 end
 
-local function execute()
+
+---@class ScribeCommand
+---@field MaxLevel integer
+
+---@param command ScribeCommand
+local function execute(command)
+
+    local maxLevel = command.MaxLevel
+    if maxLevel == 0 then
+        maxLevel = mq.TLO.Me.Level()
+    end
 
     if mq.TLO.Merchant.Open() then
-        local maxLevel = mq.TLO.Me.Level()
         local merchantName = mq.TLO.Window("MerchantWnd").Child("MW_MerchantName").Text()
         log.Info("Auto buying spells up to level %d from \ay%s\ax ...", maxLevel, merchantName)
         buySpells(maxLevel)
@@ -249,13 +258,10 @@ local function execute()
         scribeSpells()
     end
 
-    -- TODO: list all spells in inventory, see if they are DUPES or TOO HIGH LEVEL
-
-    -- TODO: look in bank for more spells that can be scribed and warn about it
 end
 
-local function createCommand(distance)
-    commandQueue.Enqueue(function() execute() end)
+local function createCommand(maxLevel)
+    commandQueue.Enqueue(function() execute({MaxLevel = toint(maxLevel)}) end)
 end
 
 bind("/scribe", createCommand)

@@ -26,7 +26,7 @@ local function make_peers_circle_me(dist)
 end
 
 ---@class CircleMeCommand
----@field Distance number
+---@field Distance integer
 
 ---@param command CircleMeCommand
 local function execute(command)

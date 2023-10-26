@@ -2410,6 +2410,11 @@ function memorize_spell(spellRow, defaultGem)
         return nil
     end
 
+    if obstructive_window_open() then
+        log.Error("Cannot memorize %s, obstructive window is open!", o.Name)
+        return nil
+    end
+
     local gem = defaultGem
     if o.Gem ~= nil then
         gem = o.Gem
