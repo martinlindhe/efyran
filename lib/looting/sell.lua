@@ -61,7 +61,7 @@ local function sellItem(itemToSell)
     mq.cmd("/notify MerchantWnd MW_Sell_Button leftmouseup")
 
     local quantityWindow = mq.TLO.Window("QuantityWnd")
-    mq.delay(30, function() return quantityWindow() and merchantWindow.Open() end)
+    mq.delay(30, function() return quantityWindow() and mq.TLO.Merchant.Open() end)
     if(quantityWindow() and quantityWindow.Open()) then
         mq.cmd("/notify QuantityWnd QTYW_Accept_Button leftmouseup")
         mq.delay(30, function() return not quantityWindow() or not quantityWindow.Open() end)

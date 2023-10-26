@@ -471,7 +471,11 @@ function have_spell(name)
         -- SHM/62 Ancestral Guard / SHM Ancestral Guard AA
         return false
     end
-    return mq.TLO.Me.Book(mq.TLO.Spell(name).RankName())() ~= nil
+    local ranked = mq.TLO.Spell(name).RankName()
+    if mq.TLO.Me.Book(ranked)() ~= nil then
+        return true
+    end
+    return mq.TLO.Me.Book(name)() ~= nil
 end
 
 -- Returns true if we have enough mana to cast `spell`
@@ -573,6 +577,12 @@ end
 ---@return boolean
 function is_ability_ready(name)
     return mq.TLO.Me.AbilityReady(name)()
+end
+
+-- Do we have combat ability `name`?
+---@return boolean
+function have_combat_ability(name)
+    return mq.TLO.Me.CombatAbility(name)() ~= nil
 end
 
 -- Returns true if the combat ability `name` is ready to use.
@@ -1684,12 +1694,6 @@ function get_rez_spell()
         end
     end
     return nil
-end
-
--- Do we have combat ability `name`?
----@return boolean
-function have_combat_ability(name)
-    return mq.TLO.Me.CombatAbility(name)() ~= nil
 end
 
 -- Number of open buff slots (not counting the short duration buff slots).

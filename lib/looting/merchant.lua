@@ -24,39 +24,35 @@ end
 ---@param merchant spawn
 ---@return boolean
 local function openMerchant(merchant)
-    local merchantWindow = mq.TLO.Window("MerchantWnd")
     local openMerchantTimer = timer.new(10)
 
-    if EnsureTarget(merchant.ID()) and not merchantWindow.Open() then
+    if EnsureTarget(merchant.ID()) and not mq.TLO.Merchant.Open() then
         mq.cmd("/click right target")
         mq.delay("5s", function ()
-        return merchantWindow.Open() or openMerchantTimer:expired() end)
+        return mq.TLO.Merchant.Open() or openMerchantTimer:expired() end)
     end
 
-    if not merchantWindow.Open() then
+    if not mq.TLO.Merchant.Open() then
         log.Warn("Failed to open trade with [%s].", merchant.CleanName())
         return false
     end
 
-    -- NOTE: this will time out if "show only items I can use" filter is enabled.
     mq.delay("5s", function ()
-        return (merchantWindow.Child("ItemList") and merchantWindow.Child("ItemList").Items() > 0) or openMerchantTimer:expired()
+        return mq.TLO.Merchant.ItemsReceived() or openMerchantTimer:expired()
     end)
-
-    return merchantWindow.Open()
+    return mq.TLO.Merchant.Open()
 end
 
 ---@param target spawn
 ---@return boolean
 local function closeMerchant()
-    local merchantWindow = mq.TLO.Window("MerchantWnd")
     local closeMerchantTimer = timer.new(5)
-    while merchantWindow.Open() and not closeMerchantTimer:expired() do
+    while mq.TLO.Merchant.Open() and not closeMerchantTimer:expired() do
         mq.cmd("/notify MerchantWnd MW_Done_Button leftmouseup")
         mq.delay(10)
     end
 
-    if merchantWindow.Open() then
+    if mq.TLO.Merchant.Open() then
         log.Warn("Failed to close mechant window.")
         return false
     end
