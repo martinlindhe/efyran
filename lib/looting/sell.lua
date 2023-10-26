@@ -1,5 +1,4 @@
---- @type Mq
-local mq = require 'mq'
+local mq = require("mq")
 local log = require("knightlinc/Write")
 local timer = require("lib/Timer")
 local bard = require("lib/classes/Bard")
@@ -7,13 +6,16 @@ local merchant = require("lib/looting/merchant")
 local repository = require("lib/looting/repository")
 require("ezmq")
 
----@param itemId integer
----@param itemName string
+---@param item item
 ---@return boolean, LootItem
-local function canSellItem(itemId, itemName)
-    local itemToSell = repository:tryGet(itemId)
+local function canSellItem(item)
+    local itemToSell = repository:tryGet(item.ID())
     if not itemToSell then
-        itemToSell = { Id = itemId, Name = itemName, Sell = false, Destroy = false }
+        itemToSell = { Id = item.ID(), Name = item.Name(), Sell = false, Destroy = false }
+    end
+    if itemToSell.Destroy and not item.NoDrop() then
+        log.Debug("Selling %s (marked for auto-destroy)", item.ItemLink("CLICKABLE")())
+        return true, itemToSell
     end
 
     return itemToSell.Sell, itemToSell
@@ -25,7 +27,7 @@ local function sellItem(itemToSell)
         return
     end
 
-    local shouldSell, _ = canSellItem(itemToSell.ID(), itemToSell.Name())
+    local shouldSell, _ = canSellItem(itemToSell)
     if not shouldSell then
         --log.Debug("%s has not listed for selling, skipping.", itemToSell.Name())
         return
@@ -40,7 +42,7 @@ local function sellItem(itemToSell)
     local merchantWindow = mq.TLO.Window("MerchantWnd")
 
     local packslot = itemToSell.ItemSlot() - 22
-    log.Info("Selecting item for sell in pack%d %d: %s", packslot, itemToSell.ItemSlot2() + 1, itemToSell.Name())
+    log.Info("Selecting %s to sell in pack%d %d", itemToSell.ItemLink("CLICKABLE")(), packslot, itemToSell.ItemSlot2() + 1)
     while merchantWindow.Child("MW_SelectedItemLabel").Text() ~= itemToSell.Name() do
         if itemToSell.ItemSlot2() >= 0 then
             mq.cmdf("/nomodkey /itemnotify in pack%d %d leftmouseup", packslot, itemToSell.ItemSlot2() + 1)
@@ -66,7 +68,7 @@ local function sellItem(itemToSell)
     end
 
     mq.delay("1s", function() return not merchantWindow.Child("MW_Sell_Button").Enabled() end)
-    mq.delay(100)
+    mq.delay(200)
 
     if(itemToSell.ItemSlot2() >= 0 and mq.TLO.Me.Inventory("pack"..packslot).Item(itemToSell.ItemSlot).Item())
         or mq.TLO.Me.Inventory("pack"..packslot).Item() then
@@ -111,7 +113,7 @@ local function sellItems()
             end
         end
 
-        merchant.CloseMerchant(nearestMerchant --[[@as spawn]])
+        merchant.CloseMerchant()
     end
 
     close_bags()

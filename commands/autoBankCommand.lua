@@ -1,10 +1,11 @@
 local mq = require("mq")
-local commandQueue = require("lib/CommandQueue")
-
-local serverSettings = require("lib/settings/default/ServerSettings")
-
 local log = require("knightlinc/Write")
-require("ezmq")
+
+local broadCastInterfaceFactory = require("broadcast/broadcastinterface")
+local bci = broadCastInterfaceFactory()
+
+local commandQueue = require("lib/CommandQueue")
+local serverSettings = require("lib/settings/default/ServerSettings")
 
 local tradeskillsIni = efyranConfigDir() .. "\\" .. current_server() .. "__Tradeskills.ini"
 
@@ -22,11 +23,6 @@ local function autobank()
     end
 
     clear_cursor()
-
-    local bankWnd = "BigBankWnd"
-    if not serverSettings.bigBank then
-        bankWnd = "BankWnd"
-    end
 
     local depositCount = 0
 
@@ -58,13 +54,13 @@ local function autobank()
                                     cmdf("/nomodkey /shiftkey /itemnotify in pack%d %d leftmouseup", item.ItemSlot()-22, item.ItemSlot2() + 1)
 
                                     delay("1s", function ()
-                                        if has_cursor_item() then
+                                        if have_cursor_item() then
                                             return true
                                         end
                                     end)
-                                    delay(3)
+                                    delay(20)
 
-                                    if not has_cursor_item() then
+                                    if not have_cursor_item() then
                                         all_tellf("ERROR cursor is empty")
                                         return
                                     end
@@ -81,15 +77,15 @@ local function autobank()
                                         doevents()
                                         if bankFull then
                                             all_tellf("/autobank: Bank is full, aborting !")
-                                            close_window(bankWnd)
+                                            close_bank_window()
                                             return
                                         end
 
-                                        if has_cursor_item() then
+                                        if have_cursor_item() then
                                             all_tellf("Failed to auto bank %s, retrying ...", item.Name())
                                             delay("1s")
                                         end
-                                    until not has_cursor_item()
+                                    until not have_cursor_item()
 
                                 end
                             end
@@ -103,7 +99,7 @@ local function autobank()
         end
     end
 
-    close_window(bankWnd)
+    close_bank_window()
 end
 
 local function execute()
@@ -116,3 +112,10 @@ local function createCommand()
 end
 
 bind("/autobank", createCommand)
+
+mq.bind("/bankall", function()
+    if is_orchestrator() then
+        bci.ExecuteZoneCommand("/autobank")
+    end
+    cmd("/autobank")
+end)

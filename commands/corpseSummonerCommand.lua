@@ -135,13 +135,13 @@ local function execute()
     -- pick up soulstone
     cmdf("/nomodkey /ctrl /itemnotify in Pack%d %d leftmouseup", item.ItemSlot() - 22, item.ItemSlot2() + 1)
     delay(200)
-    delay(1000, function() return has_cursor_item() end)
+    delay(1000, function() return have_cursor_item() end)
 
     -- give it
     cmd("/click left target")
     delay(200)
 
-    delay(1000, function() return not has_cursor_item() end)
+    delay(1000, function() return not have_cursor_item() end)
     cmd("/notify GiveWnd GVW_Give_Button leftmouseup")
 
     delay(1000)

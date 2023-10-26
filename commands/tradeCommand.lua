@@ -11,7 +11,7 @@ local function execute()
     if not window_open("tradewnd") then
         return
     end
-    if has_cursor_item() then
+    if have_cursor_item() then
         all_tellf("CANNOT ACCEPT TRADE: have item on cursor! %s", mq.TLO.Cursor.Name())
         return
     end

@@ -841,11 +841,11 @@ function QoL.Tick()
     QoL.AcceptSharedTask()
 
     -- auto accept trades
-    if window_open("tradewnd") and not has_cursor_item() then
+    if window_open("tradewnd") and not have_cursor_item() then
         if has_target() and is_peer(mq.TLO.Target.Name()) then
             all_tellf("Accepting trade in 5s with %s", mq.TLO.Target.Name())
-            delay(5000, function() return not window_open("tradewnd") or has_cursor_item() end)
-            if not has_cursor_item() then
+            delay(5000, function() return not window_open("tradewnd") or have_cursor_item() end)
+            if not have_cursor_item() then
                 cmd("/squelch /notify tradewnd TRDW_Trade_Button leftmouseup")
             end
         else

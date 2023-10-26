@@ -146,9 +146,9 @@ settings.debug = true -- enable debug logging for this peer
 /reportclickies <filter>    - report detected auto clickes on current toon
 
 /coins                      - reports coin on all peers
-/banker                     - summons a banker
-/autobank                   - autobanks loot listed in Tradeskills.ini
-/sort                       - sorts loot listed in Tradeskills.ini (move between peers)
+/banker                     - summons a banker (if possible)
+/autobank, /bankall         - autobanks loot listed in Tradeskills.ini
+/sort, /sortall             - sorts loot listed in Tradeskills.ini (move between peers)
 
 /recallgroup <name>         - recalls a group/raid formation
 /disbandall                 - disband all peers from group/raids

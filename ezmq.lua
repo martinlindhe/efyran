@@ -1140,7 +1140,7 @@ function is_script_running(name)
 end
 
 ---@return boolean
-function has_cursor_item()
+function have_cursor_item()
     return mq.TLO.Cursor.ID() ~= nil
 end
 
@@ -1154,12 +1154,15 @@ end
 ---@param force? boolean
 function clear_cursor(force)
     while true do
+        local cursor = mq.TLO.Cursor
+
         if not force and obstructive_window_open() then
-            log.Debug("clear_cursor: aborting, obstructive window is open")
+            if cursor() ~= nil then
+                log.Warn("clear_cursor: aborting with %s on cursor!, obstructive window is open")
+            end
             return false
         end
 
-        local cursor = mq.TLO.Cursor
         if cursor() == nil or cursor.ID() == nil then
             return true
         end
@@ -2795,8 +2798,8 @@ end
 -- Opens bank window, by summoning a clockwork banker if needed
 -- Returns true on success
 ---@return boolean
+local bankerQuery = "npc radius 100 banker"
 function open_banker()
-    local bankerQuery = "npc radius 100 banker"
     local bankerPetQuery = "pet radius 100 banker" -- summoned banker is a pet
 
     local bankWnd = "BigBankWnd"
@@ -2836,4 +2839,12 @@ function open_banker()
         return false
     end
     return true
+end
+
+function close_bank_window()
+    local bankWnd = "BigBankWnd"
+    if not serverSettings.bigBank then
+        bankWnd = "BankWnd"
+    end
+    close_window(bankWnd)
 end

@@ -19,6 +19,8 @@ local function findMerchant()
     return merchantSpawn
 end
 
+-- Opens merchant window and waits for it to populate.
+-- Returns true on success.
 ---@param merchant spawn
 ---@return boolean
 local function openMerchant(merchant)
@@ -28,8 +30,7 @@ local function openMerchant(merchant)
     if EnsureTarget(merchant.ID()) and not merchantWindow.Open() then
         mq.cmd("/click right target")
         mq.delay("5s", function ()
-        return merchantWindow.Open() or openMerchantTimer:expired()
-        end)
+        return merchantWindow.Open() or openMerchantTimer:expired() end)
     end
 
     if not merchantWindow.Open() then
@@ -37,16 +38,17 @@ local function openMerchant(merchant)
         return false
     end
 
+    -- NOTE: this will time out if "show only items I can use" filter is enabled.
     mq.delay("5s", function ()
         return (merchantWindow.Child("ItemList") and merchantWindow.Child("ItemList").Items() > 0) or openMerchantTimer:expired()
     end)
 
-    return merchantWindow.Child("ItemList").Items() > 0
+    return merchantWindow.Open()
 end
 
 ---@param target spawn
 ---@return boolean
-local function closeMerchant(target)
+local function closeMerchant()
     local merchantWindow = mq.TLO.Window("MerchantWnd")
     local closeMerchantTimer = timer.new(5)
     while merchantWindow.Open() and not closeMerchantTimer:expired() do
@@ -55,7 +57,7 @@ local function closeMerchant(target)
     end
 
     if merchantWindow.Open() then
-        log.Warn("Failed to close trade with [%s].", target.CleanName())
+        log.Warn("Failed to close mechant window.")
         return false
     end
 

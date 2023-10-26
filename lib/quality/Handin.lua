@@ -260,16 +260,16 @@ local function auto_hand_in_items()
                                     local exe = string.format("/nomodkey /ctrl /itemnotify in Pack%d %d leftmouseup", item.ItemSlot() - 22, item.ItemSlot2() + 1)
                                     --log.Debug("EXE: %s", exe)
                                     cmdf(exe)
-                                    delay(1000, function() return has_cursor_item() end)
+                                    delay(1000, function() return have_cursor_item() end)
                                     delay(200)
-                                    if not has_cursor_item() then
+                                    if not have_cursor_item() then
                                         all_tellf("ERROR failed to pick up item")
                                         return
                                     end
 
                                     log.Info("Handing in \ay%s\ax", component)
                                     cmd("/click left target")
-                                    delay(1000, function() return not has_cursor_item() end)
+                                    delay(1000, function() return not have_cursor_item() end)
                                     delay(200)
                                 end
 

@@ -78,8 +78,20 @@ local function handOverComponents(itemType, reciever)
                             count = count + 1
                             log.Info("Handing over #%d %s: %s", count, currentItemType, item.Name())
 
-                            cmdf("/nomodkey /shiftkey /itemnotify in %s %d leftmouseup", pack, slot)
-                            delay(2000, function() return mq.TLO.Cursor.ID() ~= nil end)
+                            local pickupTries = 0
+                            while true do
+                                --log.Debug("Trying to pick up item ...")
+                                cmdf("/nomodkey /shiftkey /itemnotify in %s %d leftmouseup", pack, slot)
+                                delay("1s", function() return mq.TLO.Cursor.ID() ~= nil end)
+                                if have_cursor_item() then
+                                    break
+                                end
+                                pickupTries = pickupTries + 1
+                                if pickupTries >= 3 then
+                                    all_tellf("/sort ERROR: failed to pick up item, giving up")
+                                    return
+                                end
+                            end
 
                             while true do
                                 target_id(recvSpawn.ID())
@@ -124,14 +136,16 @@ end
 local function execute()
     log.Info("Autosorting loot ...")
 
-    local itemKind, reciever = findItemType()
-    if itemKind == nil then
-        log.Info("No item kind found!")
-        return
-    end
+    while true do
+        local itemKind, reciever = findItemType()
+        if itemKind == nil then
+            log.Info("Sort: No more item kinds to hand over found, giving up!")
+            return
+        end
 
-    move_to_peer(reciever)
-    handOverComponents(itemKind, reciever)
+        move_to_peer(reciever)
+        handOverComponents(itemKind, reciever)
+    end
 end
 
 -- auto banks items from SERVER__Tradeskills.ini

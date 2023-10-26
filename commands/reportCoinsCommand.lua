@@ -6,9 +6,9 @@ local bci = broadCastInterfaceFactory()
 
 local function execute()
     local me = mq.TLO.Me
-    all_tellf("coins: inventory [+y+]%dp[+x+] %dg %ds %dc, bank [+y+]%dp[+x+] %dg %ds %dc, shared [+y+]%dp[+x+]",
-        me.Platinum(), me.Gold(), me.Silver(), me.Copper(),
-        me.PlatinumBank(), me.GoldBank(), me.SilverBank(), me.CopperBank(),
+    all_tellf("coins: [+y+]%dp[+x+] %dg %ds inventory, [+y+]%dp[+x+] bank, [+y+]%dp[+x+] shared",
+        me.Platinum(), me.Gold(), me.Silver(), -- don't show inventory copper
+        me.PlatinumBank(), -- don't show bank gold, silver, copper (should be empty)
         me.PlatinumShared())
 end
 
