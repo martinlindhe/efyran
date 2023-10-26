@@ -19,8 +19,8 @@ function GetSpecialization()
 	local skillName = ""
 
 	for idx, spec in pairs(specializationSkills) do
-		if mq.TLO.Me.Skill(spec)() > bestLevel then
-			bestLevel = mq.TLO.Me.Skill(spec)()
+		if skill_value(spec) > bestLevel then
+			bestLevel = skill_value(spec)
 			skillName = spec
 		end
 	end
@@ -38,8 +38,8 @@ function GetSecondaryForte()
 
 	for idx, spec in pairs(specializationSkills) do
 		if primarySpec ~= spec then
-			if mq.TLO.Me.Skill(spec)() > bestLevel then
-				bestLevel = mq.TLO.Me.Skill(spec)()
+			if skill_value(spec) > bestLevel then
+				bestLevel = skill_value(spec)
 				skillName = spec
 			end
 		end
@@ -79,11 +79,11 @@ function VerifySpecialization()
 	for class, spec in pairs(expectedSpecialization) do
 		if class == class_shortname() then
 			if spec ~= currentSpec and currentSkill <= 50 then
-				log.Info("Need to train Specialization \ag%s\ax, skill %d/%d", spec, mq.TLO.Me.Skill(spec)(), mq.TLO.Me.SkillCap(spec)())
+				log.Info("Need to train Specialization \ag%s\ax, skill %d/%d", spec, skill_value(spec), skill_cap(spec))
 				return false, spec
 			end
-			if spec == currentSpec and currentSkill < mq.TLO.Me.SkillCap(currentSpec)() then
-				log.Info("Need to train Specialization \ag%s\ax, skill %d/%d", currentSpec, currentSkill, mq.TLO.Me.SkillCap(currentSpec)())
+			if spec == currentSpec and currentSkill < skill_cap(currentSpec) then
+				log.Info("Need to train Specialization \ag%s\ax, skill %d/%d", currentSpec, currentSkill, skill_cap(currentSpec))
 				return false, currentSpec
 			end
 			if spec ~= currentSpec and currentSkill > 50 then
@@ -131,13 +131,13 @@ function VerifySpecialization()
 	for class, spec in pairs(expectedSecondary) do
 		if class == class_shortname() then
 			if spec ~= secondary and secondaryLevel <= 50 then
-				log.Info("Need to train Secondary Forte \ag%s\ax, skill %d/%d", spec, mq.TLO.Me.Skill(secondary)(), mq.TLO.Me.SkillCap(secondary)())
+				log.Info("Need to train Secondary Forte \ag%s\ax, skill %d/%d", spec, skill_value(secondary), skill_cap(secondary))
 				return false, spec
 			end
 
 			-- Skill should be 51+. Cap is 100 at L70
-			if secondary == spec and secondaryLevel < mq.TLO.Me.SkillCap(secondary)() then
-				log.Info("Need to train Secondary Forte \ag%s\ax, skill %d/%d", secondary, secondaryLevel, mq.TLO.Me.SkillCap(secondary)())
+			if secondary == spec and secondaryLevel < skill_cap(secondary) then
+				log.Info("Need to train Secondary Forte \ag%s\ax, skill %d/%d", secondary, secondaryLevel, skill_cap(secondary))
 				return false, secondary
 			end
 
@@ -159,11 +159,11 @@ local trainSpellMatrix = {
 
 	WIZ = {Abjuration = "Minor Shielding", Divination = "True North",     Conjuration = "Halo of Light",          Alteration = "Root",           Evocation = "Blast of Cold"},
 	MAG = {Abjuration = "Minor Shielding", Divination = "True North",     Conjuration = "Summon Drink",           Alteration = "Renew Elements", Evocation = "Burst of Flame"},
-	NEC = {Abjuration = "Minor Shielding", Divination = "Locate Corpse",  Conjuration = "Coldlight",              Alteration = "Cure Disease",   Evocation = "Word of Shadow"},   -- Word of Shadow: AoE DD
-	ENC = {Abjuration = "Minor Shielding", Divination = "True North",     Conjuration = "Pendril's Animation",    Alteration = "Strengthen",     Evocation = "Chaotic Feedback"}, -- Chaotic Feedback: stun (face a corner)
+	NEC = {Abjuration = "Minor Shielding", Divination = "Locate Corpse",  Conjuration = "Coldlight",              Alteration = "Cure Disease",   Evocation = "Word of Shadow"},     -- Word of Shadow: AoE DD
+	ENC = {Abjuration = "Minor Shielding", Divination = "True North",     Conjuration = "Pendril's Animation",    Alteration = "Strengthen",     Evocation = "Chaotic Feedback"},   -- Chaotic Feedback: stun (face a corner)
 
 	SHD = {Abjuration = "Endure Cold",     Divination = "Sense the Dead", Conjuration = "Disease Cloud",          Alteration = "Grim Aura",      Evocation = "Word of Spirit"},
-	PAL = {Abjuration = "Yaulp",           Divination = "True North",     Conjuration = "Halo of Light",          Alteration = "Minor Healing",  Evocation = "Cease"},
+	PAL = {Abjuration = "Yaulp",           Divination = "True North",     Conjuration = "Halo of Light",          Alteration = "Minor Healing",  Evocation = "Stun"},               -- NOTE: L07 Cease (Evocation) is Luclin
 	RNG = {Abjuration = "Endure Fire",     Divination = "Glimpse",        Conjuration = "Dance of the Fireflies", Alteration = "Minor Healing",  Evocation = "Burst of Fire"},
 	BST = {Abjuration = "Fleeting Fury",   Divination = "Serpent Sight",  Conjuration = "Summon Drink",           Alteration = "Salve",          Evocation = "Blast of Frost"},
 }
@@ -189,22 +189,22 @@ function TrainSpellSkill(baseSkill)
 		specName = "Specialize Abjure"
 	end
 
-    if ((is_caster() and mq.TLO.Me.Level() >= 20) or (is_priest() and mq.TLO.Me.Level() >= 30)) and mq.TLO.Me.Skill(specName)() < mq.TLO.Me.SkillCap(specName)() then
+    if ((is_caster() and mq.TLO.Me.Level() >= 20) or (is_priest() and mq.TLO.Me.Level() >= 30)) and skill_value(specName) < skill_cap(specName) then
         -- first, train until spec is capped
 		trainSkill = specName
 	end
 
-    if trainSkill == "" and mq.TLO.Me.Skill(baseSkill)() < mq.TLO.Me.SkillCap(baseSkill)() then
+    if trainSkill == "" and skill_value(baseSkill) < skill_cap(baseSkill) then
         -- then train until base skill is capped
 		trainSkill = baseSkill
 	end
 
     if trainSkill == "" then
-        log.Debug("Capped \ag%s\ax, ending!", baseSkill)
+        log.Info("Capped \ag%s\ax, ending!", baseSkill)
         return
     end
 
-    log.Info("Training \ag%s\ax: %d/%d", trainSkill, mq.TLO.Me.Skill(trainSkill)(), mq.TLO.Me.SkillCap(trainSkill)())
+    log.Info("Training \ag%s\ax: %d/%d", trainSkill, skill_value(trainSkill), skill_cap(trainSkill))
 
 	local spell = trainSpellMatrix[class_shortname()][baseSkill]
 	if spell == nil then
@@ -212,7 +212,7 @@ function TrainSpellSkill(baseSkill)
 		return
 	end
     if not have_spell(spell) then
-        all_tellf("FATAL: i do not have required training spell [+r+]%s[+x+], cannot train %s", spell, baseSkill)
+        all_tellf("ERROR: i do not have required training spell [+r+]%s[+x+], cannot train [+y+]%s[+x+]", spell, baseSkill)
         return
     end
 
@@ -222,7 +222,7 @@ function TrainSpellSkill(baseSkill)
 		return
 	end
 
-	all_tellf("Training [+y+]%s[+x+] using spell [+g+]%s[+x+], skill %d/%d", trainSkill, spell, mq.TLO.Me.Skill(trainSkill)(), mq.TLO.Me.SkillCap(trainSkill)())
+	all_tellf("Training [+y+]%s[+x+] using spell [+g+]%s[+x+], skill %d/%d", trainSkill, spell, skill_value(trainSkill), skill_cap(trainSkill))
 
 	local tries = 0
 	local maxTries = 800
@@ -237,7 +237,7 @@ function TrainSpellSkill(baseSkill)
 
 			tries = tries + 1
 			if tries >= maxTries then
-				all_tellf("Giving up [+g+]%s[+x+] training after %d casts at %d/%d, ending!", trainSkill, tries, mq.TLO.Me.Skill(trainSkill)(), mq.TLO.Me.SkillCap(trainSkill)())
+				all_tellf("Giving up [+g+]%s[+x+] training after %d casts at %d/%d, ending!", trainSkill, tries, skill_value(trainSkill), skill_cap(trainSkill))
 				return
 			end
 		end
@@ -245,7 +245,7 @@ function TrainSpellSkill(baseSkill)
 		delay(50)
 		doevents()
 
-		if mq.TLO.Me.Skill(trainSkill)() == mq.TLO.Me.SkillCap(trainSkill)() then
+		if skill_value(trainSkill) == skill_cap(trainSkill) then
 			all_tellf("Capped [+g+]%s[+x+], ending!", trainSkill)
 			return
 		end
@@ -265,12 +265,12 @@ function TrainSpellSkill(baseSkill)
 			cmd("/pet leave")
 		end
 
-        if mq.TLO.Me.CurrentMana() < spellCost then
+        if mq.TLO.Me.CurrentMana() < spellCost or mq.TLO.Me.CurrentHPs() < 50 then
             if is_standing() then
                 log.Info("spell train: medding for %s (%s)", spell, trainSkill)
                 cmd("/sit")
             end
-            mq.delay("300s", function() return mq.TLO.Me.PctMana() >= 100 or is_standing() end)
+            mq.delay("300s", function() return (mq.TLO.Me.PctMana() >= 100 and mq.TLO.Me.PctHPs() >= 100) or is_standing() end)
         end
 
 	end
@@ -337,4 +337,5 @@ return function()
     for idx, skill in pairs(skills) do
         TrainSpellSkill(skill)
     end
+    log.Info("Train spells finished!")
 end

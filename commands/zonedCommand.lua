@@ -40,7 +40,7 @@ local function createCommand(zone, delay)
     commandQueue.Enqueue(function() execute(delay) end)
 end
 
-mq.event("zoned", "You have entered #1#.", function(text, zone) createCommand(zone, 5000) end)
+mq.event("zoned", "You have entered #1#.", function(text, zone) createCommand(zone, 4000) end)
 
 return {
     Enqueue = createCommand

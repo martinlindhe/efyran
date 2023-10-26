@@ -161,7 +161,7 @@ SpellGroups.SHM = {
         "Talisman of the Boar",                     -- L63: 60-68 sta
         "Talisman of the Brute",                    -- L57: 50 sta
     },
-    -- NOTE: dru_str exists too
+    -- NOTE: dru_str is weaker
     -- blocked by shm_focus (67 str)
     shm_str = {
         "Strength of the Diaku",                    -- L63: 35 str, 28 dex
@@ -561,7 +561,7 @@ SpellGroups.DRU = {
         "Legacy of Thorn",                          -- L59: 32 ds, 15 min
         "Legacy of Spike",                          -- L49: 24 ds, 15 min - lands on LV1
     },
-    -- NOTE: shm_str exists too
+    -- NOTE: shm_str is stronger
     dru_str = {
         "Nature's Might",                           -- L62 Nature's Might (55 str) PoP
         "Girdle of Karana",                         -- L55 Girdle of Karana (42 str) Kunark

@@ -1347,29 +1347,56 @@ function drop_invis()
     end
 end
 
--- Do I have the skill `name`?
+-- Do I have the skill/language `name`?
 ---@param name string
 ---@return boolean
 function have_skill(name)
+    if have_language(name) then
+        return true
+    end
     return mq.TLO.Me.Skill(name)() > 0
 end
 
--- Return my skill value.
+-- Return my skill/language value.
 ---@param name string Kick, Taunt etc.
 ---@return integer|nil
 function skill_value(name)
+    if have_language(name) then
+        return language_value(name)
+    end
     return mq.TLO.Me.Skill(name)()
 end
 
--- Return my skill cap.
+-- Return my skill/language cap
 ---@param name string Kick, Taunt etc.
 ---@return integer|nil
 function skill_cap(name)
-    local value = mq.TLO.Skill(name).SkillCap()
-    if value == nil then
+    local cap = mq.TLO.Me.SkillCap(name)()
+    if cap == nil then
+        if have_language(name) then
+            return 100
+        end
+        all_tellf("WARN: skill cap 0 for %s", name)
         return 0
     end
-    return value
+    return cap
+end
+
+-- Do I have the language `name`?
+---@param name string
+---@return boolean
+function have_language(name)
+    if mq.TLO.Me.Language(name)() == nil then
+        return false
+    end
+    return mq.TLO.Me.Language(name)() > 0
+end
+
+-- Return my language cap
+---@param name string
+---@return integer
+function language_value(name)
+    return mq.TLO.Me.LanguageSkill(name)()
 end
 
 ---@param name string
@@ -2388,7 +2415,7 @@ function memorize_spell(spellRow, defaultGem)
     if mq.TLO.Me.Gem(gem).Name() ~= nameWithRank then
         log.Info("Memorizing \ag%s\ax in gem %d (had \ay%s\ax)", nameWithRank, gem, mq.TLO.Me.Gem(gem).Name())
         mq.cmdf('/memorize "%s" %d', nameWithRank, gem)
-        mq.delay(5000, function() return mq.TLO.Me.Gem(nameWithRank)() ~= nil end)
+        mq.delay("10s", function() return mq.TLO.Me.Gem(nameWithRank)() ~= nil end)
 
         local waitForReady = mq.TLO.Spell(o.Name).RecoveryTime()
         mq.delay(waitForReady)

@@ -62,7 +62,7 @@ local function createAssistOnCommand(...)
     spawn = spawn_from_id(spawnID)
 
     if spawn == nil or spawn() == nil or spawn.Type() == "PC" then
-        log.Warn("GIVING UP ASSIST CALL ON %s %s, filter %s", tostring(spawnID), tostring(spawn.Name()), tostring(filter))
+        log.Warn("GIVING UP ASSIST CALL ON %s %s, filter %s", tostring(spawnID), tostring(spawn.Name() or ""), tostring(filter))
         return
     end
 

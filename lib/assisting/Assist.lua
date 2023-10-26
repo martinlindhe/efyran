@@ -137,13 +137,22 @@ end
 ---@param spawnID integer
 function Assist.beginKillSpawnID(spawnID)
 
-    Assist.backoff()
-
-    Assist.targetID = spawnID
-
     if spawnID == 0 then
         return
     end
+    local spawn = spawn_from_id(spawnID)
+    if spawn == nil or spawn() == nil then
+        return
+    end
+
+    if spawn.Distance() > 200 then
+        log.Debug("beginKillSpawnID: too far away %d, aborting", spawn.Distance())
+        return
+    end
+
+    Assist.backoff()
+
+    Assist.targetID = spawnID
 
     log.Info("Assist.beginKillSpawnID %d", spawnID)
 
@@ -158,11 +167,6 @@ function Assist.beginKillSpawnID(spawnID)
     end
 
     if melee then
-        local spawn = spawn_from_id(spawnID)
-        if spawn == nil or spawn() == nil then
-            return
-        end
-
         if botSettings.settings.assist.melee_distance == "auto" then
             local mult = 0.5  -- XXX too far in riftseekers with 0.75. XXX cant disarm in riftseekers with 0.60
             if is_tank() then

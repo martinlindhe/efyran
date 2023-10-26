@@ -27,7 +27,7 @@ local function execute()
     if s ~= "" then
         all_tellf(s)
     else
-        all_tellf("OK: All languages capped")
+        all_tellf("[+g+]OK: All languages capped[+y+]")
     end
 end
 

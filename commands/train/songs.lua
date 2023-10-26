@@ -54,7 +54,8 @@ return function()
 
     local songs = {
         ["Singing"] = "Chant of Battle",                            -- L01
-        ["Brass Instruments"] = "McVaxius' Berserker Crescendo",    -- L42 lowest non-detrimental song
+        --["Brass Instruments"] = "McVaxius' Berserker Crescendo",    -- L42 lowest non-detrimental song
+        ["Brass Instruments"] = "Denon's Disruptive Discord",       -- L18 PBAE DoT
         ["Percussion Instruments"] = "Elemental Rhythms",           -- L09
         ["Stringed Instruments"] = "Hymn of Restoration",           -- L06
         ["Wind Instruments"] = "Tarew's Aquatic Ayre",              -- L16

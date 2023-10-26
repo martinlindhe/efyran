@@ -11,8 +11,10 @@ local function autoMapHeightFilter()
         lavastorm = { min = 100, max = 100},
         unrest = { min = 9, max = 9},
         felwithea = { min = 10, max = 10},
+        highpasshold = { min = 25, max = 25},
         highkeep = { min = 10, max = 10},
         blackburrow = { min = 10, max = 10},
+        freporte = { min = 30, max = 30},
 
         -- kunark?
         chardok = {min = 60, max = 60},
@@ -49,7 +51,7 @@ local function autoMapHeightFilter()
 
     -- NOTE: this need recent macroquest, past july 25 2023 for the SetText
     mq.TLO.Window("MVW_MapToolBar/MVW_MinZEditBox").SetText(string.format("%d", data.min))
-    mq.TLO.Window("MVW_MapToolBar/MVW_MinZEditBox").SetText(string.format("%d", data.min))
+    mq.TLO.Window("MVW_MapToolBar/MVW_MaxZEditBox").SetText(string.format("%d", data.max))
 
     -- if Height Filter button is not enabled, then enable it !
     if not unknown then

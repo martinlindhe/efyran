@@ -166,14 +166,15 @@ local function lootCorpse()
     end
 
     if corpse.Items() > 0 then
-        log.Debug("Looting \ay%s\ax with \ay%d\ax items", name, corpse.Items())
-        for i=1,corpse.Items() do
+        local itemCount = corpse.Items()
+        log.Debug("Looting \ay%s\ax with \ay%d\ax items", name, itemCount)
+        for i = 1, itemCount do
             if corpse() == nil or corpse == nil then
                 all_tellf("UNLIKELY: corpse poofed while looting item %d", i)
                 break
             end
             local item = corpse.Item(i) --[[@as item]]
-            --log.Debug("Checking corpse item %s (%d/%d)", item.Name(), i, corpse.Items())
+            --log.Debug("Checking corpse item %s (%d/%d)", item.Name(), i, itemCount)
 
             if (mq.TLO.Me.FreeInventory() < 1 and not item.Stackable())
                 or (mq.TLO.Me.FreeInventory() == 0 and item.Stackable() and item.FreeStack() == 0) then
@@ -182,7 +183,7 @@ local function lootCorpse()
             end
 
             if canLootItem(item) then
-                log.Debug("Looting %s (%d/%d)", item.ItemLink("CLICKABLE")(), i, corpse.Items())
+                log.Debug("Looting %s (%d/%d)", item.ItemLink("CLICKABLE")(), i, itemCount)
                 lootItem(i)
             end
             --log.Debug("Done looting slot %d", i)

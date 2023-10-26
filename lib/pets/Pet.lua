@@ -170,11 +170,16 @@ function Pet.ConfigureAfterZone()
         return
     end
     if botSettings.settings.pet.taunt ~= nil and botSettings.settings.pet.taunt then
+        all_tellf("[+y+]PET TAUNT IS ON[+x+]")
         cmd("/squelch /pet taunt on")
     else
         cmd("/squelch /pet taunt off")
     end
-    cmd("/squelch /pet ghold on")
+    if have_alt_ability("Pet Discipline") then
+        cmd("/squelch /pet ghold on")
+    else
+        cmd("/squelch /pet hold")
+    end
 
     cmd("/squelch /pet follow")
 end
