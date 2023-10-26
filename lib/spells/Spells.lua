@@ -279,8 +279,15 @@ function memorizeListedSpells()
         delay(100)
     end
 
+    local usedGems = {}
     for spellRow, gem in pairs(botSettings.settings.gems) do
-        memorize_spell(spellRow, gem)
+        if usedGems[gem] ~= nil then
+            all_tellf("[+r+]PEER SETTINGS ERROR[+x+]: duplicate gem slot %d used by [+y+]%s[+x+] and [+y+]%s[+x+]", gem, usedGems[gem], spellRow)
+            cmd("/beep")
+        else
+            memorize_spell(spellRow, gem)
+            usedGems[gem] = spellRow
+        end
     end
 
     if window_open("SpellBookWnd") then

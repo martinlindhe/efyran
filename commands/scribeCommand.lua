@@ -131,16 +131,18 @@ end
 local function execute()
 
     if is_melee() or is_hybrid() then
-        log.Info("TODO scribe tomes!!!")
+        log.Error("TODO scribe tomes!!!")
         --/call ScribeTomes
     end
 
     if is_caster() or is_priest() or is_hybrid() or is_brd() then
-        log.Info("Scribing spells !")
+        log.Info("Scribing spells in inventory ...")
         scribeSpells()
     end
 
-    -- TODO 1: list all spells in inventory, see if they are DUPES or TOO HIGH LEVEL
+    -- TODO: list all spells in inventory, see if they are DUPES or TOO HIGH LEVEL
+
+    -- TODO: look in bank for more spells that can be scribed and warn about it
 end
 
 local function createCommand(distance)

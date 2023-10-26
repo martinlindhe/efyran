@@ -112,18 +112,26 @@ SpellGroups.SHM = {
         "Malaisement",                              -- L34: -40 cr, -40 mr, -40 fr, cost 100 mana
         "Malaise",                                  -- L19: -20 cr, -20 mr, -20 fr, cost 60 mana
     },
-    shm_disease_resist = {
-        "Talisman of the Tribunal",                 -- L62 Talisman of the Tribunal (65 dr, 65 pr, group) PoP
-        "Talisman of Epuration",                    -- L58 Talisman of Epuration (55 dr, 55 pr, group) Luclin
-        "Talisman of Jasinth",                      -- L50 Talisman of Jasinth (45 dr, group) Kunark
-        "Resist Disease",                           -- L34 Resist Disease (40 dr)
-        "Endure Disease",                           -- L09 Endure Disease (19-20 dr)
-    },
     -- NOTE: don't stack with Talisman of the Tribunal
     shm_poison_resist = {
         "Talisman of Shadoo",                       -- L53 Talisman of Shadoo (45 pr, group) Kunark
         "Resist Poison",                            -- L39 Resist Poison (40 pr)
         "Endure Poison",                            -- L14 Endure Poison (19-20 pr)
+    },
+    shm_disease_resist = {
+        "Talisman of the Tribunal",                 -- L62: 65 dr, 65 pr, group, PoP
+        "Talisman of Epuration",                    -- L58: 55 dr, 55 pr, group, Luclin
+        "Talisman of Jasinth",                      -- L50: 45 dr, group, Kunark
+        "Resist Disease",                           -- L34 40 dr
+        "Endure Disease",                           -- L09: 19-20 dr
+    },
+    shm_poison_cure = {
+        "Counteract Poison",                        -- L29: -8 poison counter
+        "Cure Poison",                              -- L05: -1-4 poison counter
+    },
+    shm_disease_cure = {
+        "Counteract Disease",                       -- L24: -8 disease counter
+        "Cure Disease",                             -- L01: -1-4 disease counter
     },
     shm_regen = {
         "Spirit of Perseverance",                   -- L66: 60 hp/tick, 21 min, cost 343 mana
