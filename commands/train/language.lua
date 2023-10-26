@@ -5,7 +5,7 @@ local log = require("knightlinc/Write")
 
 require("ezmq")
 
-local maxAttempts = 100 + 10 -- Skill cap is 100
+local maxAttempts = 100 + 5 -- Skill cap is 100
 
 return function()
     if not in_group() then

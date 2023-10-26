@@ -7,6 +7,24 @@ local log = require("knightlinc/Write")
 
 local timer = require("lib/Timer")
 
+-- Returns a 24-hour timestamp, in the format "HH:MM:SS".
+---@return string
+function time()
+    ---@diagnostic disable-next-line: return-type-mismatch
+    return os.date("%H:%M:%S")
+end
+
+-- Send a text to all peers
+function all_tellf(...)
+    --cmdf("/dgtell all [%s] %s", time(), string.format(...))
+    mq.cmdf("/bc [%s] %s", time(), string.format(...))
+end
+
+--- Send a text to all peers thru MQ2DanNet
+function all_tell(msg)
+    mq.cmdf("/bc [%s] %s", time(), msg)
+end
+
 local follow  = require("lib/following/Follow")
 
 local spellGroups  = require("lib/spells/SpellGroups")
@@ -1844,17 +1862,6 @@ function trim(s)
     return s:match("^%s*(.-)%s*$")
 end
 
--- Send a text to all peers thru MQ2DanNet
-function all_tell(msg)
-    mq.cmdf("/bc [%s] %s", time(), msg)
-end
-
--- Send a text to all peers thru MQ2DanNet
-function all_tellf(...)
-    --cmdf("/dgtell all [%s] %s", time(), string.format(...))
-    mq.cmdf("/bc [%s] %s", time(), string.format(...))
-end
-
 --- collect arg into query, needed for /fdi water flask to work without quotes
 function args_string(...)
     local s = ""
@@ -2011,13 +2018,6 @@ function toint(s)
         return 0
     end
     return s + 0
-end
-
--- Returns a 24-hour timestamp, in the format "HH:MM:SS".
----@return string
-function time()
-    ---@diagnostic disable-next-line: return-type-mismatch
-    return os.date("%H:%M:%S")
 end
 
 ---Performs an ingame slash action provided as a string.

@@ -99,7 +99,7 @@ function botSettings.Init()
         botSettings.settings = settings()
     elseif not file_exists(settingsFile) then
         all_tellf("PEER SETTINGS NOT FOUND, CREATING EMPTY ONE. PLEASE EDIT %s", settingsFile)
-        cmd("/beep 1")
+        mq.cmd("/beep 1")
 
         local f = assert(io.open(settingsFile, "w"))
         f:write(peerTemplate)
@@ -109,7 +109,7 @@ function botSettings.Init()
         botSettings.settings = settings()
     else
         all_tellf("FAILED TO PARSE SETTINGS FROM %s", settingsFile)
-        cmd("/beep")
+        mq.cmd("/beep")
     end
 end
 

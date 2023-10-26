@@ -187,12 +187,6 @@ function TrainSpellSkill(baseSkill)
 		return
 	end
 
-	if is_mag() and not have_pet() and baseSkill == "Alteration" then
-		-- Renew Elements: requries Pet
-		all_tellf("ERROR: MAG training Alteration must have a pet!")
-		return
-	end
-
 	local trainSkill = ""
 
 	local specName = "Specialize "..baseSkill
@@ -214,6 +208,12 @@ function TrainSpellSkill(baseSkill)
         log.Info("Capped \ag%s\ax, ending!", baseSkill)
         return
     end
+
+	if is_mag() and not have_pet() and baseSkill == "Alteration" then
+		-- Renew Elements: requries Pet
+		all_tellf("ERROR: MAG training Alteration must have a pet!")
+		return
+	end
 
     log.Info("Training \ag%s\ax: %d/%d", trainSkill, skill_value(trainSkill), skill_cap(trainSkill))
 
