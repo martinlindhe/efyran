@@ -133,6 +133,7 @@ settings.debug = true -- enable debug logging for this peer
 /playmelody <name>          - bards: play specific song set. default name is "general"
 /playmelody off             - stop melodies
 
+/gate                       - tell peer to cast the Gate spell
 /teleportbind               - WIZ: port group to bind point using "Teleport Bind" AA
 /secondaryrecall            - WIZ/DRU: port to secondary bind
 

@@ -31,10 +31,13 @@ local hailTargets = {
     ["oasis"] = { -- Oasis of Marr
         ["Translocator Tradil"] = "travel to timorous deep", -- TL to Timorous Deep
     },
+    ["timorous"] = { -- Timorous Deep
+        ["Translocator Jorbin"] = "travel to oasis", -- TL to Overthere and Oasis of Marr
+        ["Translocator Deela"] = "travel to butcherblock", -- TL to Butcherblock
+    },
     ["qey2hh1"] = { -- West Karana
         ["Melaara Tenwinds"] = "interesting ore", -- LDoN flag to get Adventurer's Stone (1/2)
     },
-
     ["potranquility"] = {
         ["Adler Fuirstel"] = "ward", -- Grummus pre-flag - outside Plane of Disease
         ["Elder Fuirstel"] = true, -- Grummus & Bert post-flag - in sickbay, hail only
@@ -219,7 +222,7 @@ function Hail.PerformHail()
     for i = 1, max do
 
         log.Info("Attempting to hail %s ... (%d/%d): %s", name, i, max, tostring(zoneTargets[name]))
-        if spawn.Distance() > 25 then
+        if spawn.Distance() > 20 then
             move_to(spawn.ID())
         end
 
@@ -266,6 +269,7 @@ function Hail.PerformHail()
 
         -- some hails result in rewards
         if clear_cursor() then
+            log.Info("PerformHail: Cleared cursor and stopped hailing")
             return
         end
 
@@ -277,6 +281,7 @@ function Hail.PerformHail()
             return
         end
     end
+    log.Info("PerformHail: Gave up")
 end
 
 return Hail

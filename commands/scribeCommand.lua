@@ -107,7 +107,7 @@ local function scribeSpells()
                 elseif mq.TLO.Me.Book(mq.TLO.InvSlot(pack).Item.Spell.Name())() then
                     log.Warn("Already have spell %s scribed. Scroll is in top level %s", mq.TLO.InvSlot(pack).Item.Name(), pack)
                 else
-                    log.Info("Scribing TOP LEVEL spell %s", mq.TLO.InvSlot(pack).Item.Name())
+                    --log.Debug("Scribing TOP LEVEL spell %s", mq.TLO.InvSlot(pack).Item.Name())
 
                     -- pick up scroll and scribe it in book
                     mq.cmdf("/nomodkey /ctrlkey /itemnotify %s leftmouseup", pack)
