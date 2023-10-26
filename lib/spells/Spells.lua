@@ -665,7 +665,7 @@ function loot_my_corpse()
     -- click loot all button
     cmd("/notify LootWnd LootAllButton leftmouseup")
     delay(30000, function() return not window_open("LootWnd") end)
-    all_tellf("\ayReady to die again!")
+    all_tellf("[+y+]Ready to die again!")
 end
 
 -- check all nearby peers if their banker is ready and use it.

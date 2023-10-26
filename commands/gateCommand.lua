@@ -4,7 +4,7 @@ local log          = require("knightlinc/Write")
 
 local function execute()
 
-    if not is_caster() or not is_priest() then
+    if not is_caster() and not is_priest() then
         log.Error("My class %s don't have the Gate spell, aborting", class_shortname())
         return
     end

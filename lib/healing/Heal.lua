@@ -153,7 +153,7 @@ function Heal.medCheck()
         return
     end
 
-    if Heal.autoMed and not follow.IsFollowing() and medTimer:expired() and is_standing() and not is_moving() then
+    if Heal.autoMed and not follow.IsFollowing() and medTimer:expired() and is_standing() and not is_moving() and nearby_player_count(50) > 1 then
         local pct = botSettings.settings.meditate
         if pct == nil then
             if is_caster() or is_priest() or is_hybrid() then
