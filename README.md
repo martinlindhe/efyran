@@ -148,6 +148,7 @@ settings.debug = true -- enable debug logging for this peer
 /coins                      - reports coin on all peers
 /banker                     - summons a banker (if possible)
 /autobank, /bankall         - autobanks loot listed in Tradeskills.ini
+/autochange, /changeall     - change currencies at banker
 /sort, /sortall             - sorts loot listed in Tradeskills.ini (move between peers)
 
 /recallgroup <name>         - recalls a group/raid formation

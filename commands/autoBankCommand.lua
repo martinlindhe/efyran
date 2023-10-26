@@ -15,7 +15,15 @@ mq.event("bank-full", "You have no room left in the bank.", function()
     bankFull = true
 end)
 
--- reads settings/tradeskills.ini and auto banks all the stuff you should have
+local function changeCurrenciesAtBanker()
+    if serverSettings.bigBank then
+        cmd("/notify BigBankWnd BIGB_ChangeButton leftmouseup")
+    else
+        cmd("/notify BankWnd BW_ChangeButton leftmouseup")
+    end
+end
+
+-- Auto-banks all the stuff you should have according to config/efyran/SERVER_tradeskills.ini
 local function autobank()
     bankFull = false
     if not open_banker() then
@@ -23,6 +31,9 @@ local function autobank()
     end
 
     clear_cursor()
+
+    -- auto-change currencies while banker is open
+    changeCurrenciesAtBanker()
 
     local depositCount = 0
 
@@ -102,20 +113,37 @@ local function autobank()
     close_bank_window()
 end
 
-local function execute()
-    autobank()
+
+-- auto-change currencies
+local function autochange()
+    if not open_banker() then
+        return
+    end
+
+    changeCurrenciesAtBanker()
+
+    close_bank_window()
 end
 
--- auto banks items from tradeskills.ini
-local function createCommand()
-    commandQueue.Enqueue(function() execute() end)
-end
 
-bind("/autobank", createCommand)
+bind("/autobank", function()
+    commandQueue.Enqueue(function() autobank() end)
+end)
 
 mq.bind("/bankall", function()
     if is_orchestrator() then
         bci.ExecuteZoneCommand("/autobank")
     end
     cmd("/autobank")
+end)
+
+bind("/autochange", function()
+    commandQueue.Enqueue(function() autochange() end)
+end)
+
+mq.bind("/changeall", function()
+    if is_orchestrator() then
+        bci.ExecuteZoneCommand("/autochange")
+    end
+    cmd("/autochange")
 end)
