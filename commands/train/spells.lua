@@ -168,7 +168,7 @@ function getSpellMatrix()
         SHD = {Abjuration = "Endure Cold",     Divination = "Sense the Dead", Conjuration = "Disease Cloud",          Alteration = "Grim Aura",      Evocation = "Word of Spirit"},
         PAL = {Abjuration = "Yaulp",           Divination = "True North",     Conjuration = "Halo of Light",          Alteration = "Minor Healing",  Evocation = "Stun"},
         RNG = {Abjuration = "Endure Fire",     Divination = "Glimpse",        Conjuration = "Dance of the Fireflies", Alteration = "Minor Healing",  Evocation = "Burst of Fire"},
-        BST = {Abjuration = "Fleeting Fury",   Divination = "Serpent Sight",  Conjuration = "Summon Drink",           Alteration = "Salve",          Evocation = "Blast of Frost"},
+        BST = {Abjuration = "Fleeting Fury",   Divination = "Serpent Sight",  Conjuration = "Summon Drink",           Alteration = "Minor Healing",  Evocation = "Blast of Frost"},
     }
 
     if is_pal() and have_spell("Cease") then

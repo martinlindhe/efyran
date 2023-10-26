@@ -1546,6 +1546,7 @@ SpellGroups.BST = {
         "Healing",                                  -- L36 Healing (135-175 hp, cost 65 mana)
         "Light Healing",                            -- L20 Light Healing (47-65 hp, cost 28 mana)
         "Minor Healing",                            -- L06 Minor Healing (12-20 hp, cost 10 mana)
+        "Salve",                                    -- L01 Salve (5-9 hp, cost 8 mana), GoD
     },
     bst_posion_dot = {
         "Turepta Blood",                            -- L65 Turepta Blood (168/tick, poison, cost 377 mana)
