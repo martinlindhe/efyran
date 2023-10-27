@@ -868,6 +868,13 @@ function QoL.Tick()
         delay(100)
     end
 
+    -- auto skill-up Forage
+    if not in_combat() and not obstructive_window_open() and skill_value("Forage") > 0 and skill_value("Forage") < skill_cap("Forage") and is_ability_ready("Forage") then
+        log.Info("Training Forage")
+        cmd('/doability "Forage"')
+        delay(100)
+    end
+
     if is_wiz() and have_pet() then
         cmd("/pet get lost")
     end
