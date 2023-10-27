@@ -28,7 +28,7 @@ local function bind_group()
         cmd("/stand")
     end
 
-    mq.cmdf('/memorize "%s" %d', spellName, gem)
+    memorize_spell(spellName, gem)
 
     local spell = mq.TLO.Spell(spellName)
 
@@ -77,3 +77,10 @@ local function createCommand(distance)
 end
 
 bind("/bindgroup", createCommand)
+
+mq.bind("/bindall", function()
+    if is_orchestrator() then
+        bci.ExecuteZoneCommand("/bindgroup")
+    end
+    cmd("/bindgroup")
+end)

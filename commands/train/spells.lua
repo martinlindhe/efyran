@@ -87,7 +87,7 @@ function VerifySpecialization()
 				return false, currentSpec
 			end
 			if spec ~= currentSpec and currentSkill > 50 then
-				all_tellf("ERROR: Specialization is [+r+]%s[+x+], expected [+y+]%s[+x+] (need re-specialization quest to reset)", currentSpec, spec)
+				all_tellf("WARNING: Specialization is [+r+]%s[+x+], expected [+y+]%s[+x+] (need re-specialization quest to reset)", currentSpec, spec)
 				return false, ""
 			end
 		end
@@ -235,7 +235,13 @@ function TrainSpellSkill(baseSkill)
 		return
 	end
 
-	all_tellf("Training [+y+]%s[+x+] using spell [+g+]%s[+x+], skill %d/%d", trainSkill, spell, skill_value(trainSkill), skill_cap(trainSkill))
+    local link = mq.TLO.LinkDB("=Spell: "..spell)()
+    local spellName = spell
+    if link ~= nil then
+        spellName = link
+    end
+
+    all_tellf("Training [+y+]%s[+x+] using %s, skill %d/%d", trainSkill, spellName, skill_value(trainSkill), skill_cap(trainSkill))
 
 	local tries = 0
 	local maxTries = 800

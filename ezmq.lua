@@ -105,8 +105,8 @@ function move_to(spawnID)
         mq.cmdf("/afollow spawn %d", spawnID)
     end
 
-    mq.delay(30000, function() -- 30s
-        return spawn == nil or spawn() == nil or spawn.Distance() < dist
+    mq.delay("120s", function()
+        return spawn == nil or spawn() == nil or spawn.Distance() < dist or not mq.TLO.Navigation.Active()
     end)
 
     -- abort our given move-to commands
