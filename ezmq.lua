@@ -1833,7 +1833,7 @@ end
 function drop_all_buffs()
     for i = 1, mq.TLO.Me.MaxBuffSlots() do
         if mq.TLO.Me.Buff(i).ID() ~= nil then
-            log.Debug("Removing buff %s", mq.TLO.Me.Buff(i).Name())
+            --log.Debug("Removing buff %s", mq.TLO.Me.Buff(i).Name())
             mq.cmdf('/removebuff "%s"', mq.TLO.Me.Buff(i).Name())
         end
     end

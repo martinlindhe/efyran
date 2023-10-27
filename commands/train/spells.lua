@@ -231,7 +231,7 @@ function TrainSpellSkill(baseSkill)
 
     if is_enc() and baseSkill == "Conjuration" and inventory_item_count("Tiny Dagger") == 0 then
         -- Pendril's Animation: Tiny Dagger reagent
-        all_tellf("ERROR: missing [+r+]Tiny Dagger[+x+] reagent")
+        all_tellf("ERROR: Cannot train [+r+]%s[+x+] using %s, missing [+r+]Tiny Dagger[+x+] reagent", baseSkill, spell)
         return
     end
 
@@ -248,7 +248,7 @@ function TrainSpellSkill(baseSkill)
     local spellCost = mq.TLO.Spell(spell).Mana() + 50
 
     while true do
-        RemoveTrainSpellBlockerBuffs()
+        drop_all_buffs()
         memorize_spell(spell, 1)
 
         if not is_casting() and is_spell_ready(spell) then
@@ -292,43 +292,6 @@ function TrainSpellSkill(baseSkill)
             mq.delay("300s", function() return (mq.TLO.Me.PctMana() >= 100 and mq.TLO.Me.PctHPs() >= 100) or is_standing() end)
         end
 
-    end
-end
-
--- click off buffs that may block cast of training spells
-function RemoveTrainSpellBlockerBuffs()
-    local blockers = {
-        "Shielding",
-        "Major Shielding",
-        "Arch Shielding",
-        "Greater Shielding",
-        "Shield of the Magi",
-        "Blessing of Temperance",
-        "Protection of the Cabbage",
-        "Protection of the Nine",
-        "Blessing of the Nine",
-        "Steeloak Skin",
-        "Blessing of Steeloak",
-        "Focus of Soul",
-        "Focus of the Seventh",
-        "Talisman of Wunshi",
-        "Wunshi's Focusing",
-        "Strength of Tunare",
-        "Flight of Eagles",
-        "Koadic's Endless Intellect",
-        "Voice of Quellious",
-        "Voice of Clairvoyance",
-        "Clairvoyance",
-        "Temperance",
-        "Blessing of Aegolism",
-        "Hand of Virtue",
-        "Hand of Conviction",
-    }
-    for _, blocker in pairs(blockers) do
-        if have_buff(blocker) then
-            log.Info("Removing buff \ag%s\ax", blocker)
-            cmdf('/removebuff "%s"', blocker)
-        end
     end
 end
 
