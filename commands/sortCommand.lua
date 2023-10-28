@@ -58,6 +58,11 @@ local function handOverComponents(itemType, reciever)
         return
     end
 
+    if window_open("TradeWnd") then
+        log.Info("Trade window is already open, aborting ...")
+        return
+    end
+
     local count = 0
     for bag = 1, mq.TLO.Me.NumBagSlots() do
         local pack = string.format("pack%d", bag)

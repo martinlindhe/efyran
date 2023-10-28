@@ -79,7 +79,7 @@ end
 -- Sells all items in inventory that's marked for selling
 local function sellItems()
     bard.pauseMelody()
-    open_bags()
+    --open_bags()
     clear_cursor(true)
 
     local startX = mq.TLO.Me.X()
@@ -116,7 +116,7 @@ local function sellItems()
         merchant.CloseMerchant()
     end
 
-    close_bags()
+    --close_bags()
     bard.resumeMelody()
 
     move_to_loc(startY, startX, startZ)

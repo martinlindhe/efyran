@@ -31,6 +31,8 @@ end
 
 -- refreshes buff on self or another bot, returns true if buff was cast
 -- only refreshes fading & missing buffs
+---@param buffItem string spell row
+---@param spawn spawn
 function refreshBuff(buffItem, spawn)
 
    --print("refreshBuff ", buffItem, ", target Name:", spawn.CleanName())
@@ -46,12 +48,12 @@ function refreshBuff(buffItem, spawn)
 
     local spawnID = spawn.ID()
 
-    if not spellConfigAllowsCasting(buffItem, spawn) then
+    local spellConfig = parseSpellLine(buffItem)
+
+    if not spellConfigAllowsCasting(spellConfig, spawn) then
         --print("wont allow casting ", buffItem)
         return false
     end
-
-    local spellConfig = parseSpellLine(buffItem)
 
     local spell = getSpellFromBuff(spellConfig.Name)
     if spell == nil then
@@ -156,39 +158,29 @@ function refreshBuff(buffItem, spawn)
     return castSpell(spellName, spawnID)
 end
 
--- XXX refactor more. need to be usable with pet buffs too (should take a spawn id instead of bot name, and then derive if its a bot in zone or a pet)
----@param spawn spawn
+---@param spellConfig SpellObject
 ---@return boolean
-function spellConfigAllowsCasting(buffItem, spawn)
+function spellConfigAllowsCasting(spellConfig, spawn)
 
     if spawn == nil then
-        all_tellf("ERROR: spellConfigAllowsCasting called with nil spawn for %s", buffItem)
+        all_tellf("ERROR: spellConfigAllowsCasting called with nil spawn for %s", spellConfig)
         cmd("/beep 1")
         return false
     end
 
-    local spellConfig = parseSpellLine(buffItem)
-
     local spell = getSpellFromBuff(spellConfig.Name)
     if spell == nil then
-        --eg missing clicky while naked
+        --eg. missing clicky while naked
         --cmd("/dgtell all spellConfigAllowsCasting: getSpellFromBuff ", buffItem, " FAILED. Query = '"..spellConfig.Name.."'")
         return false
     end
 
     --print("spellConfigAllowsCasting ", buffItem, " ", spawn.Name(), ", spell ", spell.Name())
 
-    -- AERange is used for group spells
-    if spell.TargetType() == "Group v2" then
-        if spawn.Distance() >= spell.AERange() then
-            --log.Debug("cant rebuff (%s), toon too far away: %s %s spell range = %d, spawn distance = %d", spell.TargetType(), buffItem, spawn.CleanName(), spell.Range(), spawn.Distance())
-            return false
-        end
-    else
-        if spell.TargetType() ~= "Self" and spawn.Distance() >= spell.Range() then
-            --log.Error("cant rebuff (%s), toon too far away: %s %s spell range = %d, spawn distance = %d", spell.TargetType(), buffItem, spawn.CleanName(), spell.Range(), spawn.Distance())
-            return false
-        end
+    if spell.TargetType() == "Group v2" and spawn.Distance() >= spell.AERange() then
+        return false
+    elseif spell.TargetType() ~= "Self" and spawn.Distance() >= spell.Range() then
+        return false
     end
 
     if spawn.ID() == mq.TLO.Me.ID() then
@@ -236,12 +228,9 @@ function spellConfigAllowsCasting(buffItem, spawn)
             end
         end
     end
-    if spellConfig.Reagent ~= nil then
-        -- if we lack this item, then skip.
-        if inventory_item_count(spellConfig.Reagent) == 0 then
-            all_tellf("SKIP BUFFING %s , out of reagent %s", spellConfig.Name, spellConfig.Reagent)
-            return false
-        end
+    if spellConfig.Reagent ~= nil and inventory_item_count(spellConfig.Reagent) == 0 then
+        all_tellf("SKIP BUFFING %s with %s, out of reagent %s", spawn.Name(), spellConfig.Name, spellConfig.Reagent)
+        return false
     end
 
     return true

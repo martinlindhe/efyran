@@ -377,7 +377,7 @@ function healPeer(spell_list, peer, pct)
         elseif not matches_filter(heal, mq.TLO.Me.Name()) then
             --log.Debug("healPeer skip heal %s (%s), not matching ONLY filter %s", peer, spellConfig.Name, heal)
         elseif peer_hp(peer) >= 98 then
-            log.Info("Skipping heal! \ag%s\ax was %d %%, is now %d %%", peer, pct, peer_hp(peer))
+            --log.Info("Skipping heal! \ag%s\ax was %d %%, is now %d %%", peer, pct, peer_hp(peer))
         elseif have_spell(spellConfig.Name) and not have_mana_for_spell(spellConfig.Name) then
             log.Debug("Want to heal %s with %s but OOM (have %d mana)", peer, spellConfig.Name, mq.TLO.Me.CurrentMana())
         elseif is_memorized(spellConfig.Name) and not is_spell_ready(spellConfig.Name) then

@@ -1610,10 +1610,13 @@ function parseSpellLine(s)
     if spellGroups[class_shortname()] ~= nil then
         local spellGroup = spellGroups[class_shortname()][o.Name]
         if spellGroup ~= nil then
-            local spellName = findBestSpellFromSpellGroup(o.Name)
-            if spellName ~= nil then
-                o.spellGroup = o.Name
-                o.Name = spellName
+            local spellObj = findBestSpellFromSpellGroup(o.Name)
+            if spellObj ~= nil then
+                local groupName = o.Name
+                for k, v in pairs(spellObj) do
+                    o[k] = v
+                end
+                o.spellGroup = groupName
             else
                 all_tellf("ERROR: parseSpellLine: did not find a best spell for [+r+]spellGroups.%s.%s[+x+]", class_shortname(), o.Name)
             end
@@ -2196,7 +2199,7 @@ function castSpellAbility(spawnID, row, callback)
         end
         if not matches_filter(row, filterSpawn) then
             -- so nukes with "/Not|raid" works, check vs PEER and not TARGET
-            log.Info("SKIP cast %s (filterSpawn \ay%s\ax, target \ay%s\ax), not matching %s", spell.Name, filterSpawn, spawn.Name(), row)
+            log.Debug("SKIP cast %s (filterSpawn \ay%s\ax, target \ay%s\ax), not matching %s", spell.Name, filterSpawn, spawn.Name(), row)
             return false
         end
 
@@ -2422,7 +2425,9 @@ function memorize_spell(spellRow, defaultGem)
         return nil
     end
 
-    if obstructive_window_open() then
+    if mq.TLO.Corpse.Open() or window_open("MerchantWnd") or window_open("GiveWnd")
+    or window_open("BankWnd") or window_open("BigBankWnd") or window_open("LootWnd")
+    or window_open("tradewnd") or window_open("ConfirmationDialogBox") then
         log.Error("Cannot memorize %s, obstructive window is open!", o.Name)
         return nil
     end

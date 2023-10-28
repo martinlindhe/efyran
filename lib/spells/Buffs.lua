@@ -462,29 +462,29 @@ function handleBuffRequest(req)
         return false
     end
 
-    local spellName = findBestSpellFromSpellGroup(req.Buff)
-    if spellName == nil then
+    local spellObj = findBestSpellFromSpellGroup(req.Buff)
+    if spellObj == nil then
         all_tellf("ERROR: handleBuffRequest: did not find spellGroups.%s entry %s", class_shortname(), req.Buff)
         return false
     end
 
-    if spellConfigAllowsCasting(spellName, spawn) then
-        if not req.Force and peer_has_buff(req.Peer, spellName) then
-            log.Info("handleBuffRequest: Skip \ag%s\ax %s (%s), they have buff already.", spawn.Name(), spellName, req.Buff)
+    if spellConfigAllowsCasting(spellObj, spawn) then
+        if not req.Force and peer_has_buff(req.Peer, spellObj.Name) then
+            log.Info("handleBuffRequest: Skip \ag%s\ax %s (%s), they have buff already.", spawn.Name(), spellObj.Name, req.Buff)
             return false
         end
 
-        log.Info("Buffing \ag%s\ax with \ay%s\ax (\ay%s\ax).", spawn.Name(), spellName, req.Buff)
-        castSpellRaw(spellName, spawn.ID(), "-maxtries|3")
+        log.Info("Buffing \ag%s\ax with \ay%s\ax (\ay%s\ax).", spawn.Name(), spellObj.Name, req.Buff)
+        castSpellRaw(spellObj.Name, spawn.ID(), "-maxtries|3")
         delay(100)
         doevents()
         delay(10000, function()
             if not is_casting() then
                 return true
             end
-            if not req.Force and peer_has_buff(req.Peer, spellName) then
+            if not req.Force and peer_has_buff(req.Peer, spellObj.Name) then
                 -- abort if they got the buff while we are casting
-                log.Info("handleBuffRequest: Peer %s has buff %s, ducking.", req.Peer, spellName)
+                log.Info("handleBuffRequest: Peer %s has buff %s, ducking.", req.Peer, spellObj.Name)
                 cmdf("/interrupt")
                 return true
             end
@@ -494,9 +494,9 @@ function handleBuffRequest(req)
     return false
 end
 
--- Returns the name of the first available spell
+-- Returns the spell data of the first available spell
 ---@param groupName string
----@return string|nil
+---@return SpellObject|nil
 function findBestSpellFromSpellGroup(groupName)
     local buffRows = spellGroups[class_shortname()][groupName]
     if buffRows == nil then
@@ -513,7 +513,7 @@ function findBestSpellFromSpellGroup(groupName)
             return nil
         end
         if have_spell(spellConfig.Name) then
-            return spell.RankName()
+            return spellConfig
         end
     end
     return nil
