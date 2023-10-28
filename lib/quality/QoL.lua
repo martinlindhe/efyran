@@ -874,7 +874,7 @@ function QoL.Tick()
     end
 
     -- auto skill-up Forage
-    if not in_combat() and not obstructive_window_open() and skill_value("Forage") > 0 and skill_value("Forage") < skill_cap("Forage") and is_ability_ready("Forage") then
+    if not in_combat() and not obstructive_window_open() and free_inventory_slots() > 0 and skill_value("Forage") > 0 and skill_value("Forage") < skill_cap("Forage") and is_ability_ready("Forage") then
         log.Info("Training Forage")
         cmd('/doability "Forage"')
         delay(100)

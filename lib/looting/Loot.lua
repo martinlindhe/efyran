@@ -54,7 +54,6 @@ local function canLootItem(item)
 
     if alreadyHaveLoreItem(item) then
         all_tellf("%s is [LORE] and I already have one.", item.ItemLink("CLICKABLE")())
-        mq.cmd("/beep 1")
         return false
     end
 
@@ -250,7 +249,7 @@ local function lootNearestCorpse(seekRadius)
             all_tellf("WARN: Unable to locate or target corpse id <%s>", corpse.ID())
         end
 
-        bard.resumeMelody()
+        bard.resumeMelody(true)
         move_to_loc(startY, startX, startZ)
     end
     return ok

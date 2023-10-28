@@ -1,6 +1,10 @@
 local mq = require("mq")
-local commandQueue = require("lib/CommandQueue")
 local log = require("knightlinc/Write")
+
+local commandQueue = require("lib/CommandQueue")
+
+local broadCastInterfaceFactory = require("broadcast/broadcastinterface")
+local bci = broadCastInterfaceFactory()
 
 local tradeskillsIni = efyranConfigDir() .. "\\" .. current_server() .. "__Tradeskills.ini"
 
@@ -154,3 +158,10 @@ local function createCommand()
 end
 
 bind("/sort", createCommand)
+
+mq.bind("/sortall", function()
+    if is_orchestrator() then
+        bci.ExecuteZoneCommand("/sort")
+    end
+    cmd("/sort")
+end)

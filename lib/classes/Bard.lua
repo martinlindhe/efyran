@@ -70,14 +70,15 @@ function Bard.UpdateMQ2MedleyINI()
     cmd("/medley reload")
 end
 
-function Bard.resumeMelody()
+---@param quiet boolean|nil
+function Bard.resumeMelody(quiet)
     if not is_brd() then
         return
     end
     if Bard.currentMelody == "" then
-        Bard.PlayMelody(defaultMelody)
+        Bard.PlayMelody(defaultMelody, quiet)
     elseif Bard.currentMelody ~= "" and not is_casting() then
-        Bard.PlayMelody(Bard.currentMelody)
+        Bard.PlayMelody(Bard.currentMelody, quiet)
     end
 end
 
@@ -90,7 +91,8 @@ end
 
 -- memorizes and sings a set of songs defined in peer settings.songs
 ---@param name string name of song set
-function Bard.PlayMelody(name)
+---@param quiet boolean|nil
+function Bard.PlayMelody(name, quiet)
 
     if botSettings.settings.songs == nil then
         all_tellf("ERROR no bard songs declared")
@@ -126,7 +128,9 @@ function Bard.PlayMelody(name)
     end
 
     cmdf("/medley efyran-%s", name)
-    all_tellf("Playing melody [+y+]%s[+x+].", name)
+    if not quiet then
+        all_tellf("Playing melody [+y+]%s[+x+].", name)
+    end
 
     Bard.currentMelody = name
 end

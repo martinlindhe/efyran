@@ -1168,7 +1168,7 @@ function clear_cursor(force)
 
         if not force and obstructive_window_open() then
             if cursor() ~= nil then
-                log.Warn("clear_cursor: aborting with %s on cursor!, obstructive window is open")
+                log.Warn("clear_cursor: aborting with %s on cursor!, obstructive window is open", cursor.Name())
             end
             return false
         end
@@ -2174,7 +2174,7 @@ function castSpellAbility(spawnID, row, callback)
     if spawn ~= nil and spawn() ~= nil then
         if spell.MaxHP ~= nil and spawn.PctHPs() > spell.MaxHP then
             -- eg. Snare mob at low health
-            log.Debug("SKIP MaxHP %s, %d vs required %d", spell.Name, spawn.PctHPs(), spell.MaxHP)
+            log.Debug("SKIP MaxHP %s, %d %% HP vs required %d", spell.Name, spawn.PctHPs(), spell.MaxHP)
             return false
         end
 

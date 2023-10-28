@@ -10,7 +10,7 @@ end)
 
 -- loot up several  nearby corpses at once
 local function execute()
-    local seekRadius = 100
+    local seekRadius = 60
     local maxTries = 50
 
     local tries = 0
