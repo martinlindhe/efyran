@@ -230,7 +230,7 @@ local function lootNearestCorpse(seekRadius)
     local ok = true
     if corpse() ~= nil then
         if EnsureTarget(corpse.ID()) then
-            if corpse.Distance() > 16 and corpse.DistanceZ() < 80 then
+            if corpse.Distance() >= 15 and corpse.DistanceZ() < 80 then
                 move_to(corpse.ID())
             end
 
@@ -238,7 +238,7 @@ local function lootNearestCorpse(seekRadius)
                 log.Debug("lootNearestCorpse: giving up, corpse poofed")
                 return false
             end
-            if corpse.Distance() <= 20 and corpse.DistanceZ() < 40 and EnsureTarget(corpse.ID()) then
+            if corpse.Distance() < 15 and corpse.DistanceZ() < 40 and EnsureTarget(corpse.ID()) then
                 if not lootCorpse() then
                     ok = false
                 end

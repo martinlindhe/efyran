@@ -1004,6 +1004,24 @@ SpellGroups.MAG = {
         "Flame Flux",                               -- L22 Flame Flux (89-96 hp, aerange 20, recast 6s, cost 123 mana)
         "Fire Flux",                                -- L01 Fire Flux (8-12 hp, aerange 20, recast 6s , cost 23 mana)
     },
+    mag_pet_weapon = {
+        "Dagger of Symbols",                        -- L39: 5/20 1hp
+        "Sword of Runes",                           -- L29: 7/27 1hs, proc Ward Summoned
+        "Spear of Warding",                         -- L20: 6/27 1hp, 5 fr, 5 cr
+        "Summon Fang",                              -- L12: 5/26 1hp
+        "Summon Dagger",                            -- L01: 3/21 1hp
+    },
+    mag_pet_gear = {
+        "Muzzle of Mardu",                          -- L56: 11% haste
+    },
+    mag_summoned_clickies = {
+        "Modulating Rod",                           -- L44: + xxx mana
+        "Summon Ring of Flight",                    -- L39: xxx levi
+        "Staff of Symbols",                         -- L34: 10/34 2hb, click See Invisible (4 charges)
+        "Staff of Runes",                           -- L24: 9/36 2hb, click Cancel Magic (1 charge)
+        "Staff of Warding",                         -- L16: 8/38 2hb, click Gaze (5 charges)
+        "Staff of Tracing",                         -- L08: 7/40 2hb, click Flare (2 charges)
+    },
     mag_epic2 = {
         "Focus of Primal Elements",                 -- epic 2.0: hp 1000, mana 12/tick, hp 24/tick, proc Primal Fusion Strike, defensive proc Primal Fusion Parry, 20 min (34 min with ext duration)
         "Staff of Elemental Essence",               -- epic 1.5: hp  800, mana 10/tick, hp 20/tick, proc Elemental Conjunction Strike, defensive proc Elemental Conjunction Parry
