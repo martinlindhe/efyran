@@ -1324,10 +1324,10 @@ SpellGroups.RNG = {
         "Strength of Nature",                       -- L51: 25 atk, 75 hp, single, cost 125 mana, Velious
     },
     rng_atk = {
-        "Howl of the Predator",                     -- L69: slot 2: 90 atk, slot 9: double atk 3-20%, group
-        "Spirit of the Predator",                   -- L64: slot 2: 70 atk, group
-        "Call of the Predator",                     -- L60: slot 2: 40 atk, group
-        "Mark of the Predator",                     -- L56: slot 2: 20 atk, group
+        "Howl of the Predator",                     -- L69: slot 2: 90 atk, slot 9: double atk 3-20%, group, OOW
+        "Spirit of the Predator",                   -- L64: slot 2: 70 atk, group, PoP
+        "Call of the Predator",                     -- L60: slot 2: 40 atk, group, Velious
+        "Mark of the Predator",                     -- L56: slot 2: 20 atk, group, Luclin
     },
     rng_ds = {
         "Guard of the Earth",                       -- L67: slot 2: 13 ds, slot 3: 49 ac
@@ -1659,9 +1659,29 @@ SpellGroups.BRD = {
         "Cantata of Replenishment",                 -- L55: Original
         "Cantana of Soothing",                      -- L34: 4 hp/tick, 5 mana/tick, Velious
     },
+    brd_haste = {
+        "Jonthan's Inspiration",                    -- L58: singing, 61-63% haste, 17-18 str, 15-16 atk, Kunark
+        "Vilia's Chorus of Celerity",               -- L54: singing, 45% haste, Kunark
+        "Verses of Victory",                        -- L50: singing, 30% haste, 30 agi, 30 str, 15 ac, Original
+        "Jonthan's Provocation",                    -- L45: singing, 48-50% haste, 13-19 str, 13-19 atk, Original
+        "Vilia's Verses of Celerity",               -- L36: singing, 20% haste, 23-40 agi, 5-10 ac, Original
+        "Anthem de Arms",                           -- L10: singing, 10% haste, 10-35 str, Original
+        "Jonthan's Whistling Warsong",              -- L07: singing, 16-25% haste, 2-10 ac, 8-32 str (self only), Original
+    },
+    brd_brass_haste = {
+        "McVaxius' Rousing Rondo",                  -- L57: brass, 21-22% haste, 20-21 str, 21-22 atk, 8 ds, Kunark
+        "McVaxius' Berserker Crescendo",            -- L42: brass, 18-25% haste, 15-24 str, 6-10 ac, Origina
+    },
+    brd_ac = {
+        "Chant of Battle",                          -- L01: 1-6 ac, 5-20 str, 5-20 dex
+    },
+    brd_nuke = {
+        "Brusco's Bombastic Bellow",                -- L55: 222 dmg, stun, Kunark
+        "Brusco's Boastful Bellow",                 -- L12: 7-31 dmg, pushback, 30s recast
+    },
     brd_epic2 = {
-        "Blade of Vesagran",                        -- epic 2.0: slot 9: spell crit 12%, slot 10: dot crit 12%, slot 12: accuracy 140%
-        "Prismatic Dragon Blade",                   -- epic 1.5: slot 9: spell crit  8%, slot 10: dot crit  8%, slot 12: accuracy 130%
+        "Blade of Vesagran",                        -- epic 2.0: spell crit 12%, slot 10: dot crit 12%, slot 12: accuracy 140%
+        "Prismatic Dragon Blade",                   -- epic 1.5: spell crit  8%, slot 10: dot crit  8%, slot 12: accuracy 130%
     },
     brd_oow_bp = {
         "Farseeker's Plate Chestguard of Harmony",  -- oow T2 bp: increase double attack by 100% for 24s, 5 min reuse
