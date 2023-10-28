@@ -627,9 +627,14 @@ function QoL.Init()
         all_tellf("\agDing AA - %d unspent", mq.TLO.Me.AAPoints())
     end)
 
-    mq.event('summoned', '#*#You have been summoned#*#', function(text, sender) -- XXX improve
+    mq.event('summoned', '#*#You have been summoned#*#', function(text, sender)
+        if follow.IsFollowing() then
+            follow.Stop()
+            log.Info("I was summoned to %d, %d, stopping auto follow", mq.TLO.Me.Y(), mq.TLO.Me.X())
+        else
+            log.Info("You was summoned to %d, %d", mq.TLO.Me.Y(), mq.TLO.Me.X())
+        end
         cmdf("/popup SUMMONED")
-        log.Info("You was summoned to %d, %d", mq.TLO.Me.Y(), mq.TLO.Me.X())
     end)
 
     -- tell all toons to camp

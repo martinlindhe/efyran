@@ -880,6 +880,13 @@ SpellGroups.ENC = {
         "Color Shift",                              -- L20: 6s stun/L55?, aerange 25, recast 12s
         "Color Flux",                               -- L03: 4s stun/L55?, aerange 20, recast 12s
     },
+    enc_root = {
+        "Fetter",                                   -- L58: root for 3 min, Kunark
+        "Paralyzing Earth",                         -- L49: root for 3 min
+        "Immobilize",                               -- L39: root for 1 min
+        "Enstill",                                  -- L29: root for 1.6 min
+        "Root",                                     -- L08: root for 0.8 min
+    },
     enc_epic2 = {
         "Staff of Eternal Eloquence",               -- epic 2.0: slot 5: Aegis of Abstraction,  absorb 1800 dmg
         "Oculus of Persuasion",                     -- epic 1.5: slot 5: Protection of the Eye, absorb 1500 dmg

@@ -30,6 +30,9 @@ function Heal.Init()
             bci.ExecuteZoneCommand("/medon")
         end
         Heal.autoMed = true
+        if mq.TLO.Me.MaxMana() > 1 and mq.TLO.Me.PctMana() < 100 and is_standing() then
+            cmd("/sit")
+        end
         Heal.medCheck()
     end)
 
