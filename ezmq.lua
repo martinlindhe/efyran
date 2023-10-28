@@ -732,6 +732,18 @@ function is_sitting()
     return mq.TLO.Me.Sitting()
 end
 
+-- Returns true if I am meditating (sitting and not max mana/end)
+---@return boolean
+function is_meditating()
+    if mq.TLO.Me.MaxMana() > 0 and mq.TLO.Me.PctMana() == 100 then
+        return false
+    end
+    if mq.TLO.Me.MaxMana() == 0 and mq.TLO.Me.PctEndurance() == 100 then
+        return false
+    end
+    return mq.TLO.Me.Sitting()
+end
+
 -- Am I invisible?
 ---@return boolean
 function is_invisible()

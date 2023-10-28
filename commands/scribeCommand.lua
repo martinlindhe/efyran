@@ -72,6 +72,16 @@ local function doScribe()
     clear_cursor(true)
 end
 
+local function openSpellbook()
+    if not window_open("SpellBookWnd") then
+        cmd("/book")
+    end
+
+    -- TODO make more sure that book is open
+
+    mq.delay("1s")
+end
+
 ---@param item item
 ---@param pack string
 ---@param slot integer|nil
@@ -82,6 +92,8 @@ local function scribeSpell(item, pack, slot)
         log.Warn("Already have spell %s scribed. Scroll is in pack %s, slot %d", item.Name(), pack, slot)
     else
         --log.Info("Scribing spell %s", item.Name())
+
+        openSpellbook()
 
         -- pick up scroll
         if slot == nil then
@@ -97,22 +109,10 @@ local function scribeSpell(item, pack, slot)
     end
 end
 
-local function open_spellbook()
-    if not window_open("SpellBookWnd") then
-        cmd("/book")
-    end
-
-    -- TODO make more sure that book is open
-
-    mq.delay("1s")
-end
-
 local function scribeSpells()
 
     open_bags()
     clear_cursor(true)
-
-    open_spellbook()
 
     for bag = 1, mq.TLO.Me.NumBagSlots() do
         local pack = string.format("pack%d", bag)

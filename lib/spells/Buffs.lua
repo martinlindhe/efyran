@@ -246,10 +246,10 @@ function buffs.Tick()
         refreshAutoClickiesTimer:restart()
     end
 
-    if not is_moving() and not in_combat() and buffs.refreshBuffs and refreshBuffsTimer:expired() then
+    if not is_moving() and not is_meditating() and not in_combat() and buffs.refreshBuffs and refreshBuffsTimer:expired() then
         if not buffs.RefreshSelfBuffs() then
-            if not buffs.RefreshAura() then
-                if not follow.IsFollowing() and not pet.Summon() then
+            if not follow.IsFollowing() and not buffs.RefreshAura() then
+                if not pet.Summon() then
                     pet.BuffMyPet()
                 end
             end
@@ -262,7 +262,7 @@ function buffs.Tick()
         buffs.requestAvailabiliyTimer:restart()
     end
 
-    if is_casting() or is_hovering() or is_sitting() or is_moving() or mq.TLO.Me.SpellInCooldown() or obstructive_window_open() then
+    if is_casting() or is_hovering() or is_meditating() or is_moving() or mq.TLO.Me.SpellInCooldown() or obstructive_window_open() then
         return
     end
 
