@@ -120,7 +120,7 @@ local function sellItems()
     bard.resumeMelody()
 
     move_to_loc(startY, startX, startZ)
-    log.Info("Completed selling items to [%s].", merchantName)
+    log.Info("Finished selling items to \ay%s\ax.", merchantName)
 end
 
 return sellItems

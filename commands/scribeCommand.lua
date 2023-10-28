@@ -97,10 +97,22 @@ local function scribeSpell(item, pack, slot)
     end
 end
 
+local function open_spellbook()
+    if not window_open("SpellBookWnd") then
+        cmd("/book")
+    end
+
+    -- TODO make more sure that book is open
+
+    mq.delay("1s")
+end
+
 local function scribeSpells()
 
     open_bags()
     clear_cursor(true)
+
+    open_spellbook()
 
     for bag = 1, mq.TLO.Me.NumBagSlots() do
         local pack = string.format("pack%d", bag)

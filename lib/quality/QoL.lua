@@ -554,10 +554,10 @@ function QoL.Init()
         local msg = ""
 
         if not in_raid() then
-            if xpDiff > 0. then
-                msg = string.format("(%.1f %% XP)", xpDiff)
-            else
+            if aaDiff > 0. then
                 msg = string.format("(%.1f %% AA)", aaDiff)
+            else
+                msg = string.format("(%.1f %% XP)", xpDiff)
             end
             if not in_group() then
                 msg = "[+g+]Solo XP[+x+] " .. msg

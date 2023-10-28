@@ -115,8 +115,8 @@ local function handOverComponents(itemType, reciever)
                                 delay(10)
                                 cmdf("/bct %s //notify TradeWnd TRDW_Trade_Button leftmouseup", reciever)
                                 count = 0
-                                mq.delay(5000, function() return not window_open("TradeWnd") end)
-                                delay(2000)
+                                mq.delay("10s", function() return not window_open("TradeWnd") end)
+                                delay("2s")
                             end
                         end
                     end
