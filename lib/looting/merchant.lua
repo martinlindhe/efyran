@@ -43,7 +43,6 @@ local function openMerchant(merchant)
     return mq.TLO.Merchant.Open()
 end
 
----@param target spawn
 ---@return boolean
 local function closeMerchant()
     local closeMerchantTimer = timer.new(5)
