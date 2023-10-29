@@ -8,16 +8,16 @@ settings.meditate = 50
 settings.gems = {
     ["Weaken"] = 1,
     ["enc_magic_nuke"] = 2,
-    ["enc_mez"] = 3,
+    ["Enthrall"] = 3, -- better mez
     ["enc_slow"] = 4,
 
-    ["enc_tash"] = 6,
-    ["enc_haste"] = 7,
-    --["Juli's Animation"] = 7, -- pet
-    ["enc_self_shield"] = 8,
+    ["enc_root"] = 6,
+    ["Mesmerize"] = 7, -- low mez           --["enc_tash"] = 7
+    ["enc_manaregen"] = 8,
 }
 
 settings.self_buffs = {
+    "enc_manaregen",
     "enc_self_shield",
     "enc_magic_resist",
 }

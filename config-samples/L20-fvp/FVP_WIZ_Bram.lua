@@ -1,8 +1,11 @@
 ---@type PeerSettings
 local settings = { }
 
+settings.autoloot = false -- holds Words so inventory gets full
+
 settings.gems = {
     ["wiz_fire_nuke"] = 1,
+    ["Flame Shock"] = 2,
 
     ["wiz_self_shield"] = 8,
 }
@@ -23,7 +26,8 @@ settings.healing = {
 settings.assist = {
     nukes = {
         main = {
-            "wiz_fire_nuke/MaxHP|75/NoAggro/MinMana|20",
+            "wiz_fire_nuke/Delay|6/MaxHP|95/NoAggro/Only|group raid",
+            "Flame Shock/Delay|10/MaxHP|95/NoAggro/Not|group raid", -- avoid xp steal with lesser nuke
         },
     },
 }

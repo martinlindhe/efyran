@@ -1,15 +1,17 @@
 ---@type PeerSettings
 local settings = { }
 
+settings.autoloot = true
+
 settings.gems = {
     ["shm_heal"] = 1,
-    ["Burst of Flame"] = 2,
+    ["shm_cold_nuke"] = 2,
 
-    ["Dexterous Aura"] = 4,
+    ["shm_dex"] = 4,
 
-    ["Cure Poison"] = 6,
-    ["Cure Disease"] = 7,
-    ["Strengthen"] = 8,
+    ["shm_poison_cure"] = 6,
+    ["shm_slow"] = 7,
+    ["shm_str"] = 8,
 }
 
 settings.self_buffs = {
@@ -35,13 +37,14 @@ settings.healing = {
 }
 
 settings.assist = {
-    type = "Melee",
-    engage_percent = 98,
-
     nukes = {
         main = {
-            --"Burst of Flame/NoAggro/MinMana|20",
+            -- prefer mana to buffs
+            "shm_cold_nuke/NoAggro/MinMana|70",
         },
+    },
+    debuffs = {
+        "shm_slow/MinMana|90",
     },
 }
 

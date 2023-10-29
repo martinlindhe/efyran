@@ -1,11 +1,11 @@
 local groups = {
     xp = {
-        -- g1
-        --{"Tratt", "Doge", "Ture", "Speedo", "Gimp", "Bram"},
-
-        -- g2
-        {"Barm", "Zoro", "Blum", "Blut", "Gamli","Hela" },
-        {"Gimp", "Tratt"},
+        -- g1 XP
+        --{"Tratt", "Doge", "Ture", "Speedo", "Hela", "Barm"},
+    
+        -- g2 XP
+        {"Zoro", "Blum", "Blut", "Gamli", "Hela", "Gimp" },
+        --{"Gimp", "Tratt"},
     },
 
     team12 = {

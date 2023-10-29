@@ -44,7 +44,7 @@ settings.healing = {
 settings.assist = {
     nukes = {
         main = {
-            "clr_magic_nuke/NoAggro/Gem|7/MinMana|30/Not|raid",
+            --"clr_magic_nuke/NoAggro/Gem|7/MinMana|30/Not|raid",
         }
     },
 }

@@ -1,6 +1,8 @@
 ---@type PeerSettings
 local settings = { }
 
+settings.autoloot = true
+
 settings.gems = {
     ["rng_heal"] = 1,
 

@@ -1,30 +1,27 @@
 ---@type PeerSettings
 local settings = { }
 
-settings.debug = true
+--settings.debug = true
+settings.autoloot = true
 
 settings.gems = {
-    ["Jonthan's Whistling Warsong"] = 1,
+    ["brd_nuke"] = 1,
     ["Chant of Battle"] = 2,
+    ["brd_haste"] = 3,
 
-    ["Elemental Rhythms"] = 6, -- fr, cr, magic resist
-    ["Purifying Rhythms"] = 7, -- pr, dr, magic resist
+--    ["Elemental Rhythms"] = 6, -- fr, cr, magic resist
+    ["Purifying Rhythms"] = 6, -- pr, dr, magic resist
+
+    ["brd_slow"] = 7,
     ["brd_runspeed"] = 8,
 }
 
 settings.songs = {
     general = {
-        -- PERCUSSION
-        "brd_runspeed",
-
-        -- PERCUSSION
-        "Purifying Rhythms",
-
-        -- SINGING
-        --"Jonthan's Whistling Warsong",
-
-        -- PERCUSSION
-        "Chant of Battle",
+        "brd_runspeed",             -- PERCUSSION
+        "Purifying Rhythms",        -- PERCUSSION
+        "brd_haste",                -- SINGING
+        "Chant of Battle",          -- PERCUSSION
     },
 }
 
@@ -39,6 +36,15 @@ settings.healing = {
 settings.assist = {
     type = "Melee",
     engage_percent = 98,
+
+    nukes = {
+        main = {
+            "brd_nuke",
+        }
+    },
+    debuffs = {
+        "brd_slow",
+    },
 }
 
 return settings

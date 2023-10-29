@@ -1,10 +1,12 @@
 ---@type PeerSettings
 local settings = { }
 
+settings.autoloot = true
+
 settings.gems = {
     ["mag_fire_nuke"] = 1,
-    ["Summon Drink"] = 2,
-    ["Summon Food"] = 3,
+    ["mag_pet_weapon"] = 2,
+    --["mag_pet_heal"] = 3,
     ["mag_pet_haste"] = 4,
 
     ["mag_ds"] = 6, -- ds
@@ -22,22 +24,22 @@ settings.healing = {
 }
 
 settings.assist = {
+    --type = "Melee",
     nukes = {
         main = {
-            "mag_fire_nuke/MaxHP|95/NoAggro/MinMana|20",
+            "mag_fire_nuke/MaxHP|95/NoAggro",
         },
     },
 }
 
 settings.pet = {
     heals = {
+        --"mag_pet_heal/HealPct|40",
     },
-
     buffs = {
         "mag_pet_haste",
     },
-
-    taunt = false, -- XXX impl
+    taunt = false,
 }
 
 return settings

@@ -22,6 +22,7 @@ settings.swap = {
 
 settings.self_buffs = {
     "dru_self_ds/MinMana|50",
+    "dru_str", -- TODO when higher level: ask for shm_str, it's stronger
 }
 
 settings.healing = {
