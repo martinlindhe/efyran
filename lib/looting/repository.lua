@@ -35,10 +35,8 @@ function parseLootLine(s)
             end
         else
             if in_table(shortProperties, token) then
-                --print("allowed: ", token)
                 o[token] = true
             else
-                --print("assuming name: ", token)
                 o.Name = token
             end
         end

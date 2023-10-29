@@ -3,6 +3,12 @@ local settings = { }
 
 settings.debug = true
 
+settings.weapons = {
+    main = {
+        mainhand = "Poison Wind Censer", -- 2hb
+    },
+}
+
 settings.gems = {
     ["pal_heal"] = 1,
 

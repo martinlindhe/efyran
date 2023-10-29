@@ -3,6 +3,13 @@ local settings = { }
 
 settings.autoloot = true
 
+settings.weapons = {
+    main = {
+        mainhand = "Fine Steel Scimitar",
+        offhand = "Pugius",
+    },
+}
+
 settings.gems = {
     ["rng_heal"] = 1,
 

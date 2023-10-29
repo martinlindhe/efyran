@@ -672,11 +672,42 @@ function QoL.Init()
     end
 
     -- enable MQ2NetBots
-    cmd("/netbots on grab=on send=on")
+    --cmd("/netbots on grab=on send=on")
 
     QoL.verifyAllSpellLines()
 
+    QoL.equipWeaponSet("main")
+
     zonedCommand.Enqueue(nil, 0)
+end
+
+-- Equips a weapon set
+function QoL.equipWeaponSet(setName)
+    if botSettings.settings.weapons == nil then
+        return
+    end
+    local set = botSettings.settings.weapons[setName]
+    if set == nil then
+        all_tellf("ERROR: No such weapon set %s", setName)
+    end
+
+    for slotName, itemName in pairs(set) do
+        if mq.TLO.Me.Inventory(slotName).Name() ~= itemName then
+            if not have_item_inventory(itemName) then
+                if not have_item_banked(itemName) then
+                    all_tellf("ERROR: cannot equip %s %s %s, item not found", setName, slotName, itemName)
+                else
+                    all_tellf("ERROR: cannot equip %s %s %s, item is in bank", setName, slotName, itemName)
+                end
+                cmd("/beep")
+                return
+            end
+
+            log.Info("equipWeaponSet %s: %s %s", setName, slotName, itemName)
+            mq.cmdf('/exchange "%s" %s', itemName, slotName)
+            mq.delay(50)
+        end
+    end
 end
 
 function QoL.loadRequiredPlugins()

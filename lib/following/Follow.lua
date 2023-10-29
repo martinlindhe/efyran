@@ -47,7 +47,7 @@ function Follow.Start(spawnName, force)
     end
 
     if mq.TLO.Me.Rooted() then
-        all_tellf("WARN: i am rooted, follow will be slow!")
+        all_tellf("WARN: I am [+r+]rooted[+x+], following when I can!")
     end
 
     if Follow.IsFollowing() then

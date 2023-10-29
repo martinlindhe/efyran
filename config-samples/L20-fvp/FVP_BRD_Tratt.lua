@@ -4,6 +4,13 @@ local settings = { }
 --settings.debug = true
 settings.autoloot = true
 
+settings.weapons = {
+    main = {
+        mainhand = "Sebilite Croaking Dirk",
+        offhand = "Hand Drum",
+    },
+}
+
 settings.gems = {
     ["brd_nuke"] = 1,
     ["Chant of Battle"] = 2,
