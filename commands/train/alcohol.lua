@@ -6,7 +6,7 @@
 
 local mq = require("mq")
 
-local log = require("efyran/knightlinc/Write")
+local log = require("knightlinc/Write")
 
 local drunk = false
 mq.event("too-drunk", "You could not possibly consume more alcohol or become more intoxicated#*#", function(line)

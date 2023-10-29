@@ -2,7 +2,7 @@ local mq = require("mq")
 
 local log = require("knightlinc/Write")
 
-require("efyran/ezmq")
+require("ezmq")
 
 -- train begging on a nearby pet
 -- WHY: need Begging 151+ for GoD BiC quest

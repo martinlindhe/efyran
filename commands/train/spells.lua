@@ -1,7 +1,7 @@
 local mq = require("mq")
-local log = require("efyran/knightlinc/Write")
+local log = require("knightlinc/Write")
 
-require("efyran/ezmq")
+require("ezmq")
 
 local specializationSkills = {
     "Specialize Abjure",
