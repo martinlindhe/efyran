@@ -204,12 +204,9 @@ function spellConfigAllowsCasting(spellConfig, spawn)
         --print("will not shrink myself with ", spellConfig.Name, " because my height is already ", mq.TLO.Me.Height())
         return false
     end
-
-    if spellConfig.MinMana ~= nil then
-        if mq.TLO.Me.PctMana() < spellConfig.MinMana then
-            log.Debug("SKIP BUFFING %s, my mana is %d %% vs required %d %%", spellConfig.Name, mq.TLO.Me.PctMana(), spellConfig.MinMana)
-            return false
-        end
+    if spellConfig.MinMana ~= nil and mq.TLO.Me.PctMana() < spellConfig.MinMana then
+        --log.Debug("SKIP BUFFING %s, my mana is %d %% vs required %d %%", spellConfig.Name, mq.TLO.Me.PctMana(), spellConfig.MinMana)
+        return false
     end
     if spellConfig.CheckFor ~= nil then
         -- if we got this buff on, then skip.
