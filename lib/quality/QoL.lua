@@ -292,10 +292,6 @@ function QoL.Init()
         bci.ExecuteZoneCommand("/if (${NetBots[${Me.Name}].Counters}) /bc DEBUFFED: ${NetBots[${Me.Name}].Counters} counters in ${NetBots[${Me.Name}].Detrimentals} debuffs: ${NetBots[${Me.Name}].Detrimental}")
     end)
 
-    bind("/lessonsactive", function()
-        bci.ExecuteZoneCommand("/if (${Me.Buff[Lesson of the Devoted].ID}) /bc ACTIVE: ${Me.Buff[Lesson of the Devoted].Duration.TimeHMS}")
-    end)
-
     -- report naked toons
     bind("/naked", function()
         if is_orchestrator() then

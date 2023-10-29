@@ -183,6 +183,8 @@ settings.debug = true -- enable debug logging for this peer
 /lootallcorpses             - tell peers to loot their corpse
 /usecorpsesummoner          - summon corpse in guild lobby
 
+/bonusxpactive, /bonusxpready - report status on Lesson of the Devoted / XP potions
+
 /scribe <maxLevel>          - scribes all spells in inventory, or purchases all spells you miss from open merchant up to maxLevel
 /campall                    - camp all peers to desktop
 /bindgroup                  - binds all group members using Bind Affinity
