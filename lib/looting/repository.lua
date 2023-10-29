@@ -1,99 +1,94 @@
 local mq = require("mq")
-
 local log = require("knightlinc/Write")
 
-require("persistence")
-
 ---@class LootItem
----@field public Id integer
+---@field public ID integer
 ---@field public Name string
 ---@field public Sell boolean should we auto sell item?
 ---@field public Destroy boolean should we auto destroy item?
+---@field public Keep boolean? should we keep the item?
 
-local lootFile = efyranConfigDir() .. "\\" .. current_server() .. "__Loot Settings.lua"
+-- is turned into bools
+local shortProperties = { "Sell", "Destroy", "Keep" }
 
-local function loadStore()
-    local configData, err = loadfile(lootFile)
-    if err then
-        -- failed to read the config file, create it using pickle
-        mq.pickle(lootFile, {})
-        return {}
-    elseif configData then
-        -- file loaded, put content into your config table
-        return configData()
-    end
-end
+-- parses a loot line with properties, returns a object
+-- example in: "Fine Steel Rapier/Sell"
+---@param s string
+---@return LootItem
+function parseLootLine(s)
+    local o = {}
+    local tokens = split_str(s, "/")
 
----@class LootRepository
-local LootRepository = {
-    items = loadStore()
-}
-
----@param item LootItem
-function LootRepository:add(item)
-    table.insert(self.items, item)
-end
-
----@param itemId integer
----@return LootItem?
-function LootRepository:tryGet(itemId)
-    for i, v in ipairs (self.items) do
-        if (v.Id == itemId) then
-            return v
+    for k, token in pairs(tokens) do
+        local found, _ = string.find(token, "|")
+        if found then
+            local key = ""
+            local subIndex = 0
+            for v in string.gmatch(token, "[^|]+") do
+                if subIndex == 0 then
+                    key = v
+                end
+                if subIndex == 1 then
+                    o[key] = v
+                end
+                subIndex = subIndex + 1
+            end
+        else
+            if in_table(shortProperties, token) then
+                --print("allowed: ", token)
+                o[token] = true
+            else
+                --print("assuming name: ", token)
+                o.Name = token
+            end
         end
     end
-
-    return nil
-end
-
----@param upsertItem LootItem
-function LootRepository:upsert(upsertItem)
-    for k, v in ipairs (self.items) do
-        if (v.Id == upsertItem.Id) then
-            self.items[k] = upsertItem
-            return
-        end
-    end
-
-    self:add(upsertItem)
-    local filePath = lootFile
-    mq.pickle(filePath, LootRepository.items)
-end
-
--- reads the loot settings from disk
-function LootRepository.ReadLootSettings()
-    local o = persistence.load(lootFile)
-    if o == nil then
-        log.Warn("No loot settings found (", lootFile, "), creating new table")
-
-        -- populate initial obj with keys A-Z, 0-9
-        o = {}
-        for n = 65, 90 do
-            o[string.char(n)] = {}
-        end
-        for n = 0, 9 do
-            o[tostring(n)] = {}
-        end
+    if s == "" then
+        o.Name = ""
     end
     return o
 end
 
-function LootRepository.WriteLootSettings(settings)
-    -- WARNING DO not write from multiple toons.
+local lootFile = efyranConfigDir() .. "\\" .. current_server() .. "__Loot Settings.ini"
 
-    -- XXX force reload of settings on all other toons!
+---@class LootRepository
+local LootRepository = {
+}
 
-    persistence.store(lootFile, settings)
+---@param item item
+---@return LootItem|nil
+function LootRepository:get(item)
+    local firstLetter = string.sub(item.Name(), 1, 1)
+    local lootData = mq.TLO.Ini(lootFile, firstLetter, item.ID())()
+    if lootData == nil then
+        return nil
+    end
+    local o = parseLootLine(lootData)
+    o.ID = item.ID()
+    return o
 end
 
-function LootRepository.GetLootItemSetting(lootSettings, item)
-    local first = item.Name():sub(1, 1)
-    return lootSettings[first][item.Name()]
+function write_ini(file, section, key, val)
+    local s = string.format('/ini "%s" "%s" "%s" "%s"', file, section, key, val)
+    log.Info("write_ini %s", s)
+    mq.cmdf('/ini "%s" "%s" "%s" "%s"', file, section, key, val)
 end
 
-function LootRepository.SetLootItemSetting(lootSettings, item, value)
-    local first = item.Name():sub(1, 1)
-    lootSettings[first][item.Name()] = value
+-- Create or update loot entry
+---@param lootItem LootItem
+function LootRepository:set(lootItem)
+    local firstLetter = string.sub(lootItem.Name, 1, 1)
+    local val = lootItem.Name
+    if lootItem.Sell then
+        val = val .. "/Sell"
+    end
+    if lootItem.Destroy then
+        val = val .. "/Destroy"
+    end
+    if lootItem.Keep then
+        val = val .. "/Keep"
+    end
+    write_ini(lootFile, firstLetter, lootItem.ID, val)
 end
 
 return LootRepository

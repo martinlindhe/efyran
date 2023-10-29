@@ -1,19 +1,6 @@
 local mq = require 'mq'
 local log = require("knightlinc/Write")
-local broadcast = require("broadcast/broadcast")
 local repository = require("lib/looting/repository")
-
----@param itemId integer
----@param itemName string
----@return boolean, LootItem
-local function canSellItem(itemId, itemName)
-    local itemToSell = repository:tryGet(itemId)
-    if not itemToSell then
-        itemToSell = { Id = itemId, Name = itemName, Sell = false, Destroy = false }
-    end
-
-    return itemToSell.Sell, itemToSell
-end
 
 local function markItemForSelling()
     local cursor = mq.TLO.Cursor
@@ -22,16 +9,21 @@ local function markItemForSelling()
         return
     end
 
-    local itemId = cursor.ID()
-    local shouldSell, sellItem = canSellItem(itemId, cursor.Name())
-    if shouldSell then
+    local lootItem = repository:get(cursor)
+    if lootItem ~= nil and lootItem.Sell then
         log.Debug("Item %s already marked for selling", cursor.ItemLink("CLICKABLE")())
     end
 
-    sellItem.Sell = true
-    repository:upsert(sellItem)
+    if lootItem ~= nil then
+        lootItem.Sell = true
+        lootItem.Keep = false
+        lootItem.Destroy = false
+    else
+        lootItem = { ID = cursor.ID(), Name = cursor.Name(), Sell = true, Destroy = false }
+    end
+
+    repository:set(lootItem)
     log.Info("Marked %s for selling", cursor.ItemLink("CLICKABLE")())
-    --broadcast.Success({}, "Marked %s for selling", cursor.ItemLink("CLICKABLE")())
 end
 
 mq.bind("/setsellitem", markItemForSelling)
