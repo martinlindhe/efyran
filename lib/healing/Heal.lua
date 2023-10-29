@@ -355,6 +355,13 @@ function healPeer(spell_list, peer, pct)
     for k, heal in ipairs(spell_list) do
 
         local spellConfig = parseSpellLine(heal)
+
+        local spell = get_spell(spellConfig.Name)
+        if spell == nil then
+            all_tellf("UNLIKELY: spell didnt resolve for %s", spellConfig.Name)
+            return false
+        end
+
         if not spawn() then
             -- peer died
             return false
@@ -382,6 +389,8 @@ function healPeer(spell_list, peer, pct)
             log.Debug("Want to heal %s with %s but OOM (have %d mana)", peer, spellConfig.Name, mq.TLO.Me.CurrentMana())
         elseif is_memorized(spellConfig.Name) and not is_spell_ready(spellConfig.Name) then
             log.Debug("Want to heal %s with %s but spell not ready!", peer, spellConfig.Name)
+        elseif spawn.Distance() > spell.MyRange() then
+            all_tellf("WARN: cannot heal with %s, target is too far away at %d vs max %d", peer, spellConfig.Name, spawn.Distance(), spell.MyRange())
         else
             if not in_raid() then
                 all_tellf("Healing [+g+]%s[+x+] at %d%% with [+y+]%s[+x+]", peer, pct, spellConfig.Name)
