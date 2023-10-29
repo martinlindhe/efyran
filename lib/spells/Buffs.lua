@@ -19,7 +19,17 @@ local bci = broadCastInterfaceFactory()
 
 local serverBuffsSettings = efyranConfigDir() .. "\\" .. server_buffs_settings_file()
 if file_exists(serverBuffsSettings) then
-    spellGroups.Default = loadfile(serverBuffsSettings)()
+    local data = loadfile(serverBuffsSettings)
+    if data == nil then
+        mq.delay(50)
+        data = loadfile(serverBuffsSettings)
+        if data == nil then
+            all_tellf("FATAL: %s is empty, cannot continue", serverBuffsSettings)
+            return
+        end
+
+    end
+    spellGroups.Default = data()
 end
 
 local MIN_BUFF_DURATION = 1 * 6000 -- 1 tick, each tick is 6s

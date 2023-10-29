@@ -115,8 +115,6 @@ local function lootItem(slotNum)
     if itemToDestroy ~= nil and itemToDestroy.Destroy then
         log.Debug("Destroying item %s ...", cursor.Name())
         destroyCursorItem()
-    else
-        log.Info("Looted %s", itemLink)
     end
     clear_cursor(true)
 end
@@ -171,7 +169,7 @@ local function lootCorpse()
             end
 
             if canLootItem(item) then
-                log.Debug("Looting %s (%d/%d)", item.ItemLink("CLICKABLE")(), i, itemCount)
+                log.Info("Looting %s (%d/%d)", item.ItemLink("CLICKABLE")(), i, itemCount)
                 lootItem(i)
             end
             --log.Debug("Done looting slot %d", i)
