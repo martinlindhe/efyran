@@ -384,13 +384,13 @@ function Assist.Tick()
     end
 
     -- perform debuffs ONE TIME EACH on assist before starting nukes
-    if botSettings.settings.assist.debuffs ~= nil and not is_casting() and spawn ~= nil
+    if botSettings.settings.assist.debuffs ~= nil and (not is_casting() or is_brd()) and spawn ~= nil
     and performSpellAbility(Assist.targetID, botSettings.settings.assist.debuffs, "debuff", Assist.debuffsUsed) then
         return
     end
 
     -- perform dots ONE TIME EACH on assist before staring nukes
-    if botSettings.settings.assist.dots ~= nil and not is_casting() and spawn ~= nil
+    if botSettings.settings.assist.dots ~= nil and (not is_casting() or is_brd()) and spawn ~= nil
     and performSpellAbility(Assist.targetID, botSettings.settings.assist.dots, "dot", Assist.dotsUsed) then
         return
     end
@@ -403,7 +403,7 @@ function Assist.Tick()
     end
 
     -- caster/hybrid assist.nukes
-    if botSettings.settings.assist.nukes ~= nil and not is_casting() and spawn ~= nil then
+    if botSettings.settings.assist.nukes ~= nil and (not is_casting() or is_brd()) and spawn ~= nil then
         if botSettings.settings.assist.nukes[Assist.spellSet] == nil then
             all_tellf("\arERROR I have no spell set '%s'\ax, reverting to spell set 'main'", Assist.spellSet)
             Assist.spellSet = "main"
