@@ -1004,8 +1004,9 @@ SpellGroups.MAG = {
         "Flame Flux",                               -- L22 Flame Flux (89-96 hp, aerange 20, recast 6s, cost 123 mana)
         "Fire Flux",                                -- L01 Fire Flux (8-12 hp, aerange 20, recast 6s , cost 23 mana)
     },
+    -- pet delay is fixed, so list is ordered by damage
     mag_pet_weapon = {
-        "Dagger of Symbols",                        -- L39: 5/20 1hp
+        --"Dagger of Symbols",                        -- L39: 5/20 1hp
         "Sword of Runes",                           -- L29: 7/27 1hs, proc Ward Summoned
         "Spear of Warding",                         -- L20: 6/27 1hp, 5 fr, 5 cr
         "Summon Fang",                              -- L12: 5/26 1hp

@@ -2856,6 +2856,7 @@ function open_banker()
 
         cmdf("/target id %d", bankerID)
         move_to(bankerID)
+        delay(10)
 
         cmd("/click right target")
         delay(250)
