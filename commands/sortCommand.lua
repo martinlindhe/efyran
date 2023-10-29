@@ -16,11 +16,6 @@ local function findItemType()
     for bag = 1, mq.TLO.Me.NumBagSlots() do
         local pack = string.format("pack%d", bag)
         if mq.TLO.InvSlot(pack).Item.Container() then
-            if not window_open(pack) then
-                cmdf("/nomodkey /ctrlkey /itemnotify %s rightmouseup", pack)
-            end
-            mq.delay(1000, function() return mq.TLO.Window(pack).Open() end)
-
             for Slot = 1, mq.TLO.InvSlot(pack).Item.Container() do
                 local item = mq.TLO.InvSlot(pack).Item.Item(Slot)
                 if item.ID() and not item.NoDrop() then
@@ -67,10 +62,6 @@ local function handOverComponents(itemType, reciever)
     for bag = 1, mq.TLO.Me.NumBagSlots() do
         local pack = string.format("pack%d", bag)
         if mq.TLO.InvSlot(pack).Item.Container() then
-            --if not window_open(pack) then
-            --    cmdf("/nomodkey /ctrlkey /itemnotify %s rightmouseup", pack)
-            --    mq.delay(1000, function() return window_open(pack) end)
-            --end
 
             for slot = 1, mq.TLO.InvSlot(pack).Item.Container() do
                 local item = mq.TLO.InvSlot(pack).Item.Item(slot)
@@ -158,11 +149,9 @@ local function execute()
 end
 
 -- auto banks items from SERVER__Tradeskills.ini
-local function createCommand()
+bind("/sort", function()
     commandQueue.Enqueue(function() execute() end)
-end
-
-bind("/sort", createCommand)
+end)
 
 mq.bind("/sortall", function()
     if is_orchestrator() then

@@ -98,10 +98,6 @@ end
 
 -- Loot item from currently opened corpse and autodestroy or autoinventory
 local function lootItem(slotNum)
-    if mq.TLO.Me.FreeInventory() < 1 then
-        all_tellf("Cannot loot! No free inventory slots")
-        return
-    end
     local lootTimer = timer.new(3)
     local cursor = mq.TLO.Cursor
 
@@ -172,6 +168,11 @@ local function lootCorpse()
                 all_tellf("UNLIKELY: corpse poofed while looting item %d", i)
                 break
             end
+            if mq.TLO.Me.FreeInventory() < 1 then
+                all_tellf("Cannot loot! No free inventory slots")
+                break
+            end
+
             local item = corpse.Item(i) --[[@as item]]
             --log.Debug("Checking corpse item %s (%d/%d)", item.Name(), i, itemCount)
 

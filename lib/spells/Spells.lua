@@ -483,7 +483,7 @@ function cast_port_to(name)
 
     follow.Stop()
 
-    all_tellf("Porting group to \ag%s\ax (\ay%s\ax) ...", name, spellName)
+    all_tellf("Porting group to [+g+]%s[+x+] ([+y+]%s[+x+]) ...", name, spellName)
     unflood_delay()
 
     if memorize_spell(spellName, 5) ~= nil then
