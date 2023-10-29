@@ -176,6 +176,8 @@ settings.debug = true -- enable debug logging for this peer
 /rezit                      - rez target
 /aerez                      - perform ae rez
 
+/dpw                        - MAG: distribute pet weapons
+
 /rc                         - use radiant cure
 /counters                   - report debuff counters
 

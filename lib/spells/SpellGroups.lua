@@ -1019,22 +1019,22 @@ SpellGroups.MAG = {
     },
     -- pet delay is fixed, so list is ordered by damage
     mag_pet_weapon = {
-        --"Dagger of Symbols",                        -- L39: 5/20 1hp
-        "Sword of Runes",                           -- L29: 7/27 1hs, proc Ward Summoned
-        "Spear of Warding",                         -- L20: 6/27 1hp, 5 fr, 5 cr
-        "Summon Fang",                              -- L12: 5/26 1hp
-        "Summon Dagger",                            -- L01: 3/21 1hp
+        --"Dagger of Symbols/Summon|Summoned: Dagger of Symbols", -- L39: 5/20 1hp
+        "Sword of Runes/Summon|Summoned: Sword of Runes",       -- L29: 7/27 1hs, proc Ward Summoned
+        "Spear of Warding/Summon|Summoned: Spear of Warding",   -- L20: 6/27 1hp, 5 fr, 5 cr
+        "Summon Fang/Summon|Summoned: Snake Fang",              -- L12: 5/26 1hp
+        "Summon Dagger/Summon|Summoned: Dagger",                -- L01: 3/21 1hp
     },
     mag_pet_gear = {
-        "Muzzle of Mardu",                          -- L56: 11% haste
+        "Muzzle of Mardu/Summon|Summoned: Muzzle of Mardu",     -- L56: 11% haste
     },
     mag_summoned_clickies = {
-        "Modulating Rod",                           -- L44: + xxx mana
-        "Summon Ring of Flight",                    -- L39: xxx levi
-        "Staff of Symbols",                         -- L34: 10/34 2hb, click See Invisible (4 charges)
-        "Staff of Runes",                           -- L24: 9/36 2hb, click Cancel Magic (1 charge)
-        "Staff of Warding",                         -- L16: 8/38 2hb, click Gaze (5 charges)
-        "Staff of Tracing",                         -- L08: 7/40 2hb, click Flare (2 charges)
+        "Modulating Rod/Summon|Summoned: Modulating Rod",       -- L44: 150 mana, -225 hp, 5 min recast (1 charge)
+        "Summon Ring of Flight/Summon|Summoned: Ring of Flight",-- L39: levitate (2 charges)
+        "Staff of Symbols/Summon|Summoned: Staff of Symbols",   -- L34: 10/34 2hb, click See Invisible (4 charges)
+        "Staff of Runes/Summon|Summoned: Staff of Runes",       -- L24: 9/36 2hb, click Cancel Magic (1 charge)
+        "Staff of Warding/Summon|Summoned: Staff of Warding",   -- L16: 8/38 2hb, click Gaze (5 charges)
+        "Staff of Tracing/Summon|Summoned: Staff of Tracing",   -- L08: 7/40 2hb, click Flare (2 charges)
     },
     mag_epic2 = {
         "Focus of Primal Elements",                 -- epic 2.0: hp 1000, mana 12/tick, hp 24/tick, proc Primal Fusion Strike, defensive proc Primal Fusion Parry, 20 min (34 min with ext duration)
