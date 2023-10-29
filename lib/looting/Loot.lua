@@ -18,18 +18,6 @@ local function typeChrs(message, ...)
     end
 end
 
----@param itemId integer
----@param itemName string
----@return boolean, LootItem
-local function canDestroyItem(itemId, itemName)
-    local itemToDestroy = repository:tryGet(itemId)
-    if not itemToDestroy then
-        itemToDestroy = { Id = itemId, Name = itemName, Sell = false, Destroy = false }
-    end
-
-    return itemToDestroy.Destroy, itemToDestroy
-end
-
 local function alreadyHaveLoreItem(item)
     if not item.Lore() then
         return false
@@ -78,7 +66,7 @@ local function destroyCursorItem()
     while cursor() ~= nil do
         if cursor.ID() ~= id then
             local newID = cursor.ID()
-            all_tellf("WARNING: destroyCursorItem aborted. item id to destroy changed from %d to %s", id, tostring(newID))
+            all_tellf("UNLIKELY: destroyCursorItem aborted. item id to destroy changed from %d to %s, aborting", id, tostring(newID))
             break
         end
         if cursor.NoDrop() then
@@ -99,7 +87,7 @@ end
 -- Loot item from currently opened corpse and autodestroy or autoinventory
 local function lootItem(slotNum)
     local lootTimer = timer.new(3)
-    local cursor = mq.TLO.Cursor
+    local cursor = mq.TLO.Cursor --[[@as item]]
 
     while not cursor() and not cursor.ID() and not lootTimer:expired() do
         mq.cmdf("/nomodkey /itemnotify loot%d leftmouseup", slotNum)
@@ -123,8 +111,8 @@ local function lootItem(slotNum)
 
     local itemLink = cursor.ItemLink("CLICKABLE")()
 
-    local shouldDestroy, item = canDestroyItem(cursor.ID(), cursor.Name())
-    if shouldDestroy then
+    local itemToDestroy = repository:get(cursor)
+    if itemToDestroy ~= nil and itemToDestroy.Destroy then
         log.Debug("Destroying item %s ...", cursor.Name())
         destroyCursorItem()
     else
