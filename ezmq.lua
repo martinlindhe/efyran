@@ -1854,6 +1854,19 @@ function drop_all_buffs()
     end
 end
 
+-- Remove all buffs from yourself that does not stack with spell `name`.
+---@param name string
+function drop_buffs_not_stacking_with(name)
+    for i = 1, mq.TLO.Me.MaxBuffSlots() do
+        if mq.TLO.Me.Buff(i).ID() ~= nil then
+            if not mq.TLO.Me.Buff(i).WillStack(name) then
+                all_tellf("drop_buffs_not_stacking_with: removing %s, will not stack with %s", mq.TLO.Me.Buff(i).Name(), name)
+                mq.cmdf('/removebuff "%s"', mq.TLO.Me.Buff(i).Name())
+            end
+        end
+    end
+end
+
 -- for rof2 emu. toggles tribute through the Tribute window
 function toggleTribute()
     if not window_open("TributeBenefitWnd") then

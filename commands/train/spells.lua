@@ -245,10 +245,15 @@ function TrainSpellSkill(baseSkill)
 
     local tries = 0
     local maxTries = 800
-    local spellCost = mq.TLO.Spell(spell).Mana() + 50
+
+    local spellData = mq.TLO.Spell(spell)
+    local spellCost = spellData.Mana() + 50
 
     while true do
-        drop_all_buffs()
+        if spellData.SpellType() == "Beneficial" then
+            drop_buffs_not_stacking_with(spellData.RankName())
+        end
+
         memorize_spell(spell, 1)
 
         if not is_casting() and is_spell_ready(spell) then
