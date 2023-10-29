@@ -3,20 +3,21 @@ local mq = require("mq")
 local log = require("knightlinc/Write")
 local timer = require("lib/Timer")
 
+---@return spawn|nil
 local function findMerchant()
-    local merchantSpawn = mq.TLO.NearestSpawn("Merchant radius 100")
+    local merchantSpawn = mq.TLO.NearestSpawn("Merchant radius 100 zradius 10")
     local nav = mq.TLO.Navigation
 
     if not merchantSpawn() or not nav.PathExists("id "..merchantSpawn.ID()) then
         log.Warn("There are no merchants nearby!")
-        return false
+        return nil
     end
 
     if merchantSpawn.Aggressive() then
         return nil
     end
 
-    return merchantSpawn
+    return merchantSpawn --[[@as spawn]]
 end
 
 -- Opens merchant window and waits for it to populate.
@@ -43,7 +44,6 @@ local function openMerchant(merchant)
     return mq.TLO.Merchant.Open()
 end
 
----@param target spawn
 ---@return boolean
 local function closeMerchant()
     local closeMerchantTimer = timer.new(5)

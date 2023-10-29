@@ -98,7 +98,7 @@ local function sellItems()
         return
     end
 
-    if merchant.OpenMerchant(nearestMerchant --[[@as spawn]]) then
+    if merchant.OpenMerchant(nearestMerchant) then
         local maxInventory = 23 + mq.TLO.Me.NumBagSlots() - 1
         for i = 23, maxInventory do
             local inventoryItem = mq.TLO.Me.Inventory(i)
