@@ -16,6 +16,7 @@ SpellGroups.Lookup = {
     clr_aegolism = "CLR",
     clr_vie = "CLR",
     clr_spellhaste = "CLR",
+    clr_magic_resist = "CLR",
     di = "CLR",
 
     dru_skin = "DRU",
@@ -132,6 +133,10 @@ SpellGroups.SHM = {
     shm_disease_cure = {
         "Counteract Disease",                       -- L24: -8 disease counter
         "Cure Disease",                             -- L01: -1-4 disease counter
+    },
+    shm_magic_resist = {
+        "Resist Magic",                             -- L44: 40 mr
+        "Endure Magic",                             -- L19: 20 mr
     },
     shm_regen = {
         "Spirit of Perseverance",                   -- L66: 60 hp/tick, 21 min, cost 343 mana
@@ -450,6 +455,10 @@ SpellGroups.CLR = {
         "Word of Shadow",                           -- L19 Word of Shadow (52-58 hp, aerange 20, recast 9s, cost 85 mana)
         "Word of Pain",                             -- L09 Word of Pain (24-29 hp, aerange 20, recast 9s, cost 47 mana)
     },
+    clr_magic_resist = {
+        "Resist Magic",                             -- L44: 40 mr
+        "Endure Magic",                             -- L19: 20 mr
+    },
     clr_oow_bp = {
         "Faithbringer's Breastplate of Conviction", -- oow T2 bp: increase healing spell potency by 1-50% for 0.7 min
         "Sanctified Chestguard",                    -- oow T1 bp: increase healing spell potency by 1-50% for 0.5 min
@@ -519,6 +528,10 @@ SpellGroups.DRU = {
     dru_disease_resist = {
         "Resist Disease",                           -- L44 Resist Disease (40 dr)
         "Endure Disease",                           -- L19 Endure Disease (19-20 dr)
+    },
+    dru_magic_resist = {
+        "Resist Magic",                             -- L49: 40 mr
+        "Endure Magic",                             -- L34: 20
     },
     dru_corruption_resist = {
         "Forbear Corruption",                       -- L78 Forbear Corruption Rk. II (slot 1: 23 corruption resist, 36 min, 50 mana)
