@@ -67,10 +67,10 @@ local function handOverComponents(itemType, reciever)
     for bag = 1, mq.TLO.Me.NumBagSlots() do
         local pack = string.format("pack%d", bag)
         if mq.TLO.InvSlot(pack).Item.Container() then
-            if not window_open(pack) then
-                cmdf("/nomodkey /ctrlkey /itemnotify %s rightmouseup", pack)
-                mq.delay(1000, function() return window_open(pack) end)
-            end
+            --if not window_open(pack) then
+            --    cmdf("/nomodkey /ctrlkey /itemnotify %s rightmouseup", pack)
+            --    mq.delay(1000, function() return window_open(pack) end)
+            --end
 
             for slot = 1, mq.TLO.InvSlot(pack).Item.Container() do
                 local item = mq.TLO.InvSlot(pack).Item.Item(slot)

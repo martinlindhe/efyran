@@ -477,7 +477,7 @@ function cast_port_to(name)
     end
 
     if spellName == nil then
-        all_tellf("\arERROR\ax: Unknown port alias \ag%s\ax", name)
+        all_tellf("[+r+]ERROR[+x+]: Unknown port alias [+g+]%s[+x+].", name)
         return
     end
 
@@ -487,8 +487,8 @@ function cast_port_to(name)
     unflood_delay()
 
     if memorize_spell(spellName, 5) ~= nil then
+        delay(5000)
         castSpellRaw(spellName, mq.TLO.Me.ID(), "gem5 -maxtries|3")
-        delay(5000) -- 5s to memorize and start casting
         wait_until_not_casting()
     end
 

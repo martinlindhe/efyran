@@ -542,10 +542,10 @@ function QoL.Init()
             aaDiff = 100 + mq.TLO.Me.PctAAExp() - QoL.currentAAXP
         end
 
-        if xpDiff > 0. then
-            log.Info("Gained XP %.2f %%", xpDiff)
-        else
+        if aaDiff > 0. then
             log.Info("Gained AAXP %.2f %%", aaDiff)
+        else
+            log.Info("Gained XP %.2f %%", xpDiff)
         end
 
         QoL.currentExp = mq.TLO.Me.PctExp()
