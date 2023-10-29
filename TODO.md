@@ -7,8 +7,6 @@ sep 2023:
 
 - allow to override PetBuffs, Hails, Handins, AutoTribute with per-server settings that is user supplied
 
-- mag: auto pet weapons
-
 - pet classes: auto equip pet focus items while summoning pets
 
 - rez: dont try to rez "this corpse cannot be ressurected" corpses, instead force that toon to loot their corpse
@@ -36,20 +34,12 @@ pets:
 
 
 
-
-
 item swap:
     https://gitlab.com/redguides/plugins/MQ2Exchange
 
 
 buffs:
     - /dson mode = clicky ds buffs + auto ask for MAG & RNG ds (for power leveling)
-
-
-auto aa:
-    MQ2AAspend is buggy / dont work on emu sep 2023
-
-        xxxx look att MQ2AAPurchase, from old emu build ... ?
 
 
 stat food:

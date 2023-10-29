@@ -315,8 +315,8 @@ return function()
 
     -- train remaining spell skills
     local skills = {
-        "Abjuration",
         "Alteration",
+        "Abjuration",
         "Conjuration",
         "Divination",
         "Evocation",

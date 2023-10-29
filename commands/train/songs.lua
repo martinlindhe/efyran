@@ -7,6 +7,9 @@ local log = require("knightlinc/Write")
 ---@return string|nil
 local function findInstrument(skill)
     local skillFirst = split_str(skill, " ")
+    if skillFirst[1] == "Stringed" then
+        skillFirst[1] = "String"
+    end
 
     -- 0-22 is worn gear, 23-32 is top level inventory
     for i = 0, 32 do
@@ -18,6 +21,7 @@ local function findInstrument(skill)
                     local item = inv.Item(c)
                     local focusFirst = split_str(item.Focus2() or "", " ")
                     if #focusFirst > 0 then
+                        --log.Debug("focus1 %s == skill %s", focusFirst[1], skillFirst[1])
                         if focusFirst[1] == "Performance" or focusFirst[1] == skillFirst[1] then
                             return item.Name()
                         end
@@ -26,6 +30,7 @@ local function findInstrument(skill)
             else
                 local focusFirst = split_str(inv.Focus2() or "", " ")
                 if #focusFirst > 0 then
+                    --log.Debug("focus2 %s == skill %s", focusFirst[1], skillFirst[1])
                     if focusFirst[1] == "Performance" or focusFirst[1] == skillFirst[1] then
                         return inv.Name()
                     end
