@@ -185,6 +185,8 @@ settings.debug = true -- enable debug logging for this peer
 
 /bonusxpactive, /bonusxpready - report status on Lesson of the Devoted / XP potions
 
+/weaponset <name>           - switch to named weapon set
+
 /scribe <maxLevel>          - scribes all spells in inventory, or purchases all spells you miss from open merchant up to maxLevel
 /campall                    - camp all peers to desktop
 /bindgroup                  - binds all group members using Bind Affinity

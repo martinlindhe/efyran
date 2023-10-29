@@ -652,6 +652,13 @@ function QoL.Init()
         end
     end)
 
+    -- tell all toons to equip weapon set
+    bind("/weaponset", function(name)
+        if is_orchestrator() then
+            bci.ExecuteZoneCommand(string.format("/weaponset %s", name))
+        end
+        QoL.equipWeaponSet(name)
+    end)
 
     -- api: used by one peer to tell other peers about what corpses are already rezzed
     bind("/ae_rezzed", function(...)
@@ -688,7 +695,7 @@ function QoL.equipWeaponSet(setName)
     end
     local set = botSettings.settings.weapons[setName]
     if set == nil then
-        all_tellf("ERROR: No such weapon set %s", setName)
+        log.Error("No such weapon set \ay%s\ax!", setName)
     end
 
     for slotName, itemName in pairs(set) do
