@@ -72,13 +72,13 @@ end
 ---@param spawnID integer
 ---@return boolean
 function move_to(spawnID)
-    log.Debug("move_to %d", spawnID)
-
     local spawn = spawn_from_id(spawnID)
     if spawn == nil or spawn() == nil then
         all_tellf("move_to: lost target spawn %d", spawnID)
         return false
     end
+
+    log.Debug("move_to %d (at distance %d)", spawnID, spawn.Distance())
 
     --if serverSettings.followMode:lower() == "mq2advpath" and not line_of_sight_to(spawn) then
     --    all_tellf("move_to ERROR: cannot see %s", spawn.Name())
@@ -2441,7 +2441,8 @@ function memorize_spell(spellRow, defaultGem)
         elseif botSettings.settings.gems[o.spellGroup] ~= nil then
             gem = botSettings.settings.gems[o.spellGroup]
         end
-    elseif gem == nil then
+    end
+    if gem == nil then
         all_tellf("\arWARN\ax: Spell/song lacks gems default slot or Gem|n argument: %s", spellRow)
         gem = 5
     end

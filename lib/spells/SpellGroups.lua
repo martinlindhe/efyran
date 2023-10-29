@@ -1679,6 +1679,10 @@ SpellGroups.BRD = {
         "Brusco's Bombastic Bellow",                -- L55: 222 dmg, stun, Kunark
         "Brusco's Boastful Bellow",                 -- L12: 7-31 dmg, pushback, 30s recast
     },
+    brd_slow = {
+        --"Angstlich's Assonance",                    -- L60: brass, 31% slow, 25 hp/tick dot, Kunark
+        "Selo's Consonant Chain",                   -- L23: singing, 16-40% slow, 53-60% snare, Original
+    },
     brd_epic2 = {
         "Blade of Vesagran",                        -- epic 2.0: spell crit 12%, slot 10: dot crit 12%, slot 12: accuracy 140%
         "Prismatic Dragon Blade",                   -- epic 1.5: spell crit  8%, slot 10: dot crit  8%, slot 12: accuracy 130%
