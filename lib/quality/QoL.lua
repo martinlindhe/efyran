@@ -679,7 +679,7 @@ function QoL.Init()
     end
 
     -- enable MQ2NetBots
-    --cmd("/netbots on grab=on send=on")
+    cmd("/netbots on grab=on send=on")
 
     QoL.verifyAllSpellLines()
 
