@@ -28,7 +28,7 @@ function Pet.Summon()
 
     local spellName = find_pet_spell()
     if spellName == nil then
-        all_tellf("ERROR: Can't summon pet. No spell found.")
+        log.Error("Can't summon pet. No spell found.")
         return false
     end
 
@@ -68,6 +68,7 @@ function Pet.Summon()
 end
 
 -- return spell line (string) with best available pet
+---@return string|nil
 function find_pet_spell()
     local pets = PetSpells[class_shortname()]
     if pets == nil then
@@ -88,6 +89,9 @@ function find_pet_spell()
         else
             log.Debug("Pet spell not in book: %s", v)
         end
+    end
+    if name == "" then
+        return nil
     end
 
     local reagent = ""
