@@ -602,7 +602,7 @@ function rez_corpse(spawnID)
         if serverSettings.allowBotTells then
             --cmdf("/tell %s Wait4Rez", spawn.DisplayName())
         end
-        castSpellRaw(rez, spawn.ID())
+        castSpellRaw(rez, spawn.ID(), "-maxtries|9")
     else
         all_tellf("\arWARN\ax: Not ready to rez \ag%s\ax (%s not ready).", spawn.Name(), rez)
     end
