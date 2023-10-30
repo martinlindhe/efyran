@@ -13,7 +13,7 @@ local function execute(command)
     rez_corpse(command.SpawnId)
 end
 
-local function createCommand()
+local function createCommand(spawnID)
     if is_orchestrator() then
         if not has_target() then
             log.Error("/rezit: No corpse targeted.")
@@ -24,6 +24,7 @@ local function createCommand()
             log.Error("/rezit: No target to rez.")
             return
         end
+        spawnID = spawn.ID()
 
         if spawn.Type() ~= "Corpse" then
             log.Error("/rezit: Target is not a corpse. Type %s",  spawn.Type())
@@ -38,12 +39,12 @@ local function createCommand()
                 return
             end
             log.Info("Requesting rez for \ay%s\ax from \ag%s\ax.", spawn.Name(), clrName)
-            bci.ExecuteCommand(string.format("/rezit %d", spawn.ID()), {clrName})
+            bci.ExecuteCommand(string.format("/rezit %d", spawnID), {clrName})
             return
         end
     end
 
-    commandQueue.Enqueue(function() execute({SpawnId = mq.TLO.Target.ID()}) end)
+    commandQueue.Enqueue(function() execute({SpawnId = spawnID}) end)
 end
 
 -- Perform rez on target (CLR,DRU,SHM,PAL will auto use >= 90% rez spells) or delegate it to nearby cleric

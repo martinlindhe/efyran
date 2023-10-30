@@ -560,6 +560,7 @@ function ae_rez_query(spawnQuery)
     end
 end
 
+---@param spawnID integer
 function rez_corpse(spawnID)
     local spawn = spawn_from_id(spawnID)
     if spawn == nil or spawn() == nil then
@@ -569,7 +570,7 @@ function rez_corpse(spawnID)
 
     local rez = get_rez_spell()
     if rez == nil then
-        all_tellf("ae_rez_query ERROR: no rez spell found!")
+        all_tellf("ERROR: rez_corpse, no rez spell found!")
         return
     end
 
@@ -585,11 +586,10 @@ function rez_corpse(spawnID)
     if have_spell(rez) and not is_memorized(rez) then
         log.Info("Memorizing %s ...", rez)
         mq.cmdf('/memorize "%s" %d', rez, 8) -- avoid gem5 as it is used for temp buffs
-        mq.delay(5000, function() return mq.TLO.Me.Gem(rez)() ~= nil end)
+        mq.delay("15s", function() return mq.TLO.Me.Gem(rez)() ~= nil end)
     end
 
-
-    mq.delay(15000, function() return not is_casting() and is_spell_ability_ready(rez) end)
+    mq.delay("25s", function() return not is_casting() and is_spell_ability_ready(rez) end)
 
     if is_spell_ability_ready(rez) then
 
