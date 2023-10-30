@@ -136,6 +136,12 @@ function Follow.Update(force)
         return
     end
 
+    if spawn.Distance() > 500 then
+        all_tellf("WARN: aborting auto follow %s at %d distance", Follow.spawnName, spawn.Distance())
+        Follow.Stop()
+        return
+    end
+
     local maxRange = 5 -- spawn.MaxRangeTo()
 
     --log.Debug("Follow.Update, mode %s, distance %f", serverSettings.followMode, spawn.Distance3D())
