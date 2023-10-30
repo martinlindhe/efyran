@@ -1702,6 +1702,10 @@ function get_rez_spell()
     return nil
 end
 
+function write_ini(file, section, key, val)
+    mq.cmdf('/ini "%s" "%s" "%s" "%s"', file, section, key, val)
+end
+
 -- Number of open buff slots (not counting the short duration buff slots).
 ---@return integer
 function free_buff_slots()

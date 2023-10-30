@@ -367,7 +367,15 @@ function QoL.Init()
     bind("/fbs", function() mq.cmd("/freebuffslots") end)
 
     -- /raidinvite shorthand
-    bind("/ri", function(name) mq.cmdf("/raidinvite %s", name) end)
+    bind("/ri", function(name)
+        if name == nil then
+            if mq.TLO.Target() == nil then
+                return
+            end
+            name = mq.TLO.Target.Name()
+        end
+        mq.cmdf("/raidinvite %s", name)
+    end)
 
     -- quickly exits all eqgame.exe instances using task manager
     bind("/exitall", function()

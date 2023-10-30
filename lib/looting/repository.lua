@@ -66,12 +66,6 @@ function LootRepository:get(item)
     return o
 end
 
-function write_ini(file, section, key, val)
-    local s = string.format('/ini "%s" "%s" "%s" "%s"', file, section, key, val)
-    log.Info("write_ini %s", s)
-    mq.cmdf('/ini "%s" "%s" "%s" "%s"', file, section, key, val)
-end
-
 -- Create or update loot entry
 ---@param lootItem LootItem
 function LootRepository:set(lootItem)
