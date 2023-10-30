@@ -1682,27 +1682,18 @@ function split_str(s, sSeparator)
     return aRecord
 end
 
-local rezSpells = {
-    -- order: falling priority
-    "Reviviscence",                         -- CLR/56        : 96% exp, 7s cast, 600 mana
-    "Resurrection",                         -- CLR/47, PAL/59: 90% exp, 6s cast, 20s recast, 700 mana
-    "Restoration",                          -- CLR/42, PAL/55: 75% exp, 6s cast, 20s recast
-    "Resuscitate",                          -- CLR/37        : 60% exp, 6s cast, 20s recast
-    "Renewal",                              -- CLR/32, PAL/49: 50% exp, 6s cast, 20s recast
-    "Revive",                               -- CLR/27, PAL/39: 35% exp, 6s cast, 20s recast
-    "Reparation",                           -- CLR/22, PAL/31: 20% exp, 6s cast, 20s recast
-    "Reconstitution",                       -- CLR/18, PAL/30: 10% exp, 6s cast, 20s recast
-    "Reanimation",                          -- CLR/12, PAL/22:  0% exp, 6s cast, 20s recast
-
-    "Incarnate Anew",                       -- DRU/59, SHM/59 Incarnate Anew (90% exp, 20s cast, 700 mana)
-    --"Call of the Wild",                     -- DRU/XX, SHM/xx AA, 0% exp, corpse can be properly rezzed later)
-
-    --"Convergence/Reagent|Essence Emerald",  -- NEC/53 (93% exp)
-}
-
--- Returns the name of the best >= 90% rez for DRU/SHM, or any best available rez for CLR/PAL, or nil if none
+-- Returns the name of the best available rez for CLR/PAL, or nil if none
 ---@ return string|nil
 function get_rez_spell()
+    local rezSpells = nil
+    if is_clr() then
+        rezSpells = spellGroups.CLR.clr_rez
+    elseif is_pal() then
+        rezSpells = spellGroups.PAL.pal_rez
+    else
+        return nil
+    end
+
     for k, rez in pairs(rezSpells) do
         if have_alt_ability(rez) or have_spell(rez) or have_item_inventory(rez) then
             return rez

@@ -312,6 +312,17 @@ SpellGroups.CLR = {
     clr_group_hot = {
         "Elixir of Divinity",                       -- L70 Elixir of Divinity (900 hp/tick, group, cost 1550 mana)
     },
+    clr_rez = {
+        "Reviviscence",                             -- L56: 96% exp, 7s cast, 600 mana, Kunark
+        "Resurrection",                             -- L47: 90% exp, 6s cast, 20s recast, 700 mana, Original
+        "Restoration",                              -- L42: 75% exp, 6s cast, 20s recast, Luclin?
+        "Resuscitate",                              -- L37: 60% exp, 6s cast, 20s recast, Original
+        "Renewal",                                  -- L32: 50% exp, 6s cast, 20s recast, Luclin?
+        "Revive",                                   -- L27: 35% exp, 6s cast, 20s recast, Original
+        "Reparation",                               -- L22: 20% exp, 6s cast, 20s recast, Luclin?
+        "Reconstitution",                           -- L18: 10% exp, 6s cast, 20s recast, Luclin?
+        "Reanimation",                              -- L12:  0% exp, 6s cast, 20s recast, Luclin?
+    },
     -- NOTE: stacks with dru_skin and clr_ac
     clr_symbol = {
         "Symbol of Kaerra",                         -- L76 Symbol of Kaerra Rk. II (1847 hp, cost 1190 mana)
@@ -1414,6 +1425,15 @@ SpellGroups.PAL = {
         "Supernal Cleansing",                       -- L64 Supernal Cleansing (300 hp/tick, 30s recast, cost 360 mana)
         "Celestial Cleansing",                      -- L59 Celestial Cleansing (175 hp/tick, 30s recast, cost 225 mana)
         "Ethereal Cleansing",                       -- L44 Ethereal Cleansing (98-100 hp/tick, 30s recast, cost 150 mana)
+    },
+    pal_rez = {
+        "Resurrection",                             -- L59: 90% exp, 6s cast, 20s recast, 700 mana
+        "Restoration",                              -- L55: 75% exp, 6s cast, 20s recast
+        "Renewal",                                  -- L49: 50% exp, 6s cast, 20s recast
+        "Revive",                                   -- L39: 35% exp, 6s cast, 20s recast
+        "Reparation",                               -- L31: 20% exp, 6s cast, 20s recast
+        "Reconstitution",                           -- L30: 10% exp, 6s cast, 20s recast
+        "Reanimation",                              -- L22:  0% exp, 6s cast, 20s recast
     },
     pal_hp = {
         "Brell's Brawny Bulwark",                   -- L70 Brell's Brawny Bulwark (412 hp, group) OOW
