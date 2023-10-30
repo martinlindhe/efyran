@@ -1425,7 +1425,7 @@ function skill_cap(name)
         if have_language(name) then
             return 100
         end
-        all_tellf("WARN: skill cap 0 for %s", name)
+        log.Warning("skill_cap returned 0 for \ay%s\ax", name)
         return 0
     end
     return cap
