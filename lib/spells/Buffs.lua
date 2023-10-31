@@ -21,7 +21,7 @@ local serverBuffsSettings = efyranConfigDir() .. "\\" .. server_buffs_settings_f
 if file_exists(serverBuffsSettings) then
     local data = loadfile(serverBuffsSettings)
     if data == nil then
-        mq.delay(50)
+        --mq.delay(50)
         data = loadfile(serverBuffsSettings)
         if data == nil then
             all_tellf("FATAL: %s is empty, cannot continue", serverBuffsSettings)
@@ -152,7 +152,7 @@ end
 
 local refreshBuffsTimer = timer.new_expired(10) -- 10s
 
-local requestBuffsTimer = timer.new_random(60 * 1) -- 60s
+local requestBuffsTimer = timer.new_random(30 * 1) -- 30s
 
 local handleBuffsTimer = timer.new_random(2 * 1) -- 2s
 
@@ -845,6 +845,8 @@ function buffs.acceptRez()
 
         -- let some time pass after accepting rez.
         delay(5000)
+
+        follow.Stop()
 
         -- request buffs
         buffs.RequestBuffs()

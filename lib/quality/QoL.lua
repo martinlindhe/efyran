@@ -704,6 +704,7 @@ function QoL.equipWeaponSet(setName)
     local set = botSettings.settings.weapons[setName]
     if set == nil then
         log.Error("No such weapon set \ay%s\ax!", setName)
+        return
     end
 
     for slotName, itemName in pairs(set) do

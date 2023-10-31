@@ -14,7 +14,7 @@ local function sellItem(item)
 
     local itemToSell = repository:get(item)
     if itemToSell == nil or (not itemToSell.Sell and not itemToSell.Destroy) then
-        log.Debug("%s is not listed for selling/destroying, skipping.", item.Name())
+        --log.Debug("%s is not listed for selling/destroying, skipping.", item.Name())
         return
     end
 

@@ -126,9 +126,18 @@ function Heal.medCheck()
         return
     end
 
+    local nearbyMobs = nearby_npc_count(45)
+
     if is_sitting() and not window_open("SpellBookWnd") then
         -- make sure to proecss events in order to not stand up in case of "/camp" command, which would end the macro
         doevents()
+
+        if nearbyMobs > 0 then
+            log.Info("Aborting med, %d mobs nearby!", nearbyMobs)
+            cmd("/sit off")
+            Heal.medding = false
+            return
+        end
 
         if mq.TLO.Me.MaxMana() > 1 and mq.TLO.Me.PctMana() >= 100 then
             all_tellf("Ending medbreak, [+g+]full mana[+x+].")
@@ -149,7 +158,7 @@ function Heal.medCheck()
     end
 
     local neutral = in_neutral_zone()
-    if nearby_npc_count(45) > 0 and not neutral then
+    if nearbyMobs > 0 and not neutral then
         return
     end
     if not neutral and is_brd() then
@@ -365,7 +374,7 @@ function healPeer(spell_list, peer, pct)
         if not spawn() then
             -- peer died
             return false
-        elseif spawn ~= nil and spawn.Distance() > 200 then
+        elseif spawn() ~= nil and spawn.Distance() > 200 then
             return false
         elseif spellConfig.MinMana ~= nil and mq.TLO.Me.PctMana() < spellConfig.MinMana then
             --log.Debug("SKIP HEALING %s, my mana %d vs required %d", peer, mq.TLO.Me.PctMana(), spellConfig.MinMana)
@@ -390,7 +399,7 @@ function healPeer(spell_list, peer, pct)
         elseif is_memorized(spellConfig.Name) and not is_spell_ready(spellConfig.Name) then
             log.Debug("Want to heal %s with %s but spell not ready!", peer, spellConfig.Name)
         elseif spawn.Distance() > spell.MyRange() then
-            all_tellf("WARN: cannot heal with %s, target is too far away at %d vs max %d", peer, spellConfig.Name, spawn.Distance(), spell.MyRange())
+            all_tellf("WARN: cannot heal %s with %s, target is too far away at %d vs max %d", peer, spellConfig.Name, spawn.Distance(), spell.MyRange())
         else
             if not in_raid() then
                 all_tellf("Healing [+g+]%s[+x+] at %d%% with [+y+]%s[+x+]", peer, pct, spellConfig.Name)

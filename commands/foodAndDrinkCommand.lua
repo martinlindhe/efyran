@@ -108,6 +108,14 @@ local function restockSupply(category, supplies, purchaseCap)
     while true do
 
         clear_cursor()
+        if mq.TLO.Merchant() == "FALSE" then
+            log.Debug("restockSupply: merchant lost, aborting")
+            break
+        end
+        if mq.TLO.Me.FreeInventory() < 1 then
+            all_tellf("restockSupply: OUT OF INVENTORY SPACE, aborting")
+            break
+        end
 
         local currentCount = inventory_item_count(itemName)
         local numToBuyRemaining = purchaseCap - currentCount
