@@ -975,6 +975,24 @@ SpellGroups.MAG = {
         "Velocity",                                 -- L58 Velocity (59-80% movement, 36 min)
         "Expedience",                               -- L27 Expedience (20% movement, 12 min)
     },
+    -- water pets (rogue)
+    mag_water_pet = {
+        "Child of Water",             -- L67 (pet ROG/65) - Malachite
+        "Servant of Marr",            -- L62 (pet ROG/60) - no reagent
+        "Greater Vocaration: Water",  -- L60
+        "Vocarate: Water",            -- L54
+        "Greater Conjuration: Water", -- L49
+        "Conjuration: Water",         -- L41
+        "Lesser Conjuration: Water",  -- L36
+        "Minor Conjuration: Water",   -- L31
+        "Greater Summoning: Water",   -- L26
+        "Summoning: Water",           -- L22
+        "Lesser Summoning: Water",    -- L18
+        "Minor Summoning: Water",     -- L14
+        "Elemental: Water",           -- L10
+        "Elementaling: Water",        -- L06
+        "Elementalkin: Water",        -- L02
+    },
     mag_fire_nuke = {
         "Ancient: Nova Strike",                     -- L70 Ancient: Nova Strike (2377 hp, 6.3s cast, cost 525 mana)
         "Star Strike",                              -- L70 Star Strike (2201 hp, 6.4s cast, cost 494 mana)
