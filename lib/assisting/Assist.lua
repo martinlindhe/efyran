@@ -158,6 +158,9 @@ end
 -- Returns true when ready to engage mob.
 ---@return boolean
 local function waitForEngage()
+
+    wait_for_buffs_populated()
+
     local target = mq.TLO.Target
     if target() == nil then
         return false

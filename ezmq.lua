@@ -390,22 +390,29 @@ function target_id(id)
     end
 end
 
+-- Returns true if buffs are populated
+---@return boolean
 function wait_for_buffs_populated()
     local count = 0
 
-    local wait = 100
-    local limit = wait * 10 -- 1000ms
+    local wait = 50
+    local limit = wait * 40 -- 2000ms
 
-    while not mq.TLO.Target.BuffsPopulated()
+    local target = mq.TLO.Target
+
+    while not target.BuffsPopulated()
     do
-        --log.Debug("buffs not finished populating")
+        if target() == nil then
+            return false
+        end
         delay(wait)
         count = count + wait
         if count >= limit then
             all_tellf("WARN: broke wait_for_buffs_populated after %d ms", limit)
-            return
+            return false
         end
     end
+    return true
 end
 
 -- Partial search by name (inventory, bags). Will not search bank!
