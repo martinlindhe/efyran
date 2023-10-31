@@ -11,10 +11,17 @@ local function distributePetWeapons()
         return
     end
 
-    for _, weapon in pairs(botSettings.settings.pet.weapons) do
-        log.Info("Distribute pet weapon \ay%s\ax", weapon)
-
+    for index, weapon in pairs(botSettings.settings.pet.weapons) do
         local o = parseSpellLine(weapon)
+        -- find all pets, give them stuff
+        if o.Summon == nil then
+            all_tellf("ERROR: pet weapon spell %s lacks Summon argument", o.Name)
+            return
+        end
+
+        local link = mq.TLO.LinkDB("="..o.Summon)()
+
+        log.Info("Distributing pet weapon \ay%s\ax (%d/%d)", link, index, #botSettings.settings.pet.weapons)
 
         if not is_memorized(o.Name) then
             all_tellf("WARNING: had to memorize pet weapon spell %s, this will slow me down. you should keep pet weapon spells in spell gems", o.Name)
@@ -25,11 +32,6 @@ local function distributePetWeapons()
         if spell == nil then
             all_tellf("UNLIKELY: dpw cannot resolve spell %s", o.Name)
             return
-        end
-
-        -- find all pets, give them stuff
-        if o.Summon == nil then
-            all_tellf("ERROR: pet weapon spell %s lacks Summon argument", o.Name)
         end
 
         clear_cursor(true)
@@ -44,8 +46,8 @@ local function distributePetWeapons()
             --log.Debug("Pet %s", pet.Name())
             if pet() ~= nil and not string.find(pet.Name(), "familiar") and finishedPets[pet.Name()] == nil then
 
-                -- summon weapon
                 if not have_item(o.Summon) then
+                    -- summon weapon
                     castSpellAbility(nil, o.Name)
                     wait_until_not_casting()
                     --log.Debug("Done casting pet weapon... ")
@@ -54,19 +56,18 @@ local function distributePetWeapons()
                         return
                     end
                 else
-                    log.Debug("I already have a %s, skip summoning", o.Name)
+                    -- pick up item in inventory
                     local item = find_item(o.Summon)
                     if item == nil then
-                        all_tellf("FAILED to resolve pet weapon %s", o.Name)
+                        all_tellf("FAILED to resolve pet weapon %s (summon %s)", o.Name, o.Summon)
                         return
                     end
-                    -- pick up item
                     cmdf("/nomodkey /shiftkey /itemnotify in pack%d %d leftmouseup", item.ItemSlot()-22, item.ItemSlot2() + 1)
                 end
 
                 move_to(pet.ID())
                 target_id(pet.ID())
-                log.Info("Giving weapon %s to pet %s", o.Summon, pet.Name())
+                --log.Debug("Giving weapon %s to pet %s", o.Summon, pet.Name())
 
                 local cursor = mq.TLO.Cursor
                 if cursor() ~= nil and cursor.Name() ~= o.Summon then
@@ -88,7 +89,7 @@ local function distributePetWeapons()
                     all_tellf("UNLIKELY: pet weapon handin GiveWnd not open")
                 end
 
-                log.Info("Armed \ag%s\ax with %s !", pet.Name(), o.Summon)
+                log.Info("Armed \ag%s\ax with %s !", pet.Name(), link)
 
                 mq.delay(spell.RecastTime())
 

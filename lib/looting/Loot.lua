@@ -229,7 +229,7 @@ local function lootNearestCorpse(seekRadius)
                     ok = false
                 end
             else
-                all_tellf("WARN: Corpse %s is %d|%d distance, skipping", corpse.Name(), corpse.Distance(), corpse.DistanceZ())
+                log.Info("WARN: Corpse %s is %d|%d distance, skipping", corpse.Name(), corpse.Distance(), corpse.DistanceZ())
             end
         else
             all_tellf("WARN: Unable to locate or target corpse id <%s>", corpse.ID())

@@ -6,10 +6,6 @@ local timer = require("lib/Timer")
 
 local bci = broadCastInterfaceFactory()
 
--- TODO LATER: accept args "/scribe minlevel maxlevel"   for auto-purchase
-
-
-
 -- Scribe the scroll on cursor into book at the first free spot
 local function doScribe()
 
@@ -111,7 +107,6 @@ end
 
 local function scribeSpells()
 
-    open_bags()
     clear_cursor(true)
 
     for bag = 1, mq.TLO.Me.NumBagSlots() do
@@ -134,8 +129,6 @@ local function scribeSpells()
     if window_open("SpellBookWnd") then
         close_window("SpellBookWnd")
     end
-
-    close_bags()
 end
 
 

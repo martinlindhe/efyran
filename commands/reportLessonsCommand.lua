@@ -24,6 +24,9 @@ bind("/bonusxpactive", function()
             all_tellf("%s active for %s", buffName, mq.TLO.Me.Buff(buffName).Duration.TimeHMS())
         end
     end
+    if is_orchestrator() then
+        bci.ExecuteZoneCommand("/bonusxpactive")
+    end
 end)
 
 -- report available XP buffs
@@ -39,5 +42,8 @@ bind("/bonusxpready", function()
         if have_item_inventory(buffName) then
             all_tellf("Have %d x %s in inventory", inventory_item_count(buffName), buffName)
         end
+    end
+    if is_orchestrator() then
+        bci.ExecuteZoneCommand("/bonusxpready")
     end
 end)

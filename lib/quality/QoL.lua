@@ -2,6 +2,7 @@
 
 local mq = require("mq")
 local log = require("knightlinc/Write")
+
 local timer = require("lib/Timer")
 local broadCastInterfaceFactory = require 'broadcast/broadcastinterface'
 
@@ -501,6 +502,12 @@ function QoL.Init()
     bind("/lootoff", function()
         all_tellf("Auto-loot DISABLED")
         botSettings.settings.autoloot = false
+    end)
+
+    -- reload MQ2Nav meshes (for when you edited a navmesh and want it to take effect immediately)
+    bind("/reloadmesh", function()
+        all_tellf("Reloading meshes on ALL")
+        bci.ExecuteAllWithSelfCommand("/nav reload")
     end)
 
     -- make all peer quit expedition

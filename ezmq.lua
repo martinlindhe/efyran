@@ -1425,7 +1425,8 @@ function skill_cap(name)
         if have_language(name) then
             return 100
         end
-        log.Warning("skill_cap returned 0 for \ay%s\ax", name)
+        -- NOTE: this might be a macroquest bug. if a language skill is learned while in game, that skill doesnt seem to be registered by macroquest /oct 2023
+        log.Warn("skill_cap returned 0 for \ay%s\ax", name)
         return 0
     end
     return cap
