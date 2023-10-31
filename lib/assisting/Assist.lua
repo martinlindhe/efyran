@@ -25,6 +25,48 @@ local Assist = {
     PBAE = false, -- is PBAE active?
 }
 
+-- Summons missing component for nukes. Only for magicians
+-- eg: "Molten Orb/NoAggro/Summon|Summon: Molten Orb" (MAG)
+local function summonNukeComponents()
+    if botSettings.settings.assist == nil or botSettings.settings.assist.nukes == nil or not is_mag() or is_naked() then
+        return
+    end
+
+    for idx, lines in pairs(botSettings.settings.assist.nukes) do
+        for k, row in pairs(lines) do
+            local spellConfig = parseSpellLine(row)
+            if spellConfig.Summon ~= nil then
+                if not known_spell_ability(spellConfig.Summon) then
+                    all_tellf("I dont know spell/ability %s", spellConfig.Summon)
+                    cmd("/beep 1")
+                end
+
+                log.Debug("Checking summon components for %s", spellConfig.Summon)
+
+                if inventory_item_count(spellConfig.Name) == 0 then
+                    log.Info("Summoning %s", spellConfig.Name)
+                    wait_until_not_casting()
+                    castSpellRaw(spellConfig.Summon, nil)
+
+                    -- wait and inventory
+                    local spell = get_spell(spellConfig.Summon)
+                    if spell ~= nil then
+                        delay(2000 + spell.MyCastTime())
+                        clear_cursor()
+                    end
+                    return true
+                end
+            end
+        end
+    end
+end
+
+-- called at end of each /assist call
+local function prepareForNextFight()
+    log.Debug("Assist.prepareForNextFight")
+    summonNukeComponents()
+end
+
 function Assist.Init()
 
     if botSettings.settings.assist ~= nil then
@@ -61,15 +103,20 @@ function Assist.Init()
         delay(100)
     end)
 
-    Assist.prepareForNextFight()
+    prepareForNextFight()
 end
 
--- Are we assisting on a target?
+-- Returns true if I am assisting on a target.
 ---@return boolean
 function Assist.IsAssisting()
     return Assist.targetID ~= 0
 end
 
+-- Returns true if I am tanking (sticking to the front).
+---@return boolean
+function Assist.IsTanking()
+    return botSettings.settings.assist.stick_point == "Front"
+end
 
 function Assist.backoff()
     if Assist.targetID ~= 0 then
@@ -91,46 +138,45 @@ function Assist.handleAssistCall(spawn)
     Assist.beginKillSpawnID(spawn.ID())
 end
 
--- called at end of each /assist call
-function Assist.prepareForNextFight()
-    log.Debug("Assist.prepareForNextFight")
-    Assist.summonNukeComponents()
-end
-
--- Summons missing component for nukes. Only for magicians
--- eg: "Molten Orb/NoAggro/Summon|Summon: Molten Orb" (MAG)
-function Assist.summonNukeComponents()
-    if botSettings.settings.assist == nil or botSettings.settings.assist.nukes == nil or not is_mag() or is_naked() then
+local function meleeStick()
+    if Assist.targetID == 0 then
         return
     end
-
-    for idx, lines in pairs(botSettings.settings.assist.nukes) do
-        for k, row in pairs(lines) do
-            local spellConfig = parseSpellLine(row)
-            if spellConfig.Summon ~= nil then
-                if not known_spell_ability(spellConfig.Summon) then
-                    all_tellf("I dont know spell/ability %s", spellConfig.Summon)
-                    cmd("/beep 1")
-                end
-
-                log.Debug("Checking summon components for %s", spellConfig.Summon)
-
-                if inventory_item_count(spellConfig.Name) == 0 then
-                    log.Info("Summoning %s", spellConfig.Name)
-                    wait_until_not_casting()
-                    castSpellRaw(spellConfig.Summon, nil)
-
-                    -- wait and inventory
-                    local spell = get_spell(spellConfig.Summon)
-                    if spell ~= nil then
-                        delay(2000 + spell.MyCastTime())
-                        clear_cursor()
-                    end
-                    return true
-                end
-            end
-        end
+    if Assist.IsTanking() then
+        cmdf("/stick hold front %d uw", Assist.meleeDistance)
+    else
+        cmd("/stick snaproll uw")
+        mq.delay(2000, function()
+            return mq.TLO.Stick.Behind() and mq.TLO.Stick.Stopped()
+        end)
+        cmdf("/stick hold moveback behind %d uw", Assist.meleeDistance)
     end
+end
+
+-- Returns true if ready to attack
+---@return boolean
+local function waitForEngage()
+    local target = mq.TLO.Target
+    if target() == nil then
+        return false
+    end
+
+    local startPct = botSettings.settings.assist.engage_at
+
+    if not is_number(startPct) then
+        return true
+    end
+
+    -- TODO this is blocking, need to be able to /backoff
+    mq.delay("30s", function() return mq.TLO.Target() ~= nil and mq.TLO.Target.PctHPs() <= startPct end)
+
+    if mq.TLO.Target() == nil then
+        log.Debug("Aborting assist before engage! mob is dead")
+        return false
+    end
+
+    log.Info("Target is at %s %% HPs (min %d), sticking!", mq.TLO.Target.PctHPs(), startPct)
+    return true
 end
 
 -- Sets current assist target and initalizes combat.
@@ -194,39 +240,9 @@ function Assist.beginKillSpawnID(spawnID)
             mq.delay(1)
         end
 
-        local startPct = botSettings.settings.assist.engage_at
-
-        -- TODO blocking, need to be able to /backoff
-        mq.delay("30s", function() return mq.TLO.Target() ~= nil and mq.TLO.Target.PctHPs() <= startPct end)
-        if mq.TLO.Target() == nil then
-            log.Debug("Aborting assist before engage! mob is dead")
-            return
+        if waitForEngage() then
+            meleeStick()
         end
-
-        log.Info("Target is at %s %% HPs (min %d), sticking!", mq.TLO.Target.PctHPs(), startPct)
-
-        Assist.meleeStick()
-    end
-end
-
--- Returns true if I am tanking (sticking to the front)
----@return boolean
-function Assist.IsTanking()
-    return botSettings.settings.assist.stick_point == "Front"
-end
-
-function Assist.meleeStick()
-    if Assist.targetID == 0 then
-        return
-    end
-    if Assist.IsTanking() then
-        cmdf("/stick hold front %d uw", Assist.meleeDistance)
-    else
-        cmd("/stick snaproll uw")
-        mq.delay(2000, function()
-            return mq.TLO.Stick.Behind() and mq.TLO.Stick.Stopped()
-        end)
-        cmdf("/stick hold moveback behind %d uw", Assist.meleeDistance)
     end
 end
 
@@ -258,7 +274,7 @@ function Assist.EndFight()
     -- abort all current follow commands
     follow.Pause()
 
-    Assist.prepareForNextFight()
+    prepareForNextFight()
 
     -- resume following orchestrator
     follow.Resume()
