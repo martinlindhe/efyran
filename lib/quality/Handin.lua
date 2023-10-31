@@ -3,7 +3,6 @@
 -- @type mq
 local mq = require("mq")
 
-require("ezmq")
 local log = require("knightlinc/Write")
 
 local handinRules = {

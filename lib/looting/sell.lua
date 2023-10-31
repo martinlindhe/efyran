@@ -4,7 +4,6 @@ local timer = require("lib/Timer")
 local bard = require("lib/classes/Bard")
 local merchant = require("lib/looting/merchant")
 local repository = require("lib/looting/repository")
-require("ezmq")
 
 ---@param item item
 local function sellItem(item)

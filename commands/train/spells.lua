@@ -1,8 +1,6 @@
 local mq = require("mq")
 local log = require("knightlinc/Write")
 
-require("ezmq")
-
 local specializationSkills = {
     "Specialize Abjure",
     "Specialize Alteration",

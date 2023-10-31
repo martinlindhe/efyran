@@ -4,7 +4,6 @@ local broadcast = require("broadcast/broadcast")
 local timer = require("lib/Timer")
 local repository = require("lib/looting/repository")
 local bard = require("lib/classes/Bard")
-require("ezmq")
 
 local function typeChrs(message, ...)
     -- https://stackoverflow.com/questions/829063/how-to-iterate-individual-characters-in-lua-string

@@ -3,8 +3,6 @@
 local mq = require("mq")
 local log = require("knightlinc/Write")
 
-require("ezmq")
-
 local maxAttempts = 100 + 5 -- Skill cap is 100
 
 return function()
