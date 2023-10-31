@@ -22,6 +22,8 @@ local Assist = {
     longburns = false,
     fullburns = false,
 
+    powerlevel = false, -- Is Powerlevel mode active?
+
     PBAE = false, -- is PBAE active?
 }
 
@@ -162,6 +164,9 @@ local function waitForEngage()
     end
 
     local startPct = botSettings.settings.assist.engage_at
+    if Assist.powerlevel and not in_group() then
+        startPct = 49 -- do not KS noobs
+    end
 
     if not is_number(startPct) then
         return true
@@ -184,6 +189,12 @@ local function waitForEngage()
 
     log.Info("Target is at %s %% HPs (min %d), sticking!", target.PctHPs(), startPct)
     return true
+end
+
+-- Sets powerlevel mode.
+---@param value boolean
+function Assist.Powerlevel(value)
+    Assist.powerlevel = value
 end
 
 -- Sets current assist target and initalizes combat.

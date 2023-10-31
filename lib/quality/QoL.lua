@@ -656,6 +656,22 @@ function QoL.Init()
         cmd("/camp desktop")
     end)
 
+    -- PL mode on
+    bind("/plon", function()
+        if is_orchestrator() then
+            bci.ExecuteZoneCommand("/plon")
+        end
+        assist.Powerlevel(true)
+    end)
+
+    -- PL mode off
+    bind("/ploff", function()
+        if is_orchestrator() then
+            bci.ExecuteZoneCommand("/ploff")
+        end
+        assist.Powerlevel(false)
+    end)
+
     -- toggles debug output on/off
     bind("/debug", function()
         if log.loglevel == "debug" then

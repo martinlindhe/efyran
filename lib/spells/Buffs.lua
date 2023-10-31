@@ -25,6 +25,7 @@ if file_exists(serverBuffsSettings) then
         data = loadfile(serverBuffsSettings)
         if data == nil then
             all_tellf("FATAL: %s is empty, cannot continue", serverBuffsSettings)
+            cmd("/beep")
             return
         end
 
