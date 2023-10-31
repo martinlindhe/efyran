@@ -194,6 +194,17 @@ function Assist.beginKillSpawnID(spawnID)
             mq.delay(1)
         end
 
+        local startPct = botSettings.settings.assist.engage_at
+
+        -- TODO blocking, need to be able to /backoff
+        mq.delay("30s", function() return mq.TLO.Target() ~= nil and mq.TLO.Target.PctHPs() <= startPct end)
+        if mq.TLO.Target() == nil then
+            log.Debug("Aborting assist before engage! mob is dead")
+            return
+        end
+
+        log.Info("Target is at %s %% HPs (min %d), sticking!", mq.TLO.Target.PctHPs(), startPct)
+
         Assist.meleeStick()
     end
 end
