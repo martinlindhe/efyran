@@ -93,7 +93,7 @@ settings.assist = {
     stick_point = "Front",
     --melee_distance = 12,
     ranged_distance = 100,
-    engage_percent = 98,
+    engage_at = 98,
 
     taunts = {
         "Bazu Bellow/MinEnd|70", -- Timer 7, 30s reuse             -- XXX impl endurance check

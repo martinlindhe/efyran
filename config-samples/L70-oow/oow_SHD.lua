@@ -88,7 +88,7 @@ settings.assist = {
     --melee_distance = 15,   -- XXX in order to automatically be closer to boss than the rest, allow changing formula "spawn.MaxRangeTo() * 0.75"
 
     ranged_distance = 60,
-    engage_percent = 100,  -- XXX implement!
+    engage_at = 100,  -- XXX implement!
 
     abilities = {
         "Bash",

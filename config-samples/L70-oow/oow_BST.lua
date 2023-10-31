@@ -118,7 +118,7 @@ Combat Buff=Ferocity of Irionu/Rupat/Gem|6/CheckFor|Infusion of the Faithful
 
 settings.assist = {
     type = "Melee",
-    engage_percent = 98,
+    engage_at = 98,
     abilities = {
         "Kick",
         "Rake", -- L70 Tome of Rake

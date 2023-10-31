@@ -30,7 +30,7 @@ settings.healing = {
 
 settings.assist = {
     type = "Melee",
-    engage_percent = 100,
+    engage_at = 100,
     stick_point = "Front",
 }
 

@@ -78,7 +78,7 @@ settings.healing = {
 settings.assist = {
     type = "Melee",
     ranged_distance = 80,
-    engage_percent = 98,  -- XXX implement!
+    engage_at = 98,  -- XXX implement!
 
     abilities = {
         "Kick",

@@ -28,7 +28,7 @@ settings.healing = {
 
 settings.assist = {
     type = "Melee",
-    engage_percent = 98,  -- XXX implement!
+    engage_at = 98,  -- XXX implement!
 
     abilities = {
         -- kicks:

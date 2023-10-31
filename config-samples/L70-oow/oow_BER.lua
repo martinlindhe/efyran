@@ -30,7 +30,7 @@ settings.healing = {
 
 settings.assist = {
     type = "Melee",
-    engage_percent = 98,
+    engage_at = 98,
     ranged_distance = 60, -- XXX 60 range worked for skillups in Throwing 87/310
 
     abilities = {

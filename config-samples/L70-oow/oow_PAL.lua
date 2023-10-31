@@ -120,7 +120,7 @@ settings.healing = {
 settings.assist = {
     type = "Melee",
     stick_point = "Front",
-    engage_percent = 100,
+    engage_at = 100,
 
     taunts = {
         -- magic stuns, no timer:

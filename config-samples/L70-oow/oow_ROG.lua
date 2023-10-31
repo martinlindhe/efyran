@@ -61,7 +61,7 @@ settings.healing = {
 settings.assist = {
     type = "Melee",
     ranged_distance = 80,
-    engage_percent = 98,
+    engage_at = 98,
     abilities = {
         "Escape/PctAggro|99", -- L59 Escape AA
         "Backstab",

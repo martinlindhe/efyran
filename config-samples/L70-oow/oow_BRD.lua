@@ -37,7 +37,7 @@ settings.healing = {
 settings.assist = {
     type = "Melee", -- XXX "Ranged",  "Off"
     ranged_distance = 100,
-    engage_percent = 98,  -- XXX implement!
+    engage_at = 98,  -- XXX implement!
 
     abilities = {
         "Boastful Bellow",
@@ -84,7 +84,7 @@ settings.gems = {
 settings.songs = {
     general = {
         -- TANK SONGS (Niv's Harmonic): Spela, Sophee
-        
+
         "Selo's Accelerating Chorus", -- PERCUSSION - Selo's Accelerating Chorus
         "Psalm of Veeshan", -- SINGING - resists + ac + ds
         "Verse of Vesagran", -- WIND - Verse of Vesagran (mitigate melee & spell by 5% for 450 dmg)

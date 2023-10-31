@@ -33,7 +33,7 @@ settings.self_buffs = {
 
 settings.assist = {
     type = "Melee",
-    engage_percent = 98,
+    engage_at = 98,
 }
 
 return settings

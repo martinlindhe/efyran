@@ -14,7 +14,7 @@ settings.self_buffs = {
 
 settings.assist = {
     stick_point = "Front",
-    engage_percent = 98,
+    engage_at = 98,
 
     nukes = {
         main = {
