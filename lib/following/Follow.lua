@@ -87,16 +87,14 @@ end
 
 -- pause follow for now, in all possible ways
 function Follow.Pause()
-    if is_plugin_loaded("MQ2Nav") and mq.TLO.Navigation.Active() then
+    if plugin_loaded("MQ2Nav") and mq.TLO.Navigation.Active() then
         cmd("/nav stop")
     end
-    if is_plugin_loaded("MQ2AdvPath") and mq.TLO.AdvPath.Following() then
+    if plugin_loaded("MQ2AdvPath") and mq.TLO.AdvPath.Following() then
         cmd("/afollow off")
     end
-    if is_plugin_loaded("MQ2MoveUtils") and mq.TLO.Stick.Active() then
+    if plugin_loaded("MQ2MoveUtils") then
         cmd("/stick off")
-    end
-    if is_plugin_loaded("MQ2MoveUtils") and mq.TLO.MoveTo.Moving() then
         cmd("/moveto off")
     end
 end
