@@ -897,7 +897,7 @@ function QoL.Tick()
 
     -- auto accept trades
     if window_open("tradewnd") and not have_cursor_item() then
-        if has_target() and is_peer(mq.TLO.Target.Name()) then
+        if have_target() and is_peer(mq.TLO.Target.Name()) then
             all_tellf("Accepting trade in 5s with %s", mq.TLO.Target.Name())
             delay(5000, function() return not window_open("tradewnd") or have_cursor_item() end)
             if not have_cursor_item() then

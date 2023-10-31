@@ -33,7 +33,7 @@ return function()
     cmd("/squelch /target clear")
 
     while true do
-        if not has_target() or mq.TLO.Target.Type() ~= "Pet" then
+        if not have_target() or mq.TLO.Target.Type() ~= "Pet" then
             cmd("/target pet")
             delay("1s")
             move_to(mq.TLO.Target.ID())

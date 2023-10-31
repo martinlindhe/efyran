@@ -684,12 +684,12 @@ end
 
 -- used by /lcorpse
 function open_nearby_corpse()
-    if has_target() ~= nil then
+    if have_target() ~= nil then
         cmd("/squelch /target clear")
     end
     cmd("/target corpse radius 100")
     delay(500, function()
-        return has_target()
+        return have_target()
     end)
     cmd("/loot")
 end

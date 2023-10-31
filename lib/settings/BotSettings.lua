@@ -16,6 +16,7 @@ local mq = require("mq")
 ---@class PeerSettingsAssist
 ---@field public type string "melee" or "ranged"
 ---@field public melee_distance string|integer "auto" or a number
+---@field public engage_at integer melee engage at this HP %
 
 local botSettings = {
     ---@type PeerSettings

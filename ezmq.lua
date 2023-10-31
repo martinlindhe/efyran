@@ -304,49 +304,49 @@ function have_item(name)
     return have_item_inventory(name) or have_item_banked(name)
 end
 
--- Returns true if `name` is an item i have in inventory.
+-- Returns true if `name` is an item I have in inventory.
 ---@param name string
 ---@return boolean
 function have_item_inventory(name)
     return name == nil or mq.TLO.FindItemCount("=" .. name)() > 0
 end
 
--- Returns true if `id` is an item i have in inventory.
+-- Returns true if `id` is an item I have in inventory.
 ---@param id integer
 ---@return boolean
 function have_item_inventory_id(id)
     return mq.TLO.FindItemCount(id)() > 0
 end
 
--- Returns true if `name` is an item i have in bank.
+-- Returns true if `name` is an item I have in bank.
 ---@param name string
 ---@return boolean
 function have_item_banked(name)
     return mq.TLO.FindItemBankCount("=" .. name)() > 0
 end
 
--- Returns true if `id` is an item i have in bank.
+-- Returns true if `id` is an item I have in bank.
 ---@param id integer
 ---@return boolean
 function have_item_banked_id(id)
     return mq.TLO.FindItemBankCount(id)() > 0
 end
 
--- Returns number of items by EXACT NAME in bank
+-- Returns number of items by EXACT NAME in bank.
 ---@param name string
 ---@return integer
 function banked_item_count(name)
     return mq.TLO.FindItemBankCount("=" .. name)()
 end
 
--- Returns number of items by EXACT NAME in inventory
+-- Returns number of items by EXACT NAME in inventory.
 ---@param name string
 ---@return integer
 function inventory_item_count(name)
     return mq.TLO.FindItemCount("=" .. name)()
 end
 
--- Returns true if we have item `name` equipped
+-- Returns true if I have item `name` equipped.
 ---@param name string
 ---@return boolean
 function have_item_equipped(name)
@@ -359,16 +359,16 @@ function have_item_equipped(name)
     return false
 end
 
--- Returnss true if peer has a target.
+-- Returns true if I have a target.
 ---@return boolean
-function has_target()
+function have_target()
     return mq.TLO.Target() ~= nil
 end
 
 -- Get the current target.
 ---@return spawn|nil
 function get_target()
-    if not has_target() then
+    if not have_target() then
         return nil
     end
     return mq.TLO.Target

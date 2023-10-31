@@ -176,7 +176,7 @@ function cure_player(name, kind)
 
         if known_spell_ability(cureConfig.Name) then
             if have_spell(cureConfig.Name) or is_alt_ability_ready(cureConfig.Name) then
-                all_tellf("Curing \ag%s\ax with \ay%s\ax (\ay%s\ax)", name, cureConfig.Name, kind)
+                all_tellf("Curing [+g+]%s[+x+] with [+y+]%s[+x+] ([+y+]%s[+x+])", name, cureConfig.Name, kind)
 
                 if castSpellAbility(spawn.ID(), cureRow) then
                     return true

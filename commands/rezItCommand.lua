@@ -15,7 +15,7 @@ end
 
 local function createCommand(spawnID)
     if is_orchestrator() then
-        if not has_target() then
+        if not have_target() then
             log.Error("/rezit: No corpse targeted.")
             return
         end

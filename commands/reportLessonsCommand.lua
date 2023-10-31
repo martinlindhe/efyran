@@ -42,6 +42,9 @@ bind("/bonusxpready", function()
         if have_item_inventory(buffName) then
             all_tellf("Have %d x %s in inventory", inventory_item_count(buffName), buffName)
         end
+        if have_item_banked(buffName) then
+            all_tellf("Have %d x %s in inventory", banked_item_count(buffName), buffName)
+        end
     end
     if is_orchestrator() then
         bci.ExecuteZoneCommand("/bonusxpready")

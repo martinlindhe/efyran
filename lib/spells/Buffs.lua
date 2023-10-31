@@ -405,7 +405,7 @@ function buffs.HandleDebuffs()
                     return
                 end
                 if spawn.Distance() < 200 then
-                    all_tellf("Asking \ag%s\ax to cure \ar%s\ax (\ay%s\ax)", curer, spellConfig.Name, spellConfig.Cure)
+                    all_tellf("Asking [+g+]%s[+x+] to cure [+r+]%s[+x+] ([+y+]%s[+x+])", curer, spellConfig.Name, spellConfig.Cure)
                     bci.ExecuteCommand(string.format("/cure %s %s", mq.TLO.Me.Name(), spellConfig.Cure), {curer})
                 else
                     all_tellf("ERROR: Want to ask \ag%s\ax to cure \ar%s\ax (\ay%s\ax). Distance %.2f", curer, spellConfig.Name, spellConfig.Cure, spawn.Distance())
