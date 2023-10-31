@@ -745,14 +745,14 @@ function QoL.loadRequiredPlugins()
         "MQ2AdvPath",   -- for MQ2AdvPath follow mode, /afollow
         "MQ2Nav",       -- for MQ2Nav follow mode, requires meshes, /nav
     }
-    if not is_plugin_loaded("MQ2EQBC") and not is_plugin_loaded("MQ2DanNet") then
+    if not plugin_loaded("MQ2EQBC") and not plugin_loaded("MQ2DanNet") then
         load_plugin("MQ2EQBC")
     end
-    if is_plugin_loaded("MQ2EQBC") and not is_plugin_loaded("MQ2NetBots") then
+    if plugin_loaded("MQ2EQBC") and not plugin_loaded("MQ2NetBots") then
         load_plugin("MQ2NetBots")
     end
     for k, v in pairs(requiredPlugins) do
-        if not is_plugin_loaded(v) then
+        if not plugin_loaded(v) then
             load_plugin(v)
             log.Debug("Loaded base plugin %s, was not loaded", v)
         end
@@ -764,7 +764,7 @@ function QoL.loadRequiredPlugins()
             --"MQMountClassicModels", -- TODO make use of
         }
         for k, v in pairs(requiredEmuPlugins) do
-            if not is_plugin_loaded(v) then
+            if not plugin_loaded(v) then
                 load_plugin(v)
                 log.Debug("Loaded emu plugin %s, was not loaded", v)
             end

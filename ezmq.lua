@@ -1449,12 +1449,14 @@ function language_value(name)
     return mq.TLO.Me.LanguageSkill(name)()
 end
 
+-- Returns true if plugin `name` is currently loaded.
 ---@param name string
 ---@return boolean
-function is_plugin_loaded(name)
+function plugin_loaded(name)
     return mq.TLO.Plugin(name)() ~= nil
 end
 
+-- Loads the plugin `name`.
 ---@param name string
 function load_plugin(name)
     mq.cmdf("/plugin %s", name)
