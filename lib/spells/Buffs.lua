@@ -88,7 +88,7 @@ function buffs.Init()
 
     -- INTERNAL: for requesting buff state (is sent from `peer`. We will respond with a /set_others_buffs to `peer`
     bind("/request_buffs", function(peer)
-        bci.ExecuteCommand(string.format("/set_others_buffs %s %s", mq.TLO.Me.Name(), buffs.getAvailableGroupBuffs()), {peer})
+        bci.ExecuteCommand(string.format("/set_others_buffs %s %s", mq.TLO.Me.Name(), buffs.getAvailableBuffs()), {peer})
         --log.Debug("Told %s my buffs are %s", peer, buffs.getAvailableGroupBuffs())
     end)
 
@@ -154,8 +154,9 @@ local refreshIllusionTimer = timer.new_random(10 * 1) -- 10s
 
 local refreshAutoClickiesTimer = timer.new(3) -- 3s (duration of a song, so bards wont chain-queue clickies)
 
+-- Returns a list of my available buffs
 ---@return string
-function buffs.getAvailableGroupBuffs()
+function buffs.getAvailableBuffs()
     local classSpellGroups = spellGroups[class_shortname()]
     if classSpellGroups == nil then
         return ""
@@ -166,8 +167,12 @@ function buffs.getAvailableGroupBuffs()
         for rowIdx, row in pairs(buffGroup) do
             local spellConfig = parseSpellLine(row)
             if have_spell(spellConfig.Name) then
-                s = s .. " " .. groupIdx
-                break
+                if spellConfig.Reagent ~= nil and inventory_item_count(spellConfig.Reagent) == 0 then
+                    log.Debug("getAvailableBuffs: SKIP %s, out of reagent %s", spellConfig.Name,  spellConfig.Reagent)
+                else
+                    s = s .. " " .. groupIdx
+                    break
+                end
             end
         end
     end
@@ -412,7 +417,7 @@ end
 ---@param spawnID integer
 function buffs.BuffIt(spawnID)
 
-    local available = buffs.getAvailableGroupBuffs()
+    local available = buffs.getAvailableBuffs()
     if available == nil then
         log.Debug("Stopping /buffit, no group_buffs available!")
         return
