@@ -168,7 +168,7 @@ function buffs.getAvailableBuffs()
             local spellConfig = parseSpellLine(row)
             if have_spell(spellConfig.Name) then
                 if spellConfig.Reagent ~= nil and inventory_item_count(spellConfig.Reagent) == 0 then
-                    log.Debug("getAvailableBuffs: SKIP %s, out of reagent %s", spellConfig.Name,  spellConfig.Reagent)
+                    --log.Debug("getAvailableBuffs: SKIP %s, out of reagent %s", spellConfig.Name,  spellConfig.Reagent)
                 else
                     s = s .. " " .. groupIdx
                     break
@@ -326,8 +326,6 @@ function buffs.RefreshCombatBuffs()
         return
     end
 
-    -- XXX is there similar buffs for RNG ? or more classes?
-
     -- TODO Skin of the Reptile should be castable on a non-grouped peer ...
 
     -- Refresh on group (DRU, SHM, ENC, BST)
@@ -447,7 +445,7 @@ end
 function getClassBuffGroup(classShort, buffGroup)
     local buffRows = spellGroups[classShort][buffGroup]
     if buffRows == nil then
-        all_tellf("FATAL ERROR: did not find spellGroups.%s entry %s", classShort, buffGroup)
+        all_tellf("UNLIKELY: did not find spellGroups.%s entry %s", classShort, buffGroup)
         return false
     end
 end
@@ -595,6 +593,8 @@ local buffClasses = { "CLR", "DRU", "SHM", "PAL", "RNG", "BST", "MAG", "ENC", "N
 
 -- queries other peers for their available buffs by class using /request_buffs
 function buffs.RequestAvailabiliy()
+
+    -- TODO: prefer higher level buffer
 
     for i = 1, #buffClasses do
         if class_shortname() ~= buffClasses[i] then

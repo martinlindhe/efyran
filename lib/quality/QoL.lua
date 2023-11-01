@@ -750,7 +750,7 @@ function QoL.equipWeaponSet(setName)
                 return
             end
 
-            log.Info("equipWeaponSet %s: %s %s", setName, slotName, itemName)
+            log.Info("Equipping %s in %s (set %s)", slotName, itemName, setName)
             mq.cmdf('/exchange "%s" %s', itemName, slotName)
             mq.delay(50)
         end

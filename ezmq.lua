@@ -105,7 +105,7 @@ function move_to(spawnID)
         mq.cmdf("/afollow spawn %d", spawnID)
     end
 
-    mq.delay("120s", function()
+    mq.delay("4m", function()
         return spawn == nil or spawn() == nil or spawn.Distance() < dist or not mq.TLO.Navigation.Active()
     end)
 
@@ -1385,7 +1385,12 @@ function have_skill(name)
     if have_language(name) then
         return true
     end
-    return mq.TLO.Me.Skill(name)() > 0
+    local val = mq.TLO.Me.Skill(name)()
+    if val == nil then
+        all_tellf("UNLIKELY: queried for a skill that didnt resolve (maybe a typo?): %s", name)
+        return false
+    end
+    return val > 0
 end
 
 -- Return my skill/language value.
@@ -1559,6 +1564,11 @@ function parseSpellLine(s)
 
     local o = {}
     local tokens = split_str(s, "/")
+    if #tokens == 1 and tokens[1] == "Shrink" then
+        o.Name = tokens[1]
+        o.Shrink = true
+        return o
+    end
 
     for k, token in pairs(tokens) do
         local found, _ = string.find(token, "|")

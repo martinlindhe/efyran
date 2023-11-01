@@ -169,13 +169,13 @@ function spellConfigAllowsCasting(spellConfig, spawn)
     end
 
     local spell = getSpellFromBuff(spellConfig.Name)
-    if spell == nil then
+    if spell == nil or spell() == nil then
         --eg. missing clicky while naked
-        --cmd("/dgtell all spellConfigAllowsCasting: getSpellFromBuff ", buffItem, " FAILED. Query = '"..spellConfig.Name.."'")
+        log.Warn("spellConfigAllowsCasting: getSpellFromBuff %s FAILED", spellConfig.Name)
         return false
     end
 
-    --print("spellConfigAllowsCasting ", buffItem, " ", spawn.Name(), ", spell ", spell.Name())
+    --log.Debug("spellConfigAllowsCasting %s, spawn %s, spell %s, TargetType %s", spellConfig.Name, spawn.Name(), spell.Name(), spell.TargetType())
 
     if spell.TargetType() == "Group v2" and spawn.Distance() >= spell.AERange() then
         return false

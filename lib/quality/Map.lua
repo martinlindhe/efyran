@@ -15,6 +15,7 @@ local function autoMapHeightFilter()
         highkeep = { min = 10, max = 10},
         blackburrow = { min = 10, max = 10},
         freporte = { min = 30, max = 30},
+        qeynos2 = { min = 20, max = 20},
 
         -- kunark?
         chardok = {min = 60, max = 60},

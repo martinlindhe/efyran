@@ -171,5 +171,8 @@ bind("/food", function()
 end)
 
 bind("/restock", function()
+    if is_orchestrator() then
+        bci.ExecuteZoneCommand("/restock")
+    end
     commandQueue.Enqueue(function() restockFoodAndDrink() end)
 end)

@@ -45,15 +45,11 @@ return function()
             count = count + 1
             log.Info("Training Hide %d/%d (try %d)", skill_value("Hide"), skill_cap("Hide"), count)
             mq.cmd('/doability "Hide"')
-            mq.delay(20)
-            mq.cmd('/doability "Hide"')
         end
         if is_ability_ready("Sneak") and not is_casting() and not obstructive_window_open()
         and skill_value("Sneak") > 0 and skill_value("Sneak") < skill_cap("Sneak") then
             count = count + 1
             log.Info("Training Sneak %d/%d (try %d)", skill_value("Sneak"), skill_cap("Sneak"), count)
-            mq.cmd('/doability "Sneak"')
-            mq.delay(20)
             mq.cmd('/doability "Sneak"')
         end
         if is_ability_ready("Sense Traps") and not is_casting() and not obstructive_window_open()
