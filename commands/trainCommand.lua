@@ -5,20 +5,23 @@ local commandQueue = require("lib/CommandQueue")
 
 local bci = broadCastInterfaceFactory()
 
-local alcoholTrainer  = require("commands/train/alcohol")
-local begTrainer      = require("commands/train/begging")
-local languageTrainer = require("commands/train/language")
-local songTrainer     = require("commands/train/songs")
-local spellTrainer    = require("commands/train/spells")
+local alcoholTrainer      = require("commands/train/alcohol")
+local begTrainer          = require("commands/train/begging")
+local hideAndSneakTrainer = require("commands/train/hide")
+local languageTrainer     = require("commands/train/language")
+local songTrainer         = require("commands/train/songs")
+local spellTrainer        = require("commands/train/spells")
 
 local trainers = {
     alc = alcoholTrainer,
     alcohol = alcoholTrainer,
     beg = begTrainer,
     begging = begTrainer,
+    hide = hideAndSneakTrainer,
     lang = languageTrainer,
     language = languageTrainer,
     languages = languageTrainer,
+    sneak = hideAndSneakTrainer,
     song = songTrainer,
     songs = songTrainer,
     spell = spellTrainer,

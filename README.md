@@ -193,7 +193,7 @@ settings.debug = true -- enable debug logging for this peer
 /campall                    - camp all peers to desktop
 /bindgroup                  - binds all group members using Bind Affinity
 
-/train <skill>              - train skill [language, begging, alcohol, spells, songs]
+/train <skill>              - train skill [language, begging, alcohol, spells, songs, hide]
 /languages                  - report language skills for all peers
 /combineit                  - tradeskill: autocombine (uses new tradeskill window)
 
