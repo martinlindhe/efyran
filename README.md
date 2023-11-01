@@ -152,6 +152,8 @@ settings.debug = true -- enable debug logging for this peer
 /autochange, /changeall     - change currencies at banker
 /sort, /sortall             - sorts loot listed in Tradeskills.ini (move between peers)
 
+/plon <pct>, /ploff         - toggle PL mode
+
 /recallgroup <name>         - recalls a group/raid formation
 /disbandall                 - disband all peers from group/raids
 

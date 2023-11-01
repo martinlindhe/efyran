@@ -22,7 +22,7 @@ local Assist = {
     longburns = false,
     fullburns = false,
 
-    powerlevel = false, -- Is Powerlevel mode active?
+    powerlevel = 0, -- if non-zero, powerlevel is active and we assist at given HP %
 
     PBAE = false, -- is PBAE active?
 }
@@ -200,8 +200,8 @@ local function waitForEngage()
     end
 
     local startPct = botSettings.settings.assist.engage_at
-    if Assist.powerlevel and not in_group() then
-        startPct = 49 -- do not KS noobs
+    if Assist.powerlevel ~= 0 and not in_group() then
+        startPct = Assist.powerlevel
     end
 
     if not is_number(startPct) then
@@ -227,8 +227,8 @@ local function waitForEngage()
     return true
 end
 
--- Sets powerlevel mode.
----@param value boolean
+-- Sets powerlevel mode (assist HP %). 0 disables PL
+---@param value integer
 function Assist.Powerlevel(value)
     Assist.powerlevel = value
 end

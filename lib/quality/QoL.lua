@@ -657,11 +657,15 @@ function QoL.Init()
     end)
 
     -- PL mode on
-    bind("/plon", function()
-        if is_orchestrator() then
-            bci.ExecuteZoneCommand("/plon")
+    bind("/plon", function(pct)
+        if pct == nil or not is_number(pct) then
+            pct = 49
         end
-        assist.Powerlevel(true)
+        pct = toint(pct)
+        if is_orchestrator() then
+            bci.ExecuteZoneCommand(string.format("/plon %d", pct))
+        end
+        assist.Powerlevel(pct)
     end)
 
     -- PL mode off
@@ -669,7 +673,7 @@ function QoL.Init()
         if is_orchestrator() then
             bci.ExecuteZoneCommand("/ploff")
         end
-        assist.Powerlevel(false)
+        assist.Powerlevel(0)
     end)
 
     -- toggles debug output on/off
