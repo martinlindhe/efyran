@@ -9,7 +9,7 @@ local function autoMapHeightFilter()
         soltemple = {min = 10, max = 10},
         soldunga = { min = 15, max = 15},
         lavastorm = { min = 100, max = 100},
-        unrest = { min = 9, max = 9},
+        unrest = { min = 8, max = 8},
         felwithea = { min = 9, max = 9},
         highpasshold = { min = 25, max = 25},
         highkeep = { min = 10, max = 10},

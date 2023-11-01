@@ -390,31 +390,6 @@ function target_id(id)
     end
 end
 
--- Returns true if buffs are populated
----@return boolean
-function wait_for_buffs_populated()
-    local count = 0
-
-    local wait = 50
-    local limit = wait * 40 -- 2000ms
-
-    local target = mq.TLO.Target
-
-    while not target.BuffsPopulated()
-    do
-        if target() == nil then
-            return false
-        end
-        delay(wait)
-        count = count + wait
-        if count >= limit then
-            all_tellf("WARN: broke wait_for_buffs_populated after %d ms", limit)
-            return false
-        end
-    end
-    return true
-end
-
 -- Partial search by name (inventory, bags). Will not search bank!
 ---@param name string
 ---@return item|nil
@@ -2587,12 +2562,12 @@ end
 
 ---@param radius integer
 function nearby_npc_count(radius)
-    return spawn_count(string.format("npc radius %d zradius 25", radius))
+    return spawn_count(string.format("npc radius %d zradius 15", radius))
 end
 
 ---@param radius integer
 function nearby_player_count(radius)
-    return spawn_count(string.format("pc radius %d zradius 25", radius))
+    return spawn_count(string.format("pc radius %d zradius 15", radius))
 end
 
 -- report peers out of range or in another zone

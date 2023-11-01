@@ -397,7 +397,7 @@ function healPeer(spell_list, peer, pct)
         elseif have_spell(spellConfig.Name) and not have_mana_for_spell(spellConfig.Name) then
             log.Debug("Want to heal %s with %s but OOM (have %d mana)", peer, spellConfig.Name, mq.TLO.Me.CurrentMana())
         elseif is_memorized(spellConfig.Name) and not is_spell_ready(spellConfig.Name) then
-            log.Debug("Want to heal %s with %s but spell not ready!", peer, spellConfig.Name)
+            --log.Debug("Want to heal %s with %s but spell not ready!", peer, spellConfig.Name)
         elseif spawn.Distance() > spell.MyRange() then
             all_tellf("WARN: cannot heal %s with %s, target is too far away at %d vs max %d", peer, spellConfig.Name, spawn.Distance(), spell.MyRange())
         else

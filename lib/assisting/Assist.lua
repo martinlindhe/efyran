@@ -155,11 +155,44 @@ local function meleeStick()
     end
 end
 
+-- Returns true if buffs are populated
+---@return boolean
+local function waitForBuffsPopulated()
+    local count = 0
+
+    local wait = 50
+    local limit = wait * 20 -- 1000ms
+
+    local target = mq.TLO.Target
+
+    if mq.TLO.Me.LAInspectBuffs() == 0 then
+        -- wont work without the leader aa
+        mq.delay(100)
+        return true
+    end
+
+    while not target.BuffsPopulated()
+    do
+        if target() == nil then
+            return false
+        end
+        delay(wait)
+        count = count + wait
+        if count >= limit then
+            all_tellf("WARN: broke waitForBuffsPopulated after %d ms", limit)
+            return false
+        end
+    end
+    return true
+end
+
 -- Returns true when ready to engage mob.
 ---@return boolean
 local function waitForEngage()
 
-    wait_for_buffs_populated()
+    if not waitForBuffsPopulated() then
+        return false
+    end
 
     local target = mq.TLO.Target
     if target() == nil then
@@ -217,6 +250,8 @@ function Assist.beginKillSpawnID(spawnID)
         return
     end
 
+    local timeStarted = mq.gettime()
+
     Assist.backoff()
 
     Assist.targetID = spawnID
@@ -252,16 +287,20 @@ function Assist.beginKillSpawnID(spawnID)
             Assist.meleeDistance = tonumber(botSettings.settings.assist.melee_distance)
         end
 
-        if melee and mq.TLO.Target.ID() ~= Assist.targetID then
+        if mq.TLO.Target.ID() ~= Assist.targetID then
             mq.cmdf("/target id %d", Assist.targetID)
-            mq.delay(1)
-        end
-        if melee and not mq.TLO.Me.Combat() then
-            cmd("/attack on")
             mq.delay(1)
         end
 
         if waitForEngage() then
+            local timeSticking = mq.gettime() - timeStarted
+            log.Info("Engaging after %d ms", timeSticking)
+
+            if not mq.TLO.Me.Combat() then
+                cmd("/attack on")
+                mq.delay(1)
+            end
+
             meleeStick()
         end
     end

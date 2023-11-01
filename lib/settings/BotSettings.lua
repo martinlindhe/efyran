@@ -85,7 +85,7 @@ end
 
 --@return string
 local function peer_settings_file()
-    return mq.TLO.MacroQuest.Server() .. "_" .. mq.TLO.Me.Class.ShortName() .. "_" .. mq.TLO.Me.Name() .. ".lua"
+    return mq.TLO.MacroQuest.Server() .. "_" .. mq.TLO.Me.Class.ShortName() .. "_" .. mq.TLO.Me.DisplayName() .. ".lua"
 end
 
 function botSettings.Init()
