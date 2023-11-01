@@ -438,7 +438,7 @@ SpellGroups.CLR = {
         "Holy Might",                               -- L19 Holy Might
         "Stun",                                     -- L05 Stun
     },
-    clr_magic_nuke = {
+    clr_nuke = {
         "Ancient: Pious Conscience",                -- L70: 1646 dd, cost 457 mana
         "Chromastrike",                             -- L69: 1200 dd, cost 375 mana, chromatic resist
         "Reproach",                                 -- L67: 1424-1524 dd, cost 430 mana

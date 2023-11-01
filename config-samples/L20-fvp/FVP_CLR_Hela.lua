@@ -11,7 +11,7 @@ settings.gems = {
     ["clr_symbol"] = 3,
     ["Divine Aura"] = 4,
 
-    ["clr_magic_nuke"] = 6,
+    ["clr_nuke"] = 6,
     ["Cure Disease"] = 7,
     ["clr_aegolism"] = 8,
 }
@@ -44,7 +44,7 @@ settings.healing = {
 settings.assist = {
     nukes = {
         main = {
-            --"clr_magic_nuke/NoAggro/Gem|7/MinMana|30/Not|raid",
+            --"clr_nuke/NoAggro/Gem|7/MinMana|30/Not|raid",
         }
     },
 }
