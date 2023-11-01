@@ -28,7 +28,18 @@ return function()
         end
     end
 
-    while true do
+    local train = false
+    if skill_value("Hide") > 0 and skill_value("Hide") < skill_cap("Hide") then
+        train = true
+    end
+    if skill_value("Sneak") > 0 and skill_value("Sneak") < skill_cap("Sneak") then
+        train = true
+    end
+    if skill_value("Sense Traps") > 0 and skill_value("Sense Traps") < skill_cap("Sense Traps") then
+        train = true
+    end
+
+    while train do
         if is_ability_ready("Hide") and not is_casting() and not obstructive_window_open()
         and skill_value("Hide") > 0 and skill_value("Hide") < skill_cap("Hide") then
             count = count + 1
@@ -52,7 +63,6 @@ return function()
             mq.cmd('/doability "Sense Traps"')
         end
         if count >= maxTries then
-            log.Info("Finished training")
             break
         end
         mq.doevents()
@@ -67,4 +77,6 @@ return function()
             mq.delay(20)
         end
     end
+
+    log.Info("Finished training")
 end
