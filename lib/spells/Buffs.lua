@@ -76,17 +76,6 @@ function buffs.Init()
 
     buffs.UpdateClickies()
 
-    mq.event("eqbc_chat", "<#1#> [#2#] #3#", function(text, peerName, time, msg)
-        if string.sub(msg, 1, 16) == "#available-buffs" then
-            -- if peer is in my zone, remember their announcement
-            if spawn_from_peer_name(peerName) ~= nil then
-                local available = string.sub(msg, 18)
-                --log.Debug("%s ANNOUNCED AVAILABLE BUFFS: %s", peerName, available)
-                buffs.otherAvailable[peerName] = available
-            end
-        end
-    end)
-
     -- enqueues a buff to be cast on a peer
     -- is normally called from another peer, to request a buff
     bind("/buff", function(peer, buff, force)
