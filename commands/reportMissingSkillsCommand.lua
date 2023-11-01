@@ -73,25 +73,99 @@ local classSkills = {
         "Riposte",                  -- L30
         "Disarm",                   -- L40
     },
+    RNG = {
+        "Taunt",                    -- L01
+        "Kick",                     -- L05
+        "Dodge",                    -- L08
+        "Meditate",                 -- L12
+        "Dual Wield",               -- L17
+        "Parry",                    -- L18
+        "Double Attack",            -- L20
+        "Specialize Alteration",    -- L30
+        "Disarm",                   -- L35
+        "Riposte",                  -- L35
+        "Tracking",                 -- L01
+        "Forage",                   -- L03
+        "Sneak",                    -- L10
+        "Hide",                     -- L25
+    },
+    SHD = {
+        "Meditate",                 -- L08
+        "Dodge",                    -- L15
+        "Specialize Alteration",    -- L30
+        -- XXX more
+    },
+    WAR = {
+        "Kick",                     -- L01
+        "Slam",                     -- L01
+        "Taunt",                    -- L01
+        "Bash",                     -- L06
+        "Dodge",                    -- L06
+        "Parry",                    -- L10
+        "Dual Wield",               -- L13
+        "Double Attack",            -- L15
+        "Riposte",                  -- L25
+        "Disarm",                   -- L35
+    },
+    CLR = {
+        "Meditate",                 -- L08
+        "Dodge",                    -- L15
+        "Specialize Alteration",    -- L30
+    },
+    DRU = {
+        "Forage",                   -- L05
+        "Meditate",                 -- L08
+        "Dodge",                    -- L15
+        "Tracking",                 -- L20
+        "Specialize Alteration",    -- L30
+    },
+    SHM = {
+        "Meditate",                 -- L08
+        "Dodge",                    -- L15
+        "Specialize Alteration",    -- L30
+    },
+    WIZ = {
+        "Meditate",                 -- L08
+        "Dodge",                    -- L15
+        "Specialize Alteration",    -- L20
+    },
+    MAG = {
+        "Meditate",                 -- L08
+        "Dodge",                    -- L22
+        "Specialize Alteration",    -- L20
+    },
+    ENC = {
+        "Meditate",                 -- L08
+        "Dodge",                    -- L15
+        "Specialize Alteration",    -- L20
+    },
+    NEC = {
+        "Meditate",                 -- L08
+        "Dodge",                    -- L15
+        "Specialize Alteration",    -- L20
+    },
+    -- BST = {}, -- TODO
+    -- BER = {}, -- TODO
 }
 
 local function execute()
-    local skills = classSkills[class_shortname()]
+    local class = class_shortname()
+    local skills = classSkills[class]
     if skills == nil then
-        all_tellf("TODO add class skills for %s", class_shortname())
+        all_tellf("UNLIKELY: class skills missing for %s", class)
         return
     end
 
     local missing = ""
 
     for _, skill in pairs(skills) do
-        log.Info("Checking for %s", skill)
+        --log.Debug("Checking for %s", skill)
         if not have_skill(skill) then
-            missing = missing .. ", " .. skill
+            missing = skill .. ", " .. missing
         end
     end
     if missing ~= "" then
-        all_tellf("Missing skills: %s", missing)
+        all_tellf("Missing skills (%s): %s", class, missing)
     end
 end
 
