@@ -21,5 +21,5 @@ mq.bind("/sellall", function()
     if is_orchestrator() then
         bci.ExecuteZoneCommand("/dosell")
     end
-    cmd("/dosell")
+    createSellAllCommand()
 end)

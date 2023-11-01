@@ -265,8 +265,15 @@ local function execute(command)
 
 end
 
-local function createCommand(maxLevel)
+local function createScribeCommand(maxLevel)
     commandQueue.Enqueue(function() execute({MaxLevel = toint(maxLevel)}) end)
 end
 
-bind("/scribe", createCommand)
+bind("/scribe", createScribeCommand)
+
+mq.bind("/scribeall", function()
+    if is_orchestrator() then
+        bci.ExecuteZoneCommand("/scribe")
+    end
+    createScribeCommand()
+end)
