@@ -2,8 +2,10 @@ local mq = require("mq")
 
 local log = require("knightlinc/Write")
 
--- train begging on a nearby pet
--- WHY: need Begging 151+ for GoD BiC quest
+-- Train Begging and Pick Pockets on a nearby pet
+-- WHY:
+-- * Need Begging 151+ for GoD BiC quest
+-- * Need Pick Pockets for ROG epic
 return function()
     log.Info("Begging training started")
 
@@ -11,7 +13,6 @@ return function()
     local maxTries = 800
 
     if not have_ability("Begging") then
-        -- TODO: only complain if this class should have Begging.
         all_tellf("ERROR: Do not have Begging. Cannot train.")
         return
     end
@@ -30,12 +31,12 @@ return function()
         mq.cmd("/stand")
     end
 
-    cmd("/squelch /target clear")
+    mq.cmd("/squelch /target clear")
 
     while true do
         if not have_target() or mq.TLO.Target.Type() ~= "Pet" then
-            cmd("/target pet")
-            delay("1s")
+            mq.cmd("/target pet")
+            mq.delay("1s")
             move_to(mq.TLO.Target.ID())
         end
 
@@ -44,22 +45,25 @@ return function()
             break
         end
 
-        if is_ability_ready("Begging") and not mq.TLO.Corpse.Open() and mq.TLO.Target.Type() ~= "Begging" then
-
+        if is_ability_ready("Begging") and not obstructive_window_open() then
             if not is_casting() or is_brd() then
                 trackCount = trackCount + 1
-                delay(3)
                 print("Begging ", trackCount, " of ", maxTries, ", level ", skill_value("Begging"), "/",skill_cap("Begging"))
-                cmd('/doability "Begging"')
+                mq.cmd('/doability "Begging"')
+                mq.delay(10)
                 if trackCount >= maxTries then
                     print("Reached max amount. Ending")
                     break
                 end
             end
-
+        end
+        if is_ability_ready("Pick Pockets") and skill_value("Pick Pockets") < skill_cap("Pick Pockets") then
+            log.Info("Pick Pockets %d / %d", skill_value("Pick Pockets"), skill_cap("Pick Pockets"))
+            mq.cmd('/doability "Pick Pockets"')
+            mq.delay(10)
         end
 
-        delay(1)
-        doevents()
+        mq.delay(1)
+        mq.doevents()
     end
 end
