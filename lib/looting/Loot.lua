@@ -33,6 +33,7 @@ local function canLootItem(item)
         all_tellf("UNLIKELY: canLootItem item poofed")
         return false
     end
+
     if item.NoDrop() then
         all_tellf("%s is [NO DROP], skipping.", item.ItemLink("CLICKABLE")())
         mq.cmd("/beep 1")
@@ -68,11 +69,7 @@ local function destroyCursorItem()
             all_tellf("UNLIKELY: destroyCursorItem aborted. item id to destroy changed from %d to %s, aborting", id, tostring(newID))
             break
         end
-        if cursor.NoDrop() then
-            all_tellf("ERROR: cant mark NO-DROP item for destroy. TODO add a 'force' argument")
-            cmd("/beep")
-            return
-        end
+
         mq.cmdf("/destroy")
         mq.delay(200, function() return cursor() == nil end)
         if cursor() == nil then
@@ -115,6 +112,7 @@ local function lootItem(slotNum)
         log.Debug("Destroying item %s ...", cursor.Name())
         destroyCursorItem()
     end
+
     clear_cursor(true)
 end
 
