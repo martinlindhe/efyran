@@ -419,14 +419,24 @@ local classSpells = {
             "Aegolism",                         -- L60
         },
     },
+    DRU = {
+        Original = {
+            -- XXX
+        },
+    },
 }
 
 -- NOTE: fvp uses original spell names. These spells was later renamed
 local renamedSpells = {
+    -- classic name (fvp)              corrected name (live)
     ["Cantana of Replenishment"]    = "Cantata of Replenishment",
+    ["Cantana of Soothing"]         = "Cantata of Soothing",
     ["Enstill"]                     = "Instill",
     ["Invisibility versus Undead"]  = "Invisibility vs. Undead",
     ["Complete Healing"]            = "Complete Heal",
+    ["Calefaction"]                 = "Dustdevil",
+    ["Largo's Absonant Binding"]    = "Largo's Assonant Binding",
+    ["Selo's Assonant Strane"]      = "Selo's Assonant Strain",
 }
 
 ---@param expac string
