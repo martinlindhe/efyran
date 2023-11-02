@@ -1407,6 +1407,33 @@ SpellGroups.RNG = {
         "Ensnare",                                  -- L51
         "Snare",                                    -- L09
     },
+    -- Timer 1
+    rng_fire_nuke = {
+        "Hearth Embers",                            -- L69: 842 hp, 0.5s cast, cost 275 mana, 30s recast, OOW
+        "Sylvan Burn",                              -- L65, 673 hp, 0.5s cast, cost 242 mana, GoD
+        "Brushfire",                                -- L64, PoP
+        "Calefaction",                              -- L59 .. xxx spelling
+        "Firestrike",                               -- L52, Kunark
+        "Call of Flame",                            -- L49, Original
+        "Burning Arrow",                            -- L39, PoP
+        "Flaming Arrow",                            -- L29, PoP
+        "Ignite",                                   -- L22, Original
+        "Burst of Fire",                            -- L15, Original
+    },
+    -- Timer 4
+    rng_fire_nuke4 = {
+        "Scorched Earth",                           -- L70: 1150 hp, 0.5s cast, cost 365 mana, 30s recast, PoR
+        "Ancient: Burning Chaos",                   -- L65: 734 hp, 0.5s cast, cost 264 mana, GoD
+    },
+    -- Timer 3
+    rng_cold_nuke = {
+        "Frozen Wind",                              -- L63: 695 hp, 0.5s cast, cost 295 mana, PoP
+        "Ancient: North Wind",                      -- L70: 1032 hp, 0.5s cast, 30s recast, cost 392 mana, OOW
+    },
+    -- Timer 2
+    rng_cold_nuke2 = {
+        "Frost Wind",                               -- L68: 956 hp, 0.5s cast, cost 369 mana, 30s recast, OOW
+    },
     rng_epic2 = {
         "Aurora, the Heartwood Blade",              -- epic 2.0: critical melee chance 170%, accuracy 170%, 1 min duration, 5 min recast
         "Heartwood Blade",                          -- epic 1.5: critical melee chance 110%, accuracy 110%
