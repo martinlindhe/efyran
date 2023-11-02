@@ -140,7 +140,7 @@ end)
 
 mq.bind("/bankall", function()
     if is_orchestrator() then
-        bci.ExecuteZoneCommand("/autobank")
+        bci.ExecuteAllCommand("/autobank")
     end
     cmd("/autobank")
 end)
@@ -151,7 +151,7 @@ end)
 
 mq.bind("/changeall", function()
     if is_orchestrator() then
-        bci.ExecuteZoneCommand("/autochange")
+        bci.ExecuteAllCommand("/autochange")
     end
     cmd("/autochange")
 end)

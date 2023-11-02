@@ -273,7 +273,7 @@ bind("/scribe", createScribeCommand)
 
 mq.bind("/scribeall", function()
     if is_orchestrator() then
-        bci.ExecuteZoneCommand("/scribe")
+        bci.ExecuteAllCommand("/scribe")
     end
     createScribeCommand()
 end)

@@ -11,7 +11,7 @@ local function markItemForDestroying()
 
     local lootItem = repository:get(cursor)
     if lootItem ~= nil and lootItem.Destroy then
-        log.Debug("Item %s already marked for destroying", cursor.ItemLink("CLICKABLE")())
+        log.Debug("Item %s is already marked for destroying", cursor.ItemLink("CLICKABLE")())
     end
 
     if lootItem ~= nil then

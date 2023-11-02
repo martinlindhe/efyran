@@ -248,14 +248,14 @@ function QoL.Init()
     bind("/buffon", function()
         buffs.refreshBuffs = true
         if is_orchestrator() then
-            bci.ExecuteZoneCommand("/buffon")
+            bci.ExecuteAllCommand("/buffon")
         end
     end)
 
     bind("/buffoff", function()
         buffs.refreshBuffs = false
         if is_orchestrator() then
-            bci.ExecuteZoneCommand("/buffoff")
+            bci.ExecuteAllCommand("/buffoff")
         end
     end)
 
@@ -266,7 +266,7 @@ function QoL.Init()
             exe = exe .. " " .. filter
         end
 
-        bci.ExecuteZoneCommand(exe)
+        bci.ExecuteAllCommand(exe)
     end
 
     ---@param ... string|nil filter, such as "/only|ROG"
@@ -275,7 +275,7 @@ function QoL.Init()
 
     bind("/followoff", function(s)
         if is_orchestrator() then
-            bci.ExecuteZoneCommand("/followoff")
+            bci.ExecuteAllCommand("/followoff")
         end
         follow.Stop()
     end)
@@ -294,13 +294,13 @@ function QoL.Init()
 
     -- reports all peers with debuffs
     bind("/counters", function()
-        bci.ExecuteZoneCommand("/if (${NetBots[${Me.Name}].Counters}) /bc DEBUFFED: ${NetBots[${Me.Name}].Counters} counters in ${NetBots[${Me.Name}].Detrimentals} debuffs: ${NetBots[${Me.Name}].Detrimental}")
+        bci.ExecuteAllCommand("/if (${NetBots[${Me.Name}].Counters}) /bc DEBUFFED: ${NetBots[${Me.Name}].Counters} counters in ${NetBots[${Me.Name}].Detrimentals} debuffs: ${NetBots[${Me.Name}].Detrimental}")
     end)
 
     -- report naked toons
     bind("/naked", function()
         if is_orchestrator() then
-            bci.ExecuteZoneCommand("/naked")
+            bci.ExecuteAllCommand("/naked")
         end
         if is_naked() then
             all_tellf("IM NAKED IN \ay%s\ax", zone_shortname())
@@ -346,7 +346,7 @@ function QoL.Init()
     end)
 
     -- tell all peers to report faction status
-    bind("/factionsall", function() bci.ExecuteZoneCommand("/factions") end)
+    bind("/factionsall", function() bci.ExecuteAllWithSelfCommand("/factions") end)
 
     -- clear all chat windows on current peer
     bind("/clr", function() mq.cmd("/clear") end)
@@ -558,9 +558,9 @@ function QoL.Init()
         end
 
         if aaDiff > 0. then
-            log.Info("Gained AAXP %.2f %%", aaDiff)
+            log.Info("Gained AAXP %.1f %%", aaDiff)
         else
-            log.Info("Gained XP %.2f %%", xpDiff)
+            log.Info("Gained XP %.1f %%", xpDiff)
         end
 
         QoL.currentExp = mq.TLO.Me.PctExp()
@@ -576,6 +576,9 @@ function QoL.Init()
             end
             if not in_group() then
                 msg = "[+g+]Solo XP[+x+] " .. msg
+                if peer_count() > 1 then
+                    cmd("/beep 1") -- should avoid solo xp
+                end
             elseif is_group_leader() then
                 msg = "[+g+]Group XP[+x+] " .. msg
             else

@@ -11,7 +11,7 @@ local function markItemForSelling()
 
     local lootItem = repository:get(cursor)
     if lootItem ~= nil and lootItem.Sell then
-        log.Debug("Item %s already marked for selling", cursor.ItemLink("CLICKABLE")())
+        log.Debug("Item %s is already marked for selling", cursor.ItemLink("CLICKABLE")())
     end
 
     if lootItem ~= nil then

@@ -21,7 +21,7 @@ local function distributePetWeapons()
 
         local link = mq.TLO.LinkDB("="..o.Summon)()
 
-        log.Info("Distributing pet weapon \ay%s\ax (%d/%d)", link, index, #botSettings.settings.pet.weapons)
+        all_tellf("Arming pets with [+y+]%s[+x+] (%d/%d)", link, index, #botSettings.settings.pet.weapons)
 
         if not is_memorized(o.Name) then
             all_tellf("WARNING: had to memorize pet weapon spell %s, this will slow me down. you should keep pet weapon spells in spell gems", o.Name)
@@ -97,8 +97,8 @@ local function distributePetWeapons()
             end
 
         end
-
     end
+    all_tellf("Finished arming pets!")
 end
 
 bind("/dpw", function() commandQueue.Enqueue(function() distributePetWeapons() end) end)

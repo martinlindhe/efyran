@@ -27,7 +27,7 @@ local Heal = {
 function Heal.Init()
     bind("/medon", function()
         if is_orchestrator() then
-            bci.ExecuteZoneCommand("/medon")
+            bci.ExecuteAllCommand("/medon")
         end
         Heal.autoMed = true
         if mq.TLO.Me.MaxMana() > 1 and mq.TLO.Me.PctMana() < 100 and is_standing() then
@@ -38,7 +38,7 @@ function Heal.Init()
 
     bind("/medoff", function()
         if is_orchestrator() then
-            bci.ExecuteZoneCommand("/medoff")
+            bci.ExecuteAllCommand("/medoff")
         end
         Heal.autoMed = false
         Heal.medCheck()
