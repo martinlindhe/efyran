@@ -57,7 +57,7 @@ local classSpells = {
         Kunark = {
             "Solon's Bewitching Bravura",       -- L39
             "Jonthan's Provocation",            -- L45
-            --"Shield of Song",                   -- L49      XXX disabled on fvp
+            --"Shield of Song",                   -- L49      XXX disabled on fvp nov 2, Eredhin says it should be enabled
             "Selo's Song of Travel",
             "Largo's Absonant Binding",
             "Nillipus' March of the Wee",
@@ -65,7 +65,7 @@ local classSpells = {
             "Song of Dawn",
             "Vilia's Chorus of Celerity",
             "Selo's Assonant Strane",
-            "Cantana of Replenishment",         -- L55          XXX typo in the name on fvp, should be "Cantata"
+            "Cantana of Replenishment",         -- L55
             "Brusco's Bombastic Bellow",        -- L55
             "Song of Highsun",
             "Song of Midnight",
@@ -148,7 +148,7 @@ local classSpells = {
         },
         Kunark = {
             "Ensnare",                          -- L51
-            "Extinguish Fatigue",               -- L52     XXX maybe retired
+            "Extinguish Fatigue",               -- L52
             "Firestrike",                       -- L52
             "Storm Strength",                   -- L53
             "Drones of Doom",                   -- L54
@@ -180,6 +180,92 @@ local classSpells = {
             "Call of the Predator",             -- L60
         }
     },
+    PAL = {
+        Original = {
+            "Courage",                          -- L09
+            "Cure Poison",
+            "Flash of Light",
+            "Minor Healing",
+            "Spook the Dead",
+            "True North",
+            "Yaulp",
+            "Cure Disease",                     -- L15
+            "Hammer of Wrath",
+            "Holy Armor",
+            "Light Healing",
+            "Lull",
+            "Sense the Dead",
+            "Ward Undead",
+            "Center",                           -- L22
+            "Endure Poison",
+            "Halo of Light",
+            "Invigor",
+            "Invisibility versus Undead",
+            "Reckless Strength",
+            "Root",
+            "Expulse Undead",                   -- L30
+            "Hammer of Striking",
+            "Healing",
+            "Soothe",
+            "Spirit Armor",
+            "Stun",
+            "Symbol of Transal",
+            "Cancel Magic",                     -- L39
+            "Counteract Poison",
+            "Daring",
+            "Endure Disease",
+            "Greater Healing",
+            "Symbol of Ryltan",
+            "Yaulp II",
+            "Calm",                             -- L49
+            "Dismiss Undead",
+            "Guard",
+            "Holy Might",
+            "Revive",
+            "Symbol of Pinzarn",
+            "Valor",
+        },
+        Kunark = {
+            "Divine Might",                     -- L49
+            "Pacify",                           -- L51
+            "Force",                            -- L52
+            "Frenzied Strength",                -- L52
+            "Armor of Faith",                   -- L53
+            "Enstill",                          -- L54
+            "Expel Undead",                     -- L54
+            "Divine Aura",                      -- L55
+            "Divine Favor",                     -- L55
+            "Counteract Disease",               -- L56
+            "Yaulp III",                        -- L56
+            "Symbol of Naltron",                -- L58
+        },
+        Velious = {
+            "Endure Magic",                     -- L30
+            "Divine Purpose",                   -- L39
+            "Guard",                            -- L39
+            "Flame of Light",                   -- L50
+            "Resist Disease",                   -- L51
+            "Divine Glory",                     -- L53
+            "Resist Magic",                     -- L55
+            "Wave of Healing",                  -- L55
+            "Superior Healing",                 -- L57
+            "Nullify Magic",                    -- L58
+            "Celestial Cleansing",              -- L59
+            "Resurrection",                     -- L59
+            "Divine Strength",                  -- L60
+            "Resolution",                       -- L60
+            "Shield of Words",                  -- L60
+            "Yaulp IV",                         -- L60
+        }
+    },
+}
+
+-- NOTE: fvp uses original spell names. These spells was later renamed
+-- TODO make use of this table
+local renamedSpells = {
+    ["Cantana of Replenishment"]    = "Cantata of Replenishment",
+    ["Enstill"]                     = "Instill",
+    ["Invisibility versus Undead"]  = "Invisibility vs. Undead",
 }
 
 ---@param onlyExpac string
