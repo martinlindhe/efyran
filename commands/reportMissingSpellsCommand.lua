@@ -628,6 +628,190 @@ local classSpells = {
             "Protection of the Glades",         -- L60
         },
     },
+    SHM = {
+        Original = {
+            "Burst of Flame",                   -- L01
+            "Cure Disease",
+            "Dexterous Aura",
+            "Endure Cold",
+            "Flash of Light",
+            "Inner Fire",
+            "Minor Healing",
+            "Strengthen",
+            "True North",
+            "Cure Poison",                      -- L05
+            "Drowsy",
+            "Endure Fire",
+            "Feet like Cat",
+            "Fleeting Fury",
+            "Frost Rift",
+            "Gate",
+            "Scale Skin",
+            "Sicken",
+            "Spirit Pouch",
+            "Summon Drink",
+            "Cure Blindness",                   -- L09
+            "Endure Disease",
+            "Light Healing",
+            "Sense Animals",
+            "Serpent Sight",
+            "Spirit of Bear",
+            "Spirit of Wolf",
+            "Spirit Sight",
+            "Summon Food",
+            "Tainted Breath",
+            "Bind Affinity",                    -- L14
+            "Burst of Strength",
+            "Disempower",
+            "Endure Poison",
+            "Enduring Breath",
+            "Invisibility versus Animals",
+            "Levitate",
+            "Root",
+            "Spirit of Snake",
+            "Spirit Strike",
+            "Turtle Skin",
+            "Walking Sleep",
+            "Affliction",                       -- L19
+            "Cancel Magic",
+            "Endure Magic",
+            "Frenzy",
+            "Healing",
+            "Infectious Cloud",
+            "Insidious Fever",
+            "Malise",
+            "Shrink",
+            "Spirit of Cat",
+            "Spirit Strength",
+            "Vision",
+            "Cannibalize",                      -- L24
+            "Counteract Disease",
+            "Creeping Vision",
+            "Envenomed Breath",
+            "Frost Strike",
+            "Invigor",
+            "Poison Storm",
+            "Protect",
+            "Regeneration",
+            "Resist Cold",
+            "Spirit of Cheetah",
+            "Spirit of Monkey",
+            "Spirit of Ox",
+            "Alluring Aura",                    -- L29
+            "Befriend Animal",
+            "Counteract Poison",
+            "Greater Healing",
+            "Invisibility",
+            "Listless Power",
+            "Quickness",
+            "Raging Strength",
+            "Resist Fire",
+            "Rising Dexterity",
+            "Tagar's Insects",
+            "Ultravision",
+            "Companion Spirit",                 -- L34
+            "Fury",
+            "Health",
+            "Enstill",
+            "Malisement",
+            "Nimble",
+            "Resist Disease",
+            "Scourge",
+            "Shifting Shield",
+            "Talisman of Tnarg",
+            "Winter's Roar",
+            "Assiduous Vision",                 -- L39
+            "Blinding Luminance",
+            "Chloroplast",
+            "Deftness",
+            "Extinguish Fatigue",
+            "Furious Strength",
+            "Gale of Poison",
+            "Glamour",
+            "Insidious Malady",
+            "Resist Poison",
+            "Togor's Insects",
+            "Venom of the Snake",
+            "Vigilant Spirit",
+            "Agility",                          -- L44
+            "Alacrity",
+            "Blizzard Blast",
+            "Guardian",
+            "Guardian Spirit",
+            "Incapacitate",
+            "Nullify Magic",
+            "Resist Magic",
+            "Stamina",
+            "Talisman of Altuna",
+            "Abolish Disease",                  -- L49
+            "Charisma",
+            "Dexterity",
+            "Envenomed Bolt",
+            "Frenzied Spirit",
+            "Malosi",
+            "Plague",
+            "Rage",
+            "Strength",
+        },
+        Kunark = {
+            "Scale of Wolf",                    -- L24
+            "Imbue Amber",                      -- L29: Cazic-Thule
+            "Imbue Ivory",                      -- L29: The Tribunal
+            "Imbue Jade",                       -- L29: Rallos Zek
+            "Imbue Sapphire",                   -- L29: Innoruuk
+            "Charm Animals",                    -- L34
+            "Cannibalize II",                   -- L39
+            "Immobilize",                       -- L51
+            "Talisman of Jasinth",              -- L51
+            "Turgur's Insects",                 -- L51
+            "Insidious Decay",                  -- L52
+            "Regrowth",                         -- L52
+            "Spirit of Scale",                  -- L52
+            "Cripple",                          -- L53
+            "Deliriously Nimble",               -- L53
+            "Superior Healing",                 -- L53
+            "Talisman of Shadoo",               -- L53
+            "Cannibalize III",                  -- L54
+            "Ice Strike",                       -- L54
+            "Riotous Health",                   -- L54
+            "Shroud of the Spirits",            -- L54
+            "Annul Magic",                      -- L55
+            "Spirit of the Howler",             -- L55
+            "Talisman of Kragg",                -- L55
+            "Torrent of Poison",                -- L55
+            "Acumen",                           -- L56
+            "Bane of Nife",                     -- L56
+            "Celerity",                         -- L56
+            "Paralyzing Earth",                 -- L56
+            "Malosini",                         -- L57
+            "Maniacal Strength",                -- L57
+            "Talisman of the Brute",            -- L57
+            "Talisman of the Cat",              -- L57
+            "Mortal Deftness",                  -- L58
+            "Talisman of the Rhino",            -- L58
+            "Talisman of the Serpent",          -- L58
+            "Tigir's Insects",                  -- L58
+            "Pox of Bertoxxulous",              -- L59
+            "Talisman of the Raptor",           -- L59
+            "Unfailing Reverence",              -- L59
+            "Voice of the Berserker",           -- L59
+            "Avatar",                           -- L60
+            "Malo",                             -- L60
+            "Torpor",                           -- L60
+        },
+        Velious = {
+            "Shock of the Tainted",             -- L34
+            "Tumultuous Strength",              -- L39
+            "Blast of Poison",                  -- L44
+            "Summon Companion",                 -- L44
+            "Spirit Quickening",                -- L50
+            "Chloroblast",                      -- L55
+            "Form of the Great Bear",           -- L55
+            "Cannibalize IV",                   -- L58
+            "Focus of Spirit",                  -- L60
+            "Primal Avatar",                    -- L60
+        },
+    },
 }
 
 -- NOTE: fvp uses original spell names. These spells was later renamed
@@ -641,6 +825,8 @@ local renamedSpells = {
     ["Calefaction"]                 = "Dustdevil",
     ["Largo's Absonant Binding"]    = "Largo's Assonant Binding",
     ["Selo's Assonant Strane"]      = "Selo's Assonant Strain",
+    ["Malise"]                      = "Malaise",
+    ["Malisement"]                  = "Malaisement",
 }
 
 ---@param expac string
