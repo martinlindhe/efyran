@@ -1292,7 +1292,198 @@ local classSpells = {
             "Valiant Companion",                -- L59
             "Monster Summoning III",            -- L60
         },
-    }
+    },
+    WIZ = {
+        Original = {
+            "Frost Bolt",                       -- L01
+            "Minor Shielding",
+            "Numbing Cold",
+            "Blast of Cold",
+            "Sphere of Light",
+            "True North",
+            "Fade",                             -- L04
+            "Gate",
+            "Glimpse",
+            "Icestrike",
+            "O`Keil's Radiation",
+            "Root",
+            "See Invisible",
+            "Shock of Fire",
+            "Column of Frost",                  -- L08
+            "Eye of Zomm",
+            "Fingers of Fire",
+            "Fire Bolt",
+            "Lesser Shielding",
+            "Sense Summoned",
+            "Shadow Step",
+            "Shock of Ice",
+            "Bind Affinity",                    -- L12
+            "Cancel Magic",
+            "Firestorm",
+            "Frost Spiral of Al'Kabor",
+            "Gaze",
+            "Halo of Light",
+            "Resistant Skin",
+            "Shock of Lightning",
+            "Bind Sight",                       -- L16
+            "Flame Shock",
+            "Heat Sight",
+            "Identify",
+            "Invisibility",
+            "Lightning Bolt",
+            "Pillar of Fire",
+            "Project Lightning",
+            "Shielding",
+            "Shieldskin",
+            "Elemental Shield",                 -- L20
+            "Instill",
+            "Fay Gate",
+            "Fire Spiral of Al'Kabor",
+            "Force Shock",
+            "North Gate",
+            "Sight",
+            "Tishan's Clash",
+            "Tox Gate",
+            "Cast Force",                       -- L24
+            "Cazic Gate",
+            "Column of Lightning",
+            "Common Gate",
+            "Frost Shock",
+            "Leatherskin",
+            "Levitate",
+            "Lightning Storm",
+            "Major Shielding",
+            "Nek Gate",
+            "Ro Gate",
+            "West Gate",
+            "Bonds of Force",                   -- L29
+            "Energy Storm",
+            "Evacuate: North",
+            "Fay Portal",
+            "Inferno Shock",
+            "Magnify",
+            "North Portal",
+            "Shock Spiral of Al'Kabor",
+            "Thunder Strike",
+            "Tox Portal",
+            "Yonder",
+            "Cazic Portal",                     -- L34
+            "Circle of Force",
+            "Evacuate: Fay",
+            "Greater Shielding",
+            "Ice Shock",
+            "Lava Storm",
+            "Nek Portal",
+            "Nullify Magic",
+            "Steelskin",
+            "Thunderclap",
+            "Chill Sight",                      -- L39
+            "Common Portal",
+            "Evacuate: Ro",
+            "Force Spiral of Al'Kabor",
+            "Immobilize",
+            "Lightning Shock",
+            "Ro Portal",
+            "Shifting Sight",
+            "West Portal",
+            "Arch Shielding",                   -- L44
+            "Conflagration",
+            "Diamondskin",
+            "Elemental Armor",
+            "Evacuate: Nek",
+            "Force Strike",
+            "Frost Storm",
+            "Gravity Flux",
+            "Alter Plane: Hate",                -- L46
+            "Alter Plane: Sky",
+            "Evacuate: West",                   -- L49
+            "Ice Comet",
+            "Markar's Clash",
+            "Paralyzing Earth",
+            "Rend",
+            "Supernova",
+            "Wrath of Al'Kabor",
+        },
+        Kunark = {
+            "Combine Gate",                     -- L24
+            "Imbue Fire Opal",                  -- L29
+            "Combine Portal",                   -- L34
+            "Harvest",                          -- L34
+            "Concussion",                       -- L39
+            "Markar's Relocation",              -- L39
+            "Tishan's Relocation",              -- L39
+            "Atol's Spectral Shackles",         -- L51
+            "Draught of Fire",                  -- L51
+            "Pillar of Frost",                  -- L51
+            "Tishan's Discord",                 -- L51
+            "Abscond",                          -- L52
+            "Lure of Frost",                    -- L52
+            "Manaskin",                         -- L52
+            "Tears of Druzzil",                 -- L52
+            "Annul Magic",                      -- L53
+            "Inferno of Al'Kabor",              -- L53
+            "Jyll's Static Pulse",              -- L53
+            "Pillar of Lightning",              -- L54
+            "Shield of the Magi",               -- L54
+            "Thunderbolt",                      -- L54
+            "Voltaic Draught",                  -- L54
+            "Draught of Jiva",                  -- L55
+            "Lure of Flame",                    -- L55
+            "Plainsight",                       -- L55
+            "Tears of Solusek",                 -- L55
+            "Jyll's Zephyr of Ice",             -- L56
+            "Markar's Discord",                 -- L56
+            "Retribution of Al'Kabor",          -- L56
+            "Draught of Ice",                   -- L57
+            "Evacuate",                         -- L57
+            "Eye of Tallon",                    -- L57
+            "Pillar of Flame",                  -- L57
+            "Fetter",                           -- L58
+            "Lure of Lightning",                -- L58
+            "Manasink",                         -- L58
+            "Tears of Prexus",                  -- L58
+            "Flaming Sword of Xuzl",            -- L59
+            "Invert Gravity",                   -- L59
+            "Jyll's Wave of Heat",              -- L59
+            "Vengeance of Al'Kabor",            -- L59
+            "Disintegrate",                     -- L60
+            "Lure of Ice",                      -- L60
+            "Sunstrike",                        -- L60
+            "Winds of Gelid",                   -- L60
+        },
+        Velious = {
+            "Great Divide Gate",                -- L34
+            "Iceclad Gate",                     -- L34
+            "Iceclad Portal",                   -- L34
+            "O`Keil's Flickering Flame",        -- L34
+            "Cobalt Scar Gate",                 -- L39
+            "Great Divide Portal",              -- L39
+            "Invisibility to Undead",           -- L39
+            "Translocate: Combine",             -- L39
+            "Translocate: Fay",                 -- L39
+            "Translocate: North",               -- L39
+            "Translocate: Tox",                 -- L39
+            "Wakening Lands Gate",              -- L39
+            "Cobalt Scar Portal",               -- L44
+            "Enticement of Flame",              -- L44
+            "Translocate: Cazic",               -- L44
+            "Translocate: Common",              -- L44
+            "Translocate: West",                -- L44
+            "Translocate: Nek",                 -- L44
+            "Translocate: Ro",                  -- L44
+            "Wakening Lands Portal",            -- L44
+            "Translocate: Cobalt Scar",         -- L49
+            "Translocate: Great Divide",        -- L49
+            "Translocate: Iceclad",             -- L49
+            "Translocate: Wakening Lands",      -- L49
+            "Translocate",                      -- L50
+            "Translocate: Group",               -- L52
+            "Improved Invisibility",            -- L55
+            "Hsagra's Wrath",                   -- L60
+            "Ice Spear of Solist",              -- L60
+            "Porlos' Fury",                     -- L60
+        },
+    },
 }
 
 -- Mapping between classic spell names and the names used on live.
@@ -1318,6 +1509,11 @@ local renamedSpells = {
     ["Vocarate: Water"]             = "Vocerate: Water",
     ["Vocarate: Air"]               = "Vocerate: Air",
     ["Vocarate: Earth"]             = "Vocerate: Earth",
+    ["O`Keil's Radiation"]          = "O`Keils Radiation",
+    ["O`Keil's Flickering Flame"]   = "O'Keils Flickering Flame",
+    ["Blast of Cold"]               = "Shock of Frost",
+    ["Thunderbolt"]                 = "Thunderbold",
+    ["Voltaic Draught"]             = "Voltaic Draugh",
 }
 
 -- Unlike have_spell(), we ignore AA names.
