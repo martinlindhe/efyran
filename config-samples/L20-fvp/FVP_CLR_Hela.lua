@@ -3,7 +3,7 @@ local settings = { }
 
 settings.debug = true
 
-settings.autoloot = false
+settings.loot = false
 
 settings.gems = {
     ["Healing"] = 1,

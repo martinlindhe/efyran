@@ -18,6 +18,7 @@ local trainers = {
     alcohol = alcoholTrainer,
     beg = begTrainer,
     begging = begTrainer,
+    fd = feignTrainer,
     feign = feignTrainer,
     hide = hideAndSneakTrainer,
     lang = languageTrainer,

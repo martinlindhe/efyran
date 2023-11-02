@@ -95,7 +95,6 @@ local classSpells = {
     },
 }
 
-
 ---@param onlyExpac string
 local function execute(onlyExpac)
     local class = class_shortname()
@@ -113,10 +112,9 @@ local function execute(onlyExpac)
 
     for expac, expacSpells in pairs(spells) do
         if onlyExpac == nil or (onlyExpac ~= nil and string.lower(onlyExpac) == string.lower(expac)) then
-            log.Info("missing spells in expac %s (%d total)", expac, #expacSpells)
+            log.Info("Expansion %s (%d total):", expac, #expacSpells)
 
             for _, spell in pairs(expacSpells) do
-                -- XXX
                 local spellData = get_spell(spell)
                 if spellData == nil then
                     all_tellf("UNLIKELY: %s: DID NOT RESOLVE [+r+]%s[+x+]", expac, spell)
@@ -131,9 +129,6 @@ local function execute(onlyExpac)
             end
         end
     end
-
-    -- XXX impl
-
 end
 
 ---@param onlyExpac string

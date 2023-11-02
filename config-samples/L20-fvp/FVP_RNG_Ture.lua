@@ -1,7 +1,7 @@
 ---@type PeerSettings
 local settings = { }
 
-settings.autoloot = true
+settings.loot = true
 
 settings.weapons = {
     main = {

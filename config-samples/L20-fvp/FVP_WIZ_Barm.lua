@@ -1,7 +1,7 @@
 ---@type PeerSettings
 local settings = { }
 
-settings.autoloot = false -- holds Runes so inventory gets full
+settings.loot = false -- holds Runes so inventory gets full
 
 settings.gems = {
     ["wiz_fire_nuke"] = 1,

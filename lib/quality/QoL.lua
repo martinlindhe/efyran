@@ -499,13 +499,13 @@ function QoL.Init()
     -- turn auto loot on
     bind("/looton", function()
         all_tellf("Auto-loot ENABLED")
-        botSettings.settings.autoloot = true
+        botSettings.settings.loot = true
     end)
 
     -- turn auto loot off
     bind("/lootoff", function()
         all_tellf("Auto-loot DISABLED")
-        botSettings.settings.autoloot = false
+        botSettings.settings.loot = false
     end)
 
     -- reload MQ2Nav meshes (for when you edited a navmesh and want it to take effect immediately)
@@ -539,7 +539,7 @@ function QoL.Init()
     -- track xp, auto adjust level / AA xp and auto loot
     local xpGain = function(text)
 
-        if botSettings.settings.autoloot then
+        if botSettings.settings.loot then
             mq.cmd("/doloot")
         end
 

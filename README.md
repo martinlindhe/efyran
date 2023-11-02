@@ -201,8 +201,8 @@ settings.debug = true -- enable debug logging for this peer
 /languages                  - report language skills for all peers
 /combineit                  - tradeskill: autocombine (uses new tradeskill window)
 
-# autoloot
-/looton, /lootoff           - toggle autoloot (non-persistent. Use peer `settings.autoloot = true` to make it permanent)
+# Looting
+/looton, /lootoff           - toggle autoloot (non-persistent. Use peer `settings.loot = true` to make it permanent)
 /doloot                     - manually trigger autoloot on this peer
 /setdestroyitem             - mark item on cursor for auto-destroy
 /setsellitem                - mark item on cursor for auto-sell

@@ -3,7 +3,7 @@ local settings = { }
 
 settings.debug = true
 
-settings.autoloot = true
+settings.loot = true
 
 settings.gems = {
     ["dru_heal"] = 1,
