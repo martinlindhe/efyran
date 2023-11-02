@@ -889,7 +889,227 @@ local classSpells = {
             "Drain Soul",                       -- L60
             "Death Peace",                      -- L60
         },
-    }
+    },
+    ENC = {
+        Original = {
+            "Lull",                             -- L01
+            "Minor Illusion",
+            "Minor Shielding",
+            "Pendril's Animation",
+            "Reclaim Energy",
+            "Shallow Breath",
+            "Strengthen",
+            "Taper Enchantment",
+            "True North",
+            "Weaken",
+            "Color Flux",                       -- L04
+            "Enfeeblement",
+            "Fear",
+            "Gate",
+            "Haze",
+            "Illusion: Half-Elf",
+            "Illusion: Human",
+            "Invisibility",
+            "Juli's Animation",
+            "Mesmerize",
+            "Suffocating Sphere",
+            "Tashan",
+            "Alliance",                         -- L08
+            "Bind Sight",
+            "Cancel Magic",
+            "Chaotic Feedback",
+            "Enchant Silver",
+            "Eye of Confusion",
+            "Illusion: Gnome",
+            "Illusion: Wood Elf",
+            "Lesser Shielding",
+            "Mircyl's Animation",
+            "Root",
+            "See Invisible",
+            "Sentinel",
+            "Soothe",
+            "Bind Affinity",                    -- L12
+            "Charm",
+            "Choke",
+            "Ebbing Strength",
+            "Enduring Breath",
+            "Illusion: Dark Elf",
+            "Illusion: Erudite",
+            "Illusion: Halfling",
+            "Illusion: High Elf",
+            "Kilan's Animation",
+            "Languid Pace",
+            "Memory Blur",
+            "Mist",
+            "Serpent Sight",
+            "Thicken Mana",
+            "Whirl till you hurl",
+            "Chase the Moon",                   -- L16
+            "Disempower",
+            "Enchant Electrum",
+            "Enthrall",
+            "Identify",
+            "Illusion: Barbarian",
+            "Illusion: Dwarf",
+            "Illusion: Tree",
+            "Invisibility versus Undead",
+            "Levitate",
+            "Mesmerization",
+            "Quickness",
+            "Rune I",
+            "Sanity Warp",
+            "Shalee's Animation",
+            "Shielding",
+            "Benevolence",                      -- L20
+            "Berserker Strength",
+            "Calm",
+            "Cloud",
+            "Color Shift",
+            "Crystallize Mana",
+            "Endure Magic",
+            "Feckless Might",
+            "Illusion: Ogre",
+            "Illusion: Troll",
+            "Shifting Sight",
+            "Sisna's Animation",
+            "Sympathetic Aura",
+            "Tashani",
+            "Alacrity",                         -- L24
+            "Beguile",
+            "Chaos Flux",
+            "Enchant Gold",
+            "Illusion: Earth Elemental",
+            "Illusion: Skeleton",
+            "Invigor",
+            "Major Shielding",
+            "Rune II",
+            "Sagar's Animation",
+            "Strip Enchantment",
+            "Tepid Deeds",
+            "Augmentation",                     -- L29
+            "Clarify Mana",
+            "Clarity",
+            "Curse of the Simple Mind",
+            "Dyn's Dizzying Draught",
+            "Feedback",
+            "Illusion: Air Elemental",
+            "Illusion: Water Elemental",
+            "Enstill",
+            "Listless Power",
+            "Nullify Magic",
+            "Obscure",
+            "Suffocate",
+            "Uleen's Animation",
+            "Ultravision",
+            "Anarchy",                          -- L34
+            "Boltran's Animation",
+            "Cast Sight",
+            "Enchant Platinum",
+            "Entrance",
+            "Greater Shielding",
+            "Illusion: Fire Elemental",
+            "Insipid Weakness",
+            "Mana Sieve",
+            "Radiant Visage",
+            "Rune III",
+            "Aanya's Animation",                -- L39
+            "Cajoling Whispers",
+            "Celerity",
+            "Distill Mana",
+            "Gravity Flux",
+            "Illusion: Drybone",
+            "Illusion: Spirit Wolf",
+            "Immobilize",
+            "Insight",
+            "Invoke Fear",
+            "Mind Wipe",
+            "Pacify",
+            "Rampage",
+            "Resist Magic",
+            "Shade",
+            "Arch Shielding",                   -- L44
+            "Brilliance",
+            "Color Skew",
+            "Discordant Mind",
+            "Extinguish Fatigue",
+            "Illusion: Werewolf",
+            "Incapacitate",
+            "Pillage Enchantment",
+            "Rune IV",
+            "Shiftless Deeds",
+            "Tashania",
+            "Weakness",
+            "Yegoreff's Animation",
+            "Adorning Grace",                   -- L49
+            "Allure",
+            "Berserker Spirit",
+            "Blanket of Forgetfulness",
+            "Dazzle",
+            "Gasping Embrace",
+            "Group Resist Magic",
+            "Kintaz's Animation",
+            "Paralyzing Earth",
+            "Purify Mana",
+            "Reoccurring Amnesia",
+            "Shadow",
+            "Swift like the Wind",
+        },
+        Kunark = {
+            "Breeze",                           -- L16
+            "Illusion: Iksar",                  -- L20
+            "Enchant Adamantite",               -- L49
+            "Enchant Brellium",                 -- L49
+            "Enchant Mithril",                  -- L49
+            "Enchant Steel",                    -- L49
+            "Collaboration",                    -- L51
+            "Theft of Thought",                 -- L51
+            "Wake of Tranquility",              -- L51
+            "Boon of the Clear Mind",           -- L52
+            "Color Slant",                      -- L52
+            "Fascination",                      -- L52
+            "Rune V",                           -- L52
+            "Aanya's Quickening",               -- L53
+            "Boltran's Agacerie",               -- L53
+            "Cripple",                          -- L53
+            "Recant Magic",                     -- L53
+            "Clarity II",                       -- L54
+            "Dementia",                         -- L54
+            "Glamour of Kintaz",                -- L54
+            "Shield of the Magi",               -- L54
+            "Largarn's Lamentation",            -- L55
+            "Memory Flux",                      -- L55
+            "Wind of Tishani",                  -- L55
+            "Zumaik's Animation",               -- L55
+            "Augment",                          -- L56
+            "Overwhelming Splendor",            -- L56
+            "Torment of Argli",                 -- L56
+            "Trepidation",                      -- L56
+            "Enlightenment",                    -- L57
+            "Forlorn Deeds",                    -- L57
+            "Tashanian",                        -- L57
+            "Umbra",                            -- L57
+            "Bedlam",                           -- L58
+            "Fetter",                           -- L58
+            "Wonderous Rapidity",               -- L58
+            "Asphyxiate",                       -- L59
+            "Gift of Pure Thought",             -- L59
+            "Rapture",                          -- L59
+            "Dictate",                          -- L60
+            "Visions of Grandeur",              -- L60
+            "Wind of Tishanian",                -- L60
+        },
+        Velious = {
+            "Enchant Clay",                     -- L08
+            "Gift of Magic",                    -- L34
+            "Wandering Mind",                   -- L39
+            "Boon of the Garou",                -- L44
+            "Enchant Velium",                   -- L44
+            "Summon Companion",                 -- L44
+            "Improved Invisibility",            -- L50
+            "Gift of Insight",                  -- L55
+            "Gift of Brilliance",               -- L60
+        },
+    },
 }
 
 -- NOTE: fvp uses original spell names. These spells was later renamed
@@ -905,6 +1125,11 @@ local renamedSpells = {
     ["Selo's Assonant Strane"]      = "Selo's Assonant Strain",
     ["Malise"]                      = "Malaise",
     ["Malisement"]                  = "Malaisement",
+    ["Wonderous Rapidity"]          = "Wondrous Rapidity",
+    ["Tashan"]                      = "Tashina",
+    ["Wind of Tishani"]             = "Wind of Tashani",
+    ["Wind of Tishanian"]           = "Wind of Tashanian",
+    ["Illusion: Drybone"]           = "Illusion: Dry Bone",
 }
 
 -- Unlike have_spell(), we ignore AA names.
@@ -929,7 +1154,7 @@ local function reportSpellStatus(expac, spell)
                 reportSpellStatus(expac, rename)
                 return
             else
-                all_tellf("%s: ERROR: No Level data for \ay%s\ax", expac, spell)
+                all_tellf("%s: ERROR: No Level data for [+y+]%s[+x+]", expac, spell)
             end
         elseif spellData.Level() <= mq.TLO.Me.Level() then
             log.Info("%s: Missing L%d \ay%s\ax", expac, spellData.Level(), spell)
