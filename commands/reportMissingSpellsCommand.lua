@@ -1484,6 +1484,17 @@ local classSpells = {
             "Porlos' Fury",                     -- L60
         },
     },
+    NEC = {
+        Original = {
+            -- XXX
+        },
+        Kunark = {
+
+        },
+        Velious = {
+
+        },
+    }
 }
 
 -- Mapping between classic spell names and the names used on live.
@@ -1546,6 +1557,35 @@ local function reportSpellStatus(expac, spell)
     end
 end
 
+---@param spell spell
+---@return boolean
+local function recognizedSpell(spell)
+    if spell() == nil then
+        return false
+    end
+
+    local class = class_shortname()
+    local spells = classSpells[class]
+    if spells == nil then
+        return false
+    end
+
+    for expac, t in pairs(spells) do
+        for _, currentSpell in pairs(t) do
+            if spell.Name() == currentSpell then
+                return true
+            end
+            local rename = renamedSpells[currentSpell]
+            if rename ~= nil and spell.Name() == rename then
+                return true
+            end
+        end
+    end
+
+    return false
+end
+
+-- Reports missing spells
 ---@param onlyExpac string
 local function execute(onlyExpac)
     local class = class_shortname()
@@ -1566,6 +1606,16 @@ local function execute(onlyExpac)
             log.Info("Expansion %s (%d total):", expac, #expacSpells)
             for _, spell in pairs(expacSpells) do
                 reportSpellStatus(expac, spell)
+            end
+        end
+    end
+
+    -- scan spell book and look for any unknown spells according to the above tables.
+    for i = 1, 8000 do
+        local spell = mq.TLO.Me.Book(i)
+        if spell() ~= nil then
+            if not recognizedSpell(spell) then
+                log.Info("UNRECOGNIZED SPELL IN slot %d: %s", i, spell.RankName())
             end
         end
     end
