@@ -1486,15 +1486,184 @@ local classSpells = {
     },
     NEC = {
         Original = {
-            -- XXX
+            "Cavorting Bones",                  -- L01
+            "Coldlight",
+            "Disease Cloud",
+            "Invisibility versus Undead",
+            "Lifetap",
+            "Locate Corpse",
+            "Minor Shielding",
+            "Reclaim Energy",
+            "Sense the Dead",
+            "Siphon Strength",
+            "Clinging Darkness",                -- L04
+            "Endure Cold",
+            "Fear",
+            "Gate",
+            "Grim Aura",
+            "Leering Corpse",
+            "Lifespike",
+            "Numb the Dead",
+            "Poison Bolt",
+            "True North",
+            "Bone Walk",                        -- L08
+            "Dark Empathy",
+            "Dark Pact",
+            "Deadeye",
+            "Gather Shadows",
+            "Impart Strength",
+            "Lesser Shielding",
+            "Mend Bones",
+            "Shadow Step",
+            "Vampiric Embrace",
+            "Ward Undead",
+            "Bind Affinity",                    -- L12
+            "Convoke Shadow",
+            "Endure Disease",
+            "Engulfing Darkness",
+            "Heat Blood",
+            "Leech",
+            "Lifedraw",
+            "Scent of Dusk",
+            "Sight Graft",
+            "Spook the Dead",
+            "Wave of Enfeeblement",
+            "Banshee Aura",                     -- L16
+            "Cancel Magic",
+            "Cure Disease",
+            "Feign Death",
+            "Heart Flutter",
+            "Hungry Earth",
+            "Infectious Cloud",
+            "Restless Bones",
+            "Shielding",
+            "Shieldskin",
+            "Spirit Armor",
+            "Voice Graft",
+            "Allure of Death",                  -- L20
+            "Animate Dead",
+            "Dominate Undead",
+            "Expulse Undead",
+            "Harmshield",
+            "Identify",
+            "Shadow Compact",
+            "Shadow Vortex",
+            "Siphon Life",
+            "Word of Shadow",
+            "Breath of the Dead",               -- L24
+            "Haunting Corpse",
+            "Intensify Death",
+            "Leatherskin",
+            "Major Shielding",
+            "Rapacious Subvention",
+            "Resist Cold",
+            "Rest the Dead",
+            "Scent of Shadow",
+            "Screaming Terror",
+            "Shadow Sight",
+            "Shock of Poison",
+            "Boil Blood",                       -- L29
+            "Dismiss Undead",
+            "Dooming Darkness",
+            "Panic the Dead",
+            "Renew Bones",
+            "Spirit Tap",
+            "Summon Dead",
+            "Vampiric Curse",
+            "Word of Spirit",
+            "Beguile Undead",                   -- L34
+            "Call of Bones",
+            "Greater Shielding",
+            "Invoke Fear",
+            "Invoke Shadow",
+            "Resist Disease",
+            "Root",
+            "Steelskin",
+            "Surge of Enfeeblement",
+            "Venom of the Snake",
+            "Augment Death",                    -- L39
+            "Counteract Disease",
+            "Drain Spirit",
+            "Expel Undead",
+            "Malignant Dead",
+            "Nullify Magic",
+            "Scent of Darkness",
+            "Scourge",
+            "Summon Corpse",
+            "Word of Souls",
+            "Arch Shielding",                   -- L44
+            "Asystole",
+            "Cackling Bones",
+            "Covetous Subversion",
+            "Dead Man Floating",
+            "Diamondskin",
+            "Ignite Bones",
+            "Pact of Shadow",
+            "Banish Undead",                    -- L49
+            "Bond of Death",
+            "Cajole Undead",
+            "Cascading Darkness",
+            "Drain Soul",
+            "Ignite Blood",
+            "Invoke Death",
+            "Lich",
+            "Paralyzing Earth",
         },
         Kunark = {
-
+            "Track Corpse",                     -- L20
+            "Dread of Night",                   -- L51
+            "Envenomed Bolt",                   -- L51
+            "Sacrifice",                        -- L51
+            "Splurt",                           -- L51
+            "Defoliation",                      -- L52
+            "Manaskin",                         -- L52
+            "Plague",                           -- L52
+            "Scent of Terris",                  -- L52
+            "Annul Magic",                      -- L53
+            "Convergence",                      -- L53
+            "Instill",                          -- L53
+            "Minion of Shadows",                -- L53
+            "Deflux",                           -- L54
+            "Shadowbond",                       -- L54
+            "Shield of the Magi",               -- L54
+            "Thrall of Bones",                  -- L54
+            "Chill Bones",                      -- L55
+            "Infusion",                         -- L55
+            "Levant",                           -- L55
+            "Skin of the Shadow",               -- L55
+            "Cessation of Cor",                 -- L56
+            "Sedulous Subversion",              -- L56
+            "Servant of Bones",                 -- L56
+            "Trepidation",                      -- L56
+            "Conjure Corpse",                   -- L57
+            "Exile Undead",                     -- L57
+            "Vexing Replenishment",             -- L57
+            "Immobilize",                       -- L58
+            "Pyrocruor",                        -- L58
+            "Quivering Veil of Xarn",           -- L58
+            "Devouring Darkness",               -- L59
+            "Emissary of Thule",                -- L59
+            "Touch of Night",                   -- L59
+            "Banishment of Shadows",            -- L60
+            "Demi Lich",                        -- L60
+            "Enslave Death",                    -- L60
+            "Trucidation",                      -- L60
         },
         Velious = {
-
+            "Torbas' Acid Blast",               -- L34
+            "Chilling Embrace",                 -- L39
+            "Corporeal Empathy",                -- L44
+            "Incinerate Bones",                 -- L44
+            "Summon Companion",                 -- L44
+            "Dead Men Floating",                -- L49
+            "Improved Invisibility",            -- L50
+            "Augmentation of Death",            -- L55
+            "Conglaciation of Bone",            -- L55
+            "Arch Lich",                        -- L60
+            "Gangrenous Touch of Zum`uul",      -- L60
         },
-    }
+    },
+    -- BST = {}, -- TODO
 }
 
 -- Mapping between classic spell names and the names used on live.
@@ -1525,6 +1694,10 @@ local renamedSpells = {
     ["Blast of Cold"]               = "Shock of Frost",
     ["Thunderbolt"]                 = "Thunderbold",
     ["Voltaic Draught"]             = "Voltaic Draugh",
+    ["Rapacious Subvention"]        = "Rapacious Subversion",
+    ["Vexing Replenishment"]        = "Vexing Mordinia",
+    ["Servant of Bones"]            = "Servent of Bones",
+    ["Leech"]                       = "Leach",
 }
 
 -- Unlike have_spell(), we ignore AA names.
@@ -1615,7 +1788,7 @@ local function execute(onlyExpac)
         local spell = mq.TLO.Me.Book(i)
         if spell() ~= nil then
             if not recognizedSpell(spell) then
-                log.Info("UNRECOGNIZED SPELL IN slot %d: %s", i, spell.RankName())
+                log.Info("UNRECOGNIZED SPELL %d: L%d %s", i, spell.Level(), spell.RankName())
             end
         end
     end
