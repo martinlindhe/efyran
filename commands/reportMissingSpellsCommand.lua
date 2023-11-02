@@ -59,13 +59,13 @@ local classSpells = {
             "Jonthan's Provocation",            -- L45
             --"Shield of Song",                   -- L49      XXX disabled on fvp nov 2, Eredhin says it should be enabled
             "Selo's Song of Travel",
-            "Largo's Absonant Binding",
+            "Largo's Assonant Binding",
             "Nillipus' March of the Wee",
             "Song of Twilight",
             "Song of Dawn",
             "Vilia's Chorus of Celerity",
-            "Selo's Assonant Strane",
-            "Cantana of Replenishment",         -- L55
+            "Selo's Assonant Strain",
+            "Cantata of Replenishment",         -- L55
             "Brusco's Bombastic Bellow",        -- L55
             "Song of Highsun",
             "Song of Midnight",
@@ -80,7 +80,7 @@ local classSpells = {
         },
         Velious = {
             "Cassindra's Chant of Clarity",     -- L20
-            "Cantana of Soothing",              -- L34
+            "Cantata of Soothing",              -- L34
             "Melody of Ervaj",                  -- L50
             "Occlusion of Sound",               -- L55
             "Composition of Ervaj",             -- L60
@@ -153,7 +153,7 @@ local classSpells = {
             "Greater Wolf Form",                -- L56
             "Greater Healing",                  -- L57
             "Shield of Spikes",                 -- L58
-            "Calefaction",                      -- L59
+            "Dustdevil",                        -- L59
             "Enveloping Roots",                 -- L60
             "Thorncoat",                        -- L60
         },
@@ -194,7 +194,7 @@ local classSpells = {
             "Endure Poison",
             "Halo of Light",
             "Invigor",
-            "Invisibility versus Undead",
+            "Invisibility vs. Undead",
             "Reckless Strength",
             "Root",
             "Expulse Undead",                   -- L30
@@ -225,7 +225,7 @@ local classSpells = {
             "Force",                            -- L52
             "Frenzied Strength",                -- L52
             "Armor of Faith",                   -- L53
-            "Enstill",                          -- L54
+            "Instill",                          -- L54
             "Expel Undead",                     -- L54
             "Divine Aura",                      -- L55
             "Divine Favor",                     -- L55
@@ -292,7 +292,7 @@ local classSpells = {
             "Expulse Undead",
             "Halo of Light",
             "Healing",
-            "Invisibility versus Undead",
+            "Invisibility vs. Undead",
             "Sense Summoned",
             "Smite",
             "Symbol of Transal",
@@ -316,7 +316,7 @@ local classSpells = {
             "Abundant Drink",                   -- L29
             "Counteract Disease",
             "Divine Barrier",
-            "Enstill",
+            "Instill",
             "Expulse Summoned",
             "Guard",
             "Panic the Dead",
@@ -337,7 +337,7 @@ local classSpells = {
             "Valor",
             "Word of Health",
             "Armor of Faith",                   -- L39
-            "Complete Healing",
+            "Complete Heal",
             "Dismiss Summoned",
             "Invoke Fear",
             "Nullify Magic",
@@ -679,7 +679,7 @@ local classSpells = {
             "Healing",
             "Infectious Cloud",
             "Insidious Fever",
-            "Malise",
+            "Malaise",
             "Shrink",
             "Spirit of Cat",
             "Spirit Strength",
@@ -712,8 +712,8 @@ local classSpells = {
             "Companion Spirit",                 -- L34
             "Fury",
             "Health",
-            "Enstill",
-            "Malisement",
+            "Instill",
+            "Malaisement",
             "Nimble",
             "Resist Disease",
             "Scourge",
@@ -815,7 +815,7 @@ local classSpells = {
     SHD = {
         Original = {
             "Disease Cloud",                    -- L09
-            "Invisibility versus Undead",
+            "Invisibility vs. Undead",
             "Leering Corpse",
             "Lifetap",
             "Locate Corpse",
@@ -913,7 +913,7 @@ local classSpells = {
             "Juli's Animation",
             "Mesmerize",
             "Suffocating Sphere",
-            "Tashan",
+            "Tashina",
             "Alliance",                         -- L08
             "Bind Sight",
             "Cancel Magic",
@@ -952,7 +952,7 @@ local classSpells = {
             "Illusion: Barbarian",
             "Illusion: Dwarf",
             "Illusion: Tree",
-            "Invisibility versus Undead",
+            "Invisibility vs. Undead",
             "Levitate",
             "Mesmerization",
             "Quickness",
@@ -1017,7 +1017,7 @@ local classSpells = {
             "Celerity",
             "Distill Mana",
             "Gravity Flux",
-            "Illusion: Drybone",
+            "Illusion: Dry Bone",
             "Illusion: Spirit Wolf",
             "Immobilize",
             "Insight",
@@ -1078,7 +1078,7 @@ local classSpells = {
             "Shield of the Magi",               -- L54
             "Largarn's Lamentation",            -- L55
             "Memory Flux",                      -- L55
-            "Wind of Tishani",                  -- L55
+            "Wind of Tashani",                  -- L55
             "Zumaik's Animation",               -- L55
             "Augment",                          -- L56
             "Overwhelming Splendor",            -- L56
@@ -1090,13 +1090,13 @@ local classSpells = {
             "Umbra",                            -- L57
             "Bedlam",                           -- L58
             "Fetter",                           -- L58
-            "Wonderous Rapidity",               -- L58
+            "Wondrous Rapidity",               -- L58
             "Asphyxiate",                       -- L59
             "Gift of Pure Thought",             -- L59
             "Rapture",                          -- L59
             "Dictate",                          -- L60
             "Visions of Grandeur",              -- L60
-            "Wind of Tishanian",                -- L60
+            "Wind of Tashanian",                -- L60
         },
         Velious = {
             "Enchant Clay",                     -- L08
@@ -1110,26 +1110,214 @@ local classSpells = {
             "Gift of Brilliance",               -- L60
         },
     },
+    MAG = {
+        Original = {
+            "Burst of Flame",                   -- L01
+            "Flare",
+            "Minor Shielding",
+            "Reclaim Energy",
+            "Summon Dagger",
+            "Summon Drink",
+            "Summon Food",
+            "True North",
+            "Burn",                             -- L04
+            "Elementalkin: Air",
+            "Elementalkin: Earth",
+            "Elementalkin: Fire",
+            "Elementalkin: Water",
+            "Fire Flux",
+            "Gate",
+            "Sense Summoned",
+            "Summon Bandages",
+            "Summon Wisp",
+            "Dimensional Pocket",               -- L08
+            "Elementaling: Air",
+            "Elementaling: Earth",
+            "Elementaling: Fire",
+            "Elementaling: Water",
+            "Eye of Zomm",
+            "Flame Bolt",
+            "Invisibility",
+            "Lesser Shielding",
+            "Shield of Fire",
+            "Shock of Blades",
+            "Staff of Tracing",
+            "Bind Affinity",                    -- L12
+            "Burnout",
+            "Cancel Magic",
+            "Column of Fire",
+            "Elemental: Air",
+            "Elemental: Earth",
+            "Elemental: Fire",
+            "Elemental: Water",
+            "Rain of Blades",
+            "Summon Fang",
+            "Ward Summoned",
+            "Identify",                         -- L16
+            "Minor Summoning: Air",
+            "Minor Summoning: Earth",
+            "Minor Summoning: Fire",
+            "Minor Summoning: Water",
+            "Phantom Leather",
+            "See Invisible",
+            "Shielding",
+            "Shock of Flame",
+            "Staff of Warding",
+            "Summon Heatstone",
+            "Summon Throwing Dagger",
+            "Bolt of Flame",                    -- L20
+            "Elemental Shield",
+            "Expulse Summoned",
+            "Lesser Summoning: Air",
+            "Lesser Summoning: Earth",
+            "Lesser Summoning: Fire",
+            "Lesser Summoning: Water",
+            "Rain of Fire",
+            "Renew Summoning",
+            "Shield of Flame",
+            "Spear of Warding",
+            "Summon Arrows",
+            "Summon Waterstone",
+            "Cornucopia",                       -- L24
+            "Everfount",
+            "Flame Flux",
+            "Major Shielding",
+            "Malaise",
+            "Shock of Spikes",
+            "Staff of Runes",
+            "Summoning: Air",
+            "Summoning: Earth",
+            "Summoning: Fire",
+            "Summoning: Water",
+            "Burnout II",                       -- L29
+            "Dismiss Summoned",
+            "Greater Summoning: Air",
+            "Greater Summoning: Earth",
+            "Greater Summoning: Fire",
+            "Greater Summoning: Water",
+            "Inferno Shield",
+            "Phantom Chain",
+            "Rain of Spikes",
+            "Summon Coldstone",
+            "Sword of Runes",
+            "Blaze",                            -- L34
+            "Cinder Bolt",
+            "Dimensional Hole",
+            "Greater Shielding",
+            "Minor Conjuration: Air",
+            "Minor Conjuration: Earth",
+            "Minor Conjuration: Fire",
+            "Minor Conjuration: Water",
+            "Nullify Magic",
+            "Staff of Symbols",
+            "Barrier of Combustion",            -- L39
+            "Dagger of Symbols",
+            "Expel Summoned",
+            "Flame Arc",
+            "Lesser Conjuration: Air",
+            "Lesser Conjuration: Earth",
+            "Lesser Conjuration: Fire",
+            "Lesser Conjuration: Water",
+            "Rain of Lava",
+            "Summon Ring of Flight",
+            "Arch Shielding",                   -- L44
+            "Conjuration: Air",
+            "Conjuration: Earth",
+            "Conjuration: Fire",
+            "Conjuration: Water",
+            "Elemental Armor",
+            "Malaisement",
+            "Modulating Rod",
+            "Phantom Plate",
+            "Shock of Swords",
+            "Banish Summoned",                  -- L49
+            "Burnout III",
+            "Greater Conjuration: Air",
+            "Greater Conjuration: Earth",
+            "Greater Conjuration: Fire",
+            "Greater Conjuration: Water",
+            "Lava Bolt",
+            "Rain of Swords",
+            "Shield of Lava",
+        },
+        Kunark = {
+            "Renew Elements",                   -- L08
+            "Summon Orb",                       -- L46
+            "Gift of Xev",                      -- L51
+            "Malosi",                           -- L51
+            "Scintillation",                    -- L51
+            "Vocarate: Earth",                  -- L51
+            "Bristlebane's Bundle",             -- L52
+            "Char",                             -- L52
+            "Phantom Armor",                    -- L52
+            "Vocarate: Fire",                   -- L52
+            "Annul Magic",                      -- L53
+            "Boon of Immolation",               -- L53
+            "Quiver of Marr",                   -- L53
+            "Vocarate: Air",                    -- L53
+            "Bandoleer of Luclin",              -- L54
+            "Scars of Sigil",                   -- L54
+            "Shield of the Magi",               -- L54
+            "Vocarate: Water",                  -- L54
+            "Call of the Hero",                 -- L55
+            "Pouch of Quellious",               -- L55
+            "Rage of Zomm",                     -- L55
+            "Sirocco",                          -- L55
+            "Cadeau of Flame",                  -- L56
+            "Dyzil's Deafening Decoy",          -- L56
+            "Exile Summoned",                   -- L56
+            "Muzzle of Mardu",                  -- L56
+            "Eye of Tallon",                    -- L57
+            "Greater Vocaration: Earth",        -- L57
+            "Shock of Steel",                   -- L57
+            "Greater Vocaration: Fire",         -- L58
+            "Malosini",                         -- L58
+            "Velocity",                         -- L58
+            "Greater Vocaration: Air",          -- L59
+            "Manastorm",                        -- L59
+            "Seeking Flame of Seukor",          -- L59
+            "Aegis of Ro",                      -- L60
+            "Banishment",                       -- L60
+            "Greater Vocaration: Water",        -- L60
+            "Mala",                             -- L60
+        },
+        Velious = {
+            "Expedience",                       -- L29
+            "Monster Summoning I",              -- L34
+            "Summon Shard of the Core",         -- L34
+            "Summon Companion",                 -- L39
+            "Monster Summoning II",             -- L50
+            "Burnout IV",                       -- L55
+            "Wrath of the Elements",            -- L55
+            "Valiant Companion",                -- L59
+            "Monster Summoning III",            -- L60
+        },
+    }
 }
 
--- NOTE: fvp uses original spell names. These spells was later renamed
+-- Mapping between classic spell names and the names used on live.
+-- These spells was later renamed. Needed for fvp, which use the classic names.
 local renamedSpells = {
-    -- classic name (fvp)              corrected name (live)
-    ["Cantana of Replenishment"]    = "Cantata of Replenishment",
-    ["Cantana of Soothing"]         = "Cantata of Soothing",
-    ["Enstill"]                     = "Instill",
-    ["Invisibility versus Undead"]  = "Invisibility vs. Undead",
-    ["Complete Healing"]            = "Complete Heal",
-    ["Calefaction"]                 = "Dustdevil",
-    ["Largo's Absonant Binding"]    = "Largo's Assonant Binding",
-    ["Selo's Assonant Strane"]      = "Selo's Assonant Strain",
-    ["Malise"]                      = "Malaise",
-    ["Malisement"]                  = "Malaisement",
-    ["Wonderous Rapidity"]          = "Wondrous Rapidity",
-    ["Tashan"]                      = "Tashina",
-    ["Wind of Tishani"]             = "Wind of Tashani",
-    ["Wind of Tishanian"]           = "Wind of Tashanian",
-    ["Illusion: Drybone"]           = "Illusion: Dry Bone",
+    -- renamed (live)                classic name (fvp)
+    ["Illusion: Dry Bone"]          = "Illusion: Drybone",
+    ["Malaise"]                     = "Malise",
+    ["Malaisement"]                 = "Malisement",
+    ["Tashina"]                     = "Tashan",
+    ["Wind of Tashani"]             = "Wind of Tishani",
+    ["Wind of Tashanian"]           = "Wind of Tishanian",
+    ["Wondrous Rapidity"]           = "Wonderous Rapidity",
+    ["Dustdevil"]                   = "Calefaction",
+    ["Complete Heal"]               = "Complete Healing",
+    ["Invisibility vs. Undead"]     = "Invisibility versus Undead",
+    ["Instill"]                     = "Enstill",
+    ["Selo's Assonant Strane"]      = "Selo's Assonant Strane",
+    ["Largo's Assonant Binding"]    = "Largo's Absonant Binding",
+    ["Cantata of Replenishment"]    = "Cantana of Replenishment",
+    ["Cantata of Soothing"]         = "Cantana of Soothing",
+    ["Vocarate: Fire"]              = "Vocerate: Fire",
+    ["Vocarate: Water"]             = "Vocerate: Water",
+    ["Vocarate: Air"]               = "Vocerate: Air",
+    ["Vocarate: Earth"]             = "Vocerate: Earth",
 }
 
 -- Unlike have_spell(), we ignore AA names.
