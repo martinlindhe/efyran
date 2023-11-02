@@ -1733,7 +1733,7 @@ local classSpells = {
             "Resist Disease",                   -- L51
             "Spirit of Wind",                   -- L51
             "Ultravision",                      -- L51
-            --"Resistant Discipline",             -- L51, disc
+            "Resistant Discipline",             -- L51 disc
             "Aid of Khurenz",                   -- L52
             "Health",                           -- L52
             "Spiritual Radiance",               -- L52
@@ -1745,11 +1745,11 @@ local classSpells = {
             "Resist Poison",                    -- L54
             "Spirit of Omakin",                 -- L54
             "Spirit of Snow",                   -- L54
-            --"Fearless Discipline",              -- L54, disc
+            "Fearless Discipline",              -- L54 disc
             "Chloroplast",                      -- L55
             "Omakin's Alacrity",                -- L55
             "Sha's Restoration",                -- L55
-            --"Protective Spirit Discipline",     -- L55, disc
+            "Protective Spirit Discipline",     -- L55 disc
             "Incapacitate",                     -- L56
             "Shifting Shield",                  -- L56
             "Spirit of Flame",                  -- L56
@@ -1768,9 +1768,9 @@ local classSpells = {
             "Sha's Advantage",                  -- L60
             "Spirit of Khati Sha",              -- L60
             "Spiritual Strength",               -- L60
-            --"Bestial Fury Discipline",          -- L60 disc
+            "Bestial Fury Discipline",          -- L60 disc
         },
-        Planes = {
+        PoP = {
             "Tiny Companion",                   -- L19
             "Ice Spear",                        -- L33
             "Frost Shard",                      -- L47
@@ -1802,21 +1802,21 @@ local classSpells = {
             "Malaria",                          -- L40
             "Bond of the Wild",                 -- L52
         },
-        Ldon = {
+        LDON = {
             "Spirit of the Shrew",              -- L39
             "Ward of Calliav",                  -- L49
             "Pack Shrew",                       -- L44
             "Guard of Calliav",                 -- L58
             "Protection of Calliav",            -- L64
         },
-        Gates = {
+        GoD = {
             "Salve",                            -- L01
             "Turepta Blood",                    -- L65
             "Trushar's Mending",                -- L65
             "Trushar's Frost",                  -- L65
             "Ancient: Frozen Chaos",            -- L65
         },
-        Omens = {
+        OOW = {
             "Chimera Blood",                    -- L66
             "Healing of Mikkily",               -- L66
             "Muada's Mending",                  -- L67
@@ -1835,17 +1835,17 @@ local classSpells = {
             "Spirit of Rashara",                -- L70
             "Ancient: Savage Ice",              -- L70
         },
-        Dragons = {
+        DoN = {
             "Growl of the Leopard",             -- L61
             "Growl of the Panther",             -- L69
         },
-        Depth = {
+        DoDH = {
             "Bestial Empathy",                  -- L68
-            --"Empathic Fury",                    -- L69 disc
+            "Empathic Fury",                    -- L69 disc
         },
         PoR = {
             "Spirit of Oroshar",                -- L70
-            --"Rake",                             -- L70 disc
+            "Rake",                             -- L70 disc
         },
     },
 }
@@ -1893,13 +1893,14 @@ local function haveSpellOnly(name)
     return mq.TLO.Me.Book(name)() ~= nil
 end
 
+-- Report missing spells/tomes.
 ---@param expac string
 ---@param spell string
 local function reportSpellStatus(expac, spell)
     local spellData = get_spell(spell)
     if spellData == nil then
         all_tellf("UNLIKELY: %s: DID NOT RESOLVE [+r+]%s[+x+]", expac, spell)
-    elseif not haveSpellOnly(spell) then
+    elseif not haveSpellOnly(spell) and not have_combat_ability(spell) then
         if spellData.Level() == nil then
             local rename = renamedSpells[spell]
             if rename ~= nil then
@@ -1942,7 +1943,7 @@ local function recognizedSpell(spell)
     return false
 end
 
--- Reports missing spells
+-- Reports missing spells/discs
 ---@param onlyExpac string
 local function execute(onlyExpac)
     local class = class_shortname()
@@ -1968,11 +1969,22 @@ local function execute(onlyExpac)
     end
 
     -- scan spell book and look for any unknown spells according to the above tables.
-    for i = 1, 8000 do
+    local bookSize = 8 * 90 -- size of spellbook: 8 * 90 pages (RoF2)
+    for i = 1, bookSize do
         local spell = mq.TLO.Me.Book(i)
         if spell() ~= nil then
             if not recognizedSpell(spell) then
                 log.Info("UNRECOGNIZED SPELL %d: L%d %s", i, spell.Level(), spell.RankName())
+            end
+        end
+    end
+
+    -- scan for unknown discs.
+    for i = 1, 100 do
+        local spell = mq.TLO.Me.CombatAbility(i)
+        if spell() ~= nil then
+            if not recognizedSpell(spell) then
+                log.Info("UNRECOGNIZED DISC %d: L%d %s", i, spell.Level(), spell.RankName())
             end
         end
     end
