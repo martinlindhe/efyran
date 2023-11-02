@@ -13,7 +13,7 @@ return function()
         return
     end
 
-    log.Info("Training %s %d / %d ...", skill, skill_value(skill), skill_cap(skill))
+    log.Info("Training %s %d / %d and Mend %d / %d...", skill, skill_value(skill), skill_cap(skill), skill_value("Mend"), skill_cap("Mend"))
 
     if not is_standing() then
         mq.cmd("/stand")
@@ -21,8 +21,8 @@ return function()
     end
 
     while true do
-        if skill_value(skill) >= skill_cap(skill) then
-            log.Info("Skill %s capped!", skill)
+        if skill_value(skill) >= skill_cap(skill) and skill_value("Mend") >= skill_cap("Mend") then
+            log.Info("Skill %s and Mend is capped!", skill)
             break
         end
 
@@ -37,7 +37,7 @@ return function()
             mq.delay(200)
         end
 
-        if is_ability_ready(skill) then
+        if is_ability_ready(skill) and skill_value(skill) < skill_cap(skill) then
             mq.cmd('/doability "Feign Death"')
             log.Info("Feigning %d / %d", skill_value(skill), skill_cap(skill))
             mq.delay(200)
