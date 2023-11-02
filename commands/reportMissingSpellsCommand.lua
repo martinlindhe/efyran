@@ -93,6 +93,93 @@ local classSpells = {
         Omens = {},  -- TODO
         Dragons = {}, -- TODO
     },
+    RNG = {
+        Original = {
+
+            "Endure Fire",                      -- L09
+            "Flame Lick",
+            "Glimpse",
+            "Lull Animal",
+            "Minor Healing",
+            "Skin like Wood",
+            "Snare",
+
+            "Burst of Fire",                    -- L15
+            "Camouflage",
+            "Cure Poison",
+            "Dance of the Fireflies",
+            "Feet like Cat",
+            "Grasping Roots",
+            "Invoke Lightning",
+            "Thistlecoat",
+
+            "Bind Sight",                       -- L22
+            "Enduring Breath",
+            "Harmony",
+            "Ignite",
+            "Light Healing",
+            "Skin like Rock",
+            "Ward Summoned",
+
+            "Barbcoat",                         -- L30
+            "Cancel Magic",
+            "Eyes of the Cat",
+            "Invigor",
+            "Shield of Thistles",
+            "Stinging Swarm",
+            "Strength of Earth",
+
+            "Calm Animal",                      -- L39
+            "Careless Lightning",
+            "Dismiss Summoned",
+            "Healing",
+            "Levitate",
+            "Skin like Steel",
+            "Spirit of Wolf",
+
+            "Bramblecoat",                       -- L49
+            "Call of Flame",
+            "Ensnaring Roots",
+            "Immolate",
+            "Resist Fire",
+            "Shield of Brambles",
+            "Superior Camouflage",
+            "Wolf Form",
+        },
+        Kunark = {
+            "Ensnare",                          -- L51
+            "Extinguish Fatigue",               -- L52     XXX maybe retired
+            "Firestrike",                       -- L52
+            "Storm Strength",                   -- L53
+            "Drones of Doom",                   -- L54
+            "Skin like Diamond",                -- L54
+            "Chloroplast",                      -- L55
+            "Jolt",                             -- L55
+            "Chill Sight",                      -- L56
+            "Greater Wolf Form",                -- L56
+            "Greater Healing",                  -- L57
+            "Shield of Spikes",                 -- L58
+            "Calefaction",                      -- L59
+            "Enveloping Roots",                 -- L60
+            "Thorncoat",                        -- L60
+        },
+        Velious = {
+            "Endure Cold",                      -- L22
+            "Firefist",                         -- L22
+            "Panic Animal",                     -- L22
+            "Call of Sky",                      -- L39
+            "Spikecoat",                        -- L49
+            "Call of Earth",                    -- L50
+
+            "Strength of Nature",               -- L51
+            "Call of Fire",                     -- L55
+            "Cinder Jolt",                      -- L55
+            "Resist Cold",                      -- L55
+            "Nullify Magic",                    -- L58
+            "Skin like Nature",                 -- L59
+            "Call of the Predator",             -- L60
+        }
+    },
 }
 
 ---@param onlyExpac string
@@ -119,7 +206,6 @@ local function execute(onlyExpac)
                 if spellData == nil then
                     all_tellf("UNLIKELY: %s: DID NOT RESOLVE [+r+]%s[+x+]", expac, spell)
                 elseif not have_spell(spell) then
-                    log.Info("%s: \ay%s\ax", expac, spell)
                     if spellData.Level() == nil then
                         all_tellf("%s: ERROR: No Level data for \ay%s\ax", expac, spell)
                     elseif spellData.Level() <= mq.TLO.Me.Level() then
