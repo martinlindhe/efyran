@@ -177,4 +177,4 @@ local function createCommand()
     commandQueue.Enqueue(function() execute() end)
 end
 
-bind("/reportskills", createCommand)
+bind("/missingskills", createCommand)

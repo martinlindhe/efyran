@@ -145,7 +145,8 @@ settings.debug = true -- enable debug logging for this peer
 
 /listclickies               - lists every clickie on current toon
 /reportclickies <filter>    - report detected auto clickes on current toon
-/reportskills               - report untrained skills
+/missingskills              - report untrained skills
+/missingspells              - report missing spells (total or by expansion)
 
 /coins                      - reports coin on all peers
 /banker                     - summons a banker (if possible)
