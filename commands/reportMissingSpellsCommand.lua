@@ -1663,7 +1663,191 @@ local classSpells = {
             "Gangrenous Touch of Zum`uul",      -- L60
         },
     },
-    -- BST = {}, -- TODO
+    BST = {
+        Luclin = {
+            "Sense Animals",                    -- L02
+            "Endure Cold",                      -- L03
+            "Cure Disease",                     -- L04
+            "Flash of Light",                   -- L05
+            "Minor Healing",                    -- L06
+            "Inner Fire",                       -- L07
+            "Spirit of Sharik",                 -- L08
+            "Endure Fire",                      -- L09
+            "Sharik's Replenishing",            -- L09
+            "Scale Skin",                       -- L10
+            "Fleeting Fury",                    -- L11
+            "Blast of Frost",                   -- L12
+            "Cure Poison",                      -- L13
+            "Spirit of Lightning",              -- L13
+            "Strengthen",                       -- L14
+            "Sicken",                           -- L14
+            "Keshuval's Rejuvenation",          -- L15
+            "Spirit of Khaliz",                 -- L15
+            "Serpent Sight",                    -- L16
+            "Summon Drink",                     -- L17
+            "Spirit of Bear",                   -- L17
+            "Light Healing",                    -- L18
+            "Endure Poison",                    -- L18
+            "Spirit of the Blizzard",           -- L18
+            "Tainted Breath",                   -- L19
+            "Drowsy",                           -- L20
+            "Spirit of Keshuval",               -- L21
+            "Endure Disease",                   -- L22
+            "Shrink",                           -- L23
+            "Spirit of Wolf",                   -- L24
+            "Enduring Breath",                  -- L25
+            "Spirit Strike",                    -- L26
+            "Turtle Skin",                      -- L26
+            "Herikol's Soothing",               -- L27
+            "Healing",                          -- L28
+            "Spirit of Inferno",                -- L28
+            "Spirit Strength",                  -- L28
+            "Summon Food",                      -- L29
+            "Spirit Sight",                     -- L29
+            "Spirit of Herikol",                -- L30
+            "Summon Companion",                 -- L31
+            "Levitate",                         -- L32
+            "Endure Magic",                     -- L34
+            "Envenomed Breath",                 -- L35
+            "Cancel Magic",                     -- L35
+            "Yekan's Recovery",                 -- L36
+            "Spirit of Ox",                     -- L37
+            "Yekan's Quickening",               -- L37
+            "Spirit of Monkey",                 -- L38
+            "Spirit of the Scorpion",           -- L38
+            "Greater Healing",                  -- L38
+            "Spirit of Yekan",                  -- L39
+            "Raging Strength",                  -- L41
+            "Spiritual Light",                  -- L41
+            "Spiritual Brawn",                  -- L42
+            "Invisibility",                     -- L43
+            "Listless Power",                   -- L44
+            "Counteract Disease",               -- L45
+            "Spirit of Kashek",                 -- L46
+            "Spirit of Vermin",                 -- L46
+            "Frenzy",                           -- L47
+            "Protect",                          -- L48
+            "Spirit Salve",                     -- L48
+            "Vigor of Zehkes",                  -- L49
+            "Sha's Lethargy",                   -- L50
+            "Resist Disease",                   -- L51
+            "Spirit of Wind",                   -- L51
+            "Ultravision",                      -- L51
+            --"Resistant Discipline",             -- L51, disc
+            "Aid of Khurenz",                   -- L52
+            "Health",                           -- L52
+            "Spiritual Radiance",               -- L52
+            "Venom of the Snake",               -- L52
+            "Deftness",                         -- L53
+            "Spirit of the Storm",              -- L53
+            "Talisman of Tnarg",                -- L53
+            "Furious Strength",                 -- L54
+            "Resist Poison",                    -- L54
+            "Spirit of Omakin",                 -- L54
+            "Spirit of Snow",                   -- L54
+            --"Fearless Discipline",              -- L54, disc
+            "Chloroplast",                      -- L55
+            "Omakin's Alacrity",                -- L55
+            "Sha's Restoration",                -- L55
+            --"Protective Spirit Discipline",     -- L55, disc
+            "Incapacitate",                     -- L56
+            "Shifting Shield",                  -- L56
+            "Spirit of Flame",                  -- L56
+            "Spirit of Zehkes",                 -- L56
+            "Dexterity",                        -- L57
+            "Stamina",                          -- L57
+            "Spirit of Khurenz",                -- L58
+            "Talisman of Altuna",               -- L58
+            "Nullify Magic",                    -- L58
+            "Blizzard Blast",                   -- L59
+            "Chloroblast",                      -- L59
+            "Sha's Ferocity",                   -- L59
+            "Spiritual Purity",                 -- L59
+            "Alacrity",                         -- L60
+            "Savagery",                         -- L60
+            "Sha's Advantage",                  -- L60
+            "Spirit of Khati Sha",              -- L60
+            "Spiritual Strength",               -- L60
+            --"Bestial Fury Discipline",          -- L60 disc
+        },
+        Planes = {
+            "Tiny Companion",                   -- L19
+            "Ice Spear",                        -- L33
+            "Frost Shard",                      -- L47
+            "Ice Shard",                        -- L54
+            "Annul Magic",                      -- L61
+            "Counteract Poison",                -- L61
+            "Healing of Sorsha",                -- L61
+            "Infusion of Spirit",               -- L61
+            "Scorpion Venom",                   -- L61
+            "Talisman of Shadoo",               -- L61
+            "Spiritual Vigor",                  -- L62
+            "Spirit of Arag",                   -- L62
+            "Talisman of Kragg",                -- L62
+            "Abolish Disease",                  -- L63
+            "Arag's Celerity",                  -- L63
+            "Celerity",                         -- L63
+            "Frost Spear",                      -- L63
+            "Spirit of Rellic",                 -- L63
+            "Talisman of Jasinth",              -- L63
+            "Regrowth",                         -- L64
+            "Spiritual Dominion",               -- L64
+            "Spirit of Sorsha",                 -- L64
+            "Acumen",                           -- L65
+            "Ferocity",                         -- L65
+            "Plague",                           -- L65
+            "Sha's Revenge",                    -- L65
+        },
+        Ykesha = {
+            "Malaria",                          -- L40
+            "Bond of the Wild",                 -- L52
+        },
+        Ldon = {
+            "Spirit of the Shrew",              -- L39
+            "Ward of Calliav",                  -- L49
+            "Pack Shrew",                       -- L44
+            "Guard of Calliav",                 -- L58
+            "Protection of Calliav",            -- L64
+        },
+        Gates = {
+            "Salve",                            -- L01
+            "Turepta Blood",                    -- L65
+            "Trushar's Mending",                -- L65
+            "Trushar's Frost",                  -- L65
+            "Ancient: Frozen Chaos",            -- L65
+        },
+        Omens = {
+            "Chimera Blood",                    -- L66
+            "Healing of Mikkily",               -- L66
+            "Muada's Mending",                  -- L67
+            "Focus of Alladnu",                 -- L67
+            "Spiritual Vitality",               -- L67
+            "Spirit of Alladnu",                -- L68
+            "Growl of the Beast",               -- L68
+            "Spirit of Irionu",                 -- L68
+            "Glacier Spear",                    -- L69
+            "Feral Vigor",                      -- L69
+            "Spiritual Ascendance",             -- L69
+            "Feral Guard",                      -- L69
+            "Ferocity of Irionu",               -- L70
+            "Festering Malady",                 -- L70
+            "Sha's Legacy",                     -- L70
+            "Spirit of Rashara",                -- L70
+            "Ancient: Savage Ice",              -- L70
+        },
+        Dragons = {
+            "Growl of the Leopard",             -- L61
+            "Growl of the Panther",             -- L69
+        },
+        Depth = {
+            "Bestial Empathy",                  -- L68
+            --"Empathic Fury",                    -- L69 disc
+        },
+        PoR = {
+            "Spirit of Oroshar",                -- L70
+            --"Rake",                             -- L70 disc
+        },
+    },
 }
 
 -- Mapping between classic spell names and the names used on live.
@@ -1688,7 +1872,7 @@ local renamedSpells = {
     ["Vocarate: Fire"]              = "Vocerate: Fire",
     ["Vocarate: Water"]             = "Vocerate: Water",
     ["Vocarate: Air"]               = "Vocerate: Air",
---    ["Vocarate: Earth"]             = "Vocerate: Earth",          -- XXX not sure about this typo, asked in fvp discord https://discord.com/channels/411265596588687360/1169718481332207616
+    ["Vocarate: Earth"]             = "Vocerate: Earth",
     ["O`Keil's Radiation"]          = "O`Keils Radiation",
     ["O`Keil's Flickering Flame"]   = "O'Keils Flickering Flame",
     ["Blast of Cold"]               = "Shock of Frost",

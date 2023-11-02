@@ -48,7 +48,7 @@ end
 local function createCommand(name)
     name = name:lower()
     if is_orchestrator() then
-        bci.ExecuteZoneCommand(string.format("/train %s", name))
+        bci.ExecuteAllCommand(string.format("/train %s", name))
     end
     commandQueue.Enqueue(function() execute({Skill = name}) end)
 end
