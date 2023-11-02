@@ -812,6 +812,84 @@ local classSpells = {
             "Primal Avatar",                    -- L60
         },
     },
+    SHD = {
+        Original = {
+            "Disease Cloud",                    -- L09
+            "Invisibility versus Undead",
+            "Leering Corpse",
+            "Lifetap",
+            "Locate Corpse",
+            "Sense the Dead",
+            "Siphon Strength",
+            "Bone Walk",                        -- L15
+            "Clinging Darkness",
+            "Endure Cold",
+            "Fear",
+            "Lifespike",
+            "Numb the Dead",
+            "Shadow Step",
+            "Convoke Shadow",                   -- L22
+            "Dark Empathy",
+            "Deadeye",
+            "Engulfing Darkness",
+            "Spook the Dead",
+            "Vampiric Embrace",
+            "Ward Undead",
+            "Endure Disease",                   -- L30
+            "Feign Death",
+            "Gather Shadows",
+            "Heat Blood",
+            "Lifedraw",
+            "Restless Bones",
+            "Wave of Enfeeblement",
+            "Animate Dead",                     -- L39
+            "Cancel Magic",
+            "Expulse Undead",
+            "Heart Flutter",
+            "Resist Cold",
+            "Shadow Vortex",
+            "Shieldskin",
+            "Breath of the Dead",               -- L49
+            "Dismiss Undead",
+            "Dooming Darkness",
+            "Invoke Fear",
+            "Life Leech",
+            "Shadow Sight",
+            "Summon Dead",
+            "Word of Spirit",
+        },
+        Kunark = {
+            "Siphon Life",                      -- L51
+            "Malignant Dead",                   -- L52
+            "Rest the Dead",                    -- L52
+            "Boil Blood",                       -- L53
+            "Banshee Aura",                     -- L54
+            "Panic the Dead",                   -- L54
+            "Bobbing Corpse",                   -- L55
+            "Expel Undead",                     -- L55
+            "Steelskin",                        -- L56
+            "Spirit Tap",                       -- L56
+            "Vampiric Curse",                   -- L57
+            "Cackling Bones",                   -- L58
+            "Nullify Magic",                    -- L58
+            "Cascading Darkness",               -- L59
+            "Asystole",                         -- L60
+            "Drain Spirit",                     -- L60
+        },
+        Velious = {
+            "Grim Aura",                        -- L22
+            "Strengthen Death",                 -- L29
+            "Shroud of Hate",                   -- L39
+            "Shroud of Pain",                   -- L50
+            "Summon Corpse",                    -- L51
+            "Summon Companion",                 -- L52
+            "Shroud of Death",                  -- L55
+            "Shroud of Undeath",                -- L55
+            "Diamondskin",                      -- L59
+            "Drain Soul",                       -- L60
+            "Death Peace",                      -- L60
+        },
+    }
 }
 
 -- NOTE: fvp uses original spell names. These spells was later renamed
@@ -829,13 +907,22 @@ local renamedSpells = {
     ["Malisement"]                  = "Malaisement",
 }
 
+-- Unlike have_spell(), we ignore AA names.
+local function haveSpellOnly(name)
+    local ranked = mq.TLO.Spell(name).RankName()
+    if mq.TLO.Me.Book(ranked)() ~= nil then
+        return true
+    end
+    return mq.TLO.Me.Book(name)() ~= nil
+end
+
 ---@param expac string
 ---@param spell string
 local function reportSpellStatus(expac, spell)
     local spellData = get_spell(spell)
     if spellData == nil then
         all_tellf("UNLIKELY: %s: DID NOT RESOLVE [+r+]%s[+x+]", expac, spell)
-    elseif not have_spell(spell) then
+    elseif not haveSpellOnly(spell) then
         if spellData.Level() == nil then
             local rename = renamedSpells[spell]
             if rename ~= nil then

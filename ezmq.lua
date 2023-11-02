@@ -451,6 +451,7 @@ function have_spell(name)
         -- Examples:
         -- CLR/06 Sanctuary / CLR Sanctuary AA
         -- SHM/62 Ancestral Guard / SHM Ancestral Guard AA
+        -- SHD/60 Death Peace / SHD Death Peace AA
         return false
     end
     local ranked = mq.TLO.Spell(name).RankName()
