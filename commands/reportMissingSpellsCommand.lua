@@ -95,7 +95,6 @@ local classSpells = {
     },
     RNG = {
         Original = {
-
             "Endure Fire",                      -- L09
             "Flame Lick",
             "Glimpse",
@@ -103,7 +102,6 @@ local classSpells = {
             "Minor Healing",
             "Skin like Wood",
             "Snare",
-
             "Burst of Fire",                    -- L15
             "Camouflage",
             "Cure Poison",
@@ -112,7 +110,6 @@ local classSpells = {
             "Grasping Roots",
             "Invoke Lightning",
             "Thistlecoat",
-
             "Bind Sight",                       -- L22
             "Enduring Breath",
             "Harmony",
@@ -120,7 +117,6 @@ local classSpells = {
             "Light Healing",
             "Skin like Rock",
             "Ward Summoned",
-
             "Barbcoat",                         -- L30
             "Cancel Magic",
             "Eyes of the Cat",
@@ -128,7 +124,6 @@ local classSpells = {
             "Shield of Thistles",
             "Stinging Swarm",
             "Strength of Earth",
-
             "Calm Animal",                      -- L39
             "Careless Lightning",
             "Dismiss Summoned",
@@ -136,7 +131,6 @@ local classSpells = {
             "Levitate",
             "Skin like Steel",
             "Spirit of Wolf",
-
             "Bramblecoat",                       -- L49
             "Call of Flame",
             "Ensnaring Roots",
@@ -258,15 +252,203 @@ local classSpells = {
             "Yaulp IV",                         -- L60
         }
     },
+    CLR = {
+        Original = {
+            "Courage",                          -- L01
+            "Cure Poison",
+            "Divine Aura",
+            "Flash of Light",
+            "Lull",
+            "Minor Healing",
+            "Spook the Dead",
+            "Strike",
+            "True North",
+            "Yaulp",
+            "Cure Blindness",                   -- L05
+            "Cure Disease",
+            "Furor",
+            "Gate",
+            "Holy Armor",
+            "Light Healing",
+            "Reckless Strength",
+            "Stun",
+            "Summon Drink",
+            "Ward Undead",
+            "Center",                           -- L09
+            "Endure Fire",
+            "Endure Poison",
+            "Fear",
+            "Hammer of Wrath",
+            "Invigor",
+            "Root",
+            "Sense the Dead",
+            "Soothe",
+            "Summon Food",
+            "Word of Pain",
+            "Bind Affinity",                    -- L14
+            "Cancel Magic",
+            "Endure Cold",
+            "Endure Disease",
+            "Expulse Undead",
+            "Halo of Light",
+            "Healing",
+            "Invisibility versus Undead",
+            "Sense Summoned",
+            "Smite",
+            "Symbol of Transal",
+            "Calm",                             -- L19
+            "Daring",
+            "Endure Magic",
+            "Extinguish Fatigue",
+            "Holy Might",
+            "Spirit Armor",
+            "Ward Summoned",
+            "Word of Shadow",
+            "Yaulp II",
+            "Bravery",                          -- L24
+            "Counteract Poison",
+            "Dismiss Undead",
+            "Greater Healing",
+            "Hammer of Striking",
+            "Inspire Fear",
+            "Symbol of Ryltan",
+            "Wave of Fear",
+            "Abundant Drink",                   -- L29
+            "Counteract Disease",
+            "Divine Barrier",
+            "Enstill",
+            "Expulse Summoned",
+            "Guard",
+            "Panic the Dead",
+            "Revive",
+            "Word of Spirit",
+            "Wrath",
+            "Abundant Food",                    -- L34
+            "Atone",
+            "Blinding Luminance",
+            "Expel Undead",
+            "Force",
+            "Frenzied Strength",
+            "Resist Fire",
+            "Resist Poison",
+            "Superior Healing",
+            "Symbol of Pinzarn",
+            "Tremor",
+            "Valor",
+            "Word of Health",
+            "Armor of Faith",                   -- L39
+            "Complete Healing",
+            "Dismiss Summoned",
+            "Invoke Fear",
+            "Nullify Magic",
+            "Pacify",
+            "Resist Cold",
+            "Resist Disease",
+            "Resuscitate",
+            "Word of Souls",
+            "Banish Undead",                    -- L44
+            "Earthquake",
+            "Hammer of Requital",
+            "Resist Magic",
+            "Resolution",
+            "Retribution",
+            "Symbol of Naltron",
+            "Yaulp III",
+            "Abolish Poison",                   -- L49
+            "Expel Summoned",
+            "Immobilize",
+            "Resurrection",
+            "Shield of Words",
+            "Sound of Force",
+            "Word Divine",
+            "Word of Healing",
+        },
+        Kunark = {
+            "Imbue Amber",                      -- L29: Cazic-Thule
+            "Imbue Black Pearl",                -- L29: Prexus
+            "Imbue Black Sapphire",             -- L29: Bertoxxulous
+            "Imbue Diamond",                    -- L29: Mithaniel Marr
+            "Imbue Emerald",                    -- L29: Tunare
+            "Imbue Opal",                       -- L29: Rodcet Nife
+            "Imbue Peridot",                    -- L29: Bristlebane
+            "Imbue Plains Pebble",              -- L29: Karana
+            "Imbue Rose Quartz",                -- L29: Erollisi Marr
+            "Imbue Ruby",                       -- L29: Brell Serilis
+            "Imbue Sapphire",                   -- L29: Innoruuk
+            "Imbue Topaz",                      -- L29: Quellious
+            "Death Pact",                       -- L51
+            "Dread of Night",                   -- L51
+            "Remedy",                           -- L51
+            "Sunskin",                          -- L51
+            "Heroic Bond",                      -- L52
+            "Heroism",                          -- L52
+            "Upheaval",                         -- L52
+            "Word of Vigor",                    -- L52
+            "Annul Magic",                      -- L53
+            "Divine Light",                     -- L53
+            "Yaulp IV",                         -- L53
+            "Reckoning",                        -- L54
+            "Symbol of Marzin",                 -- L54
+            "Unswerving Hammer of Faith",       -- L54
+            "Exile Undead",                     -- L55
+            "Fortitude",                        -- L55
+            "Wake of Tranquility",              -- L55
+            "Banish Summoned",                  -- L56
+            "Mark of Karn",                     -- L56
+            "Paralyzing Earth",                 -- L56
+            "Reviviscence",                     -- L56
+            "Aegis",                            -- L57
+            "Bulwark of Faith",                 -- L57
+            "Trepidation",                      -- L57
+            "Word of Restoration",              -- L57
+            "Antidote",                         -- L58
+            "Enforced Reverence",               -- L58
+            "Naltron's Mark",                   -- L58
+            "Celestial Elixir",                 -- L59
+            "The Unspoken Word",                -- L59
+            "Banishment of Shadows",            -- L60
+            "Divine Intervention",              -- L60
+            "Word of Redemption",               -- L60
+        },
+        Velious = {
+            "Armor of Protection",              -- L34
+            "Turning of the Unnatural",         -- L39
+            "Celestial Healing",                -- L44
+            "Improved Invisibility to Undead",  -- L50
+            "Stun Command",                     -- L55
+            "Aegolism",                         -- L60
+        },
+    },
 }
 
 -- NOTE: fvp uses original spell names. These spells was later renamed
--- TODO make use of this table
 local renamedSpells = {
     ["Cantana of Replenishment"]    = "Cantata of Replenishment",
     ["Enstill"]                     = "Instill",
     ["Invisibility versus Undead"]  = "Invisibility vs. Undead",
+    ["Complete Healing"]            = "Complete Heal",
 }
+
+---@param expac string
+---@param spell string
+local function reportSpellStatus(expac, spell)
+    local spellData = get_spell(spell)
+    if spellData == nil then
+        all_tellf("UNLIKELY: %s: DID NOT RESOLVE [+r+]%s[+x+]", expac, spell)
+    elseif not have_spell(spell) then
+        if spellData.Level() == nil then
+            local rename = renamedSpells[spell]
+            if rename ~= nil then
+                reportSpellStatus(expac, rename)
+                return
+            else
+                all_tellf("%s: ERROR: No Level data for \ay%s\ax", expac, spell)
+            end
+        elseif spellData.Level() <= mq.TLO.Me.Level() then
+            log.Info("%s: Missing L%d \ay%s\ax", expac, spellData.Level(), spell)
+        end
+    end
+end
 
 ---@param onlyExpac string
 local function execute(onlyExpac)
@@ -288,16 +470,7 @@ local function execute(onlyExpac)
             log.Info("Expansion %s (%d total):", expac, #expacSpells)
 
             for _, spell in pairs(expacSpells) do
-                local spellData = get_spell(spell)
-                if spellData == nil then
-                    all_tellf("UNLIKELY: %s: DID NOT RESOLVE [+r+]%s[+x+]", expac, spell)
-                elseif not have_spell(spell) then
-                    if spellData.Level() == nil then
-                        all_tellf("%s: ERROR: No Level data for \ay%s\ax", expac, spell)
-                    elseif spellData.Level() <= mq.TLO.Me.Level() then
-                        log.Info("%s: Missing L%d \ay%s\ax", expac, spellData.Level(), spell)
-                    end
-                end
+                reportSpellStatus(expac, spell)
             end
         end
     end
