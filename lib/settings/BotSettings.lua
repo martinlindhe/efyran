@@ -5,6 +5,7 @@ local mq = require("mq")
 ---@class PeerSettings
 ---@field public debug boolean Enable debug logs
 ---@field public loot boolean Enable auto looting
+---@field public forage boolean Enable auto forage
 ---@field public assist PeerSettingsAssist
 ---@field public gems string[]|nil XXX key is string, val is integer
 ---@field public self_buffs string[]|nil spellRows of self buffs
