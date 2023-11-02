@@ -421,7 +421,211 @@ local classSpells = {
     },
     DRU = {
         Original = {
-            -- XXX
+            "Burst of Flame",                   -- L01
+            "Dance of the Fireflies",
+            "Endure Fire",
+            "Flame Lick",
+            "Lull Animal",
+            "Minor Healing",
+            "Panic Animal",
+            "Sense Animals",
+            "Skin like Wood",
+            "Snare",
+            "Burst of Fire",                    -- L05
+            "Camouflage",
+            "Cure Disease",
+            "Cure Poison",
+            "Gate",
+            "Grasping Roots",
+            "Harmony",
+            "Invoke Lightning",
+            "Ward Summoned",
+            "Whirling Wind",
+            "Endure Cold",                      -- L09
+            "Enduring Breath",
+            "Firefist",
+            "Ignite",
+            "Invisibility versus Animals",
+            "Light Healing",
+            "Shield of Thistles",
+            "Starshine",
+            "Strength of Earth",
+            "Thistlecoat",
+            "Treeform",
+            "Befriend Animal",                  -- L14
+            "Bind Affinity",
+            "Cascade of Hail",
+            "Expulse Summoned",
+            "Halo of Light",
+            "Levitate",
+            "See Invisible",
+            "Skin like Rock",
+            "Spirit of Wolf",
+            "Stinging Swarm",
+            "Summon Drink",
+            "Summon Food",
+            "Barbcoat",                         -- L19
+            "Calm Animal",
+            "Cancel Magic",
+            "Careless Lightning",
+            "Dizzying Wind",
+            "Endure Disease",
+            "Endure Poison",
+            "Feral Spirit",
+            "Healing",
+            "Ring of Butcher",
+            "Ring of Commons",
+            "Ring of Karana",
+            "Ring of Toxxulia",
+            "Shield of Barbs",
+            "Superior Camouflage",
+            "Terrorize Animal",
+            "Charm Animals",                    -- L24
+            "Creeping Crud",
+            "Dismiss Summoned",
+            "Ensnaring Roots",
+            "Pogonip",
+            "Resist Fire",
+            "Ring of Feerrott",
+            "Ring of Lavastorm",
+            "Ring of Ro",
+            "Ring of Steamfont",
+            "Skin like Steel",
+            "Spirit of Cheetah",
+            "Sunbeam",
+            "Tremor",
+            "Wolf Form",
+            "Bramblecoat",                       -- L29
+            "Circle of Butcher",
+            "Circle of Commons",
+            "Circle of Karana",
+            "Circle of Toxxulia",
+            "Combust",
+            "Counteract Disease",
+            "Counteract Poison",
+            "Ensnare",
+            "Greater Healing",
+            "Immolate",
+            "Ring of Misty",
+            "Shield of Brambles",
+            "Succor: East",
+            "Beguile Animals",                  -- L34
+            "Circle of Feerrott",
+            "Circle of Lavastorm",
+            "Circle of Ro",
+            "Circle of Steamfont",
+            "Drones of Doom",
+            "Earthquake",
+            "Endure Magic",
+            "Expel Summoned",
+            "Greater Wolf Form",
+            "Lightning Strike",
+            "Regeneration",
+            "Resist Cold",
+            "Strength of Stone",
+            "Succor: Butcher",
+            "Avalanche",                        -- L39
+            "Circle of Misty",
+            "Enveloping Roots",
+            "Firestrike",
+            "Pack Regeneration",
+            "Pack Spirit",
+            "Share Wolf Form",
+            "Shield of Spikes",
+            "Skin like Diamond",
+            "Spikecoat",
+            "Succor: Ro",
+            "Allure of the Wild",               -- L44
+            "Banish Summoned",
+            "Chloroplast",
+            "Drifting Death",
+            "Form of the Great Wolf",
+            "Nullify Magic",
+            "Resist Disease",
+            "Resist Poison",
+            "Savage Spirit",
+            "Storm Strength",
+            "Succor: Lavastorm",
+            "Engulfing Roots",                  -- L49
+            "Fire",
+            "Ice",
+            "Lightning Blast",
+            "Pack Chloroplast",
+            "Resist Magic",
+            "Shield of Thorns",
+            "Skin like Nature",
+            "Starfire",
+            "Succor: North",
+            "Thorncoat",
+        },
+        Kunark = {
+            "Scale of Wolf",                    -- L24
+            "Beguile Plants",                   -- L29
+            "Imbue Emerald",                    -- L29
+            "Imbue Plains Pebble",              -- L29
+            "Circle of the Combines",           -- L34
+            "Wind of the North",                -- L39
+            "Wind of the South",                -- L39
+            "Calefaction",                      -- L44
+            "Circle of Winter",                 -- L51
+            "Legacy of Spike",                  -- L51
+            "Repulse Animal",                   -- L51
+            "Upheaval",                         -- L51
+            "Breath of Ro",                     -- L52
+            "Call of Karana",                   -- L52
+            "Circle of Summer",                 -- L52
+            "Egress",                           -- L52
+            "Glamour of Tunare",                -- L53
+            "Spirit of Scale",                  -- L53
+            "Superior Healing",                 -- L53
+            "Winged Death",                     -- L53
+            "Blizzard",                         -- L54
+            "Form of the Howler",               -- L54
+            "Regrowth",                         -- L54
+            "Scoriae",                          -- L54
+            "Annul Magic",                      -- L55
+            "Exile Summoned",                   -- L55
+            "Girdle of Karana",                 -- L55
+            "Tunare's Request",                 -- L55
+            "Bladecoat",                        -- L56
+            "Breath of Karana",                 -- L56
+            "Engorging Roots",                  -- L56
+            "Wake of Karana",                   -- L56
+            "Bonds of Tunare",                  -- L57
+            "Frost",                            -- L57
+            "Natureskin",                       -- L57
+            "Succor",                           -- L57
+            "Fist of Karana",                   -- L58
+            "Regrowth of the Grove",            -- L58
+            "Shield of Blades",                 -- L58
+            "Legacy of Thorn",                  -- L59
+            "Spirit of Oak",                    -- L59
+            "Wildfire",                         -- L59
+            "Banishment",                       -- L60
+            "Entrapping Roots",                 -- L60
+            "Form of the Hunter",               -- L60
+            "Mask of the Hunter",               -- L60
+        },
+        Velious = {
+            "Ring of the Combines",             -- L24
+            "Ring of Surefall Glade",           -- L24
+            "Circle of Surefall Glade",         -- L29
+            "Circle of Iceclad",                -- L34
+            "Fury of Air",                      -- L34
+            "Ring of Great Divide",             -- L34
+            "Ring of Iceclad",                  -- L34
+            "Circle of Great Divide",           -- L39
+            "Ring of Cobalt Scar",              -- L39
+            "Ring of Wakening Lands",           -- L39
+            "Ro's Fiery Sundering",             -- L39
+            "Circle of Cobalt Scar",            -- L44
+            "Circle of Wakening Lands",         -- L44
+            "Fixation of Ro",                   -- L44
+            "Improved Superior Camouflage",     -- L50
+            "Chloroblast",                      -- L55
+            "Nature Walker's Behest",           -- L55          XXX L255 on FVP, nov 2
+            "Nature's Touch",                   -- L60
+            "Protection of the Glades",         -- L60
         },
     },
 }
@@ -478,7 +682,6 @@ local function execute(onlyExpac)
     for expac, expacSpells in pairs(spells) do
         if onlyExpac == nil or (onlyExpac ~= nil and string.lower(onlyExpac) == string.lower(expac)) then
             log.Info("Expansion %s (%d total):", expac, #expacSpells)
-
             for _, spell in pairs(expacSpells) do
                 reportSpellStatus(expac, spell)
             end
