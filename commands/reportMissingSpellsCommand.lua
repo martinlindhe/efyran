@@ -57,7 +57,7 @@ local classSpells = {
         Kunark = {
             "Solon's Bewitching Bravura",       -- L39
             "Jonthan's Provocation",            -- L45
-            --"Shield of Song",                   -- L49      XXX disabled on fvp nov 2, Eredhin says it should be enabled
+            "Shield of Song",                   -- L49
             "Selo's Song of Travel",
             "Largo's Assonant Binding",
             "Nillipus' March of the Wee",
@@ -1519,7 +1519,7 @@ local renamedSpells = {
     ["Vocarate: Fire"]              = "Vocerate: Fire",
     ["Vocarate: Water"]             = "Vocerate: Water",
     ["Vocarate: Air"]               = "Vocerate: Air",
-    ["Vocarate: Earth"]             = "Vocerate: Earth",
+--    ["Vocarate: Earth"]             = "Vocerate: Earth",          -- XXX not sure about this typo, asked in fvp discord https://discord.com/channels/411265596588687360/1169718481332207616
     ["O`Keil's Radiation"]          = "O`Keils Radiation",
     ["O`Keil's Flickering Flame"]   = "O'Keils Flickering Flame",
     ["Blast of Cold"]               = "Shock of Frost",

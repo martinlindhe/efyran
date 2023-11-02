@@ -38,7 +38,7 @@ local classSkills = {
         "Feign Death",
         "Intimidation",
         "Eagle Strike",             -- L20
-        -- XXX Dragon Punch / Tail Rake  -- L25
+        "Dragon Punch",             -- L25, shows as Tail Rake for Iksars
         "Disarm",                   -- L27
         "Flying Kick",              -- L30
         "Riposte",                  -- L35
@@ -64,12 +64,24 @@ local classSkills = {
         "Pick Lock",
     },
     PAL = {
-        "Meditate",                 -- L12
         "Taunt",                    -- L01
         "Bash",                     -- L06
         "Dodge",                    -- L10
+        "Meditate",                 -- L12
         "Parry",                    -- L17
         "Double Attack",            -- L20
+        "Specialize Alteration",    -- L30
+        "Riposte",                  -- L30
+        "Disarm",                   -- L40
+    },
+    SHD = {
+        "Taunt",                    -- L01
+        "Bash",                     -- L06
+        "Meditate",                 -- L08
+        "Dodge",                    -- L15
+        "Parry",                    -- L17
+        "Double Attack",            -- L20
+        "Specialize Alteration",    -- L30
         "Riposte",                  -- L30
         "Disarm",                   -- L40
     },
@@ -88,12 +100,6 @@ local classSkills = {
         "Forage",                   -- L03
         "Sneak",                    -- L10
         "Hide",                     -- L25
-    },
-    SHD = {
-        "Meditate",                 -- L08
-        "Dodge",                    -- L15
-        "Specialize Alteration",    -- L30
-        -- XXX more
     },
     WAR = {
         "Kick",                     -- L01
@@ -144,8 +150,23 @@ local classSkills = {
         "Dodge",                    -- L15
         "Specialize Alteration",    -- L20
     },
-    -- BST = {}, -- TODO
-    -- BER = {}, -- TODO
+    BST = {
+        "Kick",                     -- L05
+        "Dodge",                    -- L10
+        "Meditate",                 -- L12
+        "Dual Wield",               -- L17
+        "Block",                    -- L25
+        "Riposte",                  -- L40
+    },
+    BER = {
+        "Kick",                     -- L01
+        "Frenzy",                   -- L06
+        "Dodge",                    -- L10
+        "Parry",                    -- L10
+        "Double Attack",            -- L15
+        "Riposte",                  -- L25
+        "Disarm",                   -- L35
+    },
 }
 
 local function execute()
@@ -171,7 +192,7 @@ end
 
 local function createCommand()
     if is_orchestrator() then
-        --bci.ExecuteAllCommand("/reportskills")
+        bci.ExecuteAllCommand("/missingskills")
     end
 
     commandQueue.Enqueue(function() execute() end)
