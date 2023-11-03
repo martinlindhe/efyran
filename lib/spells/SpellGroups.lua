@@ -753,8 +753,9 @@ SpellGroups.ENC = {
         "Wondrous Rapidity",                        -- L58 Wondrous Rapidity   (70% haste, 18.4 min)
         "Aanya's Quickening",                       -- L53 Aanya's Quickening  (64% haste, 24 min, DOES NOT land on lv15. DOES LAND on L42)
         "Swift Like the Wind",                      -- L47 Swift Like the Wind (60% haste, 16 min) - L01-45
-        "Alacrity",                                 -- L24 Alacrity (single, 34-40% haste, 5.8 min)
-        "Quickness",                                -- L16 Quickness (single, 28-30% haste, 5.8 min)
+        "Augmentation",                             -- L29: 22-28% haste, 27min
+        "Alacrity",                                 -- L24 Alacrity (34-40% haste, 7 min)
+        "Quickness",                                -- L16 Quickness (28-30% haste, 7 min)
     },
     enc_group_haste = {
         "Vallon's Quickening",                      -- L65 Vallon's Quickening (68% haste, 41 atk, 52 agi, 33 dex, 42 min, group)
@@ -2119,7 +2120,7 @@ SpellGroups.Default.MNK = {
     "shm_str/Class|SHM",
     "rng_atk/Class|RNG",
     "enc_haste/Class|ENC",
-    "shm_haste/Class|SHM/NotClass|ENC",
+    --"shm_haste/Class|SHM/NotClass|ENC",
 
     "dru_fire_resist/Class|DRU",
     "enc_magic_resist/Class|ENC",

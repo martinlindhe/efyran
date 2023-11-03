@@ -500,6 +500,7 @@ function QoL.Init()
     bind("/looton", function()
         all_tellf("Auto-loot ENABLED")
         botSettings.settings.loot = true
+        cmd("/doloot")
     end)
 
     -- turn auto loot off
@@ -670,7 +671,7 @@ function QoL.Init()
         end
         pct = toint(pct)
         if is_orchestrator() then
-            bci.ExecuteZoneCommand(string.format("/plon %d", pct))
+            bci.ExecuteAllCommand(string.format("/plon %d", pct))
         end
         assist.Powerlevel(pct)
     end)
@@ -678,7 +679,7 @@ function QoL.Init()
     -- PL mode off
     bind("/ploff", function()
         if is_orchestrator() then
-            bci.ExecuteZoneCommand("/ploff")
+            bci.ExecuteAllCommand("/ploff")
         end
         assist.Powerlevel(0)
     end)
