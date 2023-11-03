@@ -4,9 +4,8 @@ local commandQueue = require("lib/CommandQueue")
 local loot = require("lib/looting/Loot")
 
 local cantLoot = false
-mq.event("cannot-loot", "You may not loot this corpse at this time.", function(line)
-    cantLoot = true
-end)
+mq.event("cannot-loot", "You may not loot this corpse at this time.", function() cantLoot = true end)
+mq.event("someone-looting", "Someone is already looting that corpse.", function() cantLoot = true end)
 
 -- loot up several  nearby corpses at once
 local function execute()
