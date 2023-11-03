@@ -1155,6 +1155,32 @@ function free_inventory_slots()
     return mq.TLO.Me.FreeInventory()
 end
 
+--- This can happen if item cannot be worn by race/class combo but the worn slot is empty. /autoinv will try to equip
+---@param item item | fun() : nil
+---@return boolean
+local function mustManualyEmptyCursor(item)
+    if not item() then
+        return false
+    end
+
+    if not item.Class(mq.TLO.Me.Class())() then
+        return false
+    end
+
+    if not item.Race(mq.TLO.Me.Race())() then
+        return false
+    end
+
+    for i = 1, item.WornSlots(), 1 do
+        local wornslot = item.WornSlot(i)
+        if wornslot() and not mq.TLO.Me.Inventory(wornslot.ID())() then
+            return true
+        end
+    end
+
+    return false
+end
+
 -- autoinventories all items on cursor. returns false on failure
 ---@param force? boolean
 function clear_cursor(force)
@@ -1183,7 +1209,29 @@ function clear_cursor(force)
         if not force and cursor.ID() ~= 77678 then
             all_tellf("Putting cursor item %s in inventory.", cursor.ItemLink("CLICKABLE")())
         end
-        mq.cmd("/autoinventory")
+
+        if mustManualyEmptyCursor(cursor) then
+            local numberOfBagSlots = mq.TLO.Me.NumBagSlots()
+            for i = 1, numberOfBagSlots do
+                local inventoryItem = mq.TLO.Me.Inventory(i + 22)
+                if inventoryItem() then
+                    if inventoryItem.Container() > 0 then
+                        if inventoryItem.Container() > inventoryItem.Items() and inventoryItem.SizeCapacity() >= cursor.Size() then
+                            for p = 1, inventoryItem.Container() do
+                                mq.cmdf("/nomodkey /itemnotify in pack%d %d leftmouseup", i, p)
+                                break
+                            end
+                        end
+                    else
+                        mq.cmdf("/nomodkey /itemnotify pack%d leftmouseup", i)
+                        break
+                    end
+                end
+            end
+        else
+            mq.cmd("/autoinventory")
+        end
+
         mq.delay(2000, function() return mq.TLO.Cursor.ID() == nil end)
         mq.delay(200)
     end
