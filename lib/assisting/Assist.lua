@@ -231,6 +231,7 @@ end
 ---@param value integer
 function Assist.Powerlevel(value)
     Assist.powerlevel = value
+    log.Info("Powerlevel set to %d %%", value)
 end
 
 -- Sets current assist target and initalizes combat.
