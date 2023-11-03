@@ -881,13 +881,128 @@ local classSpells = {
             "Strengthen Death",                 -- L29
             "Shroud of Hate",                   -- L39
             "Shroud of Pain",                   -- L50
+            "Resistant Discipline",             -- L51 disc
             "Summon Corpse",                    -- L51
             "Summon Companion",                 -- L52
+            "Fearless Discipline",              -- L54 disc
+            "Unholy Aura Discipline",           -- L55 disc
             "Shroud of Death",                  -- L55
             "Shroud of Undeath",                -- L55
             "Diamondskin",                      -- L59
+            "Leechcurse Discipline",            -- L60 disc
             "Drain Soul",                       -- L60
             "Death Peace",                      -- L60
+        },
+        Luclin = {
+            "Despair",                          -- L09
+            "Lesser Summon Corpse",             -- L12 unsure
+            "Scream of Hate",                   -- L15
+            "Cure Disease",                     -- L19 unsure
+            "Scream of Pain",                   -- L23
+            "Terror of Darkness",               -- L33
+            "Scream of Death",                  -- L37
+            "Voice of Darkness",                -- L39
+            "Terror of Shadows",                -- L42
+            "Voice of Shadows",                 -- L46
+            "Harmshield",                       -- L50 unsure
+            "Abduction of Strength",            -- L52
+            "Mental Corruption",                -- L52
+            "Terror of Death",                  -- L53
+            "Torrent of Hate",                  -- L54
+            "Voice of Death",                   -- L55
+            "Torrent of Pain",                  -- L56
+            "Conjure Corpse",                   -- L57 unsure
+            "Torrent of Fatigue",               -- L58
+            "Deathly Temptation",               -- L58
+            "Terror of Terris",                 -- L59
+            "Augment Death",                    -- L60 unsure
+            "Cloak of the Akheva",              -- L60
+            "Voice of Terris",                  -- L60
+        },
+        PoP = {
+            "Spike of Disease",                 -- L01
+            "Tiny Companion",                   -- L19
+            "Spear of Disease",                 -- L34
+            "Spear of Pain",                    -- L48
+            "Spear of Plague",                  -- L54
+            "Aura of Darkness",                 -- L61
+            "Festering Darkness",               -- L61
+            "Improved Invisibility to Undead",  -- L61 unsure
+            "Ignite Blood",                     -- L61 unsure
+            "Bond of Death",                    -- L62 unsure
+            "Touch of Volatis",                 -- L62
+            "Zevfeer's Bite",                   -- L62
+            "Deny Undead",                      -- L62
+            "Shroud of Chaos",                  -- L63
+            "Aura of Pain",                     -- L63
+            "Terror of Thule",                  -- L63
+            "Blood of Hate",                    -- L63
+            "Augmentation of Death",            -- L64 unsure
+            "Invoke Death",                     -- L64 unsure
+            "Pact of Hate",                     -- L64
+            "Spear of Decay",                   -- L64
+            "Voice of Thule",                   -- L65
+            "Aura of Hate",                     -- L65
+            "Touch of Innoruuk",                -- L65
+            "Cloak of Luclin",                  -- L65
+        },
+        LoY = {
+            "Blood of Pain",                    -- L41
+            "Comatose",                         -- L52
+        },
+        LDoN = {
+            "Dark Temptation",                  -- L32
+            "Scythe of Darkness",               -- L47
+            "Call of Darkness",                 -- L54
+            "Scythe of Death",                  -- L54
+            "Scythe of Innoruuk",               -- L64
+        },
+        GoD = {
+            "Mental Horror",                    -- L65
+            "Black Shroud",                     -- L65
+            "Miasmic Spear",                    -- L65
+            "Ancient: Bite of Chaos",           -- L65
+        },
+        OOW = {
+            "Blood of Discord",                 -- L66
+            "Dark Constriction",                -- L66
+            "Bond of Inruku",                   -- L66
+            "Soulless Terror",                  -- L66
+            "Touch of Inruku",                  -- L67
+            "Inruku's Bite",                    -- L67
+            "Shroud of Discord",                -- L67
+            "Terror of Discord",                -- L67
+            "Shadow Howl",                      -- L67
+            "Theft of Pain",                    -- L68
+            "Blood of Inruku",                  -- L68
+            "Son of Decay",                     -- L68
+            "Scythe of Inruku",                 -- L68
+            "Rune of Decay",                    -- L69
+            "Pact of Decay",                    -- L69
+            "Spear of Muram",                   -- L69
+            "Dread Gaze",                       -- L69
+            "Theft of Hate",                    -- L70
+            "Touch of the Devourer",            -- L70
+            "Cloak of Discord",                 -- L70
+            "Ancient: Bite of Muram",           -- L70
+        },
+        DoN = {
+            "Soulless Fear",                    -- L56
+            "Ichor Guard",                      -- L56
+            "Shadow Voice",                     -- L57
+            "Soul Guard",                       -- L61
+            "Soulless Panic",                   -- L61
+            "Shadow Bellow",                    -- L62
+            "Soul Shield",                      -- L69
+        },
+        DoDH = {
+            "Fickle Shadows",                   -- L68
+            "Touch of Draygun",                 -- L69
+            "Gift of Draygun",                  -- L69
+        },
+        PoR = {
+            "Decrepit Skin",                    -- L70
+            "Theft of Agony",                   -- L70
         },
     },
     ENC = {
