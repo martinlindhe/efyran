@@ -1660,7 +1660,137 @@ local classSpells = {
             "Augmentation of Death",            -- L55
             "Conglaciation of Bone",            -- L55
             "Arch Lich",                        -- L60
+            "Death Peace",                      -- L60
             "Gangrenous Touch of Zum`uul",      -- L60
+        },
+        Luclin = {
+            "Focus Death",                      -- L11
+            "Lesser Summon Corpse",             -- L12
+            "Shackle of Bone",                  -- L17
+            "Eternities Torment",               -- L27
+            "Shackle of Spirit",                -- L38
+            "Insidious Retrogression",          -- L46
+            "Degeneration",                     -- L52
+            "Succussion of Shadows",            -- L54
+            "Crippling Claudication",           -- L56
+            "Mind Wrack",                       -- L58
+            "Zevfeer's Theft of Vitae",         -- L60
+            "Funeral Pyre of Kelador",          -- L60
+            "Ancient: Lifebane",                -- L60
+            "Ancient: Master of Death",         -- L60
+        },
+        PoP = {
+            "Tiny Companion",                   -- L19
+            "Torbas' Poison Blast",             -- L49
+            "Torbas' Venom Blast",              -- L54
+            "Eidolon Voice",                    -- L56
+            "Imbue Nightmare",                  -- L57
+            "Imbue Disease",                    -- L58
+            "Imbue Torment",                    -- L58
+            "Touch of Mujaki",                  -- L61
+            "Neurotoxin",                       -- L61
+            "Shield of the Arcane",             -- L61
+            "Legacy of Zek",                    -- L61
+            "Dark Plague",                      -- L61
+            "Petrifying Earth",                 -- L62
+            "Rune of Death",                    -- L62
+            "Saryrn's Kiss",                    -- L62
+            "Greater Immobilize",               -- L63
+            "Force Shield",                     -- L63
+            "Death's Silence",                  -- L63
+            "Embracing Darkness",               -- L63
+            "Saryrn's Companion",               -- L63
+            "Shield of Maelin",                 -- L64
+            "Seduction of Saryrn",              -- L64
+            "Touch of Death",                   -- L64
+            "Blood of Thule",                   -- L65
+            "Child of Bertoxxulous",            -- L65
+            "Word of Terris",                   -- L65
+            "Destroy Undead",                   -- L65
+        },
+        LoY = {
+            "Auspice",                          -- L45
+            "Comatose",                         -- L52
+        },
+        LDoN = {
+            "Wuggan's Lesser Appraisal",        -- L13
+            "Reebo's Lesser Exorcism",          -- L13
+            "Reebo's Lesser Augury",            -- L14
+            "Wuggan's Lesser Discombobulation", -- L14
+            "Wuggan's Lesser Extrication",      -- L14
+            "Reebo's Lesser Cleansing",         -- L14
+            "Wuggan's Appraisal",               -- L23
+            "Reebo's Exorcism",                 -- L23
+            "Reebo's Augury",                   -- L24
+            "Wuggan's Discombobulation",        -- L24
+            "Wuggan's Extrication",             -- L24
+            "Reebo's Cleansing",                -- L24
+            "Wuggan's Greater Appraisal",       -- L33
+            "Reebo's Greater Exorcism",         -- L33
+            "Reebo's Greater Augury",           -- L34
+            "Wuggan's Greater Discombobulation",-- L34
+            "Wuggan's Greater Extrication",     -- L34
+            "Reebo's Greater Cleansing",        -- L34
+            "Dark Soul",                        -- L39
+            "Bounce",                           -- L44
+            "Ward of Calliav",                  -- L49
+            "Imprecation",                      -- L54
+            "Guard of Calliav",                 -- L58
+            "Reflect",                          -- L58
+            "Horror",                           -- L63
+            "Protection of Calliav",            -- L64
+        },
+        GoD = {
+            "Night Stalker",                    -- L65
+            "Night Fire",                       -- L65
+            "Night's Beckon",                   -- L65
+            "Ancient: Seduction of Chaos",      -- L65
+        },
+        OOW = {
+            "Acikin",                           -- L66
+            "Shadow Guard",                     -- L66
+            "Chaos Plague",                     -- L66
+            "Eidolon Howl",                     -- L66
+            "Soulspike",                        -- L67
+            "Grip of Mori",                     -- L67
+            "Glyph of Darkness",                -- L67
+            "Lost Soul",                        -- L67
+            "Dark Nightmare",                   -- L67
+            "Unholy Howl",                      -- L67
+            "Fang of Death",                    -- L68
+            "Scent of Midnight",                -- L68
+            "Desecrating Darkness",             -- L68
+            "Shadow of Death",                  -- L68
+            "Dull Pain",                        -- L69
+            "Dark Hold",                        -- L69
+            "Dark Salve",                       -- L69
+            "Bulwark of Calliav",               -- L69
+            "Pyre of Mori",                     -- L69
+            "Chaos Venom",                      -- L70
+            "Dark Possession",                  -- L70
+            "Dark Assassin",                    -- L70
+            "Word of Chaos",                    -- L70
+            "Desolate Undead",                  -- L70
+            "Ancient: Curse of Mori",           -- L70
+            "Ancient: Touch of Orshilak",       -- L70
+        },
+        DoN = {
+            "Unholy Voice",                     -- L57
+            "Soul Orb",                         -- L61
+            "Eidolon Bellow",                   -- L61
+            "Unholy Bellow",                    -- L62
+            "Shadow Orb",                       -- L69
+        },
+        DoDH = {
+            "Call for Blood",                   -- L68
+            "Corath Venom",                     -- L69
+            "Dread Pyre",                       -- L70
+        },
+        PoR = {
+            "Dark Rune",                        -- L55
+            "Grave Pact",                       -- L70
+            "Mind Flay",                        -- L70
+            "Death Rune",                       -- L70
         },
     },
     BST = {
@@ -1798,7 +1928,7 @@ local classSpells = {
             "Plague",                           -- L65
             "Sha's Revenge",                    -- L65
         },
-        Ykesha = {
+        LoY = {
             "Malaria",                          -- L40
             "Bond of the Wild",                 -- L52
         },
