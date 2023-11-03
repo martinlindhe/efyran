@@ -30,7 +30,6 @@ end
 ---@return boolean
 local function canLootItem(item)
     if item() == nil or item == nil then
-        all_tellf("UNLIKELY: canLootItem item poofed")
         return false
     end
 
@@ -90,15 +89,13 @@ local function lootItem(slotNum)
         mq.delay("1s", function() return cursor() ~= nil end)
     end
 
-    mq.delay(50)
-
     if window_open("ConfirmationDialogBox") then
         mq.cmd("/notify ConfirmationDialogBox Yes_Button leftmouseup")
+        mq.delay(20)
     elseif window_open("QuantityWnd") then
         mq.cmd("/notify QuantityWnd QTYW_Accept_Button leftmouseup")
+        mq.delay(20)
     end
-
-    mq.delay(50)
 
     if not cursor() then
         log.Debug("Unable to loot item in slotnumber %d", slotNum)
