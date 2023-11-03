@@ -1158,7 +1158,7 @@ end
 --- This can happen if item cannot be worn by race/class combo but the worn slot is empty. /autoinv will try to equip
 ---@param item item | fun() : nil
 ---@return boolean
-local function mustManualyEmptyCursor(item)
+local function mustManuallyEmptyCursor(item)
     if not item() then
         return false
     end
@@ -1210,7 +1210,7 @@ function clear_cursor(force)
             all_tellf("Putting cursor item %s in inventory.", cursor.ItemLink("CLICKABLE")())
         end
 
-        if mustManualyEmptyCursor(cursor) then
+        if mustManuallyEmptyCursor(cursor) then
             local numberOfBagSlots = mq.TLO.Me.NumBagSlots()
             for i = 1, numberOfBagSlots do
                 local inventoryItem = mq.TLO.Me.Inventory(i + 22)
