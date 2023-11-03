@@ -133,16 +133,105 @@ local classSpells = {
             "Cassindra's Chant of Clarity",     -- L20
             "Cantata of Soothing",              -- L34
             "Melody of Ervaj",                  -- L50
+            "Resistant Discipline",             -- L51 disc
+            "Fearless Discipline",              -- L54 disc
+            "Deftdance Discipline",             -- L55 disc
             "Occlusion of Sound",               -- L55
             "Composition of Ervaj",             -- L60
+            "Puretone Discipline",              -- L60 disc
         },
-        Luclin = {}, -- TODO
-        PoP = {}, -- TODO
-        LDoN = {},   -- TODO
-        LoY = {}, -- TODO
-        GoD = {},  -- TODO
-        OOW = {},  -- TODO
-        DoN = {}, -- TODO
+        Luclin = {
+            "Magical Monologue",                -- L09
+            "Song of Sustenance",               -- L15
+            "Amplification",                    -- L30
+            "Katta's Song of Sword Dancing",    -- L39
+            "Sionachie's Dreams",               -- L40
+            "Selo's Accelerating Chorus",       -- L49
+            "Battlecry of the Vah Shir",        -- L52
+            "Elemental Chorus",                 -- L54
+            "Purifying Chorus",                 -- L56
+            "Dreams of Ayonae",                 -- L58
+            "Chorus of Replenishment",          -- L58
+            "Ervaj's Lost Composition",         -- L60
+            "Warsong of the Vah Shir",          -- L60
+            "Ancient: Lcea's Lament",           -- L60
+            "Ancient: Lullaby of Shadow",       -- L60
+        },
+        PoP = {
+            "Tuyen's Chant of Disease",         -- L42
+            "Tuyen's Chant of Poison",          -- L50
+            "Silent Song of Quellious",         -- L61
+            "Tuyen's Chant of the Plague",      -- L61
+            "Saryrn's Scream of Pain",          -- L61
+            "Dreams of Thule",                  -- L62
+            "Druzzil's Disillusionment",        -- L62
+            "Melody of Mischief",               -- L62
+            "Warsong of Zek",                   -- L62
+            "Wind of Marr",                     -- L62
+            "Psalm of Veeshan",                 -- L63
+            "Tuyen's Chant of Venom",           -- L63
+            "Tuyen's Chant of Ice",             -- L63
+            "Call of the Banshee",              -- L64
+            "Chorus of Marr",                   -- L64
+            "Dreams of Terris",                 -- L64
+            "Requiem of Time",                  -- L64
+            "Rizlona's Call of Flame",          -- L64
+            "Tuyen's Chant of Fire",            -- L65
+            "Harmony of Sound",                 -- L65
+            "Lullaby of Morell",                -- L65
+        },
+        LoY = {
+            "Aria of Asceticism",               -- L45
+            "Aria of Innocence",                -- L52
+        },
+        LDoN = {
+            "Selo's Rhythm of Speed",           -- L25
+            "Rizlona's Embers",                 -- L45
+            "Rizlona's Fire",                   -- L53
+            "Fufil's Diminishing Dirge",        -- L60
+            "Call of the Muse",                 -- L65
+        },
+        GoD = {
+            "War March of the Mastruq",         -- L65
+            "Echo of the Trusik",               -- L65
+            "Dark Echo",                        -- L65
+            "Ancient: Chaos Chant",             -- L65
+        },
+        OOW = {
+            "Bellow of Chaos",                  -- L66
+            "Luvwen's Aria of Serenity",        -- L66
+            "Vulka's Chant of Disease",         -- L66
+            "Angstlich's Wail of Panic",        -- L67
+            "Cantata of Life",                  -- L67
+            "Luvwen's Lullaby",                 -- L67
+            "Vulka's Chant of Frost",           -- L67
+            "Zuriki's Song of Shenanigans",     -- L67
+            "Dirge of Metala",                  -- L68
+            "Vulka's Chant of Poison",          -- L68
+            "War March of Muram",               -- L68
+            "Yelhun's Mystic Call",             -- L68
+            "Chorus of Life",                   -- L69
+            "Eriki's Psalm of Power",           -- L69
+            "Verse of Vesagran",                -- L69
+            "Voice of the Vampire",             -- L70
+            "Vulka's Chant of Flame",           -- L70
+            "Vulka's Lullaby",                  -- L70
+            "Ancient: Call of Power",           -- L70
+        },
+        DoN = {
+            "Song of the Storm",                -- L61
+            "Angstlich's Echo of Terror",       -- L62
+            "Storm Blade",                      -- L69
+        },
+        DoDH = {
+            "Creeping Dreams",                  -- L68
+            "Thousand Blades",                  -- L69 disc
+        },
+        PoR = {
+            "Aura of Insight",                  -- L55 aura
+            "Aura of the Muse",                 -- L70 aura
+            "Arcane Aria",                      -- L70
+        },
     },
     RNG = {
         Original = {
