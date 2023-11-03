@@ -54,7 +54,9 @@ local function handOverComponents(itemType, reciever)
     end
 
     if window_open("TradeWnd") then
-        log.Info("Trade window is already open, aborting ...")
+        log.Info("Trade window is already open, closing and aborting ...")
+        close_window("TradeWnd")
+        clear_cursor(true)
         return
     end
 
@@ -78,7 +80,7 @@ local function handOverComponents(itemType, reciever)
                             count = count + 1
                             log.Info("Handing over #%d %s: %s", count, currentItemType, item.Name())
 
-                            local cursor = mq.TLO.Cursor.ID()
+                            local cursor = mq.TLO.Cursor
 
                             local pickupTries = 0
                             while true do
@@ -95,6 +97,7 @@ local function handOverComponents(itemType, reciever)
                                 end
                             end
 
+                            local attempts = 0
                             while true do
                                 if cursor() == nil then
                                     break
@@ -108,6 +111,10 @@ local function handOverComponents(itemType, reciever)
                                 end
                                 log.Error("Failed to open trade with %s, retrying ...", reciever)
                                 delay(2000)
+                                attempts = attempts + 1
+                                if attempts > 10 then
+                                    break
+                                end
                             end
 
                             if count >= 8 then
