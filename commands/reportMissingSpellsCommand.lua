@@ -5,6 +5,57 @@ local log = require("knightlinc/Write")
 local bci = broadCastInterfaceFactory()
 
 local classSpells = {
+    WAR = {
+        Velious = { -- unsure if all of these belong to Velious
+            "Throw Stone",                      -- L01 disc
+            "Elbow Strike",                     -- L05 disc
+            "Focused Will Discipline",          -- L10 disc
+            "Provoke",                          -- L20 disc
+            "Resistant Discipline",             -- L30 disc
+            "Fearless Discipline",              -- L40 disc
+            "Evasive Discipline",               -- L52 disc
+            "Charge Discipline",                -- L53 disc
+            "Mighty Strike Discipline",         -- L54 disc
+            "Defensive Discipline",             -- L55 disc
+            "Furious Discipline",               -- L56 disc
+            "Precision Discipline",             -- L57 disc
+            "Fellstrike Discipline",            -- L58 disc
+            "Fortitude Discipline",             -- L59 disc
+            "Aggressive Discipline",            -- L60 disc
+        },
+        PoP = {
+            "Spirit of Rage Discipline",        -- L61 disc
+            "Incite",                           -- L63 disc
+        },
+        LDoN = {
+            "Bellow",                           -- L52 disc
+            "Berate",                           -- L56 disc
+        },
+        GoD = {
+            "Healing Will Discipline",          -- L63 disc
+            "Stonewall Discipline",             -- L65 disc
+            "Bellow of the Mastruq",            -- L65 disc
+            "Ancient: Chaos Cry",               -- L65 disc
+        },
+        OOW = {
+            "Aura of Runes Discipline",         -- L66 disc
+            "Savage Onslaught Discipline",      -- L68 disc
+            "Bazu Bellow",                      -- L69 disc
+            "Shocking Defense Discipline",      -- L70 disc
+        },
+        DoN = {
+            "Whirlwind Blade",                  -- L61 disc
+            "Cyclone Blade",                    -- L69 disc
+        },
+        DoDH = {
+            "Commanding Voice",                 -- L68 disc
+        },
+        PoR = {
+            "Myrmidon's Aura",                  -- L55 aura
+            "Champion's Aura",                  -- L70 aura
+            "Mock",                             -- L70 disc
+        },
+    },
     BRD = {
         Original = {
             "Chant of Battle",                  -- L01
