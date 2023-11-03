@@ -108,7 +108,7 @@ local classSpells = {
         Kunark = {
             "Solon's Bewitching Bravura",       -- L39
             "Jonthan's Provocation",            -- L45
-            "Shield of Song",                   -- L49
+            "Shield of Songs",                  -- L49
             "Selo's Song of Travel",
             "Largo's Assonant Binding",
             "Nillipus' March of the Wee",
@@ -2263,7 +2263,7 @@ local renamedSpells = {
     ["Complete Heal"]               = "Complete Healing",
     ["Invisibility vs. Undead"]     = "Invisibility versus Undead",
     ["Instill"]                     = "Enstill",
-    ["Selo's Assonant Strane"]      = "Selo's Assonant Strane",
+    ["Selo's Assonant Strain"]      = "Selo's Assonant Strane",
     ["Largo's Assonant Binding"]    = "Largo's Absonant Binding",
     ["Cantata of Replenishment"]    = "Cantana of Replenishment",
     ["Cantata of Soothing"]         = "Cantana of Soothing",
