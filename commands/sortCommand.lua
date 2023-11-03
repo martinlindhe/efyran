@@ -78,11 +78,13 @@ local function handOverComponents(itemType, reciever)
                             count = count + 1
                             log.Info("Handing over #%d %s: %s", count, currentItemType, item.Name())
 
+                            local cursor = mq.TLO.Cursor.ID()
+
                             local pickupTries = 0
                             while true do
                                 --log.Debug("Trying to pick up item ...")
                                 cmdf("/nomodkey /shiftkey /itemnotify in %s %d leftmouseup", pack, slot)
-                                delay("1s", function() return mq.TLO.Cursor.ID() ~= nil end)
+                                delay("1s", function() return cursor() ~= nil end)
                                 if have_cursor_item() then
                                     break
                                 end
@@ -94,6 +96,9 @@ local function handOverComponents(itemType, reciever)
                             end
 
                             while true do
+                                if cursor() == nil then
+                                    break
+                                end
                                 target_id(recvSpawn.ID())
                                 cmd("/click left target")
                                 mq.delay(2000, function() return window_open("TradeWnd") end)
