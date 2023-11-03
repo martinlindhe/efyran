@@ -137,12 +137,12 @@ local classSpells = {
             "Composition of Ervaj",             -- L60
         },
         Luclin = {}, -- TODO
-        Planes = {}, -- TODO
-        Ldon = {},   -- TODO
-        Ykesha = {}, -- TODO
-        Gates = {},  -- TODO
-        Omens = {},  -- TODO
-        Dragons = {}, -- TODO
+        PoP = {}, -- TODO
+        LDoN = {},   -- TODO
+        LoY = {}, -- TODO
+        GoD = {},  -- TODO
+        OOW = {},  -- TODO
+        DoN = {}, -- TODO
     },
     RNG = {
         Original = {
@@ -289,19 +289,121 @@ local classSpells = {
             "Divine Purpose",                   -- L39
             "Guard",                            -- L39
             "Flame of Light",                   -- L50
+            "Resistant Discipline",             -- L51 disc
             "Resist Disease",                   -- L51
             "Divine Glory",                     -- L53
+            "Fearless Discipline",              -- L54 disc
+            "Holyforge Discipline",             -- L55 disc
             "Resist Magic",                     -- L55
             "Wave of Healing",                  -- L55
             "Superior Healing",                 -- L57
             "Nullify Magic",                    -- L58
             "Celestial Cleansing",              -- L59
             "Resurrection",                     -- L59
+            "Sanctification Discipline",        -- L60 disc
             "Divine Strength",                  -- L60
             "Resolution",                       -- L60
             "Shield of Words",                  -- L60
             "Yaulp IV",                         -- L60
-        }
+        },
+        Luclin = {
+            "Cease",                            -- L07
+            "Desist",                           -- L13
+            "Reanimation",                      -- L22 unsure
+            "Instrument of Nife",               -- L26
+            "Reconstitution",                   -- L30 unsure
+            "Reparation",                       -- L31 unsure
+            "Divine Vigor",                     -- L35
+            "Valor of Marr",                    -- L44
+            "Remove Curse",                     -- L45
+            "Thunder of Karana",                -- L47
+            "Renewal",                          -- L49 unsure
+            "Quellious' Word of Tranquility",   -- L54
+            "Restoration",                      -- L55
+            "Breath of Tunare",                 -- L56
+            "Healing Wave of Prexus",           -- L58
+            "Celestial Cleansing",              -- L59
+            "Brell's Mountainous Barrier",      -- L60
+            "Remove Greater Curse",             -- L60
+        },
+        PoP = {
+            "Wave of Life",                     -- L39
+            "Brell's Steadfast Aegis",          -- L49
+            "Force of Akera",                   -- L53
+            "Greater Immobilize",               -- L61
+            "Heroism",                          -- L61 unsure
+            "Resist Poison",                    -- L61 unsure
+            "Touch of Nife",                    -- L61
+            "Crusader's Touch",                 -- L62
+            "Force of Akilae",                  -- L62
+            "Ward of Nife",                     -- L62
+            "Deny Undead",                      -- L62
+            "Improved Invisibility to Undead",  -- L63 unsure
+            "Light of Nife",                    -- L63
+            "Pious Might",                      -- L63
+            "Symbol of Marzin",                 -- L63 unsure
+            "Aura of the Crusader",             -- L64
+            "Heroic Bond",                      -- L64 unsure
+            "Quellious' Word of Serenity",      -- L64
+            "Supernal Cleansing",               -- L64
+            "Brell's Stalwart Shield",          -- L65
+            "Bulwark of Faith",                 -- L65 unsure
+            "Shackles of Tunare",               -- L65
+            "Wave of Marr",                     -- L65
+        },
+        LoY = {
+            "Ethereal Cleansing",               -- L44
+            "Light of Life",                    -- L52
+        },
+        LDoN = {
+            "Remove Minor Curse",               -- L19
+            "Remove Lesser Curse",              -- L34
+            "Austerity",                        -- L55
+            "Blessing of Austerity",            -- L58
+            "Guidance",                         -- L65
+        },
+        GoD = {
+            "Salve",                            -- L01
+            "Wave of Trushar",                  -- L65
+            "Light of Order",                   -- L65
+            "Holy Order",                       -- L65
+            "Ancient: Force of Chaos",          -- L65
+        },
+        OOW = {
+            "Direction",                        -- L66
+            "Touch of Piety",                   -- L66
+            "Force of Piety",                   -- L66
+            "Crusader's Purity",                -- L67
+            "Silvered Fury",                    -- L67
+            "Spurn Undead",                     -- L67
+            "Symbol of Jeron",                  -- L67
+            "Pious Fury",                       -- L68
+            "Light of Piety",                   -- L68
+            "Serene Command",                   -- L68
+            "Jeron's Mark",                     -- L68
+            "Hand of Direction",                -- L69
+            "Armor of the Champion",            -- L69
+            "Pious Cleansing",                  -- L69
+            "Bulwark of Piety",                 -- L69
+            "Affirmation",                      -- L70
+            "Brell's Brawny Bulwark",           -- L70
+            "Wave of Piety",                    -- L70
+            "Ancient: Force of Jeron",          -- L70
+        },
+        DoN = {
+            "Guard of Piety",                   -- L56
+            "Guard of Humility",                -- L61
+            "Guard of Righteousness",           -- L69
+        },
+        DoDH = {
+            "Last Rites",                       -- L68
+            "Silent Piety",                     -- L69
+        },
+        PoR = {
+            "Holy Aura",                        -- L55 aura
+            "Blessed Aura",                     -- L70 aura
+            "Ward of Tunare",                   -- L70
+        },
     },
     CLR = {
         Original = {
