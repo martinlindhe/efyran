@@ -2359,7 +2359,6 @@ local renamedSpells = {
     ["Vocarate: Fire"]              = "Vocerate: Fire",
     ["Vocarate: Water"]             = "Vocerate: Water",
     ["Vocarate: Air"]               = "Vocerate: Air",
-    ["Vocarate: Earth"]             = "Vocerate: Earth",
     ["O`Keil's Radiation"]          = "O`Keils Radiation",
     ["O`Keil's Flickering Flame"]   = "O'Keils Flickering Flame",
     ["Blast of Cold"]               = "Shock of Frost",
