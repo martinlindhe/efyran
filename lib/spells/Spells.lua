@@ -593,6 +593,10 @@ function rez_corpse(spawnID)
 
     if is_spell_ability_ready(rez) then
 
+        if not is_standing() then
+            cmd("/stand")
+        end
+
         -- tell bots this corpse is rezzed
         local cmd = string.format("/ae_rezzed %s", spawn.DisplayName())
         bci.ExecuteZoneCommand(cmd)
