@@ -652,9 +652,9 @@ function buffs.RequestBuffs()
         end
     end
 
-    --print("Buffs.RequestBuffs")
+    --log.Debug("Buffs.RequestBuffs")
 
-    local availableClasses = find_available_classes() -- XXX list should be known locally already
+    local availableClasses = find_available_classes()
 
     for k, row in pairs(req) do
         -- "aegolism/Class|CLR/NotClass|DRU"
@@ -663,7 +663,7 @@ function buffs.RequestBuffs()
 
         local skip = false
         local classes = split_str(spellConfig.Class, ",")
-        for classIdx, class in pairs(classes) do
+        for _, class in pairs(classes) do
             --log.Debug("- Class: do we have class \ax%s\ay available? %s", class, tostring(availableClasses[class] == true))
             if availableClasses[class] ~= true then
                 skip = true
@@ -672,7 +672,7 @@ function buffs.RequestBuffs()
 
         if spellConfig.NotClass ~= nil then
             local notClasses = split_str(spellConfig.NotClass, ",")
-            for classIdx, class in pairs(notClasses) do
+            for _, class in pairs(notClasses) do
                 --log.Debug("- NotClass: do we have class \ax%s\ay available? %s", class, tostring(availableClasses[class] == true))
                 if availableClasses[class] == true then
                     skip = true
@@ -682,7 +682,7 @@ function buffs.RequestBuffs()
 
         if spellConfig.CheckFor ~= nil then
             local tokens = split_str(spellConfig.CheckFor, ",")
-            for key, value in pairs(tokens) do
+            for _, value in pairs(tokens) do
                 if have_buff(value) then
                     --log.Debug("RequestBuffs %s, CheckFor \ag%s\ax found, skipping", spellConfig.Name, value)
                     skip = true
@@ -707,7 +707,7 @@ function buffs.RequestBuffs()
             -- assume what spell will be used and see if it will stack on me.
             local found = false
             local refresh = false
-            for idx, checkRow in pairs(buffRows) do
+            for _, checkRow in pairs(buffRows) do
                 local o = parseSpellLine(checkRow)
                 --log.Debug("Checking stacking status for buff \ay%s\ax (%s)", spellConfig.Name, o.Name)
 
@@ -723,13 +723,6 @@ function buffs.RequestBuffs()
                     break
                 end
 
-                local spell = get_spell(o.Name)
-                if spell ~= nil and not spell.Stacks() then
-                    --log.Debug("Can't ask for buff \ay%s\ax, won't stack (%s) spell.Stacks", spellConfig.Name, o.Name)
-                    return false
-                end
-
-                -- NOTE: evaluating wether WillStack() ever kicks in (oct 2023)
                 for i = 1, mq.TLO.Me.MaxBuffSlots() do
                     local buff = mq.TLO.Me.Buff(i)()
                     if buff ~= nil then
