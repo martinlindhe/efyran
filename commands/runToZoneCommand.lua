@@ -18,7 +18,7 @@ end
 local function createCommand(startingPeerName)
     if is_orchestrator() then
         -- tell the others to cross zone line
-        bci.ExecuteZoneCommand(string.format("/rtz %s", mq.TLO.Me.Name()))
+        bci.ExecuteAllCommand(string.format("/rtz %s", mq.TLO.Me.Name()))
         return
     end
 

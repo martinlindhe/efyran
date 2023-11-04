@@ -23,12 +23,6 @@ local function changeCurrenciesAtBanker()
     end
 end
 
--- Returns the number of free slots in the bank,
--- taking no consideration to item size.
-local function freeBankSlots()
-    return mq.TLO.Inventory.Bank.FreeSlots("Tiny")
-end
-
 -- Auto-banks all the stuff you should have according to config/efyran/SERVER_tradeskills.ini
 local function autobank()
     bankFull = false
@@ -62,7 +56,7 @@ local function autobank()
                                 local receiver = mq.TLO.Ini(tradeskillsIni, "Roles", itemType,"-")()
 
                                 if mq.TLO.Me.Name() == receiver then
-                                    if freeBankSlots() == 0 then
+                                    if FreeBankSlots() == 0 then
                                         all_tellf("ERROR: Bank is full, cannot auto-bank!")
                                         break
                                     end

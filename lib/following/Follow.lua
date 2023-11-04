@@ -159,7 +159,7 @@ function Follow.RunToZone(startingPeer)
     -- run across (need pos + heading from orchestrator)
     local spawn = spawn_from_peer_name(startingPeer)
     if spawn == nil then
-        all_tellf("ERROR: /rtz requested from peer not found: %s", startingPeer)
+        all_tellf("ERROR: /rtz requested from peer %s not found (i am in %s)", startingPeer, zone_shortname())
         return
     end
 

@@ -453,6 +453,10 @@ function QoL.Init()
         bci.ExecuteAllWithSelfCommand("/if (${Me.FreeInventory} <= 20) /bc FULL INVENTORY, ${Me.FreeInventory} FREE SLOTS")
     end)
 
+    bind("/freebankslots", function()
+        bci.ExecuteAllWithSelfCommand("/bc FREE BANK SLOTS: ${Inventory.Bank.FreeSlots[Tiny]}")
+    end)
+
     -- make peers in zone face my target
     bind("/facetarget", function() bci.ExecuteZoneCommand("/face fast id "..mq.TLO.Target.ID()) end)
     bind("/facetgt", function() mq.cmd("/facetarget") end)

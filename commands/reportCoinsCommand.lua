@@ -15,9 +15,8 @@ end
 -- reports coin summary on all peers
 local function createCommand()
     if is_orchestrator() then
-        bci.ExecuteZoneCommand("/coins")
+        bci.ExecuteAllCommand("/coins")
     end
-
     commandQueue.Enqueue(function() execute() end)
 end
 

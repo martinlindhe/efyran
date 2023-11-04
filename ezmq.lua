@@ -1155,7 +1155,7 @@ function free_inventory_slots()
     return mq.TLO.Me.FreeInventory()
 end
 
---- This can happen if item cannot be worn by race/class combo but the worn slot is empty. /autoinv will try to equip
+--- This can happen if item cannot be worn by race/class combo but the worn slot is empty. /autoinv will try to equip (rof2 client bug work-around)
 ---@param item item | fun() : nil
 ---@return boolean
 local function mustManuallyEmptyCursor(item)
@@ -1211,15 +1211,19 @@ function clear_cursor(force)
         end
 
         if mustManuallyEmptyCursor(cursor) then
+            log.Info("mustManuallyEmptyCursor %s ...", cursor.Name())
             local numberOfBagSlots = mq.TLO.Me.NumBagSlots()
             for i = 1, numberOfBagSlots do
                 local inventoryItem = mq.TLO.Me.Inventory(i + 22)
                 if inventoryItem() then
                     if inventoryItem.Container() > 0 then
-                        if inventoryItem.Container() > inventoryItem.Items() and inventoryItem.SizeCapacity() >= cursor.Size() then
-                            for p = 1, inventoryItem.Container() do
-                                mq.cmdf("/nomodkey /itemnotify in pack%d %d leftmouseup", i, p)
-                                break
+                        log.Info("XXX Items = %s, SizeCapacity = %s, cursorSize = %s", tostring(inventoryItem.Items()), tostring(inventoryItem.SizeCapacity()), tostring(cursor.Size()))
+                        if inventoryItem.Container() > inventoryItem.Items() then
+                            if inventoryItem.SizeCapacity() >= cursor.Size() then
+                                for p = 1, inventoryItem.Container() do
+                                    mq.cmdf("/nomodkey /itemnotify in pack%d %d leftmouseup", i, p)
+                                    break
+                                end
                             end
                         end
                     else
@@ -1754,6 +1758,12 @@ end
 ---@return integer
 function free_buff_slots()
     return mq.TLO.Me.FreeBuffSlots()
+end
+
+-- Returns the number of free slots in the bank,
+-- taking no consideration to item size.
+function FreeBankSlots()
+    return mq.TLO.Inventory.Bank.FreeSlots("Tiny")
 end
 
 local auraNames = {
