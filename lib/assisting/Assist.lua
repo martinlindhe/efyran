@@ -158,18 +158,17 @@ end
 -- Returns true if buffs are populated
 ---@return boolean
 local function waitForBuffsPopulated()
+    if mq.TLO.Me.LAInspectBuffs() == 0 then
+        -- wont work without the leader aa
+        return true
+    end
+
     local count = 0
 
     local wait = 50
     local limit = wait * 20 -- 1000ms
 
     local target = mq.TLO.Target
-
-    if mq.TLO.Me.LAInspectBuffs() == 0 then
-        -- wont work without the leader aa
-        mq.delay(100)
-        return true
-    end
 
     while not target.BuffsPopulated()
     do
@@ -283,7 +282,7 @@ function Assist.beginKillSpawnID(spawnID)
             end
 
             Assist.meleeDistance = dist
-            log.Info("Calculated auto melee distance %f", Assist.meleeDistance)
+            log.Debug("Calculated auto melee distance %f", Assist.meleeDistance)
         else
             Assist.meleeDistance = tonumber(botSettings.settings.assist.melee_distance)
         end
@@ -295,7 +294,7 @@ function Assist.beginKillSpawnID(spawnID)
 
         if waitForEngage() then
             local timeSticking = mq.gettime() - timeStarted
-            log.Info("Engaging after %d ms", timeSticking)
+            log.Debug("Engaging after %d ms", timeSticking)
 
             if not mq.TLO.Me.Combat() then
                 cmd("/attack on")
