@@ -304,15 +304,113 @@ local classSpells = {
             "Call of Sky",                      -- L39
             "Spikecoat",                        -- L49
             "Call of Earth",                    -- L50
-
+            "Resistant Discipline",             -- L51 disc
             "Strength of Nature",               -- L51
+            "Fearless Discipline",              -- L54 disc
+            "Trueshot Discipline",              -- L55 disc
             "Call of Fire",                     -- L55
             "Cinder Jolt",                      -- L55
             "Resist Cold",                      -- L55
             "Nullify Magic",                    -- L58
             "Skin like Nature",                 -- L59
             "Call of the Predator",             -- L60
-        }
+            "Weapon Shield Discipline",         -- L60 disc
+        },
+        Luclin = {
+            "Tangling Weeds",                   -- L05
+            "Hawk Eye",                         -- L11
+            "Riftwind's Protection",            -- L29
+            "Nature's Precision",               -- L37
+            "Force of Nature",                  -- L48
+            "Tangle",                           -- L51
+            "Falcon Eye",                       -- L52
+            "Jolting Blades",                   -- L54
+            "Mark of the Predator",             -- L56
+            "Eagle Eye",                        -- L58
+            "Warder's Protection",              -- L60
+        },
+        PoP = {
+            "Cure Disease",                     -- L22 unsure
+            "Flaming Arrow",                    -- L29
+            "See Invisible",                    -- L32 unsure
+            "Burning Arrow",                    -- L39
+            "Harmony of Nature",                -- L39
+            "Annul Magic",                      -- L61 unsure
+            "Circle of Winter",                 -- L61 unsure
+            "Counteract Disease",               -- L61 unsure
+            "Counteract Poison",                -- L61 unsure
+            "Entangle",                         -- L61
+            "Exile Summoned",                   -- L61 unsure
+            "Call of the Rathe",                -- L62
+            "Drifting Death",                   -- L62 unsure
+            "Shield of Thorns",                 -- L62 unsure
+            "Chloroblast",                      -- L62 unsure
+            "Strength of Tunare",               -- L62
+            "Bladecoat",                        -- L63 unsure
+            "Circle of Summer",                 -- L63 unsure
+            "Earthen Roots",                    -- L63
+            "Frozen Wind",                      -- L63
+            "Brushfire",                        -- L64
+            "Nature's Rebuke",                  -- L64
+            "Regrowth",                         -- L64 unsure
+            "Spirit of the Predator",           -- L64
+            "Protection of the Wild",           -- L65
+            "Cry of Thunder",                   -- L65
+            "Mask of the Stalker",              -- L65
+            "Natureskin",                       -- L65 unsure
+            "Spirit of Eagle",                  -- L65
+        },
+        LoY = {
+            "Swarm of Pain",                    -- L40
+            "Icewind",                          -- L52
+        },
+        LDoN = {
+            "Spirit of the Shrew",              -- L41
+            "Pack Shrew",                       -- L49
+            "Fire Swarm",                       -- L55
+            "Call of Ice",                      -- L58
+            "Feral Form",                       -- L64
+        },
+        GoD = {
+            "Salve",                            -- L01
+            "Sylvan Light",                     -- L65
+            "Sylvan Burn",                      -- L65
+            "Sylvan Call",                      -- L65
+            "Ancient: Burning Chaos",           -- L65
+        },
+        OOW = {
+            "Nature Veil",                      -- L66
+            "Displace Summoned",                -- L66
+            "Shield of Briar",                  -- L66
+            "Locust Swarm",                     -- L67
+            "Sylvan Water",                     -- L67
+            "Guard of the Earth",               -- L67
+            "Strength of the Hunter",           -- L67
+            "Briarcoat",                        -- L68
+            "Frost Wind",                       -- L68
+            "Hunter's Vigor",                   -- L68
+            "Tranquility of the Glade",         -- L68
+            "Nature's Denial",                  -- L69
+            "Howl of the Predator",             -- L69
+            "Hearth Embers",                    -- L69
+            "Nature's Balance",                 -- L69
+            "Onyx Skin",                        -- L70
+            "Ward of the Hunter",               -- L70
+            "Call of Lightning",                -- L70
+            "Ancient: North Wind",              -- L70
+        },
+        DoN = {
+            "Earthen Embrace",                  -- L61
+            "Earthen Shackles",                 -- L69
+        },
+        DoDH = {
+            "Hail of Arrows",                   -- L68
+            "Warder's Wrath",                   -- L69 disc
+        },
+        PoR = {
+            "Scorched Earth",                   -- L70
+            "Elddar's Grasp",                   -- L70
+        },
     },
     PAL = {
         Original = {
