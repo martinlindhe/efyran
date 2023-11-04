@@ -81,12 +81,13 @@ end
 
 -- Loot item from currently opened corpse and autodestroy or autoinventory
 local function lootItem(slotNum)
-    local lootTimer = timer.new(3)
     local cursor = mq.TLO.Cursor --[[@as item]]
+    local attempts = 0
 
-    while not cursor() and not cursor.ID() and not lootTimer:expired() do
+    while cursor() == nil and attempts < 3 do
         mq.cmdf("/nomodkey /itemnotify loot%d leftmouseup", slotNum)
         mq.delay("1s", function() return cursor() ~= nil end)
+        attempts = attempts + 1
     end
 
     if window_open("ConfirmationDialogBox") then
@@ -181,14 +182,15 @@ local function lootCorpse()
         mq.delay(10)
     end
 
+    local left = corpse.Items() or 0
+
     if mq.TLO.Corpse.Open() then
         mq.cmd("/notify LootWnd DoneButton leftmouseup")
-        mq.delay("1s", function() return not mq.TLO.Window("LootWnd").Open() end)
+        mq.delay("1s", function() return not window_open("LootWnd") end)
     end
 
-    local left = corpse.Items() or 0
     if left > 0 then
-        broadcast.Success({}, "Ending loot on \ay%s\ax, %d items left", name, corpse.Items() or 0)
+        broadcast.Success({}, "Ending loot on \ay%s\ax, %d items left", name, left or 0)
     end
     return true
 end
