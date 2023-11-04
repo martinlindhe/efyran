@@ -31,7 +31,7 @@ return function()
             mq.delay(50)
         end
 
-        if is_standing() and is_ability_ready("Mend") and skill_value("Mend") < skill_cap("Mend") then
+        if is_standing() and mq.TLO.Me.PctHPs() >= 90 and is_ability_ready("Mend") and skill_value("Mend") < skill_cap("Mend") then
             mq.cmd('/doability "Mend"')
             log.Info("Mending %d / %d", skill_value("Mend"), skill_cap("Mend"))
             mq.delay(200)
