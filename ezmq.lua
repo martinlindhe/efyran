@@ -1220,12 +1220,10 @@ function clear_cursor(force)
                 if inventoryItem() then
                     if inventoryItem.Container() > 0 then
                         log.Info("XXX Items = %s, SizeCapacity = %s, cursorSize = %s", tostring(inventoryItem.Items()), tostring(inventoryItem.SizeCapacity()), tostring(cursor.Size()))
-                        if inventoryItem.Container() > inventoryItem.Items() then
-                            if inventoryItem.SizeCapacity() >= cursor.Size() then
-                                for p = 1, inventoryItem.Container() do
-                                    mq.cmdf("/nomodkey /itemnotify in pack%d %d leftmouseup", i, p)
-                                    break
-                                end
+                        if cursor.Size() ~= nil and inventoryItem.Container() > inventoryItem.Items() and inventoryItem.SizeCapacity() >= cursor.Size() then
+                            for p = 1, inventoryItem.Container() do
+                                mq.cmdf("/nomodkey /itemnotify in pack%d %d leftmouseup", i, p)
+                                break
                             end
                         end
                     else
