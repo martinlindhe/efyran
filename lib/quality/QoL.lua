@@ -207,17 +207,16 @@ function QoL.Init()
     bind("/spellset", function(name)
         if is_orchestrator() then
             local cmd = string.format("/spellset %s", name)
-            bci.ExecuteZoneCommand(cmd)
+            bci.ExecuteAllCommand(cmd)
         end
         log.Info("Changed spellset to %s", name)
         assist.spellSet = name
     end)
 
-
     -- mana check
     bind("/mana", function()
         if is_orchestrator() then
-            bci.ExecuteZoneCommand("/mana")
+            bci.ExecuteAllCommand("/mana")
         end
         if not mq.TLO.Me.Class.CanCast() then
             return
@@ -234,7 +233,7 @@ function QoL.Init()
     -- weight check
     bind("/weight", function()
         if is_orchestrator() then
-            bci.ExecuteZoneCommand("/weight")
+            bci.ExecuteAllCommand("/weight")
         end
         if mq.TLO.Me.CurrentWeight() > mq.TLO.Me.STR() then -- red
             all_tellf("WEIGHT [+r+]%d/%d", mq.TLO.Me.CurrentWeight(), mq.TLO.Me.STR())
