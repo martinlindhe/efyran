@@ -40,19 +40,19 @@ return function()
     end
 
     while train do
-        if is_ability_ready("Hide") and not is_casting() and not obstructive_window_open()
+        if is_ability_ready("Hide") and (not is_casting() or is_brd()) and not obstructive_window_open()
         and skill_value("Hide") > 0 and skill_value("Hide") < skill_cap("Hide") then
             count = count + 1
             log.Info("Training Hide %d/%d (try %d)", skill_value("Hide"), skill_cap("Hide"), count)
             mq.cmd('/doability "Hide"')
         end
-        if is_ability_ready("Sneak") and not is_casting() and not obstructive_window_open()
+        if is_ability_ready("Sneak") and (not is_casting() or is_brd()) and not obstructive_window_open()
         and skill_value("Sneak") > 0 and skill_value("Sneak") < skill_cap("Sneak") then
             count = count + 1
             log.Info("Training Sneak %d/%d (try %d)", skill_value("Sneak"), skill_cap("Sneak"), count)
             mq.cmd('/doability "Sneak"')
         end
-        if is_ability_ready("Sense Traps") and not is_casting() and not obstructive_window_open()
+        if is_ability_ready("Sense Traps") and (not is_casting() or is_brd()) and not obstructive_window_open()
         and skill_value("Sense Traps") > 0 and skill_value("Sense Traps") < skill_cap("Sense Traps") then
             count = count + 1
             log.Info("Training Sense Traps %d/%d (try %d)", skill_value("Sense Traps"), skill_cap("Sense Traps"), count)
