@@ -7,11 +7,16 @@ local assist       = require("lib/assisting/Assist")
 local bci = broadCastInterfaceFactory()
 
 ---@class KillItCommand
+---@field Sender string Peer name
 ---@field SpawnId integer
 ---@field Filter string
 
 ---@param command KillItCommand
 local function execute(command)
+    if not is_peer_in_zone(command.Sender) then
+        log.Info("Ignoring KillIt command, sender \ay%s\ax is not in zone !", command.Sender)
+        return
+    end
     local filter = command.Filter
     if filter ~= nil and not matches_filter(filter, mq.TLO.Me.Name()) then
         log.Info("Not matching filter, giving up: %s", filter)
@@ -68,22 +73,25 @@ local function createAssistOnCommand(...)
         return
     end
 
-    local exe = string.format("/killit %d", spawn.ID())
+    local exe = string.format("/killit %s %d", mq.TLO.Me.Name(), spawn.ID())
     if filter ~= nil then
         exe = exe .. " " .. filter
     end
 
-    bci.ExecuteZoneCommand(exe)
-    commandQueue.Enqueue(function() execute({ SpawnId = toint(spawn.ID()), Filter = filter }) end)
+    bci.ExecuteAllCommand(exe)
+    commandQueue.Enqueue(function() execute({ Sender = mq.TLO.Me.Name(), SpawnId = toint(spawn.ID()), Filter = filter }) end)
 end
 
-local function createKillItCommand(mobID, ...)
+---@param sender string Name of sender peer
+---@param mobID integer
+---@param ... string
+local function createKillItCommand(sender, mobID, ...)
     if is_gm() then
         return
     end
 
     local filter = args_string(...)
-    commandQueue.Enqueue(function() execute({ SpawnId = toint(mobID), Filter = filter }) end)
+    commandQueue.Enqueue(function() execute({ Sender = sender, SpawnId = toint(mobID), Filter = filter }) end)
 end
 
 bind("/killit", createKillItCommand)

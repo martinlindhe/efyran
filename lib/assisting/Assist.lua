@@ -222,7 +222,7 @@ local function waitForEngage()
         return false
     end
 
-    log.Info("Target is at %s %% HPs (min %d), sticking!", target.PctHPs(), startPct)
+    log.Debug("Target is at %s %% HPs (min %d), sticking!", target.PctHPs(), startPct)
     return true
 end
 
@@ -256,7 +256,7 @@ function Assist.beginKillSpawnID(spawnID)
 
     Assist.targetID = spawnID
 
-    log.Info("Assist.beginKillSpawnID %d", spawnID)
+    log.Info("Assist: Killing \ay%d\ax", spawnID)
 
     follow.PauseForKill()
 
