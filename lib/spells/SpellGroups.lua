@@ -976,23 +976,73 @@ SpellGroups.MAG = {
         "Velocity",                                 -- L58 Velocity (59-80% movement, 36 min)
         "Expedience",                               -- L27 Expedience (20% movement, 12 min)
     },
-    -- water pets (rogue)
+    mag_earth_pet = {
+        "Child of Earth",                           -- L70, OOW
+        "Rathe's Son",                              -- L65, PoP
+        "Greater Vocaration: Earth",                -- L57, Kunark
+        "Vocarate: Earth",                          -- L51, Kunark
+        "Greater Conjuration: Earth",               -- L49
+        "Conjuration: Earth",                       -- L44
+        "Lesser Conjuration: Earth",                -- L39
+        "Minor Conjuration: Earth",                 -- L34
+        "Greater Summoning: Earth",                 -- L29
+        "Summoning: Earth",                         -- L24
+        "Lesser Summoning: Earth",                  -- L20
+        "Minor Summoning: Earth",                   -- L16
+        "Elemental: Earth",                         -- L12
+        "Elementaling: Earth",                      -- L08
+        "Elementalkin: Earth",                      -- L04
+    },
+    mag_fire_pet = {
+        "Child of Fire",                            -- L68, OOW
+        "Child of Ro",                              -- L63, PoP
+        "Greater Vocaration: Fire",                 -- L58, Kunark
+        "Vocarate: Fire",                           -- L52, Kunark
+        "Greater Conjuration: Fire",                -- L49
+        "Conjuration: Fire",                        -- L44
+        "Lesser Conjuration: Fire",                 -- L39
+        "Minor Conjuration: Fire",                  -- L34
+        "Greater Summoning: Fire",                  -- L29
+        "Summoning: Fire",                          -- L24
+        "Lesser Summoning: Fire",                   -- L20
+        "Minor Summoning: Fire",                    -- L16
+        "Elemental: Fire",                          -- L12
+        "Elementaling: Fire",                       -- L08
+        "Elementalkin: Fire",                       -- L04
+    },
+    mag_air_pet = {
+        "Child of Wind",                            -- L66, OOW
+        "Ward of Xegony",                           -- L61, PoP
+        "Greater Vocaration: Air",                  -- L59, Kunark
+        "Vocarate: Air",                            -- L53, Kunark
+        "Greater Conjuration: Air",                 -- L49
+        "Conjuration: Air",                         -- L44
+        "Lesser Conjuration: Air",                  -- L39
+        "Minor Conjuration: Air",                   -- L34
+        "Greater Summoning: Air",                   -- L29
+        "Summoning: Air",                           -- L24
+        "Lesser Summoning: Air",                    -- L20
+        "Minor Summoning: Air",                     -- L16
+        "Elemental: Air",                           -- L12
+        "Elementaling: Air",                        -- L08
+        "Elementalkin: Air",                        -- L04
+    },
     mag_water_pet = {
-        "Child of Water",             -- L67 (pet ROG/65) - Malachite
-        "Servant of Marr",            -- L62 (pet ROG/60) - no reagent
-        "Greater Vocaration: Water",  -- L60
-        "Vocarate: Water",            -- L54
-        "Greater Conjuration: Water", -- L49
-        "Conjuration: Water",         -- L41
-        "Lesser Conjuration: Water",  -- L36
-        "Minor Conjuration: Water",   -- L31
-        "Greater Summoning: Water",   -- L26
-        "Summoning: Water",           -- L22
-        "Lesser Summoning: Water",    -- L18
-        "Minor Summoning: Water",     -- L14
-        "Elemental: Water",           -- L10
-        "Elementaling: Water",        -- L06
-        "Elementalkin: Water",        -- L02
+        "Child of Water",                           -- L67 (pet ROG/65) - Malachite, OOW
+        "Servant of Marr",                          -- L62 (pet ROG/60) - no reagent, PoP
+        "Greater Vocaration: Water",                -- L60, Kunark
+        "Vocarate: Water",                          -- L54, Kunark
+        "Greater Conjuration: Water",               -- L49
+        "Conjuration: Water",                       -- L44
+        "Lesser Conjuration: Water",                -- L39
+        "Minor Conjuration: Water",                 -- L34
+        "Greater Summoning: Water",                 -- L29
+        "Summoning: Water",                         -- L24
+        "Lesser Summoning: Water",                  -- L20
+        "Minor Summoning: Water",                   -- L16
+        "Elemental: Water",                         -- L12
+        "Elementaling: Water",                      -- L08
+        "Elementalkin: Water",                      -- L04
     },
     mag_fire_nuke = {
         "Ancient: Nova Strike",                     -- L70 Ancient: Nova Strike (2377 hp, 6.3s cast, cost 525 mana)
