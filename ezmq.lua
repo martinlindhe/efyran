@@ -1210,6 +1210,8 @@ function clear_cursor(force)
             all_tellf("Putting cursor item %s in inventory.", cursor.ItemLink("CLICKABLE")())
         end
 
+        mq.delay(10)
+
         if mustManuallyEmptyCursor(cursor) then
             log.Info("mustManuallyEmptyCursor %s ...", cursor.Name())
             local numberOfBagSlots = mq.TLO.Me.NumBagSlots()
@@ -1236,8 +1238,7 @@ function clear_cursor(force)
             mq.cmd("/autoinventory")
         end
 
-        mq.delay(2000, function() return mq.TLO.Cursor.ID() == nil end)
-        mq.delay(200)
+        mq.delay(2000, function() return cursor() == nil end)
     end
 end
 

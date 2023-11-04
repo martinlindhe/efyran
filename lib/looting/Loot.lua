@@ -104,10 +104,11 @@ local function lootItem(slotNum)
     end
 
     local itemLink = cursor.ItemLink("CLICKABLE")()
+    log.Info("handling looted item %s", itemLink)
 
     local itemToDestroy = repository:get(cursor)
     if itemToDestroy ~= nil and itemToDestroy.Destroy then
-        log.Debug("Destroying item %s ...", cursor.Name())
+        log.Debug("Destroying item %s ...", itemLink)
         destroyCursorItem()
     end
 
