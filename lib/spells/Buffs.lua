@@ -271,6 +271,11 @@ function buffs.Tick()
         return
     end
 
+    if not in_group() and nearby_npc_count(45) > 0 then
+        -- avoid being busy buffing while leveling other peers
+        return
+    end
+
     if #buffs.queue > 0 and not in_combat() and not heal.medding and handleBuffsTimer:expired() then
         -- process up  to 10 requests per tick, until at least one is handled.
         for i = 1, 10 do
