@@ -45,7 +45,10 @@ local function portTo(name)
     unflood_delay()
 
     if memorize_spell(spellName, 5) ~= nil then
-        delay(5000)
+        if not is_standing() then
+            mq.cmd("/stand")
+            mq.delay(10)
+        end
         castSpellRaw(spellName, mq.TLO.Me.ID(), "gem5 -maxtries|3")
         wait_until_not_casting()
     end

@@ -25,7 +25,7 @@ local function createCommand(...)
         if filter ~= nil then
             exe = exe .. " " .. filter
         end
-        bci.ExecuteZoneCommand(exe)
+        bci.ExecuteAllCommand(exe)
     end
 
     commandQueue.Enqueue(function() execute({ Filter = filter }) end)

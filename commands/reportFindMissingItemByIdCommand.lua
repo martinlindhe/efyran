@@ -13,7 +13,7 @@ local bci = broadCastInterfaceFactory()
 local function report_find_missing_item_by_id(id)
 
     if is_orchestrator() then
-        bci.ExecuteZoneCommand(string.format("/fmid %s", tostring(id)))
+        bci.ExecuteAllCommand(string.format("/fmid %s", tostring(id)))
     end
 
     local found = false

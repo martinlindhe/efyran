@@ -23,6 +23,16 @@ local function changeCurrenciesAtBanker()
     end
 end
 
+---@return boolean
+local function bankWindowOpen()
+    local bankWnd = "BigBankWnd"
+    if not serverSettings.bigBank then
+        bankWnd = "BankWnd"
+    end
+    return window_open(bankWnd)
+end
+
+
 -- Auto-banks all the stuff you should have according to config/efyran/SERVER_tradeskills.ini
 local function autobank()
     bankFull = false
@@ -31,6 +41,8 @@ local function autobank()
     end
 
     clear_cursor()
+
+    close_bags()
 
     -- auto-change currencies while banker is open
     changeCurrenciesAtBanker()
@@ -98,7 +110,7 @@ local function autobank()
                                             all_tellf("Failed to auto bank %s, retrying ...", item.Name())
                                             delay("1s")
                                         end
-                                    until not have_cursor_item()
+                                    until not have_cursor_item() or not bankWindowOpen()
 
                                 end
                             end

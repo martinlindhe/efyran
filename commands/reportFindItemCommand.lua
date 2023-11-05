@@ -22,7 +22,7 @@ local function report_find_item(name, filter)
         if filter ~= nil then
             exe = exe .. " " .. filter
         end
-        bci.ExecuteZoneCommand(exe)
+        bci.ExecuteAllCommand(exe)
     end
 
     if filter ~= nil and not matches_filter(filter, mq.TLO.Me.Name()) then

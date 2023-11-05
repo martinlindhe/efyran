@@ -22,9 +22,7 @@ local function execute(delay)
     memorizeListedSpells()
 
     heal.timeZoned = os.time()
---    heal.autoMed = true
 
---    buffs.refreshBuffs = true
     buffs.UpdateClickies()
 
     map.AutoMapHeightFilter()

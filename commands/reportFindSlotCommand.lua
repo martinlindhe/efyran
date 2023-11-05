@@ -114,7 +114,7 @@ local function createCommand(...)
     end
     if name ~= "" then
         if is_orchestrator() then
-            bci.ExecuteZoneCommand(string.format("/findslot %s", args))
+            bci.ExecuteAllCommand(string.format("/findslot %s", args))
         end
         commandQueue.Enqueue(function() execute({ Slot = name, Filter = filter }) end)
     end

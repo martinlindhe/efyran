@@ -93,6 +93,14 @@ function QoL.Init()
         log.Info("MEZ BREAK > \ar%s\ax < by \ay%s\ax", mob, awakener)
     end)
 
+    local mobSlowed = function(text, name)
+        if is_peer(name) then
+            return
+        end
+        log.Info("SLOWED > \ay%s\ax <", name)
+    end
+    mq.event("mob-slowed", "#1# slows down.", mobSlowed) -- ENC Languid Pace
+
     mq.event("mob-resisted", "Your target resisted the #1# spell.", function(text, name)
         log.Error("RESISTED > \ay%s\ax <", name)
         mq.cmdf("/popup RESISTED %s", name)

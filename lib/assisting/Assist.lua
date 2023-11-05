@@ -87,6 +87,9 @@ function Assist.Init()
 
     -- Adjust Melee distance if too far away msg, because spawn.MaxDistanceTo() is not exact
     mq.event("melee-out-of-range", "Your target is too far away, get closer!", function()
+        if not Assist.IsAssisting() then
+            return
+        end
         local t = Assist.meleeDistance - 2
         if t >= 9 and mq.TLO.Target() ~= nil and mq.TLO.Target.Distance() > Assist.meleeDistance then
             log.Info("Reducing max distance from %f to %f", Assist.meleeDistance, t)

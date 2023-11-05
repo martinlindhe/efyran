@@ -139,8 +139,8 @@ end
 local function restockFoodAndDrink()
     clear_cursor(true)
 
-    local foodSupplyCap = 100
-    local drinkSupplyCap = 200
+    local foodSupplyCap = 60
+    local drinkSupplyCap = 120
 
     local nearestMerchant = merchant.FindMerchant()
     if not nearestMerchant then
