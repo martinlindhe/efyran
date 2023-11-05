@@ -277,8 +277,8 @@ function buffs.Tick()
     end
 
     if #buffs.queue > 0 and not in_combat() and not heal.medding and handleBuffsTimer:expired() then
-        -- process up  to 10 requests per tick, until at least one is handled.
-        for i = 1, 10 do
+        -- process up  to 25 requests per tick, until at least one is handled.
+        for i = 1, 25 do
             local req = table.remove(buffs.queue, 1)
             if req ~= nil then
                 if handleBuffRequest(req) then
