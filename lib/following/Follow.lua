@@ -90,7 +90,7 @@ function Follow.Pause()
     if plugin_loaded("MQ2Nav") and mq.TLO.Navigation.Active() then
         cmd("/nav stop")
     end
-    if plugin_loaded("MQ2AdvPath") and mq.TLO.AdvPath.Following() then
+    if plugin_loaded("MQ2AdvPath") then
         cmd("/afollow off")
     end
     if plugin_loaded("MQ2MoveUtils") then
@@ -119,6 +119,30 @@ function Follow.Tick()
     followUpdateTimer:restart()
 end
 
+-- zone shortnames for "water zones", where MQ2Nav won't function well.
+-- Will use MQ2AdvPath instead for following.
+local forceAdvpathZones = {
+    ["lakerathe"] = true,       -- Lake Rathetear, Original
+    ["cauldron"] = true,        -- Dagnor's Cauldron, Original
+    ["erudsxing"] = true,       -- Erud's Crossing, Original
+    ["feerrott"] = true,        -- The Feerrott, Original
+    ["innothule"] = true,       -- Innothule Swamp, Original
+    ["guktop"] = true,          -- Upper Guk, Original
+    ["kedge"] = true,           -- Kedge Keep, Original
+    ["oot"] = true,             -- Oceans of Tears
+    ["oceanoftears"] = true,    -- Oceans of Tears, remake ?
+    ["lakeofillomen"] = true,   -- Lake of Ill Omen, Kunark
+    ["timorous"] = true,        -- Timorous Deep, Kunark
+    ["potranquility"] = true,   -- Plane of Tranquility, PoP
+    ["powater"] = true,         -- Plane of Water, PoP
+}
+
+-- Returns true if current zone should be forced to use MQ2AdvPath
+---@return boolean
+local function shouldForceAdvpath()
+    return forceAdvpathZones[zone_shortname()] ~= nil
+end
+
 -- called from Follow.Tick() in main loop, restores auto follow after a Follow.Pause() call
 ---@param force boolean
 function Follow.Update(force)
@@ -141,18 +165,18 @@ function Follow.Update(force)
 
     --log.Debug("Follow.Update, mode %s, distance %f", serverSettings.followMode, spawn.Distance3D())
 
-    if serverSettings.followMode:lower() == "mq2nav" then
-        if not mq.TLO.Navigation.Active() and spawn.Distance() >= 14 then
-            log.Info("Follow.Update: Navigate to %s activated", Follow.spawnName)
-            mq.cmdf("/nav spawn PC =%s | distance=%d log=off", spawn.Name(), maxRange)
-        end
-    elseif serverSettings.followMode:lower() == "mq2advpath" then
+    if serverSettings.followMode:lower() == "mq2advpath" or shouldForceAdvpath() then
         if mq.TLO.AdvPath.WaitingWarp() then
             force = true
             all_tellf("AdvPath: WaitingWarp - force follow")
         end
         if force or not mq.TLO.AdvPath.Following() then
             mq.cmdf("/afollow spawn %d", spawnID)
+        end
+    elseif serverSettings.followMode:lower() == "mq2nav" then
+        if not mq.TLO.Navigation.Active() and spawn.Distance() >= 14 then
+            log.Info("Follow.Update: Navigate to %s activated", Follow.spawnName)
+            mq.cmdf("/nav spawn PC =%s | distance=%d log=off", spawn.Name(), maxRange)
         end
     end
 end
@@ -162,7 +186,7 @@ function Follow.RunToZone(startingPeer)
     -- run across (need pos + heading from orchestrator)
     local spawn = spawn_from_peer_name(startingPeer)
     if spawn == nil then
-        all_tellf("ERROR: /rtz requested from peer %s not found (i am in %s)", startingPeer, zone_shortname())
+        log.Error("/rtz requested from peer %s not in zone (i am in %s)", startingPeer, zone_shortname())
         return
     end
 
