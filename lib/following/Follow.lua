@@ -54,7 +54,7 @@ function Follow.Start(spawnName, force)
         Follow.Pause()
     end
 
-    log.Debug("Follow start on %s", spawn.Name())
+    log.Info("Started following \ag%s\ax", spawn.Name())
     Follow.spawnName = spawn.Name()
     Follow.Update(true)
 end
@@ -101,6 +101,9 @@ end
 
 -- stops following completely
 function Follow.Stop()
+    if Follow.spawnName ~= "" or Follow.lastFollowName ~= "" then
+        log.Info("Stopped following \ag%s %s\ax", Follow.spawnName, Follow.lastFollowName)
+    end
     Follow.spawnName = ""
     Follow.lastFollowName = ""
     Follow.Pause()

@@ -312,7 +312,7 @@ function Heal.performLifeSupport()
         if not skip then
             medTimer:restart()
             if is_ability_ready(spellConfig.Name) then
-                all_tellf("USING LIFE SUPPORT ability %s at %d%%", spellConfig.Name, mq.TLO.Me.PctHPs())
+                all_tellf("Using life support [+y+]%s[+x+] at [+y+]%d%%[+x+]", spellConfig.Name, mq.TLO.Me.PctHPs())
                 cmdf("/doability %s", spellConfig.Name)
                 return
             end
@@ -341,7 +341,6 @@ function Heal.performLifeSupport()
                             all_tellf("USED LIFE SUPPORT [+y+]%s[+x+] at %d%% HP (was %d%%)", spellName, mq.TLO.Me.PctHPs(), hp)
                         end
                     end
-
                     return
                 end
             end
