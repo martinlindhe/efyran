@@ -214,7 +214,7 @@ function spellConfigAllowsCasting(spellConfig, spawn)
             --log.Debug("cant rebuff %s, dont stack", spellConfig.Name)
             return false
         end
-    elseif is_peer_id(spawn.ID()) and not netbotsWillStack(spawn.Name(), spellConfig.Name) then
+    elseif is_peer(spawn.DisplayName()) and not netbotsWillStack(spawn.DisplayName(), spellConfig.Name) then
         log.Debug("SKIP BUFFING %s, %s dont stack", spawn.Name(), spellConfig.Name)
         return false
     end
