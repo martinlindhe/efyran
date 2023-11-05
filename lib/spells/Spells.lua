@@ -158,6 +158,32 @@ function refreshBuff(buffItem, spawn)
     return castSpell(spellName, spawnID)
 end
 
+-- Simulates .WillStack() for a netbot
+---@param peer string
+---@param spellName string
+---@return boolean
+function netbotsWillStack(peer, spellName)
+    local bot = mq.TLO.NetBots(peer)
+    if bot() == nil then
+        return false
+    end
+
+    local netbotBuffs = split_str(bot.Buff(), " ")
+    if bot.FreeBuffSlots() == 0 then
+        return false
+    end
+
+    for _, id in ipairs(netbotBuffs) do
+        local buffID = toint(id)
+        local spell = mq.TLO.Spell(buffID)
+        if spell() and not mq.TLO.Spell(spellName).WillStack(spell.Name())() then
+            return false
+        end
+    end
+
+    return true
+end
+
 ---@param spellConfig SpellObject
 ---@return boolean
 function spellConfigAllowsCasting(spellConfig, spawn)
@@ -188,16 +214,9 @@ function spellConfigAllowsCasting(spellConfig, spawn)
             --log.Debug("cant rebuff %s, dont stack", spellConfig.Name)
             return false
         end
-    else
-        if is_peer_id(spawn.ID()) and not mq.TLO.NetBots(spawn.Name()).Stacks(spell.ID())() then
-            log.Debug("SKIP BUFFING %s, %s dont stack", spawn.Name(), spellConfig.Name)
-            return false
-        end
-
-        if not spell.StacksSpawn(spawn.ID()) then
-            all_tellf("cant rebuff %s on spawn, dont stack", spellConfig.Name)
-            return false
-        end
+    elseif is_peer_id(spawn.ID()) and not netbotsWillStack(spawn.Name(), spellConfig.Name) then
+        log.Debug("SKIP BUFFING %s, %s dont stack", spawn.Name(), spellConfig.Name)
+        return false
     end
 
     if spellConfig.Shrink ~= nil and spellConfig.Shrink and mq.TLO.Me.Height() <= 2.04 then
