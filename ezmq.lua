@@ -2635,7 +2635,7 @@ end
 
 ---@param radius integer
 function nearby_npc_count(radius)
-    return spawn_count(string.format("npc radius %d zradius 15", radius))
+    return spawn_count(string.format("npc radius %d zradius 15 los", radius))
 end
 
 ---@param radius integer
