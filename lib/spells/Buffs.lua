@@ -601,29 +601,27 @@ function buffs.RequestAvailabiliy()
             local found = false
 
             if buffs.buffers[buffClasses[i]] == nil or not is_peer_in_zone(buffs.buffers[buffClasses[i]]) then
-                -- 1. find peer of needed class in my group
-                for j = 1, mq.TLO.Group.Members() do
-                    if mq.TLO.Group.Member(j).ID() ~= nil and mq.TLO.Group.Member(j).Class.ShortName() == buffClasses[i] then
-                        if is_peer(mq.TLO.Group.Member(j).Name()) then
-                            --log.Debug("found class buffer in group: %s %s", buffClasses[i], mq.TLO.Group.Member(j).Name())
-                            buffs.buffers[buffClasses[i]] = mq.TLO.Group.Member(j).Name()
-                            found = true
-                            break
+                -- 1. find peer of needed class in my group (preferred when in raid)
+                if in_raid() then
+                    for j = 1, mq.TLO.Group.Members() do
+                        if mq.TLO.Group.Member(j).ID() ~= nil and mq.TLO.Group.Member(j).Class.ShortName() == buffClasses[i] then
+                            if is_peer(mq.TLO.Group.Member(j).Name()) then
+                                --log.Debug("found class buffer in group: %s %s", buffClasses[i], mq.TLO.Group.Member(j).Name())
+                                buffs.buffers[buffClasses[i]] = mq.TLO.Group.Member(j).Name()
+                                found = true
+                                break
+                            end
                         end
                     end
                 end
 
                 -- 2. find any peer
                 if not found then
-                    local spawnQuery = "pc notid " .. mq.TLO.Me.ID() .. ' class "'.. shortToLongClass[buffClasses[i]] ..'"'
-                    for j = 1, spawn_count(spawnQuery) do
-                        local spawn = mq.TLO.NearestSpawn(j, spawnQuery)
-                        if spawn ~= nil and is_peer(spawn.Name()) then
-                            --log.Debug("found class buffer nearby: %s %s, peer id = %s", buffClasses[i], spawn.Name(), tostring(mq.TLO.NetBots(spawn.Name()).ID()))
-                            buffs.buffers[buffClasses[i]] = spawn.Name()
-                            found = true
-                            break
-                        end
+                    local name = NearestPeerByClass(buffClasses[i])
+                    if name ~= nil then
+                        --log.Debug("found class buffer nearby: %s %s, peer id = %s", buffClasses[i], spawn.Name(), tostring(mq.TLO.NetBots(spawn.Name()).ID()))
+                        buffs.buffers[buffClasses[i]] = name
+                        found = true
                     end
                 end
             end
