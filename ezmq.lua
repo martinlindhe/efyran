@@ -1912,7 +1912,7 @@ end
 function drop_buffs_not_stacking_with(name)
     for i = 1, mq.TLO.Me.MaxBuffSlots() do
         if mq.TLO.Me.Buff(i).ID() ~= nil then
-            if not mq.TLO.Me.Buff(i).WillStack(name) then
+            if not mq.TLO.Spell(name).WillStack(mq.TLO.Me.Buff(i).Name())() then
                 all_tellf("drop_buffs_not_stacking_with: removing %s, will not stack with %s", mq.TLO.Me.Buff(i).Name(), name)
                 mq.cmdf('/removebuff "%s"', mq.TLO.Me.Buff(i).Name())
             end

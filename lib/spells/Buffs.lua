@@ -727,15 +727,11 @@ function buffs.RequestBuffs()
                 end
 
                 for i = 1, mq.TLO.Me.MaxBuffSlots() do
-                    local buff = mq.TLO.Me.Buff(i)()
-                    if buff ~= nil then
-                        local spell1 = get_spell(buff)
-                        if spell1 == nil then
-                            all_tellf("XXX get_spell nil unexpected", buff)
-                        end
-                        if spell1 ~= nil and not spell1.WillStack(o.Name) then
-                            -- TODO: see if this ever triggers
-                            all_tellf("UNLIKELY: Can't ask for buff \ay%s\ax, won't stack (%s) spell.WillStack", spellConfig.Name, o.Name)
+                    local buff = mq.TLO.Me.Buff(i)
+                    if buff() ~= nil then
+                        --log.Debug("Checking if %s will stack with %s: %s", o.Name, buff.Name(), tostring(mq.TLO.Spell(o.Name).WillStack(buff.Name())))
+                        if not mq.TLO.Spell(o.Name).WillStack(buff.Name())() then
+                            log.Debug("Can't ask for buff \ay%s\ax (%s), won't stack (have %s)", spellConfig.Name, o.Name, buff.Name())
                             return false
                         end
                     end
