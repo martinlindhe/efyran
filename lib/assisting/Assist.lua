@@ -256,7 +256,7 @@ function Assist.beginKillSpawnID(spawnID)
 
     Assist.targetID = spawnID
 
-    log.Info("Assist: Killing \ay%d\ax", spawnID)
+    log.Info("Assist: Killing \ay%s\ax (\ay%d\ax)", spawn.DisplayName(), spawnID)
 
     follow.PauseForKill()
 

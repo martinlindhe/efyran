@@ -4,9 +4,6 @@ local broadCastInterfaceFactory = require 'broadcast/broadcastinterface'
 
 local serverSettings = require("lib/settings/default/ServerSettings")
 local botSettings = require("lib/settings/BotSettings")
-local aliases = require("lib/settings/default/SpellAliases")
-
-local follow = require("lib/following/Follow")
 
 local bci = broadCastInterfaceFactory()
 
@@ -478,36 +475,6 @@ function cast_evac_spell()
         end
         log.Error("I have no evac spell!")
     end
-end
-
--- Perform the "/portto <name>" command
----@param name string
-function cast_port_to(name)
-    local spellName = nil --- @type string|nil
-    if class_shortname() == "WIZ" then
-        spellName = aliases.WIZ["port " .. name]
-    elseif class_shortname() == "DRU" then
-        spellName = aliases.DRU["port " .. name]
-    else
-        return
-    end
-
-    if spellName == nil then
-        all_tellf("[+r+]ERROR[+x+]: Unknown port alias [+g+]%s[+x+].", name)
-        return
-    end
-
-    follow.Stop()
-
-    all_tellf("Porting group to [+g+]%s[+x+] ([+y+]%s[+x+]) ...", name, spellName)
-    unflood_delay()
-
-    if memorize_spell(spellName, 5) ~= nil then
-        delay(5000)
-        castSpellRaw(spellName, mq.TLO.Me.ID(), "gem5 -maxtries|3")
-        wait_until_not_casting()
-    end
-
 end
 
 -- Cleric: performs an AE rez
