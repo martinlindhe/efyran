@@ -726,13 +726,16 @@ function buffs.RequestBuffs()
                     break
                 end
 
-                for i = 1, mq.TLO.Me.MaxBuffSlots() do
-                    local buff = mq.TLO.Me.Buff(i)
-                    if buff() ~= nil then
-                        --log.Debug("Checking if %s will stack with %s: %s", o.Name, buff.Name(), tostring(mq.TLO.Spell(o.Name).WillStack(buff.Name())))
-                        if not mq.TLO.Spell(o.Name).WillStack(buff.Name())() then
-                            log.Debug("Can't ask for buff \ay%s\ax (%s), won't stack (have %s)", spellConfig.Name, o.Name, buff.Name())
-                            return false
+                -- skip checks for invalid spell names (such as original names pre-rename)
+                if is_spell(o.Name) then
+                    for i = 1, mq.TLO.Me.MaxBuffSlots() do
+                        local buff = mq.TLO.Me.Buff(i)
+                        if buff() ~= nil then
+                            --log.Debug("Checking if %s will stack with %s: %s", o.Name, buff.Name(), tostring(mq.TLO.Spell(o.Name).WillStack(buff.Name())))
+                            if not mq.TLO.Spell(o.Name).WillStack(buff.Name())() then
+                                log.Debug("Can't ask for buff \ay%s\ax (%s), won't stack (have %s)", spellConfig.Name, o.Name, buff.Name())
+                                return false
+                            end
                         end
                     end
                 end
