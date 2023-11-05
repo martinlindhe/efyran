@@ -483,7 +483,7 @@ function handleBuffRequest(req)
         end
 
         log.Info("Buffing \ag%s\ax with \ay%s\ax (\ay%s\ax).", spawn.Name(), spellObj.Name, req.Buff)
-        castSpellRaw(spellObj.Name, spawn.ID(), "-maxtries|3")
+        castSpellRaw(spellObj.Name, spawn.ID())
         delay(100)
         doevents()
         delay(10000, function()
