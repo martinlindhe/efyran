@@ -144,7 +144,7 @@ function Follow.Update(force)
     if serverSettings.followMode:lower() == "mq2nav" then
         if not mq.TLO.Navigation.Active() and spawn.Distance() >= 14 then
             log.Info("Follow.Update: Navigate to %s activated", Follow.spawnName)
-            mq.cmdf("/nav spawn PC =%s | distance=%d log=trace", spawn.Name(), maxRange)
+            mq.cmdf("/nav spawn PC =%s | distance=%d log=off", spawn.Name(), maxRange)
         end
     elseif serverSettings.followMode:lower() == "mq2advpath" then
         if mq.TLO.AdvPath.WaitingWarp() then
