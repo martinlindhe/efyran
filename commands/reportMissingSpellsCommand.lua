@@ -592,6 +592,15 @@ local classSpells = {
             "Ward of Tunare",                   -- L70
         },
     },
+    MNK = {
+        -- TODO discs
+    },
+    ROG = {
+        -- TODO discs
+    },
+    BER = {
+        -- TODO discs
+    },
     CLR = {
         Original = {
             "Courage",                          -- L01

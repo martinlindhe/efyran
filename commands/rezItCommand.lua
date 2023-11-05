@@ -33,7 +33,7 @@ local function createCommand(spawnID)
 
         -- non-cleric orchestrator asks nearby CLR to rez spawnID
         if not is_priest() and not is_pal() then
-            local clrName = nearest_peer_by_class("CLR")
+            local clrName = ClosestPeerByClass("CLR")
             if clrName == nil then
                 all_tellf("\arERROR\ax: Cannot request rez, no cleric nearby.")
                 return

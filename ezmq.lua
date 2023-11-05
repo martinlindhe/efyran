@@ -1532,25 +1532,30 @@ local shortToLongClass = {
     NEC = "Necromancer",
 }
 
--- returns the nearest peer by class shortname, or nil on failure
+-- Returns the nearest peer by class shortname, or nil on failure.
+-- Prefers higher level peers.
 ---@param shortClass string Class shortname.
 ---@return string|nil
-function nearest_peer_by_class(shortClass)
+function NearestPeerByClass(shortClass)
     local longName = shortToLongClass[shortClass]
     if longName == nil then
         all_tellf("INVALID shortToLongClass %s", shortClass)
         return nil
     end
 
+    local highest = 0
+    local name = nil
+
     local spawnQuery = 'pc notid '..mq.TLO.Me.ID()..' radius 100 class "'..longName..'"'
     for i = 1, spawn_count(spawnQuery) do
         local spawn = mq.TLO.NearestSpawn(i, spawnQuery)
         local peer = spawn.Name()
-        if is_peer(peer) then
-            return peer
+        if is_peer(peer) and spawn.Level() > highest then
+            name = peer
+            highest = spawn.Level()
         end
     end
-    return nil
+    return name
 end
 
 -- Seeds the current process with a value unlikely to be used by another process.
