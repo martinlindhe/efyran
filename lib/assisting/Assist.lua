@@ -69,6 +69,15 @@ local function prepareForNextFight()
     summonNukeComponents()
 end
 
+-- Returns melee mode for melee classes.
+---@return string|nil
+local function defaultAssistTypeByClass()
+    if is_melee() then
+        return "melee"
+    end
+    return ""
+end
+
 function Assist.Init()
 
     if botSettings.settings.assist ~= nil then
@@ -82,6 +91,8 @@ function Assist.Init()
 
         if botSettings.settings.assist.type ~= nil then
             botSettings.settings.assist.type = botSettings.settings.assist.type:lower()
+        else
+            botSettings.settings.assist.type = defaultAssistTypeByClass()
         end
     end
 

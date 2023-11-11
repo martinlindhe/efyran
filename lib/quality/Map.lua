@@ -5,7 +5,7 @@ local log = require("knightlinc/Write")
 local function autoMapHeightFilter()
     local heights = {
         -- old
-        guktop = {min = 30, max = 30},
+        guktop = {min = 40, max = 40},
         soltemple = {min = 10, max = 10},
         soldunga = { min = 15, max = 15},
         lavastorm = { min = 100, max = 100},
