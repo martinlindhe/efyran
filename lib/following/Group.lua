@@ -66,7 +66,7 @@ end
 function Group.RecallGroup(name, groupNumber)
 
     if Group.settings[name] == nil then
-        all_tellf("/recallgroup ERROR: no such group \ar%s\ax.", name)
+        all_tellf("/recall ERROR: no such group \ar%s\ax.", name)
         cmd("/beep 1")
         return
     end
@@ -75,7 +75,7 @@ function Group.RecallGroup(name, groupNumber)
     local raidLeader = ""
 
     if groupNumber == nil then
-        orchestrator = true -- the instance doing /recallgroup
+        orchestrator = true -- the instance doing /recall
         disband_all_peers()
     else
         log.Info("Recalling group %s %d", name, groupNumber)

@@ -1,10 +1,10 @@
 # efyran
 
-The road to massive everquest botting.
+Efyran (*ee-fey-ran*) is a MacroQuest script written in Lua.
 
-[efyran](https://en.wikipedia.org/wiki/European_route_E4) is a bot macro for Macroquest, written in Lua.
+The main use for efyran is to simplify the playing of EverQuest with many characters at once.
 
-It was created after playing with and modding the older [E3 macro](https://github.com/cream24/Macros) over a number of years.
+It was created after playing with and modding the [E3 macro](https://github.com/cream24/Macros) over a number of years.
 
 Some concepts are borrowed from E3, while others are new.
 
@@ -12,17 +12,3 @@ Some concepts are borrowed from E3, while others are new.
 ## Getting started
 
 Please see the [wiki](https://github.com/martinlindhe/efyran/wiki/Getting-started).
-
-
-## Moving around
-
-Add some socials to simplify control:
-
-```
-/hotbutton FOLLOW 18 /followon
-/hotbutton STOP 18 /followoff
-/hotbutton KILL 13 /assiston
-```
-
-See [Command Reference](https://github.com/martinlindhe/efyran/wiki/Command-Reference) for more commands.
-
