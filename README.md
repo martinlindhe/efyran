@@ -18,11 +18,11 @@ Please see the [wiki](https://github.com/martinlindhe/efyran/wiki/Getting-starte
 
 Add some socials to simplify control:
 
-| Social
-|-------
-| /hotbutton FOLLOW 18 /followon
-| /hotbutton STOP 18 /followoff
-| /hotbutton KILL 13 /assiston
+```
+/hotbutton FOLLOW 18 /followon
+/hotbutton STOP 18 /followoff
+/hotbutton KILL 13 /assiston
+```
 
 See [Command Reference](https://github.com/martinlindhe/efyran/wiki/Command-Reference) for more commands.
 
