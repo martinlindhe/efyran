@@ -482,11 +482,6 @@ function QoL.Init()
     -- reports all toons that are not running e4
     bind("/note4", function() bci.ExecuteAllWithSelfCommand("/lua run efyran/note4") end)
 
-    bind("/running", function()
-        -- XXX reports all running scripts on all toons
-        log.Error("FIXME impl /running: report all running scripts on all toons")
-    end)
-
     local mmrl = function()
         bci.ExecuteCommand(string.format("/makeraidleader %s", mq.TLO.Me.Name()), {mq.TLO.Raid.Leader()})
     end
