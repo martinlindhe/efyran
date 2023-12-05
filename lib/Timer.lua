@@ -6,7 +6,7 @@ Timer.__index = Timer
 ---@param duration number seconds
 function Timer.new(duration)
     local t = setmetatable({}, Timer)
-    t.duration = duration
+    t.duration = (duration or 0)*1000
     t:restart()
     return t
 end
@@ -24,7 +24,7 @@ end
 ---@param expireDuration number
 function Timer.new_expires_in(duration, expireDuration)
     local t = Timer.new(duration)
-    t.expires = os.time() + expireDuration
+    t.expires = mq.gettime() + (expireDuration or 0)*1000
     return t
 end
 
@@ -32,7 +32,7 @@ end
 ---@param duration number seconds
 function Timer.new_random(duration)
     local t = Timer.new(duration)
-    t.expires = os.time() + math.random(0, duration)
+    t.expires = mq.gettime() + math.random(0, (duration or 0)*1000)
     return t
 end
 
@@ -50,12 +50,12 @@ end
 -- Is timer expired?
 ---@return boolean
 function Timer.expired(self)
-    return os.time() >= self.expires
+    return mq.gettime() >= self.expires
 end
 
 -- Restarts timer.
 function Timer.restart(self)
-    self.expires = os.time() + self.duration
+    self.expires = mq.gettime() + self.duration
 end
 
 return Timer
