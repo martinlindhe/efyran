@@ -1068,6 +1068,12 @@ SpellGroups.MAG = {
         "Burn",                                     -- L04 Burn
         "Burst of Flame",                           -- L01 Burst of Flame
     },
+    mag_magic_nuke = {
+      "Shock of Steel",                             -- L57 Shock of Steel (275 mana, 795-825  dd)
+      "Shock of Swords",                            -- L44 Shock of Swords
+      "Shock of Spikes",                            -- L24 Shock of Spikes
+      "Shock of Blades",                            -- L08 Shock of Blades
+    },
     mag_malo = {
         "Malosinia",                                -- L63: -70 cr, -70 mr, -70 pr, -70 fr, cost 300 mana
         "Mala",                                     -- L60: -35 cr, -35 mr, -35 pr, -35 fr, unresistable, cost 350 mana
@@ -1328,68 +1334,67 @@ SpellGroups.WIZ = {
         "Shock of Fire",                            -- L04 Shock of Fire (13-16 hp, cost 15 mana)
     },
 
-    -- L01 Frost Bolt (9-14 hp, cost 6 mana)
-    -- L01 Blast of Cold (11-18 hp, cost 8 mana), called "Shock of Frost" on fvp
-    -- L08 Shock of Ice (46-58 hp, cost 23 mana)
-    -- L49 Ice Comet (808 hp, resist adj -10, cost 203 mana)
-    -- L57 Draught of Ice (793 hp, resist adj -10, cost 216 mana)
-    -- L60 Ice Spear of Solist (1076 hp, resist adj -10, cost 221 mana)
-    -- L61 Claw of Frost (1000 hp, resist adj -50, cost 167 mana)
-    -- L64 Ice Meteor (2460 hp, resist adj -10, cost 520 mana)
-    -- L64 Draught of E'ci (980 hp, resist adj -50, cost 255 mana)
-    -- L65 Black Ice (1078 hp, resist adj -10, cost 280 mana)
-    -- L66 Icebane (1500 hp, resist adj -300, cost 456 mana)
-    -- L68 Clinging Frost (1830 hp, resist adj -10, cost 350 mana + Clinging Frost Trigger DD)
-    -- L69 Gelidin Comet (3385 hp, resist adj -10, cost 650 mana)
-    -- L69 Spark of Ice (1348 hp, resist adj -50, cost 319 mana, 3s cast)
-    -- L69 Claw of Vox (1375 hp, resist adj -50, cost 208 mana, 5s cast)
-    -- L70 Ancient: Spear of Gelaqua (1976 hp, resist adj -10, cost 345 mana, 3.5s cast)
     wiz_cold_nuke = {
-        -- XXX
+        "Ancient: Spear of Gelaqua",                  -- L70 Ancient: Spear of Gelaqua (1976 hp, resist adj -10, cost 345 mana, 3.5s cast)
+        "Claw of Vox",                                -- L69 Claw of Vox (1375 hp, resist adj -50, cost 208 mana, 5s cast)
+        "Spark of Ice",                               -- L69 Spark of Ice (1348 hp, resist adj -50, cost 319 mana, 3s cast)
+        "Gelidin Comet",                              -- L69 Gelidin Comet (3385 hp, resist adj -10, cost 650 mana)
+        "Clinging Frost",                             -- L68 Clinging Frost (1830 hp, resist adj -10, cost 350 mana + Clinging Frost Trigger DD)
+        "Icebane",                                    -- L66 Icebane (1500 hp, resist adj -300, cost 456 mana)
+        "Black Ice",                                  -- L65 Black Ice (1078 hp, resist adj -10, cost 280 mana)
+        "Draught of E'ci",                            -- L64 Draught of E'ci (980 hp, resist adj -50, cost 255 mana)
+        "Ice Meteor",                                 -- L64 Ice Meteor (2460 hp, resist adj -10, cost 520 mana)
+        "Claw of Frost",                              -- L61 Claw of Frost (1000 hp, resist adj -50, cost 167 mana)
+        "Ice Spear of Solist",                        -- L60 Ice Spear of Solist (1076 hp, resist adj -10, cost 221 mana)
+        "Draught of Ice",                             -- L57 Draught of Ice (793 hp, resist adj -10, cost 216 mana)
+        "Ice Comet",                                  -- L49 Ice Comet (808 hp, resist adj -10, cost 203 mana)
+        "Shock of Ice",                               -- L08 Shock of Ice (46-58 hp, cost 23 mana)
+        "Blast of Cold",                              -- L01 Blast of Cold (11-18 hp, cost 8 mana), called "Shock of Frost" on fvp
+        "Frost Bolt",                                 -- L01 Frost Bolt (9-14 hp, cost 6 mana)
     },
 
-    -- L10 Shock of Lightning (74-83 hp, cost 50 mana)
-    -- L60 Elnerick's Electrical Rending (1796 hp, cost 421 mana)
-    -- L61 Lure of Thunder (1090 hp, resist adj -300, cost 365 mana)
-    -- L63 Draught of Thunder (980 hp, stun 1s/65, resist adj -50, cost 255 mana)
-    -- L63 Draught of Lightning (980 hp, resist adj -50, cost 255 mana)
-    -- L63 Agnarr's Thunder (2350 hp, cost 525 mana)
-    -- L65 Shock of Magic (random dmg up to 2400 hp, resist adj -20, cost 550 mana)
-    -- L67 Lightningbane (1500 hp, resist adj -300, cost 456 mana)
-    -- L68 Spark of Lightning (1348 hp, resist adj -50, cost 319 mana)
-    -- L68 Spark of Thunder (1348 hp, resist adj -50, cost 319 mana + 1s stun L70)
-    -- L68 Thundaka (3233 hp, cost 656 mana)
     wiz_magic_nuke = {
-        -- XXX
+        "Thundaka",                                   -- L68 Thundaka (3233 hp, cost 656 mana)
+        "Spark of Thunder",                           -- L68 Spark of Thunder (1348 hp, resist adj -50, cost 319 mana + 1s stun L70)
+        "Spark of Lightning",                         -- L68 Spark of Lightning (1348 hp, resist adj -50, cost 319 mana)
+        "Lightningbane",                              -- L67 Lightningbane (1500 hp, resist adj -300, cost 456 mana)
+        "Shock of Magic",                             -- L65 Shock of Magic (random dmg up to 2400 hp, resist adj -20, cost 550 mana)
+        "Agnarr's Thunder",                           -- L63 Agnarr's Thunder (2350 hp, cost 525 mana)
+        "Draught of Lightning",                       -- L63 Draught of Lightning (980 hp, resist adj -50, cost 255 mana)
+        "Draught of Thunder",                         -- L63 Draught of Thunder (980 hp, stun 1s/65, resist adj -50, cost 255 mana)
+        "Lure of Thunder",                            -- L61 Lure of Thunder (1090 hp, resist adj -300, cost 365 mana)
+        "Elnerick's Electrical Rending",              -- L60 Elnerick's Electrical Rending (1796 hp, cost 421 mana)
+        "Shock of Lightning",                         -- L10 Shock of Lightning (74-83 hp, cost 50 mana)
     },
 
-    -- L12 Firestorm (41 hp, FIRE, adj -10, aerange 25, recast 12s, cost 34 mana)
-    -- L24 Column of Lightning (128-136 hp, FIRE, aerange 15, recast 6s, cost 130 mana)
-    -- L26 Energy Storm (238 hp, MAGIC, adj -10, aerange 25, recast 12s, cost 148 mana)
-    -- L28 Shock Spiral of Al'Kabor (111-118 hp, MAGIC, aerange 35, recast 9s, cost 200 mana)
-    -- L31 Circle of Force (193-216 hp, FIRE, adj -10, aerange 15, recast 6s, cost 175 mana)
-    -- L32 Lava Storm (401 hp, FIRE, adj -10, aerange 25, recast 12s, cost 234 mana)
-    -- L61 Tears of Ro (1106 hp, FIRE, adj -10, aerange 25, recast 10s, cost 492 mana)
-    -- L64 Tears of Arlyxir (645 hp, FIRE, adj -300, aerange 25, recast 12s, cost 420 mana)
-    -- L66 Tears of the Sun (1168 hp, FIRE, adj -10, aerange 25, recast 10s, cost 529 mana)
-    -- L69 Meteor Storm (886 hp, FIRE, adj -300, aerange 25, recast 12s, cost 523 mana)
     wiz_target_ae = {
-        -- XXX
+        "Meteor Storm",                               -- L69 Meteor Storm (886 hp, FIRE, adj -300, aerange 25, recast 12s, cost 523 mana)
+        "Tears of the Sun",                           -- L66 Tears of the Sun (1168 hp, FIRE, adj -10, aerange 25, recast 10s, cost 529 mana)
+        "Tears of Arlyxir",                           -- L64 Tears of Arlyxir (645 hp, FIRE, adj -300, aerange 25, recast 12s, cost 420 mana)
+        "Tears of Ro",                                -- L61 Tears of Ro (1106 hp, FIRE, adj -10, aerange 25, recast 10s, cost 492 mana)
+        "Lava Storm",                                 -- L32 Lava Storm (401 hp, FIRE, adj -10, aerange 25, recast 12s, cost 234 mana)
+        "Circle of Force",                            -- L31 Circle of Force (193-216 hp, FIRE, adj -10, aerange 15, recast 6s, cost 175 mana)
+        "Shock Spiral of Al'Kabor",                   -- L28 Shock Spiral of Al'Kabor (111-118 hp, MAGIC, aerange 35, recast 9s, cost 200 mana)
+        "Energy Storm",                               -- L26 Energy Storm (238 hp, MAGIC, adj -10, aerange 25, recast 12s, cost 148 mana)
+        "Column of Lightning",                        -- L24 Column of Lightning (128-136 hp, FIRE, aerange 15, recast 6s, cost 130 mana)
+        "Firestorm",                                  -- L12 Firestorm (41 hp, FIRE, adj -10, aerange 25, recast 12s, cost 34 mana)
     },
 
-    -- L01 Numbing Cold (14 hp, ICE, aerange 25, recast 12s, cost 6 mana)
-    -- L05 Fingers of Fire (19-28 hp, FIRE, aerange 25, recast 6s, cost 47 mana)
-    -- L14 Project Lightning (55-62 hp, MAGIC, aerange 25, recast 6s, cost 85 mana)
-    -- L30 Thunderclap (210-232 hp, MAGIC, aerange 20, recast 12s, cost 175 mana)
-    -- L45 Supernova (854 hp, FIRE, aerange 35, recast 12s, cost 875 mana)
-    -- L53 Jyll's Static Pulse (495-510 hp, MAGIC, aerange 25, recast 6s, cost 285 mana)
-    -- L56 Jyll's Zephyr of Ice (594 hp, ICE, adj -10, aerange 25, recast 6s, cost 313 mana)
-    -- L59 Jyll's Wave of Heat (638-648 hp, FIRE, adj -10, aerange 25, recast 6s, cost 342 mana)
-    -- L60 Winds of Gelid (1260 hp, ICE, adj -10, aerange 35, recast 12s, cost 875 mana)
-    -- L67 Circle of Fire (845 hp, FIRE, adj -10, aerange 35, recast 6s, cost 430 mana)
-    -- L70 Circle of Thunder (1450 hp, MAGIC; adj -10, aerange 35, recast 12s, cost 990 mana)
     wiz_pbae_nuke = {
-        -- xxx
+        "Circle of Thunder",                          -- L70 Circle of Thunder (1450 hp, MAGIC; adj -10, aerange 35, recast 12s, cost 990 mana)
+        "Circle of Fire",                             -- L67 Circle of Fire (845 hp, FIRE, adj -10, aerange 35, recast 6s, cost 430 mana)
+        "Winds of Gelid",                             -- L60 Winds of Gelid (1260 hp, ICE, adj -10, aerange 35, recast 12s, cost 875 mana)
+        "Jyll's Wave of Heat",                        -- L59 Jyll's Wave of Heat (638-648 hp, FIRE, adj -10, aerange 25, recast 6s, cost 342 mana)
+        "Jyll's Zephyr of Ice",                       -- L56 Jyll's Zephyr of Ice (594 hp, ICE, adj -10, aerange 25, recast 6s, cost 313 mana)
+        "Jyll's Static Pulse",                        -- L53 Jyll's Static Pulse (495-510 hp, MAGIC, aerange 25, recast 6s, cost 285 mana)
+        "Supernova",                                  -- L45 Supernova (854 hp, FIRE, aerange 35, recast 12s, cost 875 mana)
+        "Thunderclap",                                -- L30 Thunderclap (210-232 hp, MAGIC, aerange 20, recast 12s, cost 175 mana)
+        "Project Lightning",                          -- L14 Project Lightning (55-62 hp, MAGIC, aerange 25, recast 6s, cost 85 mana)
+        "Fingers of Fire",                            -- L05 Fingers of Fire (19-28 hp, FIRE, aerange 25, recast 6s, cost 47 mana)
+        "Numbing Cold",                               -- L01 Numbing Cold (14 hp, ICE, aerange 25, recast 12s, cost 6 mana)
+    },
+    wiz_mana_conversion = {
+        "Harvest",
     },
     wiz_epic2 = {
         "Staff of Phenomenal Power",                -- epic 2.0: -50% spell resist rate for group, -6% spell hate
