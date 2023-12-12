@@ -105,15 +105,15 @@ function Bard.PlayMelody(name, quiet)
 
     name = name:lower()
 
+    Bard.StopMelody()
+    if name == "off" or name == "stop" then
+        return
+    end
+
     local songSet = botSettings.settings.songs[name]
     if songSet == nil then
         all_tellf("ERROR no such song set %s", name)
         cmd("/beep 1")
-        return
-    end
-
-    Bard.StopMelody()
-    if name == "off" or name == "stop" then
         return
     end
 
