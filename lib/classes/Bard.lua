@@ -93,6 +93,10 @@ end
 ---@param name string name of song set
 ---@param quiet boolean|nil
 function Bard.PlayMelody(name, quiet)
+    if not name or name == "off" or name == "stop" then
+        Bard.StopMelody()
+        return
+    end
 
     if botSettings.settings.songs == nil then
         all_tellf("ERROR no bard songs declared")
@@ -113,10 +117,6 @@ function Bard.PlayMelody(name, quiet)
     end
 
     Bard.StopMelody()
-    if name == "off" or name == "stop" then
-        return
-    end
-
     log.Info("Scribing bard song set \ag%s\ax ...", name)
 
     local gemSet = ""
