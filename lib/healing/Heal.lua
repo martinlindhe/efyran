@@ -132,7 +132,7 @@ function Heal.medCheck()
         -- make sure to proecss events in order to not stand up in case of "/camp" command, which would end the macro
         doevents()
 
-        if nearbyMobs > 0 then
+        if nearbyMobs > 0 and not window_open("SpellBookWnd") then
             log.Info("Aborting med, %d mobs nearby!", nearbyMobs)
             cmd("/sit off")
             Heal.medding = false

@@ -18,7 +18,7 @@ function Bard.UpdateMQ2MedleyINI()
 
     local filename = mq.TLO.MacroQuest.Path("config")() .. "\\".. current_server() .. "_" .. mq.TLO.Me.Name() .. ".ini"
 
-    log.Info("UpdateMQ2MedleyINI filename: %s", filename)
+    log.Info("UpdateMQ2MedleyINI updating %s", filename)
 
     -- clear medley queue
     cmd("/medley clear")
@@ -28,7 +28,7 @@ function Bard.UpdateMQ2MedleyINI()
     cmdf('/noparse /ini "%s" "MQ2Medley" "Debug" "0"', filename)
 
     for songset, tbl in pairs(botSettings.settings.songs) do
-        log.Info("UpdateMQ2MedleyINI writing \ay%s\ax ...", songset)
+        --log.Debug("UpdateMQ2MedleyINI writing \ay%s\ax ...", songset)
 
         local section = "MQ2Medley-efyran-" .. songset
 
@@ -104,15 +104,20 @@ function Bard.PlayMelody(name, quiet)
     end
 
     name = name:lower()
+    local prevMelody = Bard.currentMelody
 
     Bard.StopMelody()
+
     if name == "off" or name == "stop" then
+        if not quiet then
+            all_tellf("Stopping song set [+y+]%s[+x+].", prevMelody)
+        end
         return
     end
 
     local songSet = botSettings.settings.songs[name]
     if songSet == nil then
-        all_tellf("ERROR no such song set %s", name)
+        all_tellf("[+r+]ERROR[+x+] no such song set [+y+]%s[+x+]", name)
         cmd("/beep 1")
         return
     end
@@ -126,10 +131,9 @@ function Bard.PlayMelody(name, quiet)
             gemSet = gemSet .. gem .. " "
         end
     end
-
     cmdf("/medley efyran-%s", name)
     if not quiet then
-        all_tellf("Playing melody [+y+]%s[+x+].", name)
+        all_tellf("Playing song set [+y+]%s[+x+].", name)
     end
 
     Bard.currentMelody = name

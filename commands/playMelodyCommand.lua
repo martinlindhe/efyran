@@ -14,8 +14,7 @@ local function execute(command)
     if not is_brd() then
         return
     end
-    all_tellf("Playing melody [+y+]%s[+x+]", command.Name)
-    bard.PlayMelody(command.Name)
+    bard.PlayMelody(command.Name, false)
 end
 
 local function createCommand(name)
