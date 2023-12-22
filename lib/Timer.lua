@@ -1,3 +1,5 @@
+local mq = require("mq")
+
 ---@class Timer
 local Timer = {}
 Timer.__index = Timer
